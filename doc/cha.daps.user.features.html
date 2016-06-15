@@ -1,16 +1,781 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Chapter 2. Conceptual Overview</title><meta name="generator" content="DocBook XSL Stylesheets V1.78.1" /><meta name="keywords" content="DAPS, DocBook Authoring and Publishing Suite, DocBook, XML, Toolchain, User Guide" /><meta name="keywords" content="DAPS, DocBook Authoring and Publishing Suite, DocBook, XML, Tool chain, Command Line" /><link rel="home" href="index.html" title="DAPS Documentation" /><link rel="up" href="book.daps.user.html" title="User Guide" /><link rel="prev" href="sec.daps.user.inst.html" title="Installation" /><link rel="next" href="sec.daps.user.features.html" title="Key Features" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 2. Conceptual Overview</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="sec.daps.user.inst.html">Prev</a> </td><th width="60%" align="center">User Guide</th><td width="20%" align="right"> <a accesskey="n" href="sec.daps.user.features.html">Next</a></td></tr></table></div><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a id="cha.daps.user.features"></a>Chapter 2. Conceptual Overview</h1></div></div></div><div class="toc"><p><strong>Table of Contents</strong></p><dl class="toc"><dt><span class="sect1"><a href="cha.daps.user.features.html#sec.daps.user.dbversions">Supported DocBook Versions</a></span></dt><dt><span class="sect1"><a href="sec.daps.user.features.html">Key Features</a></span></dt><dt><span class="sect1"><a href="sec.daps.user.config.html">DAPS Configuration</a></span></dt><dt><span class="sect1"><a href="sec.daps.user.basics.html">Defining Documentation Projects</a></span></dt><dt><span class="sect1"><a href="sec.daps.user.basics.dirstruct.html">Directory Structure</a></span></dt><dd><dl><dt><span class="sect2"><a href="sec.daps.user.basics.dirstruct.html#sec.daps.user.oview.dir.src">Source Files</a></span></dt><dt><span class="sect2"><a href="sec.daps.user.basics.dirstruct.html#sec.daps.user.oview.dir.build">The <code class="filename">build</code> Subdirectory</a></span></dt></dl></dd><dt><span class="sect1"><a href="sec.daps.user.basics.files.html">Key Files</a></span></dt><dd><dl><dt><span class="sect2"><a href="sec.daps.user.basics.files.html#sec.daps.user.basics.single">Single Deliverables (Article or Book)</a></span></dt><dt><span class="sect2"><a href="sec.daps.user.basics.files.html#sec.daps.user.basics.multiple">Multiple Deliverables: Articles or Books in a Set</a></span></dt></dl></dd><dt><span class="sect1"><a href="sec.daps.user.syntax.html">Basic DAPS Syntax</a></span></dt></dl></div><div class="abstract"><p class="title"><strong>Abstract</strong></p><p>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Conceptual Overview | User Guide | DAPS @DAPS_VERSION@</title><meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" /><link rel="stylesheet" type="text/css" href="static/css/style.css" /><meta name="generator" content="DocBook XSL Stylesheets V1.78.1" /><meta name="product-name" content="DAPS" /><meta name="product-number" content="@DAPS_VERSION@" /><meta name="book-title" content="User Guide" /><meta name="chapter-title" content="Chapter 2. Conceptual Overview" /><meta name="keywords" content="DAPS, DocBook Authoring and Publishing Suite, DocBook, XML, Toolchain, User Guide" /><meta name="keywords" content="DAPS, DocBook Authoring and Publishing Suite, DocBook, XML, Tool chain, Command Line" /><link rel="home" href="index.html" title="DAPS Documentation" /><link rel="up" href="book.daps.user.html" title="User Guide" /><link rel="prev" href="cha.daps.user.inst.html" title="Chapter 1. System Requirements and Installation" /><link rel="next" href="cha.daps.user.edit.html" title="Chapter 3. Editing DocBook XML" /><script type="text/javascript">
+
+var protocol = window.location.protocol.toLowerCase();
+if ( protocol != 'file:' ) {
+  var agent = navigator.userAgent.toLowerCase();
+  var wanted = ( protocol == 'https:') ? 'https' : 'http';
+  var file = 'fonts.css';
+  if (agent.indexOf('android') != -1 && agent.indexOf('chrom') != -1 ) {
+      file = 'fonts-nolocal.css';
+  }
+  document.write('<link rel="stylesheet" type="text/css" href="' + wanted + '://static.opensuse.org/fonts/'+ file +'"></link>');
+}
+else {
+   document.write('<link rel="stylesheet" type="text/css" href="static/css/fonts-onlylocal.css"></link>');
+}
+
+</script><noscript><link rel="stylesheet" type="text/css" href="http://static.opensuse.org/fonts/fonts.css" /></noscript><script src="static/js/jquery-1.10.2.min.js" type="text/javascript"></script><script src="static/js/script.js" type="text/javascript"></script></head><body class="nofooter offline js-off"><div id="_outer-wrap"><div id="_white-bg"><div id="_header"><div id="_logo"><a href="https://github.com/openSUSE/daps"><img src="static/images/logo.png" alt="Logo" /></a></div><div class="crumbs"><a class="book-link" href="index.html" title="User Guide"><span class="book-icon">User Guide</span></a><span> › </span><a class="crumb" href="cha.daps.user.features.html">Conceptual Overview</a></div><div class="clearme"></div></div></div><div id="_toolbar-wrap"><div id="_toolbar"><div id="_toc-area" class="inactive"><a id="_toc-area-button" class="tool" title="Contents" accesskey="c" href="index.html"><span class="tool-spacer"><span class="toc-icon">Contents</span><span class="clearme"></span></span><span class="tool-label">Contents</span></a><div class="active-contents bubble-corner"></div><div class="active-contents bubble"><div class="bubble-container"><h6>User Guide</h6><div id="_bubble-toc"><ol><li class="inactive"><a href="pre.daps.user.html"><span class="number"> </span><span class="name">About This Guide</span></a></li><li class="inactive"><a href="cha.daps.user.inst.html"><span class="number">1 </span><span class="name">System Requirements and Installation</span></a></li><li class="inactive"><a href="cha.daps.user.features.html"><span class="number">2 </span><span class="name">Conceptual Overview</span></a></li><li class="inactive"><a href="cha.daps.user.edit.html"><span class="number">3 </span><span class="name">Editing DocBook XML</span></a></li><li class="inactive"><a href="cha.daps.user.output.html"><span class="number">4 </span><span class="name">Generating Output Formats</span></a></li><li class="inactive"><a href="cha.daps.user.img.html"><span class="number">5 </span><span class="name">Image Handling</span></a></li><li class="inactive"><a href="cha.daps.user.modular.html"><span class="number">6 </span><span class="name">Modularizing Documentation Projects</span></a></li><li class="inactive"><a href="cha.daps.user.review.html"><span class="number">7 </span><span class="name">Review and Translation Processes</span></a></li><li class="inactive"><a href="cha.daps.user.deploy.html"><span class="number">8 </span><span class="name">Packaging and Deploying Your Documentation</span></a></li><li class="inactive"><a href="cha.daps.user.layout.html"><span class="number">9 </span><span class="name">Customizing Layout of the Output Formats</span></a></li><li class="inactive"><a href="cha.daps.user.config.html"><span class="number">10 </span><span class="name">Configuring DAPS</span></a></li><li class="inactive"><a href="cha.daps.user.trouble.html"><span class="number">11 </span><span class="name">Troubleshooting</span></a></li><li class="inactive"><a href="gl.daps.html"><span class="number"> </span><span class="name">Glossary</span></a></li><li class="inactive"><a href="app.daps.user.migrate.html"><span class="number">A </span><span class="name">Migration of Existing DocBook Projects</span></a></li><li class="inactive"><a href="app.daps.user.editors.html"><span class="number">B </span><span class="name">Editor-specific Information</span></a></li><li class="inactive"><a href="app.daps.user.docupdates.html"><span class="number">C </span><span class="name">What's New?</span></a></li><li class="inactive"><a href="bk01apd.html"><span class="number">D </span><span class="name">GNU Licenses</span></a></li></ol></div><div class="clearme"></div></div></div></div><div id="_nav-area" class="inactive"><div class="tool"><span class="nav-inner"><span class="tool-label">Navigation</span><a accesskey="p" class="tool-spacer" title="Chapter 1. System Requirements and Installation" href="cha.daps.user.inst.html"><span class="prev-icon">←</span></a><a accesskey="n" class="tool-spacer" title="Chapter 3. Editing DocBook XML" href="cha.daps.user.edit.html"><span class="next-icon">→</span></a></span></div></div></div></div><div id="_fixed-header-wrap" class="inactive"><div id="_fixed-header"><div class="crumbs"><a class="book-link" href="index.html" title="User Guide"><span class="book-icon">User Guide</span></a><span> › </span><a class="crumb" href="cha.daps.user.features.html">Conceptual Overview</a></div><div class="buttons"><a class="top-button button" href="#">Top</a><div class="button"><a accesskey="p" class="tool-spacer" title="Chapter 1. System Requirements and Installation" href="cha.daps.user.inst.html"><span class="prev-icon">←</span></a><a accesskey="n" class="tool-spacer" title="Chapter 3. Editing DocBook XML" href="cha.daps.user.edit.html"><span class="next-icon">→</span></a></div><div class="clearme"></div></div><div class="clearme"></div></div></div><div id="_content" class=""><div class="documentation"><div class="chapter " id="cha.daps.user.features"><div class="titlepage"><div><div class="version-info">Applies to  <span class="productname">DAPS</span> <span class="productnumber">@DAPS_VERSION@</span></div><div><h1 class="title"><span class="number">2 </span><span class="name">Conceptual Overview</span> </h1></div></div></div><div class="line"><div class="toc"><dl><dt><span class="sect1"><a href="cha.daps.user.features.html#sec.daps.user.dbversions"><span class="number">2.1 </span><span class="name">Supported DocBook Versions</span></a></span></dt><dt><span class="sect1"><a href="cha.daps.user.features.html#sec.daps.user.features"><span class="number">2.2 </span><span class="name">Key Features</span></a></span></dt><dt><span class="sect1"><a href="cha.daps.user.features.html#sec.daps.user.config"><span class="number">2.3 </span><span class="name">DAPS Configuration</span></a></span></dt><dt><span class="sect1"><a href="cha.daps.user.features.html#sec.daps.user.basics"><span class="number">2.4 </span><span class="name">Defining Documentation Projects</span></a></span></dt><dt><span class="sect1"><a href="cha.daps.user.features.html#sec.daps.user.basics.dirstruct"><span class="number">2.5 </span><span class="name">Directory Structure</span></a></span></dt><dt><span class="sect1"><a href="cha.daps.user.features.html#sec.daps.user.basics.files"><span class="number">2.6 </span><span class="name">Key Files</span></a></span></dt><dt><span class="sect1"><a href="cha.daps.user.features.html#sec.daps.user.syntax"><span class="number">2.7 </span><span class="name">Basic DAPS Syntax</span></a></span></dt></dl></div></div><div class="abstract "><p>
    This chapter describes:
-   </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+   </p><div class="itemizedlist "><ul class="itemizedlist"><li class="listitem "><p>
       the features that make DAPS stand out, from creating multiple
       output formats to automatically profiling documents,
-     </p></li><li class="listitem"><p>
+     </p></li><li class="listitem "><p>
       how to configure DAPS, and
-     </p></li><li class="listitem"><p>
+     </p></li><li class="listitem "><p>
       the basics of working with DAPS.
-     </p></li><li class="listitem"><p>
-      the basic syntax of <span class="command"><strong>daps</strong></span> commands.
+     </p></li><li class="listitem "><p>
+      the basic syntax of <code class="command">daps</code> commands.
      </p></li></ul></div><p>
-  </p></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="sec.daps.user.dbversions"></a>Supported DocBook Versions</h2></div></div></div><p>
+  </p></div><div class="sect1 " id="sec.daps.user.dbversions"><div class="titlepage"><div><div><h2 class="title" id="sec.daps.user.dbversions"><span class="number">2.1 </span><span class="name">Supported DocBook Versions</span> <a title="Permalink" class="permalink" href="cha.daps.user.features.html#sec.daps.user.dbversions">#</a></h2></div></div></div><p>
    DAPS supports DocBook 4.x and DocBook 5.x.
-  </p></div></div><div class="navfooter"><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="sec.daps.user.inst.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="book.daps.user.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="sec.daps.user.features.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Installation </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Key Features</td></tr></table></div></body></html>
+  </p></div><div class="sect1 " id="sec.daps.user.features"><div class="titlepage"><div><div><h2 class="title" id="sec.daps.user.features"><span class="number">2.2 </span><span class="name">Key Features</span> <a title="Permalink" class="permalink" href="cha.daps.user.features.html#sec.daps.user.features">#</a></h2></div></div></div><p>
+   DAPS supports technical writers in the editing, translation and
+   publishing process of DocBook XML files (in the following, simply
+   called as XML files):
+  </p><div class="variablelist "><dl class="variablelist"><dt id="idm140537712457104"><span class="term ">Output Formats (Single-source Publishing)</span></dt><dd><p>
+      DAPS lets you publish your XML sources in several different
+      output formats, for example: HTML, HTML-single, PDF, EPUB,
+      text, and man pages. For details, refer to
+      <a class="xref" href="cha.daps.user.output.html" title="Chapter 4. Generating Output Formats">Chapter 4, <em>Generating Output Formats</em></a>.
+      </p></dd><dt id="idm140537712562400"><span class="term ">Custom Layouts</span></dt><dd><p>
+      By default, DAPS uses the DocBook stylesheets to generate the
+      output formats. But DAPS also supports custom layouts for your
+      documentation projects (or for individual books within your set).
+      Thus your XML documents can be published in different layouts without
+      having to change the sources or the configuration.
+
+     </p><p>
+      Apart from that, DAPS allows you to change individual layout
+      parameters by passing string parameters to <code class="command">xsltproc</code>
+      for HTML or PDF builds —without even touching the stylesheets.
+      For details about custom layouts, refer to <a class="xref" href="cha.daps.user.layout.html" title="Chapter 9. Customizing Layout of the Output Formats">Chapter 9, <em>Customizing Layout of the Output Formats</em></a>.
+     </p></dd><dt id="idm140537711749312"><span class="term ">Editor Macros</span></dt><dd><p>
+      For Emacs, DAPS includes a set of macros for easy insertion of
+      complex DocBook elements like <code class="sgmltag-element">variablelist</code>,
+      <code class="sgmltag-element">figure</code>, <code class="sgmltag-element">table</code> or
+      <code class="sgmltag-element">indexterm</code>. Instead of inserting the child elements
+      successively, you will get a <span class="quote">“<span class="quote">skeleton</span>”</span> that includes all
+      required child elements and is ready to be filled with contents. For
+      details, refer to
+      <a class="xref" href="app.daps.user.editors.html#sec.daps.user.editors.emacs.macros" title="B.1. Emacs—Macros for Inserting DocBook Elements">Section B.1, “Emacs—Macros for Inserting DocBook Elements”</a>.
+     </p><p></p></dd><dt id="idm140537714698752"><span class="term ">Validating</span></dt><dd><p>
+      Validating XML files within in a book or set exceeds validation of the
+      current XML file, as links (<code class="sgmltag-element">xref</code> elements) or
+      XIncludes need to be resolved, too. With DAPS, you can check
+      validity of all files that belong to a documentation project with a
+      single command. For details, refer to
+      <a class="xref" href="cha.daps.user.output.html#sec.daps.user.output.validate" title="4.1. Validating Your XML Sources">Section 4.1, “Validating Your XML Sources”</a>.
+     </p></dd><dt id="idm140537711426576"><span class="term ">Spell Check</span></dt><dd><p>
+      DAPS supports spell checking of your XML sources with aspell
+      from the command line. Depending on the XML editor you use, you can
+      also integrate a custom aspell dictionary into your editor. For
+      details, refer to <a class="xref" href="cha.daps.user.edit.html#sec.daps.user.edit.spell" title="3.3. Spell Checking">Section 3.3, “Spell Checking”</a> and
+      <a class="xref" href="app.daps.user.editors.html#sec.daps.user.editors.jedit.spellcheck" title="B.3. jEdit—Spell Check on the Fly">Section B.3, “jEdit—Spell Check on the Fly”</a>.
+     </p></dd><dt id="idm140537704421296"><span class="term ">Link Checker</span></dt><dd><p>
+      To make sure that all external links in your XML sources are still
+      available (and do not give a <code class="literal">404</code> error or similar),
+      DAPS also includes a link checker (based on
+      <code class="literal">checkbot</code>). Use it to create a report of all links
+      that caused some kind of warning or error. For details, refer to
+      <a class="xref" href="cha.daps.user.edit.html#sec.daps.user.edit.chklink" title="3.4. Checking Links to Web Pages">Section 3.4, “Checking Links to Web Pages”</a>.
+     </p></dd><dt id="idm140537712081184"><span class="term ">Image Handling</span></dt><dd><p>
+      DAPS provides sophisticated image handling support. For example,
+      it automatically transforms images referenced in your XML files into different
+      formats, list all source images referenced in your XML files, list any
+      missing images or check if all image names are unique. You can also forward those lists to
+      your preferred image viewer to conveniently browse through the images. 
+      For details, refer to
+      <a class="xref" href="cha.daps.user.img.html" title="Chapter 5. Image Handling">Chapter 5, <em>Image Handling</em></a>.
+     </p></dd><dt id="idm140537714487616"><span class="term ">Profiling (Conditional Text)</span></dt><dd><p>
+      If you have similar products to document and want to generate multiple
+      documentation variants from your XML files, you can do so with the
+      help of conditional text (or <code class="literal">profiling</code>, as it is
+      called in DocBook). For example, you can profile certain parts of your
+      XML texts for different (processor) architectures, operating systems,
+      vendors or target groups. DAPS supports profiling. Use the
+      <code class="literal">PROF*</code> keys defined in <code class="filename">/etc/daps/config</code> to define
+      which information should be included in the output. For details, refer
+      to <a class="xref" href="cha.daps.user.modular.html" title="Chapter 6. Modularizing Documentation Projects">Chapter 6, <em>Modularizing Documentation Projects</em></a>.
+     </p></dd><dt id="idm140537714740000"><span class="term ">Review and Translation Processes</span></dt><dd><p>
+      DAPS offers several features to simplify review and
+      translation processes. By adding a single parameter, you can
+      generate output that contains remarks for writers, reviewers,
+      and translators. By default, remarks are suppressed in the final output
+      version. You can also generate preview versions of your
+      documentation with a <code class="literal">DRAFT</code> watermark appearing on
+      the output.  For handing over your files
+      to review or translation, DAPS can create TAR archives of the XML
+      sources and graphics.
+
+      For details, refer to <a class="xref" href="cha.daps.user.review.html" title="Chapter 7. Review and Translation Processes">Chapter 7, <em>Review and Translation Processes</em></a>.
+     </p></dd><dt id="idm140537714370352"><span class="term ">Packaging and Deployment</span></dt><dd><p>
+      For deploying the documentation as RPM packages and integrating it
+      into KDE and GNOME desktop environments and into Web user
+      interfaces (via JSP), DAPS offers a number of options to produce
+      the corresponding output. For example, you can create source packages,
+      HTML TAR archives, color PDFs and desktop and document files with the
+      <code class="command">daps package-*</code> commands. For details refer to
+      <a class="xref" href="cha.daps.user.deploy.html" title="Chapter 8. Packaging and Deploying Your Documentation">Chapter 8, <em>Packaging and Deploying Your Documentation</em></a>.
+     </p></dd></dl></div></div><div class="sect1 " id="sec.daps.user.config"><div class="titlepage"><div><div><h2 class="title" id="sec.daps.user.config"><span class="number">2.3 </span><span class="name">DAPS Configuration</span> <a title="Permalink" class="permalink" href="cha.daps.user.features.html#sec.daps.user.config">#</a></h2></div></div></div><p>
+   DAPS can be customized to a large degree: per system, per user, and per
+   document. The configuration file <code class="filename">/etc/daps/config</code> lists all parameters that can
+   be configured, including a short description for each parameter. Parameters
+   are always defined as <code class="option">KEY="VALUE"</code> pairs. Any parameter can be
+   set in various locations, which are listed below in ascending order with
+   regard to their hierarchy. If conflicting values are set for the same parameter,
+   the value defined in the next higher hierarchy level takes precedence. Values
+   defined on the command line always take precedence over values set in any other
+   locations.
+  </p><div class="itemizedlist "><ul class="itemizedlist"><li class="listitem "><p>
+     <code class="filename">/etc/daps/config</code> (system-wide configuration file)
+    </p></li><li class="listitem "><p>
+     <code class="filename">~/.config/daps/dapsrc</code> (user-specific configuration file)
+    </p></li><li class="listitem "><p>
+     DC (doc config) file of the documentation project (for settings specific
+     to a document or documentation set)
+    </p></li><li class="listitem "><p>
+     on the fly at the command line by specifying options to a
+     <code class="command">daps</code> command.
+    </p></li></ul></div></div><div class="sect1 " id="sec.daps.user.basics"><div class="titlepage"><div><div><h2 class="title" id="sec.daps.user.basics"><span class="number">2.4 </span><span class="name">Defining Documentation Projects</span> <a title="Permalink" class="permalink" href="cha.daps.user.features.html#sec.daps.user.basics">#</a></h2></div></div></div><p>
+   The easiest way to set up a new documentation project from scratch is to
+   use the DAPS initialization script <code class="command">daps-init</code>. For
+   instructions how to do so, refer to <span class="intraxref">Article “Quick Start”, Section 6 “A Documentation Project From Scratch”, Using <code class="command">daps-init</code>
+   </span>. The
+   script automatically creates the
+   <a class="xref" href="cha.daps.user.features.html#sec.daps.user.basics.files" title="2.6. Key Files">Key Files</a> and
+   <a class="xref" href="cha.daps.user.features.html#sec.daps.user.basics.dirstruct" title="2.5. Directory Structure">Directory Structure</a>
+   that you need to get started with DAPS.
+  </p><p>
+   To migrate existing DocBook projects so that you can manage and publish
+   them with DAPS, follow the step-by-step instructions in
+   <a class="xref" href="app.daps.user.migrate.html" title="Appendix A. Migration of Existing DocBook Projects">Appendix A, <em>Migration of Existing DocBook Projects</em></a>.
+  </p></div><div class="sect1 " id="sec.daps.user.basics.dirstruct"><div class="titlepage"><div><div><h2 class="title" id="sec.daps.user.basics.dirstruct"><span class="number">2.5 </span><span class="name">Directory Structure</span> <a title="Permalink" class="permalink" href="cha.daps.user.features.html#sec.daps.user.basics.dirstruct">#</a></h2></div></div></div><p>
+   For DAPS to work out of the box, your XML files and images must be
+   organized in a specific structure within your documentation directory.
+   <a class="xref" href="cha.daps.user.features.html#ex.daps.dir.doc" title="Required Directory Structure">Example 2.1</a> shows the
+   required structure including the key files for a DAPS documentation
+   project. You can also create multiple documentation directories for
+   individual documentation projects, but they all need the substructure
+   outlined below.
+  </p><div class="sect2 " id="sec.daps.user.oview.dir.src"><div class="titlepage"><div><div><h3 class="title" id="sec.daps.user.oview.dir.src"><span class="number">2.5.1 </span><span class="name">Source Files</span> <a title="Permalink" class="permalink" href="cha.daps.user.features.html#sec.daps.user.oview.dir.src">#</a></h3></div></div></div><div class="example" id="ex.daps.dir.doc"><div class="example-title-wrap"><h6 class="example-title"><span class="number">Example 2.1: </span><span class="name">Required Directory Structure </span><a title="Permalink" class="permalink" href="cha.daps.user.features.html#ex.daps.dir.doc">#</a></h6></div><div class="example-contents"><div class="verbatim-wrap"><pre class="screen"><em class="replaceable ">YOUR_DOC_DIR/</em> <span id="co.docdir.base"></span><span class="callout">1</span>
+     |--DC-* <span id="co.docdir.dc"></span><span class="callout">2</span>
+     |--images/
+     |   |--src/<span id="co.docdir.img.src"></span><span class="callout">3</span>
+     |   |  |--dia/
+     |   |  |--eps/
+     |   |  |--fig/
+     |   |  |--jpg
+     |   |  |--pdf/
+     |   |  |--png/
+     |   |  |--svg/
+     |--xml/<span id="co.docdir.xml"></span><span class="callout">4</span>
+     |   |--MAIN*.xml<span id="co.docdir.main"></span><span class="callout">5</span>
+         |--*.xml</pre></div></div></div><div class="calloutlist "><table border="0" summary="Callout list"><tr><td width="5%" valign="top" align="left"><p><a href="#co.docdir.base"><span class="callout">1</span></a> </p></td><td valign="top" align="left"><p>
+      <span class="quote">“<span class="quote">Working directory</span>”</span> for the respective documentation
+      project (in the following also called <code class="literal">project directory</code> 
+      or <code class="literal">documentation directory</code>).
+     </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.docdir.dc"><span class="callout">2</span></a> </p></td><td valign="top" align="left"><p>
+      On the topmost level of your project directory, store the Doc Config
+      (DC) file defining your documentation project. You can store multiple DC
+      files here (for multiple books belonging to the same documentation
+      project, or DC files for various documentation projects). For more
+      information, refer to <a class="xref" href="cha.daps.user.features.html#sec.daps.user.basics.files" title="2.6. Key Files">Section 2.6, “Key Files”</a>.
+     </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.docdir.img.src"><span class="callout">3</span></a> </p></td><td valign="top" align="left"><p>
+      Top-level directory for any original images that you want to use in the
+      documentation project. Contains subdirectories for images in various
+      formats. Any images to be referenced in the XML sources must be put in
+      the respective subdirectories. For basic information about referencing
+      images, refer to <a class="xref" href="cha.daps.user.img.html#sec.daps.user.imgs.refer" title="5.4. Referencing Images">Section 5.4, “Referencing Images”</a>.
+     </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.docdir.xml"><span class="callout">4</span></a> </p></td><td valign="top" align="left"><p>
+      Directory holding the XML MAIN file and all other XML files for the
+      documentation project. If you declare entities in one or more external
+      files (for example, in <code class="filename">entity-decl.ent</code>), put the
+      entity declaration files here, too.
+     </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.docdir.main"><span class="callout">5</span></a> </p></td><td valign="top" align="left"><p>
+       The MAIN file of the documentation project.  It contains the
+       <span class="quote">“<span class="quote">starting point</span>”</span> (the highest-level object) of your
+       documentation project and includes
+       <span class="quote">“<span class="quote">references</span>”</span> to other books, chapters, appendixes, etc. 
+       For more information, refer to
+      <a class="xref" href="cha.daps.user.features.html#sec.daps.user.basics.files" title="2.6. Key Files">Section 2.6, “Key Files”</a>.
+     </p></td></tr></table></div><div id="idm140537711111600" class="admonition important"><img class="symbol" alt="Important" title="Important" src="static/images/icon-important.png" /><h6>Important: Structure of the <code class="filename">xml</code> and
+     <code class="filename">image/src/*</code> Directories</h6><p>Avoid subdirectories within the <code class="filename">xml</code> and
+      <code class="filename">image/src/*</code> directories. Referencing or including
+     files from subdirectories within those directories can lead
+     to unpredictable results with DAPS.</p></div></div><div class="sect2 " id="sec.daps.user.oview.dir.build"><div class="titlepage"><div><div><h3 class="title" id="sec.daps.user.oview.dir.build"><span class="number">2.5.2 </span><span class="name">The <code class="filename">build</code> Subdirectory</span> <a title="Permalink" class="permalink" href="cha.daps.user.features.html#sec.daps.user.oview.dir.build">#</a></h3></div></div></div><p>
+    To strictly discriminate between all source content added by users and
+    the content generated by DAPS, DAPS uses a
+    <code class="filename">build</code> directory. When generating output from your
+    documentation project for the first time, DAPS adds a
+    <code class="filename">build</code> directory to your documentation directory. It
+    is located parallel to the <code class="filename">xml</code> and
+    <code class="filename">images</code> subdirectories. (If desired, the name and
+    path of the <code class="filename">build</code> directory can be changed with the
+    parameter <em class="parameter ">BUILD_DIR</em> in <code class="filename">/etc/daps/config</code> or
+    <code class="filename">~/.config/daps/dapsrc</code>.)
+   </p><p>
+    The <code class="filename">build</code> directory is structured as follows:
+   </p><div class="example" id="ex.daps.user.build"><div class="example-title-wrap"><h6 class="example-title"><span class="number">Example 2.2: </span><span class="name">Build Directory </span><a title="Permalink" class="permalink" href="cha.daps.user.features.html#ex.daps.user.build">#</a></h6></div><div class="example-contents"><div class="verbatim-wrap"><pre class="screen"><em class="replaceable ">YOUR_DOC_DIR</em> <span id="co.docdir"></span><span class="callout">1</span>
+     <span class="strong"><strong>|--build/</strong></span> <span id="co.builddir"></span><span class="callout">2</span>
+     |--<em class="replaceable ">NAME_OF_DC1</em>/ <span id="co.builddir.dc"></span><span class="callout">3</span>
+     |--<em class="replaceable ">NAME_OF_DC2</em>/ <a class="xref" href="cha.daps.user.features.html#co.builddir.dc"><span class="callout">3</span></a>
+     |--.images/ <span id="co.builddir.img"></span><span class="callout">4</span>
+     |--.profiled/ <span id="co.builddir.profiled"></span><span class="callout">5</span>
+     |--.tmp/ <span id="co.builddir.tmp"></span><span class="callout">6</span></pre></div></div></div><div class="calloutlist "><table border="0" summary="Callout list"><tr><td width="5%" valign="top" align="left"><p><a href="#co.docdir"><span class="callout">1</span></a> </p></td><td valign="top" align="left"><p>
+      <span class="quote">“<span class="quote">Working directory</span>”</span> for the respective documentation
+      project.
+     </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.builddir"><span class="callout">2</span></a> </p></td><td valign="top" align="left"><p>
+      Directory that holds all contents build by DAPS.
+     </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.builddir.dc"><span class="callout">3</span></a> </p></td><td valign="top" align="left"><p> For each of your documentation deliverables, DAPS creates a
+      subdirectory. It is named after the respective DC from which you
+      build the book, article or set. For example, the output for
+        <code class="filename">DC-<em class="replaceable ">NAME</em></code> is written
+      to
+        <code class="filename"><em class="replaceable ">YOUR_DOC_DIR</em>/build/<em class="replaceable ">NAME</em></code>.
+      All formats that have been generated from the DC (PDF, HTML, TXT,
+      EPUB etc.) can be found there. A <code class="filename">log</code>
+      subdirectory stores log files for each output format that has been
+      generated by DAPS. </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.builddir.img"><span class="callout">4</span></a> </p></td><td valign="top" align="left"><p>
+      Directory holding the images created by DAPS.
+     </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.builddir.profiled"><span class="callout">5</span></a> </p></td><td valign="top" align="left"><p>
+      Directory holding the profiled XML sources created by DAPS.
+     </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.builddir.tmp"><span class="callout">6</span></a> </p></td><td valign="top" align="left"><p>
+      Directory holding temporary files created by DAPS (for example,
+      the FO files).
+     </p></td></tr></table></div></div></div><div class="sect1 " id="sec.daps.user.basics.files"><div class="titlepage"><div><div><h2 class="title" id="sec.daps.user.basics.files"><span class="number">2.6 </span><span class="name">Key Files</span> <a title="Permalink" class="permalink" href="cha.daps.user.features.html#sec.daps.user.basics.files">#</a></h2></div></div></div><p>
+    The following key files define a documentation project so that
+    it can be processed by DAPS:
+   </p><div class="variablelist "><dl class="variablelist"><dt id="idm140537710747152"><span class="term ">MAIN File</span></dt><dd><p>
+     A DocBook XML file in the <code class="filename">xml</code> directory. It contains the <span class="quote">“<span class="quote">starting point</span>”</span> (the
+     highest-level object) of your documentation project (for example,
+       <code class="sgmltag-element">book</code> or <code class="sgmltag-element">article</code>). For larger
+       documentation projects, it is good practice to name the file
+    <code class="filename">MAIN-<em class="replaceable ">PROJECTNAME</em>.xml</code>,
+       but you can use any other file name as well. Other XML files may be
+       included into the MAIN file via <code class="sgmltag-element">&lt;xi:include/&gt;</code>
+       statements.
+      </p></dd><dt id="idm140537711096528"><span class="term ">Doc Config (DC) File</span></dt><dd><p>
+      A configuration file in the project directory. It defines several parameters for your
+      documentation deliverable (for example, the MAIN file, layout variants, or
+      which profiling information to use). Of the multiple parameters that
+      can be set  in the DC file, the only one required is
+      <em class="parameter ">MAIN</em>, pointing to the XML file that you want to
+      process. Usually, you create one DC file per book or article. For a
+      documentation <code class="sgmltag-element">set</code> (a collection of books),
+      multiple DC files can be defined. This allows you to set different
+      parameters and different values for individual books in the set.
+     </p></dd></dl></div><p>
+    In the following sections, find examples for MAIN and DC files,
+    together with background information on some key parameters that can be
+    used in DC files. The examples are sorted according to use cases:
+   </p><div class="itemizedlist "><ul class="itemizedlist"><li class="listitem "><p>
+      Small documentation projects, consisting of
+      <a class="xref" href="cha.daps.user.features.html#sec.daps.user.basics.single" title="2.6.1. Single Deliverables (Article or Book)">Single Deliverables (Article or Book)</a>
+     </p></li><li class="listitem "><p>
+      Larger documentation projects, consisting of
+      <a class="xref" href="cha.daps.user.features.html#sec.daps.user.basics.multiple" title="2.6.2. Multiple Deliverables: Articles or Books in a Set">Multiple Deliverables: Articles or Books in a Set</a>
+     </p></li></ul></div><div id="idm140537713540288" class="admonition note"><img class="symbol" alt="Note" title="Note" src="static/images/icon-note.png" /><h6>Note: Differences DocBook 4 versus DocBook 5</h6><p>The examples below differ slightly with regards to the respective
+    DocBook version. One of the main differences is the header of the XML files.
+    Apart from that, the <code class="sgmltag-element">articleinfo</code> and
+     <code class="sgmltag-element">bookinfo</code> elements no longer exist in DocBook 5. They
+    have been replaced by the generic <code class="sgmltag-element">info</code> element.
+   </p></div><div class="sect2 " id="sec.daps.user.basics.single"><div class="titlepage"><div><div><h3 class="title" id="sec.daps.user.basics.single"><span class="number">2.6.1 </span><span class="name">Single Deliverables (Article or Book)</span> <a title="Permalink" class="permalink" href="cha.daps.user.features.html#sec.daps.user.basics.single">#</a></h3></div></div></div><p>
+    The most elementary case of a documentation project is probably a white
+    paper or article. Typically, its content can be contained in a single
+    XML file with <code class="sgmltag-element">article</code> as the root element. In this
+    case, this single XML file would be the MAIN file as it specifies the
+    highest-level object in your documentation project
+    (<code class="sgmltag-element">article</code>). Apart from document title and body, the
+    file can contain other information such as a legal notice, release
+    information, author data etc. An article may be structured into sections
+    (by use of <code class="sgmltag-element">section</code> elements or
+    <code class="sgmltag-element">sect1</code>, <code class="sgmltag-element">sect2</code> etc.).
+   </p><div id="idm140537713112144" class="admonition tip"><img class="symbol" alt="Tip" title="Tip" src="static/images/icon-tip.png" /><h6>Tip: Creating an Example Document</h6><p> The command <code class="command">daps-init</code> allows you to automatically
+     set up an example article or book, together with a DC file, as
+     described in <span class="intraxref">Article “Quick Start”, Section 6 “A Documentation Project From Scratch”, Using <code class="command">daps-init</code>
+   </span>. Use the 
+     <code class="option">--docbook4</code> or the <code class="option">--docbook5</code>
+     option to define the Docbook version to use. The examples below are based
+     on the output of <code class="command">daps-init</code>, but vary deliberately in
+     some details to show key parameters that you might want to add or change.
+    </p></div><p>
+    Find simple examples for DocBook 4 and DocBook 5 in
+    <a class="xref" href="cha.daps.user.features.html#ex.daps.main.art.db4" title="MAIN file of an Article (DocBook 4.x)">Example 2.3</a> and <a class="xref" href="cha.daps.user.features.html#ex.daps.main.art.db5" title="MAIN file of an Article (DocBook 5.x)">Example 2.4</a>, respectively.
+   </p><div class="example" id="ex.daps.main.art.db4"><div class="example-title-wrap"><h6 class="example-title"><span class="number">Example 2.3: </span><span class="name">MAIN file of an Article (DocBook 4.x) </span><a title="Permalink" class="permalink" href="cha.daps.user.features.html#ex.daps.main.art.db4">#</a></h6></div><div class="example-contents"><div class="verbatim-wrap"><pre class="screen">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+[...]
+
+<span class="strong"><strong>&lt;article lang="en" id="art.template"&gt;</strong></span>
+ &lt;title&gt;Article Template&lt;/title&gt;
+ &lt;subtitle&gt;generated by DAPS&lt;/subtitle&gt;
+ &lt;articleinfo&gt;
+  &lt;releaseinfo&gt;Version 0.1&lt;/releaseinfo&gt;
+  &lt;releaseinfo&gt;Revision: 0&lt;/releaseinfo&gt;
+  &lt;releaseinfo&gt;
+   Build Date: &lt;?dbtimestamp format="B d, Y"?&gt;
+  &lt;/releaseinfo&gt;
+  &lt;legalnotice&gt;
+   &lt;para&gt;
+    &lt;ulink url="http://www.gnu.org/licenses/fdl-1.3-standalone.html"&gt;
+    GNU Free Documentation License&lt;/ulink&gt;
+   &lt;/para&gt;
+  &lt;/legalnotice&gt;
+ &lt;/articleinfo&gt;
+ &lt;abstract&gt;
+  &lt;para&gt;
+   You may use this file as a template. For a complete DocBook reference
+   see &lt;citetitle&gt;DocBook: The Definitive Guide&lt;/citetitle&gt;, available at
+   &lt;ulink url="http://www.docbook.org/tdg/en/html/docbook.html"/&gt;.
+  &lt;/para&gt;
+ &lt;/abstract&gt;
+ &lt;sect1 id="sec.template.examples"&gt;
+  &lt;title&gt;Examples: The most commonly used DocBook XML constructs&lt;/title&gt;
+  &lt;para&gt;
+   I am a paragraph in a section 1.
+  &lt;/para&gt;
+  &lt;sect2 id="sec.template.examples.lists"&gt;
+   &lt;title&gt;Lists&lt;/title&gt;
+   &lt;para&gt;
+    This section 2 showcases 3 types of lists.
+   &lt;/para&gt;
+   [...]
+  &lt;/sect2&gt;
+ &lt;/sect1&gt;
+<span class="strong"><strong>&lt;/article&gt;</strong></span></pre></div></div></div><div class="example" id="ex.daps.main.art.db5"><div class="example-title-wrap"><h6 class="example-title"><span class="number">Example 2.4: </span><span class="name">MAIN file of an Article (DocBook 5.x) </span><a title="Permalink" class="permalink" href="cha.daps.user.features.html#ex.daps.main.art.db5">#</a></h6></div><div class="example-contents"><div class="verbatim-wrap"><pre class="screen">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+[...]
+
+ <span class="emphasis"><em>&lt;article xml:id="art.template" xml:lang="en"
+  xmlns="http://docbook.org/ns/docbook" 
+  xmlns:xlink="http://www.w3.org/1999/xlink"&gt;</em></span>
+
+&lt;info&gt;
+ &lt;title&gt;Article Template&lt;/title&gt;
+ &lt;subtitle&gt;generated by DAPS&lt;/subtitle&gt;
+ &lt;info&gt;
+  &lt;releaseinfo&gt;Version 0.1&lt;/releaseinfo&gt;
+  &lt;releaseinfo&gt;Revision: 0&lt;/releaseinfo&gt;
+  &lt;releaseinfo&gt;
+   Build Date: &lt;?dbtimestamp format="B d, Y"?&gt;
+  &lt;/releaseinfo&gt;
+  &lt;legalnotice&gt;
+   &lt;para&gt;
+    &lt;link xlink:href="http://www.gnu.org/licenses/fdl-1.3-standalone.html"&gt;
+    GNU Free Documentation License&lt;/ulink&gt;
+   &lt;/para&gt;
+  &lt;/legalnotice&gt;
+ &lt;/info&gt;
+ &lt;abstract&gt;
+  &lt;para&gt;
+   You may use this file as a template. For a complete DocBook reference
+   see &lt;citetitle&gt;DocBook: The Definitive Guide&lt;/citetitle&gt;, available at
+   &lt;link xlink:href="http://www.docbook.org/tdg/en/html/docbook.html"/&gt;.
+  &lt;/para&gt;
+ &lt;/abstract&gt;
+ &lt;sect1 xml:id="sec.template.examples"&gt;
+  &lt;title&gt;Examples: The most commonly used DocBook XML constructs&lt;/title&gt;
+  &lt;para&gt;
+   I am a paragraph in a section 1.
+  &lt;/para&gt;
+  &lt;sect2 xml:id="sec.template.examples.lists"&gt;
+   &lt;title&gt;Lists&lt;/title&gt;
+   &lt;para&gt;
+    This section 2 showcases 3 types of lists.
+   &lt;/para&gt;
+   [...]
+  &lt;/sect2&gt;
+ &lt;/sect1&gt;
+<span class="strong"><strong>&lt;/article&gt;</strong></span></pre></div></div></div><p>
+    Let us assume, the XML file shown in
+    <a class="xref" href="cha.daps.user.features.html#ex.daps.main.art.db4" title="MAIN file of an Article (DocBook 4.x)">Example 2.3</a> or <a class="xref" href="cha.daps.user.features.html#ex.daps.main.art.db5" title="MAIN file of an Article (DocBook 5.x)">Example 2.4</a> is 
+    named <code class="filename">MAIN-DAPS-example-article.xml</code> and you want to
+    publish it using the default DocBook layout. To generate output, you
+    usually create a DC file per article or book, specifying a number of
+    parameters such as the MAIN file or which layout to use. Of the
+    multiple parameters that can be set in the DC file, the only one
+    required is <em class="parameter ">MAIN</em>, pointing to the XML file that
+    you want to process. Therefore, a very basic DC file for the article
+    in <a class="xref" href="cha.daps.user.features.html#ex.daps.main.art.db4" title="MAIN file of an Article (DocBook 4.x)">Example 2.3</a> or <a class="xref" href="cha.daps.user.features.html#ex.daps.main.art.db5" title="MAIN file of an Article (DocBook 5.x)">Example 2.4</a> could look as follows:
+   </p><div class="complex-example"><div class="example" id="ex.daps.user.dc.art.simple"><div class="example-title-wrap"><h6 class="example-title"><span class="number">Example 2.5: </span><span class="name">Basic DC File for an Article </span><a title="Permalink" class="permalink" href="cha.daps.user.features.html#ex.daps.user.dc.art.simple">#</a></h6></div><div class="example-contents"><div class="verbatim-wrap"><pre class="screen">## Doc config file for the DAPS example document
+## See /etc/daps/config for documentation of the settings below
+##
+
+## Mandatory Parameter
+<span class="strong"><strong>MAIN="MAIN-DAPS-example-article.xml" </strong></span></pre></div><p>
+   Specifies the XML MAIN file. It contains the highest-level object
+   (root element) of your documentation project. The MAIN file must be located
+   in <code class="filename"><em class="replaceable ">YOUR_DOC_DIR</em>/xml/</code>.
+   Therefore, you only need to specify the MAIN's file name in the DC file
+   (no path).</p></div></div></div><p>
+    The example above is a bit artificial, though: If you do not want to
+    specify any further parameters (apart from the MAIN file), you can
+    also set the <code class="option">--main</code> parameter as a command line
+    option when generating the output format. In that case, you can do
+    completely without a DC file. For details, refer to
+    <a class="xref" href="cha.daps.user.output.html" title="Chapter 4. Generating Output Formats">Chapter 4, <em>Generating Output Formats</em></a>.
+   </p><p>
+    In case your documentation project consists of a single book, instead of
+    an article (as assumed before), the basic setup of MAIN file and DC
+    file is similar:
+   </p><div class="example" id="ex.daps.main.book.db4"><div class="example-title-wrap"><h6 class="example-title"><span class="number">Example 2.6: </span><span class="name">MAIN file of a Book (DocBook 4.x) </span><a title="Permalink" class="permalink" href="cha.daps.user.features.html#ex.daps.main.book.db4">#</a></h6></div><div class="example-contents"><div class="verbatim-wrap"><pre class="screen">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+[...]
+
+<span class="strong"><strong>&lt;book id="book.template" lang="en"&gt;</strong></span>
+ &lt;bookinfo&gt;
+  &lt;title&gt;Book Template&lt;/title&gt;
+  &lt;subtitle&gt;generated by daps&lt;/subtitle&gt;
+  &lt;productname&gt;Book Template&lt;/productname&gt;
+   &lt;legalnotice&gt;
+   &lt;para&gt;
+    &lt;ulink url="http://www.gnu.org/licenses/fdl-1.3-standalone.html"&gt;
+    GNU Free Documentation License&lt;/ulink&gt;
+   &lt;/para&gt;
+  &lt;/legalnotice&gt;
+ &lt;/bookinfo&gt;
+ &lt;chapter id="cha.template.examples"&gt;
+  &lt;title&gt;Examples: the most commonly used DocBook XML constructs&lt;/title&gt;
+  &lt;abstract&gt;
+   &lt;para&gt;
+    You may use this file as a template. For a complete reference on DocBook
+    see &lt;citetitle&gt;&amp;tdg;&lt;/citetitle&gt;, available at
+    &lt;ulink url="http://www.docbook.org/tdg/en/html/docbook.html"/&gt;.
+   &lt;/para&gt;
+  &lt;/abstract&gt;
+  &lt;para&gt;
+   I am a paragraph in a chapter.
+  &lt;/para&gt;
+  &lt;sect1 id="sec.template.examples.lists"&gt;
+   &lt;title&gt;Lists&lt;/title&gt;
+   &lt;para&gt;
+    This is a section 1.
+   &lt;/para&gt;
+  &lt;/sect1&gt;
+ &lt;/chapter&gt;
+<span class="strong"><strong>&lt;/book&gt;</strong></span></pre></div></div></div><div class="example" id="ex.daps.main.book.db5"><div class="example-title-wrap"><h6 class="example-title"><span class="number">Example 2.7: </span><span class="name">MAIN file of a Book (DocBook 5.x) </span><a title="Permalink" class="permalink" href="cha.daps.user.features.html#ex.daps.main.book.db5">#</a></h6></div><div class="example-contents"><div class="verbatim-wrap"><pre class="screen">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+[...]
+
+<span class="emphasis"><em>&lt;book xml:id="book.template" xml:lang="en"
+      xmlns="http://docbook.org/ns/docbook" 
+      xmlns:xlink="http://www.w3.org/1999/xlink"&gt;</em></span>
+ &lt;info&gt;
+  &lt;title&gt;Book Template&lt;/title&gt;
+  &lt;subtitle&gt;generated by daps&lt;/subtitle&gt;
+  &lt;productname&gt;Book Template&lt;/productname&gt;
+   &lt;legalnotice&gt;
+   &lt;para&gt;
+    &lt;link xlink:href="http://www.gnu.org/licenses/fdl-1.3-standalone.html"&gt;
+    GNU Free Documentation License&lt;/ulink&gt;
+   &lt;/para&gt;
+  &lt;/legalnotice&gt;
+ &lt;/info&gt;
+ &lt;chapter xml:id="cha.template.examples"&gt;
+  &lt;title&gt;Examples: the most commonly used DocBook XML constructs&lt;/title&gt;
+  &lt;abstract&gt;
+   &lt;para&gt;
+    You may use this file as a template. For a complete reference on DocBook
+    see &lt;citetitle&gt;&amp;tdg;&lt;/citetitle&gt;, available at
+    &lt;ulink url="http://www.docbook.org/tdg/en/html/docbook.html"/&gt;.
+   &lt;/para&gt;
+  &lt;/abstract&gt;
+  &lt;para&gt;
+   I am a paragraph in a chapter.
+  &lt;/para&gt;
+  &lt;sect1 xml:id="sec.template.examples.lists"&gt;
+   &lt;title&gt;Lists&lt;/title&gt;
+   &lt;para&gt;
+    This is a section 1.
+   &lt;/para&gt;
+  &lt;/sect1&gt;
+ &lt;/chapter&gt;
+<span class="strong"><strong>&lt;/book&gt;</strong></span></pre></div></div></div><p>
+    In the above example, the book's contents are also contained in a single
+    XML file, however, this time with <code class="sgmltag-element">book</code> as the root
+    element. In contrast to an article, books can contain more structural
+    levels: they are usually divided into <code class="sgmltag-element">chapter</code>
+    elements (that may contain sections and subsections) as outlined in
+    <a class="xref" href="cha.daps.user.features.html#ex.daps.main.book.db4" title="MAIN file of a Book (DocBook 4.x)">Example 2.6</a> or
+    <a class="xref" href="cha.daps.user.features.html#ex.daps.main.book.db5" title="MAIN file of a Book (DocBook 5.x)">Example 2.7</a> . In
+    addition to chapters, books may also contain other structural elements
+    such as <code class="sgmltag-element">preface</code>, <code class="sgmltag-element">glossary</code>, and
+    <code class="sgmltag-element">appendix</code>. A further additional structural level is
+    called <code class="sgmltag-element">part</code>. For a complete reference, see
+    <em class="citetitle ">DocBook: The Definitive Guide</em>, available at
+    <a class="ulink" href="http://www.docbook.org/tdg/en/html/docbook.html" target="_blank">http://www.docbook.org/tdg/en/html/docbook.html</a>.
+   </p><p>
+    Let us assume the XML file shown in 
+    <a class="xref" href="cha.daps.user.features.html#ex.daps.main.book.db4" title="MAIN file of a Book (DocBook 4.x)">Example 2.6</a> or
+    <a class="xref" href="cha.daps.user.features.html#ex.daps.main.book.db5" title="MAIN file of a Book (DocBook 5.x)">Example 2.7</a>
+    is named <code class="filename">MAIN-DAPS-example-book.xml</code> and you want to
+    publish it in a custom layout. To generate output, you would create a
+    DC file pointing to the MAIN file of the book, and additionally
+    specify a set of custom stylesheets.
+   </p><div class="example" id="ex.daps.dc.book"><div class="example-title-wrap"><h6 class="example-title"><span class="number">Example 2.8: </span><span class="name">DC File For a Book with Custom Layout </span><a title="Permalink" class="permalink" href="cha.daps.user.features.html#ex.daps.dc.book">#</a></h6></div><div class="example-contents"><div class="verbatim-wrap"><pre class="screen">## Doc config file for the DAPS example book
+## See /etc/daps/config for documentation of the settings below
+
+## Mandatory Parameter
+MAIN="MAIN-DAPS-example-book.xml" <span id="co.daps.dc.book.main"></span><span class="callout">1</span>
+
+## Optional Parameters
+
+## Custom Stylesheets
+## (if not defined the DocBook stylesheets will be used)
+
+STYLEROOT="/usr/share/xml/docbook/stylesheet/custom/xslt" <span id="co.daps.dc.book.styleroot"></span><span class="callout">2</span></pre></div></div></div><div class="calloutlist "><table border="0" summary="Callout list"><tr><td width="5%" valign="top" align="left"><p><a href="#co.daps.dc.book.main"><span class="callout">1</span></a> </p></td><td valign="top" align="left"><p>
+   Specifies the XML MAIN file. It contains the highest-level object
+   (root element) of your documentation project. The MAIN file must be located
+   in <code class="filename"><em class="replaceable ">YOUR_DOC_DIR</em>/xml/</code>.
+   Therefore, you only need to specify the MAIN's file name in the DC file
+   (no path).</p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.daps.dc.book.styleroot"><span class="callout">2</span></a> </p></td><td valign="top" align="left"><p>
+   For a custom layout, use the <em class="parameter ">STYLEROOT</em> parameter to
+   specify the (absolute or relative) path to the directory containing the
+   custom stylesheets. Using absolute paths is recommended for DC files.
+   </p></td></tr></table></div></div><div class="sect2 " id="sec.daps.user.basics.multiple"><div class="titlepage"><div><div><h3 class="title" id="sec.daps.user.basics.multiple"><span class="number">2.6.2 </span><span class="name">Multiple Deliverables: Articles or Books in a Set</span> <a title="Permalink" class="permalink" href="cha.daps.user.features.html#sec.daps.user.basics.multiple">#</a></h3></div></div></div><p>
+    If your documentation project consists of multiple books in a
+    <code class="sgmltag-element">set</code>, the MAIN file is the one that contains the
+    <code class="sgmltag-element">set</code> element. In the following example, the components
+    of the set (individual books) are not part of the MAIN file, but have
+    been put into separate document files (<code class="code">book*.xml</code>). Those 
+    are then assembled in the MAIN file using
+    <code class="literal">XIncludes</code>. Note that this is not specific to
+    sets—it is mainly a means of modularizing your documents. You can
+    also use XIncludes for splitting up books, articles or chapters into
+
+    separate files. For more information, refer to
+    <a class="xref" href="cha.daps.user.modular.html#sec.daps.user.modular.xi" title="6.1. Splitting up Documents into XIncludes">Section 6.1, “Splitting up Documents into XIncludes”</a> and
+    <a class="ulink" href="http://www.docbook.org/tdg51/en/html/ch02.html" target="_blank"><em class="citetitle ">Physical
+    Divisions: Breaking a Document into Separate Files</em><span class="ulink-url"> (http://www.docbook.org/tdg51/en/html/ch02.html)</span></a>.
+   </p><div class="example" id="ex.daps.main.set"><div class="example-title-wrap"><h6 class="example-title"><span class="number">Example 2.9: </span><span class="name">MAIN file of a Set (DocBook 4.x) </span><a title="Permalink" class="permalink" href="cha.daps.user.features.html#ex.daps.main.set">#</a></h6></div><div class="example-contents"><div class="verbatim-wrap"><pre class="screen">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+[...]
+
+<span class="strong"><strong>&lt;set lang="en"&gt;</strong></span>
+ &lt;title&gt;DAPS Documentation&lt;/title&gt;
+ &lt;xi:include href="book_daps_user.xml"
+             xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;
+ &lt;xi:include href="book_daps_quickstarts.xml"
+             xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;
+ &lt;!--&lt;xi:include href="book_daps_developer.xml"
+             xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;--&gt;
+<span class="strong"><strong>&lt;/set&gt;</strong></span></pre></div></div></div><p>
+    For a documentation <code class="sgmltag-element">set</code> (a collection of books),
+    multiple DC files can be defined. This allows you to set different
+    parameters and values for individual books in the set. By specifying a
+    different <em class="parameter ">ROOTID</em> in the DC file, you define
+    which book of the set is to be built. You can also specify different
+    layouts or output modes (such as draft or annotated versions) for
+    individual books in the same documentation set.
+   </p><p>
+    The following two DC files are those of the DAPS Quick Start and the
+    DAPS User Guide— both guides belong to the same documentation set, but
+    use different layouts.
+   </p><div class="example" id="ex.daps.dc.quick"><div class="example-title-wrap"><h6 class="example-title"><span class="number">Example 2.10: </span><span class="name">DC File For a Book in a Set </span><a title="Permalink" class="permalink" href="cha.daps.user.features.html#ex.daps.dc.quick">#</a></h6></div><div class="example-contents"><div class="verbatim-wrap"><pre class="screen">## Doc config file for DAPS Quick Start
+## See /etc/daps/config for documentation of the settings below
+
+## Mandatory Parameter
+MAIN="MAIN.DAPS.xml" <span id="co.daps.dc.quick.main"></span><span class="callout">1</span>
+
+## Optional Parameters
+## ROOTID
+## If MAIN contains a set with several books and/or articles, use
+## a separate DC-file for each book/article and set ROOTID to
+## the id of the respective &lt;book&gt;/&lt;article&gt; element of the document
+## This will enable you to build individual books/articles rather than
+## the whole set
+## See http://www.docbook.org/tdg/en/html/set.html for more information
+## on sets
+ROOTID="art.daps.quick" <span id="co.daps.dc.quick.rootid"></span><span class="callout">2</span>
+
+## Custom Stylesheets
+## (if not defined the DocBook stylesheets will be used)
+
+STYLEROOT="/usr/share/xml/docbook/stylesheet/suse/xslt/flyer" <span id="co.daps.dc.quick.styleroot"></span><span class="callout">3</span>
+#FALLBACK_STYLEROOT="" <span id="co.daps.dc.quick.fbstyleroot"></span><span class="callout">4</span></pre></div><div class="calloutlist "><table border="0" summary="Callout list"><tr><td width="5%" valign="top" align="left"><p><a href="#co.daps.dc.quick.main"><span class="callout">1</span></a> </p></td><td valign="top" align="left"><p>
+   Specifies the XML MAIN file. It contains the highest-level object
+   (root element) of your documentation project. The MAIN file must be located
+   in <code class="filename"><em class="replaceable ">YOUR_DOC_DIR</em>/xml/</code>.
+   Therefore, you only need to specify the MAIN's file name in the DC file
+   (no path).</p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.daps.dc.quick.rootid"><span class="callout">2</span></a> </p></td><td valign="top" align="left"><p>
+  Defines the root ID of the element to be used for creating an output format.
+  Usually, you specify the root ID of a <code class="sgmltag-element">book</code> or
+  <code class="sgmltag-element">article</code> element here.</p><p>
+       In this example, <code class="literal">art.daps.quick</code> is the root ID of
+       the DAPS Quick Start, contained in <code class="filename">MAIN.DAPS.xml</code>.
+      </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.daps.dc.quick.styleroot"><span class="callout">3</span></a> </p></td><td valign="top" align="left"><p>
+   For a custom layout, use the <em class="parameter ">STYLEROOT</em> parameter to
+   specify the (absolute or relative) path to the directory containing the
+   custom stylesheets. Using absolute paths is recommended for DC files.
+   </p><p>
+       In this example, the parameter specifies the path to a directory with
+       SUSE-specific stylesheets for the flyer layout that is used by the
+       DAPS Quick Start.
+      </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.daps.dc.quick.fbstyleroot"><span class="callout">4</span></a> </p></td><td valign="top" align="left"><p>Allows you to define a fallback which is used in case the custom
+     stylesheets defined with <em class="parameter ">STYLEROOT</em> cannot be accessed.
+     In case neither the stylesheets specified with <em class="parameter ">STYLEROOT</em>
+     nor with <em class="parameter ">FALLBACK_STYLEROOT</em> can be accessed, DAPS
+     uses the default DocBook layout.</p><p>
+       In this example, no fallback is specified and the parameter is
+       disabled.
+      </p></td></tr></table></div></div></div><div class="example" id="ex.daps.dc.user"><div class="example-title-wrap"><h6 class="example-title"><span class="number">Example 2.11: </span><span class="name">DC File For Another Book in the Same Set </span><a title="Permalink" class="permalink" href="cha.daps.user.features.html#ex.daps.dc.user">#</a></h6></div><div class="example-contents"><div class="verbatim-wrap"><pre class="screen">## Doc config file for DAPS User Guide
+## See /etc/daps/config for documentation of the settings below
+
+## Mandatory Parameter
+MAIN="MAIN.DAPS.xml" <span id="co.daps.dc.user.main"></span><span class="callout">1</span>
+
+## Optional Parameters
+## ROOTID
+## If MAIN contains a set with several books and/or articles, use
+## a separate DC-file for each book/article and set ROOTID to
+## the id of the respective &lt;book&gt;/&lt;article&gt; element of the document
+## This will enable you to build individual books/articles rather than
+## the whole set
+## See http://www.docbook.org/tdg/en/html/set.html for more information
+## on sets
+ROOTID="book.daps.user" <span id="co.daps.dc.user.rootid"></span><span class="callout">2</span>
+
+## Custom Stylesheets
+## (if not defined the DocBook stylesheets will be used)
+
+STYLEROOT="/usr/share/xml/docbook/stylesheet/suse/xslt/" <span id="co.daps.dc.user.styleroot"></span><span class="callout">3</span>
+#FALLBACK_STYLEROOT="" <span id="co.daps.dc.user.fbstyleroot"></span><span class="callout">4</span>
+
+## Formatter
+# Specify which PDF formatter to use. Currently only fop or xep are supported
+
+FORMATTER="xep" <span id="co.daps.dc.user.formatter"></span><span class="callout">5</span>
+
+##Draft Mode
+# Turns on DRAFT watermarks in PDF or HTML builds when set to "yes"
+# Is ignored for any other output format and has no effect on profiling.
+# This value can be set to "yes" using the -d switch on the command line
+# Also see COMMENTS and REMARKS
+#
+DRAFT="yes" <span id="co.daps.dc.user.draft"></span><span class="callout">6</span></pre></div><div class="calloutlist "><table border="0" summary="Callout list"><tr><td width="5%" valign="top" align="left"><p><a href="#co.daps.dc.user.main"><span class="callout">1</span></a> </p></td><td valign="top" align="left"><p>
+   Specifies the XML MAIN file. It contains the highest-level object
+   (root element) of your documentation project. The MAIN file must be located
+   in <code class="filename"><em class="replaceable ">YOUR_DOC_DIR</em>/xml/</code>.
+   Therefore, you only need to specify the MAIN's file name in the DC file
+   (no path).</p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.daps.dc.user.rootid"><span class="callout">2</span></a> </p></td><td valign="top" align="left"><p>
+  Defines the root ID of the element to be used for creating an output format.
+  Usually, you specify the root ID of a <code class="sgmltag-element">book</code> or
+  <code class="sgmltag-element">article</code> element here.</p><p>
+       In this example, <code class="literal">book.daps.user</code> is the root ID of
+       the DAPS User Guide, contained in <code class="filename">MAIN.DAPS.xml</code>.
+      </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.daps.dc.user.styleroot"><span class="callout">3</span></a> </p></td><td valign="top" align="left"><p>
+   For a custom layout, use the <em class="parameter ">STYLEROOT</em> parameter to
+   specify the (absolute or relative) path to the directory containing the
+   custom stylesheets. Using absolute paths is recommended for DC files.
+   </p><p>
+       In this example, the parameter specifies the path to a directory with
+       SUSE-specific stylesheets that is used by the DAPS User Guide.
+      </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.daps.dc.user.fbstyleroot"><span class="callout">4</span></a> </p></td><td valign="top" align="left"><p>Allows you to define a fallback which is used in case the custom
+     stylesheets defined with <em class="parameter ">STYLEROOT</em> cannot be accessed.
+     In case neither the stylesheets specified with <em class="parameter ">STYLEROOT</em>
+     nor with <em class="parameter ">FALLBACK_STYLEROOT</em> can be accessed, DAPS
+     uses the default DocBook layout.</p><p>
+       In this example, no fallback is specified and the parameter is
+       disabled.
+      </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.daps.dc.user.formatter"><span class="callout">5</span></a> </p></td><td valign="top" align="left"><p>Specifies the PDF formatter to use.</p><p>
+       For supported formatters, refer to
+       <span class="intraxref">Article “Quick Start”, Section 3.2 “Software Requirements”</span>. In this example, XEP is
+       specified as PDF formatter.
+      </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.daps.dc.user.draft"><span class="callout">6</span></a> </p></td><td valign="top" align="left"><p>When set to <code class="literal">yes</code>, a DRAFT watermark appears in PDF or
+   HTML outputs of the document.</p></td></tr></table></div></div></div><p>
+    If your documentation project contains cross-references between the
+    individual books in a set, it is useful to define an additional DC
+    file —<span class="emphasis"><em>without</em></span> the
+    <em class="parameter ">ROOTID</em> parameter. Use this (generic) DC to
+    generate HTML outputs containing all hyperlinks between the individual
+    books (or for creating file lists of all source files and images used in
+    the set). Find an example DC file in <a class="xref" href="cha.daps.user.features.html#ex.daps.dc.set" title="DC File for a Set">Example 2.12, “DC File for a Set”</a>.
+   </p><div class="example" id="ex.daps.dc.set"><div class="example-title-wrap"><h6 class="example-title"><span class="number">Example 2.12: </span><span class="name">DC File for a Set </span><a title="Permalink" class="permalink" href="cha.daps.user.features.html#ex.daps.dc.set">#</a></h6></div><div class="example-contents"><div class="verbatim-wrap"><pre class="screen">## Doc config file for the DAPS Documentation Set
+## See /etc/daps/config for documentation of the settings below
+
+## Mandatory Parameter
+MAIN="MAIN.DAPS.xml" <span id="co.daps.dc.set.main"></span><span class="callout">1</span>
+
+## Optional Parameters
+## ROOTID
+## If MAIN contains a set with several books and/or articles, use
+## a separate DC-file for each book/article and set ROOTID to
+## the id of the respective &lt;book&gt;/&lt;article&gt; element of the document
+## This will enable you to build individual books/articles rather than
+## the whole set
+## See http://www.docbook.org/tdg/en/html/set.html for more information
+## on sets
+#ROOTID="" <span id="co.daps.dc.set.rootid"></span><span class="callout">2</span>
+
+## Custom Stylesheets
+## (if not defined the DocBook stylesheets will be used)
+
+STYLEROOT="/usr/share/xml/docbook/stylesheet/suse/xslt/" <span id="co.daps.dc.set.styleroot"></span><span class="callout">3</span>
+#FALLBACK_STYLEROOT="" <span id="co.daps.dc.set.fbstyleroot"></span><span class="callout">4</span>
+
+## enable sourcing
+export DOCCONF=$BASH_SOURCE <span id="co.daps.dc.set.source"></span><span class="callout">5</span></pre></div><div class="calloutlist "><table border="0" summary="Callout list"><tr><td width="5%" valign="top" align="left"><p><a href="#co.daps.dc.set.main"><span class="callout">1</span></a> </p></td><td valign="top" align="left"><p>
+   Specifies the XML MAIN file. It contains the highest-level object
+   (root element) of your documentation project. The MAIN file must be located
+   in <code class="filename"><em class="replaceable ">YOUR_DOC_DIR</em>/xml/</code>.
+   Therefore, you only need to specify the MAIN's file name in the DC file
+   (no path).</p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.daps.dc.set.rootid"><span class="callout">2</span></a> </p></td><td valign="top" align="left"><p>
+  Defines the root ID of the element to be used for creating an output format.
+  Usually, you specify the root ID of a <code class="sgmltag-element">book</code> or
+  <code class="sgmltag-element">article</code> element here.</p><p>
+       In this example, no <em class="parameter ">ROOTID</em> is set. This allows
+       to build the complete documentation set, with the output containing
+       all hyperlinks between the individual books.
+      </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.daps.dc.set.styleroot"><span class="callout">3</span></a> </p></td><td valign="top" align="left"><p>
+   For a custom layout, use the <em class="parameter ">STYLEROOT</em> parameter to
+   specify the (absolute or relative) path to the directory containing the
+   custom stylesheets. Using absolute paths is recommended for DC files.
+   </p><p>
+       In this example, the parameter specifies the path to a directory with
+       SUSE-specific stylesheets.
+      </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.daps.dc.set.fbstyleroot"><span class="callout">4</span></a> </p></td><td valign="top" align="left"><p>Allows you to define a fallback which is used in case the custom
+     stylesheets defined with <em class="parameter ">STYLEROOT</em> cannot be accessed.
+     In case neither the stylesheets specified with <em class="parameter ">STYLEROOT</em>
+     nor with <em class="parameter ">FALLBACK_STYLEROOT</em> can be accessed, DAPS
+     uses the default DocBook layout.</p><p>
+       In this example, no fallback is specified and the parameter is
+       disabled.
+      </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.daps.dc.set.source"><span class="callout">5</span></a> </p></td><td valign="top" align="left"><p>
+   Enabling this parameter allows you to source the DC file on the Bash with
+   DAPS. Sourcing a DC file (formerly called <code class="literal">ENV</code> file)
+   was necessary to work with the documentation environment provided by susedoc,
+   DAPS's predecessor.
+  </p></td></tr></table></div></div></div></div></div><div class="sect1 " id="sec.daps.user.syntax"><div class="titlepage"><div><div><h2 class="title" id="sec.daps.user.syntax"><span class="number">2.7 </span><span class="name">Basic DAPS Syntax</span> <a title="Permalink" class="permalink" href="cha.daps.user.features.html#sec.daps.user.syntax">#</a></h2></div></div></div><p>
+   Before moving forward, let's get familiar with the basic syntax of the
+   <code class="command">daps</code> command:
+  </p><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux:~&gt; </code><code class="command">daps</code> [--global-options] subcommand [--command-options] [arguments]</pre></div><p>
+   <a class="xref" href="cha.daps.user.features.html#ex.daps.user.syntax" title="DAPS Syntax">Example 2.13, “DAPS Syntax”</a> shows an example command that
+   generates HTML output. Global options are used to specify the level of
+   verbosity, and the Doc Config file for creating the output.
+  </p><div class="example" id="ex.daps.user.syntax"><div class="example-title-wrap"><h6 class="example-title"><span class="number">Example 2.13: </span><span class="name">DAPS Syntax </span><a title="Permalink" class="permalink" href="cha.daps.user.features.html#ex.daps.user.syntax">#</a></h6></div><div class="example-contents"><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux:~&gt; </code><code class="command">daps</code><span id="co.daps.user.syntax.main"></span><span class="callout">1</span> --debug<span id="co.daps.user.syntax.debug"></span><span class="callout">2</span> -d<span id="co.daps.user.syntax.dc"></span><span class="callout">3</span> DC-daps-example html<span id="co.daps.user.syntax.output"></span><span class="callout">4</span> --static<span id="co.daps.user.syntax.static"></span><span class="callout">5</span></pre></div><div class="calloutlist "><table border="0" summary="Callout list"><tr><td width="5%" valign="top" align="left"><p><a href="#co.daps.user.syntax.main"><span class="callout">1</span></a> </p></td><td valign="top" align="left"><p>
+      Main command: <code class="command">daps</code>
+     </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.daps.user.syntax.debug"><span class="callout">2</span></a> </p></td><td valign="top" align="left"><p>
+      Global Option <code class="option">--debug</code>: Sets the highest verbosity
+      level (number of messages shown during the transformation process from
+      XML to HTML).
+     </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.daps.user.syntax.dc"><span class="callout">3</span></a> </p></td><td valign="top" align="left"><p>
+      Global Option <code class="option">-d</code>: Defines the relative or absolute
+      path to the Doc Config file. In this example, <code class="command">daps</code> is
+      called in the same directory that holds the Doc Config file.
+     </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.daps.user.syntax.output"><span class="callout">4</span></a> </p></td><td valign="top" align="left"><p>
+      Subcommand <code class="command">html</code>: Defines the output format to
+      create.
+     </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.daps.user.syntax.static"><span class="callout">5</span></a> </p></td><td valign="top" align="left"><p>
+      Command option <code class="option">--static</code>: Tells DAPS to copy CSS
+      and image files to the same location like the HTML files. For more
+      information, see <a class="xref" href="cha.daps.user.output.html#tab.daps.user.output.overview" title="DAPS Output Commands and Formats">Table 4.1, “DAPS Output Commands and Formats”</a>.
+     </p></td></tr></table></div></div></div><div id="idm140537709730384" class="admonition tip"><img class="symbol" alt="Tip" title="Tip" src="static/images/icon-tip.png" /><h6>Tip: Specifying the DC File</h6><p>For execution of most commands, DAPS needs to know which DC file
+      to use. Usually, you do so by specifying a DC file with the global option
+     <code class="option">-d</code>. For example:</p><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux:~&gt; </code><code class="command">daps</code> -d <em class="replaceable ">PATH_TO_DC_FILE</em> pdf</pre></div><p>Only in the following cases you may omit the <code class="option">-d</code>
+     option:</p><div class="itemizedlist "><ul class="itemizedlist"><li class="listitem "><p>If your documentation directory contains only one DC file. In that case,
+     DAPS automatically uses the corresponding file.</p></li><li class="listitem "><p>If you have specified a default DC file to use in <code class="filename">~/.config/daps/dapsrc</code>
+    (as a value for <em class="parameter ">DOCCONF_DEFAULT</em>). In that case,
+     DAPS automatically uses the corresponding file, unless you specify a
+     different one on the command line.</p></li><li class="listitem "><p>If you want to call the help function.</p></li></ul></div></div><p>
+   To view the global options and the available subcommands for DAPS, use the command:
+  </p><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux:~&gt; </code><code class="command">daps</code> help</pre></div><p>
+   For a short help text on a specific <span class="emphasis"><em>subcommand</em></span>, use:
+  </p><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux:~&gt; </code><code class="command">daps</code> help  <em class="replaceable ">subcommand</em></pre></div><p>
+   For example, if you want more information about generating HTML output,
+   run:
+  </p><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux:~&gt; </code><code class="command">daps</code> help html</pre></div></div></div></div><div class="page-bottom"><div id="_bottom-navigation"><a class="nav-link" href="cha.daps.user.edit.html"><span class="next-icon">→</span><span class="nav-label"><span class="number">Chapter 3 </span>Editing DocBook XML</span></a><a class="nav-link" href="cha.daps.user.inst.html"><span class="prev-icon">←</span><span class="nav-label"><span class="number">Chapter 1 </span>System Requirements and Installation</span></a></div><div id="_share-print"><div class="online-contents share"><strong>Share this page: </strong><span class="share-buttons"><span id="_share-fb" class="bottom-button">Facebook</span><span class="spacer"> • </span><span id="_share-gp" class="bottom-button">Google+</span><span class="spacer"> • </span><span id="_share-tw" class="bottom-button">Twitter</span></span></div><div class="print"><span id="_print-button" class="bottom-button">Print this page</span></div><div class="clearme"></div></div></div></div></div></body></html>
