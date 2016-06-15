@@ -268,9 +268,7 @@
 
   <xsl:template match="bookinfo">
     <bookinfo>
-      <xsl:apply-templates select="(title|../title)[1]"/>
-      <!--<xsl:copy-of select="(subtitle|../subtitle)[1]"/>-->
-      <!--<xsl:copy-of select="(titleabbrev|../titleabbrev)[1]"/>-->
+      <xsl:apply-templates select="(title|../title)[1]" mode="title"/>
       <xsl:apply-templates select="productname"/>
       <xsl:apply-templates select="productnumber"/>
       <xsl:apply-templates select="date"/>
@@ -365,6 +363,17 @@
    <xsl:call-template name="warn">
      <xsl:with-param name="text">Removed qandaset/title</xsl:with-param>
    </xsl:call-template>
+  </xsl:template>
+
+ <xsl:template match="title" mode="title">
+  <xsl:call-template name="create.title"/>
+ </xsl:template>
+
+  <xsl:template match="title" name="create.title">
+   <xsl:variable name="title.text">
+    <xsl:apply-templates/>
+   </xsl:variable>
+   <title><xsl:value-of select="string($title.text)"/></title>
   </xsl:template>
 
   <xsl:template match="title/ulink">
