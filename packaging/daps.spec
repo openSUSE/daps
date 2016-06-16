@@ -223,7 +223,6 @@ exit 0
 %exclude %{_defaultdocdir}/%{name}/INSTALL
 %exclude %{_sysconfdir}/%{name}/config.in
 %exclude %{_sysconfdir}/%{name}/catalog.xml
-%exclude %{_datadir}/%{name}/libexec/daps-jing.*
 #----------------------
 
 %changelog

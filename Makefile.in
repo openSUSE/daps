@@ -488,7 +488,8 @@ xsltyelpdir = $(xsltdir)/yelp
 
 # BIN
 dist_bin_SCRIPTS = $(wildcard bin/*[^.in] $(BUILD_ROOT)/bin/*)
-dist_dapslibexec_SCRIPTS = $(wildcard libexec/*)
+# exclude daps-jing.*
+dist_dapslibexec_SCRIPTS = $(filter-out $(wildcard libexec/daps-jing.*),$(wildcard libexec/*))
 
 # CONFIG files
 dist_dapsconf_DATA = etc/config etc/docbook-xmlformat.conf \
