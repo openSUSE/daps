@@ -890,7 +890,7 @@ function sanitize_path {
             # 3. Replace ~USER with a real path
             # the %q option to printf quotes and escapes dangerous characters
             # see http://stackoverflow.com/questions/2069467/have-to-determine-all-users-home-directories-tilde-scripting-problem
-            eval BAR="$(printf "%q" "$MYPATH")"
+            eval MYPATH="$(printf "%q" "$MYPATH")"
         fi
     fi
 
@@ -898,7 +898,7 @@ function sanitize_path {
         [[ -n "$BASEDIR" ]] && MYPATH="${BASEDIR}/${MYPATH}"
         ABSPATH=$(readlink -en "$MYPATH")
         if [[ 0 = "$?" ]]; then
-            eval "$VARNAME=$ABSPATH"
+            declare -g $VARNAME="$ABSPATH"
         else
             exit_on_error "$VARNAME=$MYPATH: Path does not exist"
         fi
@@ -906,7 +906,7 @@ function sanitize_path {
         # path is already absolute, set to MYPATH (because of having cut
         # the trailing /
         if [[ -d $MYPATH || -f $MYPATH ]]; then
-            eval "$VARNAME=$MYPATH"
+            declare -g $VARNAME="$MYPATH"
         else
             exit_on_error "$VARNAME=$MYPATH: Path does not exist"
         fi
