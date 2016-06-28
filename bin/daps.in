@@ -950,6 +950,11 @@ function autoset_docconf {
         if [[ -h ${DC_COUNT[0]} ]]; then
             # DOCCONF is a link
             DC_REAL_PATH=$(readlink -nm "${DC_COUNT[0]}")
+            if [[ 0 = "$?" ]]; then
+            declare -g $VARNAME="$ABSPATH"
+        else
+            exit_on_error "$VARNAME=$MYPATH: Path does not exist"
+        fi
             DC_REAL_DIR=$(dirname "$DC_REAL_PATH")
             DC_FILENAME=$(basename "$DC_REAL_PATH")
             DC_PARENT=${DC_FILENAME#${CONF_PREFIX}*}

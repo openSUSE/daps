@@ -78,7 +78,7 @@ endif
 #
 SRCFILES := $(sort $(shell $(XSLTPROC) --stringparam "filetype=xml" \
 	      --file $(SETFILES_TMP) \
-	      --stylesheet $(DAPSROOT)/daps-xslt/common/extract-files-and-images.xsl $(XSLTPROCESSOR) ))
+	      --stylesheet $(DAPSROOT)/daps-xslt/common/extract-files-and-images.xsl $(XSLTPROCESSOR) 2>/dev/null))
 
 # check
 ifndef SRCFILES
@@ -90,7 +90,7 @@ endif
 ifdef ROOTSTRING
   # check if ROOTID is a valid root element
   #
-  ROOTELEMENT := $(shell $(XMLSTARLET) sel -t -v "//div[@id='$(ROOTID)'][1]/@remap" $(SETFILES_TMP))
+  ROOTELEMENT := $(shell $(XMLSTARLET) sel -t -v "//div[@id='$(ROOTID)'][1]/@remap" $(SETFILES_TMP) 2>/dev/null)
   ifneq "$(ROOTELEMENT)" "$(filter $(ROOTELEMENT),$(VALID_ROOTELEMENTS))"
     $(error Fatal error: ROOTID belongs to an unsupported root element ($(ROOTELEMENT)). Must be one of $(VALID_ROOTELEMENTS) )
   endif
@@ -98,7 +98,7 @@ ifdef ROOTSTRING
 
   DOCFILES := $(sort $(shell $(XSLTPROC) --stringparam "filetype=xml" \
 	      $(ROOTSTRING) --file $(SETFILES_TMP) \
-	      --stylesheet $(DAPSROOT)/daps-xslt/common/extract-files-and-images.xsl $(XSLTPROCESSOR) ))
+	      --stylesheet $(DAPSROOT)/daps-xslt/common/extract-files-and-images.xsl $(XSLTPROCESSOR) 2>/dev/null))
 
   # check
   ifndef DOCFILES
@@ -114,7 +114,7 @@ endif
 # Entity files
 #
 ENTITIES_DOC := $(addprefix $(DOC_DIR)/xml/,\
-	      $(shell $(LIBEXEC_DIR)/getentityname.py $(DOCFILES)))
+	      $(shell $(LIBEXEC_DIR)/getentityname.py $(DOCFILES) 2>/dev/null))
 
 
 # files xi:included with parse="text"
@@ -129,4 +129,4 @@ ENTITIES_DOC := $(addprefix $(DOC_DIR)/xml/,\
 #
 TEXTFILES := $(sort $(shell $(XSLTPROC) --stringparam "filetype=text" \
 	      --file $(SETFILES_TMP) \
-	      --stylesheet $(DAPSROOT)/daps-xslt/common/extract-files-and-images.xsl $(XSLTPROCESSOR) ))
+	      --stylesheet $(DAPSROOT)/daps-xslt/common/extract-files-and-images.xsl $(XSLTPROCESSOR) 2>/dev/null))
