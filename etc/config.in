@@ -2,11 +2,43 @@
 # DAPS configuration file #
 ###########################
 #
-# Copyright (C) 2012-2015 SUSE Linux GmbH
+# Copyright (C) 2012-2016 SUSE Linux GmbH
 #
 # Author:
 # Frank Sundermeyer <fsundermeyer at opensuse dot org>
 #
+
+#------------------------------------------------------------
+# Syntax
+# The following works:
+#
+# KEY=VALUE
+# KEY = VALUE
+# KEY = VALUE # comment
+
+# KEY = "VALUE1 VALUE2"
+# KEY = 'VALUE1 VALUE2'
+# KEY = 'VALUE1 VALUE2' #comment
+#
+# When not quoting values, VALUE must not include single or double
+# quotes nor a hashmark - the value will be cut at the first occurrence of
+# one of these characters. Escaping these characters will not work.
+# Therefore quoting VALUE is recommended (with single or double quotes, there
+# is no difference).
+#
+# When parsing quoted values, only the enclosing quotes will
+# be removed, the rest of the string will be taken as is including trailing
+# spaces. Do not escape special characters:
+#
+# Wrong:
+# KEY = 'Don¸\'t quote \"special\" characters like \#' #WRONG!!
+#
+# ==> Result: Don¸\'t quote \"special\" characters like \#
+#
+# Correct:
+# KEY = 'Don¸'t quote "special" characters like #' #CORRECT!
+#
+# ==> Result: Don¸'t quote "special" characters like #
 
 #------------------------------------------------------------
 # Customizing:
@@ -55,31 +87,11 @@ ASPELL_LANG=""
 ## Description: list of DOcBook XML tags which content should _not_ be
 ##              spell-checked
 ## Type:        List
-## Default:     ( author command email envar filename firstname guimenu
-##                keycap literal option remark screen surname systemitem
-##                ulink varname xref )
+## Default:     "author command email envar filename firstname guimenu \
+##               keycap literal option remark screen surname systemitem \
+##               ulink varname xref" 
 #
-# NOTE: Spece separated list of tags, needs to be enclosed in brackets
-#
-ASPELL_SKIP_TAGS=(
-    author 
-    command
-    email                 
-    envar
-    filename                
-    firstname
-    guimenu
-    keycap
-    literal                
-    option                
-    remark
-    screen
-    surname
-    systemitem
-    ulink
-    varname
-    xref
-)
+ASPELL_SKIP_TAGS="author command email envar filename firstname guimenu keycap literal option remark screen surname systemitem ulink varname xref"
 
 ## Key:         BUILD_DIR
 ## ----------------------             

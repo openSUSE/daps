@@ -1030,6 +1030,56 @@ function recover_cmdl_values {
     test -n "$XSLTPROCESSOR_CMDL" && XSLTPROCESSOR="$XSLTPROCESSOR_CMDL"
 }
 
+# ---------
+# Config file parser for DC-files and general configs
+# More secure than just sourcing the config files
+#
+
+function parse_config {
+
+    # Inspired by
+    # https://stackoverflow.com/questions/16571739/bash-parsing-variables-from-config-file
+    # Takes the config file to parse as required value
+    #
+    [[ -z $1 ]] && exit_on_error "Function parse_config must be called with a config file as an argument"
+
+    local KEY LINE_NO OLD_IFS TMP_VALUE VALUE
+
+    LINE_NO=0
+    OLD_IFS="$IFS"
+    while IFS='= ' read KEY VALUE; do
+       let LINE_NO++
+       if [[ ! "$KEY" =~ ^\ *# && -n "$KEY" ]]; then
+           VALUE="${VALUE%"${VALUE##*[^ ]}"}" # Del trailing spaces
+           VALUE="${VALUE#[\"\']*}"               # Del opening string quotes
+           TMP_VALUE="${VALUE%[\"\']*}"           # Del closing string quotes
+           #
+           # If value was quoted, we now have removed everything that was
+           # added after the last quote, incl. trailing comments. Therefore
+           # we are ready parsing quoted strings right here - we have removed
+           # the quotes and want to keep everything that has been between the
+           # quotes (and that includes # )
+           # However, if the string was not quoted, trailing comments have not
+           # been removed yet. And since we want to remove everything that
+           # comes after the first #, we need to use the greedy operator
+           # ${VALUE%%\#*}. If we would use that on the quoted strings,
+           # everything after a potential # would be deleted "foo#bar" => foo.
+           # Therefore we only remove comments on unquoted strings. If a
+           # string was unquoted TMP_VALUE and VALUE will be identical
+           # here:
+
+           if [[ "$TMP_VALUE" = "$VALUE" ]]; then
+               VALUE="${TMP_VALUE%%\#*}" # Del inline right comments
+           else
+               VALUE="$TMP_VALUE"
+           fi
+           declare -g $KEY="$VALUE" || exit_on_error "Invalid value in config file $1 in line $LINE_NO"
+       fi
+    done < "$1"
+    IFS="$OLD_IFS"
+}
+
+
 
 trap "exit_on_error '\nCaught SIGTERM/SIGINT'" SIGTERM SIGINT
 trap "clean_daps" ERR EXIT
@@ -1340,7 +1390,7 @@ fi
 
 
 if [[ -f $USER_CONFIG && -z "$DAPSROOT_CMDL" ]]; then
-    source "$USER_CONFIG"
+    parse_config "$USER_CONFIG"
     # make DAPSROOT path absolute and remove trailing /
     [[ -n "$DAPSROOT" ]] && sanitize_path "$DAPSROOT" "DAPSROOT" \
         "$(readlink -en "$(dirname "$USER_CONFIG")")"
@@ -1384,18 +1434,17 @@ XSLTPROC=${DAPSROOT}/libexec/daps-xslt
 
 
 # ---------------------------------------------
-# Source functions and system config
+# Source functions and parse system config
 #
-# Now that everything is in place, source the functions, the system config
-# and the user config (again)
+# Now that everything is in place, source the functions, parse the system
+# config and the user config (again)
 source "$LIB_DIR/daps_functions"
-source "$CONFIG"
+parse_config "$CONFIG"
 
-# ---------------------------------------------
-# Source user config
+# Parse user config
 #
 if [[ -f $USER_CONFIG ]]; then
-    source "$USER_CONFIG"
+    parse_config "$USER_CONFIG"
     # make paths from PATHLIST absolute and remove trailing /
 #    MY_BASEDIR=$(readlink -en $(dirname $USER_CONFIG))
 #    check_pathlist "$MY_BASEDIR"
@@ -1425,7 +1474,7 @@ fi
 #esac
 
 #-------------------------------------
-# Source DOCCONF and set up MAIN, DOC_DIR
+# Parse DOCCONF and set up MAIN, DOC_DIR
 #
 # The black magic part of daps ... ;-)
 #
@@ -1440,22 +1489,22 @@ fi
 # overwrite a MAIN setting from DOCCONF)
 # The real values will be set when calling recover_cmdl_values
 
-# set DOCCONF_CMDL if DC-file was sourced
+# set DOCCONF_CMDL if DC-file was parsed
 [[ -n "$DOCCONF" && -z "$DOCCONF_CMDL" ]] && DOCCONF_CMDL=$DOCCONF
 
 if [[ -z "$DOCCONF_CMDL" && -z "$MAIN_CMDL" ]]; then
 # DOCCONF and MAIN were not set on the command line, check other possibilities
     if [[ -n "$DOCCONF_NAME" ]]; then
-    # check if DOCCONF was sourced
+    # check if DOCCONF was parsed
     # takes precedence over a default set in config
         if [[ -e "$DOCCONF_NAME" ]]; then
             sanitize_path "$DOCCONF_NAME" "DOCCONF_CMDL"
             DOC_DIR=$(dirname "$DOCCONF_CMDL")
             if [[ 2 -le $VERBOSITY ]]; then
-                echo "Using previously sourced DOCCONF $DOCCONF_CMDL"
+                echo "Using previously parsed DOCCONF $DOCCONF_CMDL"
             fi
         else
-            exit_on_error "Cannot find previously sourced DOCCONF \"$DOCCONF_NAME\".\nWhen sourcing the doc config, you either need to run $ME from the directory\nwhere you sourced the config, or you need to provide an absolute path when\nsourcing the doc config."
+            exit_on_error "Cannot find previously parsed DOCCONF \"$DOCCONF_NAME\".\nWhen sourcing the doc config, you either need to run $ME from the directory\nwhere you parsed the config, or you need to provide an absolute path when\nsourcing the doc config."
         fi
     elif [[ -n "$DOCCONF_DEFAULT" ]]; then
     # check if a default value was specified in the user/system config file
@@ -1493,9 +1542,8 @@ fi
 [[ -z "$DOC_DIR" ]] && exit_on_error "Fatal: \$DOC_DIR is not set. This should not have happened. Please report a bug."
 [[ -z "$DAPSROOT" ]] && exit_on_error "Fatal: \$DAPSROOT is not set. This should not have happened. Please report a bug."
 
-# FINALLY! Source the DOCCONF file, recover the command line values
-
-[[ -n "$DOCCONF_CMDL" ]] && source "$DOCCONF_CMDL"
+# FINALLY! Parse the DOCCONF file, recover the command line values
+[[ -n "$DOCCONF_CMDL" ]] && parse_config "$DOCCONF_CMDL"
 
 # FOP/XEP CONFIG and WRAPPER / JING WRAPPER
 # when using an SVN checkout, @sysconfdir@ and @pkgdatadir have not been

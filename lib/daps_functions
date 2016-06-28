@@ -2116,7 +2116,7 @@ function spellcheck {
     # first, create skiplist
     #
     COUNT=0
-    for SKIP in "${ASPELL_SKIP_TAGS[@]}"; do
+    for SKIP in $ASPELL_SKIP_TAGS; do
         SKIPLIST[$COUNT]="--add-sgml-skip=$SKIP"
         let COUNT++
     done
