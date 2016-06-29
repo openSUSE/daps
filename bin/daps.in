@@ -657,8 +657,8 @@ Usage:
 
 
 Global Options:
-  --builddir=BUILD_DIR      Directory where every output $ME generates will end
-                            up
+  --builddir=BUILD_DIR      Directory where every output $ME generates will
+                            end up.
                             Default: <doc dir>/build/$BOOK
   --color=(0|1)             By default errors, results, warnings and certain
                             info messages are printed in color using bash color
@@ -668,13 +668,13 @@ Global Options:
                                         disabled automatically)
   --commands                Show a list of available DAPS sub commands
   --debug                   Print debugging messages. Alternatively see the
-                            --verbose options for an output that is better
+                            verbosity options for an output that is better
                             readable.
   --docconfig=DC-file,
-  -d DC-file                Path to doc config file to use. Mandatory
-                            unless there is only a single DC-file in the current
-                            directory or unless you have configured a default
-                            value (DOCCONF_DEFAULT) in $USER_CONFIG.
+  -d DC-file                Path to doc config file to use. Mandatory,
+                            unless there is only a single DC-file in the
+                            current directory or unless you have configured a
+                            default value (DOCCONF_DEFAULT) in $USER_CONFIG.
                             Note: Options --docconfig and --main exclude
                                   each other.
   --fb_styleroot            Fallback styleroot directories. Can only be used in
@@ -716,13 +716,12 @@ Global Options:
   --verbosity=0, -v0        Verbosity Level 0 (print 1 line of results)
   --verbosity=1, -v1, -v    Verbosity Level 1 (print intermediate results)
   --verbosity=2, -v2, -vv   Verbosity Level 2 (print all files created)
-  --verbosity=3, -v3, -vvv  Verbosity Level 3 (print all commands, very verbose)
-
+  --verbosity=3, -v3, -vvv  Verbosity Level 3 (print all commands, very
+                            verbose)
   --version                 Print version number
-
   --xsltprocessor=PROCESSOR Specify an xslt processor that is used to transorm
-                            the XML files. Currently supported are \"xsltproc\"
-                            and \"saxon\" (version 6).
+                            the XML files. Currently supported are "xsltproc"
+                            and "saxon" (version 6).
                             Default: xsltproc
 
 Subcommands:
@@ -827,7 +826,6 @@ function daps_commands {
         fi
     done | sort
 }
-
 
 # ---------
 # Clean up

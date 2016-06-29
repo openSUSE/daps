@@ -2443,8 +2443,8 @@ EOF
 }
 function help_clean {
     cat <<EOF
-    --clean                   Clean up the result directory (delete all files and
-                              subdirectories) before building the document.
+    --clean                   Clean up the result directory (delete all files
+                              and subdirectories) before building the document.
                               Default: unset
 EOF
 }
@@ -2899,7 +2899,7 @@ EOF
 }
 function help_trans-files {
     cat <<EOF
-    --trans-files=\"<LIST>\"  Specify one or more tarballs with translated
+    --trans-files="<LIST>"    Specify one or more tarballs with translated
                               files (semicolon-separeted) for a single
                               language.
                               Default: unset
@@ -2921,17 +2921,5 @@ function help_xsltparam {
     cat <<EOF
     --xsltparam=STRING        ** Deprecated **
                               Use --param and/or --stringparam instead.
-
-                              Add one or more xslt processor parameters in
-                              the form of
-                              \"--stringparam KEY=VALUE --param KEY=VALUE\".
-                              The given string will be passed unmodified to
-                              the xslt processor call that
-                              $1.
-                              Useful to temporarily overwrite style sheet
-                              parameters such as margins.
-                              Note: You MUST quote the string with double
-                              quotes: --xsltparam=\"STRING\"
-                              Default: unset
 EOF
 }

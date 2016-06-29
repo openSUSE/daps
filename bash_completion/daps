@@ -1,0 +1,165 @@
+#!/bin/bash
+#
+# Very helpful tutorial
+# https://debian-administration.org/article/317/An_introduction_to_bash_completion_part_2
+#
+# also check how to use completion with aliases like gdaps
+#
+
+#
+# TODO
+# Type a command with subcommand, then go backwards on the command line
+# with the cursor (before the subcommand). You should get the global options
+# (but this currently does not work)
+#
+
+shopt -s progcomp
+
+_daps() {
+    local cur prev scmd commands options
+    local -a daps_commands
+    COMPREPLY=()
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
+
+    # array containing all DAPS subcommands
+    daps_commands=( $(daps --commands) )
+
+    # Get a pipe separated list of all subcommands
+    # we need them in the case-statement
+    SAVE_IFS="$IFS"
+    IFS="|"
+    check_scmd="${daps_commands[*]}"
+    IFS="$SAVE_IFS"
+
+    # all DAPS subcommands in a plain space-separated string
+    commands="${daps_commands[@]}"
+
+    # all global options
+    options="-d -h -m -v -vv -vvv $(daps --help | sed -n 's/^\s*\(--[a-z_\-]*\).*/\1/p' | uniq)"
+
+    # subcommand that was typed
+    # "grep" for word in COMP_WORDS that does not start with "-" and
+    # is a subcommand (compare with subcommand list)
+    for ((i = 1; i < ${#COMP_WORDS[@]}; ++i)); do
+        if [[ ${COMP_WORDS[i]} != -* ]]; then
+            # check if daps subcommand
+            for cmd in "${daps_commands[@]}"; do
+                if [[ "$cmd" == "${COMP_WORDS[i]}" ]]; then
+                    scmd=${COMP_WORDS[i]}
+                    break
+                fi
+            done
+        fi
+    done
+
+
+    case "$scmd" in
+        +($check_scmd))
+            # all subcommands
+            # see https://stackoverflow.com/questions/13254425/using-variable-as-case-pattern-in-bash for the pattern match syntax
+            case "$prev" in
+                --export-dir|--notrans-dir|--output-dir)
+                    compopt -o nospace
+                    COMPREPLY=( $( compgen -d -S "/" -- $cur ) )
+                    return 0
+                    ;;
+                --css|--export-dir|--extra-dict|--file|--statdir)
+                    compopt -o filenames
+                    COMPREPLY=( $( compgen -f -- $cur ) )
+                    return 0
+                    ;;
+                --def-file)
+                    if [[ -z $cur ]]; then
+                        local def_files
+                        def_files=$(for x in DEF-*; do [[ "$x" =~ \~$ ]] && continue; [ -e "$x" ] || continue; echo "$x"; done 2>/dev/null)
+                        COMPREPLY=( $(compgen -W "$def_files" -- $cur) )
+                    else
+                        compopt -o filenames
+                        COMPREPLY=( $( compgen -f -- $cur ) )
+                    fi
+                    return 0
+                    ;;
+                --formatter)
+                    COMPREPLY=( $(compgen -W "fop xep" -- $cur) )
+                    return 0
+                    ;;
+                *)
+                ;;
+            esac
+            local options
+            options="$(daps "$scmd" --help | sed -n 's/^\s*\(--[a-z_\-]*\).*/\1/p' | uniq)"
+            COMPREPLY=( $(compgen -W "$options" -- $cur) )
+            return 0
+            ;;
+        *)
+            # the global options go here
+            case "$prev" in
+                 --builddir)
+                    compopt -o nospace
+                    COMPREPLY=( $( compgen -d -S "/" -- $cur ) )
+                    return 0
+                    ;;
+                --color)
+                    COMPREPLY=( $(compgen -W "0 1" -- $cur) )
+                    return 0
+                    ;;
+                -d|--docconfig)
+                    # return DC-file on "empty" TAB, else file completion
+                    if [[ -z $cur ]]; then
+                        local dc_files
+                        dc_files=$(for x in DC-*; do [[ "$x" =~ \~$ ]] && continue; [ -e "$x" ] || continue; echo "$x"; done 2>/dev/null)
+                        COMPREPLY=( $(compgen -W "$dc_files" -- $cur) )
+                    else
+                        #compopt -o filenames
+                        COMPREPLY=( $( compgen -f -- $cur ) )
+                    fi
+                    return 0
+                    ;;
+                -m|--main)
+                    local mains
+                    if [[ -d xml ]]; then
+                        mains=$(ls -1 --color=never xml/MAIN*.xml)
+                    fi
+                    if [[ -z $cur && -n $mains ]]; then
+                        COMPREPLY=( $(compgen -W "$mains" -- $cur) )
+                    else
+                        compopt -o filenames
+                        COMPREPLY=( $( compgen -f -- $cur ) )
+                    fi
+                    return 0
+                    ;;
+                --verbosity)
+                    COMPREPLY=( $(compgen -W "1 2 3" -- $cur) )
+                    return 0
+                    ;;
+                --xsltprocessor)
+                    COMPREPLY=( $(compgen -W "saxon xsltproc" -- $cur) )
+                    return 0
+                    ;;
+                --fb_styleroot|--styleroot)
+                    compopt -o filenames
+                    COMPREPLY=( $( compgen -f -- $cur ) )
+                    return 0
+                    ;;
+                *)
+                    ;;
+            esac
+            ;;
+    esac
+
+    if [[ $cur == -* ]]; then
+        # show options only when "-" has been entered
+       COMPREPLY=( $(compgen -W "$options" -- $cur) )
+    else
+        # else show subcommands only
+        COMPREPLY=( $(compgen -W "$commands" -- $cur) )
+    fi
+    return 0
+}
+ complete -F _daps daps
+ # most common aliases
+ # I know. it's hackish but I do not assume that there are programs
+ # called ddaps or gdaps...
+ #
+ complete -F _daps [dg]daps
