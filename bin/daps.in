@@ -922,7 +922,7 @@ function check_pathlist {
     BASEDIR=$1
 
     for DIR in "${PATHLIST[@]}"; do
-        eval "VAL=\$$DIR"
+        VAL="${!DIR}"
         if [[ -n "$VAL" ]]; then
             sanitize_path "$VAL" "$DIR" "$BASEDIR"
         fi
