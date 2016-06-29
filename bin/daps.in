@@ -1048,39 +1048,97 @@ function parse_config {
     #
     [[ -z $1 ]] && exit_on_error "Function parse_config must be called with a config file as an argument"
 
-    local KEY LINE_NO OLD_IFS TMP_VALUE VALUE
+    local CFG KEY LINE_NO OLD_IFS TMP_VALUE UNQUOTED VALUE
 
+    CFG=$1
     LINE_NO=0
     OLD_IFS="$IFS"
+    shopt -s extglob
     while IFS='= ' read KEY VALUE; do
-       let LINE_NO++
-       if [[ ! "$KEY" =~ ^\ *# && -n "$KEY" ]]; then
-           VALUE="${VALUE%"${VALUE##*[^ ]}"}" # Del trailing spaces
-           VALUE="${VALUE#[\"\']*}"               # Del opening string quotes
-           TMP_VALUE="${VALUE%[\"\']*}"           # Del closing string quotes
-           #
-           # If value was quoted, we now have removed everything that was
-           # added after the last quote, incl. trailing comments. Therefore
-           # we are ready parsing quoted strings right here - we have removed
-           # the quotes and want to keep everything that has been between the
-           # quotes (and that includes # )
-           # However, if the string was not quoted, trailing comments have not
-           # been removed yet. And since we want to remove everything that
-           # comes after the first #, we need to use the greedy operator
-           # ${VALUE%%\#*}. If we would use that on the quoted strings,
-           # everything after a potential # would be deleted "foo#bar" => foo.
-           # Therefore we only remove comments on unquoted strings. If a
-           # string was unquoted TMP_VALUE and VALUE will be identical
-           # here:
+        UNQUOTED=0
+        let LINE_NO++
+        # skip empty lines
+        [[ -z "$KEY" ]] && continue
+        # skip comments
+        [[ "$KEY" =~ ^[[:space:]]*# ]] && continue
+        # skip export statements (were allowed in DAPS <= 2.2.0)
+        [[ "$KEY" =~ ^[[:space:]]*export$ ]] && continue
 
-           if [[ "$TMP_VALUE" = "$VALUE" ]]; then
-               VALUE="${TMP_VALUE%%\#*}" # Del inline right comments
-           else
-               VALUE="$TMP_VALUE"
-           fi
-           declare -g $KEY="$VALUE" || exit_on_error "Invalid value in config file $1 in line $LINE_NO"
-       fi
-    done < "$1"
+        # Possible KEY/VALUE pairs
+        # KEY01 = VALUE
+        # KEY02=VALUE
+        # KEY03 = "VALUE"
+        # KEY04="VALUE"
+        # KEY05 = VALUE   # comment
+        # KEY06=VALUE     # comment
+        # KEY07 = "VALUE" # comment
+        # KEY08="VALUE"   # comment
+        # KEY09 += VALUE
+        # KEY10+=VALUE
+        # KEY11 += "VALUE"
+        # KEY12+="VALUE"
+        # KEY13 += VALUE   # comment
+        # KEY14+=VALUE     # comment
+        # KEY15 += "VALUE" # comment
+        # KEY16+="VALUE"   # comment
+
+        VALUE="${VALUE#[\"\']*}"           # Del opening string quotes
+        TMP_VALUE="${VALUE%[\"\']*}"       # Del closing string quotes
+
+        #
+        # DONE:
+        # KEY01 = VALUE
+        # KEY02=VALUE
+        # KEY03 = "VALUE"
+        # KEY04="VALUE"
+        # KEY07 = "VALUE" # comment
+        # KEY08="VALUE"   # comment
+
+
+        if [[ "$TMP_VALUE" = "$VALUE" ]]; then
+            VALUE="${TMP_VALUE%%\#*}" # Del inline right comments
+            VALUE="${VALUE%%*( )}" # Del trailing spaces
+            UNQUOTED=1
+
+            # DONE:
+            # KEY05 = VALUE   # comment
+            # KEY06=VALUE     # comment
+        else
+            VALUE="$TMP_VALUE"
+        fi
+
+        # special treatment for += assignments (used for concatenation)
+        #
+
+        # KEY += VALUE
+        if [[ "$VALUE" =~ ^\+= ]]; then
+            VALUE=${VALUE#+=*} # remove "+="
+            if [[ 1 -eq $UNQUOTED ]]; then
+                VALUE="${VALUE##*( )}" # Delete leading spaces
+                # DONE:
+                # KEY09 += VALUE
+                # KEY13 += VALUE   # comment
+            else
+                VALUE="${VALUE##*( )[\"\']}" # Remove leading space and quote
+                # DONE:
+                # KEY11 += "VALUE"
+                # KEY15 += "VALUE" # comment
+            fi
+            declare -g $KEY="${!KEY} $VALUE"
+            # KEY+=VALUE
+        elif [[ "$KEY" =~ \+$ ]]; then
+            KEY="${KEY%*+}" # remove trailing "+"
+            # DONE:
+            # KEY10+=VALUE
+            # KEY12+="VALUE"
+            # KEY14+=VALUE     # comment
+            # KEY16+="VALUE"   # comment
+            declare -g $KEY="${!KEY} $VALUE"
+        else
+            declare -g $KEY="$VALUE" || exit_on_error "Invalid value in config file $CFG in line $LINE_NO"
+        fi
+    done < "$CFG"
+    shopt -u extglob
     IFS="$OLD_IFS"
 }
 

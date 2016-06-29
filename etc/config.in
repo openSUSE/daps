@@ -39,12 +39,27 @@
 # KEY = 'Don¸'t quote "special" characters like #' #CORRECT!
 #
 # ==> Result: Don¸'t quote "special" characters like #
+#
+# Each KEY/Value pair needs to be on a single line.
+#
+# Concatenating values:
+#
+# It is possible to add additional VALUES to an already existing
+# KEY with the "+=" notation. This is e.g. useful to increase
+# readability when VALUE is rather log:
+#
+# XSLTPARAM = '--stringparam "foo=bar"'
+# XSLTPARAM += '--strinparam "baz=foo"
+#
+# The same rules as for regulat KRY/VALUE pairs apply
+#
+
 
 #------------------------------------------------------------
 # Customizing:
 #
 # Override any setting below in
-# $HOME/.config/daps/dapsrc
+# $HOME/.config/daps/dapsrc (also see section "Syntax" above) 
 # or on the commandline
 #------------------------------------------------------------
 #
