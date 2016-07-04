@@ -157,9 +157,5 @@ _daps() {
     fi
     return 0
 }
- complete -F _daps daps
- # most common aliases
- # I know. it's hackish but I do not assume that there are programs
- # called ddaps or gdaps...
- #
- complete -F _daps [dg]daps
+ # also add most commonly used aliases for git checkouts here
+ complete -F _daps daps ddaps gdaps gitdaps
