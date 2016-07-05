@@ -454,10 +454,8 @@
     <!-- Generally, we want phrases to be unhyphenated, but there does
          not seem to be a [style hint](https://wiki.gnome.org/Apps/Yelp/Mallard/Styles)
          for that yet and Yelp does not seem to hyphenate ever, so ...
-         lets just add a span. -->
-    <span>
-      <xsl:apply-templates/>
-    </span>
+         lets do nothing. -->
+    <xsl:apply-templates/>
   </xsl:template>
 
   <xsl:template match="citetitle|d:citetitle">
