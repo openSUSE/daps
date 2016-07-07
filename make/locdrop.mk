@@ -143,7 +143,7 @@ locdrop: $(SRCFILES) $(MANIFEST_TRANS) $(MANIFEST_NOTRANS) $(USED_ALL) $(PROFILE
   ifndef DOCCONF
 	$(error $(shell ccecho "error" "Fatal error: locdrop is only supported when using a DC-file"))
   endif
-  ifdef MISSING
+  ifneq "$(strip $(MISSING))" ""
 	@ccecho "error" "Fatal error: The following images are missing:"
 	@echo -e "$(subst $(SPACE),\n,$(sort $(MISSING)))"
 	$(error )
@@ -162,20 +162,20 @@ locdrop: $(SRCFILES) $(MANIFEST_TRANS) $(MANIFEST_NOTRANS) $(USED_ALL) $(PROFILE
 	  $(DOCCONF)
 	tar rhf $(NO_TRANS_TAR) --absolute-names \
 	  --transform=s%$(LOCDROP_TMP_DIR)/%% $(MANIFEST_NOTRANS)
-    ifdef NO_TRANS_FILES
+    ifneq "$(strip $(NO_TRANS_FILES))" ""
 	tar rhf $(NO_TRANS_TAR) --absolute-names \
 	  --transform=s%$(PROFILEDIR)/%xml/% $(NO_TRANS_FILES)
     endif
-    ifdef DEF_FILE
+    ifneq "$(strip $(DEF_FILE))" ""
 	tar rhf $(NO_TRANS_TAR) --absolute-names --transform=s%$(DOC_DIR)/%% \
 	  $(DEF_FILE) $(DC_FILES)
     endif
-    ifdef TO_TRANS_IMGS
+    ifneq "$(strip $(TO_TRANS_IMGS))" ""
         # graphics tarball "translated graphics"
 	BZIP2=--best tar cfhj $(TO_TRANS_IMG_TAR) \
 	  --absolute-names --transform=s%$(DOC_DIR)/%% $(TO_TRANS_IMGS)
     endif
-    ifdef NO_TRANS_IMGS
+    ifneq "$(strip $(NO_TRANS_IMGS))" ""
         # graphics tarball "translated graphics"
 	BZIP2=--best tar cfhj $(NO_TRANS_IMG_TAR) \
 	  --absolute-names --transform=s%$(DOC_DIR)/%% $(NO_TRANS_IMGS)
