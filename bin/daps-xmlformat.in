@@ -1,0 +1,36 @@
+#!/bin/bash
+#
+# Copyright (C) 2012-2016 SUSE Linux GmbH
+#
+# Author:
+# Frank Sundermeyer <fsundermeyer at opensuse dot org>
+#
+# Used as a wrapper script, so it's not necessary to memorize
+# where the config file stays
+
+XMLFORMAT_CONFIG_FILE="@sysconfdir@/daps/docbook-xmlformat.conf"
+
+# when using a Git checkout, @sysconfdir@ has not been
+# replaced
+#
+# ${string/#substring/replacement}
+# If $substring matches front end of $string, substitute
+# $replacement for $substring.
+
+XMLFORMAT_CONFIG_FILE=${XMLFORMAT_CONFIG_FILE/#@sysconfdir\@\/daps/${DAPSROOT}/etc}
+
+echo "Using config file '$XMLFORMAT_CONFIG_FILE'"
+
+[[ -e $XMLFORMAT_CONFIG_FILE ]] || exit_on_error "Could not find config file '$XMLFORMAT_CONFIG_FILE'\n"
+
+# Binary filename can either be xmlformat, xmlformat.rb, or xmlformat.pl ;-((
+# take the first one that exists
+#
+for _BINARY in xmlformat xmlformat.pl xmlformat.rb; do
+    XMLFORMAT_CMD="$(which  --skip-alias --skip-functions "$_BINARY" 2>/dev/null)" && break
+done
+
+[[ -z "$XMLFORMAT_CMD" ]] && exit_on_error "The xmlformat script is missing. Please install the respective package!"
+
+$XMLFORMAT_CMD --config-file "$XMLFORMAT_CONFIG_FILE" "$@"
+exit $?

@@ -2210,9 +2210,6 @@ function xmlformat {
     SUB_CMD=$1
     shift
 
-    # use daps-xmlformat from DAPSROOT if the latter is set
-    [[ "$DAPSROOT" != "$DAPSROOT_DEFAULT" ]] && DAPSXMLFORMAT="${DAPSROOT}/bin/daps-xmlformat"
-
     SHORT_OPTS="h"
     LONG_OPTS="file:,help,rootid:"
 
@@ -2237,9 +2234,16 @@ function xmlformat {
         exit_on_error "Options --file (-f) and --rootid exclude one another.\nPlease specify only one of these options"
     fi
 
+    # define which dpas-xmlformat to use
+    #
+    if [[ -n "$DAPSROOT" && "$DAPSROOT" != "$DAPSROOT_DEFAULT" ]]; then
+        # use daps-xmlformat from DAPSROOT if the latter is set
+        DAPSXMLFORMAT="${DAPSROOT}/bin/daps-xmlformat"
+    else
+        DAPSXMLFORMAT="$(which --skip-alias --skip-functions daps-xmlformat 2>/dev/null)" || exit_on_error "Cannot find a daps-xmlformat executable"
+    fi
+
     # if --file was specified, FILELIST contains just one file
-
-
     # if --rootid was specified, we need to get the list of files
 
     if [[ -n "$P_FILE" ]]; then
