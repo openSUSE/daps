@@ -19,14 +19,14 @@
 # The environment is set up using the following hierachy
 # (command line always wins)
 #
-# 1. Command line 
+# 1. Command line
 # 2. DC-file
 # 3. $HOME/.config/daps/.dapsrc (user config file)
 # 4. $DAPSROOT/etc/config
 
 
 ## Key:         ASPELL_EXTRA_DICT
-## ----------------------             
+## ----------------------
 ## Description: Additional dictionary for spell checker
 ## Type:        Absolute path to distionary
 ## Default:     ""
@@ -35,7 +35,7 @@
 ASPELL_EXTRA_DICT=""
 
 ## Key:         ASPELL_LANG
-## ----------------------             
+## ----------------------
 ## Description: Language for spell checker
 ## Type:        String
 ## Default:     ""
@@ -56,13 +56,13 @@ ASPELL_LANG=""
 ##              spell-checked
 ## Type:        List
 ## Default:     ( author command email envar filename firstname guimenu
-##                keycap literal option remark screen surname systemitem
-##                ulink varname xref )
+##                keycap literal option remark replaceable screen surname
+##                systemitem ulink varname xref )
 #
 # NOTE: Space-separated list of tags, needs to be enclosed in brackets
 #
 ASPELL_SKIP_TAGS=(
-    author 
+    author
     command
     email
     envar
@@ -73,6 +73,7 @@ ASPELL_SKIP_TAGS=(
     literal
     option
     remark
+    replaceable
     screen
     surname
     systemitem
@@ -82,7 +83,7 @@ ASPELL_SKIP_TAGS=(
 )
 
 ## Key:         BUILD_DIR
-## ----------------------             
+## ----------------------
 ## Description: Build directory where all daps generated files will go
 ## Type:        Path to directory (without a trailing slash)
 ## Default:     ""
@@ -92,12 +93,12 @@ ASPELL_SKIP_TAGS=(
 BUILD_DIR=""
 
 ## Key:         CB_OPTIONS
-## ------------------------             
+## ------------------------
 ## Description: Command line options for /usr/bin/checkbot
 ## Type:        String
 ## Default:     "--dontwarn \"(301|302|902)\" --sleep 0 --timeout 60"
 #
-# 
+#
 # Also see 'man 1 checkbot'. Do not change unless you really know what you do.
 #
 CB_OPTIONS="--dontwarn  \"(301|302|902)\" --sleep 0 --timeout 60"
@@ -115,7 +116,7 @@ CB_OPTIONS="--dontwarn  \"(301|302|902)\" --sleep 0 --timeout 60"
 COLOR="yes"
 
 ## Key:         CONF_PREFIX
-## ------------------------             
+## ------------------------
 ## Description: Common prefix for all doc config files
 ## Type:        String
 ## Default:     "DC-"
@@ -168,7 +169,7 @@ DOCCONF_DEFAULT=""
 #
 DIA_OPTIONS="-t cairo-svg"
 
-## Key: DOCBOOK4_STYLE_URI        
+## Key: DOCBOOK4_STYLE_URI
 ## ------------------
 ## Description: URI to DocBook 4 stlysheets
 ## Type:        URI
@@ -187,7 +188,7 @@ DIA_OPTIONS="-t cairo-svg"
 #
 DOCBOOK4_STYLE_URI="http://docbook.sourceforge.net/release/xsl/current/"
 
-## Key: DOCBOOK5_STYLE_URI        
+## Key: DOCBOOK5_STYLE_URI
 ## ------------------
 ## Description: URI to DocBook 5 stlysheets
 ## Type:        URI
@@ -207,7 +208,7 @@ DOCBOOK4_STYLE_URI="http://docbook.sourceforge.net/release/xsl/current/"
 #
 DOCBOOK5_STYLE_URI="http://docbook.sourceforge.net/release/xsl-ns/current/"
 
-## Key: DOCBOOK5_RNG_URI        
+## Key: DOCBOOK5_RNG_URI
 ## ------------------
 ## Description: URI to DocBook 5 Relax NG schema
 ## Type:        URI
@@ -226,7 +227,7 @@ DOCBOOK5_RNG_URI="http://docbook.org/xml/5.0/rng/docbookxi.rng"
 #
 # Turns on DRAFT watermarks in PDF or HTML builds when set to "yes"
 # Is ignored for any other output format and has no effect on profiling.
-# This value can be set to "yes" using the -d switch on the command line 
+# This value can be set to "yes" using the -d switch on the command line
 # Also see COMMENTS and REMARKS
 #
 DRAFT="no"
@@ -247,7 +248,7 @@ DRAFT_STR="_draft"
 ## Type:        yesno
 ## Default:     "no"
 #
-# Useful to find errors within an epub file when devolping stylesheets  
+# Useful to find errors within an epub file when devolping stylesheets
 #
 EPUBCHECK="no"
 
@@ -267,9 +268,9 @@ EPUB_CSS=""
 #
 # When having specified custom stylesheets with STYLEROOT, the fallback
 # for styles not specified in the custom STYLEROOT are the DocBook stylesheets
-# Specify an alternative fallback with this option. Useful if you have a 
+# Specify an alternative fallback with this option. Useful if you have a
 # fork of e.g. your custom fo stylesheets. When setting STYLEROOT to this
-# for directory that only has fo styles, html versions of that document would 
+# for directory that only has fo styles, html versions of that document would
 # be build with the DocBook stylesheets. Setting FALLBACK_STYLEROOT to the
 # directory containing your original custom stylesheets (which also have
 # html stylesheets) will create html versions with your custom styles. The
@@ -288,7 +289,7 @@ FALLBACK_STYLEROOT=""
 
 #
 # Specify an XML config file for FOP. A template is available in
-# @sysconfdir@/daps/fop/fop-daps.xml 
+# @sysconfdir@/daps/fop/fop-daps.xml
 # Also see FORMATTER, FOP-*
 #
 # FOP_CONFIG_FILE="@sysconfdir@/daps/fop/fop-daps.xml"
@@ -503,7 +504,7 @@ MAIN=""
 #  * status (content of SVN property doc:status)
 # Useful for proofreading.
 # Implies that remarks are turned on.
-# This value can be set to "yes" using the -m switch on the command line 
+# This value can be set to "yes" using the -m switch on the command line
 # Also see REMARKS
 #
 META="no"
@@ -607,7 +608,7 @@ PROFVENDOR=""
 #
 # By default remarks are ignored when generating books. Set this parameter to
 # "yes" to include remarks. Useful for proofreading.
-# This value can be set to "yes" using the -r switch on the command line 
+# This value can be set to "yes" using the -r switch on the command line
 # Also see COMMENTS and DRAFT
 #
 REMARKS="no"
@@ -674,7 +675,7 @@ STATIC_DIR=""
 #
 STYLEDEVEL=""
 
-## Key:      STYLEROOT     
+## Key:      STYLEROOT
 ## -------------------
 ## Description: Custom Stylesheet directory.
 ## Type:        Path to directory (without a trailing slash)
@@ -776,7 +777,7 @@ WH_SEARCH="yes"
 # is no such option as -c or --config for the xep executable.
 #
 # NOTE: If $HOME/.config/daps/xep-config.xml exists, it will be used
-#       instead of the file specified here. 
+#       instead of the file specified here.
 #
 XEP_CONFIG_FILE="@sysconfdir@/daps/xep/xep-daps.xml"
 
@@ -851,11 +852,11 @@ XML_MAIN_CATALOG="/etc/xml/catalog"
 ## Default:     ""
 #
 # Path to one or more (space-sperated) XML catalogs to be queried before
-# XML_MAIN_CATALOG. 
+# XML_MAIN_CATALOG.
 #
 XML_USER_CATALOGS=""
 
-## Key: XSLTPARAM        
+## Key: XSLTPARAM
 ## --------------------
 ## Description: String passed to xsltproc for HTML and PDF builds
 ## Type:        number
@@ -872,9 +873,9 @@ XML_USER_CATALOGS=""
 #
 XSLTPARAM=""
 
-## Key: XSLTPROCESSOR        
+## Key: XSLTPROCESSOR
 ## --------------------
-## Description: Patzh to XSLT processor. 
+## Description: Patzh to XSLT processor.
 ## Type:        Path to executable
 ## Default:     "/usr/bin/xsltproc"
 #
