@@ -330,11 +330,11 @@
 
 <!-- Better support DocBook 4 and 5 -->
 <xsl:template name="select.mediaobject.index">
-  <xsl:param name="olist" select="d:imageobject|imageobject
-                                  |d:imageobjectco|imageobjectco
-                                  |d:videoobject|videoobject
-                                  |d:audioobject|audioobject
-                                  |d:textobject|textobject"/>
+  <xsl:param name="olist" select="db:imageobject|imageobject
+                                  |db:imageobjectco|imageobjectco
+                                  |db:videoobject|videoobject
+                                  |db:audioobject|audioobject
+                                  |db:textobject|textobject"/>
   <xsl:param name="count">1</xsl:param>
 
   <xsl:choose>
@@ -396,13 +396,13 @@
             </xsl:when>
             <!-- skip textobject if also video, audio, or image out of order -->
             <xsl:when test="local-name($object) = 'textobject' and
-                            ../d:imageobject or
-                            ../d:audioobject or
-                            ../d:videoobject or imageobject or audioobject or videoobject">
+                            ../db:imageobject or
+                            ../db:audioobject or
+                            ../db:videoobject or imageobject or audioobject or videoobject">
               <xsl:text>0</xsl:text> 
             </xsl:when>
             <!-- The phrase is used only when contains TeX Math and output is FO -->
-            <xsl:when test="local-name($object)='textobject' and $object/d:phrase
+            <xsl:when test="local-name($object)='textobject' and $object/db:phrase
                            and $object/@role='tex' and $stylesheet.result.type = 'fo'
                            and $tex.math.in.alt != ''">
               <xsl:text>1</xsl:text>
@@ -413,14 +413,14 @@
               <xsl:text>1</xsl:text>
             </xsl:when>
             <!-- The phrase is never used -->
-            <xsl:when test="local-name($object)='textobject' and $object/d:phrase">
+            <xsl:when test="local-name($object)='textobject' and $object/db:phrase">
                 <xsl:text>0</xsl:text>
             </xsl:when>
             <xsl:when test="local-name($object)='textobject' and $object/phrase">
                 <xsl:text>0</xsl:text>
             </xsl:when>
             <xsl:when test="local-name($object)='textobject'
-                            and $object/ancestor::d:equation ">
+                            and $object/ancestor::db:equation ">
              <!-- The first textobject is not a reasonable fallback
                  for equation image -->
               <xsl:text>0</xsl:text>
@@ -438,8 +438,8 @@
             </xsl:when>
             <!-- don't use graphic when output is FO, TeX Math is used 
                  and there is math in alt element -->
-            <xsl:when test="$object/ancestor::d:equation and
-                            $object/ancestor::d:equation/d:alt[@role='tex']
+            <xsl:when test="$object/ancestor::db:equation and
+                            $object/ancestor::db:equation/db:alt[@role='tex']
                             and $stylesheet.result.type = 'fo'
                             and $tex.math.in.alt != ''">
               <xsl:text>0</xsl:text>
@@ -460,7 +460,7 @@
                 <!-- peek inside imageobjectco to simplify the test -->
                 <xsl:when test="local-name($object) = 'imageobjectco'">
                   <xsl:call-template name="is.acceptable.mediaobject">
-                    <xsl:with-param name="object" select="($object/d:imageobject | $object/imageobject)[1]"/>
+                    <xsl:with-param name="object" select="($object/db:imageobject | $object/imageobject)[1]"/>
                   </xsl:call-template>
                 </xsl:when>
                 <xsl:otherwise>
