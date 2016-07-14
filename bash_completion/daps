@@ -111,6 +111,11 @@ _daps() {
                     fi
                     return 0
                     ;;
+                --jobs|-j)
+                    # taken from /usr/share/bash-completion/completions/make
+                    COMPREPLY=( $(LC_ALL=C compgen -W "{1..$(( $(_ncpus)*2 ))}" -- "$cur") )
+                    return 0
+                    ;;
                 -m|--main)
                     local mains
                     mains=$(ls -1 --color=never ${cur}xml/MAIN*.xml 2>/dev/null)
