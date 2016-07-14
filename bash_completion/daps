@@ -60,13 +60,11 @@ _daps() {
             # see https://stackoverflow.com/questions/13254425/using-variable-as-case-pattern-in-bash for the pattern match syntax
             case "$prev" in
                 --export-dir|--notrans-dir|--output-dir)
-                    compopt -o nospace
-                    COMPREPLY=( $( compgen -d -S "/" -- $cur ) )
+                    _filedir -d
                     return 0
                     ;;
                 --css|--export-dir|--extra-dict|--file|--statdir)
-                    compopt -o filenames
-                    COMPREPLY=( $( compgen -f -- $cur ) )
+                    _filedir
                     return 0
                     ;;
                 --def-file)
@@ -75,8 +73,7 @@ _daps() {
                         def_files=$(for x in DEF-*; do [[ "$x" =~ \~$ ]] && continue; [ -e "$x" ] || continue; echo "$x"; done 2>/dev/null)
                         COMPREPLY=( $(compgen -W "$def_files" -- $cur) )
                     else
-                        compopt -o filenames
-                        COMPREPLY=( $( compgen -f -- $cur ) )
+                        _filedir
                     fi
                     return 0
                     ;;
@@ -95,9 +92,8 @@ _daps() {
         *)
             # the global options go here
             case "$prev" in
-                 --builddir)
-                    compopt -o nospace
-                    COMPREPLY=( $( compgen -d -S "/" -- $cur ) )
+                --builddir|--fb_styleroot|--styleroot)
+                    _filedir -d
                     return 0
                     ;;
                 --color)
@@ -111,8 +107,7 @@ _daps() {
                         dc_files=$(for x in DC-*; do [[ "$x" =~ \~$ ]] && continue; [ -e "$x" ] || continue; echo "$x"; done 2>/dev/null)
                         COMPREPLY=( $(compgen -W "$dc_files" -- $cur) )
                     else
-                        #compopt -o filenames
-                        COMPREPLY=( $( compgen -f -- $cur ) )
+                        _filedir
                     fi
                     return 0
                     ;;
@@ -124,8 +119,7 @@ _daps() {
                     if [[ -z $cur && -n $mains ]]; then
                         COMPREPLY=( $(compgen -W "$mains" -- $cur) )
                     else
-                        compopt -o filenames
-                        COMPREPLY=( $( compgen -f -- $cur ) )
+                        _filedir
                     fi
                     return 0
                     ;;
@@ -135,11 +129,6 @@ _daps() {
                     ;;
                 --xsltprocessor)
                     COMPREPLY=( $(compgen -W "saxon xsltproc" -- $cur) )
-                    return 0
-                    ;;
-                --fb_styleroot|--styleroot)
-                    compopt -o filenames
-                    COMPREPLY=( $( compgen -f -- $cur ) )
                     return 0
                     ;;
                 *)
