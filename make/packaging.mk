@@ -37,7 +37,7 @@ ifeq "$(OPTIPNG)" "1"
   package-src: optipng
 endif
 ifdef DEF_FILE
-  package-src: DC_FILES := $(addprefix $(DOC_DIR)/,$(shell awk '/^[ \t]*#/ {next};NF {printf "DC-%s ", $$2}' $(DEF_FILE)))
+  package-src: DC_FILES := $(addprefix $(DOC_DIR)/,$(shell awk '/^[ \t]*#/ {next};NF {printf "DC-%s ", $$2}' $(DEF_FILE) 2>/dev/null))
 endif
 ifdef IS_LOCDROP
   package-src: MFT_TRANS := $(wildcard $(addprefix $(DOC_DIR)/,$(notdir $(MANIFEST_TRANS))))

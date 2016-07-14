@@ -174,10 +174,10 @@ $(EPUB_CONTENT_OPF): $(EPUB_BIGFILE)
 $(EPUB_INLINE_IMAGES): $(ONLINE_IMAGES) | $(EPUB_OEBPS)
 
 $(EPUB_INLINE_DIR)/%.png: $(IMG_GENDIR)/color/%.png 
-	ln -sf $(shell readlink -e $<) $@
+	ln -sf $(shell readlink -e $< 2>/dev/null) $@
 
 $(EPUB_INLINE_DIR)/%.jpg: $(IMG_GENDIR)/color/%.jpg
-	ln -sf $(shell readlink -e $<) $@
+	ln -sf $(shell readlink -e $< 2>/dev/null) $@
 
 #--------------
 # mimetype file
@@ -206,7 +206,7 @@ $(EPUB_RESULT): $(EPUB_INLINE_IMAGES)
   else
 	(cd $(EPUB_TMPDIR); \
 	  zip -r -X $@ mimetype META-INF $(EPUB_CONTENT_FILE) \
-	   $(addprefix OEBPS/,$(shell xsltproc $(DAPSROOT)/daps-xslt/epub/get_manifest.xsl $(EPUB_CONTENT_OPF))) $(DEVNULL))
+	   $(addprefix OEBPS/,$(shell xsltproc $(DAPSROOT)/daps-xslt/epub/get_manifest.xsl $(EPUB_CONTENT_OPF) 2>/dev/null)) $(DEVNULL))
   endif
 
 #--------------

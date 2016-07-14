@@ -9,7 +9,7 @@
 #
 # TODO: 
 # Stylesheets for building xhtml need to be packaged in src tar
-DIST_DEBIAN:=1
+
 #------------------------
 AUTOMAKE_OPTIONS = 1.10 foreign dist-bzip2 no-dist-gzip no-installinfo \
 			-Wall -Werror -Wno-portability
@@ -89,6 +89,7 @@ MANUALS         = $(dir $(USERGUIDE)) $(dir $(QUICKSTART))
 # Installation hooks
 #
 dapsconfdir    = @sysconfdir@/daps
+bashcompletiondir =@sysconfdir@/bash_completion.d
 fopconfdir     = $(dapsconfdir)/fop
 xepconfdir     = $(dapsconfdir)/xep
 hyphendir      = $(xepconfdir)/hyphen
@@ -134,6 +135,8 @@ dist_fopconf_DATA     = etc/fop/fop-daps.xml
 dist_xepconf_DATA     = etc/xep/xep-daps.xml
 dist_hyphen_DATA      = $(wildcard etc/xep/hyphen/*.tex) \
 			$(wildcard etc/xep/hyphen/*.il2)
+# BASH completion
+dist_bashcompletion_DATA = bash_completion/daps
 
 # DATA
 if !CATALOG_EDIT		

@@ -357,7 +357,7 @@ function init_env {
 
     # There should only be one DC-file in $R_DIR
     #
-    DC_COUNT=$(find -L "$R_DIR" -maxdepth 1 -name "${CONF_PREFIX}*" -type f | wc -l)
+    DC_COUNT=$(find -L "$R_DIR" -maxdepth 1 -name "${CONF_PREFIX}*" -type f | wc -l 2>/dev/null)
     if [[ $DC_COUNT -gt 1 && 0 != "$VERBOSITY" ]]; then
         ccecho "warn" "$R_DIR contains more than one DC-file"
     fi
@@ -745,7 +745,7 @@ function build_pdfs {
 
     #------ Computing the values returned from the parser -----
     if [[ 1 = "$P_HELP" ]]; then
-        help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
+        help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
         help_cropmarks
         help_draft
         help_formatter
@@ -808,7 +808,7 @@ function build_html_jsp {
 
     #------ Computing the values returned from the parser -----
     if [[ 1 = "$P_HELP" ]]; then
-        help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
+        help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
         help_clean
         help_css
         help_draft
@@ -876,7 +876,7 @@ function webhelp {
 
     #------ Computing the values returned from the parser -----
     if [[ 1 = "$P_HELP" ]]; then
-        help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
+        help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
         help_clean
         help_css
         help_draft
@@ -946,7 +946,7 @@ function build_epub {
 
     #------ Computing the values returned from the parser -----
     if [[ 1 = "$P_HELP" ]]; then
-        help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
+        help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
         help_check
         help_css
         help_epub3
@@ -1005,7 +1005,7 @@ function build_man {
 
     #------ Computing the values returned from the parser -----
     if [[ 1 = "$P_HELP" ]]; then
-        help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
+        help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
         help_help
         help_nogzip
         help_norefcheck
@@ -1044,7 +1044,7 @@ function build_text {
 
     #------ Computing the values returned from the parser -----
     if [[ 1 = "$P_HELP" ]]; then
-        help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
+        help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
         help_ignore-styleroot
         help_help
         help_name
@@ -1087,7 +1087,7 @@ function build_generic {
 
     #------ Computing the values returned from the parser -----
     if [[ 1 = "$P_HELP" ]]; then
-        help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
+        help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
         help_help
         help_name
         help_norefcheck
@@ -1128,7 +1128,7 @@ function bigfile {
 
     #------ Computing the values returned from the parser -----
     if [[ 1 = "$P_HELP" ]]; then
-        help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
+        help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
         help_help
         help_name
         help_norefcheck
@@ -1178,7 +1178,7 @@ function build_locdrop {
 
     #------ Computing the values returned from the parser -----
     if [[ 1 = "$P_HELP" ]]; then
-        help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
+        help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
         help_def-file
         help_export-dir
         help_help
@@ -1229,7 +1229,7 @@ function online-docs {
 
     #------ Computing the values returned from the parser -----
     if [[ 1 = "$P_HELP" ]]; then
-        help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
+        help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
         help_db5todb4
         help_db5todb4nh
         help_dbnoconv
@@ -1320,7 +1320,7 @@ function package-src {
 
     #------ Computing the values returned from the parser -----
     if [[ 1 = "$P_HELP" ]]; then
-        help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
+        help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
         help_def-file
         help_help
         help_locdrop
@@ -1373,7 +1373,7 @@ function package-pdf {
 
     #------ Computing the values returned from the parser -----
     if [[ 1 = "$P_HELP" ]]; then
-        help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
+        help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
         help_cropmarks
         help_desktopfiles
         help_documentfiles
@@ -1440,7 +1440,7 @@ function package-html {
 
     #------ Computing the values returned from the parser -----
     if [[ 1 = "$P_HELP" ]]; then
-        help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
+        help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
         help_css
         help_desktopfiles
         help_documentfiles
@@ -1524,7 +1524,7 @@ function unpack-locdrop {
 
     #------ Computing the values returned from the parser -----
     if [[ 1 = "$P_HELP" ]]; then
-        help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
+        help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
         help_trans-files
         help_help
         help_notrans-dir
@@ -1551,12 +1551,12 @@ function unpack-locdrop {
     for TAR in $P_TRANS_FILES; do
     if [[ -f $TAR ]]; then
         pushd "$P_OUTPUT_DIR" > /dev/null
-        MANIFEST_TRANS=$(tar tfj "$TAR" | grep "$MFT_TRANS_SUFF")
+        MANIFEST_TRANS=$(tar tfj "$TAR" | grep "$MFT_TRANS_SUFF" 2>/dev/null) || exit_on_error "Could not get manifest of translated files"
         ALL_MANIFEST_TRANS_FILES=( "${ALL_MANIFEST_TRANS_FILES[@]}" "$MANIFEST_TRANS" )
-        MANIFEST_NOTRANS=$(tar tfj "$TAR" | grep "$MFT_NOTRANS_SUFF")
+        MANIFEST_NOTRANS=$(tar tfj "$TAR" | grep "$MFT_NOTRANS_SUFF" 2>/dev/null) || exit_on_error "Could not get manifest of non-translated files"
         ALL_MANIFEST_NOTRANS_FILES=( "${ALL_MANIFEST_NOTRANS_FILES[@]}" "$MANIFEST_NOTRANS" )
-        tar xfj "$TAR" "$MANIFEST_TRANS" "$MANIFEST_NOTRANS"
-        tar xfj "$TAR" $(cat "$MANIFEST_TRANS")
+        tar xfj "$TAR" "$MANIFEST_TRANS" "$MANIFEST_NOTRANS" 2>/dev/null || exit_on_error "Could not extract manifest files from tarball"
+        tar xfj "$TAR" $(cat "$MANIFEST_TRANS") 2>/dev/null || exit_on_error "Could not extract manifest files from tarball"
         popd >/dev/null
     else
         exit_on_error "Fatal: $TAR does not exist"
@@ -1600,14 +1600,14 @@ function unpack-locdrop {
 
     # get all files unique to the notrans lists (the ones that have not
     # been translated)
-    LINK_NOTRANS_FILES=$(comm -1 -3 <(echo -e "$ALL_TRANS_FILES") <(echo -e "$ALL_NOTRANS_FILES"))
+    LINK_NOTRANS_FILES=$(comm -1 -3 <(echo -e "$ALL_TRANS_FILES") <(echo -e "$ALL_NOTRANS_FILES") 2>/dev/null) || exit_on_error "Could not get list of files that have not been translated"
 
     # Process LINK_NOTRANS_FILES to get the file lists we need
     #  the awk statements matches multiple occurrences on a single line
     #
-    DCFILE_LIST=$(awk '{for(i=1;i<=NF;++i)if($i~/DC-[^ ]*/)print $i}' <(echo "$LINK_NOTRANS_FILES"))
-    NO_DCFILE_LIST=$(awk '{for(i=1;i<=NF;++i)if($i !~ /DC-[^ ]*/)print $i}' <(echo "$LINK_NOTRANS_FILES"))
-    XML_FILE_LIST=$(awk -v path="${P_NOTRANS_DIR}/" '{for(i=1;i<=NF;++i)if($i~/xml\/.*\.xml/)print path $i}' <(echo "$LINK_NOTRANS_FILES"))
+    DCFILE_LIST=$(awk '{for(i=1;i<=NF;++i)if($i~/DC-[^ ]*/)print $i}' <(echo "$LINK_NOTRANS_FILES") 2>/dev/null) || exit_on_error "Could not get list of DC files"
+    NO_DCFILE_LIST=$(awk '{for(i=1;i<=NF;++i)if($i !~ /DC-[^ ]*/)print $i}' <(echo "$LINK_NOTRANS_FILES") 2>/dev/null) || exit_on_error "Could not get list of images that have not been 'translated'"
+    XML_FILE_LIST=$(awk -v path="${P_NOTRANS_DIR}/" '{for(i=1;i<=NF;++i)if($i~/xml\/.*\.xml/)print path $i}' <(echo "$LINK_NOTRANS_FILES") 2>/dev/null) || exit_on_error "Could not get list of files that have been translated"
 
     # Copy remaining DC-files
     #
@@ -1680,7 +1680,7 @@ function profile_first {
 
     #------ Computing the values returned from the parser -----
     if [[ 1 = "$P_HELP" ]]; then
-        help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
+        help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
         help_draft
         help_name
         help_remarks
@@ -1721,7 +1721,7 @@ function comments_remarks {
 
     #------ Computing the values returned from the parser -----
     if [[ 1 = "$P_HELP" ]]; then
-        help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
+        help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
         help_norefcheck
         help_remarks
         echo
@@ -1757,7 +1757,7 @@ function filelists {
 
     #------ Computing the values returned from the parser -----
     if [[ 1 = "$P_HELP" ]]; then
-        help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
+        help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
         help_help
         if [[ $SUB_CMD =~ list-srcfiles ]]; then
             help_imgonly
@@ -1818,7 +1818,7 @@ function show_names {
 
     #------ Computing the values returned from the parser -----
     if [[ 1 = "$P_HELP" ]]; then
-                help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
+                help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
                 [[ "pdf-name" = "$SUB_CMD" ]] && help_cropmarks
                 help_draft
                 [[ "pdf-name" = "$SUB_CMD" ]] && help_formatter
@@ -1885,7 +1885,7 @@ function checklink {
 
     #------ Computing the values returned from the parser -----
     if [[ 1 = "$P_HELP" ]]; then
-        help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
+        help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
         help_file
         help_help
         help_rootid
@@ -1957,7 +1957,7 @@ function getimages {
 
     #------ Computing the values returned from the parser -----
     if [[ 1 = "$P_HELP" ]]; then
-        help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
+        help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
         help_compact
         help_file
         help_modified
@@ -1986,7 +1986,7 @@ function getimages {
 
     if [[ -n $P_FILE ]]; then
         if [[ -f $P_FILE ]]; then
-            ROOTID=$($XSLTPROC --stylesheet "$DAPSROOT/daps-xslt/common/get-rootelement-id.xsl" --file "$P_FILE" "$XSLTPROCESSOR") || exit_on_error "Cannot get a rootid from file $FILE"
+            ROOTID=$($XSLTPROC --stylesheet "$DAPSROOT/daps-xslt/common/get-rootelement-id.xsl" --file "$P_FILE" "$XSLTPROCESSOR" 2>/dev/null) || exit_on_error "Cannot get a rootid from file $FILE"
             export ROOTID
         else
             exit_on_error "File $P_FILE does not exist"
@@ -2024,7 +2024,7 @@ function getimages {
         else
             for IMAGE in "${IMGLIST[@]}"; do
                 if [[ $MOD ]]; then
-                MODIFIED=$(stat -c %y "$IMAGE" | cut -d '.' -f1)
+                MODIFIED=$(stat -c %y "$IMAGE" | cut -d '.' -f1 2>/dev/null)
                 echo "${IMAGE} (${MODIFIED})"
                 else
                 echo "${IMAGE}"
@@ -2062,7 +2062,7 @@ function spellcheck {
 
     #------ Computing the values returned from the parser -----
     if [[ 1 = "$P_HELP" ]]; then
-        help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
+        help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
         help_extra-dict
         help_file
         help_help
@@ -2116,7 +2116,7 @@ function spellcheck {
     # first, create skiplist
     #
     COUNT=0
-    for SKIP in "${ASPELL_SKIP_TAGS[@]}"; do
+    for SKIP in $ASPELL_SKIP_TAGS; do
         SKIPLIST[$COUNT]="--add-sgml-skip=$SKIP"
         let COUNT++
     done
@@ -2133,7 +2133,7 @@ function spellcheck {
     for FILE in "${FILELIST[@]}"; do
         test -f "$FILE" || ccecho "warn" "File $FILE does not exist"
         if [[ 1 = "$LISTMODE" ]]; then
-            LISTOUTPUT=$($SPELLCMD list < "$FILE" | sort -u)
+            LISTOUTPUT=$($SPELLCMD list < "$FILE" | sort -u 2>/dev/null)
             [[ -n "$LISTOUTPUT" ]] && echo -e "$FILE\n------------------------------\n$LISTOUTPUT\n"
             LISTOUTPUT=""
         else
@@ -2164,7 +2164,7 @@ function stylecheck {
 
     #------ Computing the values returned from the parser -----
     if [[ 1 = "$P_HELP" ]]; then
-        help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
+        help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
     help_file
         help_help
         help_name
@@ -2188,7 +2188,7 @@ function stylecheck {
 
     if [[ -n "$P_FILE" ]]; then
         if [[ -f $P_FILE ]]; then
-            ROOTID=$($XSLTPROC --stylesheet "$DAPSROOT/daps-xslt/common/get-rootelement-id.xsl" --file "$P_FILE" "$XSLTPROCESSOR") || exit_on_error "Cannot get a rootid from file $FILE"
+            ROOTID=$($XSLTPROC --stylesheet "$DAPSROOT/daps-xslt/common/get-rootelement-id.xsl" --file "$P_FILE" "$XSLTPROCESSOR" 2>/dev/null) || exit_on_error "Cannot get a rootid from file $FILE"
         export ROOTID
         else
             exit_on_error "File $P_FILE does not exist"
@@ -2218,7 +2218,7 @@ function xmlformat {
 
     #------ Computing the values returned from the parser -----
     if [[ 1 = "$P_HELP" ]]; then
-        help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
+        help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
         help_file
         help_help
         help_rootid
@@ -2291,7 +2291,7 @@ function debugging {
 
     #------ Computing the values returned from the parser -----
     if [[ 1 = "$P_HELP" ]]; then
-        help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
+        help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
         help_help
         help_name
         help_rootid
@@ -2328,7 +2328,7 @@ function build_images {
 
     #------ Computing the values returned from the parser -----
     if [[ 1 = "$P_HELP" ]]; then
-        help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
+        help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
         help_color
         help_gen
         help_grayscale_images
@@ -2378,7 +2378,7 @@ function no_opts {
 
     #------ Computing the values returned from the parser -----
     if [[ 1 = "$P_HELP" ]]; then
-        help_scmd_head "$SUB_CMD" "$HELP_SUBCMD" "0"
+        help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}" "0"
         exit 0
     fi
 
@@ -2388,7 +2388,7 @@ function no_opts {
         # Use the cd commands to avoid errors when running DAPS from
         # one of the directories that get removed
         #
-        CURR_DIR=$(pwd)
+        CURR_DIR=$(pwd 2>/dev/null)
         cd $DOC_DIR > /dev/null
         call_make "$SUB_CMD" "$@"
         [[ -d $CURR_DIR ]] && cd $CURR_DIR
@@ -2400,7 +2400,7 @@ function no_opts {
 # error message for deprecated targets
 function deprecated {
     local SUB_CMD=$1
-    ccecho "error" "$HELP_SUBCMD"
+    ccecho "error" "${HELP_SUBCOMMAND[$SUB_CMD]}"
     exit 1
 }
 
@@ -2447,8 +2447,8 @@ EOF
 }
 function help_clean {
     cat <<EOF
-    --clean                   Clean up the result directory (delete all files and
-                              subdirectories) before building the document.
+    --clean                   Clean up the result directory (delete all files
+                              and subdirectories) before building the document.
                               Default: unset
 EOF
 }
@@ -2903,7 +2903,7 @@ EOF
 }
 function help_trans-files {
     cat <<EOF
-    --trans-files=\"<LIST>\"  Specify one or more tarballs with translated
+    --trans-files="<LIST>"    Specify one or more tarballs with translated
                               files (semicolon-separeted) for a single
                               language.
                               Default: unset
@@ -2925,17 +2925,5 @@ function help_xsltparam {
     cat <<EOF
     --xsltparam=STRING        ** Deprecated **
                               Use --param and/or --stringparam instead.
-
-                              Add one or more xslt processor parameters in
-                              the form of
-                              \"--stringparam KEY=VALUE --param KEY=VALUE\".
-                              The given string will be passed unmodified to
-                              the xslt processor call that
-                              $1.
-                              Useful to temporarily overwrite style sheet
-                              parameters such as margins.
-                              Note: You MUST quote the string with double
-                              quotes: --xsltparam=\"STRING\"
-                              Default: unset
 EOF
 }

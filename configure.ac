@@ -102,13 +102,13 @@ dnl though the result /could/ be available to us directly as $BASH_VERSION we
 dnl don't want to use, or trust it, incase the user is specifying a different
 dnl bash executable.
 
-dnl AC_MSG_CHECKING([for bash version])
+AC_MSG_CHECKING([for bash version])
 
-dnl if `$BASH -c '[[ "$BASH_VERSION" \< "4.0" ]]'` ; then
-dnl    AC_MSG_ERROR([DAPS requires at least version 4.0 of bash.])
-dnl else
-dnl    AC_MSG_RESULT([$BASH_VERSION])
-dnl fi
+if `$BASH -c '[[ "$BASH_VERSION" \< "4.0" ]]'` ; then
+   AC_MSG_ERROR([DAPS requires at least version 4.0 of bash.])
+else
+   AC_MSG_RESULT([$BASH_VERSION])
+fi
 
 
 dnl make

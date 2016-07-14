@@ -14,6 +14,18 @@
 
 @SET_MAKE@
 
+# Copyright (C) 2012-2016 SUSE Linux GmbH
+#
+# Author:
+# Frank Sundermeyer <fsundermeyer at opensuse dot org>
+#
+# Makefile.am for DocBook Authoring and Publishing Suite (daps)
+# Generate catalogs and install daps
+#
+#
+# TODO: 
+# Stylesheets for building xhtml need to be packaged in src tar
+
 
 VPATH = @srcdir@
 am__is_gnu_make = test -n '$(MAKEFILE_LIST)' && test -n '$(MAKELEVEL)'
@@ -82,18 +94,19 @@ DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/Makefile.am \
 	$(top_srcdir)/configure $(am__configure_deps) \
 	$(top_srcdir)/doc/xml/entity-decl.ent.in $(dist_bin_SCRIPTS) \
 	$(dist_dapslibexec_SCRIPTS) $(dist_man1_MANS) \
-	$(am__dist_catalog_DATA_DIST) $(dist_dapsconf_DATA) \
-	$(dist_dapslib_DATA) $(dist_dapsmake_DATA) $(dist_doc_DATA) \
-	$(dist_emacssite_DATA) $(dist_fopconf_DATA) \
-	$(dist_hyphen_DATA) $(dist_template_DATA) $(dist_xepconf_DATA) \
-	$(dist_xsltcommon_DATA) $(dist_xsltcontrib_DATA) \
-	$(dist_xsltdb5todb4_DATA) $(dist_xsltdesktop_DATA) \
-	$(dist_xsltepub_DATA) $(dist_xsltindex_DATA) \
-	$(dist_xsltjsp_DATA) $(dist_xsltlib_DATA) \
-	$(dist_xsltmallard_DATA) $(dist_xsltmigrate_DATA) \
-	$(dist_xsltprofiling_DATA) $(dist_xsltrelnotes_DATA) \
-	$(dist_xsltxhtml_DATA) $(dist_xsltyelp_DATA) AUTHORS COPYING \
-	ChangeLog NEWS README TODO install-sh missing
+	$(dist_bashcompletion_DATA) $(am__dist_catalog_DATA_DIST) \
+	$(dist_dapsconf_DATA) $(dist_dapslib_DATA) \
+	$(dist_dapsmake_DATA) $(dist_doc_DATA) $(dist_emacssite_DATA) \
+	$(dist_fopconf_DATA) $(dist_hyphen_DATA) $(dist_template_DATA) \
+	$(dist_xepconf_DATA) $(dist_xsltcommon_DATA) \
+	$(dist_xsltcontrib_DATA) $(dist_xsltdb5todb4_DATA) \
+	$(dist_xsltdesktop_DATA) $(dist_xsltepub_DATA) \
+	$(dist_xsltindex_DATA) $(dist_xsltjsp_DATA) \
+	$(dist_xsltlib_DATA) $(dist_xsltmallard_DATA) \
+	$(dist_xsltmigrate_DATA) $(dist_xsltprofiling_DATA) \
+	$(dist_xsltrelnotes_DATA) $(dist_xsltxhtml_DATA) \
+	$(dist_xsltyelp_DATA) AUTHORS COPYING ChangeLog NEWS README \
+	TODO install-sh missing
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/ax_python_module.m4 \
 	$(top_srcdir)/configure.ac
@@ -132,19 +145,19 @@ am__uninstall_files_from_dir = { \
          $(am__cd) "$$dir" && rm -f $$files; }; \
   }
 am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(dapslibexecdir)" \
-	"$(DESTDIR)$(man1dir)" "$(DESTDIR)$(catalogdir)" \
-	"$(DESTDIR)$(dapsconfdir)" "$(DESTDIR)$(dapslibdir)" \
-	"$(DESTDIR)$(dapsmakedir)" "$(DESTDIR)$(docdir)" \
-	"$(DESTDIR)$(emacssitedir)" "$(DESTDIR)$(fopconfdir)" \
-	"$(DESTDIR)$(hyphendir)" "$(DESTDIR)$(templatedir)" \
-	"$(DESTDIR)$(xepconfdir)" "$(DESTDIR)$(xsltcommondir)" \
-	"$(DESTDIR)$(xsltcontribdir)" "$(DESTDIR)$(xsltdb5todb4dir)" \
-	"$(DESTDIR)$(xsltdesktopdir)" "$(DESTDIR)$(xsltepubdir)" \
-	"$(DESTDIR)$(xsltindexdir)" "$(DESTDIR)$(xsltjspdir)" \
-	"$(DESTDIR)$(xsltlibdir)" "$(DESTDIR)$(xsltmallarddir)" \
-	"$(DESTDIR)$(xsltmigratedir)" "$(DESTDIR)$(xsltprofilingdir)" \
-	"$(DESTDIR)$(xsltrelnotesdir)" "$(DESTDIR)$(xsltxhtmldir)" \
-	"$(DESTDIR)$(xsltyelpdir)"
+	"$(DESTDIR)$(man1dir)" "$(DESTDIR)$(bashcompletiondir)" \
+	"$(DESTDIR)$(catalogdir)" "$(DESTDIR)$(dapsconfdir)" \
+	"$(DESTDIR)$(dapslibdir)" "$(DESTDIR)$(dapsmakedir)" \
+	"$(DESTDIR)$(docdir)" "$(DESTDIR)$(emacssitedir)" \
+	"$(DESTDIR)$(fopconfdir)" "$(DESTDIR)$(hyphendir)" \
+	"$(DESTDIR)$(templatedir)" "$(DESTDIR)$(xepconfdir)" \
+	"$(DESTDIR)$(xsltcommondir)" "$(DESTDIR)$(xsltcontribdir)" \
+	"$(DESTDIR)$(xsltdb5todb4dir)" "$(DESTDIR)$(xsltdesktopdir)" \
+	"$(DESTDIR)$(xsltepubdir)" "$(DESTDIR)$(xsltindexdir)" \
+	"$(DESTDIR)$(xsltjspdir)" "$(DESTDIR)$(xsltlibdir)" \
+	"$(DESTDIR)$(xsltmallarddir)" "$(DESTDIR)$(xsltmigratedir)" \
+	"$(DESTDIR)$(xsltprofilingdir)" "$(DESTDIR)$(xsltrelnotesdir)" \
+	"$(DESTDIR)$(xsltxhtmldir)" "$(DESTDIR)$(xsltyelpdir)"
 SCRIPTS = $(dist_bin_SCRIPTS) $(dist_dapslibexec_SCRIPTS)
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
@@ -177,7 +190,8 @@ man1dir = $(mandir)/man1
 NROFF = nroff
 MANS = $(dist_man1_MANS)
 am__dist_catalog_DATA_DIST = $(BUILD_ROOT)/for-catalog-$(PACKAGE).xml
-DATA = $(dist_catalog_DATA) $(dist_dapsconf_DATA) $(dist_dapslib_DATA) \
+DATA = $(dist_bashcompletion_DATA) $(dist_catalog_DATA) \
+	$(dist_dapsconf_DATA) $(dist_dapslib_DATA) \
 	$(dist_dapsmake_DATA) $(dist_doc_DATA) $(dist_emacssite_DATA) \
 	$(dist_fopconf_DATA) $(dist_hyphen_DATA) $(dist_template_DATA) \
 	$(dist_xepconf_DATA) $(dist_xsltcommon_DATA) \
@@ -379,18 +393,6 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 
-# Copyright (C) 2012-2016 SUSE Linux GmbH
-#
-# Author:
-# Frank Sundermeyer <fsundermeyer at opensuse dot org>
-#
-# Makefile.am for DocBook Authoring and Publishing Suite (daps)
-# Generate catalogs and install daps
-#
-#
-# TODO: 
-# Stylesheets for building xhtml need to be packaged in src tar
-DIST_DEBIAN := 1
 #------------------------
 AUTOMAKE_OPTIONS = 1.10 foreign dist-bzip2 no-dist-gzip no-installinfo \
 			-Wall -Werror -Wno-portability
@@ -457,6 +459,7 @@ MANUALS = $(dir $(USERGUIDE)) $(dir $(QUICKSTART))
 # Installation hooks
 #
 dapsconfdir = @sysconfdir@/daps
+bashcompletiondir = @sysconfdir@/bash_completion.d
 fopconfdir = $(dapsconfdir)/fop
 xepconfdir = $(dapsconfdir)/xep
 hyphendir = $(xepconfdir)/hyphen
@@ -500,6 +503,8 @@ dist_xepconf_DATA = etc/xep/xep-daps.xml
 dist_hyphen_DATA = $(wildcard etc/xep/hyphen/*.tex) \
 			$(wildcard etc/xep/hyphen/*.il2)
 
+# BASH completion
+dist_bashcompletion_DATA = bash_completion/daps
 
 # DATA
 @CATALOG_EDIT_FALSE@dist_catalog_DATA = $(DAPS_CATALOG)		
@@ -686,6 +691,27 @@ uninstall-man1:
 	} | sed -e 's,.*/,,;h;s,.*\.,,;s,^[^1][0-9a-z]*$$,1,;x' \
 	      -e 's,\.[0-9a-z]*$$,,;$(transform);G;s,\n,.,'`; \
 	dir='$(DESTDIR)$(man1dir)'; $(am__uninstall_files_from_dir)
+install-dist_bashcompletionDATA: $(dist_bashcompletion_DATA)
+	@$(NORMAL_INSTALL)
+	@list='$(dist_bashcompletion_DATA)'; test -n "$(bashcompletiondir)" || list=; \
+	if test -n "$$list"; then \
+	  echo " $(MKDIR_P) '$(DESTDIR)$(bashcompletiondir)'"; \
+	  $(MKDIR_P) "$(DESTDIR)$(bashcompletiondir)" || exit 1; \
+	fi; \
+	for p in $$list; do \
+	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	  echo "$$d$$p"; \
+	done | $(am__base_list) | \
+	while read files; do \
+	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(bashcompletiondir)'"; \
+	  $(INSTALL_DATA) $$files "$(DESTDIR)$(bashcompletiondir)" || exit $$?; \
+	done
+
+uninstall-dist_bashcompletionDATA:
+	@$(NORMAL_UNINSTALL)
+	@list='$(dist_bashcompletion_DATA)'; test -n "$(bashcompletiondir)" || list=; \
+	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
+	dir='$(DESTDIR)$(bashcompletiondir)'; $(am__uninstall_files_from_dir)
 install-dist_catalogDATA: $(dist_catalog_DATA)
 	@$(NORMAL_INSTALL)
 	@list='$(dist_catalog_DATA)'; test -n "$(catalogdir)" || list=; \
@@ -1482,7 +1508,7 @@ check: check-recursive
 all-am: Makefile $(SCRIPTS) $(MANS) $(DATA) all-local
 installdirs: installdirs-recursive
 installdirs-am:
-	for dir in "$(DESTDIR)$(bindir)" "$(DESTDIR)$(dapslibexecdir)" "$(DESTDIR)$(man1dir)" "$(DESTDIR)$(catalogdir)" "$(DESTDIR)$(dapsconfdir)" "$(DESTDIR)$(dapslibdir)" "$(DESTDIR)$(dapsmakedir)" "$(DESTDIR)$(docdir)" "$(DESTDIR)$(emacssitedir)" "$(DESTDIR)$(fopconfdir)" "$(DESTDIR)$(hyphendir)" "$(DESTDIR)$(templatedir)" "$(DESTDIR)$(xepconfdir)" "$(DESTDIR)$(xsltcommondir)" "$(DESTDIR)$(xsltcontribdir)" "$(DESTDIR)$(xsltdb5todb4dir)" "$(DESTDIR)$(xsltdesktopdir)" "$(DESTDIR)$(xsltepubdir)" "$(DESTDIR)$(xsltindexdir)" "$(DESTDIR)$(xsltjspdir)" "$(DESTDIR)$(xsltlibdir)" "$(DESTDIR)$(xsltmallarddir)" "$(DESTDIR)$(xsltmigratedir)" "$(DESTDIR)$(xsltprofilingdir)" "$(DESTDIR)$(xsltrelnotesdir)" "$(DESTDIR)$(xsltxhtmldir)" "$(DESTDIR)$(xsltyelpdir)"; do \
+	for dir in "$(DESTDIR)$(bindir)" "$(DESTDIR)$(dapslibexecdir)" "$(DESTDIR)$(man1dir)" "$(DESTDIR)$(bashcompletiondir)" "$(DESTDIR)$(catalogdir)" "$(DESTDIR)$(dapsconfdir)" "$(DESTDIR)$(dapslibdir)" "$(DESTDIR)$(dapsmakedir)" "$(DESTDIR)$(docdir)" "$(DESTDIR)$(emacssitedir)" "$(DESTDIR)$(fopconfdir)" "$(DESTDIR)$(hyphendir)" "$(DESTDIR)$(templatedir)" "$(DESTDIR)$(xepconfdir)" "$(DESTDIR)$(xsltcommondir)" "$(DESTDIR)$(xsltcontribdir)" "$(DESTDIR)$(xsltdb5todb4dir)" "$(DESTDIR)$(xsltdesktopdir)" "$(DESTDIR)$(xsltepubdir)" "$(DESTDIR)$(xsltindexdir)" "$(DESTDIR)$(xsltjspdir)" "$(DESTDIR)$(xsltlibdir)" "$(DESTDIR)$(xsltmallarddir)" "$(DESTDIR)$(xsltmigratedir)" "$(DESTDIR)$(xsltprofilingdir)" "$(DESTDIR)$(xsltrelnotesdir)" "$(DESTDIR)$(xsltxhtmldir)" "$(DESTDIR)$(xsltyelpdir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
 install: install-recursive
@@ -1537,19 +1563,20 @@ info: info-recursive
 
 info-am:
 
-install-data-am: install-data-local install-dist_catalogDATA \
-	install-dist_dapsconfDATA install-dist_dapslibDATA \
-	install-dist_dapsmakeDATA install-dist_docDATA \
-	install-dist_emacssiteDATA install-dist_fopconfDATA \
-	install-dist_hyphenDATA install-dist_templateDATA \
-	install-dist_xepconfDATA install-dist_xsltcommonDATA \
-	install-dist_xsltcontribDATA install-dist_xsltdb5todb4DATA \
-	install-dist_xsltdesktopDATA install-dist_xsltepubDATA \
-	install-dist_xsltindexDATA install-dist_xsltjspDATA \
-	install-dist_xsltlibDATA install-dist_xsltmallardDATA \
-	install-dist_xsltmigrateDATA install-dist_xsltprofilingDATA \
-	install-dist_xsltrelnotesDATA install-dist_xsltxhtmlDATA \
-	install-dist_xsltyelpDATA install-man
+install-data-am: install-data-local install-dist_bashcompletionDATA \
+	install-dist_catalogDATA install-dist_dapsconfDATA \
+	install-dist_dapslibDATA install-dist_dapsmakeDATA \
+	install-dist_docDATA install-dist_emacssiteDATA \
+	install-dist_fopconfDATA install-dist_hyphenDATA \
+	install-dist_templateDATA install-dist_xepconfDATA \
+	install-dist_xsltcommonDATA install-dist_xsltcontribDATA \
+	install-dist_xsltdb5todb4DATA install-dist_xsltdesktopDATA \
+	install-dist_xsltepubDATA install-dist_xsltindexDATA \
+	install-dist_xsltjspDATA install-dist_xsltlibDATA \
+	install-dist_xsltmallardDATA install-dist_xsltmigrateDATA \
+	install-dist_xsltprofilingDATA install-dist_xsltrelnotesDATA \
+	install-dist_xsltxhtmlDATA install-dist_xsltyelpDATA \
+	install-man
 
 install-dvi: install-dvi-recursive
 
@@ -1596,7 +1623,8 @@ ps: ps-recursive
 
 ps-am:
 
-uninstall-am: uninstall-dist_binSCRIPTS uninstall-dist_catalogDATA \
+uninstall-am: uninstall-dist_bashcompletionDATA \
+	uninstall-dist_binSCRIPTS uninstall-dist_catalogDATA \
 	uninstall-dist_dapsconfDATA uninstall-dist_dapslibDATA \
 	uninstall-dist_dapslibexecSCRIPTS uninstall-dist_dapsmakeDATA \
 	uninstall-dist_docDATA uninstall-dist_emacssiteDATA \
@@ -1622,7 +1650,8 @@ uninstall-man: uninstall-man1
 	dist-zip distcheck distclean distclean-generic distclean-tags \
 	distcleancheck distdir distuninstallcheck dvi dvi-am html \
 	html-am info info-am install install-am install-data \
-	install-data-am install-data-local install-dist_binSCRIPTS \
+	install-data-am install-data-local \
+	install-dist_bashcompletionDATA install-dist_binSCRIPTS \
 	install-dist_catalogDATA install-dist_dapsconfDATA \
 	install-dist_dapslibDATA install-dist_dapslibexecSCRIPTS \
 	install-dist_dapsmakeDATA install-dist_docDATA \
@@ -1642,7 +1671,8 @@ uninstall-man: uninstall-man1
 	install-strip installcheck installcheck-am installdirs \
 	installdirs-am maintainer-clean maintainer-clean-generic \
 	mostlyclean mostlyclean-generic pdf pdf-am ps ps-am tags \
-	tags-am uninstall uninstall-am uninstall-dist_binSCRIPTS \
+	tags-am uninstall uninstall-am \
+	uninstall-dist_bashcompletionDATA uninstall-dist_binSCRIPTS \
 	uninstall-dist_catalogDATA uninstall-dist_dapsconfDATA \
 	uninstall-dist_dapslibDATA uninstall-dist_dapslibexecSCRIPTS \
 	uninstall-dist_dapsmakeDATA uninstall-dist_docDATA \

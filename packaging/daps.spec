@@ -203,6 +203,7 @@ exit 0
 %defattr(-,root,root)
 
 %dir %{_sysconfdir}/%{name}
+%dir %{_sysconfdir}/bash_completions.d
 %dir %{_defaultdocdir}/%{name}
 
 %dir %{_datadir}/%{name}
@@ -211,6 +212,7 @@ exit 0
 
 %config %{_sysconfdir}/xml/*.xml
 %config %{_sysconfdir}/%{name}/*
+%config %{_sysconfdir}/bash_completion.d/%{name}
 
 %doc %{_mandir}/man1/*.1%{ext_man}
 %doc %{_defaultdocdir}/%{name}/*

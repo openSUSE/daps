@@ -48,7 +48,7 @@ endif
 list-file: FILE4ID := $(shell $(XSLTPROC) --stringparam "filetype=xml" \
 	      --param "show.first=1" \
              $(ROOTSTRING) --file $(SETFILES_TMP) \
-	      --stylesheet $(DAPSROOT)/daps-xslt/common/extract-files-and-images.xsl $(XSLTPROCESSOR) )
+	      --stylesheet $(DAPSROOT)/daps-xslt/common/extract-files-and-images.xsl $(XSLTPROCESSOR) 2>/dev/null)
 list-file:
   ifneq "$(VERBOSITY)" "0"
 	@ccecho "result" "The ID \"$(ROOTID)\" appears in:"
