@@ -1,11 +1,9 @@
 #!/bin/bash
 #
-# Very helpful tutorial
-# https://debian-administration.org/article/317/An_introduction_to_bash_completion_part_2
+# Copyright (C) 2016 SUSE Linux GmbH
 #
-# also check how to use completion with aliases like gdaps
-#
-
+# Author:
+# Frank Sundermeyer <fsundermeyer at opensuse dot org>
 #
 # TODO
 # Type a command with subcommand, then go backwards on the command line
@@ -19,8 +17,7 @@ _daps() {
     local cur prev scmd commands options
     local -a daps_commands
     COMPREPLY=()
-    cur="${COMP_WORDS[COMP_CWORD]}"
-    prev="${COMP_WORDS[COMP_CWORD-1]}"
+    _get_comp_words_by_ref -n : cur prev
 
     # array containing all DAPS subcommands
     daps_commands=( $(daps --commands) )
@@ -52,7 +49,6 @@ _daps() {
             done
         fi
     done
-
 
     case "$scmd" in
         +($check_scmd))
@@ -124,6 +120,26 @@ _daps() {
                     else
                         _filedir
                     fi
+                    return 0
+                    ;;
+                --schema)
+                    if [[ $cur == file:* ]]; then
+                        # ignore file:// and do directory/file completion
+                        # only show *.rn{c,g} files
+                        compopt -o nospace -o plusdirs -o filenames
+                        COMPREPLY=( $(compgen -f -X '!*.@(rng|rnc)' -- ${cur/file:/} ) )
+                    elif [[ -z "$cur" ]]; then
+                        # print the file:// prefix plus the leading / for
+                        # regular file complation (path needs to be absolute)
+                        compopt -o nospace
+                        COMPREPLY=( $(compgen -W 'file:///' -- $cur) )
+                    else
+                        # do regular file completion in case there is no
+                        # file:// prefix
+                        _filedir
+                    fi
+                    # remove colon containing prefix from COMPREPLY items
+                    __ltrim_colon_completions "$cur"
                     return 0
                     ;;
                 --verbosity)
