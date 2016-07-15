@@ -5,11 +5,6 @@
 # Author:
 # Frank Sundermeyer <fsundermeyer at opensuse dot org>
 #
-# TODO
-# Type a command with subcommand, then go backwards on the command line
-# with the cursor (before the subcommand). You should get the global options
-# (but this currently does not work)
-#
 
 shopt -s progcomp
 
@@ -18,6 +13,10 @@ _daps() {
     local -a daps_commands
     COMPREPLY=()
     _get_comp_words_by_ref -n : cur prev
+
+    # get the command line from the beginning to the actual cursor position
+    # COMP_LINE and COMP_POINT are built-ins
+    command_line=(${COMP_LINE:0:$COMP_POINT})
 
     # array containing all DAPS subcommands
     daps_commands=( $(daps --commands) )
@@ -36,14 +35,18 @@ _daps() {
     options="-d -h -m -v -vv -vvv $(daps --help | sed -n 's/^\s*\(--[a-z_\-]*\).*/\1/p' | uniq)"
 
     # subcommand that was typed
-    # "grep" for word in COMP_WORDS that does not start with "-" and
+    # "grep" for word in command_line that does not start with "-" and
     # is a subcommand (compare with subcommand list)
-    for ((i = 1; i < ${#COMP_WORDS[@]}; ++i)); do
-        if [[ ${COMP_WORDS[i]} != -* ]]; then
+    # since $command_line only contains the command line up to the current
+    # cursor position, we will always show the correct parameters/commands
+    # at the current cursor position
+    #
+    for ((i = 1; i < ${#command_line[@]}; ++i)); do
+        if [[ ${command_line[i]} != -* ]]; then
             # check if daps subcommand
             for cmd in "${daps_commands[@]}"; do
-                if [[ "$cmd" == "${COMP_WORDS[i]}" ]]; then
-                    scmd=${COMP_WORDS[i]}
+                if [[ "$cmd" == "${command_line[i]}" ]]; then
+                    scmd=${command_line[i]}
                     break
                 fi
             done
@@ -65,11 +68,11 @@ _daps() {
                     ;;
                 --def-file)
                     compopt -o filenames -o plusdirs
-                    COMPREPLY=( $(compgen -f -d -X '!*(*/)DEF-*[^~]' -- $cur) )
+                    COMPREPLY=( $(compgen -f -d -X '!*(*/)DEF-*[^~]' -- "$cur") )
                     return 0
                     ;;
                 --formatter)
-                    COMPREPLY=( $(compgen -W "fop xep" -- $cur) )
+                    COMPREPLY=( $(compgen -W "fop xep" -- "$cur") )
                     return 0
                     ;;
                 *)
@@ -77,7 +80,7 @@ _daps() {
             esac
             local options
             options="$(daps "$scmd" --help | sed -n 's/^\s*\(--[a-z_\-]*\).*/\1/p' | uniq)"
-            COMPREPLY=( $(compgen -W "$options" -- $cur) )
+            COMPREPLY=( $(compgen -W "$options" -- "$cur") )
             return 0
             ;;
         *)
@@ -88,12 +91,12 @@ _daps() {
                     return 0
                     ;;
                 --color)
-                    COMPREPLY=( $(compgen -W "0 1" -- $cur) )
+                    COMPREPLY=( $(compgen -W "0 1" -- "$cur") )
                     return 0
                     ;;
                 -d|--docconfig)
                     compopt -o filenames -o plusdirs
-                    COMPREPLY=( $(compgen -f -d -X '!*(*/)DC-*[^~]' -- $cur) )
+                    COMPREPLY=( $(compgen -f -d -X '!*(*/)DC-*[^~]' -- "$cur") )
                     return 0
                     ;;
                 --jobs|-j)
@@ -105,7 +108,7 @@ _daps() {
                     local mains
                     mains=$(ls -1 --color=never ${cur}xml/MAIN*.xml 2>/dev/null)
                     if [[ -n $mains ]]; then
-                        COMPREPLY=( $(compgen -W "$mains" -- $cur) )
+                        COMPREPLY=( $(compgen -W "$mains" -- "$cur") )
                     else
                         _filedir
                     fi
@@ -116,12 +119,12 @@ _daps() {
                         # ignore file:// and do directory/file completion
                         # only show *.rn{c,g} files
                         compopt -o nospace -o plusdirs -o filenames
-                        COMPREPLY=( $(compgen -f -X '!*.@(rng|rnc)' -- ${cur/file:/} ) )
+                        COMPREPLY=( $(compgen -f -X '!*.@(rng|rnc)' -- "${cur/file:/}" ) )
                     elif [[ -z "$cur" ]]; then
                         # print the file:// prefix plus the leading / for
                         # regular file complation (path needs to be absolute)
                         compopt -o nospace
-                        COMPREPLY=( $(compgen -W 'file:///' -- $cur) )
+                        COMPREPLY=( $(compgen -W 'file:///' -- "$cur") )
                     else
                         # do regular file completion in case there is no
                         # file:// prefix
@@ -132,11 +135,11 @@ _daps() {
                     return 0
                     ;;
                 --verbosity)
-                    COMPREPLY=( $(compgen -W "1 2 3" -- $cur) )
+                    COMPREPLY=( $(compgen -W "1 2 3" -- "$cur") )
                     return 0
                     ;;
                 --xsltprocessor)
-                    COMPREPLY=( $(compgen -W "saxon xsltproc" -- $cur) )
+                    COMPREPLY=( $(compgen -W "saxon xsltproc" -- "$cur") )
                     return 0
                     ;;
                 *)
@@ -147,10 +150,10 @@ _daps() {
 
     if [[ $cur == -* ]]; then
         # show options only when "-" has been entered
-       COMPREPLY=( $(compgen -W "$options" -- $cur) )
+       COMPREPLY=( $(compgen -W "$options" -- "$cur") )
     else
         # else show subcommands only
-        COMPREPLY=( $(compgen -W "$commands" -- $cur) )
+        COMPREPLY=( $(compgen -W "$commands" -- "$cur") )
     fi
     return 0
 }
