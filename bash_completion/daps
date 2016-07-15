@@ -64,12 +64,8 @@ _daps() {
                     return 0
                     ;;
                 --def-file)
-                    def_files=$(for x in ${cur}DEF-*; do [[ "$x" =~ \~$ ]] && continue; [ -e "$x" ] || continue; echo "$x"; done 2>/dev/null)
-                    if [[ -n $def_files ]]; then
-                        COMPREPLY=( $(compgen -W "$def_files" -- $cur) )
-                    else
-                        _filedir
-                    fi
+                    compopt -o filenames -o plusdirs
+                    COMPREPLY=( $(compgen -f -d -X '!*(*/)DEF-*[^~]' -- $cur) )
                     return 0
                     ;;
                 --formatter)
@@ -96,15 +92,8 @@ _daps() {
                     return 0
                     ;;
                 -d|--docconfig)
-                    local dc_files
-                    # ${cur}DC-* always searches for DC-files in $cur
-                    dc_files=$(for x in ${cur}DC-*; do [[ "$x" =~ \~$ ]] && continue; [ -e "$x" ] || continue; echo "$x"; done 2>/dev/null)
-                    # return DC-files id present
-                    if [[ -n $dc_files ]]; then
-                        COMPREPLY=( $(compgen -W "$dc_files" -- $cur) )
-                    else
-                        _filedir
-                    fi
+                    compopt -o filenames -o plusdirs
+                    COMPREPLY=( $(compgen -f -d -X '!*(*/)DC-*[^~]' -- $cur) )
                     return 0
                     ;;
                 --jobs|-j)
