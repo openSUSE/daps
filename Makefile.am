@@ -89,7 +89,6 @@ MANUALS         = $(dir $(USERGUIDE)) $(dir $(QUICKSTART))
 # Installation hooks
 #
 dapsconfdir    = @sysconfdir@/daps
-bashcompletiondir =@sysconfdir@/bash_completion.d
 fopconfdir     = $(dapsconfdir)/fop
 xepconfdir     = $(dapsconfdir)/xep
 hyphendir      = $(xepconfdir)/hyphen
@@ -101,6 +100,7 @@ dapslibexecdir = $(pkgdatadir)/libexec
 dapsmakedir    = $(pkgdatadir)/make
 emacssitedir   = @datadir@/emacs/site-lisp
 templatedir    = $(pkgdatadir)/init_templates
+bashcompletiondir =@datadir@/bash-completion/completions
 
 htmldocdir     = @docdir@/html
 
