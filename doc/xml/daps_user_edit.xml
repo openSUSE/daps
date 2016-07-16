@@ -69,13 +69,13 @@
 
   <para>
    &dapsacr; comes with a spell checker that is optimized for DocBook
-   documents: Tags and attributes are excluded from the check so that you
-   can focus on the content of the document. The spell checker is based on
-   &aspell; and can be run from the command line. By default, it starts in
-   interactive mode, but you can also run it in <quote>batch</quote> mode
-   where it dumps a sorted list of misspelled words to standard output.
-   &dapsacr; also allows you to specify a custom dictionary and the language
-   to use for spelling.
+   documents: Tags and attributes are excluded from the check so that you can
+   focus on the content of the document. The spell checker is based on &aspell;
+   and can be run with the &dapsacr; <command>spellcheck</command>. By default,
+   it starts in interactive mode, but you can also run it in
+   <quote>batch</quote> mode where it dumps a sorted list of misspelled words
+   to standard output.  &dapsacr; also allows you to specify a custom
+   dictionary and the language to use for spelling.
   </para>
 
   <para>
@@ -180,12 +180,12 @@
   </variablelist>
 
   <para>
-   For your convenience, you can integrate &daps-spell; (plus a custom
-   &aspell; dictionary, if needed) into your XML editor, so that spelling is
-   checked <quote>on the fly</quote> during editing. Consult your editor's
-   documentation on how to integrate a custom dictionary. If you use
-   &jedit;, proceed as outlined in
-   <xref linkend="sec.daps.user.editors.jedit.spellcheck"/>.
+   For your convenience, you can integrate a spellchecker such a &aspell; (plus
+   a custom &aspell; dictionary, if needed) into your XML editor, so that
+   spelling is checked <quote>on the fly</quote> during editing. Consult your
+   editor's documentation on how to integrate a custom dictionary. If you use
+   &jedit;, proceed as outlined in <xref
+   linkend="sec.daps.user.editors.jedit.spellcheck"/>.
   </para>
  </sect1>
  <sect1 id="sec.daps.user.edit.chklink">
@@ -287,7 +287,7 @@
   <title>Keeping Track of Your Documentation Project</title>
   <para>To help you keep track of the files and images included in your
   documentation project, &dapsacr; provides some useful commands.</para>
-  
+
   <variablelist>
    <varlistentry>
     <term>Listing All Files in a Documentation Project</term>
@@ -304,7 +304,7 @@
      <screen>&prompt.user;&dapscmd;&nbsp;<parameter>-d</parameter>&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;list-srcfiles-unused</screen>
      <para> Lists all files that are <emphasis>not</emphasis> referenced in the
       document specified by the &dc; file, but are available in the
-      <filename>xml</filename> and <filename>images/src</filename> subdirectories. 
+      <filename>xml</filename> and <filename>images/src</filename> subdirectories.
       This command is useful if
       you want to clean up your source files and want to know which files are
       no longer needed for the documentation project. </para>
@@ -324,24 +324,24 @@ The ID "sec.template.examples.images" appears in:
    </listitem>
   </varlistentry>
  </variablelist>
-  
+
   <para>For the image-related commands, see<xref
   linkend="sec.daps.user.imgs.manage"/>.</para>
-  
+
   <!--taroth 2015-04-24: keep in sync with similar content in daps_user_images.xml-->
- &daps-note-filelists; 
- 
- <para> See 
-   <xref linkend="ex.daps.output.default"/> and 
+ &daps-note-filelists;
+
+ <para> See
+   <xref linkend="ex.daps.output.default"/> and
    <xref linkend="ex.daps.output.pretty"/> for a comparison of both outputs.</para>
-  
+
   <example id="ex.daps.output.default">
    <title>Default Output of a File Listing &dapsacr; Command</title>
    <screen><?dbsuse-fo font-size="0.70em"?>&prompt.user;<command>daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;list-srcfiles</command>
 <replaceable>YOUR_DOC_DIR</replaceable>/DC-daps-example&nbsp;<replaceable>YOUR_DOC_DIR</replaceable>/images/src/png/example1.png&nbsp;<replaceable
 >YOUR_DOC_DIR</replaceable>/images/src/png/example_png2.png&nbsp;<replaceable>YOUR_DOC_DIR</replaceable>/xml/MAIN-daps-example.xml</screen>
   </example>
-  
+
   <example id="ex.daps.output.pretty">
    <title>Pretty-printed Output of a File Listing &dapsacr; Command</title>
    <screen>&prompt.user;<command>daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;list-srcfiles&nbsp;--pretty</command>
@@ -350,7 +350,7 @@ The ID "sec.template.examples.images" appears in:
 <replaceable>YOUR_DOC_DIR</replaceable>/images/src/png/example_png2.png
 <replaceable>YOUR_DOC_DIR</replaceable>/xml/MAIN-daps-example.xml</screen>
   </example>
-  
+
   <tip>
    <title>Using Pretty-Printed Output for Counting</title>
    <para> To count the number of files listed in a given output, you can
@@ -362,9 +362,9 @@ The ID "sec.template.examples.images" appears in:
     <computeroutput>4</computeroutput> as a value.
    </para>
   </tip>
- 
+
  </sect1>
- 
+
  <sect1 id="sec.daps.user.edit.more">
   <title>For More Information</title>
 
