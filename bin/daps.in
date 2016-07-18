@@ -818,13 +818,15 @@ EOF_helptext
 function daps_commands {
     # show a list of available subcommands from the SUBCOMMANDS array
     # ignore the commands set to deprecated
-    local VAL
+    local KEY
 
-    for VAL in "${SUBCOMMANDS[@]}"; do
-        if [[ -n "${VAL##*=deprecated}" ]]; then
-            echo "${VAL%%=*}"
+    for KEY in "${!SUBCOMMANDS[@]}"; do
+        if [[ deprecated == "${SUBCOMMANDS[$KEY]}" ]]; then
+            continue
+        else
+            echo "$KEY"
         fi
-    done | sort
+    done | sort -u
 }
 
 # ---------
