@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-Fri Jul 15 16:50:01 UTC 2016 - fsundermeyer@opensuse.org
+Fri Aug 04 08:50:01 UTC 2016 - fsundermeyer@opensuse.org
 
 Stable release DAPS 2.3.0:
 
@@ -22,7 +22,15 @@ Stable release DAPS 2.3.0:
     TAB-completion for DAPS has been one of the very first feature
     requests we opened (almost five years ago). Now we finally
     managed to conquer the black Bash magic required to get it!
-
+  - Automatically detect the DocBook 5 version: If you have
+    DocBook 5.1 installed, docbookxi.rng from 5.1 will
+    automatically be used as the validating schema for DocBook 5
+    documents. If you rather want to use the 5.0 schema
+    or a custom schema, set DOCBOOK5_RNG_URI accordingly in
+    /etc/daps/config (for a system wide configuration), in
+    $HOME/.config/daps/dapsrc (for a user specific configuration),
+    or in the DC-file (for a document-specific configuration)
+	
 * Bugfixes:
   - subcommand "locdrop" failed when the book did not include
     images

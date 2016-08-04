@@ -360,6 +360,7 @@ builddir = @builddir@
 daps_xsl = @daps_xsl@
 datadir = @datadir@
 datarootdir = @datarootdir@
+db5_version = @db5_version@
 docdir = @docdir@
 dvidir = @dvidir@
 exec_prefix = @exec_prefix@
@@ -412,6 +413,7 @@ REPL_PATH = sed \
              -e 's|@pkgdatadir[@]|$(pkgdatadir)|g' \
              -e 's|@datadir[@]|$(datadir)|g' \
              -e 's|@prefix[@]|$(prefix)|g' \
+             -e 's|@db5version[@]|$(db5_version)|g' \
              -e 's|@PACKAGE_VERSION[@]|$(PACKAGE_VERSION)|g'
 
 DAPSROOT := $(abs_top_srcdir)

@@ -22,12 +22,14 @@ EXTRA_DIST := COPYING-2.0 COPYING-3.0 packaging/daps.spec
 #------------------------
 # Replace placeholders with distribution-specfic paths
 #
+
 REPL_PATH = sed \
              -e 's|@sysconfdir[@]|$(sysconfdir)|g' \
              -e 's|@bindir[@]|$(bindir)|g' \
              -e 's|@pkgdatadir[@]|$(pkgdatadir)|g' \
              -e 's|@datadir[@]|$(datadir)|g' \
              -e 's|@prefix[@]|$(prefix)|g' \
+             -e 's|@db5version[@]|$(db5_version)|g' \
              -e 's|@PACKAGE_VERSION[@]|$(PACKAGE_VERSION)|g'
 
 DAPSROOT     := $(abs_top_srcdir)

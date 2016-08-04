@@ -238,12 +238,18 @@ DOCBOOK5_STYLE_URI="http://docbook.sourceforge.net/release/xsl-ns/current/"
 ## ------------------
 ## Description: URI to DocBook 5 Relax NG schema
 ## Type:        URI
-## Default:     "http://docbook.org/xml/5.0/rng/docbook.rng"
+## Default:     "http://docbook.org/xml/@db5version@/rng/docbook.rng"
 #
 # URI to the DocBook 5 Relax NG schema that can be resolved by xmlcatalog
 # There should be no need to change this entry
+# In case you use a git checkout the DB5 version will be masked with 
+# \@db5version\@. This string will automatically be replaced with "5.1" if
+# DocBook 5.1 is installed, otherwise it will be set to "5.0"
+# If you do not like this, replace the value with one of the commented lines
 #
-DOCBOOK5_RNG_URI="http://docbook.org/xml/5.0/rng/docbookxi.rng"
+#DOCBOOK5_RNG_URI="http://docbook.org/xml/5.0/rng/docbookxi.rng"
+#DOCBOOK5_RNG_URI="http://docbook.org/xml/5.1/rng/docbookxi.rng"
+DOCBOOK5_RNG_URI="http://docbook.org/xml/@db5version@/rng/docbookxi.rng"
 
 ## Key:         DRAFT
 ## ------------------

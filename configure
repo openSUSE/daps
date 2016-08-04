@@ -599,6 +599,7 @@ DIST_REDHAT_FALSE
 DIST_REDHAT_TRUE
 HAS_DAPS_XSL_FALSE
 HAS_DAPS_XSL_TRUE
+db5_version
 HAVE_PYMOD_XML
 pkgpyexecdir
 pyexecdir
@@ -2037,8 +2038,8 @@ test "$program_suffix" != NONE &&
 ac_script='s/[\\$]/&&/g;s/;s,x,x,$//'
 program_transform_name=`$as_echo "$program_transform_name" | sed "$ac_script"`
 
-# expand $ac_aux_dir to an absolute path
-am_aux_dir=`cd $ac_aux_dir && pwd`
+# Expand $ac_aux_dir to an absolute path.
+am_aux_dir=`cd "$ac_aux_dir" && pwd`
 
 if test x"${MISSING+set}" != xset; then
   case $am_aux_dir in
@@ -3973,6 +3974,7 @@ $as_echo_n "checking for $XML_SCHEMA... " >&6; }
     { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
     HAVE_DOCBOOK_50=1
+    db5_version="5.0"
   else
     { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
@@ -4004,6 +4006,7 @@ $as_echo_n "checking for $XML_SCHEMA... " >&6; }
     { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
     HAVE_DOCBOOK_51=1
+    db5_version="5.1"
   else
     { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
@@ -4014,6 +4017,8 @@ if test -z "$HAVE_DOCBOOK_51"; then
   { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Seems you do not have DocBook 5.1 installed." >&5
 $as_echo "$as_me: WARNING: Seems you do not have DocBook 5.1 installed." >&2;}
 fi
+
+
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: ===== Checking for DocBook XSL Stylesheets..." >&5
 $as_echo "$as_me: ===== Checking for DocBook XSL Stylesheets..." >&6;}
