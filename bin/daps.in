@@ -818,13 +818,15 @@ EOF_helptext
 function daps_commands {
     # show a list of available subcommands from the SUBCOMMANDS array
     # ignore the commands set to deprecated
-    local VAL
+    local KEY
 
-    for VAL in "${SUBCOMMANDS[@]}"; do
-        if [[ -n "${VAL##*=deprecated}" ]]; then
-            echo "${VAL%%=*}"
+    for KEY in "${!SUBCOMMANDS[@]}"; do
+        if [[ deprecated == "${SUBCOMMANDS[$KEY]}" ]]; then
+            continue
+        else
+            echo "$KEY"
         fi
-    done | sort
+    done | sort -u
 }
 
 # ---------
@@ -1716,15 +1718,28 @@ if [[ 5 = "$DOCBOOK_VERSION" ]]; then
     fi
     # also get the RNG scheme location
     #
-    if [[ ${DOCBOOK5_RNG_URI:0:5} = file: ]]; then
-        DOCBOOK5_RNG="$DOCBOOK5_RNG_URI"
+
+    # first check whether we come from a GIT checkout - if so
+    # the URI contains @db5version@
+    #
+    if [[ $DOCBOOK5_RNG_URI =~ [^@]*@db5version\@.* ]]; then
+        for DB5_VERSION in "5.1" "5.0"; do
+            # checks 5.1 first, if it is found sets DOCBOOK5_RNG and
+            # leaves loop via break, otherwise continue with 5.0
+            #
+            D5U="${DOCBOOK5_RNG_URI/@db5version\@/$DB5_VERSION}"
+            DOCBOOK5_RNG=$(xmlcatalog "$XML_MAIN_CATALOG" "$D5U") && break
+        done
     else
-        DOCBOOK5_RNG=$(xmlcatalog "$XML_MAIN_CATALOG" \
-          "$DOCBOOK5_RNG_URI" 2>/dev/null) || \
-            exit_on_error "Could not determine the DocBook 5 schema location by resolving \"$DOCBOOK5_RNG_URI\" via xmlcatalog"
+        if [[ ${DOCBOOK5_RNG_URI:0:5} = file: ]]; then
+            DOCBOOK5_RNG="$DOCBOOK5_RNG_URI"
+        else
+            DOCBOOK5_RNG=$(xmlcatalog "$XML_MAIN_CATALOG" \
+              "$DOCBOOK5_RNG_URI" 2>/dev/null) || \
+                exit_on_error "Could not determine the DocBook 5 schema location by resolving \"$DOCBOOK5_RNG_URI\" via xmlcatalog"
+        fi
     fi
     # remove file:// or file: (Debian, Tumbleweed) prefix
-    # Is there a better way to do this with shell built-ins?
     #
     DOCBOOK5_RNG=${DOCBOOK5_RNG#*file:}
     DOCBOOK5_RNG=${DOCBOOK5_RNG#*//}

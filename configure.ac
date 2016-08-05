@@ -10,7 +10,7 @@ dnl Thomas Schraitle  <toms at opensuse dot org>
 dnl
 
 m4_define(daps_version_major, 2)
-m4_define(daps_version_minor, 2)
+m4_define(daps_version_minor, 3)
 m4_define(daps_version_micro, [0])
 # API version
 m4_define([daps_api_version],[daps_version_major])
@@ -316,6 +316,7 @@ for XML_SCHEMA in "http://docbook.org/xml/5.0/rng/docbookxi.rng" \
   if AC_RUN_LOG([$XMLCATALOG --noout "$root_catalog" "$XML_SCHEMA" >&2]); then
     AC_MSG_RESULT([yes])
     HAVE_DOCBOOK_50=1
+    db5_version="5.0"
   else
     AC_MSG_RESULT([no])
   fi
@@ -339,6 +340,7 @@ for XML_SCHEMA in "http://docbook.org/xml/5.1/rng/docbookxi.rng" \
   if AC_RUN_LOG([$XMLCATALOG --noout "$root_catalog" "$XML_SCHEMA" >&2]); then
     AC_MSG_RESULT([yes])
     HAVE_DOCBOOK_51=1
+    db5_version="5.1"
   else
     AC_MSG_RESULT([no])
   fi
@@ -347,6 +349,8 @@ if test -z "$HAVE_DOCBOOK_51"; then
   HAVE_DOCBOOK_51=0
   AC_MSG_WARN([Seems you do not have DocBook 5.1 installed.])
 fi
+
+AC_SUBST(db5_version)
 
 dnl -------------------------------------------------------------------------
 AC_MSG_NOTICE([===== Checking for DocBook XSL Stylesheets...])

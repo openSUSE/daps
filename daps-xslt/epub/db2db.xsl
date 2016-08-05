@@ -398,36 +398,28 @@
             <xsl:when test="local-name($object) = 'textobject' and
                             ../db:imageobject or
                             ../db:audioobject or
-                            ../db:videoobject or imageobject or audioobject or videoobject">
+                            ../db:videoobject or
+                            ../imageobject or
+                            ../audioobject or
+                            ../videoobject">
               <xsl:text>0</xsl:text>
             </xsl:when>
             <!-- The phrase is used only when contains TeX Math and output is FO -->
-            <xsl:when test="local-name($object)='textobject' and $object/db:phrase
+            <xsl:when test="local-name($object)='textobject' and
+                           ($object/db:phrase or $object/phrase)
                            and $object/@role='tex' and $stylesheet.result.type = 'fo'
                            and $tex.math.in.alt != ''">
               <xsl:text>1</xsl:text>
             </xsl:when>
-            <xsl:when test="local-name($object)='textobject' and $object/phrase
-                            and $object/@role='tex' and $stylesheet.result.type = 'fo'
-                            and $tex.math.in.alt != ''">
-              <xsl:text>1</xsl:text>
-            </xsl:when>
             <!-- The phrase is never used -->
-            <xsl:when test="local-name($object)='textobject' and $object/db:phrase">
+            <xsl:when test="local-name($object)='textobject' and
+                            ($object/db:phrase or $object/phrase)">
                 <xsl:text>0</xsl:text>
             </xsl:when>
-            <xsl:when test="local-name($object)='textobject' and $object/phrase">
-                <xsl:text>0</xsl:text>
-            </xsl:when>
-            <xsl:when test="local-name($object)='textobject'
-                            and $object/ancestor::db:equation ">
+            <xsl:when test="local-name($object)='textobject' and
+                            ($object/ancestor::db:equation or
+                             $object/ancestor::equation)">
              <!-- The first textobject is not a reasonable fallback
-                 for equation image -->
-              <xsl:text>0</xsl:text>
-            </xsl:when>
-            <xsl:when test="local-name($object)='textobject'
-                            and $object/ancestor::equation ">
-            <!-- The first textobject is not a reasonable fallback
                  for equation image -->
               <xsl:text>0</xsl:text>
             </xsl:when>
@@ -438,14 +430,12 @@
             </xsl:when>
             <!-- don't use graphic when output is FO, TeX Math is used
                  and there is math in alt element -->
-            <xsl:when test="$object/ancestor::db:equation and
-                            $object/ancestor::db:equation/db:alt[@role='tex']
-                            and $stylesheet.result.type = 'fo'
-                            and $tex.math.in.alt != ''">
-              <xsl:text>0</xsl:text>
-            </xsl:when>
-            <xsl:when test="$object/ancestor::equation and
-                            $object/ancestor::equation/alt[@role='tex']
+            <xsl:when test="(($object/ancestor::db:equation and
+                              $object/ancestor::db:equation/db:alt[@role='tex'])
+                            or
+                             ($object/ancestor::equation and
+                              $object/ancestor::equation/alt[@role='tex'])
+                            )
                             and $stylesheet.result.type = 'fo'
                             and $tex.math.in.alt != ''">
               <xsl:text>0</xsl:text>
@@ -504,7 +494,7 @@
                      db:article/db:info | db:book/db:info | db:set/db:info">
   <xsl:copy>
     <xsl:choose>
-      <xsl:when test="not(date) or not(db:date)">
+      <xsl:when test="not(date) and not(db:date)">
         <xsl:call-template name="create.date"/>
         <xsl:apply-templates/>
       </xsl:when>
@@ -756,7 +746,7 @@
 
 
 <xsl:template match="mediaobject | db:mediaobject">
-  <xsl:variable name="olist" select="(imageobject | db:imageobject)[1]"/>
+  <xsl:variable name="olist" select="(imageobject | db:imageobject)"/>
   <xsl:variable name="object.index">
     <xsl:call-template name="select.mediaobject.index">
       <xsl:with-param name="olist" select="$olist"/>
