@@ -756,7 +756,7 @@
 
 
 <xsl:template match="mediaobject | db:mediaobject">
-  <xsl:variable name="olist" select="(imageobject | db:imageobject)[1]"/>
+  <xsl:variable name="olist" select="(imageobject | db:imageobject)"/>
   <xsl:variable name="object.index">
     <xsl:call-template name="select.mediaobject.index">
       <xsl:with-param name="olist" select="$olist"/>
