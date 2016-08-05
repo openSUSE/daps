@@ -370,10 +370,10 @@ endif
 # Stylesheets do)
 #
 
-XMLLANG ?= $(shell $(XSLTPROC) --stylesheet $(STYLELANG) --file $(MAIN) $(XSLTPROCESSOR) | tr - _ )
+XMLLANG ?= $(shell $(XSLTPROC) --stylesheet $(STYLELANG) --file $(MAIN) $(XSLTPROCESSOR) | tr - _ 2>/dev/null)
 
 ifneq "$(strip $(XMLLANG))" ""
-  LL ?= $(shell tr '[:upper:]' '[:lower:]' <<< $(XMLLANG))
+  LL ?= $(shell tr '[:upper:]' '[:lower:]' <<< $(XMLLANG) 2>/dev/null)
   LANGSTRING   := _$(XMLLANG)
 endif
 
@@ -431,7 +431,6 @@ MANIFEST_NOTRANS := $(LOCDROP_TMP_DIR)/$(DOCNAME)_manifest_notrans.txt
 define print_list
   @if [[ -t 1 || 1 = "$(strip $(PRETTY_FILELIST))" ]]; then \
     echo -e "$(subst $(SPACE),\n,$(sort $1))"; \
-    echo "===============> Hallo"; \
   else \
     echo $(sort $1); \
   fi

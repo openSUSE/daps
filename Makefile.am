@@ -9,7 +9,7 @@
 #
 # TODO: 
 # Stylesheets for building xhtml need to be packaged in src tar
-DIST_DEBIAN:=1
+
 #------------------------
 AUTOMAKE_OPTIONS = 1.10 foreign dist-bzip2 no-dist-gzip no-installinfo \
 			-Wall -Werror -Wno-portability
@@ -22,12 +22,14 @@ EXTRA_DIST := COPYING-2.0 COPYING-3.0 packaging/daps.spec
 #------------------------
 # Replace placeholders with distribution-specfic paths
 #
+
 REPL_PATH = sed \
              -e 's|@sysconfdir[@]|$(sysconfdir)|g' \
              -e 's|@bindir[@]|$(bindir)|g' \
              -e 's|@pkgdatadir[@]|$(pkgdatadir)|g' \
              -e 's|@datadir[@]|$(datadir)|g' \
              -e 's|@prefix[@]|$(prefix)|g' \
+             -e 's|@db5version[@]|$(db5_version)|g' \
              -e 's|@PACKAGE_VERSION[@]|$(PACKAGE_VERSION)|g'
 
 DAPSROOT     := $(abs_top_srcdir)
@@ -72,7 +74,7 @@ endif
 # Man pages
 DC_MANPAGES    := DC-daps-manpages
 MAN_PAGE_DIR   := $(subst DC-,,$(DC_MANPAGES))
-MAN_PAGES      := daps.1 ccecho.1 daps-init.1 daps-susespell.1 daps-autobuild.1
+MAN_PAGES      := daps.1 ccecho.1 daps-init.1 daps-autobuild.1
 MAN_BUILD_PATH := $(srcdir)/man/build/$(MAN_PAGE_DIR)/man/
 
 # Manuals
@@ -100,6 +102,7 @@ dapslibexecdir = $(pkgdatadir)/libexec
 dapsmakedir    = $(pkgdatadir)/make
 emacssitedir   = @datadir@/emacs/site-lisp
 templatedir    = $(pkgdatadir)/init_templates
+bashcompletiondir =@datadir@/bash-completion/completions
 
 htmldocdir     = @docdir@/html
 
@@ -124,7 +127,8 @@ xsltyelpdir      = $(xsltdir)/yelp
 
 # BIN
 dist_bin_SCRIPTS         = $(wildcard bin/*[^.in] $(BUILD_ROOT)/bin/*)
-dist_dapslibexec_SCRIPTS = $(wildcard libexec/*)
+# exclude daps-jing.*
+dist_dapslibexec_SCRIPTS = $(filter-out $(wildcard libexec/daps-jing.*),$(wildcard libexec/*))
 
 # CONFIG files
 dist_dapsconf_DATA    = etc/config etc/docbook-xmlformat.conf \
@@ -133,6 +137,8 @@ dist_fopconf_DATA     = etc/fop/fop-daps.xml
 dist_xepconf_DATA     = etc/xep/xep-daps.xml
 dist_hyphen_DATA      = $(wildcard etc/xep/hyphen/*.tex) \
 			$(wildcard etc/xep/hyphen/*.il2)
+# BASH completion
+dist_bashcompletion_DATA = bash_completion/daps
 
 # DATA
 if !CATALOG_EDIT		
@@ -171,7 +177,7 @@ dist_man1_MANS      = $(addprefix $(MAN_BUILD_PATH), $(MAN_PAGES))
 # sure the local config, as provided by the repo, is used. Otherwise we have
 # a mixture of system and repo setup and that will not work
 
-bin/daps etc/config $(FOP_CONFIG) $(JING_WRAPPER): $(USERGUIDE) $(QUICKSTART) $(dist_man1_MANS)
+bin/daps bin/daps-xmlformat etc/config $(FOP_CONFIG) $(JING_WRAPPER): $(USERGUIDE) $(QUICKSTART) $(dist_man1_MANS)
 
 all-local: $(USERGUIDE) $(QUICKSTART) $(dist_man1_MANS) $(DAPS_CATALOG)
 
@@ -183,7 +189,7 @@ INSTALLDIRS = $(DESTDIR)$(docdir)/html $(DESTDIR)$(pkgdatadir) \
 	$(DESTDIR)$(templatedir)
 
 
-install-data-local: $(INSTALLDIRS) autobuild/daps-autobuild
+install-data-local: $(INSTALLDIRS) autobuild/daps-autobuild 
 install-data-local: TMP_CATALOG := $(shell mktemp -q $(BUILD_ROOT)/daps_catalog.XXXXX)
 install-data-local:
 	for BOOK in $(MANUALS); do \
@@ -220,7 +226,8 @@ endif
 clean-local:
 	rm -rf build/ man/build/ doc/build/
 	(cd autobuild && ln -sf daps-autobuild.in daps-autobuild)
-	(cd bin && ln -sf daps.in daps)
+	(cd bin && (ln -sf daps.in daps; ln -sf daps-xmlformat.in daps-xmlformat))
+	(cd bin && ln -sf daps-xmlformat.in daps-xmlformat)
 	(cd etc && ln -sf config.in config)
 	(cd etc/fop && ln -sf fop-daps.suse $(notdir $(FOP_CONFIG)))
 	(cd libexec && ln -sf $(notdir $(JING_WRAPPER_DEFAULT)) $(notdir $(JING_WRAPPER)))
@@ -291,7 +298,7 @@ $(FIRSTBUILD): $(BUILD_ROOT)
 	touch $@
 
 # see http://www.gnu.org/software/autoconf/manual/autoconf.html#Installation-Directory-Variables
-bin/daps: $(FIRSTBUILD)
+bin/daps bin/daps-xmlformat: $(FIRSTBUILD)
 	if [ -L $@ ]; then rm -f $@; fi
 	$(REPL_PATH) $@.in > $@
 	chmod +x $@

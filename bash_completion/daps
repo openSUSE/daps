@@ -1,0 +1,161 @@
+# bash completion for daps                             -*- shell-script -*-
+#
+# Copyright (C) 2016 SUSE Linux GmbH
+#
+# Author:
+# Frank Sundermeyer <fsundermeyer at opensuse dot org>
+#
+
+shopt -s progcomp
+
+_daps() {
+    local cur prev scmd commands options
+    local -a daps_commands
+    COMPREPLY=()
+    _get_comp_words_by_ref -n : cur prev
+
+    # get the command line from the beginning to the actual cursor position
+    # COMP_LINE and COMP_POINT are built-ins
+    command_line=(${COMP_LINE:0:$COMP_POINT})
+
+    # array containing all DAPS subcommands
+    daps_commands=( $(daps --commands) )
+
+    # Get a pipe separated list of all subcommands
+    # we need them in the case-statement
+    SAVE_IFS="$IFS"
+    IFS="|"
+    check_scmd="${daps_commands[*]}"
+    IFS="$SAVE_IFS"
+
+    # all DAPS subcommands in a plain space-separated string
+    commands="${daps_commands[@]}"
+
+    # all global options
+    options="-d -h -m -v -vv -vvv $(daps --help | sed -n 's/^\s*\(--[a-z_\-]*\).*/\1/p' | uniq)"
+
+    # subcommand that was typed
+    # "grep" for word in command_line that does not start with "-" and
+    # is a subcommand (compare with subcommand list)
+    # since $command_line only contains the command line up to the current
+    # cursor position, we will always show the correct parameters/commands
+    # at the current cursor position
+    #
+    for ((i = 1; i < ${#command_line[@]}; ++i)); do
+        if [[ ${command_line[i]} != -* ]]; then
+            # check if daps subcommand
+            for cmd in "${daps_commands[@]}"; do
+                if [[ "$cmd" == "${command_line[i]}" ]]; then
+                    scmd=${command_line[i]}
+                    break
+                fi
+            done
+        fi
+    done
+
+    case "$scmd" in
+        +($check_scmd))
+            # all subcommands
+            # see https://stackoverflow.com/questions/13254425/using-variable-as-case-pattern-in-bash for the pattern match syntax
+            case "$prev" in
+                --export-dir|--notrans-dir|--output-dir)
+                    _filedir -d
+                    return 0
+                    ;;
+                --css|--export-dir|--extra-dict|--file|--statdir)
+                    _filedir
+                    return 0
+                    ;;
+                --def-file)
+                    compopt -o filenames -o plusdirs
+                    COMPREPLY=( $(compgen -f -d -X '!*(*/)DEF-*[^~]' -- "$cur") )
+                    return 0
+                    ;;
+                --formatter)
+                    COMPREPLY=( $(compgen -W "fop xep" -- "$cur") )
+                    return 0
+                    ;;
+                *)
+                ;;
+            esac
+            local options
+            options="$(daps "$scmd" --help | sed -n 's/^\s*\(--[a-z_\-]*\).*/\1/p' | uniq)"
+            COMPREPLY=( $(compgen -W "$options" -- "$cur") )
+            return 0
+            ;;
+        *)
+            # the global options go here
+            case "$prev" in
+                --builddir|--fb_styleroot|--styleroot)
+                    _filedir -d
+                    return 0
+                    ;;
+                --color)
+                    COMPREPLY=( $(compgen -W "0 1" -- "$cur") )
+                    return 0
+                    ;;
+                -d|--docconfig)
+                    compopt -o filenames -o plusdirs
+                    COMPREPLY=( $(compgen -f -d -X '!*(*/)DC-*[^~]' -- "$cur") )
+                    return 0
+                    ;;
+                --jobs|-j)
+                    # taken from /usr/share/bash-completion/completions/make
+                    COMPREPLY=( $(LC_ALL=C compgen -W "{1..$(( $(_ncpus)*2 ))}" -- "$cur") )
+                    return 0
+                    ;;
+                -m|--main)
+                    local mains
+                    mains=$(ls -1 --color=never ${cur}xml/MAIN*.xml 2>/dev/null)
+                    if [[ -n $mains ]]; then
+                        COMPREPLY=( $(compgen -W "$mains" -- "$cur") )
+                    else
+                        _filedir
+                    fi
+                    return 0
+                    ;;
+                --schema)
+                    if [[ $cur == file:* ]]; then
+                        # ignore file:// and do directory/file completion
+                        # only show *.rn{c,g} files
+                        compopt -o nospace -o plusdirs -o filenames
+                        COMPREPLY=( $(compgen -f -X '!*.@(rng|rnc)' -- "${cur/file:/}" ) )
+                    elif [[ -z "$cur" ]]; then
+                        # print the file:// prefix plus the leading / for
+                        # regular file complation (path needs to be absolute)
+                        compopt -o nospace
+                        COMPREPLY=( $(compgen -W 'file:///' -- "$cur") )
+                    else
+                        # do regular file completion in case there is no
+                        # file:// prefix
+                        _filedir
+                    fi
+                    # remove colon containing prefix from COMPREPLY items
+                    __ltrim_colon_completions "$cur"
+                    return 0
+                    ;;
+                --verbosity)
+                    COMPREPLY=( $(compgen -W "1 2 3" -- "$cur") )
+                    return 0
+                    ;;
+                --xsltprocessor)
+                    COMPREPLY=( $(compgen -W "saxon xsltproc" -- "$cur") )
+                    return 0
+                    ;;
+                *)
+                    ;;
+            esac
+            ;;
+    esac
+
+    if [[ $cur == -* ]]; then
+        # show options only when "-" has been entered
+       COMPREPLY=( $(compgen -W "$options" -- "$cur") )
+    else
+        # else show subcommands only
+        COMPREPLY=( $(compgen -W "$commands" -- "$cur") )
+    fi
+    return 0
+}
+ # also add most commonly used aliases for git checkouts here
+ complete -F _daps daps ddaps gdaps gitdaps

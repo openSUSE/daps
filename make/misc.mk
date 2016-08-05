@@ -15,6 +15,10 @@
 
 BIGFILE := $(TMP_DIR)/$(DOCNAME)_bigfile.xml
 
+#
+# JING_FLAGS is set in validate.mk
+#
+
 .PHONY: bigfile
 bigfile: $(BIGFILE)
   ifeq "$(NOVALID)" "1"
@@ -23,7 +27,7 @@ bigfile: $(BIGFILE)
 	  ccecho "result" "Successfully validated the bigfile at:\n$<" || \
 	  ccecho "error" "Validation failed for the bigfile at:\n$<"
     else
-	$(JING_WRAPPER) $(JING_RNC) $(DOCBOOK5_RNG) $< && \
+	$(JING_WRAPPER) $(JING_FLAGS) $(DOCBOOK5_RNG) $< && \
 	  ccecho "result" "Successfully validated the bigfile at:\n$<" || \
 	  ccecho "error" "Validation failed for the bigfile at:\n$<"
     endif

@@ -48,11 +48,11 @@ define db5_get_trans
   for F in $(DOCFILES); do \
     R=`$(XMLSTARLET) sel -N dm="urn:x-suse:ns:docmanager" -N db5="http://docbook.org/ns/docbook" -t -m "/*/db5:info/dm:docmanager" -v "normalize-space(dm:translation)" $$F 2>/dev/null || echo "no"`; \
     if [ "yes" = "$$R" ]; then echo -n "$$F "; fi \
-  done
+  done 2>/dev/null
 endef
 
 ifdef USESVN
-  TO_TRANS_FILES := $(subst $(DOC_DIR)/xml,$(PROFILEDIR),$(shell svn pl -v --xml $(DOCFILES) | $(XSLTPROC) --stylesheet $(DAPSROOT)/daps-xslt/common/get-svn-props.xsl $(XSLTPROCESSOR)))
+  TO_TRANS_FILES := $(subst $(DOC_DIR)/xml,$(PROFILEDIR),$(shell svn pl -v --xml $(DOCFILES) | $(XSLTPROC) --stylesheet $(DAPSROOT)/daps-xslt/common/get-svn-props.xsl $(XSLTPROCESSOR) 2>/dev/null))
 else
   TO_TRANS_FILES := $(subst $(DOC_DIR)/xml,$(PROFILEDIR),$(shell $(db5_get_trans)))
 endif
@@ -98,7 +98,7 @@ ifneq "$(strip $(USED_ALL))" ""
   # The addprefix/addsuffix calls transform it into
   # images/src/*/foo.* and wildcard finds the existing file from this pattern
   #
-  TO_TRANS_IMGS := $(sort $(wildcard $(addprefix $(IMG_SRCDIR)/*/,$(addsuffix .*,$(basename $(shell xsltproc $(DAPSROOT)/daps-xslt/common/get-graphics.xsl $(TO_TRANS_FILES)))))))
+  TO_TRANS_IMGS := $(sort $(wildcard $(addprefix $(IMG_SRCDIR)/*/,$(addsuffix .*,$(basename $(shell xsltproc $(DAPSROOT)/daps-xslt/common/get-graphics.xsl $(TO_TRANS_FILES) 2>/dev/null))))))
   TO_TRANS_IMG_TAR :=$(LOCDROP_EXPORT_BOOKDIR)/graphics-translation-$(DOCNAME)$(LANGSTRING).tar.bz2
 endif
 
@@ -106,7 +106,7 @@ endif
 #
 # get all images in the current set
 #
-USED_SET := $(shell $(XSLTPROC) --stringparam "filetype=img" --file $(SETFILES_TMP) --stylesheet $(DAPSROOT)/daps-xslt/common/extract-files-and-images.xsl $(XSLTPROCESSOR))
+USED_SET := $(shell $(XSLTPROC) --stringparam "filetype=img" --file $(SETFILES_TMP) --stylesheet $(DAPSROOT)/daps-xslt/common/extract-files-and-images.xsl $(XSLTPROCESSOR) 2>/dev/null)
 
 ifneq "$(strip $(USED_SET))" ""
   # USED_SET contains just the images names as mentioned in the XML sources
@@ -127,7 +127,7 @@ endif
 
 .PHONY: locdrop
 ifneq "$(strip $(DEF_FILE))" ""
-  locdrop: DC_FILES := $(addprefix $(DOC_DIR)/,$(shell awk '/^[ \t]*#/ {next};NF {printf "DC-%s ", $$2}' $(DEF_FILE)))
+  locdrop: DC_FILES := $(addprefix $(DOC_DIR)/,$(shell awk '/^[ \t]*#/ {next};NF {printf "DC-%s ", $$2}' $(DEF_FILE) 2>/dev/null))
 endif
 locdrop: | $(LOCDROP_EXPORT_BOOKDIR) $(LOCDROP_TMP_DIR)
 ifeq "$(OPTIPNG)" "1"
@@ -143,7 +143,7 @@ locdrop: $(SRCFILES) $(MANIFEST_TRANS) $(MANIFEST_NOTRANS) $(USED_ALL) $(PROFILE
   ifndef DOCCONF
 	$(error $(shell ccecho "error" "Fatal error: locdrop is only supported when using a DC-file"))
   endif
-  ifdef MISSING
+  ifneq "$(strip $(MISSING))" ""
 	@ccecho "error" "Fatal error: The following images are missing:"
 	@echo -e "$(subst $(SPACE),\n,$(sort $(MISSING)))"
 	$(error )
@@ -162,20 +162,20 @@ locdrop: $(SRCFILES) $(MANIFEST_TRANS) $(MANIFEST_NOTRANS) $(USED_ALL) $(PROFILE
 	  $(DOCCONF)
 	tar rhf $(NO_TRANS_TAR) --absolute-names \
 	  --transform=s%$(LOCDROP_TMP_DIR)/%% $(MANIFEST_NOTRANS)
-    ifdef NO_TRANS_FILES
+    ifneq "$(strip $(NO_TRANS_FILES))" ""
 	tar rhf $(NO_TRANS_TAR) --absolute-names \
 	  --transform=s%$(PROFILEDIR)/%xml/% $(NO_TRANS_FILES)
     endif
-    ifdef DEF_FILE
+    ifneq "$(strip $(DEF_FILE))" ""
 	tar rhf $(NO_TRANS_TAR) --absolute-names --transform=s%$(DOC_DIR)/%% \
 	  $(DEF_FILE) $(DC_FILES)
     endif
-    ifdef TO_TRANS_IMGS
+    ifneq "$(strip $(TO_TRANS_IMGS))" ""
         # graphics tarball "translated graphics"
 	BZIP2=--best tar cfhj $(TO_TRANS_IMG_TAR) \
 	  --absolute-names --transform=s%$(DOC_DIR)/%% $(TO_TRANS_IMGS)
     endif
-    ifdef NO_TRANS_IMGS
+    ifneq "$(strip $(NO_TRANS_IMGS))" ""
         # graphics tarball "translated graphics"
 	BZIP2=--best tar cfhj $(NO_TRANS_IMG_TAR) \
 	  --absolute-names --transform=s%$(DOC_DIR)/%% $(NO_TRANS_IMGS)
