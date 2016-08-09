@@ -14,9 +14,9 @@
 #JING_MEMORY=${JING_MEMORY:-"-Xms400 -Xmx500m"}
 
 # set java thread stack size
-# A minimum stack size of 3072 is needed for builds on s390 and ARM
+# A minimum stack size of 4096 is needed for builds on s390 and ARM
 #
-JING_STACKSIZE=${JING_STACKSIZE:-"-Xss3072K"}
+JING_STACKSIZE=${JING_STACKSIZE:-"-Xss4096K"}
 
 #
 # Default JAVA setup for JING needed by DAPS - do not change
