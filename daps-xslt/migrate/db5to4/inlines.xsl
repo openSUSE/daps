@@ -30,4 +30,9 @@
       <xsl:apply-templates select="@*|node()"/>
     </sgmltag>
   </xsl:template>
+
+  <xsl:template match="d:author/d:personname|d:editor/d:personname">
+   <!-- Ignore personname for DocBook4 -->
+   <xsl:apply-templates/>
+  </xsl:template>
 </xsl:stylesheet>
