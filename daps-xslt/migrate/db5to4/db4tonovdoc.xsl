@@ -65,6 +65,7 @@
     doctype-public="-//Novell//DTD NovDoc XML V1.0//EN"
     doctype-system="novdocx.dtd"/>
 
+  <xsl:strip-space elements="cmdsynopsis arg group"/>
   <!--<xsl:strip-space elements="*"/>
   <xsl:preserve-space elements="screen programlisting"/>-->
 
@@ -78,6 +79,21 @@
   <xsl:param name="rootid"/>
   <xsl:param name="use.doctype4novdoc" select="0"/>
   <xsl:param name="debug.level" select="4"/>
+
+  <!-- cmdsynopsis: args & groups -->
+  <xsl:param name="arg.choice.opt.open.str">[</xsl:param>
+  <xsl:param name="arg.choice.opt.close.str">]</xsl:param>
+  <xsl:param name="arg.choice.req.open.str">{</xsl:param>
+  <xsl:param name="arg.choice.req.close.str">}</xsl:param>
+  <xsl:param name="arg.choice.plain.open.str"><xsl:text> </xsl:text></xsl:param>
+  <xsl:param name="arg.choice.plain.close.str"><xsl:text> </xsl:text></xsl:param>
+  <xsl:param name="arg.choice.def.open.str">[</xsl:param>
+  <xsl:param name="arg.choice.def.close.str">]</xsl:param>
+  <xsl:param name="arg.rep.repeat.str">...</xsl:param>
+  <xsl:param name="arg.rep.norepeat.str"></xsl:param>
+  <xsl:param name="arg.rep.def.str"></xsl:param>
+  <xsl:param name="arg.or.sep"> | </xsl:param>
+
 
   <xsl:key name="id" match="*" use="@id|@xml:id"/>
 
@@ -464,6 +480,89 @@
 
   <!-- ################################################################## -->
   <!-- Templates for Block Elements                                       -->
+
+  <xsl:template match="cmdsynopsis">
+   <screen><xsl:apply-templates/></screen>
+  </xsl:template>
+
+  <xsl:template match="cmdsynopsis/text()"/>
+
+  <xsl:template match="cmdsynopsis/command">
+   <command><xsl:apply-templates/></command>
+   <xsl:text> </xsl:text>
+  </xsl:template>
+
+  <xsl:template match="group | arg" name="group-or-arg">
+   <xsl:variable name="choice" select="@choice"/>
+   <xsl:variable name="rep" select="@rep"/>
+   <xsl:variable name="sepchar">
+    <xsl:choose>
+     <xsl:when test="ancestor-or-self::*/@sepchar">
+      <xsl:value-of select="ancestor-or-self::*/@sepchar"/>
+     </xsl:when>
+     <xsl:otherwise>
+      <xsl:text> </xsl:text>
+     </xsl:otherwise>
+    </xsl:choose>
+   </xsl:variable>
+
+   <xsl:if test="preceding-sibling::*">
+    <xsl:value-of select="$sepchar"/>
+   </xsl:if>
+   <xsl:choose>
+    <xsl:when test="$choice = 'plain'">
+     <xsl:value-of select="$arg.choice.plain.open.str"/>
+    </xsl:when>
+    <xsl:when test="$choice = 'req'">
+     <xsl:value-of select="$arg.choice.req.open.str"/>
+    </xsl:when>
+    <xsl:when test="$choice = 'opt'">
+     <xsl:value-of select="$arg.choice.opt.open.str"/>
+    </xsl:when>
+    <xsl:otherwise>
+     <xsl:value-of select="$arg.choice.def.open.str"/>
+    </xsl:otherwise>
+   </xsl:choose>
+   <xsl:apply-templates/>
+   <xsl:choose>
+    <xsl:when test="$rep = 'repeat'">
+     <xsl:value-of select="$arg.rep.repeat.str"/>
+    </xsl:when>
+    <xsl:when test="$rep = 'norepeat'">
+     <xsl:value-of select="$arg.rep.norepeat.str"/>
+    </xsl:when>
+    <xsl:otherwise>
+     <xsl:value-of select="$arg.rep.def.str"/>
+    </xsl:otherwise>
+   </xsl:choose>
+   <xsl:choose>
+    <xsl:when test="$choice = 'plain'">
+     <xsl:value-of select="$arg.choice.plain.close.str"/>
+    </xsl:when>
+    <xsl:when test="$choice = 'req'">
+     <xsl:value-of select="$arg.choice.req.close.str"/>
+    </xsl:when>
+    <xsl:when test="$choice = 'opt'">
+     <xsl:value-of select="$arg.choice.opt.close.str"/>
+    </xsl:when>
+    <xsl:otherwise>
+     <xsl:value-of select="$arg.choice.def.close.str"/>
+    </xsl:otherwise>
+   </xsl:choose>
+ </xsl:template>
+
+  <xsl:template match="group/arg">
+   <xsl:variable name="choice" select="@choice"/>
+   <xsl:variable name="rep" select="@rep"/>
+   <xsl:if test="preceding-sibling::*">
+    <xsl:value-of select="$arg.or.sep"/>
+   </xsl:if>
+   <xsl:call-template name="group-or-arg"/>
+  </xsl:template>
+
+  <xsl:template match="sbr">
+    <xsl:text>&#10;</xsl:text>
+  </xsl:template>
 
   <xsl:template match="blockquote/attribution">
    <xsl:call-template name="info">
