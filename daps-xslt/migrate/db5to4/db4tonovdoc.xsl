@@ -288,7 +288,14 @@
       <xsl:apply-templates select="productname"/>
       <xsl:apply-templates select="productnumber"/>
       <xsl:apply-templates select="date"/>
-      <xsl:apply-templates select="legalnotice"/>
+      <xsl:choose>
+        <xsl:when test="legalnotice">
+          <xsl:copy-of select="legalnotice"/>
+        </xsl:when>
+        <xsl:otherwise>
+         <legalnotice/>
+        </xsl:otherwise>
+      </xsl:choose>
       <xsl:apply-templates select="abstract"/>
     </bookinfo>
   </xsl:template>
@@ -477,6 +484,9 @@
     </systemitem>
   </xsl:template>
 
+  <xsl:template match="systemitem[ancestor::screen]">
+    <xsl:apply-templates/>
+  </xsl:template>
 
   <!-- ################################################################## -->
   <!-- Templates for Block Elements                                       -->
