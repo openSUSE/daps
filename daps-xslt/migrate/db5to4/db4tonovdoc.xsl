@@ -293,7 +293,7 @@
           <xsl:copy-of select="legalnotice"/>
         </xsl:when>
         <xsl:otherwise>
-         <legalnotice/>
+         <legalnotice><para/></legalnotice>
         </xsl:otherwise>
       </xsl:choose>
       <xsl:apply-templates select="abstract"/>
