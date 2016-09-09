@@ -478,6 +478,14 @@
     </option>
   </xsl:template>
 
+  <xsl:template match="author/personname">
+   <!-- Ignore any personname inside author -->
+   <xsl:call-template name="info">
+      <xsl:with-param name="text">Removed personname inside author</xsl:with-param>
+    </xsl:call-template>
+   <xsl:apply-templates/>
+  </xsl:template>
+
   <xsl:template match="systemitem[@class='protocol']">
     <systemitem>
       <xsl:apply-templates/>
