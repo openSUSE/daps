@@ -32,15 +32,17 @@
    formats such as HTML or PDF. &dapsacr; is command line based and runs on Linux*.</para>
 
   <para>In XML-based publishing, layout and contents are strictly separated:
-   while writing, you only take care of the contents and the XML tags to use.
+   while writing, you only take care of <remark>dpopov 2016-10-10: Suggestion: s/only take care of/focus on</remark> the contents and the XML tags to use.
    The layout for different output formats is defined in so-called stylesheets and is
-   automatically added when converting the XML into output formats.</para>
+   automatically added <remark>dpopov 2016-10-10: Suggestion: s/added/applied</remark>
+  when converting the XML into output formats.</para>
   <para>This tutorial is for DocBook and &dapsacr; beginners. Previous
    knowledge of XML is not required, but you need basic knowledge of using the
    Bash Shell. We will write a recipe for a chili sauce in DocBook and convert
    it into HTML. The tutorial explains step-by-step how to set up your document,
    which basic XML tags to use for writing it, and how to produce the output you
-   see in <xref linkend="fig.daps.tutorial.goal" xrefstyle="select: label"
+   see <remark>dpopov 2016-10-10: Suggestion: s/you see/shown</remark>
+   in <xref linkend="fig.daps.tutorial.goal" xrefstyle="select: label"
    />.</para>
 </abstract>
 
@@ -59,7 +61,8 @@
   <para>DocBook is a markup language for technical documentation. Content is
    tagged with XML elements according to its meaning. This is similar to sorting
    objects into drawers according to their function: For example, you place
-   scissors and tongs into a drawer labeled <literal>Tools</literal>, whereas
+   scissors and tongs <remark>dpopov 2016-10-10: Tongs? Perhaps screwdrivers is better?</remark>
+   into a drawer labeled <literal>Tools</literal>, whereas
    you place teddies and building blocks into a drawer labeled
     <literal>Toys</literal>. Similarly, when writing documents with DocBook, you
    would <quote>sort</quote> the author's name into an XML tag called
@@ -68,7 +71,7 @@
    <sgmltag>xref</sgmltag>.</para>
   <para>While this might seem cumbersome at first sight, it is a huge advantage
    when considering the different output formats you can generate from the same
-   XML sources. Imagine you want anything tagged with an <sgmltag>xref</sgmltag>
+   XML sources.<remark>dpopov 2016-10-10: this approach has an advantage when it comes to generating documents in different formats from the same XML sources.</remark> Imagine you want anything tagged with an <sgmltag>xref</sgmltag>
    element to appear in <emphasis>blue</emphasis> in HTML output, whereas you
    want it to appear in <emphasis>green</emphasis> in the PDF output. Or you
    decide at one point that you want references to other documents
@@ -81,7 +84,8 @@
    formats with one command. &dapsacr; takes care of converting any images
    in your documents automatically into the format best suited for the selected
    output format. &dapsacr; also helps you in comfortably writing and
-   editing your documents by providing additional features like editor macros,
+   editing your documents <remark>dpopov 2016-10-10: makes writing and editing more efficient</remark>
+   by providing additional features like editor macros,
    spell checking or link checking. With &daps; you can also control which
    stylesheets to use for generating output.</para>
  </sect1>
@@ -89,7 +93,8 @@
   <sect1>
   <title>What You Need</title>
   <para>
-   Before you start writing, you need to install a few packages. To ease
+   Before you start writing, you need <remark>dpopov 2016-10-10: The first step is</remark>
+   to install a few packages <remark>dpopov 2016-10-10: including an editor with XML support for mmore efficient writing</remark>. To ease
    writing use an editor with XML support. Recommended is Emacs and &dapsacr;
    version 2.0 or higher.
    Do the following to install Emacs and &dapsacr;:
@@ -128,8 +133,7 @@
  <sect1>
   <title>How to Start</title>
   <para>
-   To be able to process the XML files, &dapsacr; requires a certain
-   directory structure. Either use <command>daps-init</command> or set it up
+   To be able to process the XML files, &dapsacr; requires a certain <remark>dpopov 2016-10-10: Suggestion: s/certain/specific</remark> directory structure. Either use <command>daps-init</command> or set it up
    manually. The <command>daps-init</command> command is especially advisable
    for beginners,
    because it creates an example and the necessary structure. File names always
@@ -139,19 +143,23 @@
     <title>Working with <command>daps-init</command></title>
     <para>
       The <command>daps-init</command> command creates a working environment
-      for &dapsacr;. In this tutorial's example, it creates a directory called
+      for &dapsacr;. In this tutorial's example <remark>dpopov 2016-10-10: for this tutorial</remark>
+      , it creates a directory called
      <filename>tutorial</filename>. It contains a &dapsacr; configuration file for
      your tutorial (<filename>DC-tutorial</filename>), the DocBook XML file
      located in the XML subdirectory and a subdirectory containing image files
      (<filename>images</filename>). The <filename>image</filename> directory will
      be relevant later (see <xref linkend="ex.image"/>).
+
     </para>
     <procedure>
      <step>
     <para>
       The <command>daps-init</command> command creates a working environment
-      for &dapsacr;. It builds a directory with your entered
-     <filename>filename</filename>. In this directory are a DC-file, a
+      for &dapsacr;. It builds a directory with your entered <remark>dpopov 2016-10-10: the specified</remark>
+
+     <filename>filename</filename>. In this directory are <remark>dpopov 2016-10-10: This directory contains</remark>
+     a DC-file, a
      <filename>xml</filename> subdirectory and a <filename>image</filename>
      subdirectory. The <filename>image</filename> directory (see <xref
      linkend="ex.image"/>) will be relevant later.
@@ -160,7 +168,8 @@
      </step>
      <step>
       <para>
-       Now it is your turn: write your text! To learn about the needed XML tags, read the
+       Now it is your turn: write your text! <remark>dpopov 2016-10-10: Now you can start working on your text. Now you can start writing.</remark>
+       To learn about the needed XML tags, read the
        following chapters. If you need help with &dapsacr;, open the
        <filename>daps-init</filename> man page in your terminal:
       </para>
@@ -181,7 +190,8 @@
      <step>
       <para>
        Proceed with <xref linkend="sec.howto"/>, where we will create another XML file and
-       another DC file from scratch (in parallel to the files created by
+       another DC file from scratch (in parallel to <remark>dpopov 2016-10-10: Suggestion: s/in parallel to/in addition to</remark>
+       the files created by
        daps-init) and use them to write the recipe.
       </para>
      </step>
@@ -193,7 +203,8 @@
    <procedure>
 
     <para>
-     This method is for the more experienced writer.
+     This method is <remark>dpopov 2016-10-10: suitable</remark>
+     for the more experienced writer.
     </para>
     <step>
     <para>
@@ -227,8 +238,10 @@
  File</title>
  <para>
   Now we will create an XML file (that we will use in the following to
-  write the recipe) and a Documentation Configuration (DC) file (that we
-  will use later on to convert the XML file into HTML output).
+  write the recipe) <remark>dpopov 2016-10-10: for writing the recipe?</remark>
+  and a Documentation Configuration (DC) file (that we
+  will use later on to convert the XML file into HTML output).<remark>dpopov 2016-10-10:Suggestion: for converting</remark>
+
  </para>
 <procedure>
  <step>
@@ -239,6 +252,7 @@
   <step>
    <para>
     In a terminal, switch to the XML subdirectory.
+
    </para>
    <screen>&prompt.user;cd xml</screen>
   </step>
@@ -318,17 +332,20 @@
    <title>Identifying Start and End Tags</title>
    <para>
     The most important thing you need to know about XML is,
-    that you need to close the tags. Either with an end tag or with a
+    that you need to close the tags. <remark>dpopov 2016-10-10: Keep in mind that in XML you must close the tags either with the an end tag or...</remark>
+    Either with an end tag or with a
     backslash at the end of the tag (for example:
     <command>&lt;para/&gt;</command>). The content between the
     tags depends on which element you want to
     create. Open the XML file <filename>recipe.xml</filename> that you just
-    created, and place the cursor below the header. To write an article, paste
+    created, and place the cursor below the header. To write <remark>dpopov 2016-10-10: define?</remark>
+    an article, paste
     an <command>article</command> start and end tag into the XML file. Between these two tags, write your text as shown in <xref
     linkend="ex.tags"/>.
    </para>
    <example id="ex.tags">
-    <title>Start- and Endtag of an Article</title>
+    <title>Start- and Endtag of an Article <remark>dpopov 2016-10-10: Is it endtag or end tag?</remark>
+    </title>
     <programlisting>&lt;article&gt;
 Tags and text
 &lt;/article&gt;
@@ -383,12 +400,14 @@ Recipe for a chili sauce.
      </callout>
      <callout arearefs="co.article5.xml">
       <para>
-       An abstract. What is the subject of your article?
+       An abstract. What is the subject of your article? <remark>dpopov 2016-10-10: What is your article about?</remark>
+
       </para>
      </callout>
      <callout arearefs="co.article4.xml">
       <para>
-       Article end tag. It always has to be at the end of the whole article.
+       Article end tag. It always has to be at the end of the whole article. <remark>dpopov 2016-10-10: Suggestion: at the very end of the article.</remark>
+
       </para>
      </callout>
     </calloutlist>
@@ -455,7 +474,7 @@ Recipe for a chili sauce.
    </example>
    <para>
     Place the cursor behind the abstract end tag and in front of the article
-    end tag and paste the content of <quote>Example 4</quote>  into your XML file.
+    end tag and paste the content of <quote>Example 4</quote>  into your XML file. <remark>dpopov 2016-10-10: behind/in front is confusing. Better: before/after</remark>
    </para>
 
    <figure>
@@ -477,7 +496,7 @@ Recipe for a chili sauce.
   <sect2>
    <title>Creating Itemized Lists</title>
    <para>
-    To create a listing, use the <command>&lt;itemizedlist> </command> tag.
+    To create a listing, use the <command>&lt;itemizedlist> </command> tag. <remark>dpopov 2016-10-10: Listing and list are not the same thing.</remark>
    </para>
 
    <example>
@@ -524,7 +543,8 @@ Recipe for a chili sauce.
   </sect2>
 
   <sect2>
-   <title>Giving Step-by-Step Instructions</title>
+   <title>Giving Step-by-Step Instructions</title> <remark>dpopov 2016-10-10: Suggestion: s/Giving/Providing</remark>
+
    <para>
     For writing instructions, it is recommended to do it step-by-step, as you can
     see in the following <xref xreflabel="example"
@@ -532,7 +552,8 @@ Recipe for a chili sauce.
     and browse for the reader.
    </para>
    <example id="ex.listing">
-    <title>Example for Step-by-Step Instructions </title>
+    <title>Example for Step-by-Step Instructions </title> <remark>dpopov 2016-10-10: Example of?</remark>
+
     <programlisting>&lt;procedure><co id="co.textstructure.xml"/>
  &lt;step&gt;<co id="co.textstructure2.xml"/>
   &lt;para&gt;<co id="co.textstructure3.xml"/>
@@ -589,7 +610,8 @@ Recipe for a chili sauce.
 
 
 <sect2>
- <title>Integrating Remote Links and Cross References</title>
+ <title>Integrating Remote Links and Cross References</title> <remark>dpopov 2016-10-10: Suggestion: use insert or add instead of integrate</remark>
+
  <sect3>
   <title>Remote Links</title>
   <para>
@@ -681,7 +703,8 @@ Recipe for a chili sauce.
       To integrate an image in your file, save an image (for example, <filename>butcht.png</filename>) in the
       <filename>image/png</filename> directory.
       That is very important because otherwise, it will not
-      work.
+      work. <remark>dpopov 2016-10-10: The image must reside inside the image/png directory; otherwise DAPS will not be able to locate it.</remark>
+
      </para>
     </step>
     <step>
@@ -730,11 +753,11 @@ Recipe for a chili sauce.
  <sect1>
   <title>Convert Your XML Files</title>
   <para>
-   Convert your XML file whenever you want to, no matter if it is finished or
+    Convert your XML file whenever you want to <remark>dpopov 2016-10-10: You can convert the XML file at any time</remark>, no matter if it is finished or
    you only want to see the temporary result. Convert as often as you like.
    <important>
     <para>
-     The XML file must be valid, otherwise it will not work! Check if it is valid:
+     The XML file must be valid, otherwise it will not work! <remark>dpopov 2016-10-10: otherwise the conversion will fail.</remark> Check if it is valid:
      <screen>daps -d DC-tutorial validate</screen>
     </para>
    </important>
@@ -744,14 +767,16 @@ Recipe for a chili sauce.
   <procedure>
    <step>
      <para>
-      Open a terminal and enter the following command:
+      Open a terminal and enter <remark>dpopov 2016-10-10: s/enter/run</remark>
+      the following command:
      </para>
      <screen>&prompt.user;daps -d <filename>DC-tutorial</filename> pdf</screen>
    </step>
    <step>
      <para>
      &dapsacr; automatically creates a directory called
-     <filename>build</filename>. You can find your finished PDF file there.
+     <filename>build</filename>. You can find your finished PDF file there. <remark>dpopov 2016-10-10: saves the resulting PDF file in the build directory.</remark>
+
      </para>
    </step>
   </procedure>
@@ -768,7 +793,8 @@ Recipe for a chili sauce.
      <step>
      <para>
       You get a green colored link, which you can open in a browser, for
-      example Firefox.
+      example Firefox. <remark>dpopov 2016-10-10: in a browser like Firefox.</remark>
+
      </para>
      </step>
     </procedure>
@@ -777,12 +803,13 @@ Recipe for a chili sauce.
   <sect1>
    <title>Further Information</title>
    <para>
-    If you still have questions or want to have additional information, read
-    the &dapsacr; man page. Open it in a terminal:
+    If you still have questions or want to have <remark>dpopov 2016-10-10: Suggestion: s/want to have/need</remark> additional information, read
+    the &dapsacr; man page. Open it in a terminal: <remark>dpopov 2016-10-10: open the DAPS man page using the following command:</remark>
+
    </para>
    <screen>&prompt.user;daps --help</screen>
    <para>
-    Or visit the following links:
+    Or visit the following links: <remark>dpopov 2016-10-10: Suggestion: s/or/alternatively</remark>
    </para>
    <itemizedlist>
     <listitem>
