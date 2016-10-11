@@ -11,17 +11,16 @@
  <title>Customizing Layout of the Output Formats</title>
  <abstract>
   <para>
-   This chapter includes:
+   This chapter covers the following topics:
    <itemizedlist>
     <listitem>
      <para>
-      how to modify individual XSLT processor parameters,
+      Modifying individual XSLT processor parameters
      </para>
     </listitem>
     <listitem>
      <para>
-      an external reference to a book that deals with common customizations
-      to the DocBook stylesheets.
+      Dealing with common customizations to the DocBook stylesheets.
      </para>
     </listitem>
    </itemizedlist>
@@ -30,10 +29,10 @@
  <sect1 id="sec.daps.user.layout.xsltparams">
   <title>Modifying Individual XSLT Processor Parameters</title>
 
-  <para> If you use the default DocBook layout and want to adjust individual parameters, you can use
+  <para> If you use the default DocBook layout and want to adjust individual parameters, add
    the <option>--param "KEY=VALUE"</option> or the <option>--stringparam "KEY=VALUE"</option>
-   option. Both options can be specified multiple times and are supported for the following
-   subcommands (specifying the output formats): </para>
+   option. Both options can be added  multiple times, and they work with the following
+   subcommands that specify the output formats: </para>
   <itemizedlist>
    <listitem>
     <para>epub</para>
@@ -54,14 +53,14 @@
     <para>webhelp</para>
    </listitem>
   </itemizedlist>
-  <para>The options will pass on values for XSLT parameters directly to the XSLT processor, which is
-  useful to temporarily overwrite style sheet parameters such as margins, for example.
+  <para>The options pass on values for XSLT parameters directly to the XSLT processor, which is
+  useful to temporarily overwrite style sheet parameters such as margins.
   </para>
   
   <note>
    <title><parameter>XSLTPARAM</parameter> And <option>--xsltparam</option></title>
    <para>For compatibility reasons, &dapsacr; still supports the use of
-     <option>--xsltparam</option> on the command line, but this option will be removed in future
+     the <option>--xsltparam</option> command-line option, but it will be removed in future
     versions. Use <option>--param "KEY=VALUE"</option> or <option>--stringparam "KEY=VALUE"</option>
     instead.</para>
    <para>However, if you want to specify your settings in the &dc; file instead of using the
@@ -71,13 +70,12 @@
   
   <para>
    For larger or more complex modifications, such as adjustments of the
-   title page layout, for example, it is advisable to develop your own set
+   title page layout, for example, it is advisable to create your own set
    of stylesheets instead.
   </para>
 
   <para>
-   For a list of XSLT parameters to modify, refer to one of the following
-   parameter references at
+   For a list of XSLT parameters to modify, refer to one of the following references at
    <ulink 
    url="http://docbook.sourceforge.net/release/xsl/current/doc/index.html"/>:
   </para>
@@ -113,8 +111,7 @@
    <para>
     By default, the DocBook stylesheets display the contents of a
     <sgmltag>variablelist</sgmltag> as a table. To change this temporarily,
-    set the parameter <parameter>variablelist.as.table</parameter> to the
-    value <literal>0</literal> by executing the following command:
+    set the parameter <parameter>variablelist.as.table</parameter> to <literal>0</literal> by executing the following command:
    </para>
    <screen>&prompt.user;&dapscmd; -d  &nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;html \
 --param<co id="co.xsltparam"/>&nbsp;"variablelist.as.table<co id="co.param"/>=0"<co id="co.value"/> \
@@ -125,7 +122,8 @@
      <para>
       As value of <option>--param</option> or <option>--stringparam</option>, add an
       <literal>xsltproc</literal> parameter in the form of
-      <replaceable>PARAM_NAME</replaceable>=<replaceable>VALUE</replaceable>".
+      <replaceable>PARAM_NAME</replaceable>=<replaceable>VALUE</replaceable>" <remark>dpopov 2016-10-11: This sentence is confusing.</remark>
+      .
      </para>
      <para>
       <replaceable>VALUE</replaceable> can be an integer or XPATH expression
@@ -166,7 +164,7 @@ XSLTPARAM="$XSLTPARAM --param&nbsp;<replaceable>PARAM_NAME</replaceable>=<replac
  <sect1 id="sec.daps.user.layout.txt">
   <title>Specifying the Layout for ASCII Text Output</title>
   <para>You can set parameters in &dapsconf-sys; or &dapsconf-user; using the
-    <parameter>TXT_PARAMS</parameter> parameter. Alternatively, set them from command line, using the
+    <parameter>TXT_PARAMS</parameter> parameter. Alternatively, set them from the command line, using the
     <option>--param</option>/<option>--stringparam</option> options. By
    default, the stylesheets specified with the <parameter>STYLEROOT</parameter> parameter or
     the <option>--styleroot</option> option are used for generating ASCII text output.</para>
@@ -180,7 +178,7 @@ XSLTPARAM="$XSLTPARAM --param&nbsp;<replaceable>PARAM_NAME</replaceable>=<replac
   <title>Customizing the DocBook Stylesheets</title>
 
   <para>
-   Useful tips and tricks around using DocBook and the DocBook stylesheets
+   Useful tips and tricks on using DocBook and the DocBook stylesheets
    can be found in <citetitle>The DoCookBook&mdash;Recipes for DocBook
    Developers and Writers</citetitle>, available at
    <ulink url="http://doccookbook.sourceforge.net/"></ulink>.
