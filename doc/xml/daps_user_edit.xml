@@ -11,27 +11,28 @@
  <title>Editing DocBook XML</title>
  <abstract>
   <para>
-   This chapter describes:
+   This chapter covers the following topics:
    <itemizedlist>
     <listitem>
      <para>
-      how to choose an editor for editing DocBook XML files,
+      How to choose an editor for editing DocBook XML files
      </para>
     </listitem>
     <listitem>
      <para>
-      how to check the contents of your DocBook files for mistakes, and
+      How to check the contents of your DocBook files for mistakes
      </para>
     </listitem>
     <listitem>
      <para>
-      how to adapt your documentation to fit multiple similar product
-      versions at once,
+      How to adapt your documentation to fit multiple similar product versions
+      at once <remark>dpopov 2016-10-11: How to use the same source to
+      document similar product versions</remark>
      </para>
     </listitem>
     <listitem>
      <para>
-      how to get and keep track of your files included a documentation project.
+      How to keep track of the files included a documentation project
      </para>
     </listitem>
    </itemizedlist>
@@ -47,50 +48,53 @@
   <title>Choice of Editor</title>
  &daps-editor;
  <para>
-   XML elements can be nested deeply. Constructs like
-   <sgmltag>variablelist</sgmltag>, <sgmltag>table</sgmltag> or
-   <sgmltag>image</sgmltag> often have a lot of child elements&mdash;some of
-   them required, some optional. If you have an editor with schema support,
-   it will tell you which elements are allowed at the current cursor
-   position, but nevertheless it is cumbersome if you need to insert the
-   child elements of complex XML constructs consecutively.
-  </para>
+   XML elements can be nested deeply <remark>dpopov 2016-10-11: XML supports
+   deep nesting</remark>. Constructs like <sgmltag>variablelist</sgmltag>,
+   <sgmltag>table</sgmltag> or <sgmltag>image</sgmltag> often have a lot of
+   child elements&mdash;some of them required, some optional. If you have an
+   editor with schema support, it will tell you which elements are allowed at
+   the current cursor position, but nevertheless it is cumbersome if you need
+   to insert the child elements of complex XML constructs
+   consecutively. <remark>dpopov 2016-10-11: Although an editor with schema
+   support can prompt you which elements are allowed at the current cursor
+   position, it can still be tedious to insert elements of complex XML
+   constructs one by one.</remark>
+ </para>
 
   <para>
-   Most editors allow you to define or record macros which you can use for
-   automatically inserting empty <quote>skeletons</quote> for a complex XML
-   construct. For Emacs, &dapsacr; already includes macros for adding
-   DocBook elements. For details, refer to
-   <xref linkend="sec.daps.user.editors.emacs.macros"/>.
+   Most editors allow you to write or record macros that can be used to
+   automatically insert <quote>skeletons</quote> for complex XML
+   constructs. For Emacs, &dapsacr; already includes macros for adding DocBook
+   elements. For details, refer to <xref
+   linkend="sec.daps.user.editors.emacs.macros"/>.
   </para>
  </sect1>
  <sect1 id="sec.daps.user.edit.spell">
   <title>Spell Checking</title>
 
   <para>
-   &dapsacr; comes with a spell checker that is optimized for DocBook
-   documents: Tags and attributes are excluded from the check so that you can
-   focus on the content of the document. The spell checker is based on &aspell;
-   and can be run with the &dapsacr; <command>spellcheck</command>. By default,
-   it starts in interactive mode, but you can also run it in
-   <quote>batch</quote> mode where it dumps a sorted list of misspelled words
-   to standard output.  &dapsacr; also allows you to specify a custom
-   dictionary and the language to use for spelling.
+   &dapsacr; comes with a spell checker optimized for DocBook documents. The
+   spell checker skips tags and attributes, thus allowing you to focus on the
+   content of the document. The spell checker is based on &aspell; and can be
+   evoked with the &dapsacr; <command>spellcheck</command>. By default, it starts
+   in interactive mode, but you can also run it in the <quote>batch</quote> mode,
+   where it directs a sorted list of misspelled words to standard output.
+   &dapsacr; also allows you to specify a custom dictionary and the language
+   to use for spell check.
   </para>
 
   <para>
-   In the following, find some examples on how to spell check with
-   &dapsacr;. All options discussed below can be combined with each other,
-   except for <option>--file</option> and <option>--rootid</option> which
-   exclude each other.
+   The following examples demonstrate how to use spell check with
+   &dapsacr;. All options in these examples can be used together, except for
+   <option>--file</option> and <option>--rootid</option> that are mutually
+   exclusive.
   </para>
 
   <note>
    <title><command>spellcheck</command> Options and XIncludes</title>
    <para>
-    All options discussed below can be combined with each other, except for
-    <option>--file</option> and <option>--rootid</option> which exclude each
-    other.
+    All options in the following examples can be used together, except for
+    <option>--file</option> and <option>--rootid</option> that are mutually exclusive.
    </para>
    <para>
     The <command>spellcheck</command> command always follows
@@ -105,11 +109,11 @@
     <listitem>
 <screen>&prompt.user;&dapscmd; -d <replaceable>PATH_TO_&dc;_FILE</replaceable> spellcheck</screen>
      <para>
-      Spell checks all files in the documentation project with the default
-      dictionary (<literal>en_US</literal>). One by one, the files are
-      opened in interactive mode and checked with &aspell;. To abort spell
-      checking of the current file, press <keycap>X</keycap>. The spell
-      check continues with the next file in the project.
+      Runs a spell check operation on all files in the documentation project
+      with the default dictionary (<literal>en_US</literal>). The files are
+      opened one by one in interactive mode and checked with &aspell;. To
+      abort spell checking of the current file, press <keycap>X</keycap>. The
+      spell check continues with the next file in the project.
      </para>
      <para>
       Uses the ROOTID defined in the specified &dc; file as starting point.
@@ -117,7 +121,7 @@
       <sgmltag>book</sgmltag>, <sgmltag>article</sgmltag>,
       <sgmltag>glossary</sgmltag>, <sgmltag>appendix</sgmltag>,
       <sgmltag>part</sgmltag>, or <sgmltag>chapter</sgmltag> element. To do
-      so, specify the ID of the respective element with the
+      this, specify the ID of the respective element with the
       <option>--rootid</option> option:
      </para>
 <screen>&prompt.user;&dapscmd; -d <replaceable>PATH_TO_&dc;_FILE</replaceable> spellcheck --rootid=<replaceable>ID</replaceable>&nbsp;</screen>
@@ -172,7 +176,7 @@
 [--file <replaceable>PATH_TO_XML_FILE</replaceable>]</screen>
      <para>
       Checks the specified documentation project or file with
-      the default dictionary plus the additional custom dictionary specified
+      the default dictionary and the additional custom dictionary specified
       with <option>--extra-dict</option>.
      </para>
     </listitem>
@@ -180,11 +184,12 @@
   </variablelist>
 
   <para>
-   For your convenience, you can integrate a spellchecker such a &aspell; (plus
-   a custom &aspell; dictionary, if needed) into your XML editor, so that
-   spelling is checked <quote>on the fly</quote> during editing. Consult your
-   editor's documentation on how to integrate a custom dictionary. If you use
-   &jedit;, proceed as outlined in <xref
+   For your convenience, you can integrate a spellchecker such a &aspell; (and
+   a custom &aspell; dictionary, if needed) into your XML editor. This way,
+   spelling is checked <quote>on the fly</quote> <remark>dpopov 2016-10-11:
+   why quotes? On-the-fly is an established term.</remark> during
+   editing. Consult your editor's documentation on how to integrate a custom
+   dictionary. If you use &jedit;, proceed as outlined in <xref
    linkend="sec.daps.user.editors.jedit.spellcheck"/>.
   </para>
  </sect1>
@@ -192,15 +197,14 @@
   <title>Checking Links to Web Pages</title>
 
   <para>
-   To make sure that all external links (such as HTTP, HTTPS and FTP links)
-   in your XML sources are valid (and do not give a <literal>404</literal>
-   error or similar), &dapsacr; also includes a link checker. It is based on
-   <literal>checkbot</literal>, see <command>man 1 checkbot</command> for
-   more information. The link checker searches for the
-   <sgmltag class="attribute">url</sgmltag> attribute in
-   <sgmltag>ulink</sgmltag> elements and checks links included there. Use it
-   to create a report of all links that caused some kind of warning or
-   error.
+   To prevent the <literal>404</literal> or similar errors, &dapsacr; includes
+   a link checker for validating all external links (such as HTTP, HTTPS and
+   FTP links) in the XML sources. This tool is based on
+   <literal>checkbot</literal>, see <command>man 1 checkbot</command> for more
+   information. The link checker searches for the <sgmltag
+   class="attribute">url</sgmltag> attribute in <sgmltag>ulink</sgmltag>
+   elements and checks links included there. Use it to create a report of all
+   links that caused some kind of warning or error.
   </para>
 
   <note>
@@ -218,17 +222,17 @@
     <listitem>
 <screen>&prompt.user;&dapscmd; -d <replaceable>PATH_TO_&dc;_FILE</replaceable> checklink</screen>
      <para>
-      Uses the ROOTID defined in the specified &dc; file as starting point.
+      Uses the ROOTID defined in the specified &dc; file as a starting point.
       Checks the <sgmltag>ulink</sgmltag> elements in all files belonging to
       the documentation project. The resulting HTML report
       <filename>*checkbot-localhost.html</filename> can be opened in a
-      browser, see <xref linkend="fig.daps.user.edit.chklink"/>. For opening the
+      browser, see <xref linkend="fig.daps.user.edit.chklink"/>. To open the
       results directly in the browser, add the <option>--show</option> option.
      </para>
      <para>
-      If your &dc; file references a documentation <sgmltag>set</sgmltag>,
-      you probably do not want to check all files belonging to the set. You
-      can restrict the check to parts of the set, such as a
+      If your &dc; file references a documentation <sgmltag>set</sgmltag>, you
+      probably do not want to check all files belonging to the set. You can
+      restrict the check to parts of the set, such as a
       <sgmltag>book</sgmltag>, <sgmltag>article</sgmltag>,
       <sgmltag>glossary</sgmltag>, <sgmltag>appendix</sgmltag>,
       <sgmltag>part</sgmltag>, or <sgmltag>chapter</sgmltag> element. To do
@@ -243,11 +247,10 @@
     <listitem>
 <screen>&prompt.user;&dapscmd; -d <replaceable>PATH_TO_&dc;_FILE</replaceable> checklink --file=<replaceable>PATH_TO_XML_FILE</replaceable>&nbsp;</screen>
      <para>
-      Checks the <sgmltag>ulink</sgmltag> elements in the specified file. At
-      the end of the check, &dapsacr; returns an HTML file with a list of
-      all links which caused some kind of warning or error. Open the
-      resulting <filename>checkbot-localhost.html</filename> file in a
-      browser.
+      Checks the <sgmltag>ulink</sgmltag> elements in the specified file. Upon
+      completion, &dapsacr; returns an HTML file with a list of all
+      problematic links. Open the resulting
+      <filename>checkbot-localhost.html</filename> file in a browser.
      </para>
     </listitem>
    </varlistentry>
@@ -269,8 +272,8 @@
    <title>Opening the Link Check Report</title>
    <para>
     To directly open the link check report, use the &dapsacr; command output
-    as an argument for a browser, for example the command line Web browser
-    <command>w3m</command>:
+    as an argument for a browser (for example, the command line Web browser
+    <command>w3m</command>):
    </para>
    <screen>&prompt.user;<command>w3m</command> -dump $(&dapscmd; -d <replaceable>PATH_TO_&dc;_FILE</replaceable> checklink)</screen>
   </tip>
@@ -285,9 +288,7 @@
  </sect1>
  <sect1 id="sec.daps.user.edit.manage">
   <title>Keeping Track of Your Documentation Project</title>
-  <para>To help you keep track of the files and images included in your
-  documentation project, &dapsacr; provides some useful commands.</para>
-
+  <para>&dapsacr; provides useful commands that can help you to keep track of the files and images in your documentation project.</para>
   <variablelist>
    <varlistentry>
     <term>Listing All Files in a Documentation Project</term>
@@ -299,15 +300,18 @@
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term>Checking for Superfluous Files</term>
+    <term>Checking for Superfluous <remark>dpopov 2016-10-11: Perhaps Unused instead of Superfluous? </remark>
+    Files</term>
     <listitem>
      <screen>&prompt.user;&dapscmd;&nbsp;<parameter>-d</parameter>&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;list-srcfiles-unused</screen>
-     <para> Lists all files that are <emphasis>not</emphasis> referenced in the
-      document specified by the &dc; file, but are available in the
-      <filename>xml</filename> and <filename>images/src</filename> subdirectories.
-      This command is useful if
-      you want to clean up your source files and want to know which files are
-      no longer needed for the documentation project. </para>
+     <para>
+       Lists all files that are <emphasis>not</emphasis> referenced in the
+       document specified by the &dc; file, but are available in the
+       <filename>xml</filename> and <filename>images/src</filename>
+       subdirectories.  This command is useful if you want to clean up your
+       source files and want to know which files are no longer needed for the
+       documentation project.
+     </para>
     &daps-note-superfluous-files;
     </listitem>
    </varlistentry>
@@ -366,7 +370,7 @@ The ID "sec.template.examples.images" appears in:
  </sect1>
 
  <sect1 id="sec.daps.user.edit.more">
-  <title>For More Information</title>
+  <title>Further Information</title>
 
   <para>
    For a complete DocBook reference see
@@ -375,10 +379,10 @@ The ID "sec.template.examples.images" appears in:
   </para>
 
   <para>
-   Useful tips and tricks around using DocBook and the DocBook stylesheets
-   can be found in <citetitle>The DoCookBook&mdash;Recipes for DocBook
-   Developers and Writers</citetitle>, available at
-   <ulink url="http://doccookbook.sourceforge.net/"></ulink>.
+   Useful tips and tricks on using DocBook and the DocBook stylesheets can be
+   found in <citetitle>The DoCookBook&mdash;Recipes for DocBook Developers and
+   Writers</citetitle>, available at <ulink
+   url="http://doccookbook.sourceforge.net/"></ulink>
   </para>
  </sect1>
 </chapter>
