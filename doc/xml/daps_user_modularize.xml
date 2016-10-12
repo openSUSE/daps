@@ -62,7 +62,7 @@
   <title>Declaring Entities in a Separate File</title>
 
   <para>
-   When maintaining a large number of documents for a product, it can become
+   When maintaining a large number of documents for a product, it can be
    difficult to keep a consistent set of entities if these entities are
    declared in the document type declarations of
    <emphasis>individual</emphasis> XML files. For large documentation
@@ -165,16 +165,16 @@
 <!--, see <xref linkend="ex.daps.profiling.inline"/>.-->
    </para>
    <para>
-    Based on the conditions that you want to apply, select one or more
-    profiling attributes and add them to the text snippets that are
-    conditional. The tagged snippets will only be included in the output if
-    the required condition is fulfilled. Any content that is valid for
-    <emphasis>all</emphasis> conditions does <emphasis>not</emphasis> need
-    any profiling attributes. The respective content will always be included
-    in the output formats generated from the XML sources. You are free in
-    defining the attribute values (<literal>condition="foo"</literal>), but
-    they must be used consistently in all files belonging to a documentation
-    project.
+    Based on the conditions that you want to apply <remark>dpopov 2016-10-12:
+    define conditions?</remark> , select one or more profiling attributes and
+    add them to the text snippets that are conditional. The tagged snippets
+    will only be included in the output if the required condition is
+    fulfilled. Any content that is valid for <emphasis>all</emphasis>
+    conditions does <emphasis>not</emphasis> need any profiling
+    attributes. The respective content will always be included in the output
+    formats generated from the XML sources. You are free in defining the
+    attribute values (<literal>condition="foo"</literal>), but they must be
+    used consistently in all files belonging to a documentation project.
    </para>
    <para>
     <xref linkend="ex.daps.profile.one"/> shows how to profile
@@ -733,7 +733,7 @@
   type="text/xml" ?></screen>
     </example>
    <para>
-     The &main; file of a documentation project is the one that is referenced
+     The &main; file of a documentation project is referenced
      by the <parameter>MAIN</parameter> parameter in the &dc; file. If the
      processing instruction is missing in the &main; file, any profiling
      parameters in the &dc; file will be ignored during generation of the
