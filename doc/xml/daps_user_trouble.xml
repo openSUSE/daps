@@ -68,10 +68,11 @@
   <title>Miscellaneous</title>
   <qandaentry id="qa.daps.user.trouble.misc.verbosity">
    <question>
-    <para>Why does &dapsacr; not talk to me?</para>
+    <para>Why does &dapsacr; not talk to me? <remark>dpopov 2016-10-12: Why  don't &dapsacr; give me any feedback?</remark>
+    </para>
    </question>
    <answer>
-    <para>By default &dapsacr; only shows the result of the current subcommnd. 
+    <para>By default &dapsacr; only shows the result of the current subcommand. 
      To increase the verbosity run <command>daps</command> with the option
      <option>-v</option>, <option>-vv</option>, or <option>-vvv</option>.
      For the highest verbosity, use the <option>--debug</option> option. </para>
@@ -79,10 +80,10 @@
   </qandaentry>
   <qandaentry>
    <question>
-    <para>Where to find the log files?</para>
+    <para>Where do I find the log files?</para>
    </question>
    <answer>
-    <para> If you should run into problems with &dapsacr; that you cannot
+    <para> If you run into problems with &dapsacr; that you cannot
      classify, check the &dapsacr; log files in
        <filename><replaceable>YOUR_DOC_DIR</replaceable>/build/<replaceable>BOOKNAME</replaceable>/log</filename>.
      A complete log file of the latest
@@ -98,19 +99,23 @@
     <para>Are all changes to &dapsacr; backward-compatible?</para>
    </question>
    <answer>
-    <para>No. If you have recently updated to a higher &dapsacr; version and
-     afterward experience strange effects that are difficult to debug, check your custom
-     &dapsacr; configuration file (&dapsconf-user;) against the system-wide
-     configuration file (&dapsconf-sys;). Search for any parameters that may have
-     changed. By default, the settings in the custom &dapsacr; configuration file
-     will override the settings in &dapsconf-sys;. Therefore any parameter
-     incompatibilities between the files may lead to unexpected behavior of
-     &dapsacr;.</para>
-    <para>When switching from &dapsacr; 1.x to &dapsacr; &dapsversion;, especially
-     check the syntax of any XSLT parameters that you are using (on the command
-     line, in scripts or in &dc; files). If you have not adjusted the
-     parameters to the new syntax, this may result in strange error messages.
-     For details, refer to <xref linkend="cha.daps.user.config"/>.</para>
+    <para>
+      No. If you have recently updated to a higher &dapsacr; version and
+      afterward experience strange behavior that are difficult to debug, check
+      your custom &dapsacr; configuration file (&dapsconf-user;) against the
+      system-wide configuration file (&dapsconf-sys;). Search for any
+      parameters that may have changed. By default, the settings in the custom
+      &dapsacr; configuration file will override the settings in
+      &dapsconf-sys;. Therefore any parameter incompatibilities between the
+      files may lead to unexpected behavior of &dapsacr;.
+    </para>
+    <para>
+      When switching from &dapsacr; 1.x to &dapsacr; &dapsversion;, especially
+      check the syntax of any XSLT parameters that you are using (on the
+      command line, in scripts or in &dc; files). If you have not adjusted the
+      parameters to the new syntax, this may result in strange error messages.
+      For details, refer to <xref linkend="cha.daps.user.config"/>.
+    </para>
    </answer>
   </qandaentry>
  </qandaset>
