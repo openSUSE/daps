@@ -11,16 +11,16 @@
  <title>Generating Output Formats</title>
  <abstract>
   <para>
-   This chapter describes:
+   This chapter covers the following topics:
    <itemizedlist>
     <listitem>
      <para>
-      how to validate your XML files,
+      Validating your XML files
      </para>
     </listitem>
     <listitem>
      <para>
-      the basic command syntax for generating output formats,
+      Basic command syntax for generating output formats
      </para>
     </listitem>
     <listitem>
@@ -30,12 +30,12 @@
     </listitem>
     <listitem>
      <para>
-      how to do partial builds of your documentation, and 
+      Generating partial builds of your documentation
      </para>
     </listitem>
     <listitem>
-     <para>how to specify the &main; file at the command line (instead of using a &dc;
-     file).</para>
+     <para>Specifying the &main; file at the command line (instead of using a &dc;
+     file)</para>
     </listitem>
    </itemizedlist>
   </para>
@@ -44,10 +44,13 @@
   <title>Validating Your XML Sources</title>
   &daps-validation-basics;
   &daps-example-validation-error;
-  <para> As soon you use profiling in your DocBook sources, validation within your XML editor is not
-   reliable. Furthermore, validating XML files within a
-    <sgmltag>book</sgmltag> or <sgmltag>set</sgmltag> often exceeds validation of the current XML
-   file, as links (<sgmltag>xref</sgmltag> elements) or XIncludes need to be resolved, too. </para>
+  <para>
+    Using profiling in your DocBook sources makes validation
+    unreliable. Furthermore, validating XML files within a
+    <sgmltag>book</sgmltag> or <sgmltag>set</sgmltag> often exceeds validation
+    of the current XML file, as links (<sgmltag>xref</sgmltag> elements) or
+    XIncludes need to be resolved, too.
+  </para>
 
   <para>
    &dapsacr; can handle all those cases because of the built-in
@@ -203,7 +206,7 @@
             For example, the following command will print all files
             created during the build process: </para>
      <screen>&prompt.user;&dapscmd; -vv -d &dc;-daps-example pdf</screen>
-     <para>For a debug output, use the following:</para>
+     <para>For a debug output, use the following command:</para>
      <screen>&prompt.user;&dapscmd; --debug -d &dc;-daps-example pdf</screen>
     </listitem>
    </varlistentry>

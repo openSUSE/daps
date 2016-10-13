@@ -11,21 +11,21 @@
  <title>Editor-specific Information</title>
  <abstract>
   <para>
-   This chapter describes:
+   This chapter covers the following topics:
    <itemizedlist>
     <listitem>
      <para>
-      the use of DocBook macros for Emacs,
+      Using DocBook macros for Emacs
      </para>
     </listitem>
     <listitem>
      <para>
-      how to edit XML/DocBook Files with the Vim Editor
+      Editing XML/DocBook Files with the Vim Editor
      </para>
     </listitem>
     <listitem>
      <para>
-      how to integrate the speclchecker &aspell; into &jedit;.
+      Integrating the spell checker &aspell; into &jedit;
      </para>
     </listitem>
    </itemizedlist>
@@ -35,9 +35,9 @@
   <title>Emacs&mdash;Macros for Inserting DocBook Elements</title>
 
   <para>
-   Most editors allow you to define or record macros which you can use for
-   automatically inserting empty <quote>skeletons</quote> for a complex XML
-   construct as illustrated by <xref linkend="ex.daps.user.vle"/>.
+   Most editors allow you to write or record macros that you can use for
+   automatically inserting <quote>skeletons</quote> for complex XML
+   constructs as illustrated by <xref linkend="ex.daps.user.vle"/>.
   </para>
 
   <example id="ex.daps.user.vle">
@@ -51,17 +51,17 @@
   </example>
 
   <para>
-   For Emacs, &dapsacr; already includes macros for adding DocBook elements
-   such as <sgmltag>listitem</sgmltag>, <sgmltag>figure</sgmltag>, or
-   <sgmltag>indexterm</sgmltag>. The macros are defined in
-   <filename>docbook_macros.el</filename> and are added to your system
-   during the installation of &dapsacr;. They require that you use one of
-   Emacs' main XML editing modes, either <literal>nxml</literal> or
+   &dapsacr; comes with macros for the Emacs editor that can be used to add
+   DocBook elements, such as <sgmltag>listitem</sgmltag>,
+   <sgmltag>figure</sgmltag>, or <sgmltag>indexterm</sgmltag>. The macros are
+   stored in <filename>docbook_macros.el</filename> and are added to your
+   system during the installation of &dapsacr;. They require that you use one
+   of Emacs' main XML editing modes, either <literal>nxml</literal> or
    <literal>psgml</literal>.
   </para>
 
   <procedure id="pro.daps.emacs.macros.config">
-   <title>Configuring Emacs to Use the DocBook Macros</title>
+   <title>Configuring Emacs for Using the DocBook Macros</title>
    <step>
     <para>
      To load the DocBook macros, open your Emacs customization file
@@ -82,7 +82,7 @@
   </procedure>
 
   <para>
-   For an overview, which macros are available and how to use them, refer to
+   For an overview of the available macros and their usage, refer to
    <ulink url="http://en.opensuse.org/openSUSE:Documentation_Emacs_Docbook_Macros"></ulink>.
   </para>
  </sect1>
@@ -102,7 +102,7 @@
    dictionary, if needed) into your XML editor, so that spelling is
    checked <quote>on the fly</quote> during editing. Consult your editor's
    documentation on how to integrate a custom dictionary. If you use
-   &jedit;, proceed as outlined in
+   &jedit;, follow the instructions in
    <xref linkend="pro.daps.spellcheck.jedit"/>.
   </para>
 
@@ -212,9 +212,8 @@
      </step>
      <step>
       <para>
-       To use an additional custom &aspell; dictionary, specify the path to
-       the custom dictionary in the text box below <guimenu>Additional
-       parameters</guimenu>:
+       To use an additional custom &aspell; dictionary, specify the path to it
+       in the text box below <guimenu>Additional parameters</guimenu>:
       </para>
 <screen>--extra-dicts=<replaceable>PATH_TO_CUSTOM_DICT</replaceable></screen>
       <para>
@@ -224,7 +223,7 @@
      </step>
      <step>
       <para>
-       Confirm your settings in the plug-in options dialog with
+       Save your settings in the plug-in options dialog by pressing
        <guimenu>OK</guimenu> or <guimenu>Apply</guimenu>.
       </para>
      </step>
@@ -232,7 +231,7 @@
    </step>
    <step>
     <para>
-     To execute a spell check during editing, select <menuchoice>
+     To perform a spell check during editing, select <menuchoice>
      <guimenu>Plug-ins</guimenu> <guimenu>Spell Check</guimenu>
      <guimenu>Highlight misspelled words</guimenu> </menuchoice> (or use the
      key combination assigned to that menu item).

@@ -111,13 +111,14 @@
   <sect2 id="sec.daps.quick.inst.formatter">
    <title>Installing and Configuring the FO Formatter</title>
    <para>
-    For installation and configuration of an FO formatter (for generating
-    PDF output), refer to its installation instructions (or to your system
+    For installation and configuration of an FO formatter (for generating PDF
+    output), refer to its installation instructions (or to your system
     administrator). For FOP, you usually only need to install the respective
     FOP package. However, not all FOP packages contain the hyphenation pattern
-    files. Using the hyphenation patterns is recommended.
-    <remark>taroth 2012-03-26: todo - mention download from
-   offo.sourceforge.net in troubleshooting section and add xref</remark>
+    files. Using the hyphenation patterns is recommended.  <remark>taroth
+    2012-03-26: todo - mention download from offo.sourceforge.net in
+    troubleshooting section and add xref</remark> <remark>dpopov 2016-10-10:
+    What's FOP?</remark>
    </para>
   </sect2>
  </sect1>
@@ -185,7 +186,7 @@
     <callout arearefs="co.quick.docdir.img.src">
      <para>
       Top-level directory for any original images that you want to use in
-      the documentation project. Contains subdirectories for images in
+      the documentation project. This directory contains subdirectories for images in
       various formats. Any images to be referenced in the XML sources must
       be put in the respective subdirectories. For information about
       referencing images, refer to
@@ -202,7 +203,7 @@
     </callout>
     <callout arearefs="co.quick.docdir.main">
      <para>
-      The &main; file of the documentation project.  It contains the
+      The &main; file of the documentation project. It contains the
       <quote>starting point</quote> (the highest-level object) of your
       documentation project and includes
       <quote>references</quote> to other books, chapters, appendixes, etc. For more
@@ -245,9 +246,10 @@
     <para>To create a working environment for
      &dapsacr; , including an example document, enter the following: </para>
     <screen>&prompt.user;<command>daps-init --docdir&nbsp;<replaceable>PATH_TO_DOC_DIR</replaceable></command></screen>
-    <para>Specifying the project directory with <option>--docdir</option> is
-     mandatory. If the directory does not exist, &dapsacr; will ask you and
-     create it upon confirmation.
+    <para>
+      Specifying the project directory with <option>--docdir</option> is
+      mandatory. If the directory does not exist, &dapsacr; prompts you to
+      create it.
     </para>
      <para>If you want to modify the file name and the title for the document,
       use the options <option>--name</option> and <option>--title</option>:
@@ -276,11 +278,11 @@
    <step>
     <para>
      Check your project directory for the new files: The text file
-     <filename>&dc;-*</filename> is annotated and gives you a rough
-     idea which options can be defined in a &dc; file. For having a look at
-     the XML source code of the example document, change to the <filename>xml</filename>
-     subdirectory and open the file
-     <filename>MAIN-*.xml</filename> in a text editor or XML editor.
+     <filename>&dc;-*</filename> is annotated and gives you a general idea
+     which options can be defined in a &dc; file. For having a look at the XML
+     source code of the example document, change to the
+     <filename>xml</filename> subdirectory and open the file
+     <filename>MAIN-*.xml</filename> in a text editor or XML editor.  
     </para>
    </step>
   </procedure>
@@ -309,7 +311,7 @@
   <sect2 id="sec.daps.quick.imgs.path">
    <title>Organization of the <filename>images</filename> Directory</title>
    <para>
-    &daps-images-dir; For a longer reference to the directory
+    &daps-images-dir; For a more detailed reference to the directory
     structure, see <xref linkend="sec.daps.quick.basics.dirstruct"/>.
    </para>
   </sect2>
@@ -364,10 +366,10 @@
    </callout>
    <callout arearefs="co.daps.syntax.debug">
     <para>
-      Global Option <option>--debug</option>: Sets the highest verbosity
-      level (number of messages shown during the transformation process from
-      XML to HTML).
-     </para>
+      Global Option <option>--debug</option>: Sets the highest verbosity level
+      (number of messages shown during the conversion process from XML to
+      HTML).
+    </para>
    </callout>
    <callout arearefs="co.daps.syntax.dc">
     <para>
@@ -384,10 +386,10 @@
    </callout>
    <callout arearefs="co.daps.syntax.static">
     <para>
-      Command option <option>--static</option>: Tells &dapsacr; to copy CSS
-      and image files to the same location like the HTML files. For more
-      information, see <xref linkend="tab.daps.quick.output.overview"/>.
-     </para>
+      Command option <option>--static</option>: Instructs &dapsacr; to copy
+      CSS and image files to the same location like the HTML files. For more
+      information, see <xref linkend="tab.daps.quick.output.overview"/>.   
+    </para>
    </callout>
   </calloutlist>
  </example>
@@ -398,31 +400,30 @@
 
  <para>
    The following section introduces the key <command>daps</command> commands
-   needed to create output formats from XML files. All examples are based on
-   the example files that are provided by the &dapsacr; init
-   script. For more information, refer to
-   <xref linkend="sec.daps.quick.init"/>.
-  </para>
+   for generating output formats from XML files. All examples are based on the
+   files generated by the &dapsacr; init script. For more information, refer
+   to <xref linkend="sec.daps.quick.init"/>.
+ </para>
 </sect1>
 <sect1 id="sec.daps.quick.output">
  <title>Output Formats</title>
 
-
  <para>
    By default, the DocBook stylesheets are used for generating output
-   formats. But &dapsacr; also allows you to customize your output formats
-   in a very flexible way. For more details, refer to <xref
-    linkend="cha.daps.user.layout"/>.
+   formats. But &dapsacr; also allows you to easily customize your output
+   formats. For more details, refer to <xref linkend="cha.daps.user.layout"/>.
  </para>
-
-
 
  <sect2 id="sec.daps.quick.output.syntax">
   <title>Basic Syntax for Generating Output</title>
-   <para>&dapsacr; supports various different output formats, including also
-   <quote>exotic</quote> formats like man pages or simple text.
+   <para>
+     &dapsacr; supports various different output formats, including also
+     <quote>exotic</quote> <remark>dpopov 2016-10-10: Drop exotic,
+     as it doesn't serve any purpose.</remark> formats like man pages or
+     simple text.
    <xref linkend="tab.daps.quick.output.overview" xrefstyle="select:label"/>
-   gives an overview.</para>
+   gives an overview.
+   </para>
  &daps-output-cmd-basics;
   <para>
     If your current directory is not the documentation directory where the
@@ -443,10 +444,13 @@
    <xi:include href="daps_table_output_formats_i.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
   </table>
   &daps-output-all;
-   <para>&dapsacr; allows you to fine-tune the output in many ways. For
-    example, you can include remarks or a <literal>DRAFT</literal> watermark in
-    your output, or you can build parts of your documentation project only. Find
-    some examples in the sections below.</para>
+   <para>
+     &dapsacr; allows you to fine-tune the output in many ways <remark>dpopov
+     2016-10-10: "in many ways" is redundant</remark>. For example, you can
+     include remarks or a <literal>DRAFT</literal> watermark in your output,
+     or you can build parts of your documentation project only. Find some
+     examples in the sections below.
+   </para>
  </sect2>
 
  
@@ -505,7 +509,7 @@
   </para>
    &daps-feedback;
   <para>
-   For a complete DocBook reference see
+   For a complete DocBook reference, see
    <ulink url="http://www.docbook.org/tdg/en/html/docbook.html">
    <citetitle>&tdg;</citetitle>
   </ulink>.
@@ -517,7 +521,7 @@
  <para>
    If you encounter problems with &dapsacr;, check
    <xref linkend="cha.daps.user.trouble"/> for a list of common problems and
-   their solution.
+   their solutions.
   </para>
 </sect1>
 <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="common_gfdl_i.xml"/>

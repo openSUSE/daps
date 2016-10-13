@@ -10,27 +10,28 @@
 <chapter id="cha.daps.user.modular">
  <title>Modularizing Documentation Projects</title>
  <para>
-  This chapter describes:
+  This chapter covers the following topics:
   <itemizedlist>
    <listitem>
     <para>
-     how to modularize documents by splitting them into XIncludes,
+     Modularizing documents by splitting them into XIncludes
     </para>
    </listitem>
    <listitem>
     <para>
-     how to use a consistent set of entities throughout a documentation
-     project,
+     Using a consistent set of entities throughout a documentation
+     project
     </para>
    </listitem>
    <listitem>
     <para>
-     how to create document variants by using profiling, and
+      Creating document variants <remark>dpopov 2016-10-12: editions instead variants?</remark>
+      by using profiling
     </para>
    </listitem>
    <listitem>
     <para>
-     how to combine profiling and entities.
+     Combining profiling and entities
     </para>
    </listitem>
   </itemizedlist>
@@ -40,35 +41,33 @@
 
   <para>
    Instead of putting the contents of a complete article or book into the
-   &main; file, DocBook allows you to divide the text into separate document
-   files. They are then assembled in the &main; file using
-   <literal>XIncludes</literal> as shown in
-   <xref linkend="ex.daps.main.set"/>. XIncludes can be used for splitting
-   up sets, books, articles or chapters into separate files. For more
-   information, refer to
+   &main; file, DocBook allows you to divide <remark>dpopov 2016-10-12:
+   s/divide/split ?</remark> the text into separate document files. They are
+   then assembled in the &main; file using <literal>XIncludes</literal> as
+   shown in <xref linkend="ex.daps.main.set"/>. XIncludes can be used for
+   splitting up sets, books, articles or chapters into separate files. For
+   more information, refer to
    <ulink url="http://www.docbook.org/tdg51/en/html/ch02.html">
    <citetitle>Physical Divisions: Breaking a Document into Separate
    Files</citetitle> </ulink>.
   </para>
 
   <para>
-   XIncludes do not cause any problems with &dapsacr; and are fully
-   supported. For example, <command>daps</command> commands like
-   <command>checklink</command> or <command>spellcheck</command>, for
-   example) also follow XIncludes.
+   XIncludes are fully supported and do not cause any problems with
+   &dapsacr;. For example, <command>daps</command> commands like
+   <command>checklink</command> or <command>spellcheck</command> also follow XIncludes.
   </para>
  </sect1>
  <sect1 id="sec.daps.user.modular.ent.separate">
   <title>Declaring Entities in a Separate File</title>
 
   <para>
-   When maintaining many documents for a product, 
-   it becomes cumbersome to keep a consistent set of entities if you 
-   declare entities in the document type declaration of 
-   <emphasis>individual</emphasis> XML files. For large
-   documentation projects, it is therefore useful to put all entity
-   declarations into a separate file and reference that file in the
-   individual XML files.
+   When maintaining a large number of documents for a product, it can be
+   difficult to keep a consistent set of entities if these entities are
+   declared in the document type declarations of
+   <emphasis>individual</emphasis> XML files. For large documentation
+   projects, it is therefore useful to put all entity declarations into a
+   separate file and reference that file in the individual XML files.
   </para>
 
   <example id="ex.daps.ent.decl.separate">
@@ -166,16 +165,16 @@
 <!--, see <xref linkend="ex.daps.profiling.inline"/>.-->
    </para>
    <para>
-    Based on the conditions that you want to apply, select one or more
-    profiling attributes and add them to the text snippets that are
-    conditional. The tagged snippets will only be included in the output if
-    the required condition is fulfilled. Any content that is valid for
-    <emphasis>all</emphasis> conditions does <emphasis>not</emphasis> need
-    any profiling attributes. The respective content will always be included
-    in the output formats generated from the XML sources. You are free in
-    defining the attribute values (<literal>condition="foo"</literal>), but
-    they must be used consistently in all files belonging to a documentation
-    project.
+    Based on the conditions that you want to apply <remark>dpopov 2016-10-12:
+    define conditions?</remark> , select one or more profiling attributes and
+    add them to the text snippets that are conditional. The tagged snippets
+    will only be included in the output if the required condition is
+    fulfilled. Any content that is valid for <emphasis>all</emphasis>
+    conditions does <emphasis>not</emphasis> need any profiling
+    attributes. The respective content will always be included in the output
+    formats generated from the XML sources. You are free in defining the
+    attribute values (<literal>condition="foo"</literal>), but they must be
+    used consistently in all files belonging to a documentation project.
    </para>
    <para>
     <xref linkend="ex.daps.profile.one"/> shows how to profile
@@ -331,7 +330,7 @@
     </tgroup>
    </table>
    <para>
-    Let's suppose the professional edition of the software is also available
+    Let us suppose the professional edition of the software is also available
     as OEM (original equipment manufacturer) version by the vendor
     <literal>OEM Company</literal>. It contains additional features that are
     only available in the OEM version:
@@ -734,7 +733,7 @@
   type="text/xml" ?></screen>
     </example>
    <para>
-     The &main; file of a documentation project is the one that is referenced
+     The &main; file of a documentation project is referenced
      by the <parameter>MAIN</parameter> parameter in the &dc; file. If the
      processing instruction is missing in the &main; file, any profiling
      parameters in the &dc; file will be ignored during generation of the
