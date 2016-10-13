@@ -720,6 +720,12 @@
     <xsl:comment> Removed <xsl:value-of select="name()"/> end</xsl:comment>
   </xsl:template>
 
+  <xsl:template match="step/procedure">
+   <substeps>
+    <xsl:apply-templates/>
+   </substeps>
+  </xsl:template>
+
   <xsl:template match="step/title">
     <para><emphasis role="bold">
       <xsl:apply-templates/>
