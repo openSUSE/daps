@@ -621,6 +621,21 @@
     <xsl:copy-of select="."/>
   </xsl:template>
 
+  <xsl:template match="mediaobject">
+   <xsl:choose>
+    <xsl:when test="parent::figure">
+     <xsl:copy-of select="."/>
+    </xsl:when>
+    <xsl:otherwise>
+     <xsl:message>Wrapped informalfigure around mediaobject. Parent: <xsl:value-of
+      select="local-name(parent::*)"/></xsl:message>
+     <informalfigure>
+      <xsl:copy-of select="."/>
+     </informalfigure>
+    </xsl:otherwise>
+   </xsl:choose>
+  </xsl:template>
+
   <xsl:template match="literallayout">
     <screen>
       <xsl:apply-templates/>
