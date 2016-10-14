@@ -457,6 +457,10 @@
     <xsl:apply-templates/>
   </xsl:template>
 
+  <xsl:template match="literal/emphasis">
+   <replaceable><xsl:apply-templates/></replaceable>
+  </xsl:template>
+
   <xsl:template match="literal/ulink[normalize-space(.) != '']">
     <xsl:copy>
       <xsl:copy-of select="@*"/>
