@@ -179,6 +179,9 @@ $(EPUB_INLINE_DIR)/%.png: $(IMG_GENDIR)/color/%.png
 $(EPUB_INLINE_DIR)/%.jpg: $(IMG_GENDIR)/color/%.jpg
 	ln -sf $(shell readlink -e $< 2>/dev/null) $@
 
+$(EPUB_INLINE_DIR)/%.svg: $(IMG_GENDIR)/color/%.svg
+	ln -sf $(shell readlink -e $< 2>/dev/null) $@
+
 #--------------
 # mimetype file
 #
