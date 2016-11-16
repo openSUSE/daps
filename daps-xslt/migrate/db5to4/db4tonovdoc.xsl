@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
    Purpose:
-     Transforms DocBook document into Novdoc
+     Transforms DocBook document into Novdoc (main entry file)
 
    Parameters:
      * createvalid
@@ -26,7 +26,7 @@
      No, convert your document to DocBook 4 first
 
    Author:    Thomas Schraitle <toms@opensuse.org>
-   Copyright (C) 2012-2015 SUSE Linux GmbH
+   Copyright (C) 2012-2016 SUSE Linux GmbH
 
 -->
 
@@ -69,6 +69,9 @@
   <!--<xsl:strip-space elements="*"/>
   <xsl:preserve-space elements="screen programlisting"/>-->
 
+  <xsl:include href="debug.xsl"/>
+
+
   <!-- ################################################################## -->
   <!-- Parameters                                                         -->
 
@@ -78,7 +81,6 @@
   <xsl:param name="menuchoice.separator">+</xsl:param>
   <xsl:param name="rootid"/>
   <xsl:param name="use.doctype4novdoc" select="0"/>
-  <xsl:param name="debug.level" select="4"/>
 
   <!-- cmdsynopsis: args & groups -->
   <xsl:param name="arg.choice.opt.open.str">[</xsl:param>
@@ -124,9 +126,38 @@
   <xsl:template match="@rules[. ='all']"/>
   <xsl:template match="@wordsize"/>
   <xsl:template match="screen/@language"/>
-  <xsl:template match="filename/@class"/>
+  <xsl:template match="filename/@class|filename/@role"/>
   <xsl:template match="literallayout/@class"/>
   <xsl:template match="variablelist/@role"/>
+
+
+  <xsl:template match="informalfigure/@id">
+    <xsl:variable name="linkto" select="count(key('id', .)) -1"/>
+    <xsl:variable name="text">
+      <xsl:text>Strip id=</xsl:text>
+      <xsl:value-of select="."/>
+      <xsl:text> from informalfigure.</xsl:text>
+    </xsl:variable>
+
+    <xsl:choose>
+      <xsl:when test="$linkto = 0">
+        <xsl:call-template name="log.info">
+          <xsl:with-param name="text" select="$text"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="log.warn">
+          <xsl:with-param name="text">
+            <xsl:value-of select="$text"/>
+            <xsl:text> References to this element: </xsl:text>
+            <xsl:value-of select="$linkto"/>
+            <xsl:text>. Please check!</xsl:text>
+          </xsl:with-param>
+        </xsl:call-template>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
 
   <!-- ################################################################## -->
   <!-- Suppressed Elements for Novdoc                                     -->
@@ -138,66 +169,6 @@
 
   <!-- ################################################################## -->
   <!-- Named Templates                                                    -->
-
-  <xsl:template name="message">
-    <xsl:param name="text"/>
-    <xsl:param name="type"/>
-    <xsl:param name="abort" select="0"/>
-
-    <xsl:choose>
-      <xsl:when test="$abort != 0">
-        <xsl:message terminate="yes">
-          <xsl:value-of select="$type"/>
-          <xsl:text>: </xsl:text>
-          <xsl:value-of select="$text"/>
-          <xsl:if test="ancestor-or-self::*/@id">
-            <xsl:text>&#10;  (within ID: </xsl:text>
-            <xsl:value-of select="ancestor-or-self::*[@id][1]/@id"/>
-            <xsl:text>)</xsl:text>
-          </xsl:if>
-        </xsl:message>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:message>
-          <xsl:value-of select="$type"/>
-          <xsl:text>: </xsl:text>
-          <xsl:value-of select="$text"/>
-          <xsl:if test="ancestor-or-self::*/@id">
-            <xsl:text>&#10;  (within ID: </xsl:text>
-            <xsl:value-of select="ancestor-or-self::*[@id][1]/@id"/>
-            <xsl:text>)</xsl:text>
-          </xsl:if>
-        </xsl:message>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:template>
-
-  <xsl:template name="fatal">
-    <xsl:param name="text"/>
-      <xsl:call-template name="message">
-        <xsl:with-param name="type">FATAL</xsl:with-param>
-        <xsl:with-param name="text" select="$text"/>
-        <xsl:with-param name="abort" select="1"/>
-      </xsl:call-template>
-  </xsl:template>
-  <xsl:template name="warn">
-    <xsl:param name="text"/>
-    <xsl:if test="$debug.level > 1">
-      <xsl:call-template name="message">
-        <xsl:with-param name="type">WARNING</xsl:with-param>
-        <xsl:with-param name="text" select="$text"/>
-      </xsl:call-template>
-    </xsl:if>
-  </xsl:template>
-  <xsl:template name="info">
-    <xsl:param name="text"/>
-    <xsl:if test="$debug.level > 2">
-      <xsl:call-template name="message">
-        <xsl:with-param name="type">INFO</xsl:with-param>
-        <xsl:with-param name="text" select="$text"/>
-      </xsl:call-template>
-    </xsl:if>
-  </xsl:template>
 
   <xsl:template name="getrootname">
     <xsl:choose>
@@ -279,6 +250,16 @@
 
   <!-- ################################################################## -->
   <!-- Templates                                                          -->
+  <xsl:template match="/">
+    <xsl:call-template name="log.info">
+      <xsl:with-param name="text">Started DB4 -> Novdoc conversation...</xsl:with-param>
+    </xsl:call-template>
+    <xsl:apply-templates/>
+    <xsl:call-template name="log.info">
+      <xsl:with-param name="text">Finished DB4 -> Novdoc conversation.</xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+
 
   <xsl:template match="book/title|book/subtitle|book/titleabbrev"/><!-- Don't copy -->
 
@@ -325,7 +306,7 @@
 
   <xsl:template match="part/subtitle">
    <xsl:comment> subtitle=<xsl:value-of select="normalize-space(.)"/> </xsl:comment>
-   <xsl:call-template name="warn">
+   <xsl:call-template name="log.warn">
      <xsl:with-param name="text">Removed part/subtitle</xsl:with-param>
    </xsl:call-template>
   </xsl:template>
@@ -373,7 +354,17 @@
   </xsl:template>
 
   <xsl:template match="sect5">
-    <xsl:message>bridgehead: <xsl:value-of select="name()"/></xsl:message>
+    <xsl:call-template name="log.warn">
+      <xsl:with-param name="text">
+        <xsl:text>Sect5 </xsl:text>
+        <xsl:if test="@id">
+          <xsl:text>(id=</xsl:text>
+          <xsl:value-of select="@id"/>
+          <xsl:text>)</xsl:text>
+        </xsl:if>
+        <xsl:text> converted to bridgehead.</xsl:text>
+      </xsl:with-param>
+    </xsl:call-template>
     <bridgehead>
        <xsl:copy-of select="@id"/>
        <xsl:apply-templates select="title"/>
@@ -383,7 +374,7 @@
 
   <xsl:template match="qandaset/title">
    <xsl:comment> title=<xsl:value-of select="normalize-space(.)"/> </xsl:comment>
-   <xsl:call-template name="warn">
+   <xsl:call-template name="log.warn">
      <xsl:with-param name="text">Removed qandaset/title</xsl:with-param>
    </xsl:call-template>
   </xsl:template>
@@ -400,14 +391,14 @@
   </xsl:template>
 
   <xsl:template match="title/ulink">
-   <xsl:call-template name="warn">
+   <xsl:call-template name="log.warn">
      <xsl:with-param name="text">Removed ulink tag in title </xsl:with-param>
    </xsl:call-template>
    <xsl:value-of select="."/>
   </xsl:template>
 
  <xsl:template match="title/xref">
-   <xsl:call-template name="warn">
+   <xsl:call-template name="log.warn">
      <xsl:with-param name="text">Removed xref tag in title </xsl:with-param>
    </xsl:call-template>
   </xsl:template>
@@ -424,7 +415,7 @@
   </xsl:template>
 
   <xsl:template match="citetitle/*">
-    <xsl:call-template name="info">
+    <xsl:call-template name="log.info">
       <xsl:with-param name="text">Removed citetitle/<xsl:value-of select="local-name()"/> </xsl:with-param>
     </xsl:call-template>
     <xsl:apply-templates/>
@@ -484,7 +475,7 @@
 
   <xsl:template match="author/personname">
    <!-- Ignore any personname inside author -->
-   <xsl:call-template name="info">
+   <xsl:call-template name="log.info">
       <xsl:with-param name="text">Removed personname inside author</xsl:with-param>
     </xsl:call-template>
    <xsl:apply-templates/>
@@ -587,7 +578,7 @@
   </xsl:template>
 
   <xsl:template match="blockquote/attribution">
-   <xsl:call-template name="info">
+   <xsl:call-template name="log.info">
       <xsl:with-param name="text">Changed blockquote/attribution -> para/emphasis</xsl:with-param>
     </xsl:call-template>
    <para><emphasis>
@@ -596,7 +587,7 @@
   </xsl:template>
 
   <xsl:template match="mediaobject[textobject]">
-    <xsl:call-template name="info">
+    <xsl:call-template name="log.info">
       <xsl:with-param name="text">Changed order of mediaobject/textobject</xsl:with-param>
     </xsl:call-template>
     <mediaobject>
@@ -607,7 +598,7 @@
   </xsl:template>
 
   <xsl:template match="textobject[not(@role)]">
-    <xsl:call-template name="info">
+    <xsl:call-template name="log.info">
       <xsl:with-param name="text">Added missing textobject/@role attribute</xsl:with-param>
     </xsl:call-template>
     <textobject>
@@ -623,12 +614,14 @@
 
   <xsl:template match="mediaobject">
    <xsl:choose>
-    <xsl:when test="parent::figure">
+    <xsl:when test="parent::figure or parent::informalfigure">
      <xsl:copy-of select="."/>
     </xsl:when>
     <xsl:otherwise>
-     <xsl:message>Wrapped informalfigure around mediaobject. Parent: <xsl:value-of
-      select="local-name(parent::*)"/></xsl:message>
+     <xsl:call-template name="log.info">
+       <xsl:with-param name="text">Wrapped informalfigure around mediaobject. Parent: <xsl:value-of
+      select="local-name(parent::*)"/></xsl:with-param>
+     </xsl:call-template>
      <informalfigure>
       <xsl:copy-of select="."/>
      </informalfigure>
@@ -643,7 +636,7 @@
   </xsl:template>
 
   <xsl:template match="simplelist[@type='vert']">
-    <xsl:call-template name="info">
+    <xsl:call-template name="log.info">
       <xsl:with-param name="text">
         <xsl:text>Converted simplelist[@type='vert'] -> itemizedlist</xsl:text>
       </xsl:with-param>
@@ -654,7 +647,7 @@
   </xsl:template>
 
   <xsl:template match="simplelist[@type='vert']/member">
-    <xsl:call-template name="info">
+    <xsl:call-template name="log.info">
       <xsl:with-param name="text">
         <xsl:text>Converted simplelist[@type='vert']/member -> listitem</xsl:text>
       </xsl:with-param>
@@ -675,7 +668,7 @@
   </xsl:template>
 
   <xsl:template match="listitem/procedure">
-    <xsl:call-template name="info">
+    <xsl:call-template name="log.info">
       <xsl:with-param name="text">
         <xsl:text>Converted listitem/procedure -> listitem/itemizedlist</xsl:text>
       </xsl:with-param>
@@ -686,7 +679,7 @@
     </itemizedlist>
   </xsl:template>
   <xsl:template match="listitem/procedure/step">
-    <xsl:call-template name="info">
+    <xsl:call-template name="log.info">
       <xsl:with-param name="text">
         <xsl:text>Converted listitem/procedure/step -> listitem/itemizedlist/listitem</xsl:text>
       </xsl:with-param>
@@ -696,14 +689,29 @@
     </listitem>
   </xsl:template>
 
-  <xsl:template match="note/procedure">
+  <xsl:template match="note/procedure|
+                       caution/procedure|
+                       important/procedure|
+                       tip/procedure|
+                       warning/procedure">
+    <xsl:call-template name="log.info">
+      <xsl:with-param name="text">
+        <xsl:text>Converted </xsl:text>
+        <xsl:value-of select="name(..)"/>
+        <xsl:text>/procedure -> orderedlist.</xsl:text>
+      </xsl:with-param>
+    </xsl:call-template>
     <orderedlist>
       <xsl:apply-templates select="@*"/>
       <xsl:apply-templates/>
     </orderedlist>
   </xsl:template>
 
-  <xsl:template match="note/procedure/step">
+  <xsl:template match="note/procedure/step|
+                       caution/procedure/step|
+                       important/procedure/step|
+                       tip/procedure/step|
+                       warning/procedure/step">
     <listitem>
       <xsl:apply-templates/>
     </listitem>
@@ -714,29 +722,28 @@
   </xsl:template>
 
   <xsl:template match="note[figure]|caution[figure]|warning[figure]|important[figure]">
-    <xsl:comment> Removed <xsl:value-of select="name()"/> start</xsl:comment>
-    <xsl:choose>
-      <xsl:when test="@id">
-        <xsl:call-template name="warn">
-          <xsl:with-param name="text">
-            <xsl:text>Admonition with id='</xsl:text>
-            <xsl:value-of select="@id"/>
-            <xsl:text>' contains figure.&#10;</xsl:text>
-          </xsl:with-param>
-        </xsl:call-template>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:call-template name="warn">
-          <xsl:with-param name="text">
-            <xsl:text>Removed admonition (</xsl:text>
-            <xsl:value-of select="local-name()"/>
-            <xsl:text>) and figure, but preserved content</xsl:text>
-          </xsl:with-param>
-        </xsl:call-template>
-        <xsl:apply-templates select="*[not(self::title)]"/>
-      </xsl:otherwise>
-    </xsl:choose>
-    <xsl:comment> Removed <xsl:value-of select="name()"/> end</xsl:comment>
+    <xsl:comment>
+      <xsl:text> Removed </xsl:text>
+      <xsl:value-of select="name()"/>
+      <xsl:if test="@id"> id="<xsl:value-of select="@id"/>"</xsl:if>
+    </xsl:comment>
+    <xsl:text>&#10;</xsl:text>
+    <xsl:call-template name="log.warn">
+      <xsl:with-param name="text">
+        <xsl:text>Removed admonition (</xsl:text>
+        <xsl:value-of select="local-name()"/>
+        <xsl:if test="@id">
+          <xsl:text> with id='</xsl:text>
+          <xsl:value-of select="@id"/>
+          <xsl:text>'</xsl:text>
+        </xsl:if>
+        <xsl:text>) and child figure, but preserved content</xsl:text>
+      </xsl:with-param>
+    </xsl:call-template>
+
+    <xsl:apply-templates select="*[not(self::title)]"/>
+    <xsl:text>&#10;</xsl:text>
+    <xsl:comment> Removed /<xsl:value-of select="name()"/></xsl:comment>
   </xsl:template>
 
   <xsl:template match="step/procedure">
@@ -752,7 +759,7 @@
   </xsl:template>
 
   <xsl:template match="step[*[1][not(self::para)]]">
-    <xsl:call-template name="info">
+    <xsl:call-template name="log.info">
       <xsl:with-param name="text">Added para at first position under step</xsl:with-param>
     </xsl:call-template>
     <step>
@@ -835,7 +842,7 @@
           </para>
         </xsl:when>
         <xsl:when test="normalize-space(text()[1]) != '' and $diff >0">
-          <xsl:call-template name="warn">
+          <xsl:call-template name="log.warn">
             <xsl:with-param name="text">
               <xsl:text>Sorry, can't handle mixed content of inlines and blocks in entry for now. </xsl:text>
               <xsl:text>Check your XML source and wrap text in paras. </xsl:text>
