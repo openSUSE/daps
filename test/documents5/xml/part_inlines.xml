@@ -1,0 +1,370 @@
+<!-- Converted by suse-upgrade version 1.1 -->
+
+<part xmlns="http://docbook.org/ns/docbook" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0" xml:id="inlines"><title>Inline Elements</title><info/>
+  
+  <chapter xml:id="links-and-xrefs"><title>
+    <link xlink:href="http://www.lipsum.com">Links</link> and Cross References:
+    <xref linkend="links-and-xrefs"/>
+   </title><info><abstract>
+    <para>Lorem ipsum...</para>
+   </abstract></info>
+   
+   
+   <variablelist xml:id="vl.links-and-xrefs">
+    <title>Links and Cross References</title>
+    <varlistentry>
+     <term>Simple link</term>
+     <listitem>
+      <para>
+       <link xlink:href="http://www.lipsum.com"/>
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>Named link</term>
+     <listitem>
+      <para>
+       <link xlink:href="http://www.lipsum.com">ed diam voluptua</link>
+      </para>
+     </listitem>
+    </varlistentry>
+    <!--    <varlistentry>
+         <term>Cross References - footnote</term>
+         <listitem>
+
+
+         <footnoteref linkend="footnote"/>
+
+         </listitem>
+         </varlistentry>
+         <varlistentry>
+         <term>Cross References - biblioref</term>
+         <listitem>
+         <para>
+         <biblioref linkend="inlines"/>
+         <footnote id="footnote">
+         <para>
+           Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
+           nisi ut aliquip ex ea commodo consequat.
+         </para>
+         </footnote>
+         </para>
+         </listitem>
+         </varlistentry>-->
+   </variablelist>
+   <para>
+    See <xref linkend="vl.links-and-xrefs"/> for more information.
+   </para>
+  </chapter>
+
+  <chapter xml:id="inline-in-paras"><title>Inline Elements in Paragraphs</title><info/>
+   
+   <para>This is a <literal>literal</literal> inside a paragraph.</para>
+  </chapter>
+
+  <chapter xml:id="images"><title>Images</title><info><abstract>
+    <para>
+     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam
+     lectus. Sed sit amet ipsum mauris. Maecenas congue ligula ac quam viverra
+     nec consectetur ante hendrerit.
+    </para>
+   </abstract></info>
+   
+   
+   <sect1 xml:id="images.formats">
+    <title>Image Formats</title>
+    <para>
+     Supported image formats.
+    </para>
+    <sect2 xml:id="images.formats.dia">
+     <title>DIA</title>
+     <para/>
+     <itemizedlist>
+      <listitem>
+       <para>
+        Source: DIA
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+        Result (fo): SVG or PDF
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+        Result (html): PNG
+       </para>
+      </listitem>
+     </itemizedlist>
+     <figure>
+      <title>DIA -&gt; SVG (fo)/PNG (html)</title>
+      <mediaobject>
+       <imageobject role="fo">
+        <imagedata fileref="dia_example.svg" width="35%"/>
+       </imageobject>
+       <imageobject role="html">
+        <imagedata fileref="dia_example.png" width="35%"/>
+       </imageobject>
+      </mediaobject>
+     </figure>
+     <figure>
+      <title>DIA -&gt; PDF (fo)/PNG (html)</title>
+      <mediaobject>
+       <imageobject role="fo">
+        <imagedata fileref="dia_example.pdf" width="35%"/>
+       </imageobject>
+       <imageobject role="html">
+        <imagedata fileref="dia_example.png" width="35%"/>
+       </imageobject>
+      </mediaobject>
+     </figure>
+    </sect2>
+
+    <sect2 xml:id="images.formats.eps">
+     <title>EPS</title>
+     <para/>
+     <itemizedlist>
+      <listitem>
+       <para>
+        Source: EPS
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+        Result (fo): PDF
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+        Result (html): PNG
+       </para>
+      </listitem>
+     </itemizedlist>
+     <figure>
+      <title>EPS -&gt; PDF (fo)/PNG (html)</title>
+      <mediaobject>
+       <imageobject role="fo">
+        <imagedata fileref="eps_example.pdf" width="75%"/>
+       </imageobject>
+       <imageobject role="html">
+        <imagedata fileref="eps_example.png" width="75%"/>
+       </imageobject>
+      </mediaobject>
+     </figure>
+    </sect2>
+
+    <sect2 xml:id="images.formats.fig">
+     <title>FIG</title>
+     <para/>
+     <itemizedlist>
+      <listitem>
+       <para>
+        Source: FIG
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+        Result (fo): SVG or PDF
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+        Result (html): PNG
+       </para>
+      </listitem>
+     </itemizedlist>
+     <figure>
+      <title>FIG -&gt; SVG (fo)/PNG (html)</title>
+      <mediaobject>
+       <imageobject role="fo">
+        <imagedata fileref="fig_example.svg" width="50%"/>
+       </imageobject>
+       <imageobject role="html">
+        <imagedata fileref="fig_example.png" width="50%"/>
+       </imageobject>
+      </mediaobject>
+     </figure>
+     <figure>
+      <title>FIG -&gt; PDF (fo)/PNG (html)</title>
+      <mediaobject>
+       <imageobject role="fo">
+        <imagedata fileref="fig_example.pdf" width="50%"/>
+       </imageobject>
+       <imageobject role="html">
+        <imagedata fileref="fig_example.png" width="50%"/>
+       </imageobject>
+      </mediaobject>
+     </figure>
+    </sect2>
+
+    <sect2 xml:id="images.formats.jpg">
+     <title>JPG</title>
+     <para/>
+     <itemizedlist>
+      <listitem>
+       <para>
+        Source: JPG
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+        Result (fo): JPG
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+        Result (html): JPG
+       </para>
+      </listitem>
+     </itemizedlist>
+     <figure>
+      <title>JPG</title>
+      <mediaobject>
+       <imageobject>
+        <imagedata fileref="jpg_example.jpg" width="75%"/>
+       </imageobject>
+      </mediaobject>
+     </figure>
+    </sect2>
+
+    <sect2 xml:id="images.formats.pdf">
+     <title>PDF</title>
+     <para/>
+     <itemizedlist>
+      <listitem>
+       <para>
+        Source: PDF
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+        Result (fo): PDF
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+        Result (html): PNG
+       </para>
+      </listitem>
+     </itemizedlist>
+     <figure>
+      <title>PDF -&gt; PDF (fo)/PNG (html)</title>
+      <mediaobject>
+       <imageobject role="fo">
+        <imagedata fileref="pdf_example.pdf" width="75%"/>
+       </imageobject>
+       <imageobject role="html">
+        <imagedata fileref="pdf_example.png" width="75%"/>
+       </imageobject>
+      </mediaobject>
+     </figure>
+    </sect2>
+
+    <sect2 xml:id="images.formats.png">
+     <title>PNG</title>
+     <para/>
+     <itemizedlist>
+      <listitem>
+       <para>
+        Source: PNG
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+        Result (fo): PNG
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+        Result (html): PNG
+       </para>
+      </listitem>
+     </itemizedlist>
+     <figure>
+      <title>PNG</title>
+      <mediaobject>
+       <imageobject>
+        <imagedata fileref="png_example.png" width="90%"/>
+       </imageobject>
+      </mediaobject>
+     </figure>
+    </sect2>
+
+    <sect2 xml:id="images.formats.svg">
+     <title>SVG</title>
+     <para/>
+     <itemizedlist>
+      <listitem>
+       <para>
+        Source: SVG
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+        Result (fo): SVG or PDF
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+        Result (html): PNG
+       </para>
+      </listitem>
+     </itemizedlist>
+     <figure>
+      <title>SVG -&gt; SVG (fo)/PNG (html)</title>
+      <mediaobject>
+       <imageobject role="fo">
+        <imagedata fileref="svg_example.svg" width="75%"/>
+       </imageobject>
+       <imageobject role="html">
+        <imagedata fileref="svg_example.png" width="75%"/>
+       </imageobject>
+      </mediaobject>
+     </figure>
+     <figure>
+      <title>SVG -&gt; PDF (fo)/PNG (html)</title>
+      <mediaobject>
+       <imageobject role="fo">
+        <imagedata fileref="svg_example.pdf" width="75%"/>
+       </imageobject>
+       <imageobject role="html">
+        <imagedata fileref="svg_example.png" width="75%"/>
+       </imageobject>
+      </mediaobject>
+     </figure>
+    </sect2>
+
+   </sect1>
+
+   <sect1 xml:id="images.tags">
+    <title>Image Tags and Attributes</title>
+    <para/>
+
+    <sect2 xml:id="images.tags.figure">
+     <title>figure</title>
+     <para/>
+     <figure>
+      <title>PNG</title>
+      <mediaobject>
+       <imageobject>
+        <imagedata fileref="png_example.png" width="50%"/>
+       </imageobject>
+      </mediaobject>
+     </figure>
+    </sect2>
+
+    <sect2 xml:id="images.tags.informalfigure">
+     <title>informalfigure</title>
+     <para/>
+     <informalfigure>
+      <mediaobject>
+       <imageobject>
+        <imagedata fileref="png_example.png" width="50%"/>
+       </imageobject>
+      </mediaobject>
+     </informalfigure>
+    </sect2>
+   </sect1>
+  </chapter>
+
+ </part>

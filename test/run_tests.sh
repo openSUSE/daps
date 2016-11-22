@@ -32,6 +32,10 @@ export _MAINPATH_NOPROF="${_DOC_DIR}/xml/$_MAIN_NOPROF"
 export _BOOKNAME=$(basename $_DCFILE)
 export _BOOKNAME="${_BOOKNAME#DC-*}"
 
+# Schema variables
+export _GEEKODOC_RNC="/usr/share/xml/geekodoc/rng/geekodoc5-flat.rnc"
+export _DOCBOOK5_RNC="/usr/share/xml/docbook/schema/rng/5.1/docbookxi.rnc"
+
 # Stylesheet directories
 export _DB_STYLES="/usr/share/xml/docbook/stylesheet/nwalsh/current"
 export _STANDARD_STYLES="${_DOC_DIR}/styles/standard"
@@ -76,6 +80,41 @@ declare -a _FO_PROCS=( "fop" "xep" )
 #--------------------------------
 # Helper functions
 #
+function usage() {
+
+    cat << EOF_helptext
+=== DAPS Testing Environment ===
+
+Usage:
+    $_ME [OPTIONS]
+    $_ME -h | --help
+
+Options for $_ME:
+    -h, --help          Output this help message
+    --debug             Pass '--debug' option to daps
+    --xsltprocessors    Sets the XSLT processor. Valid values are "xsltproc"
+                        or "saxon6"
+
+Options for testing DAPS targets:
+    --epub              Test epub output
+    --filelists         Test filelists target
+    --html              Test html target
+    --images            Test images target
+    --locdrop           Test locdrop target
+    --online-docs       Test online-docs target
+    --package-html      Test package-html
+    --package-pdf       Test package-pdf target
+    --package-src       Test package-src target
+    --pdf               Test pdf target
+    --profiling         Test profiling target
+    --text              Test text target
+
+Other options:
+    --all               Run all tests
+    --builddir          Run tests around the --builddir option
+    --script            Test of daps script
+EOF_helptext
+}
 
 # ---------
 # Verbose error handling
@@ -159,7 +198,7 @@ while true ; do
             _TESTS=( "${_TESTS[@]}" "lib/010_filelists" )
             shift
             ;;
-        -h,--help)
+        -h | --help)
             usage
             rm -rf "$_TEMPDIR"
             exit 0

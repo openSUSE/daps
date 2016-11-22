@@ -75,6 +75,23 @@ function oneTimeTearDown() {
 # *  * Does online-docs correctly build?
 # * Is the bigfile generated?
 #
+function test_onlinedocs_db5 () {
+    local _OD_BUILD_PATH
+    local _DOC_DIR="documents5"
+    local _DCFILE="${_DOC_DIR}/DC-booktest"
+
+    $_DAPSEXEC -v0 -d ${_DCFILE} --schema "file://${_DOCBOOK5_RNC}" validate
+    assertTrue \
+        ' └─ The validate command for DocBook5 itself failed' \
+        "$?"
+
+    _OD_BUILD_PATH=$($_DAPSEXEC -v0 -d ${_DCFILE} online-docs 2>/dev/null)
+    assertTrue \
+        ' └─ The online-docs command for DocBook5 itself failed' \
+        "$?"
+}
+
+
 function test_onlinedocs () {
     local _OD_BUILD_PATH
 
@@ -90,12 +107,13 @@ function test_onlinedocs () {
         "[[ -s $_OD_NAME_BIGFILE ]]"
 }
 
+
 #--------------------------------
 # * Is the image tarball generated? Does it include all images?
 #
 function test_onlinedocsImages () {
     local _FILE _IMAGE _MISSING _OD_NAME_IMG_TAR
-    
+
     _OD_NAME_IMG_TAR=$($_DAPSEXEC -v0 -d $_DCFILE showvariable VARIABLE=OD_GRAPHICS 2>/dev/null)
     assertTrue \
         ' └─ The command to determine the name of the images tarball failed' \
@@ -118,7 +136,7 @@ function test_onlinedocsImages () {
 #
 function test_onlinedocsPDF () {
     local _OD_NAME_PDF
-    
+
     _OD_NAME_PDF=$(basename $($_DAPSEXEC -v0 -d $_DCFILE pdf-name 2>/dev/null))
     assertTrue \
         ' └─ The command to determine the name of the PDF file failed' \
@@ -134,7 +152,7 @@ function test_onlinedocsPDF () {
 function test_onlinedocsEPUB () {
 
     local _OD_NAME_EPUB
-    
+
     _OD_NAME_EPUB=$(basename $($_DAPSEXEC -v0 -d $_DCFILE epub-name 2>/dev/null))
     assertTrue \
         ' └─ The command to determine the name of the EPUB file failed' \
@@ -148,9 +166,9 @@ function test_onlinedocsEPUB () {
 # * Is the single-html tarball generated?
 #
 function test_onlinedocsHTML () {
-    
+
     local _OD_NAME_HTML
-    
+
     # fs 2013-11-24: Currently there is no way to determine the
     # names the files resulting from package-pdf and package-html
     # This needs to be fixed
@@ -159,7 +177,7 @@ function test_onlinedocsHTML () {
     assertTrue \
         " └─ The single-html tarball (${_OD_NAME_HTML}) does not exist" \
         "[[ -s ${_OD_NAME_DIR}/${_OD_NAME_HTML} ]]"
-  
+
 }
 
 #--------------------------------
