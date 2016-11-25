@@ -1,0 +1,29 @@
+#!/bin/bash
+# DAPS Preflight (R) does more than just daps validate.
+# Usage:
+#   daps-preflight DC-example
+
+
+if [[ $1 == '--help' ]] || [[ $1 == '-h' ]] || [[ ! $1 ]]; then
+  sed -rn '/^#!/{n; p; :loop n; p; /^[ \t]*$/q; b loop}' $0 | sed -r 's/^# ?//'
+  exit
+fi
+
+echo "Validation"
+daps -d $1 validate
+echo ""
+echo "Missing images"
+daps -d $1 list-images-missing
+echo ""
+echo "Spellcheck"
+spell="$(daps -d $1 spellcheck --extra-dict /usr/share/suse-xsl-stylesheets/aspell/en_US-suse-addendum.rws --list)"
+spelltotallines=$(echo "$spell" | wc -l)
+# aspell adds the file names + a line with only dashes + an empty line for each file
+spellfilelines=$(echo "$spell" | grep -P '^-+$' | wc -l)
+echo "$(( $spelltotallines - ($spellfilelines * 3) )) spelling issue(s) found."
+echo ""
+echo "Stylecheck"
+style="$(daps -d $1 stylecheck)"
+styleerrors=$(grep "<result type=.error.>" $style | wc -l)
+stylewarnings=$(grep "<result type=.warning.>" $style | wc -l)
+echo "$styleerrors style error(s) found, $stylewarnings style warning(s) found."
