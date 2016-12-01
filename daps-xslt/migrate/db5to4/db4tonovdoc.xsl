@@ -623,7 +623,7 @@
 
   <xsl:template match="mediaobject">
    <xsl:choose>
-    <xsl:when test="parent::figure">
+    <xsl:when test="parent::figure or parent::informalfigure">
      <xsl:copy-of select="."/>
     </xsl:when>
     <xsl:otherwise>
@@ -696,14 +696,20 @@
     </listitem>
   </xsl:template>
 
-  <xsl:template match="note/procedure">
+  <xsl:template match="note/procedure|tip/procedure|warning/procedure|important/procedure">
+    <xsl:call-template name="info">
+      <xsl:with-param name="text">Changed procedure -> orderedlist inside <xsl:value-of select="local-name(.)"/></xsl:with-param>
+    </xsl:call-template>
     <orderedlist>
       <xsl:apply-templates select="@*"/>
       <xsl:apply-templates/>
     </orderedlist>
   </xsl:template>
 
-  <xsl:template match="note/procedure/step">
+  <xsl:template match="note/procedure/step|tip/procedure/step|warning/procedure/step|important/procedure/step">
+    <!--<xsl:call-template name="info">
+      <xsl:with-param name="text">Changed step -> listitem inside procedure</xsl:with-param>
+    </xsl:call-template>-->
     <listitem>
       <xsl:apply-templates/>
     </listitem>
@@ -738,6 +744,7 @@
     </xsl:choose>
     <xsl:comment> Removed <xsl:value-of select="name()"/> end</xsl:comment>
   </xsl:template>
+
 
   <xsl:template match="step/procedure">
    <substeps>
