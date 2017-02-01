@@ -288,6 +288,7 @@
       <xsl:apply-templates select="productname"/>
       <xsl:apply-templates select="productnumber"/>
       <xsl:apply-templates select="date"/>
+      <xsl:apply-templates select="releaseinfo"/>
       <xsl:choose>
         <xsl:when test="legalnotice">
           <xsl:copy-of select="legalnotice"/>
@@ -296,6 +297,7 @@
          <legalnotice><para/></legalnotice>
         </xsl:otherwise>
       </xsl:choose>
+      <xsl:apply-templates select="authorgroup"/>
       <xsl:apply-templates select="abstract"/>
     </bookinfo>
   </xsl:template>
