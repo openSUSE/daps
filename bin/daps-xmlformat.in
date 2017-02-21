@@ -8,6 +8,14 @@
 # Used as a wrapper script, so it's not necessary to memorize
 # where the config file stays
 
+# ---------
+# Verbose error handling
+#
+function exit_on_error {
+    >&2 echo -e "ERROR: ${1}"
+    exit 1;
+}
+
 XMLFORMAT_CONFIG_FILE="@sysconfdir@/daps/docbook-xmlformat.conf"
 
 # when using a Git checkout, @sysconfdir@ has not been
@@ -19,7 +27,8 @@ XMLFORMAT_CONFIG_FILE="@sysconfdir@/daps/docbook-xmlformat.conf"
 
 XMLFORMAT_CONFIG_FILE=${XMLFORMAT_CONFIG_FILE/#@sysconfdir\@\/daps/${DAPSROOT}/etc}
 
-echo "Using config file '$XMLFORMAT_CONFIG_FILE'"
+# only echo when output goes to STDOUT
+[[ -t 1 ]] && echo "Using config file '$XMLFORMAT_CONFIG_FILE'"
 
 [[ -e $XMLFORMAT_CONFIG_FILE ]] || exit_on_error "Could not find config file '$XMLFORMAT_CONFIG_FILE'\n"
 
