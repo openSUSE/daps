@@ -2,7 +2,7 @@
 # DAPS configuration file #
 ###########################
 #
-# Copyright (C) 2012-2016 SUSE Linux GmbH
+# Copyright (C) 2012-2017 SUSE Linux GmbH
 #
 # Author:
 # Frank Sundermeyer <fsundermeyer at opensuse dot org>
@@ -20,27 +20,21 @@
 # KEY = 'VALUE1 VALUE2'
 # KEY = 'VALUE1 VALUE2' #comment
 #
-# When not quoting values, VALUE must not include single or double
-# quotes nor a hashmark - the value will be cut at the first occurrence of
-# one of these characters. Escaping these characters will not work.
-# Therefore quoting VALUE is recommended (with single or double quotes, there
-# is no difference).
+# The following rules apply:
 #
-# When parsing quoted values, only the enclosing quotes will
-# be removed, the rest of the string will be taken as is including trailing
-# spaces. Do not escape special characters:
+# * escape-character will be removed: \# becomes #
+#   ** if you need escapes, use \\\: \\\# becomes \#
+#      Example: "c:\\\windows\\\foo" becomes c:\windows\foo 
 #
-# Wrong:
-# KEY = 'Don¸\'t quote \"special\" characters like \#' #WRONG!!
+# * When not quoting values, leading spaces will be cut
+# * Each KEY/Value pair should to be on a single line
+#   ** using \ for continuation works; leading spaces on the second line
+#      are not cut
 #
-# ==> Result: Don¸\'t quote \"special\" characters like \#
-#
-# Correct:
-# KEY = 'Don¸'t quote "special" characters like #' #CORRECT!
-#
-# ==> Result: Don¸'t quote "special" characters like #
-#
-# Each KEY/Value pair needs to be on a single line.
+# * comments on the same line will be cut
+# * comment characters (#) in values are not supported !!!
+#   ** the value will be cut at the first occurence of #
+#   ** \\\# is supported and will be transferred to \#
 #
 # Concatenating values:
 #
@@ -51,7 +45,7 @@
 # XSLTPARAM = '--stringparam "foo=bar"'
 # XSLTPARAM += '--strinparam "baz=foo"
 #
-# The same rules as for regulat KRY/VALUE pairs apply
+# The same rules as for regulat KEY/VALUE pairs apply
 #
 
 

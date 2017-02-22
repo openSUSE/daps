@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Copyright (C) 2012-2016 SUSE Linux GmbH
+# Copyright (C) 2012-2017 SUSE Linux GmbH
 #
 # Author:
 # Frank Sundermeyer <fsundermeyer at opensuse dot org>
@@ -1048,14 +1048,13 @@ function parse_config {
     #
     [[ -z $1 ]] && exit_on_error "Function parse_config must be called with a config file as an argument"
 
-    local CFG KEY LINE_NO OLD_IFS TMP_VALUE UNQUOTED VALUE
+    local CFG CONCAT KEY LINE_NO OLD_IFS VALUE
 
     CFG=$1
     LINE_NO=0
     OLD_IFS="$IFS"
     shopt -s extglob
     while IFS='= ' read KEY VALUE; do
-        UNQUOTED=0
         let LINE_NO++
         # skip empty lines
         [[ -z "$KEY" ]] && continue
@@ -1081,61 +1080,53 @@ function parse_config {
         # KEY14+=VALUE     # comment
         # KEY15 += "VALUE" # comment
         # KEY16+="VALUE"   # comment
+        # KEY17+="'VALUE17'"
+        # KEY18+=""VAL\\\"UE18""
+        # KEY19="  VALUE 19  "
+        # KEY20="  VAL \\\#UE 20  "# # #  comment # ##
+        # KEY21==VALUE
+        # KEY22 == "VALUE"
 
-        VALUE="${VALUE#[\"\']*}"           # Del opening string quotes
-        TMP_VALUE="${VALUE%[\"\']*}"       # Del closing string quotes
+        # not supported
+        # KEY = "Val #ue"        use "Val \\\#ue" instead
+        # KEY = "Val \#ue"       use "Val \\\#ue" instead
+        # KEY = "c:\windows\foo" use "c:\\\windows\\\foo" instead
 
+        # removing opening/closing single/double quotes from VALUE
+        # ${string/#substring/replacement}
+        # ${string%%substring}
         #
-        # DONE:
-        # KEY01 = VALUE
-        # KEY02=VALUE
-        # KEY03 = "VALUE"
-        # KEY04="VALUE"
-        # KEY07 = "VALUE" # comment
-        # KEY08="VALUE"   # comment
-
-
-        if [[ "$TMP_VALUE" = "$VALUE" ]]; then
-            VALUE="${TMP_VALUE%%\#*}" # Del inline right comments
-            VALUE="${VALUE%%*( )}" # Del trailing spaces
-            UNQUOTED=1
-
-            # DONE:
-            # KEY05 = VALUE   # comment
-            # KEY06=VALUE     # comment
-        else
-            VALUE="$TMP_VALUE"
-        fi
-
-        # special treatment for += assignments (used for concatenation)
-        #
+        VALUE="${VALUE%% \#*}"        # del inline right comments
+        VALUE="${VALUE/#=/}"          # del leading "=" (allows k==v)
+        VALUE="${VALUE%%*( )}"        # del trailing spaces
+        VALUE="${VALUE/#[\"\'\`\´]/}" # del opening quotes and ticks
+        VALUE="${VALUE/%[\"\'\`\´]/}" # del closing quotes and ticks
 
         # KEY += VALUE
         if [[ "$VALUE" =~ ^\+= ]]; then
-            VALUE=${VALUE#+=*} # remove "+="
-            if [[ 1 -eq $UNQUOTED ]]; then
-                VALUE="${VALUE##*( )}" # Delete leading spaces
-                # DONE:
-                # KEY09 += VALUE
-                # KEY13 += VALUE   # comment
-            else
-                VALUE="${VALUE##*( )[\"\']}" # Remove leading space and quote
-                # DONE:
-                # KEY11 += "VALUE"
-                # KEY15 += "VALUE" # comment
-            fi
-            declare -g $KEY="${!KEY} $VALUE"
-            # KEY+=VALUE
+            CONCAT=1
+            VALUE="${VALUE#+=*}"      # del "+="
+            VALUE="${VALUE##*( )}"    # del leading spaces
+            VALUE="${VALUE/#[\"\'\`\´]/}" # del closing quotes and ticks
+        # KEY+=VALUE
         elif [[ "$KEY" =~ \+$ ]]; then
-            KEY="${KEY%*+}" # remove trailing "+"
-            # DONE:
-            # KEY10+=VALUE
-            # KEY12+="VALUE"
-            # KEY14+=VALUE     # comment
-            # KEY16+="VALUE"   # comment
+            CONCAT=1
+            KEY="${KEY%*+}"           # del trailing "+"
+        fi
+
+        # check if KEY is a valid variable name
+        [[ "$KEY" =~ ^[_[:alpha:]][_[:alnum:]]*$ ]] || exit_on_error "Error: Invalid key value \"$KEY\" in config-file $CFG:$LINE_NO"
+
+        # set variables
+        if [[ 1 = "$CONCAT" ]]; then
             declare -g $KEY="${!KEY} $VALUE"
         else
-            declare -g $KEY="$VALUE" || exit_on_error "Invalid value in config file $CFG in line $LINE_NO"
+            declare -g $KEY="$VALUE"
+        fi
+
+        # Warn on empty values
+        if [[ "$VALUE" = "\"\"" || "$VALUE" = "''" ]]; then
+            ccecho "warn" "Warning: Quotes-only value for \"$KEY\" in config-file $CFG:$LINE_NO"
         fi
     done < "$CFG"
     shopt -u extglob
