@@ -277,11 +277,11 @@ endif
 .PHONY: list-images-missing
 list-images-missing:
   ifdef MISSING
-	@ccecho "warn" "The following images are missing:"
+	$(call print_info,warn,The following images are missing:)
 	$(call print_list,$(MISSING))
   else
     ifeq "$(MAKECMDGOALS)" "list-images-missing"
-	@ccecho "info" "All images for document \"$(DOCNAME)\" exist."
+	$(call print_info,info,All images for document \"$(DOCNAME)\" exist.)
     endif
   endif
 
@@ -290,11 +290,11 @@ list-images-missing:
 .PHONY: list-images-multisrc
 list-images-multisrc warn-images:
   ifdef DOUBLEIMG
-	@ccecho "warn" "Image names not unique, multiple sources available for the following images:"
+	$(call print_info,warn,Image names not unique$(COMMA) multiple sources available for the following images:)
 	$(call print_list,$(DOUBLEIMG))
   else
     ifeq "$(MAKECMDGOALS)" "list-images-multisrc"
-	@ccecho "info" "All images for document \"$(DOCNAME)\" have unique names."
+	$(call print_info,info,All images for document \"$(DOCNAME)\" have unique names.)
     endif
   endif
 

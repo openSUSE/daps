@@ -40,7 +40,7 @@ ifndef XSLTPROCESSOR
 endif
 
 #--------------------------------------------------
-# SPACE REPLACEMENT / Newline
+# SPACE REPLACEMENT / Newline / Comma
 #
 # If wanting to replace a " " with subst, a variable containing
 # a space is needed, since it is not possible to replace a literal
@@ -48,6 +48,8 @@ endif
 #
 SPACE :=
 SPACE +=
+
+COMMA := ,
 
 define \n
 
@@ -433,5 +435,16 @@ define print_list
     echo -e "$(subst $(SPACE),\n,$(sort $1))"; \
   else \
     echo $(sort $1); \
+  fi
+endef
+
+#-----
+# define ccecho that is only displayed when the output
+# goes to a terminal
+#
+
+define print_info
+  @if [[ -t 1 ]]; then \
+    ccecho "$1" "$2"; \
   fi
 endef
