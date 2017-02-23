@@ -105,7 +105,11 @@ endif
 #
 .PHONY: pdf
 pdf: list-images-multisrc list-images-missing
-pdf: $(PDF_RESULT)
+ifeq "$(LEAN)" "1"
+  pdf: $(LEAN_PDF_RESULT)
+else
+  pdf: $(PDF_RESULT)
+endif
   ifeq "$(TARGET)" "pdf"
 	@ccecho "result" "PDF book built with REMARKS=$(REMARKS), DRAFT=$(DRAFT) and META=$(META):\n$<"
   endif
@@ -166,6 +170,17 @@ $(PDF_RESULT): $(FOFILE)
 		>& /dev/null && \
 		(ccecho "warn" "Not all fonts are embedded" >&2;) || :
   endif
+
+#--------------
+# Generate a lean PDF from the original one
+# (PDF with reduced graphics quality and a considerable smaller file size)
+#
+$(LEAN_PDF_RESULT): $(PDF_RESULT)
+  ifeq "$(VERBOSITY)" "2"
+	@ccecho "info" "   Creating lean PDF from $(PDF_RESULT)..."
+  endif
+	gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/ebook \
+	  -dNOPAUSE -dQUIET -dBATCH -sOutputFile=$@ $<
 
 #--------------
 # Generate Index

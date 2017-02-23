@@ -152,6 +152,10 @@ function parse_args {
                 P_LANG="$2"
                 shift 2
                 ;;
+            --lean)
+                P_LEAN="1"
+                shift
+                ;;
             --list)
                 P_LIST=1
                 shift
@@ -738,7 +742,7 @@ function build_pdfs {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="cropmarks,draft,formatter:,help,grayscale,meta,name:,norefcheck,param:,remarks,rootid:,stringparam:,xsltparam:"
+    LONG_OPTS="cropmarks,draft,formatter:,help,grayscale,lean,meta,name:,norefcheck,param:,remarks,rootid:,stringparam:,xsltparam:"
 
     parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -751,6 +755,7 @@ function build_pdfs {
         help_formatter
         help_grayscale_pdf
         help_help
+        help_lean
         help_meta
         help_name
         help_norefcheck
@@ -769,6 +774,7 @@ function build_pdfs {
     [[ 1 = "$P_META" ]]        && META=1 DRAFT="yes"
     [[ 1 = "$P_CROPMARKS" ]]   && export CROPMARKS=1
     [[ 1 = "$P_GRAYSCALE" ]]   && export GRAYSCALE=1
+    [[ 1 = "$P_LEAN" ]]        && export LEAN=1
     [[ 1 = "$P_NOREFCHECK" ]]  && export NOREFCHECK=1
     [[ -n "$P_NAME" ]]         && export PDFNAME="$P_NAME" BOOK="$P_NAME"
     [[ -n "$P_ROOTID" ]]       && export ROOTID="$P_ROOTID"
@@ -2619,12 +2625,20 @@ function help_jsp {
                               stylesheets).
                               Default: off
 EOF
-}
-function help_lang {
+}function help_lang {
     cat <<EOF
     --lang                    Specify a language to use for spellchecking.
                               See \"man aspell \" for details.
                               Default: en_US
+EOF
+}
+function help_lean {
+    cat <<EOF
+    --lean                    Create a lean PDF with reduced graphics
+                              quality and a small file size (e.g. for
+                              sharing via email). This PDF will be created
+                              in addition to the regular one.
+                              Default: off
 EOF
 }
 function help_list {

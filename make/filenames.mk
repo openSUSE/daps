@@ -99,6 +99,11 @@ ifeq "$(CROPMARKS)" "1"
   endif
 endif
 
+# if --lean is specified, create an additional lean PDF
+ifeq "$(LEAN)" "1"
+  LEAN_PDF_RESULT := $(PDF_RESULT)_lean.pdf
+endif
+
 PDF_RESULT := $(PDF_RESULT)$(DRAFT_STR)$(META_STR)$(LANGSTRING).pdf
 
 #---------------
