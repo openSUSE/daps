@@ -1562,7 +1562,7 @@ function unpack-locdrop {
         MANIFEST_NOTRANS=$(tar tfj "$TAR" | grep "$MFT_NOTRANS_SUFF" 2>/dev/null) || exit_on_error "Could not get manifest of non-translated files"
         ALL_MANIFEST_NOTRANS_FILES=( "${ALL_MANIFEST_NOTRANS_FILES[@]}" "$MANIFEST_NOTRANS" )
         tar xfj "$TAR" "$MANIFEST_TRANS" "$MANIFEST_NOTRANS" 2>/dev/null || exit_on_error "Could not extract manifest files from tarball"
-        tar xfj "$TAR" $(cat "$MANIFEST_TRANS") 2>/dev/null || exit_on_error "Could not extract manifest files from tarball"
+        tar xfj "$TAR" $(cat "$MANIFEST_TRANS") 2>/dev/null || exit_on_error "Could not extract translated files from tarball"
         popd >/dev/null
     else
         exit_on_error "Fatal: $TAR does not exist"
