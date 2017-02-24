@@ -2054,7 +2054,7 @@ function getimages {
 ###########################################################################
 function spellcheck {
     local SHORT_OPTS LONG_OPTS SUB_CMD
-    local COUNT FILE LISTMODE LISTOUTPUT SPELLCMD
+    local ASPELL_CMD COUNT FILE LISTMODE LISTOUTPUT SPELLCMD
     local -a FILELIST SKIPLIST
 
     SUB_CMD=$1
@@ -2065,6 +2065,13 @@ function spellcheck {
 
     parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
+
+    # check whether aspell is installed:
+    ASPELL_CMD="$(which  --skip-alias --skip-functions "aspell" 2>/dev/null)"
+    if [[ -z $ASPELL_CMD ]]; then
+        ccecho "error" "Error: aspell is not installed"
+        exit 1
+    fi
 
     #------ Computing the values returned from the parser -----
     if [[ 1 = "$P_HELP" ]]; then
@@ -2212,7 +2219,7 @@ function stylecheck {
 #
 ###########################################################################
 function xmlformat {
-    local DAPSXMLFORMAT SHORT_OPTS LONG_OPTS SUB_CMD
+    local _BINARY DAPSXMLFORMAT SHORT_OPTS LONG_OPTS SUB_CMD XMLFORMAT_CMD
     SUB_CMD=$1
     shift
 
@@ -2221,6 +2228,15 @@ function xmlformat {
 
     parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
+
+    # check whether xmlformat is installed:
+    for _BINARY in xmlformat xmlformat.pl xmlformat.rb; do
+        XMLFORMAT_CMD="$(which  --skip-alias --skip-functions "$_BINARY" 2>/dev/null)" && break
+    done
+    if [[ -z $XMLFORMAT_CMD ]]; then
+        ccecho "error" "Error: xmlformat is not installed"
+        exit 1
+    fi
 
     #------ Computing the values returned from the parser -----
     if [[ 1 = "$P_HELP" ]]; then

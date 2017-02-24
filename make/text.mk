@@ -17,6 +17,15 @@
 # include $(DAPSROOT)/make/html.mk
 # include $(DAPSROOT)/make/text.mk
 
+# binary check
+ifeq "$(TARGET)" "text"
+  HAVE_W3M = $(shell which w3m 2>/dev/null)
+  ifeq "$(HAVE_W3M)" ""
+    $(error $(shell ccecho "error" "Error: w3m is not installed"))
+   endif
+endif
+
+
 ifeq "$(TXT_IGNORE_STYLEROOT)" "yes"
   STYLETXT := $(DOCBOOK_STYLES)/xhtml/docbook.xsl
 else

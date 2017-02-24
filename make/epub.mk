@@ -16,6 +16,22 @@
 # include $(DAPSROOT)/make/images.mk
 # include $(DAPSROOT)/make/misc.mk
 
+# binary checks
+ifeq "$(TARGET)" "epub"
+  ifeq "$(RESULTCHECK)" "1"
+    HAVE_ECHECK = $(shell which epubcheck 2>/dev/null)
+    ifeq "$(HAVE_ECHECK)" ""
+      $(error $(shell ccecho "error" "Error: epubcheck is not installed"))
+    endif
+  endif
+endif
+ifeq "$(TARGET)" "mobi"
+  HAVE_CALIBRE = $(shell which ebook-convert 2>/dev/null)
+  ifeq "$(HAVE_CALIBRE)" ""
+    $(error $(shell ccecho "error" "Error: ebook-convert (provided by calibre) is not installed"))
+  endif
+endif
+
 # Stylesheets
 #
 ifeq "$(EPUB3)" "1"
@@ -228,6 +244,7 @@ epub-check: $(EPUB_RESULT)
 # we are using calibre's ebook-convert to convert the epub file to mobi
 # The format generated is MOBI 6, which is compatible to all Amazon devices
 
+$(MOBI_RESULT): 
 $(MOBI_RESULT): $(EPUB_RESULT)
 	ebook-convert $< $@ --mobi-ignore-margins --no-inline-toc \
 	  --pretty-print $(DEVNULL)

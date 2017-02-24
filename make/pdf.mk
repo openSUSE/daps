@@ -1,4 +1,4 @@
-# Copyright (C) 2012-2015 SUSE Linux GmbH
+# Copyright (C) 2012-2017 SUSE Linux GmbH
 #
 # Author:
 # Frank Sundermeyer <fsundermeyer at opensuse dot org>
@@ -18,12 +18,19 @@
 # corresponding strings to the resulting filename
 #
 
+# binary checks
+ifeq "$(FORMATTER)" "xep"
+  HAVE_XEP := $(shell which xep 2>/dev/null)
+  ifndef HAVE_XEP
+    $(error $(shell ccecho "error" "Error: PDF formatter xep is not installed"))
+  endif
+endif
+
 STYLEFO    := $(firstword $(wildcard $(addsuffix \
 	        /fo/docbook.xsl, $(STYLE_ROOTDIRS))))
 STYLE_GENINDEX := $(DAPSROOT)/daps-xslt/index/xml2idx.xsl
 STYLE_ISINDEX  := $(DAPSROOT)/daps-xslt/common/search4index.xsl
 
-#
 # Make sure to use the STYLEIMG directory that comes alongside the
 # STYLEROOT that is actually used. This is needed to ensure that the
 # correct STYLEIMG is used, even when the current STYLEROOT is a
