@@ -234,8 +234,12 @@ images:
 optipng:
   ifndef HAVE_OPTIPNG
 	@ccecho "error" "Error: optipng is not installed" && false
-  else
-    ifdef USED_PNG
+  endif
+  ifndef HAVE_EXIFTOOL
+	@ccecho "error" "Error: exiftool is not installed" && false
+  endif
+
+  ifdef USED_PNG
 	( j=0; \
 	for i in $(USED_PNG); do  \
 	  if [[ -z $$(exiftool -Comment $$i | grep optipng) ]]; then \
@@ -249,9 +253,8 @@ optipng:
 	else \
 	  ccecho "result" "$$j files have been optimized."; \
 	fi )
-    else
+  else
 	@ccecho "warn" "Warning: This document does not contain any PNGs to optimize."
-    endif
   endif
 
 #---------------

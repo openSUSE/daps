@@ -20,8 +20,11 @@ repositories:
 
 SUSE::
 	http://download.opensuse.org/repositories/Documentation:Tools/ +
-	(browse to this URl and choose you SUSE version to get the complete
-	 repository URl and add it with the `zypper ar` command)
+	Browse to this URl and choose you SUSE version to get the complete
+	 repository URl and add it with the `zypper ar` command, for example:
+	`zypper are -f http://download.opensuse.org/repositories/Documentation:Tools/openSUSE_Leap_42.2 Documentation:Tools`
+	 To be able to use the complete functionality of DAPS, make sure to
+	also install all recommended packages (`zypper in --recommends --from Documentation:Tools daps`)
 ////	 
 Ubuntu::
 	https://launchpad.net/~sascha-manns-h/+archive/ubuntu/daps/ +
@@ -113,6 +116,9 @@ will output detailed information about the support status on your system.
 
 ^3^ The existing remake package on Fedora is a different software.
 
+In case you want to install the optional packages at a later point in time,
+run `daps-check-deps` to check for already installed and missing dependencies.
+
 === Installation
 
 1. Download the https://github.com/openSUSE/daps/releases/latest[latest DAPS version]
@@ -157,4 +163,3 @@ development version, you can run DAPS directly from the GitHub checkout.
 To run DAPS from the checkout directory, enter the following command: +
 `<path_to_checkout>/bin/daps --dapsroot=<path_to_checkout>
 [options] <subcommand> [options]`
-

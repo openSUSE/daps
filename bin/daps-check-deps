@@ -1,0 +1,264 @@
+#!/bin/bash
+#
+# Copyright (C) 2012-2017 SUSE Linux GmbH
+#
+# Author:
+# Frank Sundermeyer <fsundermeyer at opensuse dot org>
+#
+# Checks for missing dependencies for DAPS
+#
+
+function check_prg {
+    which --skip-functions --skip-alias $1 2>/dev/null || return 1
+}
+
+function print_prg {
+    # $1: program to check
+    # $2: warn level
+    # $3: additional information
+
+    local _COL _LEVEL _PRG
+
+    [[ "FATAL ERROR" = $2 ]] && _COL="$fatal_col"
+    [[ IMPORTANT     = $2 ]] && _COL="$important_col"
+    [[ INFO          = $2 ]] && _COL="$info_col"
+
+    _PRG=$(check_prg "$1")
+    if [[ 1 -eq $? ]]; then
+        echo -e "${_COL}${2}: \"$1\" is missing${3}${end_col}"
+    else
+        echo -e "${ok_col}OK: ${_PRG}${end_col}"
+    fi
+}
+
+function check_cat_entries {
+    local ROOT_CATALOG="/etc/xml/catalog"
+    local IFS=$'\n'
+    for _cat_entry in $@; do
+        xmlcatalog --noout "$ROOT_CATALOG" "$_cat_entry" >/dev/null 2>&1
+        [[ 0 -eq $? ]] && return 0
+    done
+    return 1
+}
+
+###############################
+
+fatal_col="\e[1;31m"
+important_col="\e[1;35m"
+info_col="\e[1;36m"
+ok_col="\e[1;32m"
+end_col="\e[0m"
+
+
+_havedb4=0
+_havedb5=0
+_nodb=0
+_havedbxslt4=0
+_havedbxslt5=0
+_noxslt=0
+_jing=""
+_xmllint=""
+_nolint=0
+
+# DB4 catalog entries to check
+
+_DB4_prefix="-//OASIS//DTD DocBook XML"
+declare -a DB4_CAT=(
+    "${_DB4_prefix} V4.1.2//EN"
+    "${_DB4_prefix} V4.2//EN"
+    "${_DB4_prefix} V4.3//EN"
+    "${_DB4_prefix} V4.4//EN"
+    "${_DB4_prefix} V4.5//EN"
+)
+
+# DB5 catalog entries to check
+
+_DB50_prefix="http://docbook.org/xml/5.0/rng/"
+_DB51_prefix="http://docbook.org/xml/5.1/rng/"
+declare -a DB5_CAT=(
+    "${_DB50_prefix}/docbookxi.rng"
+    "${_DB50_prefix}/docbookxi.rnc"
+    "${_DB50_prefix}/docbook.rng"
+    "${_DB50_prefix}/docbook.rnc"
+    "${_DB51_prefix}/docbookxi.rng"
+    "${_DB51_prefix}/docbookxi.rnc"
+    "${_DB51_prefix}/docbook.rng"
+    "${_DB51_prefix}/docbook.rnc"
+    "${_DB51_prefix}/assembly.rng"
+    "${_DB51_prefix}/assembly.rnc"
+    "${_DB51_prefix}/dbits.rng"
+    "${_DB51_prefix}/dbits.rnc"
+)
+
+# DB 4 Stylesheets
+
+DB4_XSLT_prefix="http://docbook.sourceforge.net/release/xsl/current"
+declare -a DB4_XSLT_CAT=(
+    "${DB4_XSLT_prefix}/common/common.xsl"
+    "${DB4_XSLT_prefix}/epub/docbook.xsl"
+    "${DB4_XSLT_prefix}/fo/docbook.xsl"
+    "${DB4_XSLT_prefix}/html/chunk.xsl"
+    "${DB4_XSLT_prefix}/html/docbook.xsl"
+    "${DB4_XSLT_prefix}/lib/lib.xsl"
+    "${DB4_XSLT_prefix}/manpages/docbook.xsl"
+    "${DB4_XSLT_prefix}/profiling/profile.xsl"
+    "${DB4_XSLT_prefix}/xhtml/chunk.xsl"
+    "${DB4_XSLT_prefix}/xhtml/docbook.xsl"
+)
+
+# DB 5 Stylesheets
+
+DB5_XSLT_prefix="http://docbook.sourceforge.net/release/xsl-ns/current"
+declare -a DB5_XSLT_CAT=(
+    "${DB5_XSLT_prefix}/common/common.xsl"
+    "${DB5_XSLT_prefix}/epub/docbook.xsl"
+    "${DB5_XSLT_prefix}/fo/docbook.xsl"
+    "${DB5_XSLT_prefix}/html/chunk.xsl"
+    "${DB5_XSLT_prefix}/html/docbook.xsl"
+    "${DB5_XSLT_prefix}/lib/lib.xsl"
+    "${DB5_XSLT_prefix}/manpages/docbook.xsl"
+    "${DB5_XSLT_prefix}/profiling/profile.xsl"
+    "${DB5_XSLT_prefix}/xhtml/chunk.xsl"
+    "${DB5_XSLT_prefix}/xhtml/docbook.xsl"
+)
+
+echo "DAPS dependency check on $HOSTNAME ($(date))"
+echo -e "------------------------------------------------------------------------\n"
+
+########### FATAL ###############################
+
+echo "##### Checking for fatal dependency failures #####"
+
+# bash 4
+if [[ $BASH_VERSINFO -lt 4 ]]; then
+    echo -e "${fatal_col}FATAL: Bash version 4 or higher is required${end_col}"
+else
+    echo -e "${ok_col}OK: Bash $BASH_VERSINFO${end_col}"
+fi
+
+# DocBook
+#
+# DocBook4
+check_cat_entries "${DB4_CAT[@]}"
+[[ 0 -eq $? ]] &&  _havedb4=1
+#DocBook5
+check_cat_entries "${DB5_CAT[@]}"
+[[ 0 -eq $? ]] &&  _havedb5=1
+
+if [[ 0 -eq $_havedb4 && 0 -eq $_havedb5 ]]; then
+    _nodb=1
+    echo -e "${fatal_col}FATAL: DocBook (version 4 or 5) is required ${end_col}"
+fi
+
+# DocBook Stylesheets
+#
+# DocBook4 Stylesheets
+check_cat_entries "${DB4_XSLT_CAT[@]}"
+[[ 0 -eq $? ]] &&  _havedb4xslt=1
+#DocBook5
+check_cat_entries "${DB5_XSLT_CAT[@]}"
+[[ 0 -eq $? ]] &&  _havedb5xslt=1
+
+if [[ 0 -eq $_havedb4xslt && 0 -eq $_havedb5xslt ]]; then
+    _noxslt=1
+    echo -e "${fatal_col}FATAL: DocBook steylsheets (version 4 or 5) are required ${end_col}"
+fi
+
+# make
+print_prg "make" "FATAL ERROR"
+
+# fop
+print_prg "fop" "FATAL ERROR"
+
+# xmlstarlet
+print_prg "xmlstarlet" "FATAL ERROR"
+
+# xsltproc
+print_prg "xsltproc" "FATAL ERROR"
+
+# xmllint and jing
+_jing=$(check_prg "jing")
+_xmllint=$(check_prg "xmllint")
+if [[ -z $_jing && -z $_xmllint ]]; then
+    _nolint=1
+    echo -e "${fatal_col}FATAL ERROR: Neither \"xmllint\" nor \"jing\" is installed${end_col}"
+fi
+
+########## IMPORTANT  ############################
+
+echo -e "\n##### Checking for important (but not fatal) dependency failures #####"
+
+# One of DocBook 4/5 is missing
+if [[ 0 -eq $_nodb ]]; then
+    if [[ 0 -eq $_havedb4 ]]; then
+       echo -e "${important_col}IMPORTANT: No DocBook4 support${end_col}"
+    else
+        echo -e "${ok_col}OK: DocBook4${end_col}"
+    fi
+    if [[ 0 -eq $_havedb5 ]]; then
+        echo -e "${important_col}IMPORTANT: No DocBook5 support${end_col}"
+    else
+        echo -e "${ok_col}OK: DocBook5${end_col}"
+    fi
+fi
+
+# jing
+if [[ 0 -eq $_nolint ]]; then
+    if [[ -z $_jing ]]; then
+        echo -e "${important_col}IMPORTANT: \"jing\" is missing (no DocBook 5 support)${end_col}"
+    else
+        echo -e "${ok_col}OK: ${_jing}${end_col}"
+    fi
+fi
+
+# aspell
+print_prg "aspell" "IMPORTANT" " (subcommand 'spellcheck' not supported)"
+
+# exiftool
+print_prg "exiftool" "IMPORTANT" " (subcommand 'optipng' not supported)"
+
+# optipng
+print_prg "optipng" "IMPORTANT" " (subcommand 'optipng' not supported)"
+
+# suse-doc-style-checker
+print_prg "suse-doc-style-checker" "IMPORTANT" " (subcommand 'stylecheck' not supported)"
+
+# w3m
+print_prg "w3m" "IMPORTANT" " (subcommand 'text' not supported)"
+
+# xmlformat
+for _xmlfmt in xmlformat{,.rb,.pl}; do
+    _xmlfmt_cmd=$(check_prg "$_xmlfmt") && break
+done
+if [[ -z $_xmlfmt_cmd ]]; then
+    echo -e "${important_col}IMPORTANT: \"xmlformat\" is missing (subcommand 'xmlformat' not supported)${end_col}"
+else
+    echo -e "${ok_col}OK: $_xmlfmt_cmd${end_col}"
+fi
+
+# xmllint
+if [[ 0 -eq $_nolint ]]; then
+    if [[ -z $_xmllint ]]; then
+        echo -e "${important_col}IMPORTANT: \"xmllint\" is missing (no DocBook 4 support)${end_col}"
+    else
+        echo -e "${ok_col}OK: ${_xmllint}${end_col}"
+    fi
+fi
+
+########### Functions not working ################
+
+echo -e "\n##### Checking for non-critical dependency failures #####"
+
+# calibre
+print_prg "calibre" "INFO" " (no .mobi e-book support)"
+
+# epubcheck
+print_prg "epubcheck" "INFO" " (option '--check' for subcommand 'epub' will not work)"
+
+# remake
+print_prg "remake" "INFO" " (debug output will look less pretty)"
+
+# xep
+print_prg "xep" "INFO" " (PDF formatter XEP not supported, FOP will be used)"
+
+echo
