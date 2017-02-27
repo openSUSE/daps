@@ -221,21 +221,25 @@ unset "${UNSETLIST[@]}"
 # values here.
 # TODO: Check multiple FALLBACK_STYLEROOT paths
 #
-declare -a PATHLIST
+declare -A PATHLIST
 PATHLIST=(
-    BUILD_DIR
-    DAPSROOT
-    DOCCONF_DEFAULT
-    EPUB_CSS
-    FOP_CONFIG_FILE
-    FOP_WRAPPER
-    HTML_CSS
-    JING_WRAPPER
-    STATIC_DIR
-    STYLEDEVEL
-    STYLEROOT
-    XEP_CONFIG_FILE
-    XEP_WRAPPER
+  [ASPELL_EXTRA_DICT]="additional Aspell dictionary"
+  [BUILD_DIR]="build directory"
+  [DAPSROOT]="DAPS root directory"
+  [DOCCONF]="DC-file"
+  [DOCCONF_DEFAULT]="default DC-file"
+  [EPUB_CSS]="CSS file for ePUB"
+  [FOP_CONFIG_FILE]="FOP configuration file"
+  [FOP_WRAPPER]="FOP wrapper script"
+  [HTML_CSS]="CSS file for HTML"
+  [JING_WRAPPER]="Jing wrapper script"
+  [MAIN]="MAIN-file"
+  [STATIC_DIR]="HTML ressource directory"
+  [STYLEDEVEL]="development directory for stylesheets"
+  [STYLEROOT]="staylesheet directory"
+  [XEP_CONFIG_FILE]="XEP configuration file"
+  [XEP_WRAPPER]="XEP wrapper script"
+  [XMLFORMAT_CONFIG_FILE]="xmlformat configuration file"
 )
 
 # ----------------------------------------------------------------------------
@@ -862,13 +866,15 @@ function sanitize_path {
     # in case of a non-existing path, returns 2 if variablename matches
     # _WRAPPER, else returns 1
     #
-    local ABSPATH BASEDIR MYPATH VARNAME
+    local ABSPATH BASEDIR MYPATH ORIGIN_TEXT VARNAME VN WRONGPATH
 
     MYPATH=$1
     VARNAME=$2
     [[ -n "$3" ]] && BASEDIR=$3
 
-    # Do nothing if $1 is an empty value
+    WRONGPATH=0
+
+        # Do nothing if $1 is an empty value
     [[ -z "$MYPATH" ]] && return
 
     # Remove preceding file:// scheme
@@ -902,13 +908,33 @@ function sanitize_path {
         if [[ 0 = "$?" ]]; then
             declare -g $VARNAME="$ABSPATH"
         else
-            exit_on_error "$VARNAME=$MYPATH: Path does not exist"
+            WRONGPATH=1
         fi
     else
         # path is already absolute, set to MYPATH (because of having cut
         # the trailing /
         if [[ -d $MYPATH || -f $MYPATH ]]; then
             declare -g $VARNAME="$MYPATH"
+        else
+            WRONGPATH=1
+        fi
+    fi
+
+    # in case of a wrong path
+    if [[ 1 -eq $WRONGPATH ]]; then
+        # remove _CMDL from variable name if exists
+        # MAIN_CMDL => MAIN
+        if [[ $VARNAME =~ _CMDL ]]; then
+            VN="${VARNAME%_CMDL}"
+            ORIGIN_TEXT="(provided on the command line: $MYPATH)"
+        else
+            ORIGIN_TEXT="(provided via config file: $VARNAME=$MYPATH)"
+        fi
+        # if an entry in PATHLIST exists, use the variable name
+        # description provided in the associative array
+        # to get a better error message
+        if [ ${PATHLIST[$VN]+_} ]; then
+            exit_on_error "Wrong path for the ${PATHLIST[$VN]}\n       ${ORIGIN_TEXT}"
         else
             exit_on_error "$VARNAME=$MYPATH: Path does not exist"
         fi
@@ -919,14 +945,12 @@ function sanitize_path {
 # Check all paths in $PATHLIST with sanitize_path
 #
 function check_pathlist {
-    local BASEDIR DIR VAL
-
+    local _PATH BASEDIR VNAME
     BASEDIR=$1
-
-    for DIR in "${PATHLIST[@]}"; do
-        VAL="${!DIR}"
+    for VNAME in "${!PATHLIST[@]}"; do
+        _PATH="${!VNAME}"
         if [[ -n "$VAL" ]]; then
-            sanitize_path "$VAL" "$DIR" "$BASEDIR"
+            sanitize_path "$_PATH" "$VNAME" "$BASEDIR"
         fi
     done
 }
