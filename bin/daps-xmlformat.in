@@ -16,7 +16,12 @@ function exit_on_error {
     exit 1;
 }
 
-XMLFORMAT_CONFIG_FILE="@sysconfdir@/daps/docbook-xmlformat.conf"
+# set to default if empty
+#XMLFORMAT_CONFIG_FILE="@sysconfdir@/daps/docbook-xmlformat.conf"
+#
+
+XMLFORMAT_CONFIG_FILE=${XMLFORMAT_CONFIG_FILE:-"@sysconfdir@/daps/docbook-xmlformat.conf"}
+
 
 # when using a Git checkout, @sysconfdir@ has not been
 # replaced

@@ -172,6 +172,7 @@ VARLIST=(
     XEP_JAVA_JARS
     XEP_JAVA_OPTIONS
     XEP_WRAPPER
+    XMLFORMAT_CONFIG_FILE
     XML_MAIN_CATALOG
     XML_USER_CATALOGS
     XSLTPARAM
@@ -1615,6 +1616,9 @@ JING_WRAPPER=${JING_WRAPPER/#@pkgdatadir\@/${DAPSROOT}}
 
 XEP_CONFIG_FILE=${XEP_CONFIG_FILE/#@sysconfdir\@\/daps/${DAPSROOT}/etc}
 XEP_WRAPPER=${XEP_WRAPPER/#@pkgdatadir\@/${DAPSROOT}}
+
+XMLFORMAT_CONFIG_FILE=${XMLFORMAT_CONFIG_FILE/#@sysconfdir\@\/daps/${DAPSROOT}/etc}
+
 
 # make all paths absolute, remove trailing / and check
 if [[ -n $DOCCONF_CMDL ]]; then

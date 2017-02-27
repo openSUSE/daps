@@ -882,6 +882,22 @@ XML_MAIN_CATALOG="/etc/xml/catalog"
 #
 XML_USER_CATALOGS=""
 
+## Key: XMLFORMAT_CONFIG_FILE
+## --------------------
+## Description: Path to config file for xmlformat
+## Type:        PATH to file
+## Default:     "@sysconfdir@/daps/docbook-xmlformat.conf"
+#
+# xmlformat prettyfies your XML sources (daps xmlformat)
+# This is not only useful for readability, but also ensures consistent
+# diffs even when using different editors. DAPS provides a config file
+# tailor made for DocBook (the default setting). If you prefer to use your
+# own config file, provide an absolute path to that file here.
+#
+# Can also be placed in an DC-file if being a per-book setting
+#
+XMLFORMAT_CONFIG_FILE="@sysconfdir@/daps/docbook-xmlformat.conf"
+
 ## Key: XSLTPARAM
 ## --------------------
 ## Description: String passed to xsltproc for HTML and PDF builds
