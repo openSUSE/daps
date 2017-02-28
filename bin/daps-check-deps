@@ -9,7 +9,7 @@
 #
 
 function check_prg {
-    which --skip-functions --skip-alias $1 2>/dev/null || return 1
+    which $1 2>/dev/null || return 1
 }
 
 function print_prg {
