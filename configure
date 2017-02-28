@@ -4018,6 +4018,13 @@ if test -z "$HAVE_DOCBOOK_51"; then
 $as_echo "$as_me: WARNING: Seems you do not have DocBook 5.1 installed." >&2;}
 fi
 
+# In case DocBook 5 is not installed, setting db5_version fails and the
+# URI in etc/config is set to an invalid value. Therefore let's set
+# 5.0 as a hopefully sane default
+#
+if test -z "$db5_version"; then
+  db5_version="5.0"
+fi
 
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: ===== Checking for DocBook XSL Stylesheets..." >&5
