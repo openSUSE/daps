@@ -350,7 +350,14 @@ if test -z "$HAVE_DOCBOOK_51"; then
   AC_MSG_WARN([Seems you do not have DocBook 5.1 installed.])
 fi
 
-AC_SUBST(db5_version)
+# In case DocBook 5 is not installed, setting db5_version fails and the
+# URI in etc/config is set to an invalid value. Therefore let's set
+# 5.0 as a hopefully sane default
+#
+if test -z "$db5_version"; then
+  db5_version="5.0"
+fi
+AC_SUBST(db5_version)  
 
 dnl -------------------------------------------------------------------------
 AC_MSG_NOTICE([===== Checking for DocBook XSL Stylesheets...])
