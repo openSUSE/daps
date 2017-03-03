@@ -16,9 +16,9 @@ PROFARCH="x86;amd64;em64t"
 # Do not specify a styleroot requiring a suse-xsl-stylesheet installation
 # since this will fail with a DAPS checkout or build on other distributions
 #
-# If needed, specify the following on the command line:
-# --styleroot="/usr/share/xml/docbook/stylesheet/daps2013"
-
+# You have to use the gh://openSUSE/suse-xsl repo or use the --styleroot
+# option in daps:
+STYLEROOT="/usr/share/xml/docbook/stylesheet/daps2013"
 
 #--------------------- XSLT Parameters------------------------
 #
@@ -29,12 +29,6 @@ XSLTPARAM="--stringparam glossentry.show.acronym=primary"
 ## homepage at the top of the page
 ## set a homepage for HTML builds
 XSLTPARAM+="--stringparam homepage=https://github.com/openSUSE/daps"
-
-XSLTPARAM += "--param variablelist.as.blocks=1 --param glossary.as.blocks=1"
-
-# Pagination and General Styles
-XSLTPARAM+="--param body.start.indent=0 --param double.sided=0 --param header.rule=0 --param footer.rule=0  --stringparam paper.type=A4"
-
-# Font Families
-XSLTPARAM+="--stringparam body.font.family="'Charis SIL', CharisSIL, serif" --stringparam sans.font.family="'Open Sans', OpenSans, sans-serif" --stringparam monospace.font.family="'DejaVu Sans Mono', DejaVuSansMono, monospace" --stringparam symbol.font.family="'DejaVu Sans Mono', DejaVuSansMono, KoreanSans, UnBatang, 'Un Batang', 'WenQuanYi Micro Hei Mono', WenQuanYiMicroHeiMono, monospace""
+XSLTPARAM+= "--param variablelist.as.blocks=1 --param glossary.as.blocks=1"
+XSLTPARAM+="--param suse.content=0"
 
