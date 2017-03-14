@@ -123,10 +123,12 @@
   <xsl:template match="substeps/@performance[. = 'required']"/>
   <xsl:template match="@rules[. ='all']"/>
   <xsl:template match="@wordsize"/>
+  <xsl:template match="productname/@class"/>
   <xsl:template match="screen/@language"/>
   <xsl:template match="filename/@class"/>
   <xsl:template match="literallayout/@class"/>
   <xsl:template match="variablelist/@role"/>
+
 
   <!-- ################################################################## -->
   <!-- Suppressed Elements for Novdoc                                     -->
@@ -282,12 +284,42 @@
 
   <xsl:template match="book/title|book/subtitle|book/titleabbrev"/><!-- Don't copy -->
 
-  <xsl:template match="bookinfo">
+  <xsl:template match="book[not(bookinfo)]">
+   <book>
+    <xsl:copy-of select="@*"/>
+    <xsl:call-template name="bookinfo"/>
+    <xsl:apply-templates/>
+   </book>
+  </xsl:template>
+
+  <xsl:template match="bookinfo" name="bookinfo">
     <bookinfo>
       <xsl:apply-templates select="(title|../title)[1]" mode="title"/>
-      <xsl:apply-templates select="productname"/>
-      <xsl:apply-templates select="productnumber"/>
-      <xsl:apply-templates select="date"/>
+      <xsl:choose>
+        <xsl:when test="productname">
+         <xsl:apply-templates select="productname"/>
+        </xsl:when>
+        <xsl:otherwise>
+         <xsl:apply-templates select="/set/setinfo[1]/productname[1]"/>
+        </xsl:otherwise>
+      </xsl:choose>
+      <xsl:choose>
+       <xsl:when test="productnumber">
+        <xsl:apply-templates select="productnumber"/>
+       </xsl:when>
+       <xsl:otherwise>
+        <xsl:apply-templates select="/set/setinfo[1]/productnumber[1]"/>
+       </xsl:otherwise>
+      </xsl:choose>
+      <xsl:choose>
+       <xsl:when test="date">
+        <xsl:apply-templates select="date"/>
+       </xsl:when>
+       <xsl:otherwise>
+        <date><?dbtimestamp?></date>
+       </xsl:otherwise>
+      </xsl:choose>
+
       <xsl:apply-templates select="releaseinfo"/>
       <xsl:choose>
         <xsl:when test="legalnotice">
