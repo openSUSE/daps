@@ -235,4 +235,40 @@
    
   </variablelist>
  </sect1>
+ <sect1 id="sec.daps.user.output.xmlformat">
+  <title>Pretty XML Formatting</title>
+  <para>
+	  Sometimes it might be usefull to have propper formatted XML sources.
+	  It facilisate collaboration work and the usage of tools like <command>diff</command> or <command>git</command>.
+  </para>
+  <variablelist>
+   <varlistentry>
+    <term>Prettify all your project XML files</term>
+    <listitem>
+		<screen>&prompt.user;&dapscmd; -d &dc;-daps-example xmlformat</screen>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>Prettify a specific XML file</term>
+    <listitem>
+		<screen>&prompt.user;&dapscmd; -d &dc;-daps-example xmlformat --file=xml/example.xml</screen>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>Prettify only parts of a book</term>
+    <listitem>
+		<screen>&prompt.user;&dapscmd; -d &dc;-daps-example xmlformat --rootid=cha.template.examples</screen>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+	<important>
+		<title>
+			<command>xmlformat</command> directly alter your source XML files
+		</title>
+		<para>
+			This command reformat your XML files in place, replacing their contents with the reformatted XML.
+			Make a backup if you want to keep your old formatting around.
+		</para>
+	</important>
+ </sect1>
 </chapter>
