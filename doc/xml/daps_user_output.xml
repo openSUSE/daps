@@ -232,18 +232,19 @@
      <screen>&prompt.user;&dapscmd; --jobs=16 -d &dc;-daps-example pdf</screen>
     </listitem>
    </varlistentry>
-   
   </variablelist>
  </sect1>
  <sect1 id="sec.daps.user.output.xmlformat">
   <title>Pretty XML Formatting</title>
   <para>
-   Sometimes it might be usefull to have propper formatted XML sources.
-   It facilisate collaboration work and the usage of tools like <command>diff</command> or <command>git</command>.
+   It can be useful to have properly formatted XML sources.
+   A homogeneous formatting facilitates collaboration and makes diffs more readable.
+   If done consistently, <command>xmlformat</command> reduces the amount of changes
+   that need to be stored in version control systems which leads to smaller repositories.
   </para>
   <variablelist>
    <varlistentry>
-    <term>Prettify all your project XML files</term>
+    <term>Prettify all project XML files</term>
     <listitem>
      <screen>&prompt.user;&dapscmd; -d &dc;-daps-example xmlformat</screen>
     </listitem>
@@ -251,24 +252,24 @@
    <varlistentry>
     <term>Prettify a specific XML file</term>
     <listitem>
-	 <screen>&prompt.user;&dapscmd; -d &dc;-daps-example xmlformat --file=xml/example.xml</screen>
+     <screen>&prompt.user;&dapscmd; -d &dc;-daps-example xmlformat --file=xml/example.xml</screen>
     </listitem>
    </varlistentry>
    <varlistentry>
     <term>Prettify only parts of a book</term>
     <listitem>
-	 <screen>&prompt.user;&dapscmd; -d &dc;-daps-example xmlformat --rootid=cha.template.examples</screen>
+     <screen>&prompt.user;&dapscmd; -d &dc;-daps-example xmlformat --rootid=cha.template.examples</screen>
     </listitem>
    </varlistentry>
   </variablelist>
-   <important>
-    <title>
-     <command>xmlformat</command> directly alter your source XML files
-	</title>
-	<para>
-     This command reformat your XML files in place, replacing their contents with the reformatted XML.
-	 Make a backup if you want to keep your old formatting around.
-	</para>
+  <important>
+   <title>
+    <command>xmlformat</command> Alters Source XML Files
+   </title>
+   <para>
+    This command reformats your XML files in place, replacing their contents with the reformatted XML.
+    To keep the files with the previous formatting, make a backup before running <command>daps xmlformat</command>.
+   </para>
   </important>
  </sect1>
 </chapter>
