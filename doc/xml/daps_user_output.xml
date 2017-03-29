@@ -25,7 +25,7 @@
     </listitem>
     <listitem>
      <para>
-      which output formats you can generate with &dapsacr;, 
+      Output formats you can generate with &dapsacr;
      </para>
     </listitem>
     <listitem>
@@ -69,7 +69,7 @@
 
   <variablelist>
    <varlistentry>
-    <term>Validating All XML Files in Your Book, Article or Set</term>
+    <term>Validating All XML Files in a Book, Article or Set</term>
     <listitem>
 <screen>&prompt.user;&dapscmd; -d <replaceable>PATH_TO_DC_FILE</replaceable> validate </screen>
      <para>
@@ -80,17 +80,18 @@
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term>Validating Your Files Including <sgmltag>Remark</sgmltag> Elements</term>
+    <term>Validating Files Including <sgmltag>remark</sgmltag> Elements</term>
     <listitem>
 <screen>&prompt.user;&dapscmd; -d <replaceable>PATH_TO_DC_FILE</replaceable> validate --remarks</screen>
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term>Validating Your Files without checking xref-links</term>
+    <term>Validating Files Without Checking Cross References (<sgmltag>xref</sgmltag>)</term>
     <listitem>
 <screen>&prompt.user;&dapscmd; -d <replaceable>PATH_TO_DC_FILE</replaceable> validate --norefcheck</screen>
      <para>
-	  This option only affects DocBook5 sources and is ignored when processing DocBook4.
+      This option only affects DocBook 5 sources and is ignored when
+      processing DocBook 4.
      </para>
     </listitem>
    </varlistentry>
@@ -176,7 +177,7 @@
 
   <variablelist>
    <varlistentry>
-    <term>Building Only Parts of Your Documentation Project</term>
+    <term>Building Only Parts of a Documentation Project</term>
     <listitem>
 <screen>&prompt.user;&dapscmd; -d &dc;-daps-example pdf --rootid=cha.template.examples</screen>
      &daps-partial-builds;
@@ -196,7 +197,7 @@
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term>Opening the Output Directly in Your PDF Viewer</term>
+    <term>Opening the Output Directly in a PDF Viewer</term>
     <listitem>
      <screen>&prompt.user;<command>evince</command> $(daps -d &dc;-daps-example pdf) &amp;</screen>
      <para>Use the syntax above to open the PDF output directly in a PDF viewer (for example,
@@ -204,31 +205,35 @@
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term>Getting More Information about the Building Process</term>
+    <term>Getting More Information about the Build Process</term>
     <listitem>
-     <para>By default &dapsacr; only shows the path to the resulting file.
-            Several verbosity levels are
-            available. Use the global options <option>-v*</option> to
-            specify the level of information you want. It ranges from
-              <option>-v</option> (print one line of results) to
-              <option>-vvv</option> (print all commands, very verbose).
-            For example, the following command will print all files
-            created during the build process: </para>
+     <para>
+      By default &dapsacr;, only provides the path to the resulting file as
+      output. To set higher verbosity levels, use the global options
+      <option>-v</option>, <option>-vv</option>, <option>-vvv</option>, and
+      <option>--debug</option>.
+     </para>
+     <para>
+      Output verbosity ranges from <option>-v</option> (print one line of
+      results) to <option>-vvv</option> (print all commands, very verbose).
+      For example, the following command will print all files created during
+      the build process:
+     </para>
      <screen>&prompt.user;&dapscmd; -vv -d &dc;-daps-example pdf</screen>
-     <para>For a debug output, use the following command:</para>
+     <para>For debug output, use the following command:</para>
      <screen>&prompt.user;&dapscmd; --debug -d &dc;-daps-example pdf</screen>
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term>Specify how many parallel jobs to use during the Building Process</term>
+    <term>Specifying the Number of Parallel Jobs During the Build Process</term>
     <listitem>
-     <para>By default &dapsacr; use as many jobs as available CPU cores.
-		   Use the option <option>--jobs</option> to define the number of 
-		   parallel jobs used for the building process.
-		   Higher numbers will lower the build time, but will also increase
-		   CPU load.
-		   For example, the following command will use 16 jobs for the build 
-		   process: </para>
+     <para>
+      By default &dapsacr; uses as many jobs as there are CPU cores
+      available. Use the option <option>--jobs</option> to define the number
+      of parallel jobs used for the build process. Higher numbers will lower
+      the build time, but will also increase CPU load. For example, the
+      following command will use 16 jobs for the build process:
+    </para>
      <screen>&prompt.user;&dapscmd; --jobs=16 -d &dc;-daps-example pdf</screen>
     </listitem>
    </varlistentry>
