@@ -834,6 +834,11 @@
     </itemizedlist>
   </xsl:template>
 
+  <!-- we don't allow informalfigure in entry, but mediaobject. So... -->
+  <xsl:template match="entry/informalfigure">
+   <xsl:apply-templates/>
+  </xsl:template>
+
   <xsl:template match="entry/variablelist/varlistentry">
     <listitem>
       <xsl:apply-templates select="term"/>
