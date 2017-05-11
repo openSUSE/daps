@@ -110,7 +110,7 @@
    <title>Adjusting the Layout of Variable Lists</title>
    <para>
     By default, the DocBook stylesheets display the contents of a
-      <sgmltag>variabl in your DC files.elist</sgmltag> as a table. To change this temporarily,
+      <sgmltag>variablelist</sgmltag> as a table. To change this temporarily,
       set the parameter <parameter>variablelist.as.table</parameter> to <literal>0</literal> by executing the following command:
    </para>
    <screen>&prompt.user;&dapscmd; -d  &nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;html \
@@ -184,19 +184,18 @@ XSLTPARAM="$XSLTPARAM --param&nbsp;<replaceable>PARAM_NAME</replaceable>=<replac
   </para>
   <important>
     <para>
-      The reader should be aware of that he or she needs some knowledge about
-      XSLT (at least a little bit). Basic customizations like parameter changes
-      can be done by simple adding a line with:
+	    The reader should be aware of that some knowledge about XSLT is needed.
+      Basic customizations like parameter changes can be done by simple adding a line with:
       <screen>&lt;xsl:param name="PARAMETER_NAME" select="VALUE"/></screen>
       The available parameters are format dependent and are listed in the
-      "XSL Stylesheets Reference Documentation".
+      "XSL Stylesheets Reference Documentation" at <ulink url="http://docbook.sourceforge.net/release/xsl/current/doc/param.html"></ulink>.
     </para>
   </important>
   <para>
-    Best practice is to store the stylesheets in a xslt directory as the
-    top-level directory with different subdirectories for all formats.
-    Depending on which formats are supported, this top-level directory could be
-    integrated into your project directory like this:
+    Best practice is to store the stylesheets in a <filename>xslt</filename>
+    directory as the top-level directory with different subdirectories for all
+    formats.  Depending on which formats are supported, this top-level
+    directory could be integrated into your project directory like this:
     <example id="example.filehierarchy">
       <title>Best Practice File Hierarchy</title>
       <programlisting>
@@ -227,8 +226,9 @@ XSLTPARAM="$XSLTPARAM --param&nbsp;<replaceable>PARAM_NAME</replaceable>=<replac
     </para>
   </note>
   <para>
-    In the following we will create the directory stucture for customizations of the HTML output.
-    For other formats, replace "html" with the approperiate name, e.g.: "fo".
+    In the following procedure we will create the directory stucture for
+    customizations of the HTML output.  For other formats, replace "html" with
+    the approperiate name, e.g.: "fo".
   </para>
   <procedure>
   <title>Create a Styleroot Directory for the HTML Format</title>
