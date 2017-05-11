@@ -110,8 +110,8 @@
    <title>Adjusting the Layout of Variable Lists</title>
    <para>
     By default, the DocBook stylesheets display the contents of a
-    <sgmltag>variablelist</sgmltag> as a table. To change this temporarily,
-    set the parameter <parameter>variablelist.as.table</parameter> to <literal>0</literal> by executing the following command:
+      <sgmltag>variabl in your DC files.elist</sgmltag> as a table. To change this temporarily,
+      set the parameter <parameter>variablelist.as.table</parameter> to <literal>0</literal> by executing the following command:
    </para>
    <screen>&prompt.user;&dapscmd; -d  &nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;html \
 --param<co id="co.xsltparam"/>&nbsp;"variablelist.as.table<co id="co.param"/>=0"<co id="co.value"/> \
@@ -176,12 +176,107 @@ XSLTPARAM="$XSLTPARAM --param&nbsp;<replaceable>PARAM_NAME</replaceable>=<replac
  
  <sect1 id="sec.daps.user.layout.styleheets">
   <title>Customizing the DocBook Stylesheets</title>
+  <para>
+    This section describe how you can use customs stylesheets.  There are many
+    reasons why it would be preferable to create your own customization layer.
+    Perhaps you want to change the layout or style of your project, change the
+    behaviour how an element is processed or want to create a corporate style.
+  </para>
+  <important>
+    <para>
+      The reader should be aware of that he or she needs some knowledge about
+      XSLT (at least a little bit). Basic customizations like parameter changes
+      can be done by simple adding a line with:
+      <screen>&lt;xsl:param name="PARAMETER_NAME" select="VALUE"/></screen>
+      The available parameters are format dependent and are listed in the
+      "XSL Stylesheets Reference Documentation".
+    </para>
+  </important>
+  <para>
+    Best practice is to store the stylesheets in a xslt directory as the
+    top-level directory with different subdirectories for all formats.
+    Depending on which formats are supported, this top-level directory could be
+    integrated into your project directory like this:
+    <example id="example.filehierarchy">
+      <title>Best Practice File Hierarchy</title>
+      <programlisting>
+        YOUR_DOC_DIR/
+         |
+         +-- DC-files
+         +-- xml/
+              +--- your XML files...
+         +-- xslt/
+              +-- fo/
+                   +-- docbook.xsl
+              +-- html/
+                   +-- docbook.xsl
+                   +-- chunk.xsl
+               +-- [additional formats, supported by DB XSL]
+                   +-- docbook.xsl
+      </programlisting>
+  </example>
 
+    Finaly include the <varname>STYLEROOT</varname> variable in your DC files,
+    pointing to the xslt directory. 
+  </para>
+  <note>
+    <para>
+      It is recomended to also set the <varname>FALLBACK_STYLEROOT</varname>
+      variable which is used in case the custom stylesheets defined with
+      <varname>STYLEROOT</varname> cannot be accessed.
+    </para>
+  </note>
+  <para>
+    In the following we will create the directory stucture for customizations of the HTML output.
+    For other formats, replace "html" with the approperiate name, e.g.: "fo".
+  </para>
+  <procedure>
+  <title>Create a Styleroot Directory for the HTML Format</title>
+    <para>
+    </para>
+   <step>
+    <para>
+     Inside your project directory, create the styleroot hierarchy:
+    </para>
+    <screen>&prompt.user;mkdir -p xslt/html </screen>
+    <para>
+    </para>
+   </step>
+   <step>
+    <para>
+      Make your customizations inside <filename>xslt/html/docbook.xsl</filename>:
+    </para>
+    <example id="example.customizationlayer">
+      <title>General Customization Layer</title>
+      <programlisting>
+        <![CDATA[
+<xsl:stylesheet version="1.0"
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:d="http://docbook.org/ns/docbook">
+
+  <xsl:import href="http://docbook.sourceforge.net/release/xsl-ns/current/html/docbook.xsl"/>
+
+  <!-- Your customizations go here -->
+
+</xsl:stylesheet>
+                ]]>
+      </programlisting>
+    </example>
+   </step>
+   <step>
+    <para>
+      In your DC files, set the STYLEROOT variable to <filename>xslt</filename>.
+    </para>
+    <screen>STYLEROOT="xslt"</screen>
+   </step>
+  </procedure>
   <para>
    Useful tips and tricks on using DocBook and the DocBook stylesheets
    can be found in <citetitle>The DoCookBook&mdash;Recipes for DocBook
    Developers and Writers</citetitle>, available at
-   <ulink url="http://doccookbook.sourceforge.net/"></ulink>.
+   <ulink url="http://doccookbook.sourceforge.net/"></ulink> and in 
+   <citetitle>DocBook XSL Stylesheets: Reference Documentation</citetitle> 
+   available at <ulink url="http://docbook.sourceforge.net/release/xsl/current/doc/index.html"></ulink>.
   </para>
  </sect1>
 </chapter>
