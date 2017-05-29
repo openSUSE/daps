@@ -236,7 +236,7 @@ PATHLIST=(
   [MAIN]="MAIN-file"
   [STATIC_DIR]="HTML ressource directory"
   [STYLEDEVEL]="development directory for stylesheets"
-  [STYLEROOT]="staylesheet directory"
+  [STYLEROOT]="stylesheet directory"
   [XEP_CONFIG_FILE]="XEP configuration file"
   [XEP_WRAPPER]="XEP wrapper script"
   [XMLFORMAT_CONFIG_FILE]="xmlformat configuration file"
@@ -928,6 +928,7 @@ function sanitize_path {
             VN="${VARNAME%_CMDL}"
             ORIGIN_TEXT="(provided on the command line: $MYPATH)"
         else
+            VN="${VARNAME}"
             ORIGIN_TEXT="(provided via config file: $VARNAME=$MYPATH)"
         fi
         # if an entry in PATHLIST exists, use the variable name
@@ -949,7 +950,7 @@ function check_pathlist {
     BASEDIR=$1
     for VNAME in "${!PATHLIST[@]}"; do
         _PATH="${!VNAME}"
-        if [[ -n "$VAL" ]]; then
+        if [[ -n "$_PATH" ]]; then
             sanitize_path "$_PATH" "$VNAME" "$BASEDIR"
         fi
     done
