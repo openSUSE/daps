@@ -88,9 +88,14 @@ endif
 # XML source files for the currently used document (defined by the rootid)
 #
 ifdef ROOTSTRING
+  ROOTELEMENT := $(shell $(XMLSTARLET) sel -t -v "//div[@id='$(ROOTID)'][1]/@remap" $(SETFILES_TMP) 2>/dev/null)
+  # check whether there is only a single root element (fixes issue #390)
+  #
+  ifneq "$(words $(ROOTELEMENT))" "1"
+    $(error Fatal error: ID "$(ROOTID)" has already been defined)
+  endif
   # check if ROOTID is a valid root element
   #
-  ROOTELEMENT := $(shell $(XMLSTARLET) sel -t -v "//div[@id='$(ROOTID)'][1]/@remap" $(SETFILES_TMP) 2>/dev/null)
   ifneq "$(ROOTELEMENT)" "$(filter $(ROOTELEMENT),$(VALID_ROOTELEMENTS))"
     $(error Fatal error: ROOTID belongs to an unsupported root element ($(ROOTELEMENT)). Must be one of $(VALID_ROOTELEMENTS) )
   endif
