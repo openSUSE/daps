@@ -50,11 +50,11 @@ function oneTimeSetUp() {
     # get the profiling directory
     _HTMLDIR_NAME_PATH=$($_DAPSEXEC -d $_DCFILE html-dir-name 2>/dev/null)
     if [ $? -ne 0 ]; then
-	exit_on_error " The initial DAPS call to determine the path to the resulting HTML directory failed. Skipping tests"
+        exit_on_error " The initial DAPS call to determine the path to the resulting HTML directory failed. Skipping tests"
     fi
     _LOG_DIR=$($_DAPSEXEC -v0 -d $_DCFILE showvariable VARIABLE=LOG_DIR 2>/dev/null)
     if [ $? -ne 0 ]; then
-	exit_on_error " The initial DAPS call to determine the LOG file failed. Skipping tests"
+        exit_on_error " The initial DAPS call to determine the LOG file failed. Skipping tests"
     fi
     _LOGFILE=${_LOG_DIR}/make_html.log
 }
@@ -85,13 +85,13 @@ function test_html () {
         ' └─ The html command itself failed' \
         "$?"
     assertTrue \
-	" └─ The resulting file/link (${_HTML_BUILD_PATH}/index.html) does not exist." \
-	"[ -s $_HTML_BUILD_PATH/index.html -o -L $_HTML_BUILD_PATH/index.html ]"
+        " └─ The resulting file/link (${_HTML_BUILD_PATH}/index.html) does not exist." \
+        "[ -s $_HTML_BUILD_PATH/index.html -o -L $_HTML_BUILD_PATH/index.html ]"
 
     _BUILD_DIR_NAME=$_HTML_BUILD_PATH
     assertEquals \
-	" └─ The resulting filename does not match the one retrieved with --html-dir-name" \
-	"$_HTMLDIR_NAME_PATH" "$_BUILD_DIR_NAME"
+        " └─ The resulting filename does not match the one retrieved with --html-dir-name" \
+        "$_HTMLDIR_NAME_PATH" "$_BUILD_DIR_NAME"
 }
 
 #--------------------------------
@@ -107,40 +107,40 @@ function test_htmlImages () {
     #
     _LINKCHECK=$(find ${_HTMLDIR_NAME_PATH}/images/ ${_HTMLDIR_NAME_PATH}/static/ -type l)
     assertNull \
-	' └─ image/ and static/ directories contain links (should only be regular files)' \
-	"$_LINKCHECK"
+        ' └─ image/ and static/ directories contain links (should only be regular files)' \
+        "$_LINKCHECK"
 
     # Check if image links in the HTML point to existing files
     # get list of images using lynx
     #
-    _IMAGES_HTML=$(lynx -dump -listonly -image-links ${_HTMLDIR_NAME_PATH}/*.html 2>/dev/null | grep "${_HTMLDIR_NAME_PATH}/images/" 2>/dev/null | sed 's%^\s*[0-9]*\.\s*file://%%g' 2>/dev/null | sort -u)
+    _IMAGES_HTML=$(lynx -dump -listonly -image-links ${_HTMLDIR_NAME_PATH}/*.html 2>/dev/null | grep "${_HTMLDIR_NAME_PATH}/images/" 2>/dev/null | sed 's%^\s*[0-9]*\.\s*file://\(localhost\)*%%g' 2>/dev/null | sort -u)
 
     for _IMG in $_IMAGES_HTML; do
-	readlink -e $_IMG >/dev/null 2>&1
-	[[ $? = 0 ]] || _MISSING="$_MISSING $_IMG"
+        readlink -e $_IMG >/dev/null 2>&1
+        [[ $? = 0 ]] || _MISSING="$_MISSING $_IMG"
     done
     assertNull \
-	" └─ Image links in the HTML are dead: $_MISSING" \
-	"$_MISSING"
+        " └─ Image links in the HTML are dead: $_MISSING" \
+        "$_MISSING"
     #
     # Check if list of images retrieved from DAPS matches the ones
     # retrieved from the HTML (see above)
     #
     _IMAGES_DAPS=$($_DAPSEXEC -v0 -d $_DCFILE list-srcfiles --nodc --noent --noxml)
     assertTrue \
-	" └─ The command 'list-srcfiles --nodc --noent --noxml' failed" \
-	"$?"
+        " └─ The command 'list-srcfiles --nodc --noent --noxml' failed" \
+        "$?"
     assertNotNull \
-	" └─ The command 'list-srcfiles --nodc --noent --noxml' returned an empty string" \
-	"_IMAGES_DAPS"
+        " └─ The command 'list-srcfiles --nodc --noent --noxml' returned an empty string" \
+        "_IMAGES_DAPS"
     J=0
     for _IMG in $_IMAGES_DAPS; do
-	_IMAGES_EXPECTED[$J]="${_HTMLDIR_NAME_PATH}/images/$(basename $_IMG)"
-	# skip JPEGs
-	if [[ ${_IMAGES_EXPECTED[$J]##*.} != jpg ]]; then
-	    _IMAGES_EXPECTED[$J]="${_IMAGES_EXPECTED[$J]%.*}.png"
-	fi
-	let J++
+        _IMAGES_EXPECTED[$J]="${_HTMLDIR_NAME_PATH}/images/$(basename $_IMG)"
+        # skip JPEGs
+        if [[ ${_IMAGES_EXPECTED[$J]##*.} != jpg ]]; then
+            _IMAGES_EXPECTED[$J]="${_IMAGES_EXPECTED[$J]%.*}.png"
+        fi
+        let J++
     done
     _IMAGES_BUILD=( $_IMAGES_HTML )
 
@@ -156,8 +156,8 @@ function test_htmlImages () {
     _IMAGES_DIFF=$(comm -1 -3 <(echo "${_IMAGES_BUILD[*]}" | sort -u) <(echo "${_IMAGES_EXPECTED[*]}" 2>/dev/null | sort -u))
     IFS=$_oldIFS
     assertNull \
-	" └─ The list of images from DAPS does not match the ones from the HTML" \
-	"$_IMAGES_DIFF"
+        " └─ The list of images from DAPS does not match the ones from the HTML" \
+        "$_IMAGES_DIFF"
 
 }
 
@@ -248,12 +248,12 @@ function test_htmlClean () {
        "' └─ The html command with --clean failed" \
         "$?"
     assertTrue \
-	" └─ The result directory does not contain index.html" \
-	"[ -s $_HTMLDIR_NAME_PATH/index.html -o -L $_HTMLDIR_NAME_PATH/index.html ]"
+        " └─ The result directory does not contain index.html" \
+        "[ -s $_HTMLDIR_NAME_PATH/index.html -o -L $_HTMLDIR_NAME_PATH/index.html ]"
     # Test --clean
     assertFalse \
-	" └─ The --clean option did not work--the testfile has not been deleted" \
-	"[ -f $_TO_CLEAN ]"
+        " └─ The --clean option did not work--the testfile has not been deleted" \
+        "[ -f $_TO_CLEAN ]"
 
     # Test for errors when running two --clean after another
     #
@@ -261,7 +261,7 @@ function test_htmlClean () {
     assertTrue \
        "' └─ A second run of html --clean failed" \
         "$?"
-}    
+}
 
 #--------------------------------
 # * Does the --css switch work?
@@ -293,8 +293,8 @@ function test_htmlCSS_HTML5 () {
     # Test CSS
     #
     assertTrue \
-	" └─ The result directory does not contain ${_CSS_BUILD}" \
-	"[ -f ${_CSS_BUILD} -o -L ${_CSS_BUILD} ]"
+        " └─ The result directory does not contain ${_CSS_BUILD}" \
+        "[ -f ${_CSS_BUILD} -o -L ${_CSS_BUILD} ]"
     grep -q "static/css/${_CSS_FILE}" ${_HTMLDIR_NAME_PATH}/index.html 2>/dev/null
     assertTrue \
         ' └─ The resulting HTML does not include a link to static/css/${_CSS_FILE}.' \
@@ -323,36 +323,36 @@ function test_htmlStatic () {
     #
     _LINKCHECK=$(find ${_HTMLDIR_NAME_PATH}/images/ ${_HTMLDIR_NAME_PATH}/static/ -type f)
     assertNull \
-	' └─ image/ and static/ directories contain regular files (should only contain links)' \
-	"$_LINKCHECK"
+        ' └─ image/ and static/ directories contain regular files (should only contain links)' \
+        "$_LINKCHECK"
         #
     # Check if image links in the HTML point to existing files
     # get list of images using lynx
     #
-    _IMAGES_HTML=$(lynx -dump -listonly -image-links ${_HTMLDIR_NAME_PATH}/*.html 2>/dev/null | grep "${_HTMLDIR_NAME_PATH}/images/" 2>/dev/null | sed 's%^\s*[0-9]*\.\s*file://%%g' 2>/dev/null | sort -u)
+    _IMAGES_HTML=$(lynx -dump -listonly -image-links ${_HTMLDIR_NAME_PATH}/*.html 2>/dev/null | grep "${_HTMLDIR_NAME_PATH}/images/" 2>/dev/null | sed 's%^\s*[0-9]*\.\s*file://\(localhost\)*%%g' 2>/dev/null | sort -u)
 
     for _IMG in $_IMAGES_HTML; do
-	readlink -e $_IMG >/dev/null 2>&1
-	[[ $? = 0 ]] || _MISSING="$_MISSING $_IMG"
+        readlink -e $_IMG >/dev/null 2>&1
+        [[ $? = 0 ]] || _MISSING="$_MISSING $_IMG"
     done
     assertNull \
-	" └─ Image links in the HTML are dead: $_MISSING" \
-	"$_MISSING"
+        " └─ Image links in the HTML are dead: $_MISSING" \
+        "$_MISSING"
     #
     # Check if static/images and $_STYLEIMG contain the same files
     #
     _STYLEIMAGES=$($_DAPSEXEC -v0 -d $_DCFILE showvariable VARIABLE=STYLEIMG 2>/dev/null)
     diff -qr ${_HTMLDIR_NAME_PATH}/static/images $_STYLEIMAGES >/dev/null 2>&1
     assertTrue \
-	" └─ The build static directory differs from the one provided by the stylesheets." \
-	"$?"
+        " └─ The build static directory differs from the one provided by the stylesheets." \
+        "$?"
     #
     # Check if the css files match
     #
     diff -q $_CSS_PATH $_CSS_BUILD >/dev/null 2>&1
     assertTrue \
-	" └─ The build CSS file differs from the one provided with --css." \
-	"$?"
+        " └─ The build CSS file differs from the one provided with --css." \
+        "$?"
 
     # Are the nostatic files correctly overwritten by a regular build?
     #
@@ -360,8 +360,8 @@ function test_htmlStatic () {
 
     _LINKCHECK=$(find ${_HTMLDIR_NAME_PATH}/images/ ${_HTMLDIR_NAME_PATH}/static/ -type l)
     assertNull \
-	' └─ image/ and static/ directories still contain links after a regular run' \
-	"$_LINKCHECK"
+        ' └─ image/ and static/ directories still contain links after a regular run' \
+        "$_LINKCHECK"
 
     # Are the linked files correctly overwritten by a --nostatic build?
     #
@@ -369,8 +369,8 @@ function test_htmlStatic () {
 
     _LINKCHECK=$(find ${_HTMLDIR_NAME_PATH}/images/ ${_HTMLDIR_NAME_PATH}/static/ -type f)
     assertNull \
-	' └─ image/ and static/ directories still contain regular files after a --nostatic run' \
-	"$_LINKCHECK"
+        ' └─ image/ and static/ directories still contain regular files after a --nostatic run' \
+        "$_LINKCHECK"
 
 }
 
@@ -385,18 +385,18 @@ function test_htmlNAME () {
 
     _HTML_BUILD_PATH=$($_DAPSEXEC -v0 -d $_DCFILE html --name $_NAME 2>/dev/null)
     assertTrue \
-	" └─ Building a html document with --name failed " \
+        " └─ Building a html document with --name failed " \
        "$?"
 
     _BUILD_SUBDIR_NAME=$(basename $_HTML_BUILD_PATH)
     assertEquals \
-	' └─ The subdirectory name of the build result does not match the string given with --name:' \
-	"$_NAME" "$_BUILD_SUBDIR_NAME"
+        ' └─ The subdirectory name of the build result does not match the string given with --name:' \
+        "$_NAME" "$_BUILD_SUBDIR_NAME"
 
     _HTMLDIR_NAME_PATH=$($_DAPSEXEC -v0 -d $_DCFILE html-dir-name --name $_NAME 2>/dev/null)
     assertTrue \
-	' └─ Getting the HTML-dir-name with --name failed' \
-	"$?"
+        ' └─ Getting the HTML-dir-name with --name failed' \
+        "$?"
 }
 
 #--------------------------------
@@ -416,25 +416,25 @@ function test_htmlRootidXsltparam () {
 
     _HTML_BUILD_PATH=$($_DAPSEXEC -d $_DCFILE --debug html --rootid $_ROOTID --xsltparam="$_XSLTPARAM" 2>/dev/null | tail -n 1)
     assertTrue \
-	' └─ Building a html document with --rootid and --xsltparam failed ' \
+        ' └─ Building a html document with --rootid and --xsltparam failed ' \
        "$?"
 
     egrep -q -- "--stringparam\s+\"rootid=$_ROOTID\"" $_LOGFILE 2>/dev/null
     assertTrue \
-	' └─ Stringparam for ROOTID is not correctly specified when generating the FO-file' \
-	"$?"
+        ' └─ Stringparam for ROOTID is not correctly specified when generating the FO-file' \
+        "$?"
     _BUILD_SUBDIR_NAME=$(basename $_HTML_BUILD_PATH)
     assertEquals \
-	' └─ The resulting HTML dirname does not match the ROOTID:' \
-	"$_ROOTID" "$_BUILD_SUBDIR_NAME"
+        ' └─ The resulting HTML dirname does not match the ROOTID:' \
+        "$_ROOTID" "$_BUILD_SUBDIR_NAME"
 
     # check HTML file count - should be one real file
     # (only make sense for HTML, since single-html is only one file anyway)
     #
     _FILECOUNT=$(find $_HTML_BUILD_PATH -type f -name "*.html" | wc -l)
     assertEquals \
-	' └─ Wrong HTML file count:' \
-	"$_FILECOUNT_EXPECTED" "$_FILECOUNT"
+        ' └─ Wrong HTML file count:' \
+        "$_FILECOUNT_EXPECTED" "$_FILECOUNT"
 
     # If a ROOTID was specified, no index.html is  generated by the stylesheets
     # In this case we manually generate one in the makefile
@@ -442,14 +442,14 @@ function test_htmlRootidXsltparam () {
     #
     [[ -L $_HTML_BUILD_PATH/index.html ]] && readlink -e $_HTML_BUILD_PATH/index.html >/dev/null 2>&1
     assertTrue \
-	" └─ The resulting link (${_HTML_BUILD_PATH}) does not point to an existing file" \
-	"$?"
+        " └─ The resulting link (${_HTML_BUILD_PATH}) does not point to an existing file" \
+        "$?"
 
     # check xsltparam
     egrep -q -- "$_XSLTPARAM" $_LOGFILE 2>/dev/null
     assertTrue \
-	' └─ Param for XSLTPARAM is not correctly specified when generating HTML' \
-	"$?"
+        ' └─ Param for XSLTPARAM is not correctly specified when generating HTML' \
+        "$?"
 }
 
 #--------------------------------
@@ -480,8 +480,8 @@ function test_htmlStylerootStatdir () {
     $_DAPSEXEC -d $_DCFILE --styleroot=${_DOC_DIR} --fb_styleroot=${_STANDARD_STYLES} --debug html >/dev/null 2>&1
     egrep -q -- "--stylesheet /.*/${_STANDARD_STYLES}" $_LOGFILE 2>/dev/null
     assertTrue \
-	" └─ The Fallback Styleroot specified on the command line was not used." \
-	"$?"
+        " └─ The Fallback Styleroot specified on the command line was not used." \
+        "$?"
 
     clean_build_dir results
 
@@ -491,8 +491,8 @@ function test_htmlStylerootStatdir () {
     $_DAPSEXEC -d $_DCFILE --styleroot=${_DOC_DIR} --debug html >/dev/null 2>&1
     grep -q -- "--stylesheet ${_DB_STYLES}" $_LOGFILE 2>/dev/null
     assertTrue \
-	" └─ The automatic DocBook Fallback Styleroot was not used." \
-	"$?"
+        " └─ The automatic DocBook Fallback Styleroot was not used." \
+        "$?"
 
     clean_build_dir results
 
@@ -501,15 +501,15 @@ function test_htmlStylerootStatdir () {
     $_DAPSEXEC -d $_DCFILE --styleroot ${_STANDARD_STYLES} --debug html >/dev/null 2>&1
     egrep -q -- "--stylesheet /.*/${_STANDARD_STYLES}" $_LOGFILE 2>/dev/null
     assertTrue \
-	" └─ The Styleroot specified on the command line was not used." \
-	"$?"
+        " └─ The Styleroot specified on the command line was not used." \
+        "$?"
 
     # Standard DocBook layout: Is the first CSS file automatically used?
     #
     diff -q $_STANDARD_CSS ${_HTMLDIR_NAME_PATH}/static/css/$_CSS_FILE >/dev/null 2>&1
      assertTrue \
-	" └─ $_STANDARD_CSS was not correctly copied to the build directory." \
-	"$?"
+        " └─ $_STANDARD_CSS was not correctly copied to the build directory." \
+        "$?"
 
     clean_build_dir results
 
@@ -519,8 +519,8 @@ function test_htmlStylerootStatdir () {
 
     diff -qr ${_HTMLDIR_NAME_PATH}/static ${_STATIC_DIR} >/dev/null 2>&1
     assertTrue \
-	" └─ The build static directory differs from the one provided by the stylesheets." \
-	"$?"
+        " └─ The build static directory differs from the one provided by the stylesheets." \
+        "$?"
 
     clean_build_dir results
 
@@ -530,8 +530,8 @@ function test_htmlStylerootStatdir () {
 
     diff -qr ${_HTMLDIR_NAME_PATH}static ${_ALT_STATIC_DIR} >/dev/null 2>&1
     assertTrue \
-	" └─ The build static directory differs from the one provided with --statdir." \
-	"$?"
+        " └─ The build static directory differs from the one provided with --statdir." \
+        "$?"
 }
 
 #--------------------------------
@@ -548,11 +548,11 @@ function test_htmlSingle () {
 
     _HTML_BUILD_PATH=$($_DAPSEXEC -d $_DCFILE html --single 2>/dev/null | tail -n 1)
     assertTrue \
-	' └─ Building single HTML with --single failed' \
+        ' └─ Building single HTML with --single failed' \
        "$?"
     assertTrue \
-	" └─ The resulting file (${_HTML_BUILD_PATH}) does not exist" \
-	"[ -s $_HTML_BUILD_PATH ]"
+        " └─ The resulting file (${_HTML_BUILD_PATH}) does not exist" \
+        "[ -s $_HTML_BUILD_PATH ]"
 
    _HTML_NAME_PATH=$($_DAPSEXEC -v0 -d $_DCFILE html-dir-name --single 2>/dev/null)
    assertTrue \
