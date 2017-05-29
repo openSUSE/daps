@@ -97,9 +97,12 @@ ifdef ROOTSTRING
   # check if ROOTID is a valid root element
   #
   ifneq "$(ROOTELEMENT)" "$(filter $(ROOTELEMENT),$(VALID_ROOTELEMENTS))"
-    $(error Fatal error: ROOTID belongs to an unsupported root element ($(ROOTELEMENT)). Must be one of $(VALID_ROOTELEMENTS) )
+    # rootid restriction should not apply to list file targets, because
+    # this is rather a stylesheet restriction for output formats
+    ifneq "$(MAKECMDGOALS)" "$(filter $(MAKECMDGOALS),$(LISTTARGETS))"
+      $(error Fatal error: ROOTID belongs to an unsupported root element ($(ROOTELEMENT)). Must be one of $(VALID_ROOTELEMENTS) )
+    endif
   endif
-
 
   DOCFILES := $(sort $(shell $(XSLTPROC) --stringparam "filetype=xml" \
 	      $(ROOTSTRING) --file $(SETFILES_TMP) \
