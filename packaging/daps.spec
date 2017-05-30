@@ -47,8 +47,7 @@ Group:          Productivity/Publishing/XML
 Url:            https://github.com/openSUSE/daps
 Source0:        %{name}-%{version}.tar.bz2
 Source1:        %{name}.rpmlintrc
-Source2:        %{name}-fetch-source-svn
-Source3:        %{name}-fetch-source-git
+Source2:        %{name}-fetch-source-git
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 
 BuildArch:      noarch
