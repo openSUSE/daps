@@ -1654,8 +1654,6 @@ else
     exit_on_error "Fatal: Neither a DC nor a MAIN file is set"
 fi
 recover_cmdl_values
-check_pathlist "$MY_BASEDIR"
-
 
 # If MAIN was not specified on the command line, set MAIN to an absolute
 # path
@@ -1663,7 +1661,7 @@ if [[ -z "$MAIN_CMDL" ]]; then
     set_mainfile "$MAIN"
     MAIN="$MAIN_CMDL"
 fi
-
+check_pathlist "$MY_BASEDIR"
 
 #----------
 # Values that need to be exported and are not set in the config
