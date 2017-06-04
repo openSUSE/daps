@@ -219,7 +219,7 @@ def main():
         help="Make entity filenames unique (default %default)")
     parser.add_option("-s", "--separator",
         dest="separator",
-        help="Set the separator between consequitive filenames (default '%default'). Use '\\n' and '\\t' to insert a CR and TAB character.")
+        help="Set the separator between consecutive filenames (default '%default'). Use '\\n' and '\\t' to insert a CR and TAB character.")
 
     parser.set_defaults( \
         first=False,

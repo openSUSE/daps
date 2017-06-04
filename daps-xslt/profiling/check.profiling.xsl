@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 
-<!-- Checks, if an element needs to be profiled
-     returns 0 (needs to be profiled) or 1 (no profiling neccessary)
+<!-- Checks if an element needs to be profiled
+     returns 0 (needs to be profiled) or 1 (no profiling necessary)
 
-     Taken from the original DocBook XSL Stylesheets, 
+     Taken from the original DocBook XSL Stylesheets,
      see profiling/profile-mode.xsl
 -->
-   
+
 <xsl:include href="pi-attribute.xsl"/>
 
 <xsl:param name="provo.root"/>
@@ -144,13 +144,13 @@
       </xsl:call-template>
     </xsl:if>
   </xsl:variable>
-  <xsl:variable name="attribute.ok" 
+  <xsl:variable name="attribute.ok"
                 select="not($context/@*[local-name()=$profile.attribute]) or not($profile.value) or
-                        $attribute.content != '' or 
+                        $attribute.content != '' or
                         $context/@*[local-name()=$profile.attribute] = '' or not($profile.attribute)"/>
 
   <!-- Original code:
-    <xsl:if test="$arch.ok and $condition.ok and $conformance.ok and $lang.ok and $os.ok 
+    <xsl:if test="$arch.ok and $condition.ok and $conformance.ok and $lang.ok and $os.ok
                 and $revision.ok and $revisionflag.ok and $role.ok and $security.ok
                 and $userlevel.ok and $vendor.ok and $attribute.ok">
     <xsl:copy>
@@ -159,7 +159,7 @@
   </xsl:if>
   -->
   <xsl:choose>
-    <xsl:when test="$arch.ok and $condition.ok and $conformance.ok and $lang.ok and $os.ok 
+    <xsl:when test="$arch.ok and $condition.ok and $conformance.ok and $lang.ok and $os.ok
                 and $revision.ok and $revisionflag.ok and $role.ok and $security.ok
                 and $userlevel.ok and $vendor.ok and $attribute.ok">1</xsl:when>
     <xsl:otherwise>0</xsl:otherwise>
@@ -183,13 +183,13 @@
   </xsl:variable>
   <xsl:variable name="os.ok" select="not($os.attr) or not($profile.os) or
          $os.content != '' or $os.attr = ''"/>
-      
+
    <xsl:choose>
      <xsl:when test="$os.ok">1</xsl:when>
      <xsl:otherwise>0</xsl:otherwise>
-   </xsl:choose>  
+   </xsl:choose>
 </xsl:template>
-   
+
 
 <xsl:template match="processing-instruction()" mode="profile">
   <xsl:variable name="result">
@@ -215,7 +215,7 @@
         <xsl:with-param name="attribute" select="'dirname'"/>
       </xsl:call-template>
    </xsl:variable>
-   
+
    <xsl:choose>
       <xsl:when test="$result = 1">
          <xsl:processing-instruction name="{local-name()}">
