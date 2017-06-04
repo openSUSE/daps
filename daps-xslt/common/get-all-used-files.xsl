@@ -241,18 +241,38 @@
     <xsl:param name="a"/>
     <xsl:param name="b"/>
     <xsl:param name="sep" select="$profile.separator"/>
-    <xsl:variable name="head"
-      select="substring-before(concat($a, $sep), $sep)"/>
-    <xsl:variable name="tail" select="substring-after($a, $sep)"/>
-    <xsl:if
-      test="contains(concat($sep, $b, $sep), concat($sep, $head, $sep))"
-      >1</xsl:if>
-    <xsl:if test="$tail">
-      <xsl:call-template name="cross.compare">
-        <xsl:with-param name="a" select="$tail"/>
-        <xsl:with-param name="b" select="$b"/>
+
+    <xsl:if test="$a and $b">
+      <xsl:call-template name="cross.compare.inner">
+        <xsl:with-param name="a" select="$a"/>
+        <xsl:with-param name="b" select="concat($sep, $b, $sep)"/>
+        <xsl:with-param name="sep" select="$sep"/>
       </xsl:call-template>
     </xsl:if>
+  </xsl:template>
+
+  <xsl:template name="cross.compare.inner">
+    <xsl:param name="a"/>
+    <xsl:param name="b"/>
+    <xsl:param name="sep"/>
+    <xsl:variable name="head"
+      select="substring-before(concat($a, $sep), $sep)"/>
+    <!-- As soon as one checks out, we can stop checking whether the rest
+    matches. -->
+    <xsl:choose>
+      <xsl:when
+        test="contains($b, concat($sep, $head, $sep))"
+        >1</xsl:when>
+      <xsl:otherwise>
+        <xsl:variable name="tail" select="substring-after($a, $sep)"/>
+        <xsl:if test="$tail">
+        <xsl:call-template name="cross.compare.inner">
+          <xsl:with-param name="a" select="$tail"/>
+          <xsl:with-param name="b" select="$b"/>
+        </xsl:call-template>
+        </xsl:if>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
 </xsl:stylesheet>
