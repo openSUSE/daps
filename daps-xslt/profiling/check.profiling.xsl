@@ -195,13 +195,10 @@
   <xsl:variable name="result">
      <xsl:call-template name="profile.pi"/>
   </xsl:variable>
-  <xsl:choose>
-    <xsl:when test="$result = 1">
-       <xsl:copy/>
-       <xsl:text>&#10;</xsl:text>
-    </xsl:when>
-    <xsl:otherwise/><!-- Do not copy it! -->
-  </xsl:choose> 
+  <xsl:if test="$result = 1">
+     <xsl:copy/>
+     <xsl:text>&#10;</xsl:text>
+   </xsl:if>
 </xsl:template>
 
 
