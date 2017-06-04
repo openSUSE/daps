@@ -129,9 +129,59 @@
   <xsl:param name="profile.userlevel" select="''"/>
   <xsl:param name="profile.vendor" select="''"/>
   <xsl:param name="profile.wordsize" select="''"/>
+
   <xsl:param name="profile.attribute" select="''"/>
   <xsl:param name="profile.value" select="''"/>
+
   <xsl:param name="profile.separator" select="';'"/>
+
+  <xsl:param name="profiling.attributes.enabled">
+    <xsl:if test="$profile.arch">arch<xsl:text> </xsl:text></xsl:if>
+    <xsl:if test="$profile.audience">audience<xsl:text> </xsl:text></xsl:if>
+    <xsl:if test="$profile.condition">condition<xsl:text> </xsl:text></xsl:if>
+    <xsl:if test="$profile.conformance">conformance<xsl:text> </xsl:text></xsl:if>
+    <xsl:if test="$profile.lang">lang<xsl:text> </xsl:text></xsl:if>
+    <xsl:if test="$profile.os">os<xsl:text> </xsl:text></xsl:if>
+    <xsl:if test="$profile.revision">revision<xsl:text> </xsl:text></xsl:if>
+    <xsl:if test="$profile.revisionflag">revisionflag<xsl:text> </xsl:text></xsl:if>
+    <xsl:if test="$profile.role">role<xsl:text> </xsl:text></xsl:if>
+    <xsl:if test="$profile.security">security<xsl:text> </xsl:text></xsl:if>
+    <xsl:if test="$profile.status">status<xsl:text> </xsl:text></xsl:if>
+    <xsl:if test="$profile.userlevel">userlevel<xsl:text> </xsl:text></xsl:if>
+    <xsl:if test="$profile.vendor">vendor<xsl:text> </xsl:text></xsl:if>
+    <xsl:if test="$profile.userlevel">userlevel<xsl:text> </xsl:text></xsl:if>
+    <xsl:if test="$profile.wordsize">wordsize<xsl:text> </xsl:text></xsl:if>
+    <xsl:if test="$profile.vendor">userlevel<xsl:text> </xsl:text></xsl:if>
+    <xsl:if test="$profile.value"><xsl:value-of select="$profile.attribute"/><xsl:text> </xsl:text></xsl:if>
+  </xsl:param>
+
+  <xsl:param name="profiling.values.merged">
+    <xsl:if test="$profile.arch"><xsl:value-of select="$profile.arch"/><xsl:text> </xsl:text></xsl:if>
+    <xsl:if test="$profile.audience"><xsl:value-of select="$profile.audience"/><xsl:text> </xsl:text></xsl:if>
+    <xsl:if test="$profile.condition"><xsl:value-of select="$profile.condition"/><xsl:text> </xsl:text></xsl:if>
+    <xsl:if test="$profile.conformance"><xsl:value-of select="$profile.conformance"/><xsl:text> </xsl:text></xsl:if>
+    <xsl:if test="$profile.lang"><xsl:value-of select="$profile.lang"/><xsl:text> </xsl:text></xsl:if>
+    <xsl:if test="$profile.os"><xsl:value-of select="$profile.os"/><xsl:text> </xsl:text></xsl:if>
+    <xsl:if test="$profile.revision"><xsl:value-of select="$profile.revision"/><xsl:text> </xsl:text></xsl:if>
+    <xsl:if test="$profile.revisionflag"><xsl:value-of select="$profile.revisionflag"/><xsl:text> </xsl:text></xsl:if>
+    <xsl:if test="$profile.role"><xsl:value-of select="$profile.role"/><xsl:text> </xsl:text></xsl:if>
+    <xsl:if test="$profile.security"><xsl:value-of select="$profile.security"/><xsl:text> </xsl:text></xsl:if>
+    <xsl:if test="$profile.status"><xsl:value-of select="$profile.status"/><xsl:text> </xsl:text></xsl:if>
+    <xsl:if test="$profile.userlevel"><xsl:value-of select="$profile.userlevel"/><xsl:text> </xsl:text></xsl:if>
+    <xsl:if test="$profile.vendor"><xsl:value-of select="$profile.vendor"/><xsl:text> </xsl:text></xsl:if>
+    <xsl:if test="$profile.userlevel"><xsl:value-of select="$profile.userlevel"/><xsl:text> </xsl:text></xsl:if>
+    <xsl:if test="$profile.wordsize"><xsl:value-of select="$profile.wordsize"/><xsl:text> </xsl:text></xsl:if>
+    <xsl:if test="$profile.vendor"><xsl:value-of select="$profile.userlevel"/><xsl:text> </xsl:text></xsl:if>
+    <xsl:if test="$profile.value"><xsl:value-of select="$profile.value"/><xsl:text> </xsl:text></xsl:if>
+  </xsl:param>
+
+  <xsl:param name="profiling.enabled">
+    <xsl:choose>
+      <xsl:when test="not(normalize-space($profiling.attributes.enabled))">0</xsl:when>
+      <xsl:otherwise>1</xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
+
 
   <xsl:template match="text()"/>
 
@@ -155,7 +205,9 @@
 
   <xsl:template match="*">
     <xsl:variable name="prof">
-      <xsl:call-template name="check.profiling"/>
+      <xsl:if test="$profiling.enabled = 1">
+        <xsl:call-template name="check.profiling"/>
+      </xsl:if>
     </xsl:variable>
     <xsl:if test="$prof != 0">
       <xsl:apply-templates/>
@@ -165,7 +217,9 @@
   <xsl:template match="*[@id | @xml:id]">
     <xsl:param name="xi" select="0"/>
     <xsl:variable name="prof">
-      <xsl:call-template name="check.profiling"/>
+      <xsl:if test="$profiling.enabled = 1">
+        <xsl:call-template name="check.profiling"/>
+      </xsl:if>
     </xsl:variable>
     <xsl:if test="$prof != 0">
       <div id="{(@id|@xml:id)[1]}" remap="{local-name()}">
@@ -177,7 +231,9 @@
 
   <xsl:template match="mediaobject|db:mediaobject">
     <xsl:variable name="prof">
-      <xsl:call-template name="check.profiling"/>
+      <xsl:if test="$profiling.enabled = 1">
+        <xsl:call-template name="check.profiling"/>
+      </xsl:if>
     </xsl:variable>
     <xsl:if test="$prof != 0">
       <xsl:apply-templates/>
@@ -185,7 +241,9 @@
   </xsl:template>
   <xsl:template match="imageobject|db:imageobject">
     <xsl:variable name="prof">
-      <xsl:call-template name="check.profiling"/>
+      <xsl:if test="$profiling.enabled = 1">
+        <xsl:call-template name="check.profiling"/>
+      </xsl:if>
     </xsl:variable>
     <xsl:if test="$prof != 0">
       <xsl:apply-templates/>
@@ -193,7 +251,9 @@
   </xsl:template>
   <xsl:template match="imagedata|db:imagedata">
     <xsl:variable name="prof">
-      <xsl:call-template name="check.profiling"/>
+      <xsl:if test="$profiling.enabled = 1">
+        <xsl:call-template name="check.profiling"/>
+      </xsl:if>
     </xsl:variable>
     <xsl:if test="$prof != 0">
       <image fileref="{concat($img.src.path, @fileref)}"/>
@@ -203,7 +263,9 @@
 
   <xsl:template match="xi:include">
     <xsl:variable name="prof">
-      <xsl:call-template name="check.profiling"/>
+      <xsl:if test="$profiling.enabled = 1">
+        <xsl:call-template name="check.profiling"/>
+      </xsl:if>
     </xsl:variable>
 
     <xsl:variable name="path">
@@ -260,9 +322,7 @@
     <!-- As soon as one checks out, we can stop checking whether the rest
     matches. -->
     <xsl:choose>
-      <xsl:when
-        test="contains($b, concat($sep, $head, $sep))"
-        >1</xsl:when>
+      <xsl:when test="contains($b, concat($sep, $head, $sep))">1</xsl:when>
       <xsl:otherwise>
         <xsl:variable name="tail" select="substring-after($a, $sep)"/>
         <xsl:if test="$tail">
