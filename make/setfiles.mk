@@ -99,7 +99,7 @@ ifdef ROOTSTRING
   # check whether there is only a single root element (fixes issue #390)
   #
   ifneq "$(words $(ROOTELEMENT))" "1"
-    $(error Fatal error: ID "$(ROOTID)" has already been defined)
+    $(error Fatal error: ID "$(ROOTID)" has been defined multiple times)
   endif
   # check if ROOTID is a valid root element
   #
