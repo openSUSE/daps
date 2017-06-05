@@ -52,14 +52,27 @@ endif
 # these documents (which is possible!!!) the resulting profiled sources
 # _are_ well-formed. And DAPS only works on profiled sources...
 #
-ifdef PROFILE_URN
-  CHECK_WELLFORMED := $(shell xmllint --nonet --noout --nowarning --xinclude --loaddtd $(MAIN) 2>&1 | grep -v "XInclude error")
-else
-  CHECK_WELLFORMED := $(shell xmllint --nonet --noout --nowarning --xinclude --loaddtd $(MAIN) 2>&1)
-endif
-ifdef CHECK_WELLFORMED
-  $(error Fatal error:$(\n)$(CHECK_WELLFORMED))
-endif
+
+# FIXME: Can we leave the wellformed-ness check away? It cost ~1/4 of the time
+# that this runs. And we seem to find such errors anyway since we are using
+# xsltproc right after this.
+# Caveats:
+# * not sure whether we catch every error we caught before (but XIncludes and
+#   wellformedness issues we do catch)
+# * in the case where we error out, we spend a bit more time because we're doing
+#   the full profiling check there anyway
+# * the applied XSLT must not include xsl:messages, otherwise those are written
+#   to XMLERROR_TMP.
+# Previous code commented for now.
+
+#ifdef PROFILE_URN
+#  CHECK_WELLFORMED := $(shell xmllint --nonet --noout --nowarning --xinclude --loaddtd $(MAIN) 2>&1 | grep -v "XInclude error")
+#else
+#  CHECK_WELLFORMED := $(shell xmllint --nonet --noout --nowarning --xinclude --loaddtd $(MAIN) 2>&1)
+#endif
+#ifdef CHECK_WELLFORMED
+#  $(error Fatal error:$(\n)$(CHECK_WELLFORMED))
+#endif
 
 ifeq "$(strip $(SRC_FORMAT))" "xml"
   XML_SRC_PATH := $(DOC_DIR)/xml/
@@ -73,7 +86,15 @@ SETFILES := $(shell $(XSLTPROC) $(PROFSTRINGS) \
 	      --stringparam "xml.src.path=$(XML_SRC_PATH)" \
 	      --stringparam "mainfile=$(notdir $(MAIN))" \
 	      --stylesheet $(DAPSROOT)/daps-xslt/common/get-all-used-files.xsl \
-	      --file $(MAIN) $(XSLTPROCESSOR) && echo 1)
+	      --file $(MAIN) $(XSLTPROCESSOR) 2> $(XMLERROR_TMP) && echo 1)
+
+XMLERROR_LENGTH := $(shell cat $(XMLERROR_TMP) | wc -l)
+
+ifneq "$(XMLERROR_LENGTH)" "0"
+  $(error Fatal error: Could not compute the list of XML source files, \
+    XML is not well-formed: \
+    $(shell cat $(XMLERROR_TMP)))
+endif
 
 # $(shell) does not cause make to exit in case it fails, so we need to
 # check manually

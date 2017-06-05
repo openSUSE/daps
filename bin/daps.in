@@ -857,6 +857,7 @@ function daps_commands {
 #
 function clean_daps {
     [[ -f $SETFILES_TMP ]] && rm -f "$SETFILES_TMP"
+    [[ -f $XMLERROR_TMP ]] && rm -f "$XMLERROR_TMP"
 }
 
 # ---------
@@ -1879,6 +1880,13 @@ export "${VARLIST[@]}"
 #
 SETFILES_TMP=$(mktemp -q --tmpdir daps_setfiles.XXXXXXXX 2>/dev/null) || exit_on_error "Could not write temporary SETFILES file."
 export SETFILES_TMP
+
+# Create a temporary file for XML error (setfiles.mk)
+# this needs to be done here, otherwise it is impossible to
+# delete the file after the script has run
+#
+XMLERROR_TMP=$(mktemp -q --tmpdir daps_xmlerror.XXXXXXXX 2>/dev/null) || exit_on_error "Could not write temporary XML errors file."
+export XMLERROR_TMP
 
 #-------------------------------------------------------------------
 # Create XML from ASCIIDOC
