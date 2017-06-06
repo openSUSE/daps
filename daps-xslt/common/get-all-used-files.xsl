@@ -83,10 +83,10 @@
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   extension-element-prefixes="exsl"
   exclude-result-prefixes="exsl xi db">
-
+ 
   <xsl:import href="../profiling/check.profiling.xsl"/>
   <xsl:output method="xml" indent="yes"/>
-
+ 
   <xsl:key name="file-id" match="file" use="@id|@xml:id"/>
 
   <!-- Separator between each filename: -->
@@ -113,74 +113,6 @@
 
   <!-- Name of the main file: -->
   <xsl:param name="mainfile"/>
-
-  <!-- Profiling parameters -->
-  <xsl:param name="profile.arch" select="''"/>
-  <xsl:param name="profile.audience" select="''"/>
-  <xsl:param name="profile.condition" select="''"/>
-  <xsl:param name="profile.conformance" select="''"/>
-  <xsl:param name="profile.lang" select="''"/>
-  <xsl:param name="profile.os" select="''"/>
-  <xsl:param name="profile.revision" select="''"/>
-  <xsl:param name="profile.revisionflag" select="''"/>
-  <xsl:param name="profile.role" select="''"/>
-  <xsl:param name="profile.security" select="''"/>
-  <xsl:param name="profile.status" select="''"/>
-  <xsl:param name="profile.userlevel" select="''"/>
-  <xsl:param name="profile.vendor" select="''"/>
-  <xsl:param name="profile.wordsize" select="''"/>
-
-  <xsl:param name="profile.attribute" select="''"/>
-  <xsl:param name="profile.value" select="''"/>
-
-  <xsl:param name="profile.separator" select="';'"/>
-
-  <xsl:param name="profiling.attributes.enabled">
-    <xsl:if test="$profile.arch">arch<xsl:text> </xsl:text></xsl:if>
-    <xsl:if test="$profile.audience">audience<xsl:text> </xsl:text></xsl:if>
-    <xsl:if test="$profile.condition">condition<xsl:text> </xsl:text></xsl:if>
-    <xsl:if test="$profile.conformance">conformance<xsl:text> </xsl:text></xsl:if>
-    <xsl:if test="$profile.lang">lang<xsl:text> </xsl:text></xsl:if>
-    <xsl:if test="$profile.os">os<xsl:text> </xsl:text></xsl:if>
-    <xsl:if test="$profile.revision">revision<xsl:text> </xsl:text></xsl:if>
-    <xsl:if test="$profile.revisionflag">revisionflag<xsl:text> </xsl:text></xsl:if>
-    <xsl:if test="$profile.role">role<xsl:text> </xsl:text></xsl:if>
-    <xsl:if test="$profile.security">security<xsl:text> </xsl:text></xsl:if>
-    <xsl:if test="$profile.status">status<xsl:text> </xsl:text></xsl:if>
-    <xsl:if test="$profile.userlevel">userlevel<xsl:text> </xsl:text></xsl:if>
-    <xsl:if test="$profile.vendor">vendor<xsl:text> </xsl:text></xsl:if>
-    <xsl:if test="$profile.userlevel">userlevel<xsl:text> </xsl:text></xsl:if>
-    <xsl:if test="$profile.wordsize">wordsize<xsl:text> </xsl:text></xsl:if>
-    <xsl:if test="$profile.vendor">userlevel<xsl:text> </xsl:text></xsl:if>
-    <xsl:if test="$profile.value"><xsl:value-of select="$profile.attribute"/><xsl:text> </xsl:text></xsl:if>
-  </xsl:param>
-
-  <xsl:param name="profiling.values.merged">
-    <xsl:if test="$profile.arch"><xsl:value-of select="$profile.arch"/><xsl:text> </xsl:text></xsl:if>
-    <xsl:if test="$profile.audience"><xsl:value-of select="$profile.audience"/><xsl:text> </xsl:text></xsl:if>
-    <xsl:if test="$profile.condition"><xsl:value-of select="$profile.condition"/><xsl:text> </xsl:text></xsl:if>
-    <xsl:if test="$profile.conformance"><xsl:value-of select="$profile.conformance"/><xsl:text> </xsl:text></xsl:if>
-    <xsl:if test="$profile.lang"><xsl:value-of select="$profile.lang"/><xsl:text> </xsl:text></xsl:if>
-    <xsl:if test="$profile.os"><xsl:value-of select="$profile.os"/><xsl:text> </xsl:text></xsl:if>
-    <xsl:if test="$profile.revision"><xsl:value-of select="$profile.revision"/><xsl:text> </xsl:text></xsl:if>
-    <xsl:if test="$profile.revisionflag"><xsl:value-of select="$profile.revisionflag"/><xsl:text> </xsl:text></xsl:if>
-    <xsl:if test="$profile.role"><xsl:value-of select="$profile.role"/><xsl:text> </xsl:text></xsl:if>
-    <xsl:if test="$profile.security"><xsl:value-of select="$profile.security"/><xsl:text> </xsl:text></xsl:if>
-    <xsl:if test="$profile.status"><xsl:value-of select="$profile.status"/><xsl:text> </xsl:text></xsl:if>
-    <xsl:if test="$profile.userlevel"><xsl:value-of select="$profile.userlevel"/><xsl:text> </xsl:text></xsl:if>
-    <xsl:if test="$profile.vendor"><xsl:value-of select="$profile.vendor"/><xsl:text> </xsl:text></xsl:if>
-    <xsl:if test="$profile.userlevel"><xsl:value-of select="$profile.userlevel"/><xsl:text> </xsl:text></xsl:if>
-    <xsl:if test="$profile.wordsize"><xsl:value-of select="$profile.wordsize"/><xsl:text> </xsl:text></xsl:if>
-    <xsl:if test="$profile.vendor"><xsl:value-of select="$profile.userlevel"/><xsl:text> </xsl:text></xsl:if>
-    <xsl:if test="$profile.value"><xsl:value-of select="$profile.value"/><xsl:text> </xsl:text></xsl:if>
-  </xsl:param>
-
-  <xsl:param name="profiling.enabled">
-    <xsl:choose>
-      <xsl:when test="not(normalize-space($profiling.attributes.enabled))">0</xsl:when>
-      <xsl:otherwise>1</xsl:otherwise>
-    </xsl:choose>
-  </xsl:param>
 
 
   <xsl:template match="text()"/>
