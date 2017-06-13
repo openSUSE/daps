@@ -47,9 +47,9 @@ Usage:
   $ME --config <PATH TO CONFIG FILE> [OPTIONS]
 
 Automatically build books defined in a config file and sync them to a server.
-The config file is an XML The config file is an XML file, see $ME --helpconfig forfile, see $ME --helpconfig for more information.
+The config file is an XML file, see $ME --helpconfig for more information.
 
-Specifying config file with --config is mandatory, all other options are
+Specifying a config file with --config is mandatory, all other options are
 optional.
 
 Options:
@@ -63,13 +63,13 @@ Options:
     Default: disabled
 
   --force
-    Manuals will only be rebuild when the git/svn repository has changed
+    Manuals will only be rebuilt when the git/svn repository has changed
     since the last build. Use this option to force a rebuild even when the
     repository has not changed.
     Default: disabled (rebuild on changes only)
 
   --help
-    This help messegae
+    This help message
 
   --helpconfig
     Show help on the config file.
@@ -105,8 +105,8 @@ EOFhelptext
 
 function helpconfig {
     cat <<EOFhelptext
-The config file for $ME needs to look like the foillowing example. The general
-section can only be occur once, while the set section can occur multiple times.
+The config file for $ME needs to look like the following example. The general
+section must only occur once, while the set section can occur multiple times.
 
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE daps-autobuild>
@@ -127,7 +127,7 @@ section can only be occur once, while the set section can occur multiple times.
       draft="0|1 (optional, default 0)">
   <dcfiles>Space-separated list of DC files. Mandatory.</dcfiles>
   <formats>
-   Space-seprated list of formats to build (html single-html pdf). Mandatory.
+   Space-separated list of formats to build (html single-html pdf). Mandatory.
   </formats>
   <styleroot>Path to stylesheet directory. Optional.</styleroot>
   <fb_styleroot>Path to fallback stylesheet directory. Optional.</fb_styleroot>
@@ -375,21 +375,21 @@ function failure_notification {
 
         case $REASON in
             daps)
-                TEXT="While building manuals for set $_SET on ${FAILED_BOOKS["date"]}\nerrors occured on the following DC-files\n\n"
+                TEXT="While building manuals for set $_SET on ${FAILED_BOOKS["date"]}\n, errors occurred building the following DC-files\n\n"
                 for KEY in "${!FAILED_BOOKS[@]}"; do
                     [[ "date" == "$KEY" ]] && continue
                     TEXT="$TEXT * $KEY:\t${FAILED_BOOKS["$KEY"]}\n"
                 done
                 ;;
             git)
-                TEXT="Updating the git checkout for $_SET failed on ${FAILED_BOOKS["date"]}\n"
+                TEXT="Updating the Git checkout for $_SET failed on ${FAILED_BOOKS["date"]}\n"
                 ;;
             svn)
                 TEXT="Updating the SVN working copy for $_SET failed on ${FAILED_BOOKS["date"]}\n"
                 ;;
         esac
 
-        TEXT="$TEXT\n-- \nYours friendly\n\tDAPS Auto reminder"
+        TEXT="$TEXT\n\nYours, DAPS Auto"
 
         echo -e "$TEXT" | mail -s "$SUBJECT" "$EMAIL" || return 2
     fi
