@@ -8,7 +8,7 @@
 
 
    Author:    Thomas Schraitle <toms@opensuse.org>
-   Copyright:  2015 SUSE Linux GmbH
+   Copyright: 2015-2017 SUSE Linux GmbH
 
 -->
 <xsl:stylesheet version="1.0"
@@ -30,4 +30,16 @@
       <xsl:apply-templates select="@*|node()"/>
     </sgmltag>
   </xsl:template>
+
+  <xsl:template match="d:author/d:personname|d:editor/d:personname">
+   <!-- Ignore personname for DocBook4 -->
+   <xsl:apply-templates/>
+  </xsl:template>
+
+  <xsl:template match="d:systemitem[@class = 'other'][@otherclass]">
+   <systemitem>
+    <xsl:apply-templates/>
+   </systemitem>
+  </xsl:template>
+
 </xsl:stylesheet>

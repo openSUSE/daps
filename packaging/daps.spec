@@ -17,7 +17,7 @@
 
 
 Name:           daps
-Version:        2.2.0
+Version:        2.4.0
 Release:        0
 
 ###############################################################
@@ -44,18 +44,17 @@ Release:        0
 Summary:        DocBook Authoring and Publishing Suite
 License:        GPL-2.0 or GPL-3.0
 Group:          Productivity/Publishing/XML
-Url:            http://sourceforge.net/p/daps
+Url:            https://github.com/openSUSE/daps
 Source0:        %{name}-%{version}.tar.bz2
 Source1:        %{name}.rpmlintrc
-Source2:        %{name}-fetch-source-svn
-Source3:        %{name}-fetch-source-git
+Source2:        %{name}-fetch-source-git
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 
 BuildArch:      noarch
 
 BuildRequires:  ImageMagick
 BuildRequires:  automake
-BuildRequires:  bash >= 3.1
+BuildRequires:  bash >= 4
 BuildRequires:  dia
 BuildRequires:  docbook-xsl-stylesheets >= 1.77
 BuildRequires:  docbook_4
@@ -87,7 +86,7 @@ PreReq:         libxml2
 PreReq:         sgml-skel
 
 Requires:       ImageMagick
-Requires:       bash >= 3.1
+Requires:       bash >= 4
 Requires:       dia
 Requires:       docbook_4
 Requires:       docbook_5
@@ -205,9 +204,11 @@ exit 0
 %dir %{_sysconfdir}/%{name}
 %dir %{_defaultdocdir}/%{name}
 
+%dir %{_datadir}/bash-completion
+%dir %{_datadir}/bash-completion/completions
 %dir %{_datadir}/%{name}
-%dir %{_datadir}/xml/daps
-%dir %{_datadir}/xml/daps/schema
+%dir %{_datadir}/xml/%{name}
+%dir %{_datadir}/xml/%{name}/schema
 
 %config %{_sysconfdir}/xml/*.xml
 %config %{_sysconfdir}/%{name}/*
@@ -215,15 +216,12 @@ exit 0
 %doc %{_mandir}/man1/*.1%{ext_man}
 %doc %{_defaultdocdir}/%{name}/*
 
-%{_datadir}/%{name}/*
 %{_bindir}/*
+%{_datadir}/%{name}/*
+%{_datadir}/bash-completion/completions/%{name}
 %{_datadir}/emacs/site-lisp/docbook_macros.el
 %{_datadir}/xml/daps/schema/*
 %{docbuilddir}
-%exclude %{_defaultdocdir}/%{name}/INSTALL
-%exclude %{_sysconfdir}/%{name}/config.in
-%exclude %{_sysconfdir}/%{name}/catalog.xml
-%exclude %{_datadir}/%{name}/libexec/daps-jing.*
 #----------------------
 
 %changelog

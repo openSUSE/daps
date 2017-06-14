@@ -15,39 +15,30 @@ PROFOS="osuse;quick"
 
 PROFARCH="x86;amd64;em64t"
 
-# Do not specify a styleroot requiring a suse-xsl-stylesheet installation
-# since this will fail with a DAPS ckeckput or build on other distributions
+# DO NOT SPECIFY A STYLEROOT REQUIRING A SUSE-XSL-STYLESHEET INSTALLATION
+# SINCE THIS WILL FAIL WITH A DAPS CHECKOUT OR BUILD ON OTHER DISTRIBUTIONS
+#
+# IT WILL ALSO CAUSE THE TRAVIS TEST BUILDS TO FAIL
 #
 # If needed, specify the following on the command line:
 # --styleroot="/usr/share/xml/docbook/stylesheet/daps2013"
 
-## enable sourcing
-export DOCCONF=$BASH_SOURCE
-
 #--------------------- XSLT Parameters------------------------
 #
 ## show acronyms in the glossary, so as not to confuse the user
-XSLTPARAM="$XSLTPARAM --stringparam glossentry.show.acronym=primary"
-
-## when using the suse2013 stylesheets, set a link to the DAPS
-## homepage at the top of the page
-## set a homepage for HTML builds
-XSLTPARAM="$XSLTPARAM --stringparam homepage=https://github.com/openSUSE/daps"
+XSLTPARAM="--stringparam glossentry.show.acronym=primary"
 
 # Lists
-XSLTPARAM="$XSLTPARAM \
-   --param variablelist.as.blocks=1 \
-   --param glossary.as.blocks=1"
+XSLTPARAM+="--param variablelist.as.blocks=1 --param glossary.as.blocks=1"
 
 # Pagination and General Styles
-XSLTPARAM="$XSLTPARAM --param body.start.indent=0 \
-   --param double.sided=0 \
-   --param header.rule=0 \
-   --param footer.rule=0 \
-   --stringparam paper.type=A4"
+XSLTPARAM+="--param body.start.indent=0 --param double.sided=0 --param header.rule=0 --param footer.rule=0 --stringparam paper.type=A4"
 
 # Font Families
-XSLTPARAM="$XSLTPARAM --stringparam body.font.family=\"'Charis SIL', CharisSIL, serif\" \
-   --stringparam sans.font.family=\"'Open Sans', OpenSans, sans-serif\" \
-   --stringparam monospace.font.family=\"'DejaVu Sans Mono', DejaVuSansMono, monospace\" \
-  --stringparam symbol.font.family=\"'DejaVu Sans Mono', DejaVuSansMono, KoreanSans, UnBatang, 'Un Batang', 'WenQuanYi Micro Hei Mono', WenQuanYiMicroHeiMono, monospace\""
+XSLTPARAM+="--stringparam body.font.family="'Charis SIL', CharisSIL, serif" --stringparam sans.font.family="'Open Sans', OpenSans, sans-serif" --stringparam monospace.font.family="'DejaVu Sans Mono', DejaVuSansMono, monospace" --stringparam symbol.font.family="'DejaVu Sans Mono', DejaVuSansMono, KoreanSans, UnBatang, 'Un Batang', 'WenQuanYi Micro Hei Mono', WenQuanYiMicroHeiMono, monospace""
+
+# when using the suse2013 stylesheets, set a link to the DAPS
+# homepage at the top of the page
+# set a homepage for HTML builds
+XSLTPARAM+="--stringparam homepage=https://github.com/openSUSE/daps"
+XSLTPARAM+="--param suse.content=0"

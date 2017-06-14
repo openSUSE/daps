@@ -78,7 +78,7 @@ endif
 #
 SRCFILES := $(sort $(shell $(XSLTPROC) --stringparam "filetype=xml" \
 	      --file $(SETFILES_TMP) \
-	      --stylesheet $(DAPSROOT)/daps-xslt/common/extract-files-and-images.xsl $(XSLTPROCESSOR) ))
+	      --stylesheet $(DAPSROOT)/daps-xslt/common/extract-files-and-images.xsl $(XSLTPROCESSOR) 2>/dev/null))
 
 # check
 ifndef SRCFILES
@@ -88,17 +88,25 @@ endif
 # XML source files for the currently used document (defined by the rootid)
 #
 ifdef ROOTSTRING
+  ROOTELEMENT := $(shell $(XMLSTARLET) sel -t -v "//div[@id='$(ROOTID)'][1]/@remap" $(SETFILES_TMP) 2>/dev/null)
+  # check whether there is only a single root element (fixes issue #390)
+  #
+  ifneq "$(words $(ROOTELEMENT))" "1"
+    $(error Fatal error: ID "$(ROOTID)" has already been defined)
+  endif
   # check if ROOTID is a valid root element
   #
-  ROOTELEMENT := $(shell $(XMLSTARLET) sel -t -v "//div[@id='$(ROOTID)'][1]/@remap" $(SETFILES_TMP))
   ifneq "$(ROOTELEMENT)" "$(filter $(ROOTELEMENT),$(VALID_ROOTELEMENTS))"
-    $(error Fatal error: ROOTID belongs to an unsupported root element ($(ROOTELEMENT)). Must be one of $(VALID_ROOTELEMENTS) )
+    # rootid restriction should not apply to list file targets, because
+    # this is rather a stylesheet restriction for output formats
+    ifneq "$(MAKECMDGOALS)" "$(filter $(MAKECMDGOALS),$(LISTTARGETS))"
+      $(error Fatal error: ROOTID belongs to an unsupported root element ($(ROOTELEMENT)). Must be one of $(VALID_ROOTELEMENTS) )
+    endif
   endif
-
 
   DOCFILES := $(sort $(shell $(XSLTPROC) --stringparam "filetype=xml" \
 	      $(ROOTSTRING) --file $(SETFILES_TMP) \
-	      --stylesheet $(DAPSROOT)/daps-xslt/common/extract-files-and-images.xsl $(XSLTPROCESSOR) ))
+	      --stylesheet $(DAPSROOT)/daps-xslt/common/extract-files-and-images.xsl $(XSLTPROCESSOR) 2>/dev/null))
 
   # check
   ifndef DOCFILES
@@ -114,7 +122,7 @@ endif
 # Entity files
 #
 ENTITIES_DOC := $(addprefix $(DOC_DIR)/xml/,\
-	      $(shell $(LIBEXEC_DIR)/getentityname.py $(DOCFILES)))
+	      $(shell $(LIBEXEC_DIR)/getentityname.py $(DOCFILES) 2>/dev/null))
 
 
 # files xi:included with parse="text"
@@ -129,4 +137,4 @@ ENTITIES_DOC := $(addprefix $(DOC_DIR)/xml/,\
 #
 TEXTFILES := $(sort $(shell $(XSLTPROC) --stringparam "filetype=text" \
 	      --file $(SETFILES_TMP) \
-	      --stylesheet $(DAPSROOT)/daps-xslt/common/extract-files-and-images.xsl $(XSLTPROCESSOR) ))
+	      --stylesheet $(DAPSROOT)/daps-xslt/common/extract-files-and-images.xsl $(XSLTPROCESSOR) 2>/dev/null))

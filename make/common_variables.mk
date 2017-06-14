@@ -40,7 +40,7 @@ ifndef XSLTPROCESSOR
 endif
 
 #--------------------------------------------------
-# SPACE REPLACEMENT / Newline
+# SPACE REPLACEMENT / Newline / Comma
 #
 # If wanting to replace a " " with subst, a variable containing
 # a space is needed, since it is not possible to replace a literal
@@ -48,6 +48,8 @@ endif
 #
 SPACE :=
 SPACE +=
+
+COMMA := ,
 
 define \n
 
@@ -60,7 +62,7 @@ endef
 # Prior to openSUSE 13.2 the suse xmlstarlet package had /usr/bin/xml, while
 # other distributions used /usr/bin/xmlstarlet
 
-HAVE_XMLSTARLET := $(shell which --skip-alias --skip-functions xmlstarlet 2>/dev/null)
+HAVE_XMLSTARLET := $(shell which xmlstarlet 2>/dev/null)
 
 ifndef HAVE_XMLSTARLET
   XMLSTARLET := /usr/bin/xml
@@ -370,10 +372,10 @@ endif
 # Stylesheets do)
 #
 
-XMLLANG ?= $(shell $(XSLTPROC) --stylesheet $(STYLELANG) --file $(MAIN) $(XSLTPROCESSOR) | tr - _ )
+XMLLANG ?= $(shell $(XSLTPROC) --stylesheet $(STYLELANG) --file $(MAIN) $(XSLTPROCESSOR) | tr - _ 2>/dev/null)
 
 ifneq "$(strip $(XMLLANG))" ""
-  LL ?= $(shell tr '[:upper:]' '[:lower:]' <<< $(XMLLANG))
+  LL ?= $(shell tr '[:upper:]' '[:lower:]' <<< $(XMLLANG) 2>/dev/null)
   LANGSTRING   := _$(XMLLANG)
 endif
 
@@ -431,8 +433,18 @@ MANIFEST_NOTRANS := $(LOCDROP_TMP_DIR)/$(DOCNAME)_manifest_notrans.txt
 define print_list
   @if [[ -t 1 || 1 = "$(strip $(PRETTY_FILELIST))" ]]; then \
     echo -e "$(subst $(SPACE),\n,$(sort $1))"; \
-    echo "===============> Hallo"; \
   else \
     echo $(sort $1); \
+  fi
+endef
+
+#-----
+# define ccecho that is only displayed when the output
+# goes to a terminal
+#
+
+define print_info
+  @if [[ -t 1 ]]; then \
+    ccecho "$1" "$2"; \
   fi
 endef

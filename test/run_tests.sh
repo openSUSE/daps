@@ -326,11 +326,8 @@ echo
 echo "Tests Total:   $_TOTAL"
 echo "Tests Passed:  $_PASSED"
 echo "Tests Skipped: $_SKIPPED"
-if [ 0 -ne $_FAILED ]; then
-    ccecho "error" "Tests Failed:  $_FAILED"
-else
-    echo "Tests Failed:  $_FAILED"
-fi
-
-
+echo "Tests Failed:  $_FAILED"
 rm -rf "${_DOC_DIR}/build" "$_TEMPDIR"
+if [ 0 -ne $_FAILED ]; then
+    exit 1
+fi

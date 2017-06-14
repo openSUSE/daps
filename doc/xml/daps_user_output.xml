@@ -11,31 +11,31 @@
  <title>Generating Output Formats</title>
  <abstract>
   <para>
-   This chapter describes:
+   This chapter covers the following topics:
    <itemizedlist>
     <listitem>
      <para>
-      how to validate your XML files,
+      Validating your XML files
      </para>
     </listitem>
     <listitem>
      <para>
-      the basic command syntax for generating output formats,
+      Basic command syntax for generating output formats
      </para>
     </listitem>
     <listitem>
      <para>
-      which output formats you can generate with &dapsacr;, 
+      Output formats you can generate with &dapsacr;
      </para>
     </listitem>
     <listitem>
      <para>
-      how to do partial builds of your documentation, and 
+      Generating partial builds of your documentation
      </para>
     </listitem>
     <listitem>
-     <para>how to specify the &main; file at the command line (instead of using a &dc;
-     file).</para>
+     <para>Specifying the &main; file at the command line (instead of using a &dc;
+     file)</para>
     </listitem>
    </itemizedlist>
   </para>
@@ -44,10 +44,13 @@
   <title>Validating Your XML Sources</title>
   &daps-validation-basics;
   &daps-example-validation-error;
-  <para> As soon you use profiling in your DocBook sources, validation within your XML editor is not
-   reliable. Furthermore, validating XML files within a
-    <sgmltag>book</sgmltag> or <sgmltag>set</sgmltag> often exceeds validation of the current XML
-   file, as links (<sgmltag>xref</sgmltag> elements) or XIncludes need to be resolved, too. </para>
+  <para>
+    Using profiling in your DocBook sources makes validation
+    unreliable. Furthermore, validating XML files within a
+    <sgmltag>book</sgmltag> or <sgmltag>set</sgmltag> often exceeds validation
+    of the current XML file, as links (<sgmltag>xref</sgmltag> elements) or
+    XIncludes need to be resolved, too.
+  </para>
 
   <para>
    &dapsacr; can handle all those cases because of the built-in
@@ -66,7 +69,7 @@
 
   <variablelist>
    <varlistentry>
-    <term>Validating All XML Files in Your Book, Article or Set</term>
+    <term>Validating All XML Files in a Book, Article or Set</term>
     <listitem>
 <screen>&prompt.user;&dapscmd; -d <replaceable>PATH_TO_DC_FILE</replaceable> validate </screen>
      <para>
@@ -77,9 +80,19 @@
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term>Validating Your Files Including <sgmltag>Remark</sgmltag> Elements</term>
+    <term>Validating Files Including <sgmltag>remark</sgmltag> Elements</term>
     <listitem>
 <screen>&prompt.user;&dapscmd; -d <replaceable>PATH_TO_DC_FILE</replaceable> validate --remarks</screen>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>Validating Files Without Checking Cross References (<sgmltag>xref</sgmltag>)</term>
+    <listitem>
+<screen>&prompt.user;&dapscmd; -d <replaceable>PATH_TO_DC_FILE</replaceable> validate --norefcheck</screen>
+     <para>
+      This option only affects DocBook 5 sources and is ignored when
+      processing DocBook 4.
+     </para>
     </listitem>
    </varlistentry>
   </variablelist>
@@ -164,7 +177,7 @@
 
   <variablelist>
    <varlistentry>
-    <term>Building Only Parts of Your Documentation Project</term>
+    <term>Building Only Parts of a Documentation Project</term>
     <listitem>
 <screen>&prompt.user;&dapscmd; -d &dc;-daps-example pdf --rootid=cha.template.examples</screen>
      &daps-partial-builds;
@@ -184,7 +197,7 @@
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term>Opening the Output Directly in Your PDF Viewer</term>
+    <term>Opening the Output Directly in a PDF Viewer</term>
     <listitem>
      <screen>&prompt.user;<command>evince</command> $(daps -d &dc;-daps-example pdf) &amp;</screen>
      <para>Use the syntax above to open the PDF output directly in a PDF viewer (for example,
@@ -192,22 +205,76 @@
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term>Getting More Information about the Building Process</term>
+    <term>Getting More Information about the Build Process</term>
     <listitem>
-     <para>By default &dapsacr; only shows the path to the resulting file.
-            Several verbosity levels are
-            available. Use the global options <option>-v*</option> to
-            specify the level of information you want. It ranges from
-              <option>-v</option> (print one line of results) to
-              <option>-vvv</option> (print all commands, very verbose).
-            For example, the following command will print all files
-            created during the build process: </para>
+     <para>
+      By default &dapsacr;, only provides the path to the resulting file as
+      output. To set higher verbosity levels, use the global options
+      <option>-v</option>, <option>-vv</option>, <option>-vvv</option>, and
+      <option>--debug</option>.
+     </para>
+     <para>
+      Output verbosity ranges from <option>-v</option> (print one line of
+      results) to <option>-vvv</option> (print all commands, very verbose).
+      For example, the following command will print all files created during
+      the build process:
+     </para>
      <screen>&prompt.user;&dapscmd; -vv -d &dc;-daps-example pdf</screen>
-     <para>For a debug output, use the following:</para>
+     <para>For debug output, use the following command:</para>
      <screen>&prompt.user;&dapscmd; --debug -d &dc;-daps-example pdf</screen>
     </listitem>
    </varlistentry>
-   
+   <varlistentry>
+    <term>Specifying the Number of Parallel Jobs During the Build Process</term>
+    <listitem>
+     <para>
+      By default &dapsacr; uses as many jobs as there are CPU cores
+      available. Use the option <option>--jobs</option> to define the number
+      of parallel jobs used for the build process. Higher numbers will lower
+      the build time, but will also increase CPU load. For example, the
+      following command will use 16 jobs for the build process:
+    </para>
+     <screen>&prompt.user;&dapscmd; --jobs=16 -d &dc;-daps-example pdf</screen>
+    </listitem>
+   </varlistentry>
   </variablelist>
+ </sect1>
+ <sect1 id="sec.daps.user.output.xmlformat">
+  <title>Pretty XML Formatting</title>
+  <para>
+   It can be useful to have properly formatted XML sources.
+   A homogeneous formatting facilitates collaboration and makes diffs more readable.
+   If done consistently, <command>xmlformat</command> reduces the amount of changes
+   that need to be stored in version control systems which leads to smaller repositories.
+  </para>
+  <variablelist>
+   <varlistentry>
+    <term>Prettify all project XML files</term>
+    <listitem>
+     <screen>&prompt.user;&dapscmd; -d &dc;-daps-example xmlformat</screen>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>Prettify a specific XML file</term>
+    <listitem>
+     <screen>&prompt.user;&dapscmd; -d &dc;-daps-example xmlformat --file=xml/example.xml</screen>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>Prettify only parts of a book</term>
+    <listitem>
+     <screen>&prompt.user;&dapscmd; -d &dc;-daps-example xmlformat --rootid=cha.template.examples</screen>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+  <important>
+   <title>
+    <command>xmlformat</command> Alters Source XML Files
+   </title>
+   <para>
+    This command reformats your XML files in place, replacing their contents with the reformatted XML.
+    To keep the files with the previous formatting, make a backup before running <command>daps xmlformat</command>.
+   </para>
+  </important>
  </sect1>
 </chapter>

@@ -41,8 +41,8 @@ endif
 # Resolve profile urn because saxon does not accept urns
 #
 ifdef PROFILE_URN
-  ifeq "$(shell expr substr $(PROFILE_URN) 1 4)" "urn:"
-    PROFILE_STYLESHEET := $(shell $(DAPSROOT)/libexec/xml_cat_resolver $(PROFILE_URN) 2>/dev/null )
+  ifeq "$(shell expr substr $(PROFILE_URN) 1 4 2>/dev/null)" "urn:"
+    PROFILE_STYLESHEET := $(shell $(DAPSROOT)/libexec/xml_cat_resolver $(PROFILE_URN) 2>/dev/null)
   else
     PROFILE_STYLESHEET := $(PROFILE_URN)
   endif

@@ -65,6 +65,7 @@
     doctype-public="-//Novell//DTD NovDoc XML V1.0//EN"
     doctype-system="novdocx.dtd"/>
 
+  <xsl:strip-space elements="cmdsynopsis arg group"/>
   <!--<xsl:strip-space elements="*"/>
   <xsl:preserve-space elements="screen programlisting"/>-->
 
@@ -78,6 +79,21 @@
   <xsl:param name="rootid"/>
   <xsl:param name="use.doctype4novdoc" select="0"/>
   <xsl:param name="debug.level" select="4"/>
+
+  <!-- cmdsynopsis: args & groups -->
+  <xsl:param name="arg.choice.opt.open.str">[</xsl:param>
+  <xsl:param name="arg.choice.opt.close.str">]</xsl:param>
+  <xsl:param name="arg.choice.req.open.str">{</xsl:param>
+  <xsl:param name="arg.choice.req.close.str">}</xsl:param>
+  <xsl:param name="arg.choice.plain.open.str"><xsl:text> </xsl:text></xsl:param>
+  <xsl:param name="arg.choice.plain.close.str"><xsl:text> </xsl:text></xsl:param>
+  <xsl:param name="arg.choice.def.open.str">[</xsl:param>
+  <xsl:param name="arg.choice.def.close.str">]</xsl:param>
+  <xsl:param name="arg.rep.repeat.str">...</xsl:param>
+  <xsl:param name="arg.rep.norepeat.str"></xsl:param>
+  <xsl:param name="arg.rep.def.str"></xsl:param>
+  <xsl:param name="arg.or.sep"> | </xsl:param>
+
 
   <xsl:key name="id" match="*" use="@id|@xml:id"/>
 
@@ -107,10 +123,12 @@
   <xsl:template match="substeps/@performance[. = 'required']"/>
   <xsl:template match="@rules[. ='all']"/>
   <xsl:template match="@wordsize"/>
+  <xsl:template match="productname/@class"/>
   <xsl:template match="screen/@language"/>
   <xsl:template match="filename/@class"/>
   <xsl:template match="literallayout/@class"/>
   <xsl:template match="variablelist/@role"/>
+
 
   <!-- ################################################################## -->
   <!-- Suppressed Elements for Novdoc                                     -->
@@ -266,13 +284,52 @@
 
   <xsl:template match="book/title|book/subtitle|book/titleabbrev"/><!-- Don't copy -->
 
-  <xsl:template match="bookinfo">
+  <xsl:template match="book[not(bookinfo)]">
+   <book>
+    <xsl:copy-of select="@*"/>
+    <xsl:call-template name="bookinfo"/>
+    <xsl:apply-templates/>
+   </book>
+  </xsl:template>
+
+  <xsl:template match="bookinfo" name="bookinfo">
     <bookinfo>
       <xsl:apply-templates select="(title|../title)[1]" mode="title"/>
-      <xsl:apply-templates select="productname"/>
-      <xsl:apply-templates select="productnumber"/>
-      <xsl:apply-templates select="date"/>
-      <xsl:apply-templates select="legalnotice"/>
+      <xsl:choose>
+        <xsl:when test="productname">
+         <xsl:apply-templates select="productname"/>
+        </xsl:when>
+        <xsl:otherwise>
+         <xsl:apply-templates select="/set/setinfo[1]/productname[1]"/>
+        </xsl:otherwise>
+      </xsl:choose>
+      <xsl:choose>
+       <xsl:when test="productnumber">
+        <xsl:apply-templates select="productnumber"/>
+       </xsl:when>
+       <xsl:otherwise>
+        <xsl:apply-templates select="/set/setinfo[1]/productnumber[1]"/>
+       </xsl:otherwise>
+      </xsl:choose>
+      <xsl:choose>
+       <xsl:when test="date">
+        <xsl:apply-templates select="date"/>
+       </xsl:when>
+       <xsl:otherwise>
+        <date><?dbtimestamp?></date>
+       </xsl:otherwise>
+      </xsl:choose>
+
+      <xsl:apply-templates select="releaseinfo"/>
+      <xsl:choose>
+        <xsl:when test="legalnotice">
+          <xsl:copy-of select="legalnotice"/>
+        </xsl:when>
+        <xsl:otherwise>
+         <legalnotice><para/></legalnotice>
+        </xsl:otherwise>
+      </xsl:choose>
+      <xsl:apply-templates select="authorgroup"/>
       <xsl:apply-templates select="abstract"/>
     </bookinfo>
   </xsl:template>
@@ -434,6 +491,10 @@
     <xsl:apply-templates/>
   </xsl:template>
 
+  <xsl:template match="literal/emphasis">
+   <replaceable><xsl:apply-templates/></replaceable>
+  </xsl:template>
+
   <xsl:template match="literal/ulink[normalize-space(.) != '']">
     <xsl:copy>
       <xsl:copy-of select="@*"/>
@@ -455,15 +516,109 @@
     </option>
   </xsl:template>
 
+  <xsl:template match="author/personname">
+   <!-- Ignore any personname inside author -->
+   <xsl:call-template name="info">
+      <xsl:with-param name="text">Removed personname inside author</xsl:with-param>
+    </xsl:call-template>
+   <xsl:apply-templates/>
+  </xsl:template>
+
   <xsl:template match="systemitem[@class='protocol']">
     <systemitem>
       <xsl:apply-templates/>
     </systemitem>
   </xsl:template>
 
+  <xsl:template match="systemitem[ancestor::screen]">
+    <xsl:apply-templates/>
+  </xsl:template>
 
   <!-- ################################################################## -->
   <!-- Templates for Block Elements                                       -->
+
+  <xsl:template match="cmdsynopsis">
+   <screen><xsl:apply-templates/></screen>
+  </xsl:template>
+
+  <xsl:template match="cmdsynopsis/text()"/>
+
+  <xsl:template match="cmdsynopsis/command">
+   <command><xsl:apply-templates/></command>
+   <xsl:text> </xsl:text>
+  </xsl:template>
+
+  <xsl:template match="group | arg" name="group-or-arg">
+   <xsl:variable name="choice" select="@choice"/>
+   <xsl:variable name="rep" select="@rep"/>
+   <xsl:variable name="sepchar">
+    <xsl:choose>
+     <xsl:when test="ancestor-or-self::*/@sepchar">
+      <xsl:value-of select="ancestor-or-self::*/@sepchar"/>
+     </xsl:when>
+     <xsl:otherwise>
+      <xsl:text> </xsl:text>
+     </xsl:otherwise>
+    </xsl:choose>
+   </xsl:variable>
+
+   <xsl:if test="preceding-sibling::*">
+    <xsl:value-of select="$sepchar"/>
+   </xsl:if>
+   <xsl:choose>
+    <xsl:when test="$choice = 'plain'">
+     <xsl:value-of select="$arg.choice.plain.open.str"/>
+    </xsl:when>
+    <xsl:when test="$choice = 'req'">
+     <xsl:value-of select="$arg.choice.req.open.str"/>
+    </xsl:when>
+    <xsl:when test="$choice = 'opt'">
+     <xsl:value-of select="$arg.choice.opt.open.str"/>
+    </xsl:when>
+    <xsl:otherwise>
+     <xsl:value-of select="$arg.choice.def.open.str"/>
+    </xsl:otherwise>
+   </xsl:choose>
+   <xsl:apply-templates/>
+   <xsl:choose>
+    <xsl:when test="$rep = 'repeat'">
+     <xsl:value-of select="$arg.rep.repeat.str"/>
+    </xsl:when>
+    <xsl:when test="$rep = 'norepeat'">
+     <xsl:value-of select="$arg.rep.norepeat.str"/>
+    </xsl:when>
+    <xsl:otherwise>
+     <xsl:value-of select="$arg.rep.def.str"/>
+    </xsl:otherwise>
+   </xsl:choose>
+   <xsl:choose>
+    <xsl:when test="$choice = 'plain'">
+     <xsl:value-of select="$arg.choice.plain.close.str"/>
+    </xsl:when>
+    <xsl:when test="$choice = 'req'">
+     <xsl:value-of select="$arg.choice.req.close.str"/>
+    </xsl:when>
+    <xsl:when test="$choice = 'opt'">
+     <xsl:value-of select="$arg.choice.opt.close.str"/>
+    </xsl:when>
+    <xsl:otherwise>
+     <xsl:value-of select="$arg.choice.def.close.str"/>
+    </xsl:otherwise>
+   </xsl:choose>
+ </xsl:template>
+
+  <xsl:template match="group/arg">
+   <xsl:variable name="choice" select="@choice"/>
+   <xsl:variable name="rep" select="@rep"/>
+   <xsl:if test="preceding-sibling::*">
+    <xsl:value-of select="$arg.or.sep"/>
+   </xsl:if>
+   <xsl:call-template name="group-or-arg"/>
+  </xsl:template>
+
+  <xsl:template match="sbr">
+    <xsl:text>&#10;</xsl:text>
+  </xsl:template>
 
   <xsl:template match="blockquote/attribution">
    <xsl:call-template name="info">
@@ -498,6 +653,21 @@
 
   <xsl:template match="mediaobject/textobject[screen]">
     <xsl:copy-of select="."/>
+  </xsl:template>
+
+  <xsl:template match="mediaobject">
+   <xsl:choose>
+    <xsl:when test="parent::figure or parent::informalfigure">
+     <xsl:copy-of select="."/>
+    </xsl:when>
+    <xsl:otherwise>
+     <xsl:message>Wrapped informalfigure around mediaobject. Parent: <xsl:value-of
+      select="local-name(parent::*)"/></xsl:message>
+     <informalfigure>
+      <xsl:copy-of select="."/>
+     </informalfigure>
+    </xsl:otherwise>
+   </xsl:choose>
   </xsl:template>
 
   <xsl:template match="literallayout">
@@ -560,14 +730,20 @@
     </listitem>
   </xsl:template>
 
-  <xsl:template match="note/procedure">
+  <xsl:template match="note/procedure|tip/procedure|warning/procedure|important/procedure">
+    <xsl:call-template name="info">
+      <xsl:with-param name="text">Changed procedure -> orderedlist inside <xsl:value-of select="local-name(.)"/></xsl:with-param>
+    </xsl:call-template>
     <orderedlist>
       <xsl:apply-templates select="@*"/>
       <xsl:apply-templates/>
     </orderedlist>
   </xsl:template>
 
-  <xsl:template match="note/procedure/step">
+  <xsl:template match="note/procedure/step|tip/procedure/step|warning/procedure/step|important/procedure/step">
+    <!--<xsl:call-template name="info">
+      <xsl:with-param name="text">Changed step -> listitem inside procedure</xsl:with-param>
+    </xsl:call-template>-->
     <listitem>
       <xsl:apply-templates/>
     </listitem>
@@ -601,6 +777,13 @@
       </xsl:otherwise>
     </xsl:choose>
     <xsl:comment> Removed <xsl:value-of select="name()"/> end</xsl:comment>
+  </xsl:template>
+
+
+  <xsl:template match="step/procedure">
+   <substeps>
+    <xsl:apply-templates/>
+   </substeps>
   </xsl:template>
 
   <xsl:template match="step/title">
@@ -649,6 +832,11 @@
     <itemizedlist>
       <xsl:apply-templates/>
     </itemizedlist>
+  </xsl:template>
+
+  <!-- we don't allow informalfigure in entry, but mediaobject. So... -->
+  <xsl:template match="entry/informalfigure">
+   <xsl:apply-templates/>
   </xsl:template>
 
   <xsl:template match="entry/variablelist/varlistentry">

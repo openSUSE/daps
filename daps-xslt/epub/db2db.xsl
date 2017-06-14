@@ -1,64 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- 
-  
+<!--
+
    Purpose:
      Prepares the DocBook document for EPUB and inserts a path for all
      images at the beginning of each graphic name.
-  
+
      Copies all elements, attributes, comments, processing instruction
      except for the @fileref attribute in imagedata element which is inside
      an imageobject with @role=$preferred.mediaobject.role. Resolves xrefs
      which points to books outside of $rootid.
-  
+
      All imageobject elements which contains everything else than @role =
      $preferred.mediaobject.role will be discarded.
-     
+
    Parameters:
      * rootid
        Applies stylesheet only to part of the document
-       
+
      * rootid.debug (default: 0)
        Controls some log messages (0=no, 1=yes)
-       
+
      * img.src.path
        Image paths to be added before @fileref in imagedata
-       
+
      * preferred.mediaobject.role
        Prefers imageobjects which contains @role attribute with value
        from this parameter
-     
+
      * use.role.for.mediaobject
        Should @role in imageobjects be used? 1=yes, 0=no
-       
+
      * use.pi4date
        Should the PI <?dbtimestamp format="..."?> created instead of
        the current date? 0=no, 1=yes
-     
+
    Original DocBook XSL Parameters:
      * stylesheet.result.type (default: 'xhtml')
-     
+
      * use.svg (default: 1)
        Allow SVG in the result tree?
-     
+
      * graphic.default.extension (default: '')
        Default extension for graphic filenames
-   
+
    Dependencies:
        - common/rootid.xsl
        - common/copy.xsl
        - ../lib/resolve-xrefs.xsl
-   
+
    Keys:
      * id (applys to: @id|@xml:id)
        Creates an index for all elements with IDs (derived from
        rootid.xsl)
-       
+
    Input:
      DocBook 4/Novdoc document
-     
+
    Output:
      DocBook 4/Novdoc document with corrected @fileref in imagedata
-   
+
    Author:    Thomas Schraitle <toms@opensuse.org>
    Copyright (C) 2012-2015 SUSE Linux GmbH
 -->
@@ -99,58 +99,58 @@
 
 <xsl:param name="exsl.node.set.available">
    <xsl:choose>
-     <xsl:when test="function-available('exsl:node-set') or 
+     <xsl:when test="function-available('exsl:node-set') or
                      contains(system-property('xsl:vendor'),'Apache Software Foundation')">1</xsl:when>
      <xsl:otherwise>0</xsl:otherwise>
    </xsl:choose>
  </xsl:param>
-  
+
 <xsl:param name="l10n.gentext.default.language">en</xsl:param>
 <xsl:param name="l10n.gentext.language"/>
 <xsl:param name="l10n.gentext.use.xref.language" select="0"/>
 <xsl:param name="l10n.lang.value.rfc.compliant" select="1"/>
-  
+
 <!-- =============================================================== -->
 <!-- Helper templates, copied from common/common.xsl and xhtml-1_1/graphics.xsl -->
 <xsl:template name="is.graphic.format">
   <xsl:param name="format"/>
-  <xsl:if test="$format = 'SVG' or 
+  <xsl:if test="$format = 'SVG' or
                 $format = 'PNG' or
-                $format = 'JPG' or 
-                $format = 'JPEG' or 
-                $format = 'linespecific' or 
-                $format = 'GIF' or 
-                $format = 'GIF87a' or 
-                $format = 'GIF89a' or 
+                $format = 'JPG' or
+                $format = 'JPEG' or
+                $format = 'linespecific' or
+                $format = 'GIF' or
+                $format = 'GIF87a' or
+                $format = 'GIF89a' or
                 $format = 'BMP'">1</xsl:if>
 </xsl:template>
- 
+
 <xsl:template name="is.graphic.extension">
   <xsl:param name="ext"/>
-  <xsl:variable name="lcext" select="translate($ext, 
-                              'ABCDEFGHIJKLMNOPQRSTUVWXYZ',                                        
+  <xsl:variable name="lcext" select="translate($ext,
+                              'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
                               'abcdefghijklmnopqrstuvwxyz')"/>
-  <xsl:if test="$lcext = 'svg' or 
-                $lcext = 'png' or 
-                $lcext = 'jpeg' or 
-                $lcext = 'jpg' or 
-                $lcext = 'avi' or 
-                $lcext = 'mpg' or 
-                $lcext = 'mp4' or 
-                $lcext = 'mpeg' or 
-                $lcext = 'qt'  or 
-                $lcext = 'gif' or 
-                $lcext = 'acc' or 
-                $lcext = 'mp1' or 
-                $lcext = 'mp2' or 
-                $lcext = 'mp3' or 
-                $lcext = 'mp4' or 
-                $lcext = 'm4v' or 
-                $lcext = 'm4a' or 
-                $lcext = 'wav' or 
-                $lcext = 'ogv' or 
-                $lcext = 'ogg' or 
-                $lcext = 'webm' or 
+  <xsl:if test="$lcext = 'svg' or
+                $lcext = 'png' or
+                $lcext = 'jpeg' or
+                $lcext = 'jpg' or
+                $lcext = 'avi' or
+                $lcext = 'mpg' or
+                $lcext = 'mp4' or
+                $lcext = 'mpeg' or
+                $lcext = 'qt'  or
+                $lcext = 'gif' or
+                $lcext = 'acc' or
+                $lcext = 'mp1' or
+                $lcext = 'mp2' or
+                $lcext = 'mp3' or
+                $lcext = 'mp4' or
+                $lcext = 'm4v' or
+                $lcext = 'm4a' or
+                $lcext = 'wav' or
+                $lcext = 'ogv' or
+                $lcext = 'ogg' or
+                $lcext = 'webm' or
                 $lcext = 'bmp'">1</xsl:if>
 </xsl:template>
 
@@ -172,7 +172,7 @@
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
-  
+
 <xsl:template name="filename-extension">
   <xsl:param name="filename"/>
   <xsl:param name="recurse" select="false()"/>
@@ -328,89 +328,98 @@
   </xsl:choose>
 </xsl:template>
 
+<!-- Better support DocBook 4 and 5 -->
 <xsl:template name="select.mediaobject.index">
-  <xsl:param name="olist"
-             select="imageobject|imageobjectco
-                     |videoobject|audioobject|textobject"/>
+  <xsl:param name="olist" select="db:imageobject|imageobject
+                                  |db:imageobjectco|imageobjectco
+                                  |db:videoobject|videoobject
+                                  |db:audioobject|audioobject
+                                  |db:textobject|textobject"/>
   <xsl:param name="count">1</xsl:param>
 
   <xsl:choose>
     <!-- Test for objects preferred by role -->
-    <xsl:when test="$use.role.for.mediaobject != 0 
+    <xsl:when test="$use.role.for.mediaobject != 0
                and $preferred.mediaobject.role != ''
-               and $olist[@role = $preferred.mediaobject.role]"> 
-      
+               and $olist[@role = $preferred.mediaobject.role]">
+
       <!-- Get the first hit's position index -->
       <xsl:for-each select="$olist">
         <xsl:if test="@role = $preferred.mediaobject.role and
-             not(preceding-sibling::*[@role = $preferred.mediaobject.role])"> 
-          <xsl:value-of select="position()"/> 
+             not(preceding-sibling::*[@role = $preferred.mediaobject.role])">
+          <xsl:value-of select="position()"/>
         </xsl:if>
       </xsl:for-each>
     </xsl:when>
 
-    <xsl:when test="$use.role.for.mediaobject != 0 
+    <xsl:when test="$use.role.for.mediaobject != 0
                and $olist[@role = $stylesheet.result.type]">
       <!-- Get the first hit's position index -->
       <xsl:for-each select="$olist">
-        <xsl:if test="@role = $stylesheet.result.type and 
-              not(preceding-sibling::*[@role = $stylesheet.result.type])"> 
-          <xsl:value-of select="position()"/> 
+        <xsl:if test="@role = $stylesheet.result.type and
+              not(preceding-sibling::*[@role = $stylesheet.result.type])">
+          <xsl:value-of select="position()"/>
         </xsl:if>
       </xsl:for-each>
     </xsl:when>
     <!-- Accept 'html' for $stylesheet.result.type = 'xhtml' -->
-    <xsl:when test="$use.role.for.mediaobject != 0 
+    <xsl:when test="$use.role.for.mediaobject != 0
                and $stylesheet.result.type = 'xhtml'
                and $olist[@role = 'html']">
       <!-- Get the first hit's position index -->
       <xsl:for-each select="$olist">
-        <xsl:if test="@role = 'html' and 
-              not(preceding-sibling::*[@role = 'html'])"> 
-          <xsl:value-of select="position()"/> 
+        <xsl:if test="@role = 'html' and
+              not(preceding-sibling::*[@role = 'html'])">
+          <xsl:value-of select="position()"/>
         </xsl:if>
       </xsl:for-each>
     </xsl:when>
 
     <!-- If no selection by role, and there is only one object, use it -->
     <xsl:when test="count($olist) = 1 and $count = 1">
-      <xsl:value-of select="$count"/> 
+      <xsl:value-of select="$count"/>
     </xsl:when>
 
     <xsl:otherwise>
       <!-- Otherwise select first acceptable object -->
       <xsl:if test="$count &lt;= count($olist)">
         <xsl:variable name="object" select="$olist[position()=$count]"/>
-    
+
         <xsl:variable name="useobject">
           <xsl:choose>
             <!-- select videoobject or audioobject before textobject -->
             <xsl:when test="local-name($object) = 'videoobject'">
-              <xsl:text>1</xsl:text> 
+              <xsl:text>1</xsl:text>
             </xsl:when>
             <xsl:when test="local-name($object) = 'audioobject'">
-              <xsl:text>1</xsl:text> 
+              <xsl:text>1</xsl:text>
             </xsl:when>
             <!-- skip textobject if also video, audio, or image out of order -->
             <xsl:when test="local-name($object) = 'textobject' and
+                            ../db:imageobject or
+                            ../db:audioobject or
+                            ../db:videoobject or
                             ../imageobject or
                             ../audioobject or
                             ../videoobject">
-              <xsl:text>0</xsl:text> 
-            </xsl:when>
-            <!-- The phrase is used only when contains TeX Math and output is FO -->
-            <xsl:when test="local-name($object)='textobject' and $object/phrase
-                            and $object/@role='tex' and $stylesheet.result.type = 'fo'
-                            ">
-              <xsl:text>1</xsl:text> 
-            </xsl:when>
-            <!-- The phrase is never used -->
-            <xsl:when test="local-name($object)='textobject' and $object/phrase">
               <xsl:text>0</xsl:text>
             </xsl:when>
-            <xsl:when test="local-name($object)='textobject'
-                            and $object/ancestor::equation ">
-            <!-- The first textobject is not a reasonable fallback
+            <!-- The phrase is used only when contains TeX Math and output is FO -->
+            <xsl:when test="local-name($object)='textobject' and
+                           ($object/db:phrase or $object/phrase)
+                           and $object/@role='tex' and $stylesheet.result.type = 'fo'
+                           and $tex.math.in.alt != ''">
+              <xsl:text>1</xsl:text>
+            </xsl:when>
+            <!-- The phrase is never used -->
+            <xsl:when test="local-name($object)='textobject' and
+                            ($object/db:phrase or $object/phrase)">
+                <xsl:text>0</xsl:text>
+            </xsl:when>
+            <xsl:when test="local-name($object)='textobject' and
+                            ($object/ancestor::db:equation or
+                             $object/ancestor::equation)">
+             <!-- The first textobject is not a reasonable fallback
                  for equation image -->
               <xsl:text>0</xsl:text>
             </xsl:when>
@@ -419,11 +428,16 @@
                             and $object[not(@role) or @role!='tex']">
               <xsl:text>1</xsl:text>
             </xsl:when>
-            <!-- don't use graphic when output is FO, TeX Math is used 
+            <!-- don't use graphic when output is FO, TeX Math is used
                  and there is math in alt element -->
-            <xsl:when test="$object/ancestor::equation and 
-                            $object/ancestor::equation/alt[@role='tex']
-                            and $stylesheet.result.type = 'fo'">
+            <xsl:when test="(($object/ancestor::db:equation and
+                              $object/ancestor::db:equation/db:alt[@role='tex'])
+                            or
+                             ($object/ancestor::equation and
+                              $object/ancestor::equation/alt[@role='tex'])
+                            )
+                            and $stylesheet.result.type = 'fo'
+                            and $tex.math.in.alt != ''">
               <xsl:text>0</xsl:text>
             </xsl:when>
             <!-- If there's only one object, use it -->
@@ -436,7 +450,7 @@
                 <!-- peek inside imageobjectco to simplify the test -->
                 <xsl:when test="local-name($object) = 'imageobjectco'">
                   <xsl:call-template name="is.acceptable.mediaobject">
-                    <xsl:with-param name="object" select="$object/imageobject"/>
+                    <xsl:with-param name="object" select="($object/db:imageobject | $object/imageobject)[1]"/>
                   </xsl:call-template>
                 </xsl:when>
                 <xsl:otherwise>
@@ -448,7 +462,7 @@
             </xsl:otherwise>
           </xsl:choose>
         </xsl:variable>
-    
+
         <xsl:choose>
           <xsl:when test="$useobject='1'">
             <xsl:value-of select="$count"/>
@@ -464,7 +478,6 @@
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
-  
 
 <!-- =============================================================== -->
 
@@ -476,12 +489,12 @@
       </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
-  
+
 <xsl:template match="articleinfo|bookinfo|setinfo|
                      db:article/db:info | db:book/db:info | db:set/db:info">
   <xsl:copy>
     <xsl:choose>
-      <xsl:when test="not(date) or not(db:date)">
+      <xsl:when test="not(date) and not(db:date)">
         <xsl:call-template name="create.date"/>
         <xsl:apply-templates/>
       </xsl:when>
@@ -557,7 +570,7 @@
     </xsl:choose>
   </xsl:variable>
   <xsl:variable name="day" select="substring-after($string, concat($month, '-'))"/>
-    
+
   <!--<xsl:message>make.isodate:
     string=<xsl:value-of select="$string"/>
       year='<xsl:value-of select="$year"/>'
@@ -566,7 +579,7 @@
        day2='<xsl:value-of select=" floor($day)"/>'
    counter='<xsl:value-of select="$counter"/>'
   </xsl:message>-->
-  
+
   <xsl:value-of select="$year"/>
   <xsl:if test="$month != ''">
     <xsl:text>-</xsl:text>
@@ -615,7 +628,7 @@
       <xsl:otherwise>0</xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
-  
+
 <!--    <xsl:message>*** date:
               node='<xsl:value-of select="local-name($node)"/>'
              xpath='<xsl:call-template name="xpath.location"/>'
@@ -674,7 +687,7 @@
   </xsl:variable>
 
   <!-- Partly taken from epub3/epub3-element-mods.xsl -->
-  <xsl:variable name="normalized" 
+  <xsl:variable name="normalized"
                 select="translate($node, '0123456789', '##########')"/>
 
   <xsl:variable name="date.ok">
@@ -692,11 +705,11 @@
       <xsl:otherwise>0</xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
-  
+
   <xsl:variable name="date.string">
     <xsl:call-template name="current.date"/>
   </xsl:variable>
-  
+
   <xsl:variable name="fixed.date">
     <xsl:choose>
       <xsl:when test="$date.ok != 0">
@@ -733,14 +746,14 @@
 
 
 <xsl:template match="mediaobject | db:mediaobject">
-  <xsl:variable name="olist" select="imageobject | db:imageobject"/>
+  <xsl:variable name="olist" select="(imageobject | db:imageobject)"/>
   <xsl:variable name="object.index">
     <xsl:call-template name="select.mediaobject.index">
       <xsl:with-param name="olist" select="$olist"/>
       <xsl:with-param name="count" select="1"/>
     </xsl:call-template>
   </xsl:variable>
-  
+
   <xsl:variable name="object" select="$olist[position() = $object.index]"/>
 
   <xsl:copy>
@@ -756,7 +769,7 @@
       </xsl:attribute>
     </xsl:copy>
   </xsl:template>
- 
+
 
 <xsl:template match="xref|db:xref" name="xref" priority="10">
    <xsl:apply-templates select="." mode="process.root"/>

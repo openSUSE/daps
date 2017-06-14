@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Copyright (C) 2012-2015 SUSE Linux GmbH
+# Copyright (C) 2012-2017 SUSE Linux GmbH
 #
 # Author:
 # Frank Sundermeyer <fsundermeyer at opensuse dot org>
@@ -86,6 +86,13 @@ trap "exit_on_error '\nCaught SIGTERM/SIGINT'" SIGTERM SIGINT
 # show help when called with no arguments
 [[ -z "$1" ]] && usage
 
+# check for xmlstarlet binary
+for _binary in xmlstarlet xml; do
+    XMLSTARLET=$(which $_binary 2>/dev/null)
+    [[ 0 -eq $? ]] && break
+done
+
+[[ -z $XMLSTARLET ]] && exit_on_error "Required package \"xmlstarlet\" is not installed"
 
 #----------------
 # Parse the command line arguments
@@ -118,6 +125,8 @@ while true ; do
                 exit_on_error "Please specify a directory"
             else
                 DOC_DIR="$2"
+                #  strip trailing slash
+                DOC_DIR=${DOC_DIR%/}
             fi
             shift 2
             ;;
@@ -256,11 +265,11 @@ if [[ -n $PRODUCTNAME ]]; then
         XPATH="/${ROOTELEMENT}/${ROOTELEMENT}info/title"
     fi
 
-    xml ed --inplace --append "$XPATH" --type elem --name productname \
+    $XMLSTARLET ed --inplace --append "$XPATH" --type elem --name productname \
         --value "$PRODUCTNAME" "$MAIN"
     if [[ -n $PRODUCTNUMBER ]]; then
-        xml ed --inplace --append "$XPATH" --type elem --name productnumber \
-            --value "$PRODUCTNUMBER" "$MAIN"
+        $XMLSTARLET ed --inplace --append "$XPATH" --type elem \
+            --name productnumber --value "$PRODUCTNUMBER" "$MAIN"
     fi
 fi
 

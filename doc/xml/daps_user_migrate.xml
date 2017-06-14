@@ -8,9 +8,9 @@
 %entities;
 ]>
 <appendix id="app.daps.user.migrate">
- <title>Migration of Existing DocBook Projects</title>
+ <title>Migrating Existing DocBook Projects</title>
  <para>
-  This section provides instructions how to migrate existing DocBook
+  This section provides instructions on how to migrate existing DocBook
   projects so that you can use &dapsacr; for managing and publishing them.
  </para>
  <procedure id="pro.daps.user.migrate">
@@ -18,7 +18,8 @@
   <step>
    <para>
     If your XML files are distributed across several subdirectories, flatten
-    the hierarchy and put all XML files directly into the
+    the hierarchy <remark>dpopov 2016-10-12: this requires an
+    explanation</remark> and put all XML files directly into the
     <filename>xml</filename> subdirectory that is required by &dapsacr;. See
     <xref linkend="ex.daps.dir.doc" xrefstyle="select:title"/>. Hosting
     multiple documentation projects in the same <filename>xml</filename>
@@ -61,8 +62,8 @@
   </step>
   <step>
    <para>
-    For each deliverable (book, article, set) that you want to generate from
-    your XML files, create a &dclong; file. For more information, refer to
+    Create a &dclong; file for each deliverable (book, article, set) that you want to generate from
+    your XML files. For more information, refer to
     <xref linkend="sec.daps.user.basics.files"/>. Find a template for &dc;
     files in your installed system in
     <filename>/usr/share/daps/init_templates/&dc;-file.template</filename>.
