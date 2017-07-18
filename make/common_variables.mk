@@ -246,7 +246,8 @@ PROFILED_MAIN := $(PROFILEDIR)/$(notdir $(MAIN))
 # DAPS version string params
 #
 DAPSSTRINGS := --stringparam "converter.name=$(MY_NAME)" \
-	--stringparam "converter.version=$(VERSION)"
+	--stringparam "converter.version=$(VERSION)" \
+	--stringparam "converter.url=$(MY_URL)"
 
 
 #-------
