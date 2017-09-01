@@ -876,8 +876,11 @@
       </xsl:call-template>-->
       <xsl:choose>
         <xsl:when test="$diff = 0">
+          <!-- Attributes that belong to entry itself need to stay with entry
+          and not be pushed onto the para. -->
+          <xsl:apply-templates select="@*"/>
           <para>
-             <xsl:apply-templates />
+            <xsl:apply-templates select="node()"/>
           </para>
         </xsl:when>
         <xsl:when test="normalize-space(text()[1]) != '' and $diff >0">
@@ -893,10 +896,23 @@
           </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:apply-templates/>
+          <xsl:apply-templates select="node()|@*"/>
         </xsl:otherwise>
       </xsl:choose>
     </entry>
+  </xsl:template>
+
+  <!-- Novdoc does not support tfoot, but we can try to treat its content
+  like normal tbody content (but we'll append the tfoot content after the
+  normal rows). -->
+  <xsl:template match="tfoot"/>
+  <xsl:template match="tbody">
+    <tbody>
+      <xsl:apply-templates select="node()|@*"/>
+      <xsl:if test="../tfoot">
+        <xsl:apply-templates select="../tfoot/node()|../tfoot/@*"/>
+      </xsl:if>
+    </tbody>
   </xsl:template>
 
 </xsl:stylesheet>
