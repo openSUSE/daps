@@ -128,7 +128,7 @@
   <xsl:template match="filename/@class"/>
   <xsl:template match="literallayout/@class"/>
   <xsl:template match="variablelist/@role"/>
-
+  <xsl:template match="warning/@role|tip/@role|note/@role|important/@role|caution/@role"/>
 
   <!-- ################################################################## -->
   <!-- Suppressed Elements for Novdoc                                     -->
