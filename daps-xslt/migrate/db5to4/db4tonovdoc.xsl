@@ -457,9 +457,9 @@
     <xsl:apply-templates />
   </xsl:template>
 
-  <xsl:template match="citetitle/*">
+  <xsl:template match="*[ancestor::citetitle]">
     <xsl:call-template name="info">
-      <xsl:with-param name="text">Removed citetitle/<xsl:value-of select="local-name()"/> </xsl:with-param>
+      <xsl:with-param name="text">Removed <xsl:value-of select="local-name()"/> within citetitle</xsl:with-param>
     </xsl:call-template>
     <xsl:apply-templates/>
   </xsl:template>
