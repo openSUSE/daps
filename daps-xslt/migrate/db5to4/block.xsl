@@ -41,4 +41,17 @@
     <xsl:call-template name="separate.nested.lists"/>
   </xsl:template>
 
+  <xsl:template match="d:example[d:procedure]">
+   <xsl:if test="d:title">
+    <bridgehead>
+     <xsl:if test="@xml:id">
+      <xsl:attribute name="id"><xsl:value-of select="@xml:id"/></xsl:attribute>
+     </xsl:if>
+     <xsl:apply-templates select="d:title/node()"/>
+    </bridgehead>
+    <xsl:text>&#10;</xsl:text>
+    <xsl:apply-templates select="*[not(self::d:title)]"/>
+   </xsl:if>
+  </xsl:template>
+
 </xsl:stylesheet>
