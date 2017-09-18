@@ -50,8 +50,8 @@
      <xsl:apply-templates select="d:title/node()"/>
     </bridgehead>
     <xsl:text>&#10;</xsl:text>
-    <xsl:apply-templates select="*[not(self::d:title)]"/>
    </xsl:if>
+   <xsl:apply-templates select="*[not(self::d:title)]"/>
   </xsl:template>
 
 </xsl:stylesheet>
