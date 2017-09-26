@@ -651,9 +651,11 @@ function call_make {
         # PDF
         printf "%${COLWIDTH}s: %s\n" "PDF FORMATTER" "$FORMATTER"
         if [[ "fop" = "$FORMATTER" ]]; then
+            printf "%${COLWIDTH}s: %s\n" "FORMATTER VERSION" "$(fop -version)"
             printf "%${COLWIDTH}s: %s\n" "FORMATTER WRAPPER" "$FOP_WRAPPER"
             printf "%${COLWIDTH}s: %s\n" "FORMATTER CONFIG" "$FOP_CONFIG_FILE"
         elif [[ "xep" = "$FORMATTER" ]]; then
+            printf "%${COLWIDTH}s: %s\n" "FORMATTER VERSION" "$(xep -version)"
             printf "%${COLWIDTH}s: %s\n" "FORMATTER WRAPPER" "$XEP_WRAPPER"
             printf "%${COLWIDTH}s: %s\n" "FORMATTER CONFIG:" "$XEP_CONFIG_FILE"
         fi
