@@ -47,7 +47,9 @@ AC_PREFIX_DEFAULT(/usr)
 
 dnl Some constants
 root_catalog="/etc/xml/catalog"
+daps_root_catalog="/etc/xml/catalog.d/daps.xml"
 AC_SUBST(root_catalog)
+AC_SUBST(daps_root_catalog)
 DB4_XSLT_URL="http://docbook.sourceforge.net/release/xsl/current/"
 AC_SUBST(DB4_XSLT_URL)
 DB5_XSLT_URL="http://docbook.sourceforge.net/release/xsl-ns/current/"

@@ -190,7 +190,7 @@ am__can_run_installinfo = \
 man1dir = $(mandir)/man1
 NROFF = nroff
 MANS = $(dist_man1_MANS)
-am__dist_catalog_DATA_DIST = $(BUILD_ROOT)/for-catalog-$(PACKAGE).xml
+am__dist_catalog_DATA_DIST = $(BUILD_ROOT)/$(PACKAGE).xml
 DATA = $(dist_bashcompletion_DATA) $(dist_catalog_DATA) \
 	$(dist_dapsconf_DATA) $(dist_dapslib_DATA) \
 	$(dist_dapsmake_DATA) $(dist_doc_DATA) $(dist_emacssite_DATA) \
@@ -385,6 +385,7 @@ program_transform_name = @program_transform_name@
 psdir = @psdir@
 pyexecdir = @pyexecdir@
 pythondir = @pythondir@
+daps_root_catalog = @daps_root_catalog@
 root_catalog = @root_catalog@
 sbindir = @sbindir@
 sharedstatedir = @sharedstatedir@
@@ -424,7 +425,7 @@ DAPSROOT := $(abs_top_srcdir)
 #
 BUILD_ROOT := build
 FIRSTBUILD := $(BUILD_ROOT)/.firstbuild
-DAPS_CATALOG := $(BUILD_ROOT)/for-catalog-$(PACKAGE).xml
+DAPS_CATALOG := $(BUILD_ROOT)/$(PACKAGE).xml
 
 #------------------------
 # fop config / jing wrapper
@@ -465,7 +466,8 @@ dapsconfdir = @sysconfdir@/daps
 fopconfdir = $(dapsconfdir)/fop
 xepconfdir = $(dapsconfdir)/xep
 hyphendir = $(xepconfdir)/hyphen
-catalogdir = @sysconfdir@/xml
+# catalogddir = @sysconfdir@/xml/catalog.d
+catalogdir = @sysconfdir@/xml/catalog.d
 dapslibdir = $(pkgdatadir)/lib
 dapslibexecdir = $(pkgdatadir)/libexec
 dapsmakedir = $(pkgdatadir)/make
@@ -1738,24 +1740,17 @@ install-data-local:
 	install -m755 autobuild/daps-autobuild $(DESTDIR)$(bindir)
 	install -m644 autobuild/daps-autobuild.rnc $(DESTDIR)$(datadir)/xml/$(PACKAGE)/schema/
 	install -m644 autobuild/daps-autobuild.xml $(DESTDIR)$(templatedir)
-# remove old DAPS entries in root catalog and create new entry
-@CATALOG_EDIT_TRUE@	$(XMLLINT) --nocatalogs --format $(root_catalog) | \
-@CATALOG_EDIT_TRUE@	    awk "/<\/group>/ && s == 1 {s=0;next} s == 1 {next} \
-@CATALOG_EDIT_TRUE@	      /<group id=\"$(PACKAGE)\">/{s=1;next} {print}" | \
-@CATALOG_EDIT_TRUE@	      sed '/<\/catalog>/d' >$(TMP_CATALOG)
-@CATALOG_EDIT_TRUE@	$(XMLLINT) --nocatalogs --format $(DAPS_CATALOG) | \
-@CATALOG_EDIT_TRUE@	  awk '/<\/catalog>/{next} s == 1 {print} /<catalog/{s=1} \
-@CATALOG_EDIT_TRUE@	    END{print "</catalog>"}' >>$(TMP_CATALOG)
-@CATALOG_EDIT_TRUE@	chmod --reference=$(root_catalog) $(TMP_CATALOG)
-@CATALOG_EDIT_TRUE@	mv $(TMP_CATALOG) $(root_catalog)
+## remove old DAPS entries in root catalog and create new entry
+#@CATALOG_EDIT_TRUE@	$(XMLLINT) --nocatalogs --format $(DAPS_CATALOG) | \
+#@CATALOG_EDIT_TRUE@	  awk '/<\/catalog>/{next} s == 1 {print} /<catalog/{s=1} \
+#@CATALOG_EDIT_TRUE@	    END{print "</catalog>"}' >>$(TMP_CATALOG)
+#@CATALOG_EDIT_TRUE@	chmod --reference=$(root_catalog) $(TMP_CATALOG)
+@CATALOG_EDIT_TRUE@	mv $(DAPS_CATALOG) $(DESTDIR)$(daps_root_catalog)
 
 #---------------------------Local UNINSTALL-----------------------------------
 @CATALOG_EDIT_TRUE@uninstall-local: TMP_CATALOG := $(shell mktemp -q $(BUILD_ROOT)/catalog.XXXXX)
 @CATALOG_EDIT_TRUE@uninstall-local:
-@CATALOG_EDIT_TRUE@	$(XMLLINT) --nocatalogs --format $(root_catalog) | \
-@CATALOG_EDIT_TRUE@	  awk "/<\/group>/ && s == 1 {s=0;next} s == 1 {next} /<group id=\"$(PACKAGE)\">/{s=1;next} {print}" > $(TMP_CATALOG)
-@CATALOG_EDIT_TRUE@	chmod --reference=$(root_catalog) $(TMP_CATALOG)
-@CATALOG_EDIT_TRUE@	mv $(TMP_CATALOG) $(root_catalog)
+@CATALOG_EDIT_TRUE@	rm $(DESTDIR)$(daps_root_catalog)
 #-----------------------------CLEAN--------------------------------------------
 
 clean-local:

@@ -39,7 +39,7 @@ DAPSROOT     := $(abs_top_srcdir)
 #
 BUILD_ROOT   := build
 FIRSTBUILD   := $(BUILD_ROOT)/.firstbuild
-DAPS_CATALOG := $(BUILD_ROOT)/for-catalog-$(PACKAGE).xml
+DAPS_CATALOG := $(BUILD_ROOT)/$(PACKAGE).xml
 
 #------------------------
 # fop config / jing wrapper
@@ -95,7 +95,7 @@ fopconfdir     = $(dapsconfdir)/fop
 xepconfdir     = $(dapsconfdir)/xep
 hyphendir      = $(xepconfdir)/hyphen
 
-catalogdir     = @sysconfdir@/xml
+catalogdir     = @sysconfdir@/xml/catalog.d
 
 dapslibdir     = $(pkgdatadir)/lib
 dapslibexecdir = $(pkgdatadir)/libexec
@@ -201,27 +201,20 @@ install-data-local:
 	install -m755 autobuild/daps-autobuild $(DESTDIR)$(bindir)
 	install -m644 autobuild/daps-autobuild.rnc $(DESTDIR)$(datadir)/xml/$(PACKAGE)/schema/
 	install -m644 autobuild/daps-autobuild.xml $(DESTDIR)$(templatedir)
-if CATALOG_EDIT
-# remove old DAPS entries in root catalog and create new entry
-	$(XMLLINT) --nocatalogs --format $(root_catalog) | \
-	    awk "/<\/group>/ && s == 1 {s=0;next} s == 1 {next} \
-	      /<group id=\"$(PACKAGE)\">/{s=1;next} {print}" | \
-	      sed '/<\/catalog>/d' >$(TMP_CATALOG)
-	$(XMLLINT) --nocatalogs --format $(DAPS_CATALOG) | \
-	  awk '/<\/catalog>/{next} s == 1 {print} /<catalog/{s=1} \
-	    END{print "</catalog>"}' >>$(TMP_CATALOG)
-	chmod --reference=$(root_catalog) $(TMP_CATALOG)
-	mv $(TMP_CATALOG) $(root_catalog)
-endif
+# if CATALOG_EDIT
+# # remove old DAPS entries in root catalog and create new entry
+# 	$(XMLLINT) --nocatalogs --format $(DAPS_CATALOG) | \
+# 	  awk '/<\/catalog>/{next} s == 1 {print} /<catalog/{s=1} \
+# 	    END{print "</catalog>"}' >>$(TMP_CATALOG)
+# 	chmod --reference=$(root_catalog) $(TMP_CATALOG)
+# 	mv $(TMP_CATALOG) $(DESTDIR)$(daps_root_catalog)
+# endif
 
 #---------------------------Local UNINSTALL-----------------------------------
 if CATALOG_EDIT
 uninstall-local: TMP_CATALOG := $(shell mktemp -q $(BUILD_ROOT)/catalog.XXXXX)
 uninstall-local:
-	$(XMLLINT) --nocatalogs --format $(root_catalog) | \
-	  awk "/<\/group>/ && s == 1 {s=0;next} s == 1 {next} /<group id=\"$(PACKAGE)\">/{s=1;next} {print}" > $(TMP_CATALOG)
-	chmod --reference=$(root_catalog) $(TMP_CATALOG)
-	mv $(TMP_CATALOG) $(root_catalog)
+	rm $(DESTDIR)$(daps_root_catalog)
 endif
 #-----------------------------CLEAN--------------------------------------------
 
