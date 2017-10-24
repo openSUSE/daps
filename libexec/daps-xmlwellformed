@@ -10,6 +10,7 @@
 
 import argparse
 import sys
+import textwrap
 from lxml import etree
 
 __author__ = "Thomas Schraitle"
@@ -31,8 +32,9 @@ def check_wellformedness(xmlfile, xinclude=True):
         if xinclude:
             xml.xinclude()
         return 0
-    except etree.XMLSyntaxError as err:
-        print(err, file=sys.stderr)
+    except (etree.XMLSyntaxError, etree.XIncludeError) as err:
+        print("ERROR: %s" % err, file=sys.stderr)
+        print(textwrap.indent(str(err.error_log), prefix="       "), file=sys.stderr)
         return 10
 
 
@@ -55,7 +57,7 @@ def parse_cli(args=None):
                         help="XML file to check well-formedness"
                         )
     args = parser.parse_args(args)
-    print(args, file=sys.stderr)
+    # print(args, file=sys.stderr)
     return args
 
 
