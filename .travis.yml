@@ -62,13 +62,13 @@ before_install:
     - git clone https://github.com/openSUSE/suse-xsl.git suse
 
 install:
-    - ./.travis-debug
     - ./configure --sysconfdir=/etc
     - make
     - sudo make install
 
 script:
     # - make test
+    - ./.travis-debug
     - echo "Done"
 
 # blacklist
