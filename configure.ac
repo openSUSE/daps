@@ -249,12 +249,12 @@ fi
 dnl --------------------------------------------------------------------------
 AC_MSG_NOTICE([===== Checking for additional DocBook 4.5 identifiers (optional)...])
 
-for IDENT in "-//OASIS//ELEMENTS DocBook XML Information Pool V4.5//EN" \
-             "-//OASIS//ENTITIES DocBook XML Character Entities V4.5//EN" \
-             "-//OASIS//ENTITIES DocBook XML Notations V4.5//EN" \
-             "-//OASIS//ENTITIES DocBook XML Additional General Entities V4.5//EN" \
-             "-//OASIS//ELEMENTS DocBook XML Document Hierarchy V4.5//EN" \
-             "-//OASIS//DTD DocBook XML CALS Table Model V4.5//EN" \
+for IDENT in "-//OASIS//ELEMENTS DocBook Information Pool V4.5//EN" \
+             "-//OASIS//ENTITIES DocBook Character Entities V4.5//EN" \
+             "-//OASIS//ENTITIES DocBook Notations V4.5//EN" \
+             "-//OASIS//ENTITIES DocBook Additional General Entities V4.5//EN" \
+             "-//OASIS//ELEMENTS DocBook Document Hierarchy V4.5//EN" \
+             "-//OASIS//DTD DocBook CALS Table Model V4.5//EN" \
              "-//OASIS//DTD XML Exchange Table Model 19990315//EN" \
              ; do
  AC_MSG_CHECKING([for $IDENT])
