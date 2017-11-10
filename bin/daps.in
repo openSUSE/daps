@@ -156,6 +156,7 @@ VARLIST=(
     ROOTID
     SETDATE
     SHOW
+    SRC_FORMAT
     STATIC_DIR
     STATIC_HTML
     STRINGPARAMS
@@ -750,7 +751,7 @@ Subcommands:
     list-srcfiles             List source files (XML sources, images, entity
                               declarations, DC-file) used by the document
                               reference by the DC-file.
-    list-srcfiles-unused      List files from the xml/ and images/src/
+    list-srcfiles-unused      List files from the document and image source and
                               directories not used by the document reference
                               by the DC-file.
     list-images-missing       List images referenced in the XML sources but
@@ -1022,13 +1023,13 @@ function set_mainfile {
         sanitize_path "$MAINFILE" "MAIN_CMDL"
         if [[ -z "$DOC_DIR" ]]; then
             DOC_DIR=$(dirname "$MAIN_CMDL")
-            DOC_DIR=${DOC_DIR%/xml*} #remove xml directory
+            DOC_DIR=${DOC_DIR%/${SRC_FORMAT}*} #remove SRC_FORMAT directory
         fi
-        [[ -e ${DOC_DIR}/xml/$(basename "$MAIN_CMDL") ]] || exit_on_error "XML files must reside in an \"xml/\" directory. \"$MAIN_CMDL\" is not a valid location."
+        [[ -e ${DOC_DIR}/${SRC_FORMAT}/$(basename "$MAIN_CMDL") ]] || exit_on_error "Source files must reside in an \"${SRC_FORMAT}/\" directory. \"$MAIN_CMDL\" is not a valid location."
     else
-        if [[ -e "xml/$MAINFILE" ]]; then
-            # MAIN is not a valid file, but ./xml/$MAIN exists
-            sanitize_path "xml/$MAINFILE" "MAIN_CMDL"
+        if [[ -e "${SRC_FORMAT}/$MAINFILE" ]]; then
+            # MAIN is not a valid file, but ./${SRC_FORMAT}/$MAIN exists
+            sanitize_path "${SRC_FORMAT}/$MAINFILE" "MAIN_CMDL"
             if [[ -z "$DOC_DIR" ]]; then
                 DOC_DIR="$PWD"
             fi
@@ -1037,8 +1038,8 @@ function set_mainfile {
             fi
         else
             if [[ -n "$DOC_DIR" ]]; then
-                MAIN_CMDL="${DOC_DIR}/xml/$(basename "$MAINFILE")"
-                [[ -e $MAIN_CMDL ]] || exit_on_error "XML files must reside in an \"xml/\" directory. \"$MAIN_CMDL\" is not a valid location."
+                MAIN_CMDL="${DOC_DIR}/${SRC_FORMAT}/$(basename "$MAINFILE")"
+                [[ -e $MAIN_CMDL ]] || exit_on_error "Source files must reside in an \"${SRC_FORMAT}/\" directory. \"$MAIN_CMDL\" is not a valid location."
             else
                 exit_on_error "Fatal error: ${PWD}/$MAINFILE does not exist."
             fi
@@ -1605,6 +1606,10 @@ if [[ -z "$DOCCONF_CMDL" && -z "$MAIN_CMDL" ]]; then
     fi
 elif [[ -n "$MAIN_CMDL" ]]; then
     # MAIN was set on the command line or in the user config
+
+    # get the source format (XML/ADOC) from MAIN
+    SRC_FORMAT=${MAIN_CMDL##*.}
+
     set_mainfile "$MAIN_CMDL"
 elif [[ -n "$DOCCONF_CMDL" ]]; then
     # check if DOCCONF is a regular file
@@ -1626,6 +1631,11 @@ fi
 
 # FINALLY! Parse the DOCCONF file, recover the command line values
 [[ -n "$DOCCONF_CMDL" ]] && parse_config "$DOCCONF_CMDL"
+
+# get the source format (XML/ADOC) from MAIN
+[[ -z $SRC_FORMAT ]] && SRC_FORMAT=${MAIN##*.}
+# Validate SRC_FORMAT - needs to be xml or adoc
+[[ "adoc" = "$SRC_FORMAT" || "xml" = "$SRC_FORMAT" ]] || exit_on_error "$MAIN is an unsupported file type (.$SRC_FORMAT)\nmust be ASCIIDOC (.adoc) or DocBook (.xml)"
 
 # FOP/XEP CONFIG and WRAPPER / JING WRAPPER
 # when using an SVN checkout, @sysconfdir@ and @pkgdatadir have not been
@@ -1677,7 +1687,7 @@ else
         export BOOK="${DC_FILE#${CONF_PREFIX}*}"
     elif [[ -n "$MAIN_CMDL" ]]; then
         # --main was specified, BOOK is set to basenme of MAIN
-        BOOK="$(basename "$MAIN" .xml)"
+        BOOK="$(basename "$MAIN" .${SRC_FORMAT})"
         export BOOK
     fi
 fi
