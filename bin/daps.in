@@ -52,6 +52,7 @@ export prefix=@prefix@
 
 declare -a VARLIST
 VARLIST=(
+    ADOC_CONFIG_FILE
     ASPELL_EXTRA_DICT
     ASPELL_LANG
     ASPELL_SKIP_TAGS
@@ -1637,13 +1638,15 @@ fi
 # Validate SRC_FORMAT - needs to be xml or adoc
 [[ "adoc" = "$SRC_FORMAT" || "xml" = "$SRC_FORMAT" ]] || exit_on_error "$MAIN is an unsupported file type (.$SRC_FORMAT)\nmust be ASCIIDOC (.adoc) or DocBook (.xml)"
 
-# FOP/XEP CONFIG and WRAPPER / JING WRAPPER
+# FOP/XEP/ASCIIDOC CONFIG and WRAPPER / JING WRAPPER
 # when using an SVN checkout, @sysconfdir@ and @pkgdatadir have not been
 # replaced
 #
 # ${string/#substring/replacement}
 # If $substring matches front end of $string, substitute
 # $replacement for $substring.
+
+ADOC_CONFIG_FILE=${ADOC_CONFIG_FILE/#@sysconfdir\@\/daps/${DAPSROOT}/etc}
 
 FOP_CONFIG_FILE=${FOP_CONFIG_FILE/#@sysconfdir\@\/daps/${DAPSROOT}/etc}
 FOP_WRAPPER=${FOP_WRAPPER/#@pkgdatadir\@/${DAPSROOT}}
