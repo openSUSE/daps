@@ -2078,6 +2078,8 @@ function spellcheck {
     parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
 
+    [[ -n "$P_SPELL_CHECKER" ]] && SPELL_CHECKER="$P_SPELL_CHECKER"
+
     # check whether spell is installed:
     SPELL_CHECKER_CMD="$(which  --skip-alias --skip-functions "$SPELL_CHECKER" 2>/dev/null)"
     if [[ -z $SPELL_CHECKER_CMD ]]; then
@@ -2099,7 +2101,6 @@ function spellcheck {
         exit 0
     fi
 
-    [[ -n "$P_SPELL_CHECKER" ]] && SPELL_CHECKER="$P_SPELL_CHECKER"
     [[ -n "$P_SPELL_EXTRA_DICT" ]] && SPELL_EXTRA_DICT="$P_SPELL_EXTRA_DICT"
     [[ -n "$P_FILE" ]] && FILELIST[0]="$P_FILE"
     [[ 1 = "$P_LIST" ]] && LISTMODE=1
@@ -2978,6 +2979,13 @@ function help_single {
                               the default, which generates chunked HTML,
                               consisting of several HTML pages.
                               Default: off
+EOF
+}
+function help_spell-checker {
+    cat <<EOF
+    --spell-checker           Specify the name of the spell checking command,
+                              such as 'aspell' or 'hunspell'.
+                              DEFAULT: aspell
 EOF
 }
 function help_statdir {
