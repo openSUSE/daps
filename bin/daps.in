@@ -53,6 +53,7 @@ export prefix=@prefix@
 declare -a VARLIST
 VARLIST=(
     ADOC_CONFIG_FILE
+    ADOC_TYPE
     ASPELL_EXTRA_DICT
     ASPELL_LANG
     ASPELL_SKIP_TAGS
@@ -1734,8 +1735,12 @@ export XML_CATALOG_FILES
 # specified on the command line or the DC file
 #
 # get DocBook version first ...
-
-DOCBOOK_VERSION=$($XSLTPROC --stylesheet "${DAPSROOT}/daps-xslt/common/get-docbook-version.xsl" --file "$MAIN" "$XSLTPROCESSOR") || exit_on_error "Could not get DocBook version. Maybe $MAIN is not well-formed?"
+if [[ "adoc" = "$SRC_FORMAT" ]]; then
+#    DOCBOOK_VERSION=5
+    DOCBOOK_VERSION=4
+else
+    DOCBOOK_VERSION=$($XSLTPROC --stylesheet "${DAPSROOT}/daps-xslt/common/get-docbook-version.xsl" --file "$MAIN" "$XSLTPROCESSOR") || exit_on_error "Could not get DocBook version. Maybe $MAIN is not well-formed?"
+fi
 
 # DocBook 5
 #
@@ -1826,8 +1831,9 @@ export DOCBOOK_STYLES DOCBOOK5_RNG DOCBOOK_VERSION
 # Get PROFILE_URN to determine whether profiling is turned on
 # will get exported via VARLIST
 #
-
- PROFILE_URN=$($XSLTPROC --stylesheet "${DAPSROOT}/daps-xslt/common/get-xml-stylesheet.xsl" --file "$MAIN" "$XSLTPROCESSOR") || exit_on_error "Could not get DocBook version. Maybe $MAIN is not well-formed?"
+if [[ "xml" = "$SRC_FORMAT" ]]; then
+    PROFILE_URN=$($XSLTPROC --stylesheet "${DAPSROOT}/daps-xslt/common/get-xml-stylesheet.xsl" --file "$MAIN" "$XSLTPROCESSOR") || exit_on_error "Could not get DocBook version. Maybe $MAIN is not well-formed?"
+fi
 
 #----------------------------------
 # Result directory / LOG directory
@@ -1847,6 +1853,19 @@ export "${VARLIST[@]}"
 SETFILES_TMP=$(mktemp -q --tmpdir daps_setfiles.XXXXXXXX 2>/dev/null) || exit_on_error "Could not write temporary SETFILES file."
 export SETFILES_TMP
 
+#-------------------------------------------------------------------
+# Create XML from ASCIIDOC
+#
+if [[ "adoc" = "$SRC_FORMAT" ]]; then
+    ADOC_MAIN="$MAIN"
+    ADOC_DIR="${BUILD_DIR}/.adoc"
+    MAIN="${ADOC_DIR}/${BOOK}.xml"
+    export ADOC_MAIN ADOC_DIR MAIN
+    [[ 1 -eq $FORCE_REBUILD ]] && MOPTS="--always-make"
+    [[ 2 -gt $VERBOSITY ]] && MOPTS="$MOPTS --silent"
+
+    make $MOPTS -f $DAPSROOT/make/adoc2xml.mk  || exit_on_error "Could not write XML from the ASCIIDOC sources"
+fi
 #-------------------------------------------------------------------
 # Finally, run the Subcommands
 #
