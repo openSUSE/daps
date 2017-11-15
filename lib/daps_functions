@@ -108,8 +108,8 @@ function parse_args {
                 shift 2
                 ;;
             --extra-dict)
-                P_ASPELL_EXTRA_DICT=""
-                sanitize_path "$2" "P_ASPELL_EXTRA_DICT"
+                P_SPELL_EXTRA_DICT=""
+                sanitize_path "$2" "P_SPELL_EXTRA_DICT"
                 shift 2
                 ;;
             --file)
@@ -2062,7 +2062,7 @@ function getimages {
 ###########################################################################
 function spellcheck {
     local SHORT_OPTS LONG_OPTS SUB_CMD
-    local ASPELL_CMD COUNT FILE LISTMODE LISTOUTPUT SPELLCMD
+    local SPELLCHECKER_CMD COUNT FILE LISTMODE LISTOUTPUT SPELLCMD
     local -a FILELIST SKIPLIST
 
     SUB_CMD=$1
@@ -2074,10 +2074,10 @@ function spellcheck {
     parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
 
-    # check whether aspell is installed:
-    ASPELL_CMD="$(which  --skip-alias --skip-functions "aspell" 2>/dev/null)"
-    if [[ -z $ASPELL_CMD ]]; then
-        ccecho "error" "Error: aspell is not installed"
+    # check whether spell is installed:
+    SPELLCHECKER_CMD="$(which  --skip-alias --skip-functions "$SPELLCHECKER" 2>/dev/null)"
+    if [[ -z $SPELLCHECKER_CMD ]]; then
+        ccecho "error" "Error: '$SPELLCHECKER' is not installed"
         exit 1
     fi
 
@@ -2094,7 +2094,7 @@ function spellcheck {
     exit 0
     fi
 
-    [[ -n "$P_ASPELL_EXTRA_DICT" ]] && ASPELL_EXTRA_DICT="$P_ASPELL_EXTRA_DICT"
+    [[ -n "$P_SPELL_EXTRA_DICT" ]] && SPELL_EXTRA_DICT="$P_SPELL_EXTRA_DICT"
     [[ -n "$P_FILE" ]] && FILELIST[0]="$P_FILE"
     [[ 1 = "$P_LIST" ]] && LISTMODE=1
 
@@ -2119,12 +2119,12 @@ function spellcheck {
     # Set language - if not specified anywhere try to get from $MAIN
     #
     if [[ -n "$P_LANG" ]]; then
-        ASPELL_LANG="$P_LANG"
+        SPELL_LANG="$P_LANG"
     else
-        if [[ -z "$ASPELL_LANG" ]]; then
-            ASPELL_LANG=$($XSLTPROC --stylesheet "${DAPSROOT}/daps-xslt/common/get-language.xsl" --file "$MAIN" "$XSLTPROCESSOR" 2>/dev/null)
-            if [[ -n "$ASPELL_LANG" ]]; then
-        ccecho "info" "Using language $ASPELL_LANG."
+        if [[ -z "$SPELL_LANG" ]]; then
+            SPELL_LANG=$($XSLTPROC --stylesheet "${DAPSROOT}/daps-xslt/common/get-language.xsl" --file "$MAIN" "$XSLTPROCESSOR" 2>/dev/null)
+            if [[ -n "$SPELL_LANG" ]]; then
+        ccecho "info" "Using language $SPELL_LANG."
             else
         exit_on_error "Failed to get language from $MAIN. Please specify it with --lang."
             fi
@@ -2132,20 +2132,43 @@ function spellcheck {
     fi
 
     #------------------
-    # create spellchecking command
+    # create spellchecking command for both aspell and hunspell
     #
-    # first, create skiplist
-    #
-    COUNT=0
-    for SKIP in $ASPELL_SKIP_TAGS; do
-        SKIPLIST[$COUNT]="--add-sgml-skip=$SKIP"
-        let COUNT++
-    done
-    # now create the command
-    SPELLCMD="/usr/bin/aspell --mode=sgml ${SKIPLIST[*]} --encoding=utf-8 --lang=$ASPELL_LANG"
-    if [[ -n "$ASPELL_EXTRA_DICT" ]]; then
-        SPELLCMD="$SPELLCMD --extra-dicts=$ASPELL_EXTRA_DICT"
-    fi
+
+
+    case "$SPELLCHECKER" in
+      aspell )
+        # first, create skiplist
+        COUNT=0
+        for SKIP in $SPELL_SKIP_TAGS; do
+          SKIPLIST[$COUNT]="--add-sgml-skip=$SKIP"
+          let COUNT++
+        done
+        # now create the command
+        SPELLCMD="$SPELLCHECKER_CMD --mode=sgml ${SKIPLIST[*]} --encoding=utf-8 --lang=$SPELL_LANG"
+        if [[ -n "$SPELL_EXTRA_DICT" ]]; then
+          SPELLCMD="$SPELLCMD --extra-dicts=$SPELL_EXTRA_DICT"
+        fi
+        ;;
+      hunspell )
+        # no skiplist for hunspell yet :-(
+        # expand dict name by lang
+        case "$SPELL_LANG" in
+          en )
+            SPELL_LANG+="_US"
+            ;;
+          cs )
+            SPELL_LANG+="_CZ"
+            ;;
+        esac
+        # now create the command
+        SPELLCMD="$SPELLCHECKER_CMD -H -i utf-8 -d $SPELL_LANG"
+        if [[ -n "$SPELL_EXTRA_DICT" ]]; then
+          SPELLCMD="$SPELLCMD,$SPELL_EXTRA_DICT"
+        fi
+        ;;
+    esac
+
 
     # show spellchecker command with --debug
     [[ 1 = "$DEBUG" ]] && echo "DEBUG: $SPELLCMD"
