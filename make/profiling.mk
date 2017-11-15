@@ -19,7 +19,12 @@
 # to write a pattern rule for creating the links. We use the
 # PHONY link_txt_files to generate them.
 
-PROFILES      := $(sort $(subst $(DOC_DIR)/xml/,$(PROFILEDIR)/,$(SRCFILES)))
+ifeq "$(strip $(SRC_FORMAT))" "xml"
+  PROFILES := $(sort $(subst $(DOC_DIR)/xml/,$(PROFILEDIR)/,$(SRCFILES)))
+else
+#  $(info PROFILES := $(subst $(ADOC_DIR)/,$(PROFILEDIR)/,$(MAIN)))
+  PROFILES := $(subst $(ADOC_DIR)/,$(PROFILEDIR)/,$(MAIN))
+endif
 
 # Will be used on profiling only
 #
@@ -89,11 +94,14 @@ profile: $(PROFILES)
 # linking the entity files is not needed when profiling, because the
 # entities are already resolved
 #
-
-$(PROFILEDIR)/%.xml: $(DOC_DIR)/xml/%.xml | $(PROFILEDIR)
-  ifeq "$(VERBOSITY)" "2"
+ifeq "$(strip $(SRC_FORMAT))" "xml"
+  $(PROFILEDIR)/%.xml: $(DOC_DIR)/xml/%.xml | $(PROFILEDIR)
+else
+  $(PROFILEDIR)/%.xml: $(ADOC_DIR)/%.xml | $(PROFILEDIR)
+endif
+    ifeq "$(VERBOSITY)" "2"
 	@(tput el1; echo -en "\r   Profiling $<")
-  endif
+    endif
 	$(XSLTPROC) --output $@ $(PROFSTRINGS) $(HROOTSTRING) \
 	  --stringparam "filename=$(notdir $<)" \
 	  --stylesheet $(PROFILE_STYLESHEET) --file $< $(XSLTPROCESSOR)
