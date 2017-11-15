@@ -278,6 +278,10 @@ function parse_args {
                 P_HTMLSINGLE=1
                 shift
                 ;;
+            --spell-checker)
+                P_SPELL_CHECKER="$2"
+                shift 2
+                ;;
             --static)
                 ccecho -- "warn" "--static is deprecated, since it is the default now."
                 shift
@@ -2062,22 +2066,22 @@ function getimages {
 ###########################################################################
 function spellcheck {
     local SHORT_OPTS LONG_OPTS SUB_CMD
-    local SPELLCHECKER_CMD COUNT FILE LISTMODE LISTOUTPUT SPELLCMD
+    local SPELL_CHECKER_CMD COUNT FILE LISTMODE LISTOUTPUT SPELLCMD
     local -a FILELIST SKIPLIST
 
     SUB_CMD=$1
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="extra-dict:,file:,help,lang:,list,rootid:"
+    LONG_OPTS="extra-dict:,file:,help,lang:,list,rootid:,spell-checker:"
 
     parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
 
     # check whether spell is installed:
-    SPELLCHECKER_CMD="$(which  --skip-alias --skip-functions "$SPELLCHECKER" 2>/dev/null)"
-    if [[ -z $SPELLCHECKER_CMD ]]; then
-        ccecho "error" "Error: '$SPELLCHECKER' is not installed"
+    SPELL_CHECKER_CMD="$(which  --skip-alias --skip-functions "$SPELL_CHECKER" 2>/dev/null)"
+    if [[ -z $SPELL_CHECKER_CMD ]]; then
+        ccecho "error" "Error: '$SPELL_CHECKER' is not installed"
         exit 1
     fi
 
@@ -2090,13 +2094,19 @@ function spellcheck {
         help_lang
         help_list
         help_rootid
+        help_spell-checker
         echo -e "    NOTES: * Options --file (-f) and --rootid exclude one another.\n           * If neither file nor rootid is specified, the rootid\n             from the DC-file is used\n           * $SUB_CMD follows xi:includes\n"
-    exit 0
+        exit 0
     fi
 
+    [[ -n "$P_SPELL_CHECKER" ]] && SPELL_CHECKER="$P_SPELL_CHECKER"
     [[ -n "$P_SPELL_EXTRA_DICT" ]] && SPELL_EXTRA_DICT="$P_SPELL_EXTRA_DICT"
     [[ -n "$P_FILE" ]] && FILELIST[0]="$P_FILE"
     [[ 1 = "$P_LIST" ]] && LISTMODE=1
+
+    # check if spell_checker is valid
+    [[ "aspell" = $SPELL_CHECKER || "hunspell" = $SPELL_CHECKER ]] ||
+        exit_on_error "Wrong value for --spell_checker. Needs to be \"aspell\" or \"hunspell\""
 
     # set FILELIST if rootid was specified
     if [[ -z "$P_ROOTID" && -z "$P_FILE" ]]; then
@@ -2124,9 +2134,9 @@ function spellcheck {
         if [[ -z "$SPELL_LANG" ]]; then
             SPELL_LANG=$($XSLTPROC --stylesheet "${DAPSROOT}/daps-xslt/common/get-language.xsl" --file "$MAIN" "$XSLTPROCESSOR" 2>/dev/null)
             if [[ -n "$SPELL_LANG" ]]; then
-        ccecho "info" "Using language $SPELL_LANG."
+                ccecho "info" "Using language $SPELL_LANG."
             else
-        exit_on_error "Failed to get language from $MAIN. Please specify it with --lang."
+                exit_on_error "Failed to get language from $MAIN. Please specify it with --lang."
             fi
         fi
     fi
@@ -2135,40 +2145,42 @@ function spellcheck {
     # create spellchecking command for both aspell and hunspell
     #
 
-
-    case "$SPELLCHECKER" in
-      aspell )
-        # first, create skiplist
-        COUNT=0
-        for SKIP in $SPELL_SKIP_TAGS; do
-          SKIPLIST[$COUNT]="--add-sgml-skip=$SKIP"
-          let COUNT++
-        done
-        # now create the command
-        SPELLCMD="$SPELLCHECKER_CMD --mode=sgml ${SKIPLIST[*]} --encoding=utf-8 --lang=$SPELL_LANG"
-        if [[ -n "$SPELL_EXTRA_DICT" ]]; then
-          SPELLCMD="$SPELLCMD --extra-dicts=$SPELL_EXTRA_DICT"
-        fi
-        ;;
-      hunspell )
-        # no skiplist for hunspell yet :-(
-        # expand dict name by lang
-        case "$SPELL_LANG" in
-          en )
-            SPELL_LANG+="_US"
-            ;;
-          cs )
-            SPELL_LANG+="_CZ"
-            ;;
+    # first, create skiplist
+    COUNT=0
+    for SKIP in $SPELL_SKIP_TAGS; do
+        case "$SPELL_CHECKER" in
+            aspell) SKIPLIST[$COUNT]="--add-sgml-skip=$SKIP"
+                ;;
+            hunspell) # hunspell supports no skipping
+                ;;
         esac
-        # now create the command
-        SPELLCMD="$SPELLCHECKER_CMD -H -i utf-8 -d $SPELL_LANG"
-        if [[ -n "$SPELL_EXTRA_DICT" ]]; then
-          SPELLCMD="$SPELLCMD,$SPELL_EXTRA_DICT"
-        fi
-        ;;
+        let COUNT++
+    done
+    # second, create the command
+    case "$SPELL_CHECKER" in
+        aspell )
+            SPELLCMD="$SPELL_CHECKER_CMD --mode=sgml ${SKIPLIST[*]} --encoding=utf-8 --lang=$SPELL_LANG"
+            if [[ -n "$SPELL_EXTRA_DICT" ]]; then
+                SPELLCMD+=" --extra-dicts=$SPELL_EXTRA_DICT"
+            fi
+            ;;
+        hunspell )
+            # expand dict name by lang
+            case "$SPELL_LANG" in
+                en)
+                    SPELL_LANG+="_US"
+                    ;;
+                cs)
+                    SPELL_LANG+="_CZ"
+                    ;;
+            esac
+            # now create the command
+            SPELLCMD="$SPELL_CHECKER_CMD -H -i utf-8 -d $SPELL_LANG"
+            if [[ -n "$SPELL_EXTRA_DICT" ]]; then
+                SPELLCMD+=",$SPELL_EXTRA_DICT"
+            fi
+            ;;
     esac
-
 
     # show spellchecker command with --debug
     [[ 1 = "$DEBUG" ]] && echo "DEBUG: $SPELLCMD"
@@ -2177,12 +2189,26 @@ function spellcheck {
     for FILE in "${FILELIST[@]}"; do
         test -f "$FILE" || ccecho "warn" "File $FILE does not exist"
         if [[ 1 = "$LISTMODE" ]]; then
-            LISTOUTPUT=$($SPELLCMD list < "$FILE" | sort -u 2>/dev/null)
+            case "$SPELL_CHECKER" in
+                aspell)
+                    LISTOUTPUT=$($SPELLCMD list < "$FILE" | sort -u 2>/dev/null)
+                    ;;
+                hunspell)
+                    LISTOUTPUT=$($SPELLCMD -l < "$FILE" | sort -u 2>/dev/null)
+                    ;;
+            esac
             [[ -n "$LISTOUTPUT" ]] && echo -e "$FILE\n------------------------------\n$LISTOUTPUT\n"
             LISTOUTPUT=""
         else
             echo "Checking $FILE..."
-            $SPELLCMD -c "$FILE"
+            case "$SPELL_CHECKER" in
+                aspell )
+                    eval "$SPELLCMD -c $FILE"
+                    ;;
+                hunspell )
+                    eval "$SPELLCMD $FILE"
+                    ;;
+            esac
         fi
     done
     exit
