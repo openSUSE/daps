@@ -65,8 +65,7 @@ BuildRequires:  libxml2-tools
 BuildRequires:  libxslt
 BuildRequires:  libxslt-tools
 BuildRequires:  poppler-tools
-BuildRequires:  python-lxml
-BuildRequires:  python-xml
+BuildRequires:  python3-lxml
 #BuildRequires:  sgml-skel
 BuildRequires:  suse-xsl-stylesheets
 BuildRequires:  svg-dtd
@@ -98,8 +97,7 @@ Requires:       jing
 Requires:       libxslt
 Requires:       make
 Requires:       poppler-tools
-Requires:       python-lxml
-Requires:       python-xml
+Requires:       python3-lxml
 #Requires:       sgml-skel
 Requires:       suse-xsl-stylesheets
 Requires:       svg-schema
