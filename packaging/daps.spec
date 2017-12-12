@@ -93,6 +93,7 @@ Requires:       docbook-xsl-stylesheets >= 1.77
 Requires:       docbook5-xsl-stylesheets >= 1.77
 Requires:       ghostscript-library
 Requires:       inkscape
+Requires:       java-devel >= 1.8.0
 Requires:       jing
 Requires:       libxslt
 Requires:       make
