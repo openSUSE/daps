@@ -129,6 +129,16 @@
   <xsl:template match="literallayout/@class"/>
   <xsl:template match="variablelist/@role"/>
   <xsl:template match="warning/@role|tip/@role|note/@role|important/@role|caution/@role"/>
+  <xsl:template match="set/@label|article/@label|book/@label|part/@label|chapter/@label|*[contains(local-name(.), 'sect')]/@label">
+    <xsl:call-template name="warn">
+      <xsl:with-param name="text">
+        <xsl:text>Removed "label" attribute from </xsl:text>
+        <xsl:value-of select="local-name(parent::*)"/>
+        <xsl:text>: Document structure is now inconsistent with non-Novdoc version.</xsl:text>
+      </xsl:with-param>
+      <xsl:with-param name="node" select="parent::*"/>
+    </xsl:call-template>
+  </xsl:template>
 
   <!-- ################################################################## -->
   <!-- Suppressed Elements for Novdoc                                     -->
@@ -145,58 +155,83 @@
     <xsl:param name="text"/>
     <xsl:param name="type"/>
     <xsl:param name="abort" select="0"/>
+    <xsl:param name="node" select="."/>
 
-    <xsl:choose>
-      <xsl:when test="$abort != 0">
-        <xsl:message terminate="yes">
-          <xsl:value-of select="$type"/>
-          <xsl:text>: </xsl:text>
-          <xsl:value-of select="$text"/>
-          <xsl:if test="ancestor-or-self::*/@id">
-            <xsl:text>&#10;  (within ID: </xsl:text>
-            <xsl:value-of select="ancestor-or-self::*[@id][1]/@id"/>
-            <xsl:text>)</xsl:text>
-          </xsl:if>
-        </xsl:message>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:message>
-          <xsl:value-of select="$type"/>
-          <xsl:text>: </xsl:text>
-          <xsl:value-of select="$text"/>
-          <xsl:if test="ancestor-or-self::*/@id">
-            <xsl:text>&#10;  (within ID: </xsl:text>
-            <xsl:value-of select="ancestor-or-self::*[@id][1]/@id"/>
-            <xsl:text>)</xsl:text>
-          </xsl:if>
-        </xsl:message>
-      </xsl:otherwise>
-    </xsl:choose>
+    <xsl:message>
+      <xsl:attribute name="terminate">
+        <xsl:choose>
+          <xsl:when test="$abort != 0 and 0 = 1">yes</xsl:when>
+          <xsl:otherwise>no</xsl:otherwise>
+        </xsl:choose>
+      </xsl:attribute>
+      <xsl:value-of select="$type"/>
+      <xsl:text>: </xsl:text>
+      <xsl:value-of select="$text"/>
+      <xsl:text>&#10;  (</xsl:text>
+      <xsl:choose>
+       <xsl:when test="$node/@id">
+         <xsl:text>has ID: </xsl:text>
+         <xsl:value-of select="$node/@id"/>
+       </xsl:when>
+       <xsl:when test="$node/ancestor::*/@id">
+         <xsl:text>within ID: </xsl:text>
+         <xsl:value-of select="$node/ancestor::*[@id][1]/@id"/>
+       </xsl:when>
+      </xsl:choose>
+      <xsl:if test="$node/title|$node/*[contains(local-name(.), 'info')]/title">
+        <xsl:if test="$node/ancestor-or-self::*/@id">
+          <xsl:text>, </xsl:text>
+        </xsl:if>
+        <xsl:variable name="title-candidate">
+          <xsl:value-of select="($node/title|$node/*[contains(local-name(.), 'info')]/title)[1]"/>
+        </xsl:variable>
+        <xsl:variable name="title">
+          <xsl:choose>
+            <xsl:when test="string-length($title-candidate) &gt; 30">
+              <xsl:value-of select="substring($title-candidate, 1, 27)"/>
+              <xsl:text>...</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="$title-candidate"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:variable>
+        <xsl:text>title: </xsl:text>
+        <xsl:value-of select="$title"/>
+      </xsl:if>
+      <xsl:text>)</xsl:text>
+    </xsl:message>
   </xsl:template>
 
   <xsl:template name="fatal">
     <xsl:param name="text"/>
-      <xsl:call-template name="message">
-        <xsl:with-param name="type">FATAL</xsl:with-param>
-        <xsl:with-param name="text" select="$text"/>
-        <xsl:with-param name="abort" select="1"/>
-      </xsl:call-template>
+    <xsl:param name="node" select="."/>
+    <xsl:call-template name="message">
+      <xsl:with-param name="type">FATAL</xsl:with-param>
+      <xsl:with-param name="text" select="$text"/>
+      <xsl:with-param name="abort" select="1"/>
+      <xsl:with-param name="node" select="$node"/>
+    </xsl:call-template>
   </xsl:template>
   <xsl:template name="warn">
     <xsl:param name="text"/>
+    <xsl:param name="node" select="."/>
     <xsl:if test="$debug.level > 1">
       <xsl:call-template name="message">
         <xsl:with-param name="type">WARNING</xsl:with-param>
         <xsl:with-param name="text" select="$text"/>
+        <xsl:with-param name="node" select="$node"/>
       </xsl:call-template>
     </xsl:if>
   </xsl:template>
   <xsl:template name="info">
     <xsl:param name="text"/>
+    <xsl:param name="node" select="."/>
     <xsl:if test="$debug.level > 2">
       <xsl:call-template name="message">
         <xsl:with-param name="type">INFO</xsl:with-param>
         <xsl:with-param name="text" select="$text"/>
+        <xsl:with-param name="node" select="$node"/>
       </xsl:call-template>
     </xsl:if>
   </xsl:template>
