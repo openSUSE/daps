@@ -950,4 +950,67 @@
     </tbody>
   </xsl:template>
 
+  <!-- Novdoc does not allow affiliation, but we can do tricks to pull that
+  info into one of the name fields (here: surname). To make sure that we
+  always get same layout, we just try stuff everything in the same tag. -->
+  <xsl:template match="(author|collab|editor|othercredit)[affiliation]">
+    <xsl:variable name="element">
+      <xsl:choose>
+        <xsl:when test="ancestor::authorgroup">
+          <xsl:value-of select="local-name(.)"/>
+        </xsl:when>
+        <xsl:otherwise>author</xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:element name="{$element}">
+      <!-- Firstname is bogus, but necessary for Novdoc. However, if we use
+      some non-bogus first name, that would allow for ugly firstname/surname
+      resortings with optional added punctuation *somewhere*, depending on
+      locale. This way, we at least always correctly print a Western order of
+      the names. -->
+      <firstname/>
+      <surname>
+        <xsl:if test="honorific">
+          <xsl:value-of select="honorific[1]"/>
+          <xsl:if test="firstname or surname or lineage">
+            <xsl:text> </xsl:text>
+          </xsl:if>
+        </xsl:if>
+        <xsl:if test="firstname">
+          <xsl:value-of select="firstname[1]"/>
+          <xsl:if test="surname or lineage">
+            <xsl:text> </xsl:text>
+          </xsl:if>
+        </xsl:if>
+        <xsl:if test="surname">
+          <xsl:value-of select="surname[1]"/>
+          <xsl:if test="lineage">
+            <xsl:text> </xsl:text>
+          </xsl:if>
+        </xsl:if>
+        <xsl:if test="lineage">
+          <xsl:value-of select="lineage[1]"/>
+        </xsl:if>
+        <xsl:if test="affiliation">
+          <xsl:text>, </xsl:text>
+          <xsl:if test="affiliation[1]/jobtitle">
+            <xsl:value-of select="affiliation[1]/jobtitle[1]"/>
+            <xsl:if test="affiliation[1]/orgname">
+              <xsl:text>, </xsl:text>
+            </xsl:if>
+          </xsl:if>
+          <xsl:if test="affiliation[1]/orgname">
+            <xsl:value-of select="affiliation[1]/orgname[1]"/>
+          </xsl:if>
+          <xsl:if test="affiliation[1]/orgdiv">
+            <xsl:text> (</xsl:text>
+            <xsl:value-of select="affiliation[1]/orgdiv[1]"/>
+            <xsl:text>)</xsl:text>
+          </xsl:if>
+        </xsl:if>
+      </surname>
+    </xsl:element>
+  </xsl:template>
+
+
 </xsl:stylesheet>
