@@ -162,9 +162,28 @@
   </xsl:template>
 
   <xsl:template match="d:orgname">
-     <othername>
-       <xsl:apply-templates select="@*|node()"/>
-     </othername>
-   </xsl:template>
+    <orgname>
+      <xsl:apply-templates select="@*|node()"/>
+    </orgname>
+  </xsl:template>
+
+  <!-- All the elements in which DB5 allows orgname but DB4 does not. -->
+  <xsl:template match="d:orgname[parent::d:address or parent::d:author or
+    parent::d:caption or parent::d:classsynopsisinfo or parent::d:collab or
+    parent::d:contrib or parent::d:editor or parent::d:funcsynopsisinfo or
+    parent::d:info or parent::d:merge or parent::d:org or parent::d:orgdiv or
+    parent::d:othercredit or parent::d:refdescriptor or parent::d:refname]">
+    <othername>
+      <xsl:apply-templates select="@*|node()"/>
+    </othername>
+  </xsl:template>
+
+  <xsl:template match="*[parent::d:orgname][not(self::d:link or 
+    self::d:olink or self::d:emphasis or self::d:trademark or
+    self::d:replaceable or self::d:remark or self::d:subscript or
+    self::d:superscript or self::d:inlinegraphic or self::d:inlinemediaobject or
+    self::d:indexterm)]">
+    <xsl:apply-templates select="@*|node()"/>
+  </xsl:template>
 
 </xsl:stylesheet>
