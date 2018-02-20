@@ -953,7 +953,7 @@
   <!-- Novdoc does not allow affiliation, but we can do tricks to pull that
   info into one of the name fields (here: surname). To make sure that we
   always get same layout, we just try stuff everything in the same tag. -->
-  <xsl:template match="(author|collab|editor|othercredit)[affiliation]">
+  <xsl:template match="*[self::author|self::collab|self::editor|self::othercredit][affiliation]">
     <xsl:variable name="element">
       <xsl:choose>
         <xsl:when test="ancestor::authorgroup">
