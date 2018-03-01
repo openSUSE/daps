@@ -197,6 +197,11 @@ $(OD_GRAPHICS): $(ONLINE_IMAGES)
 	  --absolute-names --transform=s%$(IMG_GENDIR)/color%images/src/jpg% \
 	 $(IMG_GENDIR)/color/*.jpg
       endif
+      ifneq "$(strip $(SVGONLINE))" ""
+	tar rhf $(OD_GRAPHICS_TMP) --exclude-vcs --ignore-failed-read \
+	  --absolute-names --transform=s%$(IMG_GENDIR)/color%images/src/svg% \
+	 $(IMG_GENDIR)/color/*.svg
+      endif
 	bzip2 -9f $(OD_GRAPHICS_TMP)
   else
 	@ccecho "info" "Selected set or book contains no graphics"
