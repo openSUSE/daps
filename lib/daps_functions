@@ -2222,6 +2222,7 @@ function stylecheck {
 ###########################################################################
 function xmlformat {
     local _BINARY DAPSXMLFORMAT SHORT_OPTS LONG_OPTS SUB_CMD XMLFORMAT_CMD
+    local _XMLFORMAT_FLAGS
     SUB_CMD=$1
     shift
 
@@ -2280,6 +2281,13 @@ function xmlformat {
         fi
     fi
 
+    # Be more verbose in debug or -vv mode
+    #
+    if [[ 1 = "$DEBUG" || 3 = "$VERBOSITY" ]]; then
+        _XMLFORMAT_FLAGS="-iv"
+    else
+        _XMLFORMAT_FLAGS="-i"
+    fi
     # run daps-xmlformat
     #
     # ignore $MAIN with --file or --rootid
@@ -2290,7 +2298,7 @@ function xmlformat {
             [[ "$FILE" == "$MAIN" ]] && continue
         fi
         [[ 0 != "$VERBOSITY" ]] && echo -e "  $FILE"
-        $DAPSXMLFORMAT -i "$FILE" >/dev/null
+        $DAPSXMLFORMAT $_XMLFORMAT_FLAGS "$FILE" >/dev/null
     done
 }
 
