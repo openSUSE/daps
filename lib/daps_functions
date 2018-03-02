@@ -2285,6 +2285,7 @@ function xmlformat {
     #
     if [[ 1 = "$DEBUG" || 3 = "$VERBOSITY" ]]; then
         _XMLFORMAT_FLAGS="-iv"
+        echo -e "Using the following config file: $XMLFORMAT_CONFIG_FILE"
     else
         _XMLFORMAT_FLAGS="-i"
     fi
@@ -2292,7 +2293,7 @@ function xmlformat {
     #
     # ignore $MAIN with --file or --rootid
     #
-    echo "Prettifying the following files:"
+    [[ 0 != "$VERBOSITY" ]] && echo "Prettifying the following files:"
     for FILE in "${FILELIST[@]}"; do
         if [[ -n "$P_FILE" || -n "$ROOTID" ]]; then
             [[ "$FILE" == "$MAIN" ]] && continue
