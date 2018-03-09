@@ -246,6 +246,9 @@ optipng:
 	    let "j += 1"; \
 	    optipng -o2 $$i >/dev/null 2>&1; \
 	    exiftool -Comment=optipng -overwrite_original -P $$i >/dev/null || true; \
+			if [[ "$(VERBOSITY)" -gt "0" ]]; then \
+	    	echo $$i; \
+			fi \
 	  fi \
 	done; \
 	if [ 0 == $$j ]; then \
@@ -275,7 +278,7 @@ ifdef HTMLROOT
     endif
 endif
 
-# List missing images 
+# List missing images
 #
 .PHONY: list-images-missing
 list-images-missing:
@@ -302,7 +305,7 @@ list-images-multisrc warn-images:
   endif
 
 #------------------------------------------------------------------------
-# The "real" image generation 
+# The "real" image generation
 #
 # While PDFs support EPSs, SVGs and PNGs, all other output formats need PNG
 # (Browser support for SVG is still not common enough). So we convert
@@ -362,7 +365,7 @@ endif
 #---------------
 # Create color PNGs from other formats
 
-# remove_link and the optipng call are used more than once, so 
+# remove_link and the optipng call are used more than once, so
 # let's define them here
 
 # A note on inkscape:
@@ -564,4 +567,3 @@ ifeq "$(VERBOSITY)" "2"
 	@echo "   Converting $(notdir $<) to grayscale"
 endif
 	convert $< $(CONVERT_OPTS_JPG) $@ $(DEVNULL)
-
