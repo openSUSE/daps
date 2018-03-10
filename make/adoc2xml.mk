@@ -16,6 +16,23 @@ endif
 #--------------------------------------------------
 # CHECKS
 #
+
+# Check whether asciidoctor is present. If not, fall back to asciidoc
+
+HAS_ASCIIDOCTOR := $(shell which asciidoctor 2>/dev/null)
+ifdef HAS_ASCIIDOCTOR
+  ASCIIDOC     := $(HAS_ASCIIDOCTOR)
+  ADOC_BACKEND := docbook5
+else
+  HAVE_ASCIIDOC := $(shell which asciidoc 2>/dev/null)
+  ifdef HAS_ASCIIDOCTOR
+    ASCIIDOC     := $(HAS_ASCIIDOC)
+    ADOC_BACKEND := docbook45
+  else
+    $(error $(shell ccecho "error" "Error: Neither asciidoctor nor asciidoc is installed"))
+  endif
+endif
+
 # Some variables need to be preset from the wrapper script
 # Double-check whether they are set
 #
@@ -45,7 +62,7 @@ $(MAIN): $(ADOC_SRCFILES) | $(ADOC_DIR)
   ifeq "$(VERBOSITY)" "2"
 	@ccecho "info"  "   Creating XML from ASCIIDOC..."
   endif
-	asciidoc --attribute=imagesdir! --backend=docbook45 \
+	asciidoc --attribute=imagesdir! --backend=$(ADOC_BACKEND) \
 	  --doctype=$(ADOC_TYPE) --out-file=$@ $(ADOC_MAIN)
   ifeq "$(VERBOSITY)" "2"
 	@ccecho "info" "Successfully created XML file $@"
