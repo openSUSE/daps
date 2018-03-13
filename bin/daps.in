@@ -52,8 +52,10 @@ export prefix=@prefix@
 
 declare -a VARLIST
 VARLIST=(
+    ADOC_BACKEND
     ADOC_CONFIG_FILE
     ADOC_TYPE
+    ASCIIDOC
     ASPELL_EXTRA_DICT
     ASPELL_LANG
     ASPELL_SKIP_TAGS
@@ -1734,10 +1736,19 @@ export XML_CATALOG_FILES
 # These stylesheets are used as a fallback and/or when no STYLEROOT is
 # specified on the command line or the DC file
 #
-# get DocBook version first ...
+# check whether we have asciidoctor (supports conversion to DocBook 5) or
+# asciidoc (only supports conversion to DocBook 4). Set DocBook versions and
+# backends for adoc
+#
 if [[ "adoc" = "$SRC_FORMAT" ]]; then
-#    DOCBOOK_VERSION=5
-    DOCBOOK_VERSION=4
+    DOCBOOK_VERSION=5
+    ADOC_BACKEND=docbook5
+    ASCIIDOC=$(which asciidoctor 2>/dev/null)
+    if [[ 1 = "$?" ]]; then
+        ASCIIDOC=$(which asciidoc 2>/dev/null) || exit_on_error "Neither asciidoctor nor asciidoc is installed"
+        DOCBOOK_VERSION=4
+        ADOC_BACKEND=docbook45
+    fi
 else
     DOCBOOK_VERSION=$($XSLTPROC --stylesheet "${DAPSROOT}/daps-xslt/common/get-docbook-version.xsl" --file "$MAIN" "$XSLTPROCESSOR") || exit_on_error "Could not get DocBook version. Maybe $MAIN is not well-formed?"
 fi

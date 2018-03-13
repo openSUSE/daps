@@ -17,22 +17,6 @@ endif
 # CHECKS
 #
 
-# Check whether asciidoctor is present. If not, fall back to asciidoc
-
-HAS_ASCIIDOCTOR := $(shell which asciidoctor 2>/dev/null)
-ifdef HAS_ASCIIDOCTOR
-  ASCIIDOC     := $(HAS_ASCIIDOCTOR)
-  ADOC_BACKEND := docbook5
-else
-  HAVE_ASCIIDOC := $(shell which asciidoc 2>/dev/null)
-  ifdef HAS_ASCIIDOCTOR
-    ASCIIDOC     := $(HAS_ASCIIDOC)
-    ADOC_BACKEND := docbook45
-  else
-    $(error $(shell ccecho "error" "Error: Neither asciidoctor nor asciidoc is installed"))
-  endif
-endif
-
 # Some variables need to be preset from the wrapper script
 # Double-check whether they are set
 #
@@ -49,7 +33,7 @@ ifndef ADOC_MAIN
   $(error $(shell ccecho "error" "Fatal error: No MAIN file set"))
 endif
 
-#ADOC_SRCFILES := $(wildcard $(shell grep "include::" $(MAIN) | sed 's/.*::\([^\[]*\).*/\1/g'))
+#ADOC_SRCFILES := $(wildcard $(shell egrep "\s*[^\]\s*include::" $(MAIN) | sed 's/.*::\([^\[]*\).*/\1/g'))
 
 # Get the adoc source files. Since it is not possible to get a list of included
 # files from adoc, we assume that all *.adoc files are sources
@@ -62,7 +46,7 @@ $(MAIN): $(ADOC_SRCFILES) | $(ADOC_DIR)
   ifeq "$(VERBOSITY)" "2"
 	@ccecho "info"  "   Creating XML from ASCIIDOC..."
   endif
-	asciidoc --attribute=imagesdir! --backend=$(ADOC_BACKEND) \
+	$(ASCIIDOC) --attribute=imagesdir! --backend=$(ADOC_BACKEND) \
 	  --doctype=$(ADOC_TYPE) --out-file=$@ $(ADOC_MAIN)
   ifeq "$(VERBOSITY)" "2"
 	@ccecho "info" "Successfully created XML file $@"
