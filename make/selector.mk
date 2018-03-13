@@ -101,6 +101,7 @@ endif
 LISTTARGETS := list-file list-images-missing list-images-multisrc list-srcfiles list-srcfiles-unused
 
 ifeq "$(MAKECMDGOALS)" "$(filter $(MAKECMDGOALS),$(LISTTARGETS))"
+  include $(DAPSROOT)/make/adoc2xml.mk
   include $(DAPSROOT)/make/setfiles.mk
   include $(DAPSROOT)/make/images.mk
   include $(DAPSROOT)/make/filelist.mk

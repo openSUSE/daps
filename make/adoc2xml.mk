@@ -33,12 +33,17 @@ ifndef ADOC_MAIN
   $(error $(shell ccecho "error" "Fatal error: No MAIN file set"))
 endif
 
-#ADOC_SRCFILES := $(wildcard $(shell egrep "\s*[^\]\s*include::" $(MAIN) | sed 's/.*::\([^\[]*\).*/\1/g'))
-
-# Get the adoc source files. Since it is not possible to get a list of included
-# files from adoc, we assume that all *.adoc files are sources
+# Get the adoc sourcefiles
 #
-ADOC_SRCFILES := $(wildcard $(DOC_DIR)/adoc/*.adoc)
+# include statements always start at the begin of the line, no other
+# characters (incl. space) are allowed before it
+#
+# If grep fails, we at least have ADOC_MAIN
+#
+ADOC_SRCFILES := $(ADOC_MAIN) $(wildcard $(addprefix \
+ $(DOC_DIR)/adoc/,$(shell egrep '^include::' $(ADOC_MAIN) 2>/dev/null | sed 's/.*::\([^\[]*\).*/\1/g' 2>/dev/null)))
+
+#ADOC_SRCFILES := $(wildcard $(DOC_DIR)/adoc/*.adoc)
 
 all: $(MAIN)
 

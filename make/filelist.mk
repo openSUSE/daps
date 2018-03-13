@@ -13,6 +13,10 @@
 # include $(DAPSROOT)/make/setfiles.mk
 # include $(DAPSROOT)/make/images.mk
 
+ifeq "$(strip $(SRC_FORMAT))" "adoc"
+  DOCFILES := $(ADOC_SRCFILES)
+endif
+
 USED_FILES    := $(ENTITIES_DOC) $(DOCCONF) $(DOCFILES) $(USED_ALL)
 
 # Using tar is the easiest way to search for files excluding versioning system
