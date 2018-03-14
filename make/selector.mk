@@ -198,6 +198,7 @@ ifeq "$(MAKECMDGOALS)" "online-docs"
   include $(DAPSROOT)/make/epub.mk
 endif
 ifeq "$(MAKECMDGOALS)" "package-src"
+  include $(DAPSROOT)/make/adoc2xml.mk
   include $(DAPSROOT)/make/setfiles.mk
   include $(DAPSROOT)/make/profiling.mk
   include $(DAPSROOT)/make/validate.mk
