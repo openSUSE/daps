@@ -46,17 +46,16 @@ ADOC_SRCFILES := $(ADOC_MAIN) $(wildcard $(addprefix \
 #ADOC_SRCFILES := $(wildcard $(DOC_DIR)/adoc/*.adoc)
 
 all: $(MAIN)
-
 $(MAIN): $(ADOC_SRCFILES) | $(ADOC_DIR)
   ifeq "$(VERBOSITY)" "2"
 	@ccecho "info"  "   Creating XML from ASCIIDOC..."
   endif
-	$(ASCIIDOC) --attribute=imagesdir! --backend=$(ADOC_BACKEND) \
-	  --doctype=$(ADOC_TYPE) --out-file=$@ $(ADOC_MAIN)
+	$(ASCIIDOC) --attribute=imagesdir! $(ADOC_ATTRIBUTES) \
+          --backend=$(ADOC_BACKEND) --doctype=$(ADOC_TYPE) \
+          --out-file=$@ $(ADOC_MAIN)
   ifeq "$(VERBOSITY)" "2"
 	@ccecho "info" "Successfully created XML file $@"
   endif
-
 
 ### 	asciidoc --attribute=imagesdir! --conf-file=$(ADOC_CONFIG_FILE) \
 	  --doctype=$(ADOC_TYPE) --out-file=$@ $(ADOC_MAIN)

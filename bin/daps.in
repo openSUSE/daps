@@ -52,6 +52,7 @@ export prefix=@prefix@
 
 declare -a VARLIST
 VARLIST=(
+    ADOC_ATTRIBUTES
     ADOC_BACKEND
     ADOC_CONFIG_FILE
     ADOC_TYPE
@@ -669,6 +670,14 @@ Usage:
 
 
 Global Options:
+  --adocattr="NAME=VALUE"   Define or delete an ASCIIDOC document attribute.
+                            Attributes are specified like NAME=VALUE, or just
+                            NAME for for attributes without a value.
+                            To delete a value set in the document use NAME!
+                            To only set a value that is not already set in the
+                            document, use NAME=VALUE@
+                            Default: unset
+                            Only works with ASCIIDOC sources
   --builddir=BUILD_DIR      Directory where every output $ME generates will
                             end up.
                             Default: <doc dir>/build/$BOOK
@@ -1198,7 +1207,7 @@ export POSIXLY_CORRECT=1
 # Therefore we need to save each variable twice in order to recover the
 # original value.
 
-ARGS=$(getopt -o d:e:hm:v:: -l builddir:,color:,colour:,commands,debug,docconfig:,dapsroot:,envfile:,fb_styleroot:,force,help,jobs:,main:,schema:,styleroot:,verbosity::,version,xsltprocessor: -n "$ME" -- "$@")
+ARGS=$(getopt -o d:e:hm:v:: -l adocattr:,builddir:,color:,colour:,commands,debug,docconfig:,dapsroot:,envfile:,fb_styleroot:,force,help,jobs:,main:,schema:,styleroot:,verbosity::,version,xsltprocessor: -n "$ME" -- "$@")
 
 # Exit when getopt returns errors
 #
@@ -1209,6 +1218,10 @@ eval set -- "$ARGS"
 
 while true ; do
     case "$1" in
+        --adocattr)
+            ADOC_ATTRIBUTES="$ADOC_ATTRIBUTES --attribute=\"$2\""
+            shift 2
+            ;;
         --builddir)
             [[ -d $2 ]] || exit_on_error "BUILD_DIR \"$2\" is not a valid directory"
             [[ -w $2 ]] || exit_on_error "BUILD_DIR \"$2\" is not writeable"
