@@ -49,8 +49,13 @@ package-src: $(PROFILES) $(PROFILEDIR)/.validate
 	@echo -e "$(subst $(SPACE),\n,$(sort $(MISSING)))"
 	exit 1
   else
+    ifeq "$(strip $(SRC_FORMAT))" "adoc"
+	tar chf $(PACKAGE_SRC_TARBALL) --absolute-names \
+	  --transform=s%$(DOC_DIR)/%% $(ADOC_SRCFILES)
+    else
 	tar chf $(PACKAGE_SRC_TARBALL) --absolute-names \
 	  --transform=s%$(PROFILEDIR)%xml% $(PROFILES)
+    endif
 	tar rfh $(PACKAGE_SRC_TARBALL) --absolute-names \
 	  --transform=s%$(DOC_DIR)/%% $(USED_ALL) $(DOCCONF)
     ifdef DEF_FILE
