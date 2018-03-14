@@ -975,6 +975,8 @@ function build_epub {
     [[ -n "$P_NAME" ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
     [[ -n "$P_ROOTID" ]]    && export ROOTID="$P_ROOTID"
     [[ -n "$P_STATIC_DIR" ]] && export STATIC_DIR="$P_STATIC_DIR"
+    [[ -n "$P_PARAMS" ]]       && export PARAMS="$P_PARAMS"
+    [[ -n "$P_STRINGPARAMS" ]] && export STRINGPARAMS="$P_STRINGPARAMS"
 
     # Checking the result requires a minimum verbosity level of 1
     if [[ 1 = "$P_CHECK" ]]; then
@@ -1029,6 +1031,8 @@ function build_man {
     [[ -n "$P_NOREFCHECK" ]] && export NOREFCHECK="1"
     [[ -n "$P_ROOTID" ]]     && export ROOTID="$P_ROOTID"
     [[ -n "$P_SUBDIRS" ]]    && export MAN_SUBDIRS="yes"
+    [[ -n "$P_PARAMS" ]]       && export PARAMS="$P_PARAMS"
+    [[ -n "$P_STRINGPARAMS" ]] && export STRINGPARAMS="$P_STRINGPARAMS"
 
     call_make "$SUB_CMD" "$@"
 }
@@ -2475,7 +2479,7 @@ $2\n"
 
 function help_adoconly {
     cat <<EOF
-    --xmlonly                 Only list ASCIIDOC and include files.
+    --adoconly                Only list ASCIIDOC and include files.
                               Shortcut for --nodc --noent --noimg.
 EOF
 }
@@ -2699,6 +2703,7 @@ function help_meta {
                               (filename, maintainer and status) for each file.
                               Implies draft mode.
                               Default: off
+                              Does not work with ASCIIDOC sources
 EOF
 }
 function help_modified {
@@ -2892,6 +2897,7 @@ function help_rootid {
                               (parts or chapters). Default: Usually set
                               in the DC-file; if not set the complete set
                               defined in \$MAIN will be built
+                              Does not work with ASCIIDOC sources
 EOF
 }
 function help_set-date {
@@ -2932,14 +2938,6 @@ function help_statdir {
                               DEFAULT: \$STYLEROOT/static
 EOF
 }
-function help_subdirs {
-    cat <<EOF
-    --subdirs                 Man pages are created in a man/ directory.
-                              To also enable the subdirectories man1/, man2/,
-                              etc., specify this parameter.
-                              Default: off
-EOF
-}
 function help_stringparam {
     cat <<EOF
     --stringparam="KEY=VALUE" Add an xslt processor parameter.
@@ -2947,6 +2945,15 @@ function help_stringparam {
                               parameters such as margins.
                               This parameter can be specified multiple times.
                               Default: unset
+                              Does not work with ASCIIDOC sources
+EOF
+}
+function help_subdirs {
+    cat <<EOF
+    --subdirs                 Man pages are created in a man/ directory.
+                              To also enable the subdirectories man1/, man2/,
+                              etc., specify this parameter.
+                              Default: off
 EOF
 }
 function help_target {
