@@ -106,6 +106,7 @@
   <!-- Suppressed attributes                                              -->
 
   <!-- Suppressed attributes -->
+  <xsl:template match="@action"/>
   <xsl:template match="@continuation"/>
   <xsl:template match="@format"/>
   <xsl:template match="@float"/>
