@@ -1013,5 +1013,52 @@
     </xsl:element>
   </xsl:template>
 
+  <!-- Novdoc does not support callouts with multiple arearefs, e.g. like:
+  <callout arearefs="callout1 callout2". We separate this out into one
+  callout with normal text and then callouts with just - " - (ditto mark) as
+  text. -->
+
+  <xsl:template match="callout[contains(normalize-space(@arearefs), ' ')]">
+    <xsl:param name="refs" select="concat(normalize-space(@arearefs), ' ')"/>
+    <xsl:variable name="thisref" select="substring-before($refs, ' ')"/>
+    <xsl:variable name="node" select="."/>
+
+    <callout arearefs="{$thisref}">
+      <xsl:apply-templates select="@*[not(name(.) = 'arearefs')]"/>
+      <xsl:choose>
+        <xsl:when test="local-name(*[1]) = 'para'">
+          <para>
+            <xsl:apply-templates select="*[1]/@*"/>
+            <xsl:call-template name="generate-co">
+              <xsl:with-param name="refs" select="substring-after($refs, ' ')"/>
+            </xsl:call-template>
+            <xsl:apply-templates select="(*[1]/node())"/>
+          </para>
+          <xsl:apply-templates select="node()[not(self::* = $node/*[1])]"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <para>
+            <xsl:call-template name="generate-co">
+              <xsl:with-param name="refs" select="substring-after($refs, ' ')"/>
+            </xsl:call-template>
+          </para>
+          <xsl:apply-templates select="*"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </callout>
+  </xsl:template>
+
+  <xsl:template name="generate-co">
+    <xsl:param name="refs" select="' '"/>
+    <xsl:variable name="thisref" select="substring-before($refs, ' ')"/>
+
+    <xsl:if test="$refs != ' ' and $refs != ''">
+      <xref linkend="{$thisref}" xrefstyle="select:label nopage"/>
+
+      <xsl:call-template name="generate-co">
+        <xsl:with-param name="refs" select="substring-after($refs, ' ')"/>
+      </xsl:call-template>
+    </xsl:if>
+  </xsl:template>
 
 </xsl:stylesheet>
