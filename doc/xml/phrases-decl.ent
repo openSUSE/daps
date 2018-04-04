@@ -284,6 +284,15 @@
 <!ENTITY daps-file-names-req
 ' <variablelist>
    <varlistentry>
+     <term>XML extension required</term>
+     <listitem>
+     <para>
+       Always use the .xml extension, so DAPS can recognize the files, which are
+       needed to build the document.
+     </para>
+     </listitem>
+   </varlistentry>
+   <varlistentry>
      <term>No Spaces and Colons In File and Directory Names</term>
      <listitem>
       <para>Avoid spaces and colons in file and directory names. 
@@ -326,6 +335,14 @@
      </listitem>
     </varlistentry>
    </variablelist>
+   <note><title>Hint on Using UTF-8 characters in File Names</title>
+   <para>
+     Depending on your environment, the build process could fail if you are using
+     file names with UTF-8 characters. Run the <command>locale</command>
+     command and check if the LANG environment variable contains UTF-8. Otherwise
+     adjust the LANG environment variable accordingly.
+   </para>
+   </note>
   '>
 
 <!ENTITY daps-img-ref
