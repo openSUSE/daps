@@ -277,4 +277,27 @@
    </para>
   </important>
  </sect1>
-</chapter>
+ <sect1 id="sec.daps.user.output.timestamp">
+ <title>Putting the current Date and Time into the Target Document</title>
+ <para>
+ To get information about the build date and time, you can use the <sgmltag class="pi">dbtimestamp</sgmltag> tag.
+ The processing instruction <sgmltag class="pi">dbtimestamp</sgmltag> is processed by &daps;, when the document
+ is built. The date and time will then show up in the final document, based on how you've set the date/time format.
+ </para>
+ <example>
+	 <title>Example for implementing the dbtimestamp tag in an XML File:</title>
+   <screen>&lt;para>Current date: &lt;?dbtimestamp?>.&lt;/para></screen>
+ </example>
+ <para>
+ The format of the date/time can be customized via the format parameter.
+ </para>
+ <example>
+   <title>Example for implementing the dbtimestamp tag with a customized format:</title>
+	 <screen>&lt;para>Current date: &lt;?dbtimestamp format="A, d B Y"?>.&lt;/para></screen>
+ </example>
+ <para>
+ For further information about the format elements look at this site:
+ <ulink  url="http://www.sagehill.net/docbookxsl/Datetime.html"/>  
+ </para>
+ </sect1>
+ </chapter>
