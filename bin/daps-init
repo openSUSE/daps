@@ -163,10 +163,10 @@ while true ; do
             shift 2
             ;;
         --rootelement|-r)
-            if [[ article = "$2" || book = "$2" ]]; then
+            if [[ article = "$2" || book = "$2" || "set" = "$2" ]]; then
                 ROOTELEMENT="$2"
             else
-                exit_on_error "Rootelement must be either \"article\" or \"book\""
+                exit_on_error "Rootelement must be either \"article\", \"book\" or \"set\""
             fi
             shift 2
             ;;
