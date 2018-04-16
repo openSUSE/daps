@@ -9,10 +9,6 @@
 # <fsundermeyer at opensuse dot org>
 #
 
-ifndef ADOC_TYPE
-  ADOC_TYPE := book
-endif
-
 #--------------------------------------------------
 # CHECKS
 #
