@@ -101,7 +101,9 @@ endif
 LISTTARGETS := list-file list-images-missing list-images-multisrc list-srcfiles list-srcfiles-unused
 
 ifeq "$(MAKECMDGOALS)" "$(filter $(MAKECMDGOALS),$(LISTTARGETS))"
-  include $(DAPSROOT)/make/adoc2xml.mk
+  ifeq "$(strip $(SRC_FORMAT))" "adoc"
+    include $(DAPSROOT)/make/adoc2xml.mk
+  endif
   include $(DAPSROOT)/make/setfiles.mk
   include $(DAPSROOT)/make/images.mk
   include $(DAPSROOT)/make/filelist.mk
@@ -198,7 +200,9 @@ ifeq "$(MAKECMDGOALS)" "online-docs"
   include $(DAPSROOT)/make/epub.mk
 endif
 ifeq "$(MAKECMDGOALS)" "package-src"
-  include $(DAPSROOT)/make/adoc2xml.mk
+  ifeq "$(strip $(SRC_FORMAT))" "adoc"
+    include $(DAPSROOT)/make/adoc2xml.mk
+  endif
   include $(DAPSROOT)/make/setfiles.mk
   include $(DAPSROOT)/make/profiling.mk
   include $(DAPSROOT)/make/validate.mk
