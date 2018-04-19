@@ -12,19 +12,58 @@
 # includes are set in selector.mk
 # include $(DAPSROOT)/make/setfiles.mk
 
-# Files included with xi:include parse="text" $(TEXTFILES) are linked into
-# the profile directory. the profiling stylesheets rewrites all paths to
-# these files with just the filename (href="../foo/bar.txt" -> href="bar.txt")
-# Since these text files can come from arbitrary locations, it is not possible
-# to write a pattern rule for creating the links. We use the
-# PHONY link_txt_files to generate them.
+#
+# Set $(PROFILES) and the profiling stylesheets.
+# ASCIIDOC:
+#
+# If ADOC_POST is set to yes, we use ADOC_POST_STYLE, otherwise a noprofile
+# stylesheet
+#
+# XML:
+#
+# If PROFILE_URN is set, we resolve it, otherwise we use a nonprofiling
+# stylesheet 
 
-ifeq "$(strip $(SRC_FORMAT))" "xml"
-  PROFILES := $(sort $(subst $(DOC_DIR)/xml/,$(PROFILEDIR)/,$(SRCFILES)))
-else
-#  $(info PROFILES := $(subst $(ADOC_DIR)/,$(PROFILEDIR)/,$(MAIN)))
+ifeq "$(strip $(SRC_FORMAT))" "adoc"
+  $(info "--> detected adoc")
   PROFILES := $(subst $(ADOC_DIR)/,$(PROFILEDIR)/,$(MAIN))
+  ifeq "$(strip $(ADOC_POST))" "yes"
+  $(info "--> setting $(ADOC_POST_STYLE)")
+    PROFILE_STYLESHEET := $(ADOC_POST_STYLE)
+  endif
+else 
+  PROFILES := $(sort $(subst $(DOC_DIR)/xml/,$(PROFILEDIR)/,$(SRCFILES)))
+  ifdef PROFILE_URN
+    # Resolve profile urn because saxon does not accept urns
+    ifeq "$(shell expr substr $(PROFILE_URN) 1 4 2>/dev/null)" "urn:"
+      PROFILE_STYLESHEET := $(shell $(DAPSROOT)/libexec/xml_cat_resolver $(PROFILE_URN) 2>/dev/null)
+    else
+      PROFILE_STYLESHEET := $(PROFILE_URN)
+    endif
+    #
+    # depending on the distribution, xmlcatalog returns file://... or file:... 
+    # make sure both cases are matched
+    #
+    PROFILE_STYLESHEET := $(patsubst //%,%,$(subst file:%,%,$(PROFILE_STYLESHEET)))
+    ifeq "$(strip $(PROFILE_STYLESHEET))" ""
+      $(error $(shell ccecho "error" "Could not resolve URN \"$(PROFILE_URN)\" with xmlcatalog via catalog file \"$(XML_MAIN_CATALOG)\""))
+    endif
+  endif
 endif
+
+#
+# If not profiling stylesheet has been set by now, we need to use a
+# noprofiling stylesheet
+#
+ifeq "$(strip $(PROFILE_STYLESHEET))" ""
+  $(info "--> setting noprofile")
+  ifeq "$(DOCBOOK_VERSION)" "5"
+    PROFILE_STYLESHEET := $(DAPSROOT)/daps-xslt/profiling/noprofile5.xsl
+  else
+    PROFILE_STYLESHEET := $(DAPSROOT)/daps-xslt/profiling/noprofile4.xsl
+  endif
+endif
+
 
 # Will be used on profiling only
 #
@@ -40,30 +79,6 @@ ifdef SETDATE
     .INTERMEDIATE: $(PROFILES)
   else
     $(warn $(shell ccecho "warn" "Warning: Ignoring --setdate option since $(MAIN) does not include a profiling URN"))
-  endif
-endif
-
-# Resolve profile urn because saxon does not accept urns
-#
-ifdef PROFILE_URN
-  ifeq "$(shell expr substr $(PROFILE_URN) 1 4 2>/dev/null)" "urn:"
-    PROFILE_STYLESHEET := $(shell $(DAPSROOT)/libexec/xml_cat_resolver $(PROFILE_URN) 2>/dev/null)
-  else
-    PROFILE_STYLESHEET := $(PROFILE_URN)
-  endif
-  #
-  # depending on the distribution, xmlcatalog returns file://... or file:... 
-  # make sure both cases are matched
-  #
-  PROFILE_STYLESHEET := $(patsubst //%,%,$(subst file:%,%,$(PROFILE_STYLESHEET)))
-  ifeq "$(strip $(PROFILE_STYLESHEET))" ""
-    $(error $(shell ccecho "error" "Could not resolve URN \"$(PROFILE_URN)\" with xmlcatalog via catalog file \"$(XML_MAIN_CATALOG)\""))
-  endif
-else
-  ifeq "$(DOCBOOK_VERSION)" "5"
-    PROFILE_STYLESHEET := $(DAPSROOT)/daps-xslt/profiling/noprofile5.xsl
-  else
-    PROFILE_STYLESHEET := $(DAPSROOT)/daps-xslt/profiling/noprofile4.xsl
   endif
 endif
 
@@ -107,7 +122,12 @@ endif
 	  --stylesheet $(PROFILE_STYLESHEET) --file $< $(XSLTPROCESSOR)
 
 
-# Files listed in TEXTFILES are relative to the XML directory
+# Files included with xi:include parse="text" $(TEXTFILES) are linked into
+# the profile directory. the profiling stylesheets rewrites all paths to
+# these files with just the filename (href="../foo/bar.txt" -> href="bar.txt")
+# Since these text files can come from arbitrary locations, it is not possible
+# to write a pattern rule for creating the links. We use the
+# PHONY link_txt_files to generate them.
 #
 # "Clean" paths and file:// entries are supported, other protocols not
 #

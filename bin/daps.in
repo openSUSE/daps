@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Copyright (C) 2012-2017 SUSE Linux GmbH
+# Copyright (C) 2012-2018 SUSE Linux GmbH
 #
 # Author:
 # Frank Sundermeyer <fsundermeyer at opensuse dot org>
@@ -55,6 +55,8 @@ VARLIST=(
     ADOC_ATTRIBUTES
     ADOC_BACKEND
     ADOC_CONFIG_FILE
+    ADOC_POST
+    ADOC_POST_STYLE
     ADOC_TYPE
     ASCIIDOC
     ASPELL_EXTRA_DICT
@@ -1663,6 +1665,7 @@ fi
 # $replacement for $substring.
 
 ADOC_CONFIG_FILE=${ADOC_CONFIG_FILE/#@sysconfdir\@\/daps/${DAPSROOT}/etc}
+ADOC_POST_STYLE=${ADOC_POST_STYLE/#@pkgdatadir\@/${DAPSROOT}}
 
 FOP_CONFIG_FILE=${FOP_CONFIG_FILE/#@sysconfdir\@\/daps/${DAPSROOT}/etc}
 FOP_WRAPPER=${FOP_WRAPPER/#@pkgdatadir\@/${DAPSROOT}}
