@@ -1,0 +1,77 @@
+=== Inline Elements
+
+==== Links and Cross References
+
+Simple External Link::
+  http://www.lipsum.com/
+Named External Link::
+  http://www.lipsum.com/[Lorem Ipsum]
+Cross Reference::
+  For more information see <<iip>>
+Cross Reference with Custom Text::
+  <<iip, This section>> contains more information
+
+
+[[iip]]
+==== Inline Elements in Paragraphs
+
+*Bold* and _italics_is supported, but shall we use it? Quoting is no problem:
+''double'' 'single'. And there is no syntax difference between `commands` and
+`/pa/a/ths` and `similar stuff.
+
+==== Images
+
+.Supported Image Formats
+DIA::
++
+* Source: DIA
+* Result (fo): SVG
+* Result (html): PNG
++
+.DIA -> SVG (fo)
+image::dia_example.svg[width="75%"]
++
+.DIA -> PNG (html)
+image::dia_example.png[width="75%"]
+
+FIG::
++
+* Source: DIA
+* Result (fo): SVG
+* Result (html): PNG
++
+.FIG -> SVG (fo)
+image::fig_example.svg[width="50%"]
++
+.FIG -> PNG (html)
+image::fig_example.png[width="50%"]
+
+JPG::
++
+* Source: JPG
+* Result (fo): JPG
+* Result (html): JPG
++
+.JPG (fo/html)
+image::jpg_example.jpg[width="75%"]
+
+PNG::
++
+* Source: PNG
+* Result (fo): PNG
+* Result (html): PNG
++
+.PNG (fo/html)
+image::png_example.png[width="90%"]
+
+SVG::
++
+* Source: SVA
+* Result (fo): SVG
+* Result (html): PNG
++
+.SVG -> SVG (fo)
+image::svg_example.svg[width="75%"]
++
+.SVG -> PNG (html)
+image::svg_example.png[width="75%"]
