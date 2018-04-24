@@ -25,10 +25,8 @@
 # stylesheet 
 
 ifeq "$(strip $(SRC_FORMAT))" "adoc"
-  $(info "--> detected adoc")
   PROFILES := $(subst $(ADOC_DIR)/,$(PROFILEDIR)/,$(MAIN))
   ifeq "$(strip $(ADOC_POST))" "yes"
-  $(info "--> setting $(ADOC_POST_STYLE)")
     PROFILE_STYLESHEET := $(ADOC_POST_STYLE)
   endif
 else 
@@ -56,7 +54,6 @@ endif
 # noprofiling stylesheet
 #
 ifeq "$(strip $(PROFILE_STYLESHEET))" ""
-  $(info "--> setting noprofile")
   ifeq "$(DOCBOOK_VERSION)" "5"
     PROFILE_STYLESHEET := $(DAPSROOT)/daps-xslt/profiling/noprofile5.xsl
   else
