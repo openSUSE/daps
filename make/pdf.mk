@@ -169,8 +169,8 @@ endif
 # PDF
 #
 # Including a workaround for failed FOP builds where FOP creates
-# 0 byte PDFs which are considered a successful build by make when
-# run a second time
+# corrupt PDFs which are considered a successful build by make when
+# run a second time (pdfinfo call)
 #
 .PHONY: pdf
 pdf: list-images-multisrc list-images-missing
@@ -179,10 +179,7 @@ ifeq "$(LEAN)" "1"
 else
   pdf: $(PDF_RESULT)
 endif
-	@if [ ! -s $(PDF_RESULT) ]; then \
-	  ccecho "error" "PDF $(PDF_RESULT) has a size of 0 bytes"; \
-	  false; \
-        fi
+	pdfinfo $(PDF_RESULT) > /dev/null 2>&1 || ( ccecho "error" "PDF $(PDF_RESULT) has a size of 0 bytes"; false )
   ifeq "$(TARGET)" "pdf"
 	@ccecho "result" "PDF book built with REMARKS=$(REMARKS), DRAFT=$(DRAFT) and META=$(META):\n$<"
   endif
