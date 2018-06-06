@@ -1061,4 +1061,29 @@
     </xsl:if>
   </xsl:template>
 
+  <xsl:template match="glosslist">
+   <variablelist>
+    <xsl:copy-of select="@*"/>
+    <xsl:apply-templates/>
+   </variablelist>
+  </xsl:template>
+
+  <xsl:template match="glosslist/glossentry">
+   <varlistentry>
+    <xsl:apply-templates/>
+   </varlistentry>
+  </xsl:template>
+
+ <xsl:template match="glosslist/glossentry/glossterm">
+  <term>
+   <xsl:apply-templates/>
+  </term>
+ </xsl:template>
+
+ <xsl:template match="glosslist/glossentry/glossdef">
+  <listitem>
+   <xsl:apply-templates/>
+  </listitem>
+ </xsl:template>
+
 </xsl:stylesheet>
