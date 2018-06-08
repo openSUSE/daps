@@ -1,0 +1,422 @@
+== Block Elements
+
+=== Lists
+
+Lorem ipsum dolor sit amet;, consetetur sadipscing elitr, sed
+diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
+erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et
+ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem
+ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing
+elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna
+aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo
+dolores et ea rebum.  Stet clita kasd gubergren, no sea takimata sanctus
+est Lorem ipsum dolor sit amet.
+
+==== Simple Lists
+
+.Bullet List
+* Listitem 1 
+* Listitem 2: Lorem ipsum dolor sit amet, consetetur sadipscing elitr, + 
+  sed diam nonumy eirmod tempor invidunt ut labore et dolore magna +
+  aliquyam erat, sed diam voluptua.
+* Listitem 3
+
+.Numbered List
+. First item
+. Second item
+. Third item
+
+.Term and Definition List
+Term 1::
+   Definition 1
+Term2::
+  Definition 2: Lorem ipsum dolor sit amet, consetetur sadipscing elitr, +
+  sed diam nonumy eirmod tempor invidunt ut labore et dolore magna +
+  aliquyam erat, sed diam voluptua.
+Term3::
+  Definition 3
+
+
+==== Advanced Lists
+
+.Nested Bullet list
+* Listitem 1
+  ** Listitem 1.1
+   *** Listitem 1.1.1
+   *** Listitem 1.1.2
+ ** Listitem 1.2
+* Listitem 2
+ ** Listitem 2.1
++
+.A short Note
+[NOTE]
+Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam +
+nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam +
+erat, sed diam voluptua.
+
+* Listitem 3
++
+.Another short Note
+[NOTE]
+==========================
+Here we have a itemizedlist inside note:
+
+* Note Item 1
+* Note Item 2
+* Note Item 3
+==========================
+
+* Listitem 4
+
+
+.Nested Numbered Lists
+. First item. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, +
+  sed diam nonumy eirmod tempor invidunt ut labore et dolore magna +
+  aliquyam erat, sed diam voluptua.
+  .. First subitem. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, +
+     sed diam nonumy eirmod tempor invidunt ut labore et dolore magna +
+     aliquyam erat, sed diam voluptua. 
+  .. Second subitem. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, +
+     sed diam nonumy eirmod tempor invidunt ut labore et dolore magna +
+     aliquyam erat, sed diam voluptua.
+   ... First subsubitem. Lorem ipsum dolor sit amet, consetetur sadipscing +
+       elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna +
+       aliquyam erat, sed diam voluptua.
+       ....  First item of level 4. Lorem ipsum dolor sit amet, consetetur +
+             sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut +
+             labore et dolore magna aliquyam erat, sed diam voluptua.
+       ....  Second item of level 4. Lorem ipsum dolor sit amet, consetetur +
+             sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut +
+             labore et dolore magna aliquyam erat, sed diam voluptua.
+   .. Second subsubitem. Lorem ipsum dolor sit amet, consetetur sadipscing +
+       elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna +
+       aliquyam erat, sed diam voluptua. 
+  .. Thirs subitem. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, +
+     sed diam nonumy eirmod tempor invidunt ut labore et dolore magna +
+     aliquyam erat, sed diam voluptua.
+. Second item. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, +
+  sed diam nonumy eirmod tempor invidunt ut labore et dolore magna +
+  aliquyam erat, sed diam voluptua.
+
+.Mixed Nested Lists
+A Term::
+  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam +
+  nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, +
+  sed diam voluptua.
++
+* Item 1
+* Item 2
+* Item 3
+
+
+.Definitions and Terms Containing Other Elements
+Variablelist with elements 1::
++
+----
+Ut enim ad
+----
++
+[source,perl]
+----
+use strict;
+my $foo = bar;
+----
+
+Variablelist with elements 2::
++
+.Important Note
+[IMPORTANT]
+==========================
+Duis aute irure dolor in reprehenderit in voluptate velit esse cillum +
+dolore eu fugiat nulla pariatur.
+==========================
+
+Variablelist with elements 3::
++
+.A Short Note
+[NOTE]
+==========================
+Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam +
+nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam +
+erat, sed diam voluptua.
+==========================
+
+=== Q & A
+
+.Lorem ipsum
+[qanda]
+[[q1]]
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua?::
+  Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris +
+  nisi ut aliquip ex ea commodo consequat.
++  
+Euismod tempor inceptos deserunt: pretium litora velit venenatis veniam
+shift + G.
+
+Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur?::
+ Excepteur sint occaecat cupidatat non proident, sunt in culpa qui +
+ officia deserunt mollit anim id est laborum.
++
+Reference to a question: See <<q1>>
++
+. Lorem ipsum dolor sit amet
+. consectetur adipisicing elit
+. sed do eiusmod tempor incididunt ut labore et dolore magna aliqua
+
+
+Sed venenatis mauris non erat bibendum posuere. Vestibulum sagittis incidunt elit, eu aliquam ipsum consectetur in?::
+  Class aptent taciti sociosqu ad litora torquent per conubia nostra,
+   per inceptos himenaeos. Ut sit amet metus nisi. Sed sollicitudin nulla
+   at turpis volutpat ac ultrices justo eleifend. Morbi in orci
+   nisi. Cras porttitor, ligula et aliquet iaculis, risus magna lobortis
+   nisl, ut ornare eros sem nec enim.  In turpis ipsum, sollicitudin ut
+   egestas sed, dapibus non lorem.
+At vero eos et accusam et justo duo dolores et ea rebum?::
++
+[width=40%]
+|=======================
+|Entry 1 |Entry 2
+|Entry 3 |Entry 4
+|=======================
+
+=== Tables
+
+Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
+nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
+erat, sed diam voluptua.
+
+.Plain Table
+[width="40%",cols="2"]
+|=======================
+|Entry 1 |Entry 2
+|Entry 3 |Entry 4
+|=======================
+
+Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
+eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
+voluptua.
+
+.Simple Table With Header
+[options="header", width="40%",cols="2"]
+|=======================
+|Head 1  |Head 2
+|Entry 1 |Entry 2
+|Entry 3 |Entry 4
+|=======================
+
+Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
+eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
+voluptua.
+
+.Table with Header and 4 Columns
+[options="header", width="80%",cols="4"]
+|=======================
+|Col 1         |Col 2         |Col 3         |Col 4
+|Row 1, Cell 1 |Row 1, Cell 2 |Row 1, Cell 3 |Row 1, Cell 4
+|Row 2, Cell 1 |Row 2, Cell 2 |Row 2, Cell 3 |Row 2, Cell 4
+|Row 3, Cell 1 |Row 3, Cell 2 |Row 3, Cell 3 |Row 3, Cell 4
+|=======================
+
+Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
+eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
+voluptua.
+
+.Table with Long Lines
+[cols="1,6"]
+|=======================
+|Foobar
+|At vero eos et accusam et justo duo dolores et ea rebum.
+Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit
+
+|Barfoo
+|Duis aute irure dolor in reprehenderit in voluptate velit esse
+cillum dolore eu fugiat nulla pariatur.
+|=======================
+
+Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
+eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
+voluptua.
+
+.Table with Source Code
+[cols="1,5a"]
+|=======================
+|Lorem ipsum
+|Run the following command
+[source,shell]
+----
+xsltproc --output foo-bar.fo $DB/fo/docbook.xsl foo.xml
+cp foo.xml bar.xml 
+----
+
+|At vero eos
+|Duis aute irure dolor in reprehenderit in voluptate velit esse
+cillum dolore eu fugiat nulla pariatur.
+|=======================
+
+Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
+eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
+voluptua.
+
+.Table with Horizonzal and Vertical Spans
+|=======================
+2+^|Horizontally Spanned Entry (centered)
+
+|Entry 1 |Entry 2
+
+2+<|Horizontally Spanned Entry (aligned left)
+
+|Entry 3 |Entry 4
+
+2+>|Horizontally Spanned Entry (aligned right)
+
+|Entry 5 .2+^.^|Vertically Spanned (center, middle)
+
+|Entry 6
+|=======================
+
+
+=== Program Listings
+
+==== Simple Command Line
+
+----
+ls /var/log/messages
+----
+
+Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
+eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
+voluptua.
+
+==== Long Line
+
+----
+xsltproc --output foo.fo --stringparam base.dir helloworld/ /usr/share/xml/docbook/stylesheet/nwalsh/current/fo/docbook.xsl foo.xml
+----
+
+Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
+eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
+voluptua.
+
+==== Source Code
+
+.DAPS function Template
+[source,shell]
+----
+local SHORT_OPTS LONG_OPTS SUB_CMD
+
+# The subcommand value is passed when calling this function
+#
+SUB_CMD=$1
+shift
+
+# SHORT_OPTS: Value for the getopt -o option
+# LONG_OPTS:  VALUE for the getopt -l option
+#
+SHORT_OPTS="h"
+LONG_OPTS="draft,formatter:,help,name:,remarks,rootid:"
+
+# Call the argument parser
+#
+parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
+
+# Reset this function's $@ to what is remaining after having parsed the
+# subcommand switches
+#
+eval set -- "$P_REMAIN_ARGS"
+
+#------ Computing the values returned from the parser -----
+#
+#    <REPLACE ME WITH CODE>
+
+# run make
+#
+call_make "$UB_CMD" "$@"
+----
+
+=== Admonitions
+
+==== Basic Admonitions
+
+.Ut enim
+[WARNING]
+====
+ad minim veniam, quis nostrud exercitation ullamco laboris nisi
+ut aliquip ex ea commodo consequat. Duis aute irure dolor in
+reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+pariatur.
+
+Excepteur sint occaecat cupidatat non proident, sunt in culpa qui
+officia deserunt mollit anim id est laborum.
+====
+
+.Excepteur sint...
+[IMPORTANT]
+...occaecat cupidatat non proident, sunt in culpa qui
+officia deserunt mollit anim id est laborum.
+
+.Lorem ipsum...
+TIP: ...dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+
+.Lorem ipsum...
+NOTE: ...dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+
+==== Complex Admonitions
+
+.Containing a Bullet List
+[WARNING]
+==========
+* Duis aute irure dolor in reprehenderit in voluptate velit esse cillum +
+dolore eu fugiat nulla pariatur.
+* Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do +
+eiusmod tempor incididunt ut labore et dolore magna aliqua.
+==========
+
+.Containing Different Block Elements
+[IMPORTANT]
+==========
+Lorem Ipsum::
+  Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris +
+  nisi ut aliquip ex ea commodo consequat.
+Duis aute::
++
+. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+
+Lorem ipsum::
++
+[cols=2*,width=50%]
+|====
+|dolor sit amet
+|consectetur adipisicing elit
+
+|Duis aute irure dolor in reprehenderit
+|dolore eu fugiat nulla pariatur.
+|====
+
+==========
+
+=== Other Block Elements
+
+.Example Block
+==========================
+Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
+eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
+voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet
+clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit
+amet.
+
+* consetetur
+* labore
+* takimata
+
+----
+ls -l
+----
+==========================
+
+.Citation
+[quote, Caesar, De Bello Gallico]
+____
+Huc Caesar magnis nocturnis diurnisque itineribus contendit occupatoque
+oppido ibi praesidium conlocat.
+____

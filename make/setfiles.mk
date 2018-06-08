@@ -61,9 +61,16 @@ ifdef CHECK_WELLFORMED
   $(error Fatal error:$(\n)$(CHECK_WELLFORMED))
 endif
 
+ifeq "$(strip $(SRC_FORMAT))" "xml"
+  XML_SRC_PATH := $(DOC_DIR)/xml/
+endif
+ifeq "$(strip $(SRC_FORMAT))" "adoc"
+  XML_SRC_PATH := $(ADOC_DIR)/
+endif
+
 SETFILES := $(shell $(XSLTPROC) $(PROFSTRINGS) \
 	      --output $(SETFILES_TMP) \
-	      --stringparam "xml.src.path=$(DOC_DIR)/xml/" \
+	      --stringparam "xml.src.path=$(XML_SRC_PATH)" \
 	      --stringparam "mainfile=$(notdir $(MAIN))" \
 	      --stylesheet $(DAPSROOT)/daps-xslt/common/get-all-used-files.xsl \
 	      --file $(MAIN) $(XSLTPROCESSOR) && echo 1)

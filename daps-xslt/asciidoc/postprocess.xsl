@@ -31,21 +31,26 @@
  xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
  <xsl:import href="../common/copy.xsl"/>
+ <xsl:output indent="yes"/>
 
  <xsl:template match="d:simpara">
   <xsl:element name="para" namespace="&db5ns;">
+   <xsl:copy-of select="@*"/>
    <xsl:apply-templates/>
   </xsl:element>
  </xsl:template>
 
  <xsl:template match="d:sidebar">
    <xsl:element name="note" namespace="&db5ns;">
+    <xsl:copy-of select="@*"/>
     <xsl:apply-templates/>
    </xsl:element>
  </xsl:template>
 
  <xsl:template match="d:literallayout[@class='monospaced']">
   <xsl:element name="screen" namespace="&db5ns;">
+   <xsl:copy-of select="@*[local-name()!='class']"/>
+   <xsl:apply-templates/>
   </xsl:element>
  </xsl:template>
 </xsl:stylesheet>
