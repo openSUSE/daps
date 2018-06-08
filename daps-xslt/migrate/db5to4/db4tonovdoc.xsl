@@ -864,15 +864,20 @@
     </xsl:attribute>
   </xsl:template>
 
+  <xsl:template
+    match="screen/*[not(
+                     self::co|self::emphasis|self::replaceable|self::command|
+                     self::prompt| self::option|self::phrase|self::xref|
+                     self::link|self::ulink|self::uri
+                   )]">
+    <xsl:apply-templates select="node()"/>
+  </xsl:template>
+
+  <!-- entry/variablelist handling -->
   <xsl:template match="entry/variablelist">
     <itemizedlist>
       <xsl:apply-templates/>
     </itemizedlist>
-  </xsl:template>
-
-  <!-- we don't allow informalfigure in entry, but mediaobject. So... -->
-  <xsl:template match="entry/informalfigure">
-   <xsl:apply-templates/>
   </xsl:template>
 
   <xsl:template match="entry/variablelist/varlistentry">
@@ -890,6 +895,27 @@
 
   <xsl:template match="entry/variablelist/varlistentry/listitem">
     <xsl:apply-templates/>
+  </xsl:template>
+  <!-- entry/variablelist handling end -->
+
+  <!-- entry/procedure handling -->
+  <xsl:template match="procedure[ancestor::entry]|substeps[ancestor::entry]">
+    <orderedlist>
+      <xsl:apply-templates/>
+    </orderedlist>
+  </xsl:template>
+
+  <xsl:template match="entry/procedure/step">
+    <listitem>
+      <xsl:apply-templates select="@*|node()"/>
+    </listitem>
+  </xsl:template>
+
+  <!-- entry/procedure handling end -->
+
+  <!-- we don't allow informalfigure in entry, but mediaobject. So... -->
+  <xsl:template match="entry/informalfigure">
+   <xsl:apply-templates/>
   </xsl:template>
 
   <xsl:template match="entry">
