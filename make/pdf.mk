@@ -149,10 +149,10 @@ ifneq "$(IS_STATIC)" "static"
 	mkdir -p $@
 
   $(TMP_STATIC_IMG_DIR): | $(TMP_STATIC_DIR)
-	(cd $(TMP_STATIC_DIR) && ln -s $(STYLEIMG))
+	(cd $(TMP_STATIC_DIR) && ln -sf $(STYLEIMG))
 
   $(TMP_IMG_DIR): | $(TMP_DIR)
-	(cd $(TMP_DIR) && ln -s $(STYLEIMG))
+	(cd $(TMP_DIR) && ln -sf $(STYLEIMG))
 
 else
   #  
@@ -160,7 +160,7 @@ else
   # create link to static in $(TMP_DIR)
   #
   $(TMP_STATIC_DIR): | $(TMP_DIR)
-	(cd $(TMP_DIR) && ln -s $(STYLEIMG))
+	(cd $(TMP_DIR) && ln -sf $(STYLEIMG))
 
 endif
 
