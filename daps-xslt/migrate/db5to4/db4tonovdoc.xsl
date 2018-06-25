@@ -905,7 +905,7 @@
     </orderedlist>
   </xsl:template>
 
-  <xsl:template match="entry/procedure/step">
+  <xsl:template match="step[ancestor::entry]">
     <listitem>
       <xsl:apply-templates select="@*|node()"/>
     </listitem>
