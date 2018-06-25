@@ -873,21 +873,6 @@
     <xsl:apply-templates select="node()"/>
   </xsl:template>
 
-  <xsl:template match="entry/procedure">
-   <xsl:call-template name="info">
-    <xsl:with-param name="text">Changed entry/procedure to entry/orderedlist</xsl:with-param>
-   </xsl:call-template>
-   <orderedlist>
-    <xsl:apply-templates/>
-   </orderedlist>
-  </xsl:template>
-
-  <xsl:template match="entry/procedure/step">
-   <listitem>
-    <xsl:apply-templates/>
-   </listitem>
-  </xsl:template>
-
   <!-- entry/variablelist handling -->
   <xsl:template match="entry/variablelist">
     <itemizedlist>
