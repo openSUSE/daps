@@ -107,6 +107,7 @@ bashcompletiondir =@datadir@/bash-completion/completions
 htmldocdir     = @docdir@/html
 
 xsltdir          = $(pkgdatadir)/daps-xslt
+xsltasciidocdir  = $(xsltdir)/asciidoc
 xsltcommondir    = $(xsltdir)/common
 xsltcontribdir   = $(xsltdir)/contrib
 xsltdesktopdir   = $(xsltdir)/desktop
@@ -148,6 +149,7 @@ dist_dapslib_DATA       = $(wildcard lib/*)
 dist_emacssite_DATA     = misc/docbook_macros.el
 dist_dapsmake_DATA      = $(wildcard make/*.mk)
 dist_template_DATA      = $(wildcard init_templates/*)
+dist_xsltasciidoc_DATA  = $(wildcard daps-xslt/asciidoc/*.xsl)
 dist_xsltcommon_DATA    = $(wildcard daps-xslt/common/*.xsl) \
 			   $(wildcard daps-xslt/common/*.xml) \
 			   $(wildcard daps-xslt/common/*.svg)
