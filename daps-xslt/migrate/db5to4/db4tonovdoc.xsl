@@ -913,6 +913,26 @@
 
   <!-- entry/procedure handling end -->
 
+  <!-- handling of complicated examples -->
+  <xsl:template match="example[*[not(self::title or self::itemizedlist or
+                                     self::orderedlist or self::simplelist or
+                                     self::variablelist or self::calloutlist or
+                                     self::formalpara or self::para or
+                                     self::screen or self::indexterm)]]">
+    <!-- I'd rather have it render like sect5 but that is forbidden in Novdoc. -->
+    <bridgehead renderas="sect4">
+      <xsl:if test="@id">
+        <xsl:copy-of select="@id"/>
+      </xsl:if>
+      <xsl:apply-templates select="title/node()"/>
+    </bridgehead>
+    <xsl:apply-templates select="node()[not(self::title)]"/>
+    <xsl:call-template name="info">
+      <xsl:with-param name="text">Removed example tag and replaced its title with bridgehead</xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+  <!-- handling of complicated examples end -->
+
   <!-- we don't allow informalfigure in entry, but mediaobject. So... -->
   <xsl:template match="entry/informalfigure">
    <xsl:apply-templates/>
