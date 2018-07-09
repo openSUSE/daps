@@ -110,6 +110,13 @@
   <xsl:template match="@continuation"/>
   <xsl:template match="@format"/>
   <xsl:template match="@float"/>
+
+  <!-- Novdoc supports @frame="none"/@frame="topbot" but neither of these values
+  are supported by DocBook 5. The DB5 equivalents to Novdoc's attributes are
+  "void" and "hsides," it seems. But the attribute is used so little ... Let's
+  not bother implementing this. -->
+  <xsl:template match="table/@frame|informaltable/@frame"/>
+
   <xsl:template match="@inheritnum"/>
   <xsl:template match="section/@lang|sect1/@lang"/>
   <xsl:template match="@moreinfo"/>
@@ -129,6 +136,7 @@
   <xsl:template match="filename/@class"/>
   <xsl:template match="literallayout/@class"/>
   <xsl:template match="variablelist/@role"/>
+
   <xsl:template match="warning/@role|tip/@role|note/@role|important/@role|caution/@role"/>
   <xsl:template match="set/@label|article/@label|book/@label|part/@label|chapter/@label|*[contains(local-name(.), 'sect')]/@label">
     <xsl:call-template name="warn">
