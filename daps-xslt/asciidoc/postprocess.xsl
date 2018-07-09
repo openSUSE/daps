@@ -33,11 +33,11 @@
  <xsl:import href="../common/copy.xsl"/>
  <xsl:output indent="yes"/>
 
- <xsl:template match="d:simpara">
-  <xsl:element name="para" namespace="&db5ns;">
-   <xsl:copy-of select="@*"/>
-   <xsl:apply-templates/>
-  </xsl:element>
+ <xsl:template match="d:guibutton|d:guimenuitem|d:guisubmenu">
+   <xsl:element name="guimenu" namespace="&db5ns;">
+    <xsl:copy-of select="@*"/>
+    <xsl:apply-templates/>
+   </xsl:element>
  </xsl:template>
 
  <xsl:template match="d:sidebar">
@@ -47,7 +47,14 @@
    </xsl:element>
  </xsl:template>
 
- <xsl:template match="d:literallayout[@class='monospaced']">
+ <xsl:template match="d:simpara">
+  <xsl:element name="para" namespace="&db5ns;">
+   <xsl:copy-of select="@*"/>
+   <xsl:apply-templates/>
+  </xsl:element>
+ </xsl:template>
+
+ <xsl:template match="d:literallayout[@class='monospaced']|d:programlisting">
   <xsl:element name="screen" namespace="&db5ns;">
    <xsl:copy-of select="@*[local-name()!='class']"/>
    <xsl:apply-templates/>

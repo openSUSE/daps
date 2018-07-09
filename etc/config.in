@@ -76,6 +76,21 @@
 #
 ADOC_CONFIG_FILE="@sysconfdir@/daps/asciidoc/docbook50.conf"
 
+## Key: ADOC_IMG_DIR
+## --------------------
+## Description: Directory hosting images for the ASCIIDOC documents
+## Type:        absolute path
+## Default:     ""
+#
+# If set, DAPS will automatically generate the image structure
+# required for XML processing. The directory needs to host all
+# images on a flat level; subdirectoriues will be ignored
+#
+# Set this value in a DC-file or on the command-line with
+# --adocimgdir
+#
+ADOC_IMG_DIR=""
+
 ## Key: ADOC_POST
 ## --------------------
 ## Description: Do postprocessing on asciidoc-generated XML?
