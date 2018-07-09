@@ -511,7 +511,7 @@
   </xsl:template>
 
   <xsl:template match="constant|errorcode|classname|code|computeroutput|methodname|
-                       prompt[not(parent::screen)]|sgmltag|returnvalue|uri|userinput">
+                       prompt[not(parent::screen)]|property|sgmltag|returnvalue|uri|userinput">
     <literal>
       <xsl:apply-templates/>
     </literal>
