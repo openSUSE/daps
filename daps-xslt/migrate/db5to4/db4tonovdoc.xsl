@@ -665,7 +665,7 @@
    </emphasis></para>
   </xsl:template>
 
-  <xsl:template match="mediaobject[textobject]">
+  <xsl:template match="mediaobject[textobject]" priority="1">
     <xsl:call-template name="info">
       <xsl:with-param name="text">Changed order of mediaobject/textobject</xsl:with-param>
     </xsl:call-template>
@@ -691,7 +691,7 @@
     <xsl:copy-of select="."/>
   </xsl:template>
 
-  <xsl:template match="mediaobject">
+  <xsl:template match="mediaobject[not(parent::entry)]">
    <xsl:choose>
     <xsl:when test="parent::figure or parent::informalfigure">
      <xsl:copy-of select="."/>
