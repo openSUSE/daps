@@ -55,6 +55,7 @@ VARLIST=(
     ADOC_ATTRIBUTES
     ADOC_BACKEND
     ADOC_CONFIG_FILE
+    ADOC_IMG_DIR
     ADOC_POST
     ADOC_POST_STYLE
     ADOC_TYPE
@@ -680,6 +681,13 @@ Global Options:
                             document, use NAME=VALUE@
                             Default: unset
                             Only works with ASCIIDOC sources
+  --adocimgdir              Specify a directory for the images used in the
+                            ASCIIDOC sources. Must contain all images,
+                            subdirectories are ignored.
+                            Not required if the images reside in the directory
+                            structure required by DAPS (see DAPS manual).
+                            Default: unset
+                            Only works with ASCIIDOC sources
   --builddir=BUILD_DIR      Directory where every output $ME generates will
                             end up.
                             Default: <doc dir>/build/$BOOK
@@ -1209,7 +1217,7 @@ export POSIXLY_CORRECT=1
 # Therefore we need to save each variable twice in order to recover the
 # original value.
 
-ARGS=$(getopt -o d:e:hm:v:: -l adocattr:,builddir:,color:,colour:,commands,debug,docconfig:,dapsroot:,envfile:,fb_styleroot:,force,help,jobs:,main:,schema:,styleroot:,verbosity::,version,xsltprocessor: -n "$ME" -- "$@")
+ARGS=$(getopt -o d:e:hm:v:: -l adocattr:,adocimgdir:,builddir:,color:,colour:,commands,debug,docconfig:,dapsroot:,envfile:,fb_styleroot:,force,help,jobs:,main:,schema:,styleroot:,verbosity::,version,xsltprocessor: -n "$ME" -- "$@")
 
 # Exit when getopt returns errors
 #
@@ -1222,6 +1230,13 @@ while true ; do
     case "$1" in
         --adocattr)
             ADOC_ATTRIBUTES="$ADOC_ATTRIBUTES --attribute=\"$2\""
+            shift 2
+            ;;
+        --adocimgdir)
+            [[ -d $2 ]] || exit_on_error "ADOC_IMG_DIR \"$2\" is not a valid directory"
+            # make path absolute and strip trailing slash
+            sanitize_path "$2" "ADOC_IMG_DIR_CMDL"
+            ADOC_IMG_DIR="$ADOC_IMG_DIR_CMDL"
             shift 2
             ;;
         --builddir)
@@ -1887,7 +1902,7 @@ if [[ "adoc" = "$SRC_FORMAT" ]]; then
     ADOC_MAIN="$MAIN"
     ADOC_DIR="${BUILD_DIR}/.adoc"
     MAIN="${ADOC_DIR}/${BOOK}.xml"
-    export ADOC_MAIN ADOC_DIR MAIN
+    export ADOC_IMG_DIR ADOC_MAIN ADOC_DIR MAIN
     [[ 1 -eq $FORCE_REBUILD ]] && MOPTS="--always-make"
     [[ 2 -gt $VERBOSITY ]] && MOPTS="$MOPTS --silent"
 

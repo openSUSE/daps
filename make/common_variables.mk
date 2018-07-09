@@ -87,7 +87,11 @@ endif
 #
 
 IMG_GENDIR         := $(BUILD_DIR)/.images
-IMG_SRCDIR         := $(DOC_DIR)/images/src
+ifneq "$(strip $(ADOC_IMG_DIR))" ""
+  IMG_SRCDIR := $(BUILD_DIR)/.adoc_images/src
+else
+  IMG_SRCDIR         := $(DOC_DIR)/images/src
+endif
 RESULT_DIR         := $(BUILD_DIR)/$(BOOK)
 TMP_DIR            := $(BUILD_DIR)/.tmp
 PACK_DIR           := $(RESULT_DIR)/package
