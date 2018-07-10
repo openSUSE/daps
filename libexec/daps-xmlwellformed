@@ -28,9 +28,13 @@ def check_wellformedness(xmlfile, xinclude=True):
     # IDs are non-unique:
     xmlparser = etree.XMLParser(collect_ids=False)
     try:
-        xml = etree.parse(xmlfile, parser=xmlparser)
+        tree = etree.parse(xmlfile, parser=xmlparser)
         if xinclude:
-            xml.xinclude()
+            tree.xinclude()
+            # This test is needed to perform XInclude resolution on
+            # second and third levels:
+            if list(tree.iter("{http://www.w3.org/2001/XInclude}include")):
+                tree.xinclude()
         return 0
     except (etree.XMLSyntaxError, etree.XIncludeError) as err:
         print("ERROR: %s" % err, file=sys.stderr)
