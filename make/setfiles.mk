@@ -34,29 +34,13 @@ endif
 
 
 # Check whether the documents are _well-formed_ (not if valid) - if not,
-# exit and display the xmllint error message
-#
+# exit and display the error message
 # Works for both, DocBook4 and DocBook5 since we are only checking for
 # well-formdness and not for validity (a DocBook5 validity check would
 # require jing)
-#
-# If there is a PROFILE URN defined, we do not check for xinclude errors for
-# the following reason
-#
-# If you have a common source for different documents with profiled
-# xi:includes you may want to create branches or tags in you VCS that only
-# contain the source files actually used in a certain document (ignoring the
-# files that will not be included because the xi:include is profiled for
-# a different version).
-# This set of sources is not well-formed. However, after having profiled
-# these documents (which is possible!!!) the resulting profiled sources
-# _are_ well-formed. And DAPS only works on profiled sources...
-#
-ifdef PROFILE_URN
-  CHECK_WELLFORMED := $(shell xmllint --nonet --noout --nowarning --xinclude --loaddtd $(MAIN) 2>&1 | grep -v "XInclude error")
-else
-  CHECK_WELLFORMED := $(shell xmllint --nonet --noout --nowarning --xinclude --loaddtd $(MAIN) 2>&1)
-endif
+
+CHECK_WELLFORMED := $(shell $(LIBEXEC_DIR)/daps-xmlwellformed --xinclude $(MAIN) 2>&1)
+
 ifdef CHECK_WELLFORMED
   $(error Fatal error:$(\n)$(CHECK_WELLFORMED))
 endif
