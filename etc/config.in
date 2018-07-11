@@ -148,50 +148,6 @@ ADOC_POST_STYLE="@pkgdatadir@/daps-xslt/asciidoc/postprocess.xsl"
 #
 ADOC_TYPE="article"
 
-## Key:         SPELL_CHECKER
-## ----------------------
-## Description: Spellchecker application to use
-## Type:        Name of the spellchecker's binary
-## Default:     "aspell"
-#
-SPELL_CHECKER="aspell"
-
-## Key:         SPELL_EXTRA_DICT
-## ----------------------
-## Description: Additional dictionary for spell checker
-## Type:        Absolute path to distionary
-## Default:     ""
-#
-# Specify an additional (custom) dictionary
-SPELL_EXTRA_DICT=""
-
-## Key:         SPELL_LANG
-## ----------------------
-## Description: Language for spell checker
-## Type:        String
-## Default:     ""
-#
-# NOTE:  Language to use for spellchecker. It uses the same format as the
-#        LANG environmental variable: It consists of  the two letter ISO 639
-#        language code (e.g. 'en' for English) and an optional two letter
-#        ISO 3166 country code after an underscore (e.g. en_GB for Britsh
-#        English). Make sure the respective dictionary for aspell is installed.
-# By default DAPS tries to get the language from the "lang" attribute of the
-# MAIN file.
-#
-SPELL_LANG=""
-
-## Key:         SPELL_SKIP_TAGS
-## ----------------------
-## Description: list of DocBook XML tags which content should _not_ be
-##              spell-checked
-## Type:        List
-## Default:     "author command email envar filename firstname guimenu \
-##               keycap literal option package remark screen surname \
-##               systemitem ulink varname xref"
-#
-SPELL_SKIP_TAGS="author command email envar filename firstname guimenu keycap literal option package remark replaceable screen surname systemitem ulink varname xref"
-
 ## Key:         BUILD_DIR
 ## ----------------------
 ## Description: Build directory where all daps generated files will go
@@ -752,6 +708,91 @@ REMARK_STR="_remarks"
 # using the command line switch --rootid=""
 #
 ROOTID=""
+
+## Key:         SPELL_CHECKER
+## ----------------------
+## Description: Spellchecker application to use
+## Type:        Name of the spellchecker's binary
+## Default:     DAPS performa a lookup for aspell and hunspell. If only one     
+##              of these packages is installed, it will be used automatically.
+##              If both are installed, aspell will be used.
+##              If you want to force using one of the two spellcheckers, specify
+##              it here.
+##
+SPELL_CHECKER=""
+
+## Key:         SPELL_CHECKER
+## ----------------------
+## Description: Spellchecker application to use
+## Type:        Name of the spellchecker's binary
+## Default:     "aspell"
+#
+SPELL_CHECKER="aspell"
+
+## Key:         SPELL_EXTRA_DICT
+## ----------------------
+## Description: Additional dictionary for spell checker
+## Type:        Absolute path to distionary
+## Default:     ""
+#
+# Refer to the aspell / hunspell doumentation on how to build custom
+# dictionaries the process differs for each spell checker)
+#
+# NOTE:Differences between aspell and hunspell
+#      aspell:
+#        An extra dictionary for aspell can reside anywhere in the
+#        file system and you need to specify the absolute path to
+#        this directory with SPELL_EXTRA_DICT or with --extra-dict
+#      hunspell:
+#        An extra dictionary for hunspell needs to reside in
+#        hunspell's search path (check with hunspell -D) and needs
+#        to be specified with the file's basename only:
+#        Example: /usr/share/hunspell/susedoc.dic => susedoc
+#        If you specify a non-existing dictionary or if it
+#        cannot be found by hunspell, it will silently be ignored
+#
+# Specify an additional (custom) dictionary (will always be used in
+# addition to the default dictionary for the given language
+#
+SPELL_EXTRA_DICT=""
+
+## Key:         SPELL_LANG
+## ----------------------
+## Description: Language for spell checker
+## Type:        String
+## Default:     ""
+#
+# NOTE:  Language to use for spellchecker.
+#  	 aspell:
+#          It uses the same format as the
+#          LANG environmental variable: It consists of  the two letter ISO 639
+#          language code (e.g. 'en' for English) and an optional two letter
+#          ISO 3166 country code after an underscore (e.g. en_GB for Britsh
+#          English). Make sure the respective dictionary for aspell is installed.
+#          By default DAPS tries to get the language from the "lang" attribute
+#          of the MAIN file.
+#        hunspell:
+#          Consists of the two letter ISO 639 (e.g. 'en' for English) and a
+#          mandatory two letter ISO 3166 country code after an underscore
+#          (e.g. en_GB for Britsh English)
+#          In case the language is not specified with --lang or SPELL_LANG,
+#          the value from the xml:lang attribute of the MAIN file will be
+#          used in case it complies with the format. If not, spellcheck will
+#          abort and ask for the language.
+#
+SPELL_LANG=""
+
+## Key:         SPELL_SKIP_TAGS
+## ----------------------
+## Description: list of DocBook XML tags which content should _not_ be
+##              spell-checked. Only works with aspell (hunspell does not
+##              support this).
+## Type:        List
+## Default:     "author command email envar filename firstname guimenu \
+##               keycap literal option package remark screen surname \
+##               systemitem tag ulink varname xref"
+#
+SPELL_SKIP_TAGS="author command email envar filename firstname guimenu keycap literal option package remark replaceable screen surname systemitem tag ulink varname xref"
 
 ## Key:      STATIC_DIR
 ## -------------------
