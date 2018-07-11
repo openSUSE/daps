@@ -60,9 +60,10 @@ VARLIST=(
     ADOC_POST_STYLE
     ADOC_TYPE
     ASCIIDOC
-    ASPELL_EXTRA_DICT
-    ASPELL_LANG
-    ASPELL_SKIP_TAGS
+    SPELL_CHECKER
+    SPELL_EXTRA_DICT
+    SPELL_LANG
+    SPELL_SKIP_TAGS
     BUILD_DIR
     CB_OPTIONS
     COLOR
@@ -233,7 +234,7 @@ unset "${UNSETLIST[@]}"
 #
 declare -A PATHLIST
 PATHLIST=(
-  [ASPELL_EXTRA_DICT]="additional Aspell dictionary"
+  [SPELL_EXTRA_DICT]="additional spell dictionary"
   [BUILD_DIR]="build directory"
   [DAPSROOT]="DAPS root directory"
   [DOCCONF]="DC-file"
