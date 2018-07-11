@@ -1,4 +1,11 @@
 #!/bin/bash
 
-echo "PATH=$PATH"
-ls
+TESTDIR=test/xml-syntax-check
+
+echo -n "Running daps XML syntax check for double IDs..."
+./libexec/daps-xmlwellformed $TESTDIR/double-ids.xml && echo "ok" || echo "Failed"
+
+echo -n "Running daps XML syntax check for XML file with syntax errors..."
+./libexec/daps-xmlwellformed $TESTDIR/syntax-error.xml 2>/dev/null && echo "Failed" || echo "ok"
+
+exit 0
