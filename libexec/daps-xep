@@ -9,13 +9,16 @@
 # Customized xep executable for daps
 #
 
-#
-# User config file
-#
+# Alternative XEP config files:
+#   * User config file
 USER_XEP_CONFIG="$HOME/.config/daps/xep-config.xml"
+#   * Stylesheet XEP config file
+STYLE_XEP_CONFIG="$STYLEROOT/formatter-config/xep/xep-daps.xml"
 
-
-if [[ -f $USER_XEP_CONFIG ]]; then
+if [[ -f $STYLE_XEP_CONFIG ]]; then
+    ccecho "info" "Using XEP config file from $STYLE_XEP_CONFIG"
+    export XEP_CONFIG_FILE=${XEP_CONFIG_FILE:-"$STYLE_XEP_CONFIG"}
+elif [[ -f $USER_XEP_CONFIG ]]; then
     ccecho "info" "Using XEP config file from $USER_XEP_CONFIG"
     export XEP_CONFIG_FILE=${XEP_CONFIG_FILE:-"$USER_XEP_CONFIG"}
 fi

@@ -933,8 +933,11 @@ WH_SEARCH="yes"
 # with the XEP_CONFIG_FILE environment variable (if exported). There
 # is no such option as -c or --config for the xep executable.
 #
-# NOTE: If $HOME/.config/daps/xep-config.xml exists, it will be used
-#       instead of the file specified here.
+# NOTE: This value may be overwritten by either of the following files, if they
+#       exist:
+#       (1) $STYLEROOT/formatter-config/xep/xep-daps.xml
+#       (2) $HOME/.config/daps/xep-config.xml
+#       The order of precedence is: (1), (2), $XEP_CONFIG_FILE setting.
 #
 XEP_CONFIG_FILE="@sysconfdir@/daps/xep/xep-daps.xml"
 
