@@ -713,7 +713,7 @@ ROOTID=""
 ## ----------------------
 ## Description: Spellchecker application to use
 ## Type:        Name of the spellchecker's binary
-## Default:     DAPS performa a lookup for aspell and hunspell. If only one     
+## Default:     DAPS performs a lookup for aspell and hunspell. If only one
 ##              of these packages is installed, it will be used automatically.
 ##              If both are installed, aspell will be used.
 ##              If you want to force using one of the two spellcheckers, specify
@@ -732,11 +732,11 @@ SPELL_CHECKER="aspell"
 ## Key:         SPELL_EXTRA_DICT
 ## ----------------------
 ## Description: Additional dictionary for spell checker
-## Type:        Absolute path to distionary
+## Type:        Absolute path to dictionary
 ## Default:     ""
 #
-# Refer to the aspell / hunspell doumentation on how to build custom
-# dictionaries the process differs for each spell checker)
+# Refer to the aspell / hunspell documentation on how to build custom
+# dictionaries (the process differs for each spell checker)
 #
 # NOTE:Differences between aspell and hunspell
 #      aspell:
@@ -747,12 +747,12 @@ SPELL_CHECKER="aspell"
 #        An extra dictionary for hunspell needs to reside in
 #        hunspell's search path (check with hunspell -D) and needs
 #        to be specified with the file's basename only:
-#        Example: /usr/share/hunspell/susedoc.dic => susedoc
+#        Example: /usr/share/hunspell/en_US-suse-doc.dic => en_US-suse-doc
 #        If you specify a non-existing dictionary or if it
 #        cannot be found by hunspell, it will silently be ignored
 #
 # Specify an additional (custom) dictionary (will always be used in
-# addition to the default dictionary for the given language
+# addition to the default dictionary for the given language)
 #
 SPELL_EXTRA_DICT=""
 
@@ -769,12 +769,12 @@ SPELL_EXTRA_DICT=""
 #          language code (e.g. 'en' for English) and an optional two letter
 #          ISO 3166 country code after an underscore (e.g. en_GB for Britsh
 #          English). Make sure the respective dictionary for aspell is installed.
-#          By default DAPS tries to get the language from the "lang" attribute
+#          By default, DAPS tries to get the language from the "lang" attribute
 #          of the MAIN file.
 #        hunspell:
 #          Consists of the two letter ISO 639 (e.g. 'en' for English) and a
 #          mandatory two letter ISO 3166 country code after an underscore
-#          (e.g. en_GB for Britsh English)
+#          (e.g. en_GB for British English)
 #          In case the language is not specified with --lang or SPELL_LANG,
 #          the value from the xml:lang attribute of the MAIN file will be
 #          used in case it complies with the format. If not, spellcheck will
