@@ -44,7 +44,7 @@ for arg in $@; do
  [[ $(echo "$arg" | grep -oP '^-[^-v]*v[^-v]*$') ]] && verbose=1
 done
 if [[ $verbose -eq 1 ]]; then
-  >&2 echo -e "Using xmlformat configuration file '$XMLFORMAT_CONFIG_FILE'\n"
+  >&2 echo -e "Using the xmlformat configuration from '$XMLFORMAT_CONFIG_FILE'\n"
 fi
 
 [[ -e $XMLFORMAT_CONFIG_FILE ]] || exit_on_error "Could not find config file '$XMLFORMAT_CONFIG_FILE'\n"

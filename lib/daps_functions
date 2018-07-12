@@ -2283,9 +2283,8 @@ function xmlformat {
 
     # Be more verbose in debug or -vv mode
     #
-    if [[ 1 = "$DEBUG" || 1 -le "$VERBOSITY" ]]; then
-        _XMLFORMAT_FLAGS="-iv"
-        echo -e "Using the following config file: $XMLFORMAT_CONFIG_FILE"
+    if [[ 1 = "$DEBUG" || 2 -le "$VERBOSITY" ]]; then
+        _XMLFORMAT_FLAGS="-i -v"
     else
         _XMLFORMAT_FLAGS="-i"
     fi
