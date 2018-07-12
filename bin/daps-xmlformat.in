@@ -39,8 +39,13 @@ fi
 
 XMLFORMAT_CONFIG_FILE=${XMLFORMAT_CONFIG_FILE/#@sysconfdir\@\/daps/${DAPSROOT}/etc}
 
-# only echo when output goes to STDOUT
-[[ -t 1 ]] && echo "Using config file '$XMLFORMAT_CONFIG_FILE'"
+verbose=0
+for arg in $@; do
+ [[ $(echo "$arg" | grep -oP '^-[^-v]*v[^-v]*$') ]] && verbose=1
+done
+if [[ $verbose -eq 1 ]]; then
+  >&2 echo -e "Using the xmlformat configuration from '$XMLFORMAT_CONFIG_FILE'\n"
+fi
 
 [[ -e $XMLFORMAT_CONFIG_FILE ]] || exit_on_error "Could not find config file '$XMLFORMAT_CONFIG_FILE'\n"
 
