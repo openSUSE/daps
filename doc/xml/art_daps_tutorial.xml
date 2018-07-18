@@ -74,11 +74,9 @@
     called <sgmltag>xref</sgmltag>.
   </para>
   <para>
-    While this might seem cumbersome at first sight, it is a huge advantage
-    when considering the different output formats you can generate from the
-    same XML sources.<remark>dpopov 2016-10-10: this approach has an advantage
-    when it comes to generating documents in different formats from the same
-    XML sources.</remark> Imagine you want anything tagged with an
+    While this might seem cumbersome at first sight, this approach has the
+    advantage that you can generate documents in different formats from the
+    same XML sources. Imagine you want anything tagged with an
     <sgmltag>xref</sgmltag> element to appear in <emphasis>blue</emphasis> in
     HTML output, whereas you want it to appear in <emphasis>green</emphasis>
     in the PDF output. Or you decide at one point that you want references to
@@ -239,11 +237,10 @@
  <title>Creating an XML File and a Documentation Configuration
  File</title>
  <para>
-  Now we will create an XML file (that we will use in the following to write
-  the recipe) <remark>dpopov 2016-10-10: for writing the recipe?</remark> and
-  a Documentation Configuration (DC) file (that we will use later on to
-  convert the XML file into HTML output).<remark>dpopov 2016-10-10:Suggestion:
-  for converting</remark>
+  Now we will create an XML file (that we will use in the following for
+  writing the recipe) and
+  a Documentation Configuration (DC) file (that we will use later on for
+  converting the XML file into HTML output).
  </para>
 <procedure>
  <step>
@@ -333,21 +330,23 @@
   <sect2>
    <title>Identifying Start and End Tags</title>
    <para>
-    The most important thing you need to know about XML is, that you need to
-    close the tags. <remark>dpopov 2016-10-10: Keep in mind that in XML you
-    must close the tags either with the an end tag or...</remark> Either with
-    an end tag or with a backslash at the end of the tag (for example:
-    <command>&lt;para/&gt;</command>). The content between the tags depends on
+    To categorize content, XML uses tags. XML tags primarily consist of an
+    element name (such as <literal>para</literal> for a paragraph in DocBook)
+    and enclosing less-than/greater-than characters (<literal>&lt;</literal>,
+    <literal>&gt;</literal>). XML tags (<literal>&lt;para&gt;</literal>) must
+    be closed. You can do so either with an end tag
+    (<literal>&lt;para&gt;&lt;/para&gt;</literal>) or by adding a backslash
+    before the final <literal>&gt;</literal> in the tag
+    (<command>&lt;para/&gt;</command>). The content between the tags depends on
     which element you want to create. Open the XML file
     <filename>recipe.xml</filename> that you just created, and place the
-    cursor below the header. To write <remark>dpopov 2016-10-10:
-    define?</remark> an article, paste an <command>article</command> start and
+    cursor below the header. To define
+    an article, paste an <command>article</command> start and
     end tag into the XML file. Between these two tags, write your text as
     shown in <xref linkend="ex.tags"/>.
    </para>
    <example id="ex.tags">
-    <title>Start- and Endtag of an Article <remark>dpopov 2016-10-10: Is it endtag or end tag?</remark>
-    </title>
+    <title>Start and End Tag of an Article</title>
     <programlisting>&lt;article&gt;
 Tags and text
 &lt;/article&gt;
@@ -402,8 +401,7 @@ Recipe for a chili sauce.
      </callout>
      <callout arearefs="co.article5.xml">
       <para>
-       An abstract. What is the subject of your article? <remark>dpopov 2016-10-10: What is your article about?</remark>
-
+       An abstract. What is your article about?
       </para>
      </callout>
      <callout arearefs="co.article4.xml">
@@ -474,8 +472,8 @@ Recipe for a chili sauce.
     </calloutlist>
    </example>
    <para>
-    Place the cursor behind the abstract end tag and in front of the article
-    end tag and paste the content of <quote>Example 4</quote>  into your XML file. <remark>dpopov 2016-10-10: behind/in front is confusing. Better: before/after</remark>
+    Place the cursor after the abstract end tag and before the article
+    end tag and paste the content of <quote>Example 4</quote> into your XML file.
    </para>
 
    <figure>
@@ -497,7 +495,7 @@ Recipe for a chili sauce.
   <sect2>
    <title>Creating Itemized Lists</title>
    <para>
-    To create a listing, use the <command>&lt;itemizedlist> </command> tag. <remark>dpopov 2016-10-10: Listing and list are not the same thing.</remark>
+    To create a list, use the <command>&lt;itemizedlist> </command> tag.
    </para>
 
    <example>
@@ -553,7 +551,7 @@ Recipe for a chili sauce.
     and browse for the reader.
    </para>
    <example id="ex.listing">
-    <title>Example for Step-by-Step Instructions </title> <remark>dpopov 2016-10-10: Example of?</remark>
+    <title>Example of Step-by-Step Instructions</title>
 
     <programlisting>&lt;procedure><co id="co.textstructure.xml"/>
  &lt;step&gt;<co id="co.textstructure2.xml"/>
@@ -611,7 +609,7 @@ Recipe for a chili sauce.
 
 
 <sect2>
- <title>Integrating Remote Links and Cross References</title> <remark>dpopov 2016-10-10: Use insert or add instead of integrate</remark>
+ <title>Inserting Remote Links and Cross References</title>
 
  <sect3>
   <title>Remote Links</title>
@@ -696,16 +694,15 @@ Recipe for a chili sauce.
 
 
   <sect2>
-   <title>Integrating Images</title>
+   <title>Embedding Images</title>
 
    <procedure>
     <step>
      <para id="ex.image">
-      To integrate an image in your file, save an image (for example, <filename>butcht.png</filename>) in the
-      <filename>image/png</filename> directory.
-      That is very important because otherwise, it will not
-      work. <remark>dpopov 2016-10-10: The image must reside inside the image/png directory; otherwise DAPS will not be able to locate it.</remark>
-
+      To add an image to your document, save the image you want (for example,
+      <filename>butcht.png</filename>) into the directory
+      <filename>image/png</filename>. If you save it to different directory,
+      DAPS will not be able to locate it.
      </para>
     </step>
     <step>
@@ -758,10 +755,9 @@ Recipe for a chili sauce.
    you only want to see the temporary result. Convert as often as you like.
    <important>
     <para>
-     The XML file must be valid, otherwise it will not work! <remark>dpopov
-     2016-10-10: otherwise the conversion will fail.</remark> Check if it is
+     The XML file must be valid, otherwise the conversion will fail.
+     Check if it is
      valid: <screen>daps -d DC-tutorial validate</screen>
-    
     </para>
    </important>
   </para>
@@ -777,8 +773,8 @@ Recipe for a chili sauce.
    <step>
      <para>
      &dapsacr; automatically creates a directory called
-     <filename>build</filename>. You can find your finished PDF file there. <remark>dpopov 2016-10-10: saves the resulting PDF file in the build directory.</remark>
-
+     <filename>build</filename>. &dapsacr; saves the resulting PDF file in the
+     build directory.
      </para>
    </step>
   </procedure>
@@ -794,9 +790,8 @@ Recipe for a chili sauce.
      </step>
      <step>
      <para>
-      You get a green colored link, which you can open in a browser, for
-      example Firefox. <remark>dpopov 2016-10-10: in a browser like Firefox.</remark>
-
+      You get a green colored link, which you can open in a browser, such as
+      Firefox.
      </para>
      </step>
     </procedure>
@@ -806,8 +801,8 @@ Recipe for a chili sauce.
    <title>Further Information</title>
    <para>
     If you still have questions or need additional information, read the
-    &dapsacr; man page. Open it in a terminal: <remark>dpopov 2016-10-10: Open
-    the DAPS man page using the following command:</remark>
+    &dapsacr; man page. To open the &dapsacr; man page using the following
+    command:
    </para>
    <screen>&prompt.user;daps --help</screen>
    <para>
