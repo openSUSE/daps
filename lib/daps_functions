@@ -1510,170 +1510,6 @@ function package-html {
 
 ###########################################################################
 #
-# PACKAGING unpack-locdrop
-#
-# Subcommand: unpack-locdrop only
-#
-# unpack a localization drop packages source.
-# Files listed in manifest_trans.txt will be extracted from the given tarball
-# Files listed in manifest_notrans will be linked/copied from the notrans
-# directory specified with --notrans-dir
-#
-###########################################################################
-function unpack-locdrop {
-    local SHORT_OPTS LONG_OPTS SUB_CMD
-    local ALL_TRANS_FILES ALL_NOTRANS_FILES DCFILE_LIST ENTITIES LINK_NOTRANS_FILES MANIFEST_TRANS MANIFEST_NOTRANS MFT_TRANS_SUFF MFT_NOTRANS_SUFF NO_DCFILE_LIST NO_EXIFTOOL NO_OPTIPNG XML_FILE_LIST
-    local -a ALL_MANIFEST_NOTRANS_FILES ALL_MANIFEST_TRANS_FILES
-
-    MFT_TRANS_SUFF=manifest_trans.txt
-    MFT_NOTRANS_SUFF=manifest_notrans.txt
-
-    SUB_CMD=$1
-    shift
-
-    SHORT_OPTS="h"
-    LONG_OPTS="help,notrans-dir:,optipng,output-dir:,trans-files:"
-
-    parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
-    eval set -- "$P_REMAIN_ARGS"
-
-    #------ Computing the values returned from the parser -----
-    if [[ 1 = "$P_HELP" ]]; then
-        help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
-        help_trans-files
-        help_help
-        help_notrans-dir
-        help_optipng
-        help_output-dir
-        echo
-        exit 0
-    fi
-
-    if [[ -z "$P_TRANS_FILES" ]]; then
-    exit_on_error "Fatal: Specifying one or more locdrop tarballs with --trans-files is mandatory."
-    fi
-
-    if [[ -z "$P_NOTRANS_DIR" ]]; then
-    ccecho "warn" "No notrans-dir was specified. Assuming DC-file directory"
-    P_NOTRANS_DIR="$MY_BASEDIR"
-    fi
-
-    [[ -z "$P_OUTPUT_DIR" ]] && exit_on_error "Fatal: Specifying an output directory\nwith  --output-dir is mandatory."
-
-    #
-    # Extract translated files
-    #
-    for TAR in $P_TRANS_FILES; do
-    if [[ -f $TAR ]]; then
-        pushd "$P_OUTPUT_DIR" > /dev/null
-        MANIFEST_TRANS=$(tar tfj "$TAR" | grep "$MFT_TRANS_SUFF" 2>/dev/null) || exit_on_error "Could not get manifest of translated files from $TAR"
-        ALL_MANIFEST_TRANS_FILES=( "${ALL_MANIFEST_TRANS_FILES[@]}" "$MANIFEST_TRANS" )
-        MANIFEST_NOTRANS=$(tar tfj "$TAR" | grep "$MFT_NOTRANS_SUFF" 2>/dev/null) || exit_on_error "Could not get manifest of non-translated files from $TAR"
-        ALL_MANIFEST_NOTRANS_FILES=( "${ALL_MANIFEST_NOTRANS_FILES[@]}" "$MANIFEST_NOTRANS" )
-        tar xfj "$TAR" "$MANIFEST_TRANS" "$MANIFEST_NOTRANS" 2>/dev/null || exit_on_error "Could not extract manifest files from tarball $TAR"
-        tar xfj "$TAR" $(cat "$MANIFEST_TRANS") 2>/dev/null || exit_on_error "Could not extract translated files from tarball $TAR"
-        popd >/dev/null
-    else
-        exit_on_error "Fatal: $TAR does not exist"
-    fi
-    done
-
-    pushd "$P_OUTPUT_DIR" > /dev/null
-
-    #
-    # Run optipng on images/src/png if --optipng was specified
-    #
-    which optipng >/dev/null 2>&1 || NO_OPTIPNG="1"
-    which exiftool >/dev/null 2>&1 || NO_EXIFTOOL="1"
-
-    if [[ -z $NO_OPTIPNG && -z $NO_EXIFTOOL ]]; then
-        if [[ -d images/src/png && 1 -eq $P_OPTIPNG ]]; then
-            local j=0
-            for IMG in images/src/png/*.png; do
-                if [[ -z "$(exiftool -Comment $IMG | grep optipng)" ]]; then
-                    let "j += 1"
-                    optipng -o2 $IMG >/dev/null 2>&1
-                    exiftool -Comment=optipng -overwrite_original -P $IMG >/dev/null
-                fi
-            done
-            if [[ 0 -eq $j ]]; then \
-                ccecho "result" "No PNG images needed optimization"
-            else
-                ccecho "result" "$j PNG images have been optimized."
-            fi
-        fi
-    else
-        [[ -n $NO_OPTIPNG ]] && ccecho "error" "Error: Cannot find optipng!"
-        [[ -n $NO_EXIFTOOL ]] && ccecho "error" "Error: Cannot find exiftool!"
-    fi
-
-    #
-    # Now create a complete list of translated/untranslated files
-    #
-    ALL_TRANS_FILES=$(cat "${ALL_MANIFEST_TRANS_FILES[@]}" | sort -u)
-    ALL_NOTRANS_FILES=$(cat "${ALL_MANIFEST_NOTRANS_FILES[@]}" | sort -u)
-
-    # get all files unique to the notrans lists (the ones that have not
-    # been translated)
-    LINK_NOTRANS_FILES=$(comm -1 -3 <(echo -e "$ALL_TRANS_FILES") <(echo -e "$ALL_NOTRANS_FILES") 2>/dev/null) || exit_on_error "Could not get list of files that have not been translated"
-
-    # Process LINK_NOTRANS_FILES to get the file lists we need
-    #  the awk statements matches multiple occurrences on a single line
-    #
-    DCFILE_LIST=$(awk '{for(i=1;i<=NF;++i)if($i~/DC-[^ ]*/)print $i}' <(echo "$LINK_NOTRANS_FILES") 2>/dev/null) || exit_on_error "Could not get list of DC files"
-    NO_DCFILE_LIST=$(awk '{for(i=1;i<=NF;++i)if($i !~ /DC-[^ ]*/)print $i}' <(echo "$LINK_NOTRANS_FILES") 2>/dev/null) || exit_on_error "Could not get list of images that have not been 'translated'"
-    XML_FILE_LIST=$(awk -v path="${P_NOTRANS_DIR}/" '{for(i=1;i<=NF;++i)if($i~/xml\/.*\.xml/)print path $i}' <(echo "$LINK_NOTRANS_FILES") 2>/dev/null) || exit_on_error "Could not get list of files that have been translated"
-
-    # Copy remaining DC-files
-    #
-    for DC in $DCFILE_LIST; do
-    if [[ -f ${P_NOTRANS_DIR}/$DC ]]; then
-        cp "${P_NOTRANS_DIR}/$DC" .
-    else
-        ccecho "warn" "File does not exist: ${P_NOTRANS_DIR}/$DC"
-    fi
-    done
-
-    # Link not translated images and XML files
-    #
-    for DATA in $NO_DCFILE_LIST; do
-    if [[ -f ${P_NOTRANS_DIR}/$DATA ]]; then
-        DIR="$(dirname "$DATA")"
-        if [[ "." == "$DIR" ]]; then
-        ln -sf "${P_NOTRANS_DIR}/$DATA"
-        else
-        [[ -d "$DIR" ]] || mkdir -p "$DIR"
-        # the realpath statement makes sure a realtive path is used
-                # for the link (also see
-                # https://stackoverflow.com/questions/2564634)
-        (cd "$DIR" && ln -sf "$(realpath --relative-to="." "${P_NOTRANS_DIR}/$DATA")")
-        fi
-    else
-        ccecho "warn" "File does not exist: ${P_NOTRANS_DIR}/$DATA"
-    fi
-    done
-
-
-    # Get entity files from the notrans sources and link to them
-    #
-    ENTITIES="$("${LIBEXEC_DIR}/getentityname.py" $XML_FILE_LIST)"
-    for ENT in $ENTITIES; do
-    if [[ -f ${P_NOTRANS_DIR}/xml/$ENT ]]; then
-        (cd xml && ln -sf "$(realpath --relative-to="." "${P_NOTRANS_DIR}/xml/$ENT")")
-    else
-        ccecho "warn" "Cannot find entity file: ${P_NOTRANS_DIR}/xml/$ENT"
-    fi
-    done
-
-    popd >/dev/null
-
-    ccecho "result" "Successfully created files in\n$P_OUTPUT_DIR"
-    exit 0
-}
-
-
-###########################################################################
-#
 #  PROFILE First
 #
 #  Some subcommands (such as projectgraphics and various dist and packaging
@@ -2868,17 +2704,6 @@ function help_nostatic {
                               with CSS and Javascript.
 EOF
 }
-function help_notrans-dir {
-    cat <<EOF
-    --notrans-dir=DIRECTORY   Relative or absolute path to the directory
-                              containing the untranslated sources. Links
-                              pointing to this directory are created for all
-                              files listed in manifest_notrans.txt.
-                              Optional. If not specified, the dirname of the
-                              DC-file is used.
-                              Default: DC-file directory
-EOF
-}
 function help_novalid {
     cat <<EOF
     --novalid                 Do not perform a validation check on the
@@ -2907,13 +2732,6 @@ function help_optipng {
                               palette (using optipng), Modifies the original
                               sources!
                               Default: off
-EOF
-}
-function help_output-dir {
-    cat <<EOF
-    --output-dir=DIRECTORY    Output directory in which to unpack the files
-                              from the localization drop. Mandatory.
-                              Default: unset
 EOF
 }
 function help_pagefiles {
@@ -3021,14 +2839,6 @@ function help_target {
                               color-pdf) in order to retrieve correct values
                               for target-specific values.
                               Default: same as daps subcommand
-EOF
-}
-function help_trans-files {
-    cat <<EOF
-    --trans-files="<LIST>"    Specify one or more tarballs with translated
-                              files (semicolon-separeted) for a single
-                              language.
-                              Default: unset
 EOF
 }
 function help_viewer {
