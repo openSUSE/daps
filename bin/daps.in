@@ -1913,7 +1913,11 @@ fi
 # Finally, run the Subcommands
 #
 
-# By default we want to write a log file, can be overwritten by
+# source additional functions
+#
+[[ -f $LIB_DIR/$SUBCMD ]] && source "$LIB_DIR/$SUBCMD"
+
+# By default we want to write a logfile, can be overwritten by
 # subcommand function
 #
 WRITE_LOG=1
