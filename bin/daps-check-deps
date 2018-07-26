@@ -161,7 +161,7 @@ check_cat_entries "${DB5_XSLT_CAT[@]}"
 
 if [[ 0 -eq $_havedb4xslt && 0 -eq $_havedb5xslt ]]; then
     _noxslt=1
-    echo -e "${fatal_col}FATAL: DocBook steylsheets (version 4 or 5) are required ${end_col}"
+    echo -e "${fatal_col}FATAL: DocBook stylesheets (version 4 or 5) are required ${end_col}"
 fi
 
 # make
@@ -191,14 +191,14 @@ echo -e "\n##### Checking for important (but not fatal) dependency failures ####
 # One of DocBook 4/5 is missing
 if [[ 0 -eq $_nodb ]]; then
     if [[ 0 -eq $_havedb4 ]]; then
-       echo -e "${important_col}IMPORTANT: No DocBook4 support${end_col}"
+       echo -e "${important_col}IMPORTANT: No DocBook 4 support${end_col}"
     else
-        echo -e "${ok_col}OK: DocBook4${end_col}"
+        echo -e "${ok_col}OK: DocBook 4${end_col}"
     fi
     if [[ 0 -eq $_havedb5 ]]; then
-        echo -e "${important_col}IMPORTANT: No DocBook5 support${end_col}"
+        echo -e "${important_col}IMPORTANT: No DocBook 5 support${end_col}"
     else
-        echo -e "${ok_col}OK: DocBook5${end_col}"
+        echo -e "${ok_col}OK: DocBook 5${end_col}"
     fi
 fi
 

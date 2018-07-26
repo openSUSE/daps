@@ -196,7 +196,7 @@ process_params () {
     # This function ensure that we can pass a certain parameter twice, with
     # that last one specified taking precedence. This is needed to overwrite
     # stringparams already set in the makefiles.
-    # Natively xsltproc does not support specifying a parameter twice, so
+    # Natively, xsltproc does not support specifying a parameter twice, so
     # something like xsltproc --param foo bar --param foo baz will result
     # in an error.
     # This function takes care that all key/value with the same key are

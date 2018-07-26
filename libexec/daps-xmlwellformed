@@ -57,13 +57,13 @@ def exists(context, f):
 
 
 def abspath(context, f):
-    """Return the absolut path of the context node
+    """Return the absolute path of the context node
 
         :param context:
         :param list f: list of path name (however, we
                        are only interested in the first
                        item
-        :return: absolut path
+        :return: absolute path
         :rtype: str
     """
     f = f[0]
@@ -108,7 +108,7 @@ def process_xinclude(tree):
             else:
                 level = 'INFO'
                 msg = entry.message
-                # Skip if we find not definied entities:
+                # Skip if we find not defined entities:
                 if ENTITY_NOT_FOUND.match(msg):
                     continue
             # print(level, msg, file=sys.stderr)
@@ -176,7 +176,7 @@ def parse_cli(args=None):
     parser.add_argument("-W", "--warnings-as-errors",
                         action="store_true",
                         default=False,
-                        help=("Flag to set the behaviour when "
+                        help=("Flag to set the behavior when "
                               "referenced files with XIncludes cannot "
                               "be found; "
                               "(default: %(default)s)")

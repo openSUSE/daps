@@ -43,7 +43,7 @@ export prefix=@prefix@
 
 # PENDING:
 # DISTVER, PRODUCTNAME, and PRODUCTNAMEREG are only need for resolving the
-# suse-PIs. Once we get rid of that, remove these variables fom the list
+# suse-PIs. Once we get rid of that, remove these variables from the list
 #
 
 # TODO fs 2012-12-20:
@@ -283,7 +283,7 @@ else
 fi
 
 # Set the maximum number of concurrent jobs to the number of cores
-# If egrep does not return somethiong usefule, set it to "2" as a sane default
+# If egrep does not return something useful, set it to "2" as a sane default
 JOBS=$(egrep -s -m1 "cpu cores\s*:" /proc/cpuinfo 2>/dev/null | sed 's/cpu cores\s*:\s*//')
 [[ -z $JOBS ]] && JOBS=2
 
@@ -717,7 +717,7 @@ Global Options:
                             alternative fallbacks (space separated absolute
                             paths). The directories will be tested in the order
                             specified, the first one that applies to the
-                            requested format, will be used.  The original
+                            requested format, will be used. The original
                             DocBook stylesheets will be used as a last resort.
                             Useful if you have forks of your custom
                             stylesheets.
@@ -780,7 +780,7 @@ Subcommands:
                               by the DC-file.
     list-images-missing       List images referenced in the XML sources but
                               missing in the images' source directory.
-    list-images-multisrc      List images for which mutiple sources exist
+    list-images-multisrc      List images for which multiple sources exist
                               (e.g. foo.svg and foo.png).
 
   Cleaning up:
@@ -889,7 +889,7 @@ function sanitize_path {
     # sets absolute path without trailing / for $1, links are being followed
     # also tests if paths are valid
     #
-    # in case of a non-existing path, returns 2 if variablename matches
+    # in case of a non-existing path, returns 2 if variable name matches
     # _WRAPPER, else returns 1
     #
     local ABSPATH BASEDIR MYPATH ORIGIN_TEXT VARNAME VN WRONGPATH
@@ -995,7 +995,7 @@ function autoset_docconf {
     if [[ 1 = "${#DC_COUNT[@]}" ]]; then
         # There is only one DOCCONF file
         #
-        # two possibilites:
+        # two possibilities:
         # 1. We are already in DOC_DIR
         # 2. We are in the documents build result directory
         # (DOC_DIR/build/<name>), where daps creates a link to the
@@ -1196,7 +1196,7 @@ trap "clean_daps" ERR EXIT
 #
 # In order to separate general daps parameters from subcommand parameters,
 # we are setting POSIXLY_CORRECT before parsing the first time.
-# This causes getopt to interprete all remaining parameters as non-option
+# This causes getopt to interpret all remaining parameters as non-option
 # parameters as soon as the first non-option parameter (the subcommand) is
 # found. This value must be _exported_
 
@@ -1212,9 +1212,9 @@ export POSIXLY_CORRECT=1
 # If variables such as $BUILD_DIR, $DOCCONF, and $DAPSROOT are set via command
 # line switch, we do not want to overwrite them by any other file we source
 # at a later stage (command line always wins).
-# Declaring the variables as readonly is unfortunately not an option, since
+# Declaring the variables as read-only is unfortunately not an option, since
 # every attempt to (un)set a read-only variable throws an error - something
-# we do not want when sourcing a config-file.
+# we do not want when sourcing a config file.
 # Therefore we need to save each variable twice in order to recover the
 # original value.
 
@@ -1242,7 +1242,7 @@ while true ; do
             ;;
         --builddir)
             [[ -d $2 ]] || exit_on_error "BUILD_DIR \"$2\" is not a valid directory"
-            [[ -w $2 ]] || exit_on_error "BUILD_DIR \"$2\" is not writeable"
+            [[ -w $2 ]] || exit_on_error "BUILD_DIR \"$2\" is not writable"
             # make path absolute and strip trailing slash
             sanitize_path "$2" "BUILD_DIR_CMDL"
             BUILD_DIR="$BUILD_DIR_CMDL"
@@ -1461,7 +1461,7 @@ esac
 # accordingly. Either by command line switch --dtdroot or in  your user
 # config file (DAPSROOT="<path>")
 #
-# Since commandline values take precedence we need to recover them every
+# Since command line values take precedence we need to recover them every
 # time we source a file
 #
 
@@ -1913,7 +1913,7 @@ fi
 # Finally, run the Subcommands
 #
 
-# By default we want to write a logfile, can be overwritten by
+# By default we want to write a log file, can be overwritten by
 # subcommand function
 #
 WRITE_LOG=1

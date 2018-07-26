@@ -45,7 +45,7 @@
 # XSLTPARAM = '--stringparam "foo=bar"'
 # XSLTPARAM += '--strinparam "baz=foo"
 #
-# The same rules as for regulat KEY/VALUE pairs apply
+# The same rules as for regular KEY/VALUE pairs apply
 #
 
 
@@ -176,8 +176,8 @@ CB_OPTIONS="--dontwarn  \"(301|302|902)\" --sleep 0 --timeout 60"
 ## Default:     "yes"
 #
 # By default errors, results, warnings and certain info messages are printed
-# in color using bash olor codes. In cron jobs and scripts you probably want to
-# turn off this behaviour by setting COLOR to "no"
+# in color using bash color codes. In cron jobs and scripts you probably want to
+# turn off this behavior by setting COLOR to "no"
 #
 COLOR="yes"
 
@@ -820,11 +820,11 @@ STATIC_DIR=""
 ## Default:     ""
 #
 #
-# By default daps uses the DocBook Stylesheets to create output. If you are
+# By default, daps uses the DocBook Stylesheets to create output. If you are
 # developing your own set of stylesheets, you may want to set STYLEDEVEL in
 # ~/.config/daps/dapsrc. If set STYLEDEVEL _always_ takes precedence over
 # STYLEROOT!
-# You may also want to set FALLBACK_STYLEROOT alomngside with STYLEDEVEL
+# You may also want to set FALLBACK_STYLEROOT alongside with STYLEDEVEL
 #
 # See also STYLEROOT, FALLBACK_STYLEROOT
 #
@@ -838,7 +838,7 @@ STYLEDEVEL=""
 ## Type:        Path to directory (without a trailing slash)
 ## Default:     ""
 #
-# By default daps uses the DocBook Stylesheets to create output. If you have
+# By default, daps uses the DocBook Stylesheets to create output. If you have
 # your own set of stylesheets, specify the absolute path to the stylesheet
 # directory here. The DocBook stylesheets will be used as a fallback in case
 # styles are not defined for all output formats.
@@ -899,9 +899,9 @@ TXT_PARAMS='--param="admon.textlabel=1" --param="section.autolabel=1" --param="s
 ##              dedication glossary index part preface refentry reference \
 ##              set setindex
 #
-# Stylesheets for PDF/HTML/EPUB etc usually expect certain top level elements
-# when transforming XNML files. I makes little sense to process a document with
-# <envar> as an root element. Specify the list of top-level elements your scripts
+# Stylesheets for PDF/HTML/EPUB etc. usually expect certain top level elements
+# when transforming XML files. It makes little sense to process a document with
+# <envar> as a root element. Specify the list of top-level elements your scripts
 # support, here. In case a document with a root element not specified here is
 # parsed, DAPS will exit with an error. This is also true when specifying the
 # --rootid parameter: If the specified rootid belongs to an element not listed

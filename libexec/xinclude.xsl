@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-   Pupose:
+   Purpose:
       Process xi:include elements and return warning message if file
       cannot be found
 

@@ -4,7 +4,7 @@
 #
 # Author:
 # Berthold Gunreben
-# Frank Sundermeyer <fsundermeyer at opensuse dot org >
+# Frank Sundermeyer <fsundermeyer at opensuse dot org>
 #
 
 if [[ -d "$DAPSROOT" ]] ; then
