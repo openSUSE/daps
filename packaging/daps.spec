@@ -148,6 +148,10 @@ for upgrade instructions.
 %setup -q -n %{name}
 #%%patch1 -p1
 
+# Correct shebang line as suggested in
+# https://lists.opensuse.org/opensuse-packaging/2018-03/msg00017.html
+sed -i '1 s|/usr/bin/env python|/usr/bin/python|' libexec/daps-xmlwellformed
+
 #--------------------------------------------------------------------------
 %build
 %configure --docdir=%{_defaultdocdir}/%{name} --disable-edit-rootcatalog
