@@ -16,6 +16,7 @@ __version__ = "0.2.0"
 
 import argparse
 import os
+import re
 import sys
 import textwrap
 from lxml import etree
@@ -23,7 +24,7 @@ from lxml import etree
 HERE = os.path.dirname(os.path.realpath(__file__))
 XINCLUDE_XSLT = os.path.join(HERE, "xinclude.xsl")
 SUSE_NS = "urn:x-suse:ns:python"
-
+ENTITY_NOT_FOUND = re.compile(r'Entity\s+.*\s+not defined')
 
 
 if etree.LXML_VERSION < (3, 4, 0):
@@ -37,7 +38,6 @@ if not os.path.exists(XINCLUDE_XSLT):
 
 # ------------------------------------------------------------
 # Extension Functions in a SUSE namespace
-
 
 def exists(context, f):
     """Test whether a path exists.  Returns False for
@@ -103,7 +103,14 @@ def process_xinclude(tree):
     try:
         result = xitransform(tree)
         for entry in xitransform.error_log:
-            level, msg = entry.message.split(':', maxsplit=1)
+            if ":" in entry.message:
+                level, msg = entry.message.split(':', maxsplit=1)
+            else:
+                level = 'INFO'
+                msg = entry.message
+                # Skip if we find not definied entities:
+                if ENTITY_NOT_FOUND.match(msg):
+                    continue
             # print(level, msg, file=sys.stderr)
             if level == 'WARN':
                 warnfiles.append(msg)
