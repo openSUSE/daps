@@ -1901,6 +1901,20 @@ if [[ "adoc" = "$SRC_FORMAT" ]]; then
     ADOC_MAIN="$MAIN"
     ADOC_DIR="${BUILD_DIR}/.adoc"
     MAIN="${ADOC_DIR}/${BOOK}.xml"
+
+    # make the path for ADOC_IMG_DIR absolute if a relative path was
+    # provided by config file
+    #
+    if [[ -z $ADOC_IMG_DIR_CMDL ]]; then
+        # path was not provided on cmdl
+        if [[ -n $ADOC_IMG_DIR ]]; then
+            # path was provided by config
+            # if not absolue, prepend DOC_DIR
+            [[ ! "/" == ${ADOC_IMG_DIR:1} ]] && ADOC_IMG_DIR="$DOC_DIR/$ADOC_IMG_DIR"
+            #  error out if $DOC_DIR/$ADOC_IMG_DIR does not exist
+            [[ ! -d $ADOC_IMG_DIR ]] && exit_on_error "AsciiDoc image directory $ADOC_IMG_DIR does not exist"
+        fi
+    fi
     export ADOC_IMG_DIR ADOC_MAIN ADOC_DIR MAIN
     [[ 1 -eq $FORCE_REBUILD ]] && MOPTS="--always-make"
     [[ 2 -gt $VERBOSITY ]] && MOPTS="$MOPTS --silent"
