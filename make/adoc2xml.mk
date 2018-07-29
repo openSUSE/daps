@@ -84,7 +84,7 @@ $(MAIN): $(ADOC_SRCFILES) | $(ADOC_DIR)
 	@ccecho "info" "Successfully created XML file $@"
   endif
 
-### 	asciidoc --attribute=imagesdir! --conf-file=$(ADOC_CONFIG_FILE) \
+### 	asciidoc --attribute=imagesdir! \
 	  --doctype=$(ADOC_TYPE) --out-file=$@ $(ADOC_MAIN)
 
 

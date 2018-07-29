@@ -54,7 +54,6 @@ declare -a VARLIST
 VARLIST=(
     ADOC_ATTRIBUTES
     ADOC_BACKEND
-    ADOC_CONFIG_FILE
     ADOC_IMG_DIR
     ADOC_POST
     ADOC_POST_STYLE
@@ -1680,7 +1679,6 @@ fi
 # If $substring matches front end of $string, substitute
 # $replacement for $substring.
 
-ADOC_CONFIG_FILE=${ADOC_CONFIG_FILE/#@sysconfdir\@\/daps/${DAPSROOT}/etc}
 ADOC_POST_STYLE=${ADOC_POST_STYLE/#@pkgdatadir\@/${DAPSROOT}}
 
 FOP_CONFIG_FILE=${FOP_CONFIG_FILE/#@sysconfdir\@\/daps/${DAPSROOT}/etc}
