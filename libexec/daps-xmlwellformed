@@ -22,7 +22,8 @@ import textwrap
 from lxml import etree
 
 HERE = os.path.dirname(os.path.realpath(__file__))
-XINCLUDE_XSLT = os.path.join(HERE, "xinclude.xsl")
+BASE = os.path.basename(__file__)
+XINCLUDE_XSLT = os.path.join(HERE, "%s-xinclude.xsl" % BASE)
 SUSE_NS = "urn:x-suse:ns:python"
 ENTITY_NOT_FOUND = re.compile(r'Entity\s+.*\s+not defined')
 
