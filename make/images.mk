@@ -36,6 +36,8 @@
 #........|...........|..........
 #  JPG   |   JPG     |   JPG
 #........|...........|..........
+#  ODG   |   PNG     | SVG,PDF
+#........|...........|..........
 #  PNG   |   PNG     |   PNG
 #........|...........|..........
 #  PDF   |   PNG     |   PDF
@@ -45,8 +47,8 @@
 #
 # $DOC_DIR/images/src/<FORMAT>/ is _never_ used for manual creation, the
 # images are rather created or linked into $IMG_GENDIR/color/ (color images)
-# or into $IMG_GENDIR/grayscale/ (grayscale). If image creation/conversion requires
-# generating intermediate files, these files are created in
+# or into $IMG_GENDIR/grayscale/ (grayscale). If image creation/conversion
+# requires generating intermediate files, these files are created in
 # $IMG_GENDIR/gen/<FORMAT>
 # We assume all images are color images, grayscale images are always created
 #
@@ -75,13 +77,14 @@ SRCDIA     := $(wildcard $(IMG_SRCDIR)/dia/*.dia)
 SRCEPS     := $(wildcard $(IMG_SRCDIR)/eps/*.eps)
 SRCFIG     := $(wildcard $(IMG_SRCDIR)/fig/*.fig)
 SRCJPG     := $(wildcard $(IMG_SRCDIR)/jpg/*.jpg)
+SRCODG     := $(wildcard $(IMG_SRCDIR)/odg/*.odg)
 SRCPDF     := $(wildcard $(IMG_SRCDIR)/pdf/*.pdf)
 SRCPNG     := $(wildcard $(IMG_SRCDIR)/png/*.png)
 SRCSVG     := $(wildcard $(IMG_SRCDIR)/svg/*.svg)
-SRCALL     := $(SRCDIA) $(SRCEPS) $(SRCFIG) $(SRCJPG) $(SRCPDF) \
-		$(SRCPNG) $(SRCSVG)
+SRCALL     := $(SRCDIA) $(SRCEPS) $(SRCFIG) $(SRCJPG) $(SRCODG) \
+		$(SRCPDF) $(SRCPNG) $(SRCSVG)
 IMGDIRS    := $(sort $(dir $(SRCALL)))
-IMGFORMATS := dia eps fig jpg pdf png svg
+IMGFORMATS := dia eps fig jpg odg pdf png svg
 
 
 # get all images used in the current Document
@@ -112,25 +115,32 @@ USED_EPS := $(filter \
 USED_FIG := $(filter \
 	$(addprefix $(IMG_SRCDIR)/fig/,$(addsuffix .fig,$(basename $(USED)))), \
 	$(SRCFIG))
+USED_ODG := $(filter \
+	$(addprefix $(IMG_SRCDIR)/odg/,$(addsuffix .odg,$(basename $(USED)))), \
+	$(SRCODG))
 USED_SVG := $(filter \
 	$(addprefix $(IMG_SRCDIR)/svg/,$(addsuffix .svg,$(basename $(USED)))), \
 	$(SRCSVG))
-USED_ALL := $(USED_DIA) $(USED_EPS) $(USED_FIG) $(USED_JPG) $(USED_PNG) \
-		$(USED_PDF) $(USED_SVG)
+USED_ALL := $(USED_DIA) $(USED_EPS) $(USED_FIG) $(USED_JPG) $(USED_ODG) \
+		$(USED_PNG) $(USED_PDF) $(USED_SVG)
 
 # generated images
 #
 GEN_PDF := $(subst .dia,.pdf,$(notdir $(USED_DIA))) \
 		$(subst .eps,.pdf,$(notdir $(USED_EPS))) \
 		$(subst .fig,.pdf,$(notdir $(USED_FIG))) \
+		$(subst .odg,.pdf,$(notdir $(USED_ODG))) \
 		$(subst .svg,.pdf,$(notdir $(USED_SVG)))
 GEN_PNG := $(subst .dia,.png,$(notdir $(USED_DIA))) \
 		$(subst .eps,.png,$(notdir $(USED_EPS))) \
 		$(subst .fig,.png,$(notdir $(USED_FIG))) \
+		$(subst .odg,.png,$(notdir $(USED_ODG))) \
 		$(subst .pdf,.png,$(notdir $(USED_PDF))) \
 		$(subst .svg,.png,$(notdir $(USED_SVG)))
 GEN_SVG := $(subst .dia,.svg,$(notdir $(USED_DIA))) \
-		$(subst .fig,.svg,$(notdir $(USED_FIG)))
+		$(subst .fig,.svg,$(notdir $(USED_FIG))) \
+		$(subst .odg,.svg,$(notdir $(USED_ODG)))
+
 
 # color images (used for manual creation)
 # (JPGs are never generated, but rather taken as are, therefore no
@@ -188,11 +198,37 @@ MISSING     := $(sort $(filter-out $(notdir $(basename $(SRCALL))), \
 # html, pdf, etc.
 #
 
-COLOR_IMAGES     := $(JPGONLINE) $(PDFONLINE) $(PNGONLINE) $(SVGONLINE)
-GRAYSCALE_IMAGES := $(JPGPRINT) $(PDFPRINT) $(PNGPRINT) $(SVGPRINT)
-ONLINE_IMAGES    := $(JPGONLINE) $(PNGONLINE) $(SVGONLINE)
+#COLOR_IMAGES     := $(JPGONLINE) $(PDFONLINE) $(PNGONLINE) $(SVGONLINE)
+#GRAYSCALE_IMAGES := $(JPGPRINT) $(PDFPRINT) $(PNGPRINT) $(SVGPRINT)
+#ONLINE_IMAGES    := $(JPGONLINE) $(PNGONLINE) $(SVGONLINE)
+
+COLOR_IMAGES     := $(addprefix $(IMG_GENDIR)/color/,$(USED))
+GRAYSCALE_IMAGES := $(addprefix $(IMG_GENDIR)/grayscale/,$(USED))
+ONLINE_IMAGES    := $(addprefix $(IMG_GENDIR)/color/,$(USED))
 
 GEN_IMAGES       := $(addprefix $(IMG_GENDIR)/gen/pdf/,$(GEN_PDF)) $(addprefix $(IMG_GENDIR)/gen/png/,$(GEN_PNG)) $(addprefix $(IMG_GENDIR)/gen/svg/,$(GEN_SVG))
+
+
+# ----------------------------
+# Generating SVG/PNG from ODG
+#
+# lodraw is not capable of being executed in parallel, therfore the image
+# creation via pattern targets is not possible. We use an empty target instead
+# and make it a dependenc of $(GEN_IMAGES) (ONLINE_IMAGES) (COLOR_IMAGES)
+#
+$(GEN_IMAGES) (ONLINE_IMAGES) (COLOR_IMAGES): $(IMG_GENDIR)/gen/.odg_gen
+
+$(IMG_GENDIR)/gen/.odg_gen: $(USED_ODG)
+ifeq "$(VERBOSITY)" "2"
+	@echo "   Converting *.odg to PNG"
+endif
+	lodraw  --headless --convert-to png --outdir $(IMG_GENDIR)/gen/png/ $(USED_ODG) > /dev/null
+ifeq "$(VERBOSITY)" "2"
+	@echo "   Converting *.odg to SVG"
+endif
+	lodraw  --headless --convert-to svg --outdir $(IMG_GENDIR)/gen/svg/ $(USED_ODG) >/dev/null
+	touch $@
+
 
 # Image target for testing and debugging
 #
@@ -309,12 +345,15 @@ list-images-multisrc warn-images:
 #
 # While PDFs support EPSs, SVGs and PNGs, all other output formats need PNG
 # (Browser support for SVG is still not common enough). So we convert
-# EPS and SVGs to PNG. FIG and DIA files are also converted to SVG (and from
-# there to PNG), because they are unsupported in the output formats.
+# EPS, FIG and SVGs to PNG. FIG and DIA files are also converted to SVG
+# because they are unsupported in the output formats.
 #
 # We assume source images are generally color images, regardless of the format.
 # Since b/w PDFs (for the print shop) need grayscale images, we transfer
 # JPGs, PNGs and SVGs to grayscale as well.
+#
+# ODG conversion to PNG/SVG needs to be handled differently, because
+# lodraw does not support parallel execution (see above)
 #
 # All conversions are done via $IMAGES_GENDIR/gen/
 # Color images are placed in $IMAGES_GENDIR/color/
@@ -385,16 +424,16 @@ optipng -o2 $@ >/dev/null 2>&1
   endef
 endif
 
-# SVG -> PNG
-# create color PNGs from SVGs
-$(IMG_GENDIR)/gen/png/%.png: $(IMG_GENDIR)/gen/svg/%.svg | $(IMG_DIRECTORIES)
+# DIA -> PNG
+# create color PNGs from DIA
+$(IMG_GENDIR)/gen/png/%.png: $(IMG_SRCDIR)/dia/%.dia | $(IMG_DIRECTORIES)
 ifeq "$(VERBOSITY)" "2"
 	@echo "   Converting $(notdir $<) to PNG"
 endif
 	$(remove_link)
-	inkscape $(INK_OPTIONS) -e $@ -f $< $(DEVNULL) && \
-	  ( test -f $< || false )
+	LANG=C dia -t png --export=$@ $< $(DEVNULL) $(ERR_DEVNULL)
 	$(run_optipng)
+
 
 # EPS -> PNG
 # create color PNGs from EPS
@@ -406,8 +445,20 @@ endif
 	convert $< $@ $(DEVNULL) $(ERR_DEVNULL)
 	$(run_optipng)
 
+
+# FIG -> PNG
+# create color PNGs from FIG
+$(IMG_GENDIR)/gen/png/%.png: $(IMG_SRCDIR)/fig/%.fig | $(IMG_DIRECTORIES)
+ifeq "$(VERBOSITY)" "2"
+	@echo "   Converting $(notdir $<) to PNG"
+endif
+	$(remove_link)
+	fig2dev -L png $< $@ $(DEVNULL)
+	$(run_optipng)
+
+
 # PDF -> PNG
-# create color PNGs from EPS
+# create color PNGs from PDF
 $(IMG_GENDIR)/gen/png/%.png: $(IMG_SRCDIR)/pdf/%.pdf | $(IMG_DIRECTORIES)
 ifeq "$(VERBOSITY)" "2"
 	@echo "   Converting $(notdir $<) to PNG"
@@ -416,13 +467,18 @@ endif
 	convert $< $@ $(DEVNULL)
 	$(run_optipng)
 
-$(IMG_GENDIR)/gen/png/%.png: $(IMG_GENDIR)/gen/pdf/%.pdf | $(IMG_DIRECTORIES)
+# SVG -> PNG
+# create color PNGs from SVGs
+#$(IMG_GENDIR)/gen/png/%.png: $(IMG_GENDIR)/gen/svg/%.svg | $(IMG_DIRECTORIES)
+$(IMG_GENDIR)/gen/png/%.png: $(IMG_SRCDIR)/svg/%.svg | $(IMG_DIRECTORIES)
 ifeq "$(VERBOSITY)" "2"
 	@echo "   Converting $(notdir $<) to PNG"
 endif
 	$(remove_link)
-	convert $< $@ $(DEVNULL)
+	inkscape $(INK_OPTIONS) -e $@ -f $< $(DEVNULL) && \
+	  ( test -f $< || false )
 	$(run_optipng)
+
 
 #------------------------------------------------------------------------
 # SVGs
@@ -467,7 +523,7 @@ $(IMG_GENDIR)/gen/svg/%.svg: $(IMG_SRCDIR)/dia/%.dia | $(IMG_DIRECTORIES)
 ifeq "$(VERBOSITY)" "2"
 	@echo "   Converting $(notdir $<) to SVG"
 endif
-	LANG=C dia $(DIA_OPTIONS) --export=$@ $< $(DEVNULL) $(ERR_DEVNULL)
+	LANG=C dia -t svg --export=$@ $< $(DEVNULL) $(ERR_DEVNULL)
 
 # FIG -> SVG
 #
@@ -476,6 +532,7 @@ ifeq "($(VERBOSITY)" "2"
 	@echo "   Converting $(notdir $<) to SVG"
 endif
 	fig2dev -L svg $< $@ $(DEVNULL)
+
 
 # SVG -> SVG
 #
@@ -524,6 +581,12 @@ endif
 #---------------
 # Create color PDFs from other formats
 
+# apart from EPS, all PDFs are generated via the previously generated
+# SVGs and not from the original sourvce format. This is because dia
+# does not support exporting to PDF and it fiddling out which PDFs
+# could be generated via the originbal format and which ones via generated
+# PDF would be a major pain and probably introduce race conditions
+
 # EPS -> PDF
 $(IMG_GENDIR)/gen/pdf/%.pdf: $(IMG_SRCDIR)/eps/%.eps | $(IMG_DIRECTORIES)
 ifeq "$(VERBOSITY)" "2"
@@ -533,8 +596,7 @@ endif
 	  -dCompatibilityLevel=1.4 -dBATCH -dNOPAUSE $< $(DEVNULL) $(ERR_DEVNULL)
 
 # SVG -> PDF
-# Color SVGs from are transformed via stylesheet in order to wipe out
-# some tags that cause trouble with xep or fop
+# use previously generated SVGs to create the PDFs
 $(IMG_GENDIR)/gen/pdf/%.pdf: $(IMG_GENDIR)/gen/svg/%.svg | $(IMG_DIRECTORIES)
 ifeq "$(VERBOSITY)" "2"
 	@echo "   Converting $(notdir $<) to PDF"
