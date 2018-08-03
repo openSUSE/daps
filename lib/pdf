@@ -1,0 +1,70 @@
+#!/bin/bash
+#
+# Copyright (C) 2015-2018 SUSE Linux GmbH
+#
+# Author:
+# Frank Sundermeyer <fsundermeyer at opensuse dot org>
+#
+###########################################################################
+#
+# BUILD PDFS
+#
+# Subcommand: pdf
+#
+###########################################################################
+function build_pdfs {
+    local SHORT_OPTS LONG_OPTS SUB_CMD
+    SUB_CMD=$1
+    shift
+
+    SHORT_OPTS="h"
+    LONG_OPTS="cropmarks,draft,formatter:,help,grayscale,lean,meta,name:,norefcheck,param:,remarks,rootid:,stringparam:,xsltparam:"
+
+    parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
+    eval set -- "$P_REMAIN_ARGS"
+
+    #------ Computing the values returned from the parser -----
+    if [[ 1 = "$P_HELP" ]]; then
+        help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
+        help_cropmarks
+        help_draft
+        help_formatter
+        help_grayscale_pdf
+        help_help
+        help_lean
+        help_meta
+        help_name
+        help_norefcheck
+        help_param
+        help_remarks
+        help_rootid
+        help_stringparam
+        help_xsltparam "creates the .fo file from the profiled sources"
+        echo
+        exit 0
+    fi
+
+    [[ 1 = "$P_DRAFT" ]]       && DRAFT="yes"
+    [[ 1 = "$P_REMARKS" ]]     && REMARKS=1
+    # usemeta implies draft mode
+    [[ 1 = "$P_META" ]]        && META=1 DRAFT="yes"
+    [[ 1 = "$P_CROPMARKS" ]]   && export CROPMARKS=1
+    [[ 1 = "$P_GRAYSCALE" ]]   && export GRAYSCALE=1
+    [[ 1 = "$P_LEAN" ]]        && export LEAN=1
+    [[ 1 = "$P_NOREFCHECK" ]]  && export NOREFCHECK=1
+    [[ -n "$P_NAME" ]]         && export PDFNAME="$P_NAME" BOOK="$P_NAME"
+    [[ -n "$P_ROOTID" ]]       && export ROOTID="$P_ROOTID"
+    [[ -n "$P_PARAMS" ]]       && export PARAMS="$P_PARAMS"
+    [[ -n "$P_STRINGPARAMS" ]] && export STRINGPARAMS="$P_STRINGPARAMS"
+    [[ -n "$P_XSLTPARAM" ]]    && export XSLTPARAM="$XSLTPARAM $P_XSLTPARAM"
+
+    if [[ -n "$P_FORMATTER" ]]; then
+        if [[ xep = "$P_FORMATTER" || fop = "$P_FORMATTER" ]]; then
+            export FORMATTER="$P_FORMATTER"
+        else
+        exit_on_error "Wrong parameter for --formatter: must be \"xep\" or \"fop\"!"
+        fi
+    fi
+
+    call_make "$SUB_CMD" "$@"
+}

@@ -1,0 +1,67 @@
+#!/bin/bash
+#
+# Copyright (C) 2015-2018 SUSE Linux GmbH
+#
+# Author:
+# Frank Sundermeyer <fsundermeyer at opensuse dot org>
+#
+###########################################################################
+#
+# BUILD ePUB
+#
+# Subcommands: epub only
+#
+###########################################################################
+function build_epub {
+    local SHORT_OPTS LONG_OPTS SUB_CMD
+    SUB_CMD=$1
+    shift
+
+    SHORT_OPTS="h"
+    LONG_OPTS="check,css:,epub3,help,name:,norefcheck,param:,remarks,rootid:,statdir:,stringparam:"
+
+    parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
+    eval set -- "$P_REMAIN_ARGS"
+
+    #------ Computing the values returned from the parser -----
+    if [[ 1 = "$P_HELP" ]]; then
+        help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
+        help_check
+        help_css
+        help_epub3
+        help_help
+        help_name
+        help_norefcheck
+        help_param
+        help_rootid
+        help_statdir
+        help_stringparam
+        echo
+        exit 0
+    fi
+
+    [[ 1 = "$P_REMARKS" ]]  && REMARKS=1
+    [[ 1 = "$P_EPUB3" ]]  && export EPUB3=1
+    [[ 1 = "$P_NOREFCHECK" ]]  && export NOREFCHECK=1
+    [[ -n "$P_NAME" ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
+    [[ -n "$P_ROOTID" ]]    && export ROOTID="$P_ROOTID"
+    [[ -n "$P_STATIC_DIR" ]] && export STATIC_DIR="$P_STATIC_DIR"
+    [[ -n "$P_PARAMS" ]]       && export PARAMS="$P_PARAMS"
+    [[ -n "$P_STRINGPARAMS" ]] && export STRINGPARAMS="$P_STRINGPARAMS"
+
+    # Checking the result requires a minimum verbosity level of 1
+    if [[ 1 = "$P_CHECK" ]]; then
+        [[ 0 = "$VERBOSITY" ]] && export VERBOSITY=1
+        export RESULTCHECK=1
+    fi
+
+    if [[ -n "$P_CSS" ]]; then
+        if [[ $P_CSS = "none" || -f "$P_CSS" ]]; then
+            export EPUB_CSS="$P_CSS"
+        else
+            exit_on_error "Cannot find CSS file $P_CSS (have you specified a correct path?)."
+        fi
+    fi
+
+    call_make "$SUB_CMD" "$@"
+}

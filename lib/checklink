@@ -1,0 +1,65 @@
+#!/bin/bash
+#
+# Copyright (C) 2015-2018 SUSE Linux GmbH
+#
+# Author:
+# Frank Sundermeyer <fsundermeyer at opensuse dot org>
+#
+###########################################################################
+#
+#  CHECKLINK
+#
+#  checks http links in file or from rootid
+#
+###########################################################################
+
+function checklink {
+    local SHORT_OPTS LONG_OPTS SUB_CMD
+
+    SUB_CMD=$1
+    shift
+
+    SHORT_OPTS="h"
+    LONG_OPTS="file:,help,rootid:,show"
+
+    parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
+    eval set -- "$P_REMAIN_ARGS"
+
+    #------ Computing the values returned from the parser -----
+    if [[ 1 = "$P_HELP" ]]; then
+        help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
+        help_file
+        help_help
+        help_rootid
+        help_show_check
+        cat <<EOF
+   NOTES: * Options --file (-f) and --rootid exclude one another.
+           * If neither file nor rootid is specified, the rootid
+             from the DC-file is used
+           * $SUB_CMD follows xi:includes
+EOF
+    exit 0
+    fi
+
+    if [[ -z "$P_ROOTID" && -z "$P_FILE" ]]; then
+        if [[ 0 != $VERBOSITY ]]; then
+            ccecho "info" "Neither file nor rootid specified, using rootid from DC-file"
+        fi
+    elif [[ -n "$P_ROOTID" && -n "$P_FILE" ]]; then
+        exit_on_error "Options --file (-f) and --rootid exclude one another.\nPlease specify only one of these options"
+    fi
+
+    [[ -n "$P_ROOTID" ]]    && export ROOTID="$P_ROOTID"
+    [[ -n "$P_SHOW" ]]      && export SHOW=1
+
+    if [[ -n "$P_FILE" ]]; then
+        if [[ -f $P_FILE ]]; then
+            ROOTID=$($XSLTPROC --stylesheet "$DAPSROOT/daps-xslt/common/get-rootelement-id.xsl" --file "$P_FILE" "$XSLTPROCESSOR") || exit_on_error "Cannot get a rootid from file $FILE"
+            export ROOTID
+        else
+            exit_on_error "File $P_FILE does not exist"
+        fi
+    fi
+
+    call_make "$SUB_CMD" "$@"
+}

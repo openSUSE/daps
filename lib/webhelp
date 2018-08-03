@@ -1,0 +1,76 @@
+#!/bin/bash
+#
+# Copyright (C) 2015-2018 SUSE Linux GmbH
+#
+# Author:
+# Frank Sundermeyer <fsundermeyer at opensuse dot org>
+#
+###########################################################################
+#
+# WEBHELP
+#
+# Subcommands: webhelp
+#
+###########################################################################
+function webhelp {
+    local EXTENSION SHORT_OPTS LONG_OPTS SUB_CMD
+    SUB_CMD=$1
+    shift
+
+    SHORT_OPTS="h"
+    LONG_OPTS="clean,css:,draft,help,name:,norefcheck,nosearch,nostatic,param:,remarks,rootid:,static,stringparam:,xsltparam:"
+
+    parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
+    eval set -- "$P_REMAIN_ARGS"
+
+    #------ Computing the values returned from the parser -----
+    if [[ 1 = "$P_HELP" ]]; then
+        help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
+        help_clean
+        help_css
+        help_draft
+        help_help
+        help_name
+        help_norefcheck
+        help_nosearch
+        help_nostatic
+        help_param
+        help_remarks
+        help_rootid
+        help_stringparam
+        help_xsltparam "creates Webhelp HTML from the profiled sources"
+        echo
+        exit 0
+    fi
+
+    for EXTENSION in $DOCBOOK_STYLES/extensions/webhelpindexer.jar \
+    $DOCBOOK_STYLES/extensions/lucene-analyzers-*.jar \
+    $DOCBOOK_STYLES/extensions/lucene-core-*.jar \
+    $DOCBOOK_STYLES/extensions/tagsoup-*.jar; do
+    if [[ ! -f $EXTENSION ]]; then
+            exit_on_error "\nwebhelp only works when a recent snapshot of the DocBook stylesheets is\ninstalled. Your version of the DocBook styles at\n$DOCBOOK_STYLES\nis not webhelp capable."
+    fi
+    done
+
+    [[ 1 = "$P_CLEAN" ]]       && export CLEAN_DIR=1
+    [[ 1 = "$P_DRAFT" ]]       && DRAFT="yes"
+    [[ 1 = "$P_REMARKS" ]]     && REMARKS=1
+    [[ 1 = "$P_NOSTATIC" ]]    && export STATIC_HTML=0
+    [[ 1 = "$P_NOSEARCH" ]]    && export WH_SEARCH="no"
+    [[ 1 = "$P_NOREFCHECK" ]]  && export NOREFCHECK=1
+    [[ -n "$P_ROOTID" ]]       && export ROOTID="$P_ROOTID"
+    [[ -n "$P_NAME" ]]         && export PDFNAME="$P_NAME" BOOK="$P_NAME"
+    [[ -n "$P_PARAMS" ]]       && export PARAMS="$P_PARAMS"
+    [[ -n "$P_STRINGPARAMS" ]] && export STRINGPARAMS="$P_STRINGPARAMS"
+    [[ -n "$P_XSLTPARAM" ]]    && export XSLTPARAM="$XSLTPARAM $P_XSLTPARAM"
+
+    if [[ -n "$P_CSS" ]]; then
+        if [[ $P_CSS = "none" || -f "$P_CSS" ]]; then
+            export HTML_CSS="$P_CSS"
+        else
+            exit_on_error "Cannot find CSS file $P_CSS (have you specified a correct path?)."
+        fi
+    fi
+
+    call_make "$SUB_CMD" "$@"
+}
