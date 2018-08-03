@@ -674,24 +674,28 @@ Usage:
 
 
 Global Options:
-  --adocattr="NAME=VALUE"   Define or delete an ASCIIDOC document attribute.
-                            Attributes are specified like NAME=VALUE, or just
-                            NAME for for attributes without a value.
-                            To delete a value set in the document use NAME!
-                            To only set a value that is not already set in the
-                            document, use NAME=VALUE@
+  --adocattr="NAME=VALUE"   Overwrite, define or delete an AsciiDoc document
+                            attribute. To overwrite an attribute already
+                            defined in the AsciiDoc document, use NAME=VALUE,
+                            or just NAME for attributes without a value. To delete
+                            a value set in the document use NAME!. To set
+                            a value that is not already set in the document, use
+                            NAME=VALUE@.
                             Default: unset
-                            Only works with ASCIIDOC sources
-  --adocimgdir              Specify a directory for the images used in the
-                            ASCIIDOC sources. Must contain all images,
+                            This option can be specified multiple times. Only
+                            works with AsciiDoc sources and is ignored otherwise.
+  --adocimgdir=IMG_DIR      Specify a directory for the images used in the
+                            AsciiDoc sources. Must contain all images,
                             subdirectories are ignored.
                             Not required if the images reside in the directory
-                            structure required by DAPS (see DAPS manual).
+                            structure required by for DocBook projects
+                            (see DAPS manual).
                             Default: unset
-                            Only works with ASCIIDOC sources
+                            Only works with ASCIIDOC sources and is ignored
+                            otherwise.
   --builddir=BUILD_DIR      Directory where every output $ME generates will
                             end up.
-                            Default: <doc dir>/build/$BOOK
+                            Default: <doc dir>/build/
   --color=(0|1)             By default errors, results, warnings and certain
                             info messages are printed in color using bash color
                             codes. Set to '0' to turn off colors.
@@ -706,7 +710,7 @@ Global Options:
   -d DC-file                Path to doc config file to use. Mandatory,
                             unless there is only a single DC-file in the
                             current directory or unless you have configured a
-                            default value (DOCCONF_DEFAULT) in $USER_CONFIG.
+                            default value (DOCCONF_DEFAULT) in \$USER_CONFIG.
                             Note: Options --docconfig and --main exclude
                                   each other.
   --fb_styleroot            Fallback styleroot directories. Can only be used in
