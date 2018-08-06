@@ -166,35 +166,12 @@ make install DESTDIR=$RPM_BUILD_ROOT
 
 #----------------------
 %post
-#
-# XML Catalog entries for daps profiling
-#
-# remove existing entries first (if existing) - needed for
-# zypper in, since it does not call postun
-#
-# delete in case of an update, which $1=2
-if [ "2" = "$1" ]; then
-  edit-xml-catalog --group --catalog /etc/xml/suse-catalog.xml \
-  --del %{name} || true
-fi
-# ... and readd it again
-edit-xml-catalog --group --catalog /etc/xml/suse-catalog.xml \
-  --add /etc/xml/%{daps_catalog}
-
+update-xml-catalog
 exit 0
 
 #----------------------
 %postun
-#
-# delete catalog entry for daps profiling
-# only run if package is really uninstalled ($1 = 0) and not
-# in case of an update
-#
-if [ 0 = $1 ]; then
-  edit-xml-catalog --group --catalog /etc/xml/suse-catalog.xml \
-  --del %{name}
-fi
-
+update-xml-catalog
 exit 0
 
 #----------------------
@@ -213,9 +190,13 @@ exit 0
 %dir %{_datadir}/xml/%{name}
 %dir %{_datadir}/xml/%{name}/schema
 
-%config %{_sysconfdir}/xml/*.xml
+# Catalogs
+%config %{_sysconfdir}/xml/catalog.d/%{name}.xml
+
+# Config files
 %config %{_sysconfdir}/%{name}/*
 
+# Man/Doc
 %doc %{_mandir}/man1/*.1%{ext_man}
 %doc %{_defaultdocdir}/%{name}/*
 
