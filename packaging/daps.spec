@@ -1,7 +1,7 @@
 #
 # spec file for package daps
 #
-# Copyright (c) 2016 SUSE LINUX GmbH, Nuernberg, Germany.
+# Copyright (c) 2018 SUSE LINUX GmbH, Nuernberg, Germany.
 #
 # All modifications and additions to the file contributed by third parties
 # remain the property of their copyright owners, unless otherwise agreed
@@ -70,9 +70,9 @@ BuildRequires:  python3-lxml
 BuildRequires:  suse-xsl-stylesheets
 BuildRequires:  svg-dtd
 BuildRequires:  transfig
+BuildRequires:  xerces-j2
 BuildRequires:  xml-commons-jaxp-1.3-apis
 BuildRequires:  xmlgraphics-fop >= 0.94
-BuildRequires:  xerces-j2
 BuildRequires:  xmlstarlet
 
 #
@@ -87,17 +87,18 @@ PreReq:         sgml-skel
 Requires:       ImageMagick
 Requires:       bash >= 4
 Requires:       dia
-Requires:       docbook_4
-Requires:       docbook_5
 Requires:       docbook-xsl-stylesheets >= 1.77
 Requires:       docbook5-xsl-stylesheets >= 1.77
+Requires:       docbook_4
+Requires:       docbook_5
 Requires:       ghostscript-library
 Requires:       inkscape
-Requires:       java-devel >= 1.8.0
+Requires:       java >= 1.8.0
 Requires:       jing
 Requires:       libxslt
 Requires:       make
 Requires:       poppler-tools
+Requires:       python-xml
 Requires:       python3-lxml
 #Requires:       sgml-skel
 Requires:       suse-xsl-stylesheets
@@ -108,7 +109,6 @@ Requires:       xml-commons-jaxp-1.3-apis
 Requires:       xmlgraphics-fop >= 0.94
 Requires:       xmlstarlet
 Requires:       zip
-
 
 Recommends:     aspell-en
 Recommends:     calibre
@@ -181,6 +181,7 @@ exit 0
 %files
 %defattr(-,root,root)
 
+%dir %{_datadir}/%{name}
 %dir %{_sysconfdir}/%{name}
 %dir %{_defaultdocdir}/%{name}
 
@@ -201,7 +202,6 @@ exit 0
 %doc %{_defaultdocdir}/%{name}/*
 
 %{_bindir}/*
-%{_datadir}/%{name}/*
 %attr(644, root, root) %{_datadir}/%{name}/libexec/*.xsl
 %{_datadir}/bash-completion/completions/%{name}
 %{_datadir}/emacs/site-lisp/docbook_macros.el
