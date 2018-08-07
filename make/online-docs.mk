@@ -176,9 +176,9 @@ endif
 # creates an archive with all generated graphics for HTML/EPUB
 #
 # fs 2013-11-24: Creating the tarball manually (rather than by just
-# adding $(ONLINE_IMAGES), because otherwise jpg would end up in
+# adding $(ONLINE_IMAGES), because otherwise jpg and svg would end up in
 # the png subdirectory as well. If other "online" images will be supported
-# in the future (SVG ??), a line for each format has to be added.
+# in the future, a line for each format has to be added.
 #
 
 $(OD_GRAPHICS): | $(OD_EXPORT_BOOKDIR)
