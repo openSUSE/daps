@@ -219,11 +219,8 @@ AM_PATH_PYTHON([3.4])
 dnl AM_PATH_PYTHON([2.6])
 
 dnl Variables HAVE_PYMOD_* are filled with "yes" or "no"
-AC_PYTHON_MODULE([xml], [fatal])
-AC_SUBST(HAVE_PYMOD_XML)
-
-dnl AC_PYTHON_MODULE([lxml], [fatal])
-dnl AC_SUBST(HAVE_PYMOD_LXML)
+AC_PYTHON_MODULE([lxml], [fatal])
+AC_SUBST(HAVE_PYMOD_LXML)
 
 
 dnl --------------------------------------------------------------------------
