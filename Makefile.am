@@ -250,7 +250,7 @@ clean-local:
 
 $(DAPS_CATALOG): DAPS_PROFDIR := $(pkgdatadir)/daps-xslt/profiling
 $(DAPS_CATALOG): $(DAPS_CATALOG_TEMPLATE) $(BUILD_ROOT) $(DAPS_CATALOG_DIR)
-	sed 's_\(xml:base\)=".."_\1="file:///usr/share/daps/daps-xslt/"_g' $< > $@
+	sed 's_\(xml:base\)="[^"]*"_\1="file:///usr/share/daps/daps-xslt/"_g' $< > $@
 
 
 # the sources contain links bin/daps, etc/config and $(FOP_CONFIG)
