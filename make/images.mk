@@ -216,7 +216,12 @@ GEN_IMAGES       := $(addprefix $(IMG_GENDIR)/gen/pdf/,$(GEN_PDF)) $(addprefix $
 # creation via pattern targets is not possible. We use an empty target instead
 # and make it a dependenc of $(GEN_IMAGES) (ONLINE_IMAGES) (COLOR_IMAGES)
 #
-$(GEN_IMAGES) (ONLINE_IMAGES) (COLOR_IMAGES): $(IMG_GENDIR)/gen/.odg_gen
+
+# Only run the .odg_gen target if there are ODG files!!
+#
+ifneq "$(strip $(USED_ODG))" ""
+  $(GEN_IMAGES) (ONLINE_IMAGES) (COLOR_IMAGES): $(IMG_GENDIR)/gen/.odg_gen
+endif
 
 $(IMG_GENDIR)/gen/.odg_gen: $(USED_ODG)
 ifeq "$(VERBOSITY)" "2"
