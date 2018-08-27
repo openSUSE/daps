@@ -56,7 +56,7 @@ ifneq "$(strip $(ADOC_IMG_DIR))" ""
   FIG     := $(subst $(ADOC_IMG_DIR)/,$(FIG_DIR)/,$(wildcard $(ADOC_IMG_DIR)/*.fig))
   JPG_DIR := $(IDIR)/jpg
   JPG     := $(subst $(ADOC_IMG_DIR)/,$(JPG_DIR)/,$(wildcard $(ADOC_IMG_DIR)/*.jpg))
-  ODG_DIR := $(IDIR)/pdf
+  ODG_DIR := $(IDIR)/odg
   ODG     := $(subst $(ADOC_IMG_DIR)/,$(ODG_DIR)/,$(wildcard $(ADOC_IMG_DIR)/*.odg))
   PDF_DIR := $(IDIR)/pdf
   PDF     := $(subst $(ADOC_IMG_DIR)/,$(PDF_DIR)/,$(wildcard $(ADOC_IMG_DIR)/*.pdf))
@@ -101,7 +101,7 @@ $(FIG_DIR)/%.fig: $(ADOC_IMG_DIR)/%.fig | $(FIG_DIR)
 $(JPG_DIR)/%.jpg: $(ADOC_IMG_DIR)/%.jpg | $(JPG_DIR)
 	(cd $(@D); ln -sf $<)
 
-$(ODG_DIR)/%.pdf: $(ADOC_IMG_DIR)/%.odg | $(ODG_DIR)
+$(ODG_DIR)/%.odg: $(ADOC_IMG_DIR)/%.odg | $(ODG_DIR)
 	(cd $(@D); ln -sf $<)
 
 $(PDF_DIR)/%.pdf: $(ADOC_IMG_DIR)/%.pdf | $(PDF_DIR)
