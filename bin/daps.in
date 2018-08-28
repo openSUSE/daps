@@ -1582,7 +1582,11 @@ recover_cmdl_values
 # run help if requested
 #
 if [[ "${SCMD_ARGS[@]}" = "-h" ]]; then
+    # source additional functions
+    #
+    [[ -f $LIB_DIR/$SUBCMD ]] && source "$LIB_DIR/$SUBCMD"
     ${SUBCOMMANDS[$SUBCMD]} "$SUBCMD" "${SCMD_ARGS[@]}"
+    exit 0
 fi
 
 # Sample call for early commands
