@@ -1,4 +1,32 @@
 -------------------------------------------------------------------
+Tue Oct 30 13:50:26 UTC 2018 - fsundermeyer@opensuse.org
+
+Stable release DAPS 3.0.0:
+
+* New Features:
+  - added full support for Python3
+	- added SVG support for online-docs
+	- added support to build AsciiDoc documentation
+	- integrated hunspell and make aspell optional
+	- implement file not found for XIncludes
+
+* Bugfixes:
+  - #419: HTML and PDF builds need different paths for Admonition
+	  and Callout Images
+	- #322: Add --xmlonly / --imgonly switches to list-srcfiles
+	- #416: DAPS Won't Built With UTF-8 Characters in XML Filenames
+	- #397: Spaces in path problem
+	- #469: RPMLINT complains about permissions of XSLT stylesheet
+	- #464: xmlformat incorrectly formats variablelist terms
+	- #466: Build issues
+	- #475: Tab completion creates error
+	- PDF fails when static links in build/.tmp already exist
+
+* Documentation:
+	- Various updates to reflect changes in the code
+	- Improve help text for daps-xslt
+
+-------------------------------------------------------------------
 Tue May 30 12:32:26 UTC 2017 - fsundermeyer@opensuse.org
 
 Stable release DAPS 2.4.0:
