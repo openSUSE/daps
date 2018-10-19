@@ -66,7 +66,7 @@ BuildRequires:  libxslt
 BuildRequires:  libxslt-tools
 BuildRequires:  poppler-tools
 BuildRequires:  python3-lxml
-BuildRequires:  python3-xml
+BuildRequires:  python-xml
 BuildRequires:  suse-xsl-stylesheets
 BuildRequires:  svg-dtd
 BuildRequires:  transfig
@@ -100,7 +100,7 @@ Requires:       libxslt
 Requires:       make
 Requires:       poppler-tools
 Requires:       python3-lxml
-Requires:       python3-xml
+Requires:       python-xml
 Requires:       rubygem(%{rb_default_ruby_abi}:asciidoctor)
 Requires:       suse-xsl-stylesheets
 Requires:       svg-schema
