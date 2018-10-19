@@ -1,4 +1,4 @@
-# Copyright (C) 2012-2015 SUSE Linux GmbH
+# Copyright (C) 2012-2017 SUSE Linux GmbH
 #
 # Author:
 # Frank Sundermeyer <fsundermeyer at opensuse dot org>
@@ -13,6 +13,7 @@
 clean:
 	rm -rf $(PROFILE_PARENT_DIR)
 	rm -rf $(TMP_DIR)
+	rm -rf $(ADOC_DIR)
 	@ccecho "info" "Successfully removed all profiled and temporary files."
 
 .PHONY: clean-images

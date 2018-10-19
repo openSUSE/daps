@@ -1,0 +1,463 @@
+= DAPS AsciiDoc Quick Start Guide
+Frank Sundermeyer <fsundermeyer at opensuse dot org>
+:Revision: 0
+:toc:
+:icons: font
+:numbered:
+:website: https://opensuse.github.io/daps/
+
+ifdef::env-github[]
+//Admonitions
+:tip-caption: :bulb:
+:note-caption: :information_source:
+:important-caption: :heavy_exclamation_mark:
+:caution-caption: :fire:
+:warning-caption: :warning:
+endif::[]
+
+// Entities
+:adoc: AsciiDoc
+:db: DocBook
+:daps: DAPS
+
+http://asciidoc.org/[{adoc}] is a widely used markup language which, among other features, natively supports conversion to {db}.
+Starting with the {daps} 3.0, {daps} supports {adoc} sources.
+{adoc} sources are converted to {db} and then processed the same way as {db} sources.
+Projects with {adoc} sources are handled the same way as regular {db} projects.
+Therefore, the full range of output formats supported by {daps} is supported for {adoc} sources (HTML, single HTML, PDF, EPUB, Mobipocket, plain text).
+This quick start guide focuses on using {daps} with {adoc} sources and requires basic {daps} knowledge and {adoc} writing experience.
+<<for_more>> contains links to documentation on {daps} and {adoc}.
+
+The complete {daps} documentation is available online at https://opensuse.github.io/daps/.
+
+== Motivation
+
+Over the past years, a lot of software documentation projects have moved from {db} to {adoc}.
+With products and solutions becoming increasingly complex, documentation needs to rely more and more on external contributors.
+The hirdle to contribute is significantly lower when using {adoc} as it is with {db}.
+Such a move not only requires converting the {db} sources to {adoc}, but also changing the project setup, the toolchain and writing new stylesheets.
+The {adoc} support in {daps} saves you from switching to a new toolchain and new stylesheets.
+Whether you convert an existing {daps} project from {db} to {adoc}, or whether you have used {daps} before and are starting an {adoc} project from scratch, {daps} lets you:
+
+* use existing XSLT stylesheets (for converting DocBook into PDF, HTML, etc.)
+* use the same `daps` commands as with {db} projects
+* use the same project setup as with {db} projects
+
+However, {daps} cannot handle the conversion to {adoc} as the new source format.
+
+== Requirements
+
+To use {adoc} sources with {daps}, you need to install the following packages:
+
+* {daps} 3.0 or better
+* `asciidoctor` (strongly recommended) or `asciidoc`
+
+To install DAPS follow the https://github.com/asciidoctor/docbookrx[DAPS installation instructions].
+For install `asciidoctor` or `asciidoc` we recommend to use packages available for your Linux distribution.
+
+== Setting up a Project
+
+An {adoc} project has got the same directory structure as a regular {db} project managed with {daps} (see https://opensuse.github.io/daps/doc/cha.daps.user.features.html#sec.daps.user.basics.dirstruct[Directory Structure] for more information.
+However, there is one exception:
+For a {db} project, images need to be saved in a directory structure where each image format has its own directory. 
+To be able to also easily process {adoc} sources from a {daps} project with, for example, `asciidoctor` or to properly display the contents on, for example, GitHub, an {adoc} project can store all images in a single directory.
+
+=== The Directory Structure
+
+The following directory structure is recommended for {adoc} projects:
+
+[source]
+----
+PROJECT_ROOT/ <1>
+     |--DC-* <2>
+     |--adoc/ <3>
+     |   |--MAIN.adoc <4>
+     |   |--\*.adoc
+     |   |--images/ <5>
+     |   |  |--\*.dia/
+     |   |  |--\*.fig/
+     |   |  |--\*.jpg
+     |   |  |--\*.png/
+     |   |  |--\*.svg/
+----
+
+<1> The project's root directory (working directory) for the respective documentation project.
+<2> One or more Doc Config files (DC files) defining your deliverables. Each DC file represents one book, article, or man page.
+<3> The directory containing all {adoc} source files. It nust be named `adoc/`. {adoc} files in subdirectories are ignored.
+<4> The MAIN file of the documentation project. It may be the only file, but may also include other {adoc} files via the `include` directive.
+<5> The Directory containing image files. Place all images in this directory. Subdirectories are ignored. Either specify the path to this directory in the DC-file with `ADOC_IMG_DIR` (recommended) or on the command line with `--adocimgdir`.
+
+
+=== The Doc Config File (DC File)
+
+A configuration file in the project directory.
+Each book, article, or man page in a project can have its own documentation configuration file (DC file).
+It defines several parameters for your documentation deliverable (for example, the MAIN file, layout variants, or whether to render the sources as article or book).
+Although not mandatory, creating a DC file for each deliverable is recommended.
+You can store deliverable-specific configuration options in the DC-file that you otherwise need to enter on the command line each time you call {daps}.
+
+
+DC files need to be placed in the project root. The file names need to start with `DC-`.
+The rest of the file name is used to name directories and files created by {daps}. For example, if a DC-file is named `DC-adoc_test`, file names and directories will start with `adoc_test`.
+
+Of the multiple parameters that can be set in the DC file, the only one required is MAIN. It points to the MAIN {adoc} file that you want to process.
+Create at least one DC file per book or article.
+
+.Example: A Typical DC File for an {adoc} Project
+[source]
+----
+## Doc config file for the DAPS example document
+## See /etc/daps/config for documentation of the settings below
+##
+
+# MAIN file (mandatory) # <1>
+#
+MAIN="MAIN-example.adoc"
+
+#----- optional parameters -----
+
+# Image directory  # <2>
+#
+ADOC_IMG_DIR="adoc/images"
+
+# Type <3>
+#
+ADOC_TYPE="book"
+
+# Turn on postprocessing  # <4>
+#
+ADOC_POST="yes"
+
+# Stylesheet directory  # <5>
+#
+STYLEROOT="/usr/share/xml/docbook/stylesheet/daps2013"
+
+# XSLT Parameters for customizing the stylesheets # <6>
+#
+XSLTPARAM="--stringparam homepage=https://github.com/openSUSE/daps"
+XSLTPARAM+="--param variablelist.as.blocks=1"
+----
+
+<1> Name of the main {adoc} file from the `adoc/` directory. You do not need to specify the full path, {daps} will automatically find it.
+<2> Path to the image directory containing images referenced in the {adoc} sources. If you specify a relative path (recommended for portability), it needs to be specified relative to the directory containing the DC file.
+<3> Document type (`article`, `book`, `manpage`).
+<4> Parameter for applying the (default) post-processing XSLT stylesheet. It cleans up some of the DocBook XML constructs created by `asciidoctor`.
+<5> For a custom layout, use the STYLEROOT parameter to specify the path to the directory containing the custom XSLT stylesheets. If not specified, {daps} will use the default DocBook stylesheets. For an introduction on how to create custom stylesheets, refer to https://opensuse.github.io/daps/doc/cha.daps.user.layout.html#sec.daps.user.layout.styleheets[Customizing the DocBook Stylesheets] (requires XSLT knowledge).
+<6> If the stylesheets allow customization via parameters, you can specify these parameters here.
+
+The example above only shows a few options you can set.
+For a complete reference, refer to the {daps} configuration file at `/etc/daps/config`. An overview of the {adoc}-specific configuration options is also available at <<config-settings>>.
+
+=== Image Linking and Processing
+
+One of the core features of {daps} is automatic image conversion.
+Whether images need to be converted to grayscale for a printable PDF, whether `.dia` images need to be converted to SVG, or whether `.svg` images need to be converted to PNG--{daps} automatically takes care.
+You only need to make sure that the image is available in a supported format in the {adoc} images directory. Refer to https://opensuse.github.io/daps/doc/cha.daps.user.img.html[Image Handling] for details.
+
+When linking an image in the {adoc} sources, use the attribute `:imagesdir:` in the document header. Always use the file name only.
+The path for `:imagesdir:` is best specified relatively (relative to the `adoc/` directory).
+Specifying `:imagesdir:` is optional, but recommended. It allows you to also process your {adoc} sources with tools other than {daps}.
+
+.Example: Linking Images in {adoc}   
+[source]
+----
+= Linking images
+
+:author: John Doe
+:imagesdir: images/
+
+This is an example of how to link images in AsciiDoc documents processed with DAPS.
+
+image::test.png[Test Image]
+----
+
+For the example above, the images need to reside in `adoc/images`.
+Possible sources for the images in `adoc/images` are:
+
+* `adoc/images/test.dia`
+* `adoc/images/test.fig`
+* `adoc/images/test.jpg`
+* `adoc/images/test.png`
+* `adoc/images/test.svg`
+
+The {adoc} source example requests a PNG file. If it exists, it will be used as is.
+If it does not exist, {daps} will search for an image with the base name
+`test` (`test.svg`, `test.dia`, or `test.fig`) and automatically convert it
+to PNG.
+
+.Unique Image Names
+[IMPORTANT]
+Because of the procedure described above, {daps} requires unique base names for images.
+If you would have two files with different content but the same base name, for example `test.svg` and `test.dia`, the outcome of an automatic conversion would be uncertain (could be either one of the two files).
+Therefore make sure to always use unique base names. To test for non-unique images, use the following daps command: `daps -d _<DCFILE>_ list-images-multisrc`.
+
+== Creating Output with {daps}
+
+After you have set up the directory structure, created {adoc} documents, and images (optionally), you can use {daps} to create PDFs, HTML, EPUB and other output formats.
+The command line syntax is the same as with {db} projects:
+
+.Example: Creating HTML output
+[source]
+----
+daps -d DC-_MYADOC_  html
+----
+
+.Example: Creating Single Page HTML Output
+[source]
+----
+daps -d DC-_MYADOC_  html --single
+----
+
+.Example: Creating a PDF Directly from an {adoc} Source File
+[source]
+----
+daps -m adoc/_MYADOC_.adoc pdf
+----
+
+For more information, refer to `daps --help`.
+Help on the {daps} subcommands is available with the command `daps _SUBCOMMAND_ help`.
+
+=== Creating Partial Output
+
+If you want to create output for parts of the documents (for example, to send a single chapter or section for review), you do not need to create the whole document and cut out the parts you need.
+{daps} supports creating partial documents on section titles for any of the supported output formats.
+All that is required is an anchor preceding the section title:
+
+.Example: Section title with an Anchor
+[source,asciidoc]
+----
+[[new_chapter]]
+== Brand New Chapter
+
+This chapter is brand new
+----
+
+This anchor, `new_chapter` in the example above, can be passed to {daps} with the `--rootid` parameter.
+The following example shows how to build a PDF only containing the chapter "Brand New Chapter":
+
+[source]
+----
+daps -d DC-_MYADOC_ pdf --rootid="new_chapter"
+----
+
+=== Spell Checking
+
+DAPS also supports spell checking your sources.
+This is especially convenient, when your sources contain include files.
+A spellcheck with DAPS automatically checks all included files.
+DAPS supports the backends aspell and hunspell for spellchecking.
+
+[source]
+----
+daps -d DC-_MYADOC_ spellcheck --lang=en_GB --spell-checker=hunspell
+----
+
+== Common Errors and Pitfalls
+
+Before generating output formats, {daps} internally converts {adoc} to DocBook XML.
+Because of that you may receive two different kind of errors when processing {adoc} sources:
+
+{adoc} Errors::
++
+The conversion to DocBook XML is done by `asciidoc` or `asciidoctor`.
+In case there are syntax or structural errors in the {adoc} sources, you will get an appropriate error message. It usually contains the number of the line where the error occured.
+These errors need to be fixed before any further processing can be done.
++
+.Using `asciidoctor` Is Recommended
+[TIP]
+====
+Compared to `asciidoc`, `asciidoctor` provides better error messages. 
+====
+
+{daps} Errors::
++
+After the internal conversion to DocBook XML is done, {daps} validates the resulting XML file to make sure it can properly be processed.
+Although this happens rarely, the conversion to DocBook XML might produce invalid XML. In this case, you will receive an error message claiming that "validation failed." The error message also contains the path to the file and the line number where the error occurred.
++ 
+To fix the error, look at the text in the XML file at the given line and locate that text in the {adoc} sources.
+The error might be the result of some unsupported special `asciidoctor` macro or of an overly complex structure.
+Simplify the {adoc} code and try again.
+
+=== Avoiding Mistakes
+
+.Section Titles (Headings)
+* {daps} only allows a single Level 0 section at the beginning of the document
+* Section titles need to be in correct order. It is not possible to skip a level. So `== Level 2` followed by `==== Level 4` will not work.
+
+.Multimedia
+* {daps} currently does not support embedding videos
+
+
+== GitHub Integration
+
+One of the advantages of using {adoc} as a source for documentation is its seamless integration with GitHub.
+GitHub not only renders {adoc} sources, but also allows to edit them directly in the Web interface.
+After having edited a document via the built-in editor, GitHub even automatically creates a pull request, depending on the repository setup.
+This improves the flow for external contributors.
+
+To enable a smooth GitHub integration, a few adjustments in the {adoc} source code are required.
+Using the `ifdef` preprocessor macro, you can set directives specific to GitHub.
+The following adjustments are required:
+
+Includes::
+In addition to this, including documents via the `include` directive needs to be worked around, since this is not supported by GitHub for security reasons.
+Create an anchor (`[[ANCHOR]]`) at the top-level of the documents you want to include and use the following syntax:
++
+[source,asciidoc]
+----
+// Links for GitHub
+\ifdef::env-github[]
+ <<FILE1.adoc#ANCHOR, TITLE1>>
+ <<FILE2.adoc#ANCHOR, TITLE2>>
+\endif::[]
+// includes for AsciiDoc processing
+\ifndef::env-github[]
+ include::FILE1[]
+ include::FILE2[]
+\endif::[]
+----
+
+Admonition Images::
+Admonition boxes (warning, tip, etc.) usually come with an icon.
+To display these icons, you need to tell GitHub where to find them.
++
+[source,asciidoc]
+----
+\ifdef::env-github[]
+//Admonitions
+:tip-caption: :bulb:
+:note-caption: :information_source:
+:important-caption: :heavy_exclamation_mark:
+:caution-caption: :fire:
+:warning-caption: :warning:
+\endif::[]
+----
+
+[[for_more]]
+== For More Information
+
+Find links to useful online resources here.
+
+=== {daps}
+
+* https://opensuse.github.io/daps/doc/book.daps.user.html[User Guide]
+* https://opensuse.github.io/daps/[Project Page]
+* https://sourceforge.net/p/daps/discussion/General/[Discussion]
+
+=== {adoc}
+
+* https://powerman.name/doc/asciidoc[{adoc} Cheatsheet]
+* https://asciidoctor.org/docs/asciidoc-syntax-quick-reference/[{adoc}tor Syntax Quick Reference]
+* https://asciidoctor.org/docs/asciidoc-writers-guide[{adoc}tor Writer\'s Guide]
+* https://github.com/SUSE/doc-susemanager/wiki/Asciidoc-getting-started[Getting Started with Asciidoc (SUSE Syntax and Best practice for Contributors)]
+
+=== Example {adoc} Code
+
+* https://raw.githubusercontent.com/openSUSE/daps/develop/doc/adoc/daps_asciidoc.adoc[This document was written in {adoc}]
+* https://github.com/openSUSE/daps/blob/develop/test/documents/adoc/book.adoc[The {daps} test documents contain example with complex, nested structures]
+
+=== Converting {db} to {adoc}
+
+* https://github.com/asciidoctor/docbookrx[DocBookRx]
+
+[appendix]
+== Appendix
+
+=== Command Line Options and Configuration Settings for {adoc}
+[[config-settings]]
+
+{daps} supports the following {adoc}-specific command line options. These are global options and need to be specified before the subcommand.
+Additional configuration settings can be made in the {daps} configuration files (for example in a DC file).
+
+.Command Line Options/Configuration Settings for {adoc}
+[options="header"]
+|=======================
+|CLI Option|Config Setting|Explanation
+
+|`--adocattr`|`ADOC_ATTRIBUTES`|
+Define or delete {adoc} document attributes.
+Refer to the {adoc} documentation for more information.
+Examples:
+
+`daps -d DC-adoc --adocattr "author=John Doe"`
+`ADOC_ATTRIBUTES="author=myself"`
+
+|`--adocimgdir`|`ADOC_IMG_DIR`|
+Specify a directory for the images used in the {adoc} sources.
+Must contain all images, subdirectories are ignored.
+Examples:
+
+`daps -d DC-adoc --adocimgdir /projects/adoc/images`
+`ADOC_ATTRIBUTES="/documentation/adoc"`
+
+||`ADOC_BACKEND`|
+Specify whether to use `asciidoc` or `asciidoctor`.
+Specifying this parameter is usually not necessary, because {daps} will automatically check which program is installed.
+If both are installed, `asciidoctor` will be preferred.
+Only required if the back-end binary is not in your path or if you prefer `asciidoc` over `asciidoctor`.
+Examples:
+
+`ADOC_BACKEND="/home/doc/asciidictor/asciidoctor"`
+`ADOC_BACKEND="/usr/bin/asciidoc"`
+
+||`ADOC_POST`|
+If set to "yes", the XML produced from the {adoc} sources will be processed again before {daps} generates output.
+This can be used to change or clean up the XML.
+The stylesheet to be used can be specified via `ADOC_POST_STYLE`.
+By default this is set to "no". Example:
+
+`ADOC_POST="yes"`
+
+||`ADOC_POST_STYLE`|
+Stylesheet to post-process the XML produced from the {adoc} sources.
+Requires `ADOC_POST` to be set to "yes" (will be ignored otherwise).
+By default it is set to a stylesheet shipped with {daps} that does some cleaning up.
+
+||`ADOC_TYPE`|
+Same option as you would set by --doctype with `asciidoc` or asciidoctor.
+Valid values are "article", "book", and "manpage".
+Do not use "inline" as it will not work with {daps}.
+Setting "manpage" requires manpage-specific content (refer to the {adoc} documentation). Otherwise processing the source will fail.
+This setting will override the :doctype: definition in the {adoc} source document.
+
+|=======================
+
+The following subcommands support {adoc}-specific commands:
+
+`list-srcfiles`::
+This subcommand lists all files that are used to build the document, including images and the DC file.
+It supports several options for filtering the output.
+To restrict the results to only {adoc} files, use the option `--adoconly`.
+To exclude {adoc} files from the results, use the option `--noadoc`.
+Examples:
++
+[source,shell]
+----
+tux > gdaps -d DC-adoc_test list-srcfiles
+/home/doc/documents/DC-adoc_test
+/home/doc/documents/adoc/appendix.adoc
+/home/doc/documents/adoc/book.adoc
+/home/doc/documents/adoc/part_block.adoc
+/home/doc/documents/adoc/part_inlines.adoc
+/home/doc/documents/images/src/dia/dia_example.dia
+/home/doc/documents/images/src/fig/fig_example.fig
+/home/doc/documents/images/src/jpg/jpg_example.jpg
+/home/doc/documents/images/src/png/png_example.png
+/home/doc/documents/images/src/png/png_example2.png
+/home/doc/documents/images/src/svg/svg_example.svg
+
+tux > gdaps -d DC-adoc_test list-srcfiles --adoconly
+/home/doc/documents/adoc/appendix.adoc
+/home/doc/documents/adoc/book.adoc
+/home/doc/documents/adoc/part_block.adoc
+/home/doc/documents/adoc/part_inlines.adoc
+
+tux > gdaps -d DC-adoc_test list-srcfiles
+/home/doc/documents/DC-adoc_test
+/home/doc/documents/images/src/dia/dia_example.dia
+/home/doc/documents/images/src/fig/fig_example.fig
+/home/doc/documents/images/src/jpg/jpg_example.jpg
+/home/doc/documents/images/src/png/png_example.png
+/home/doc/documents/images/src/png/png_example2.png
+/home/doc/documents/images/src/svg/svg_example.svg
+----

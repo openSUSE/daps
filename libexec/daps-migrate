@@ -32,7 +32,7 @@ PARAMS=()
 # Verbosity
 # VERBOSE=0
 
-# replacement string for rot element in header file
+# replacement string for root element in header file
 ROOTREPLACE=@RE@
 
 ## Functions
@@ -101,7 +101,7 @@ function parse_param {
     # Syntax: parse_param "PARAMETER_AND_VALUE"
     # Extract parameter and value, syntax $1="param=value"
     local _PARAM=$1
-    [[ "$_PARAM" == *"="* ]] || exit_on_error "Option -p muss der Syntax PARAMETER=VALUE folgen"
+    [[ "$_PARAM" == *"="* ]] || exit_on_error "Option -p must adhere to the syntax PARAMETER=VALUE"
     p=${_PARAM%=*}
     v=${_PARAM#*=}
     # Define associative array:
@@ -190,7 +190,7 @@ for i in "${!PARAMS[@]}"; do
     p="--stringparam $i ${PARAMS[$i]} $p"
 done
 
-dump "** Commandline: xsltproc --output FILE ${p} $MIGRATE_XSLT XMLINPUT"
+dump "** Command line: xsltproc --output FILE ${p} $MIGRATE_XSLT XMLINPUT"
 
 for xmlin in ${INPUTDIR}/*$EXT; do
     xmlout="$OUTPUTDIR/$(basename "$xmlin")"

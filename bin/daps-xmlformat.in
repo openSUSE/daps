@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Copyright (C) 2012-2016 SUSE Linux GmbH
+# Copyright (C) 2012-2018 SUSE Linux GmbH
 #
 # Author:
 # Frank Sundermeyer <fsundermeyer at opensuse dot org>
@@ -30,10 +30,21 @@ XMLFORMAT_CONFIG_FILE=${XMLFORMAT_CONFIG_FILE:-"@sysconfdir@/daps/docbook-xmlfor
 # If $substring matches front end of $string, substitute
 # $replacement for $substring.
 
+
+
+if [[ "$XMLFORMAT_CONFIG_FILE" == "@sysconfdir@"* && -z $DAPSROOT ]]; then
+    _XMLF_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+    DAPSROOT=${_XMLF_DIR%/bin}
+fi
+
 XMLFORMAT_CONFIG_FILE=${XMLFORMAT_CONFIG_FILE/#@sysconfdir\@\/daps/${DAPSROOT}/etc}
 
-# only echo when output goes to STDOUT
-[[ -t 1 ]] && echo "Using config file '$XMLFORMAT_CONFIG_FILE'"
+# Also show the config file in verbose mode
+#
+if [[ "${@#-v}" = "$@" || "${@#--verbose}" = "$@" ]]; then
+    # use STDERR, since xmlformat prints all messages to STDERR
+    >&2 echo "Using config file '$XMLFORMAT_CONFIG_FILE'"
+fi
 
 [[ -e $XMLFORMAT_CONFIG_FILE ]] || exit_on_error "Could not find config file '$XMLFORMAT_CONFIG_FILE'\n"
 

@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Copyright (C) 2012-2017 SUSE Linux GmbH
+# Copyright (C) 2012-2018 SUSE Linux GmbH
 #
 # Author:
 # Frank Sundermeyer <fsundermeyer at opensuse dot org>
@@ -9,8 +9,9 @@
 
 MY_NAME=DAPS
 VERSION=@PACKAGE_VERSION@
+MY_URL=https://opensuse.github.io/daps
 
-export MY_NAME VERSION
+export MY_NAME VERSION MY_URL
 
 # autoconf replaces @foo@ stuff with ${prefix}/.. if @foo@ has not
 # explicitly been set, so we need to at least export prefix to
@@ -42,7 +43,7 @@ export prefix=@prefix@
 
 # PENDING:
 # DISTVER, PRODUCTNAME, and PRODUCTNAMEREG are only need for resolving the
-# suse-PIs. Once we get rid of that, remove these variables fom the list
+# suse-PIs. Once we get rid of that, remove these variables from the list
 #
 
 # TODO fs 2012-12-20:
@@ -51,9 +52,17 @@ export prefix=@prefix@
 
 declare -a VARLIST
 VARLIST=(
-    ASPELL_EXTRA_DICT
-    ASPELL_LANG
-    ASPELL_SKIP_TAGS
+    ADOC_ATTRIBUTES
+    ADOC_BACKEND
+    ADOC_IMG_DIR
+    ADOC_POST
+    ADOC_POST_STYLE
+    ADOC_TYPE
+    ASCIIDOC
+    SPELL_CHECKER
+    SPELL_EXTRA_DICT
+    SPELL_LANG
+    SPELL_SKIP_TAGS
     BUILD_DIR
     CB_OPTIONS
     COLOR
@@ -155,6 +164,7 @@ VARLIST=(
     ROOTID
     SETDATE
     SHOW
+    SRC_FORMAT
     STATIC_DIR
     STATIC_HTML
     STRINGPARAMS
@@ -223,7 +233,7 @@ unset "${UNSETLIST[@]}"
 #
 declare -A PATHLIST
 PATHLIST=(
-  [ASPELL_EXTRA_DICT]="additional Aspell dictionary"
+  [SPELL_EXTRA_DICT]="additional spell dictionary"
   [BUILD_DIR]="build directory"
   [DAPSROOT]="DAPS root directory"
   [DOCCONF]="DC-file"
@@ -272,7 +282,7 @@ else
 fi
 
 # Set the maximum number of concurrent jobs to the number of cores
-# If egrep does not return somethiong usefule, set it to "2" as a sane default
+# If egrep does not return something useful, set it to "2" as a sane default
 JOBS=$(egrep -s -m1 "cpu cores\s*:" /proc/cpuinfo 2>/dev/null | sed 's/cpu cores\s*:\s*//')
 [[ -z $JOBS ]] && JOBS=2
 
@@ -663,9 +673,28 @@ Usage:
 
 
 Global Options:
+  --adocattr="NAME=VALUE"   Overwrite, define or delete an AsciiDoc document
+                            attribute. To overwrite an attribute already
+                            defined in the AsciiDoc document, use NAME=VALUE,
+                            or just NAME for attributes without a value. To delete
+                            a value set in the document use NAME!. To set
+                            a value that is not already set in the document, use
+                            NAME=VALUE@.
+                            Default: unset
+                            This option can be specified multiple times. Only
+                            works with AsciiDoc sources and is ignored otherwise.
+  --adocimgdir=IMG_DIR      Specify a directory for the images used in the
+                            AsciiDoc sources. Must contain all images,
+                            subdirectories are ignored.
+                            Not required if the images reside in the directory
+                            structure required by for DocBook projects
+                            (see DAPS manual).
+                            Default: unset
+                            Only works with ASCIIDOC sources and is ignored
+                            otherwise.
   --builddir=BUILD_DIR      Directory where every output $ME generates will
                             end up.
-                            Default: <doc dir>/build/$BOOK
+                            Default: <doc dir>/build/
   --color=(0|1)             By default errors, results, warnings and certain
                             info messages are printed in color using bash color
                             codes. Set to '0' to turn off colors.
@@ -680,7 +709,7 @@ Global Options:
   -d DC-file                Path to doc config file to use. Mandatory,
                             unless there is only a single DC-file in the
                             current directory or unless you have configured a
-                            default value (DOCCONF_DEFAULT) in $USER_CONFIG.
+                            default value (DOCCONF_DEFAULT) in \$USER_CONFIG.
                             Note: Options --docconfig and --main exclude
                                   each other.
   --fb_styleroot            Fallback styleroot directories. Can only be used in
@@ -691,7 +720,7 @@ Global Options:
                             alternative fallbacks (space separated absolute
                             paths). The directories will be tested in the order
                             specified, the first one that applies to the
-                            requested format, will be used.  The original
+                            requested format, will be used. The original
                             DocBook stylesheets will be used as a last resort.
                             Useful if you have forks of your custom
                             stylesheets.
@@ -749,12 +778,12 @@ Subcommands:
     list-srcfiles             List source files (XML sources, images, entity
                               declarations, DC-file) used by the document
                               reference by the DC-file.
-    list-srcfiles-unused      List files from the xml/ and images/src/
+    list-srcfiles-unused      List files from the document and image source and
                               directories not used by the document reference
                               by the DC-file.
     list-images-missing       List images referenced in the XML sources but
                               missing in the images' source directory.
-    list-images-multisrc      List images for which mutiple sources exist
+    list-images-multisrc      List images for which multiple sources exist
                               (e.g. foo.svg and foo.png).
 
   Cleaning up:
@@ -863,7 +892,7 @@ function sanitize_path {
     # sets absolute path without trailing / for $1, links are being followed
     # also tests if paths are valid
     #
-    # in case of a non-existing path, returns 2 if variablename matches
+    # in case of a non-existing path, returns 2 if variable name matches
     # _WRAPPER, else returns 1
     #
     local ABSPATH BASEDIR MYPATH ORIGIN_TEXT VARNAME VN WRONGPATH
@@ -969,7 +998,7 @@ function autoset_docconf {
     if [[ 1 = "${#DC_COUNT[@]}" ]]; then
         # There is only one DOCCONF file
         #
-        # two possibilites:
+        # two possibilities:
         # 1. We are already in DOC_DIR
         # 2. We are in the documents build result directory
         # (DOC_DIR/build/<name>), where daps creates a link to the
@@ -1021,13 +1050,13 @@ function set_mainfile {
         sanitize_path "$MAINFILE" "MAIN_CMDL"
         if [[ -z "$DOC_DIR" ]]; then
             DOC_DIR=$(dirname "$MAIN_CMDL")
-            DOC_DIR=${DOC_DIR%/xml*} #remove xml directory
+            DOC_DIR=${DOC_DIR%/${SRC_FORMAT}*} #remove SRC_FORMAT directory
         fi
-        [[ -e ${DOC_DIR}/xml/$(basename "$MAIN_CMDL") ]] || exit_on_error "XML files must reside in an \"xml/\" directory. \"$MAIN_CMDL\" is not a valid location."
+        [[ -e ${DOC_DIR}/${SRC_FORMAT}/$(basename "$MAIN_CMDL") ]] || exit_on_error "Source files must reside in an \"${SRC_FORMAT}/\" directory. \"$MAIN_CMDL\" is not a valid location."
     else
-        if [[ -e "xml/$MAINFILE" ]]; then
-            # MAIN is not a valid file, but ./xml/$MAIN exists
-            sanitize_path "xml/$MAINFILE" "MAIN_CMDL"
+        if [[ -e "${SRC_FORMAT}/$MAINFILE" ]]; then
+            # MAIN is not a valid file, but ./${SRC_FORMAT}/$MAIN exists
+            sanitize_path "${SRC_FORMAT}/$MAINFILE" "MAIN_CMDL"
             if [[ -z "$DOC_DIR" ]]; then
                 DOC_DIR="$PWD"
             fi
@@ -1036,8 +1065,8 @@ function set_mainfile {
             fi
         else
             if [[ -n "$DOC_DIR" ]]; then
-                MAIN_CMDL="${DOC_DIR}/xml/$(basename "$MAINFILE")"
-                [[ -e $MAIN_CMDL ]] || exit_on_error "XML files must reside in an \"xml/\" directory. \"$MAIN_CMDL\" is not a valid location."
+                MAIN_CMDL="${DOC_DIR}/${SRC_FORMAT}/$(basename "$MAINFILE")"
+                [[ -e $MAIN_CMDL ]] || exit_on_error "Source files must reside in an \"${SRC_FORMAT}/\" directory. \"$MAIN_CMDL\" is not a valid location."
             else
                 exit_on_error "Fatal error: ${PWD}/$MAINFILE does not exist."
             fi
@@ -1170,7 +1199,7 @@ trap "clean_daps" ERR EXIT
 #
 # In order to separate general daps parameters from subcommand parameters,
 # we are setting POSIXLY_CORRECT before parsing the first time.
-# This causes getopt to interprete all remaining parameters as non-option
+# This causes getopt to interpret all remaining parameters as non-option
 # parameters as soon as the first non-option parameter (the subcommand) is
 # found. This value must be _exported_
 
@@ -1186,13 +1215,13 @@ export POSIXLY_CORRECT=1
 # If variables such as $BUILD_DIR, $DOCCONF, and $DAPSROOT are set via command
 # line switch, we do not want to overwrite them by any other file we source
 # at a later stage (command line always wins).
-# Declaring the variables as readonly is unfortunately not an option, since
+# Declaring the variables as read-only is unfortunately not an option, since
 # every attempt to (un)set a read-only variable throws an error - something
-# we do not want when sourcing a config-file.
+# we do not want when sourcing a config file.
 # Therefore we need to save each variable twice in order to recover the
 # original value.
 
-ARGS=$(getopt -o d:e:hm:v:: -l builddir:,color:,colour:,commands,debug,docconfig:,dapsroot:,envfile:,fb_styleroot:,force,help,jobs:,main:,schema:,styleroot:,verbosity::,version,xsltprocessor: -n "$ME" -- "$@")
+ARGS=$(getopt -o d:e:hm:v:: -l adocattr:,adocimgdir:,builddir:,color:,colour:,commands,debug,docconfig:,dapsroot:,envfile:,fb_styleroot:,force,help,jobs:,main:,schema:,styleroot:,verbosity::,version,xsltprocessor: -n "$ME" -- "$@")
 
 # Exit when getopt returns errors
 #
@@ -1203,9 +1232,20 @@ eval set -- "$ARGS"
 
 while true ; do
     case "$1" in
+        --adocattr)
+            ADOC_ATTRIBUTES="$ADOC_ATTRIBUTES --attribute=\"$2\""
+            shift 2
+            ;;
+        --adocimgdir)
+            [[ -d $2 ]] || exit_on_error "ADOC_IMG_DIR \"$2\" is not a valid directory"
+            # make path absolute and strip trailing slash
+            sanitize_path "$2" "ADOC_IMG_DIR_CMDL"
+            ADOC_IMG_DIR="$ADOC_IMG_DIR_CMDL"
+            shift 2
+            ;;
         --builddir)
             [[ -d $2 ]] || exit_on_error "BUILD_DIR \"$2\" is not a valid directory"
-            [[ -w $2 ]] || exit_on_error "BUILD_DIR \"$2\" is not writeable"
+            [[ -w $2 ]] || exit_on_error "BUILD_DIR \"$2\" is not writable"
             # make path absolute and strip trailing slash
             sanitize_path "$2" "BUILD_DIR_CMDL"
             BUILD_DIR="$BUILD_DIR_CMDL"
@@ -1424,7 +1464,7 @@ esac
 # accordingly. Either by command line switch --dtdroot or in  your user
 # config file (DAPSROOT="<path>")
 #
-# Since commandline values take precedence we need to recover them every
+# Since command line values take precedence we need to recover them every
 # time we source a file
 #
 
@@ -1542,7 +1582,11 @@ recover_cmdl_values
 # run help if requested
 #
 if [[ "${SCMD_ARGS[@]}" = "-h" ]]; then
+    # source additional functions
+    #
+    [[ -f $LIB_DIR/$SUBCMD ]] && source "$LIB_DIR/$SUBCMD"
     ${SUBCOMMANDS[$SUBCMD]} "$SUBCMD" "${SCMD_ARGS[@]}"
+    exit 0
 fi
 
 # Sample call for early commands
@@ -1604,6 +1648,10 @@ if [[ -z "$DOCCONF_CMDL" && -z "$MAIN_CMDL" ]]; then
     fi
 elif [[ -n "$MAIN_CMDL" ]]; then
     # MAIN was set on the command line or in the user config
+
+    # get the source format (XML/ADOC) from MAIN
+    SRC_FORMAT=${MAIN_CMDL##*.}
+
     set_mainfile "$MAIN_CMDL"
 elif [[ -n "$DOCCONF_CMDL" ]]; then
     # check if DOCCONF is a regular file
@@ -1626,13 +1674,20 @@ fi
 # FINALLY! Parse the DOCCONF file, recover the command line values
 [[ -n "$DOCCONF_CMDL" ]] && parse_config "$DOCCONF_CMDL"
 
-# FOP/XEP CONFIG and WRAPPER / JING WRAPPER
+# get the source format (XML/ADOC) from MAIN
+[[ -z $SRC_FORMAT ]] && SRC_FORMAT=${MAIN##*.}
+# Validate SRC_FORMAT - needs to be xml or adoc
+[[ "adoc" = "$SRC_FORMAT" || "xml" = "$SRC_FORMAT" ]] || exit_on_error "$MAIN is an unsupported file type (.$SRC_FORMAT)\nmust be ASCIIDOC (.adoc) or DocBook (.xml)"
+
+# FOP/XEP/ASCIIDOC CONFIG and WRAPPER / JING WRAPPER
 # when using an SVN checkout, @sysconfdir@ and @pkgdatadir have not been
 # replaced
 #
 # ${string/#substring/replacement}
 # If $substring matches front end of $string, substitute
 # $replacement for $substring.
+
+ADOC_POST_STYLE=${ADOC_POST_STYLE/#@pkgdatadir\@/${DAPSROOT}}
 
 FOP_CONFIG_FILE=${FOP_CONFIG_FILE/#@sysconfdir\@\/daps/${DAPSROOT}/etc}
 FOP_WRAPPER=${FOP_WRAPPER/#@pkgdatadir\@/${DAPSROOT}}
@@ -1676,7 +1731,7 @@ else
         export BOOK="${DC_FILE#${CONF_PREFIX}*}"
     elif [[ -n "$MAIN_CMDL" ]]; then
         # --main was specified, BOOK is set to basenme of MAIN
-        BOOK="$(basename "$MAIN" .xml)"
+        BOOK="$(basename "$MAIN" .${SRC_FORMAT})"
         export BOOK
     fi
 fi
@@ -1719,9 +1774,22 @@ export XML_CATALOG_FILES
 # These stylesheets are used as a fallback and/or when no STYLEROOT is
 # specified on the command line or the DC file
 #
-# get DocBook version first ...
-
-DOCBOOK_VERSION=$($XSLTPROC --stylesheet "${DAPSROOT}/daps-xslt/common/get-docbook-version.xsl" --file "$MAIN" "$XSLTPROCESSOR") || exit_on_error "Could not get DocBook version. Maybe $MAIN is not well-formed?"
+# check whether we have asciidoctor (supports conversion to DocBook 5) or
+# asciidoc (only supports conversion to DocBook 4). Set DocBook versions and
+# backends for adoc
+#
+if [[ "adoc" = "$SRC_FORMAT" ]]; then
+    DOCBOOK_VERSION=5
+    ADOC_BACKEND=docbook5
+    ASCIIDOC=$(which asciidoctor 2>/dev/null)
+    if [[ 1 = "$?" ]]; then
+        ASCIIDOC=$(which asciidoc 2>/dev/null) || exit_on_error "Neither asciidoctor nor asciidoc is installed"
+        DOCBOOK_VERSION=4
+        ADOC_BACKEND=docbook45
+    fi
+else
+    DOCBOOK_VERSION=$($XSLTPROC --stylesheet "${DAPSROOT}/daps-xslt/common/get-docbook-version.xsl" --file "$MAIN" "$XSLTPROCESSOR") || exit_on_error "Could not get DocBook version. Maybe $MAIN is not well-formed?"
+fi
 
 # DocBook 5
 #
@@ -1812,8 +1880,9 @@ export DOCBOOK_STYLES DOCBOOK5_RNG DOCBOOK_VERSION
 # Get PROFILE_URN to determine whether profiling is turned on
 # will get exported via VARLIST
 #
-
- PROFILE_URN=$($XSLTPROC --stylesheet "${DAPSROOT}/daps-xslt/common/get-xml-stylesheet.xsl" --file "$MAIN" "$XSLTPROCESSOR") || exit_on_error "Could not get DocBook version. Maybe $MAIN is not well-formed?"
+if [[ "xml" = "$SRC_FORMAT" ]]; then
+    PROFILE_URN=$($XSLTPROC --stylesheet "${DAPSROOT}/daps-xslt/common/get-xml-stylesheet.xsl" --file "$MAIN" "$XSLTPROCESSOR") || exit_on_error "Could not get DocBook version. Maybe $MAIN is not well-formed?"
+fi
 
 #----------------------------------
 # Result directory / LOG directory
@@ -1834,8 +1903,39 @@ SETFILES_TMP=$(mktemp -q --tmpdir daps_setfiles.XXXXXXXX 2>/dev/null) || exit_on
 export SETFILES_TMP
 
 #-------------------------------------------------------------------
+# Create XML from ASCIIDOC
+#
+if [[ "adoc" = "$SRC_FORMAT" ]]; then
+    ADOC_MAIN="$MAIN"
+    ADOC_DIR="${BUILD_DIR}/.adoc"
+    MAIN="${ADOC_DIR}/${BOOK}.xml"
+
+    # make the path for ADOC_IMG_DIR absolute if a relative path was
+    # provided by config file
+    #
+    if [[ -z $ADOC_IMG_DIR_CMDL ]]; then
+        # path was not provided on cmdl
+        if [[ -n $ADOC_IMG_DIR ]]; then
+            # path was provided by config
+            # if not absolue, prepend DOC_DIR
+            [[ ! "/" == ${ADOC_IMG_DIR:1} ]] && ADOC_IMG_DIR="$DOC_DIR/$ADOC_IMG_DIR"
+            #  error out if $DOC_DIR/$ADOC_IMG_DIR does not exist
+            [[ ! -d $ADOC_IMG_DIR ]] && exit_on_error "AsciiDoc image directory $ADOC_IMG_DIR does not exist"
+        fi
+    fi
+    export ADOC_IMG_DIR ADOC_MAIN ADOC_DIR MAIN
+    [[ 1 -eq $FORCE_REBUILD ]] && MOPTS="--always-make"
+    [[ 2 -gt $VERBOSITY ]] && MOPTS="$MOPTS --silent"
+
+    make $MOPTS -f $DAPSROOT/make/adoc2xml.mk  || exit_on_error "Could not write XML from the ASCIIDOC sources"
+fi
+#-------------------------------------------------------------------
 # Finally, run the Subcommands
 #
+
+# source additional functions
+#
+[[ -f $LIB_DIR/$SUBCMD ]] && source "$LIB_DIR/$SUBCMD"
 
 # By default we want to write a logfile, can be overwritten by
 # subcommand function

@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 # $Id: getentityname.py 33777 2008-08-08 09:20:06Z toms $
 #
@@ -7,18 +7,16 @@
 # Author:
 # Thomas Schraitle <toms at opensuse dot org>
 #
-from __future__ import print_function
 
 import os.path
 import sys
 import optparse
 
+__proc__ = os.path.basename(sys.argv[0])
 __version__ = "$Revision: 33777 $"[11:-2]
 __author__="Thomas Schraitle <thomas DOT schraitle AT suse DOT de>"
 __license__="GPL"
 __doc__= """%(cmd)s [OPTIONS] XMLFILE(S)
-
-Version r%(version)s
 
 This script finds every external entity in the internal subset
 of the DTD, for example:
@@ -38,9 +36,7 @@ The output will be:
 entity-decl.ent foo.ent
 
 The script detects XML comments inside the internal subset and removes them.
-""" % \
-   {'cmd': os.path.basename(sys.argv[0]),
-    'version': __version__ }
+""".format(cmd=__proc__)
 
 from xml.sax import make_parser, handler, SAXParseException
 import tempfile
@@ -223,7 +219,7 @@ def main():
         help="Make entity filenames unique (default %default)")
     parser.add_option("-s", "--separator",
         dest="separator",
-        help="Set the separator between consequitive filenames (default '%default'). Use '\\n' and '\\t' to insert a CR and TAB character.")
+        help="Set the separator between consecutive filenames (default '%default'). Use '\\n' and '\\t' to insert a CR and TAB character.")
 
     parser.set_defaults( \
         first=False,
@@ -236,7 +232,13 @@ def main():
     elif options.separator == '\\t':
       options.separator = '\t'
  
-    return parser, options, args
+    resultargs = []
+    for fn in args:
+        if not os.path.isabs(fn):
+            fn = os.path.abspath(fn)
+        resultargs.append(fn)
+
+    return parser, options, resultargs
 
 
 if __name__=="__main__":

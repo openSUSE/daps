@@ -31,30 +31,48 @@ STYLEFO    := $(firstword $(wildcard $(addsuffix \
 STYLE_GENINDEX := $(DAPSROOT)/daps-xslt/index/xml2idx.xsl
 STYLE_ISINDEX  := $(DAPSROOT)/daps-xslt/common/search4index.xsl
 
-# Make sure to use the STYLEIMG directory that comes alongside the
-# STYLEROOT that is actually used. This is needed to ensure that the
-# correct STYLEIMG is used, even when the current STYLEROOT is a
-# fallback directory
+# Issue #419
+# The upstream stylesheets set paths for admon, callout, and navig graphics
+# to "images/" by default. However, DAPS' HTML builds require to set these
+# paths to static/images/ regardless what the stylesheets set
+# To ensure the same path ("static/images/") can be used for HTML and PDF
+# we need to create "static/images/" relative to the FO file
+# This is done by the target $(TMP_STATIC_IMG_DIR): by setting a link to the
+# stylesheet image or static directory
+# In addition to that, we will also create a link $(TMP_DIR)/images to ensure
+# building PDFs without explicitly setting a path for admon/callouts works
+# as well.
 #
-# dir (patsubst %/,%,(dir STYLEEPUB)):
-#  - remove filename
-#  - remove trailing slash (dir function only works when last character
-#    is no "/") -> patsubst is greedy
-#  - remove dirname
+# First, determine whether we have <STYLEROOT>/static or <STYLEROOT>/images
+# (for a detailed explanation see html.mk)
 #
-STYLEIMG := $(addsuffix images,$(dir $(patsubst %/,%,$(dir $(STYLEFO)))))
+# If we have a static directory, we can create a link to it in $(TMP_DIR)
+# If we have an image directory, $(TMP_DIR)/static needs to be created and
+# then a link to images in $(TMP_DIR)/static
+#
+ifdef STATIC_DIR
+  STYLEIMG  := $(STATIC_DIR)
+  IS_STATIC := static
+else
+  STYLEIMG := $(firstword $(wildcard \
+		$(addsuffix static, $(dir $(STYLEFO)))\
+		$(addsuffix static,$(dir $(patsubst %/,%,$(dir $(STYLEFO)))))\
+		$(addsuffix images,$(dir $(patsubst %/,%,$(dir $(STYLEFO)))))))
+  IS_STATIC := $(notdir $(STYLEIMG))
+endif
+
+TMP_STATIC_DIR     := $(TMP_DIR)/static
 
 # Draft mode can be enabled for PDFs, so we need to add the
 # corresponding strings to the resulting filename
 #
-DOCNAME := $(DOCNAME)$(DRAFT_STR)$(META_STR)
+%DOCNAME := $(DOCNAME)$(DRAFT_STR)$(META_STR)
 
 INDEX   := $(shell $(XSLTPROC) --xinclude $(ROOTSTRING) --stylesheet $(STYLE_ISINDEX) --file $(MAIN) $(XSLTPROCESSOR) 2>/dev/null)
 
 ifeq "$(INDEX)" "Yes"
   INDEXSTRING := --stringparam "indexfile=$(DOCNAME).ind"
 endif
-
 
 #----------
 # FO stringparams
@@ -107,8 +125,52 @@ ifeq "$(FORMATTER)" "xep"
   FORMATTER_CMD := $(XEP_WRAPPER) $(XEP_OPTIONS)
 endif
 
+
+# Issue #419 continued
+# The links to image or static directories need to be removed once the PDF
+# has been built, since we do not know which stylesheets (and therefore
+# which image directories) will be used in the next build.
+# Since $(TMP_DIR)/static/ can be a directory, INTERMEDIATE will not work
+# (does not remove directories), therefor using an explicit
+# rm in $(PDF_RESULT):
+
+ifneq "$(IS_STATIC)" "static"
+  #  
+  # we have <STYLEROOT>/image
+  # 1. create $(TMP_DIR)/static
+  # 2. create link to images in $(TMP_DIR)/static
+  # 3. create lilnk $(TMP_DIR)/images
+  #
+  TMP_IMG_DIR        := $(TMP_DIR)/images
+  TMP_STATIC_IMG_DIR := $(TMP_STATIC_DIR)/images
+
+
+  $(TMP_STATIC_DIR): | $(TMP_DIR)
+	mkdir -p $@
+
+  $(TMP_STATIC_IMG_DIR): | $(TMP_STATIC_DIR)
+	(cd $(TMP_STATIC_DIR) && ln -sf $(STYLEIMG))
+
+  $(TMP_IMG_DIR): | $(TMP_DIR)
+	(cd $(TMP_DIR) && ln -sf $(STYLEIMG))
+
+else
+  #  
+  # we have <STYLEROOT>/static
+  # create link to static in $(TMP_DIR)
+  #
+  $(TMP_STATIC_DIR): | $(TMP_DIR)
+	(cd $(TMP_DIR) && ln -sf $(STYLEIMG))
+
+endif
+
+
 #--------------
 # PDF
+#
+# Including a workaround for failed FOP builds where FOP creates
+# corrupt PDFs which are considered a successful build by make when
+# run a second time (pdfinfo call)
 #
 .PHONY: pdf
 pdf: list-images-multisrc list-images-missing
@@ -117,6 +179,7 @@ ifeq "$(LEAN)" "1"
 else
   pdf: $(PDF_RESULT)
 endif
+	pdfinfo $(PDF_RESULT) > /dev/null 2>&1 || ( ccecho "error" "PDF $(PDF_RESULT) has a size of 0 bytes"; false )
   ifeq "$(TARGET)" "pdf"
 	@ccecho "result" "PDF book built with REMARKS=$(REMARKS), DRAFT=$(DRAFT) and META=$(META):\n$<"
   endif
@@ -142,14 +205,14 @@ $(FOFILE): $(PROFILES) $(PROFILEDIR)/.validate $(DOCFILES) $(STYLEFO)
   ifeq "$(VERBOSITY)" "2"
 	@ccecho "info"  "   Creating fo-file..."
   endif
-	$(XSLTPROC) --xinclude $(FOSTRINGS) $(ROOTSTRING) $(METASTRING) \
-	  $(INDEXSTRING) $(FONTDEBUG) $(DAPSSTRINGS) $(XSLTPARAM) $(PARAMS) \
-	  $(STRINGPARAMS) --output $(FOFILE) --stylesheet $(STYLEFO) \
-	  --file $(PROFILED_MAIN) $(XSLTPROCESSOR) $(DEVNULL) $(ERR_DEVNULL)
+	  $(XSLTPROC) --xinclude $(FOSTRINGS) $(ROOTSTRING) $(METASTRING) \
+	    $(INDEXSTRING) $(FONTDEBUG) $(DAPSSTRINGS) $(XSLTPARAM) $(PARAMS) \
+	    $(STRINGPARAMS) --output $(FOFILE) --stylesheet $(STYLEFO) \
+	    --file $(PROFILED_MAIN) $(XSLTPROCESSOR) $(DEVNULL) \
+	    $(ERR_DEVNULL);
   ifeq "$(VERBOSITY)" "2"
 	@ccecho "info" "Successfully created fo file $(FOFILE)"
   endif
-	(cd $(TMP_DIR); ln -sf $(STYLEIMG))
 
 #--------------
 # Generate PDF
@@ -167,11 +230,18 @@ ifeq "$(GRAYSCALE)" "1"
 else
   $(PDF_RESULT): $(COLOR_IMAGES)
 endif
+ifneq "$(IS_STATIC)" "static"
+  $(PDF_RESULT): $(TMP_STATIC_IMG_DIR)
+  $(PDF_RESULT): $(TMP_IMG_DIR)
+else
+  $(PDF_RESULT): $(TMP_STATIC_DIR)
+endif
 $(PDF_RESULT): $(FOFILE)
   ifeq "$(VERBOSITY)" "2"
 	@ccecho "info" "   Creating PDF from fo-file..."
   endif
 	(cd $(dir $(FOFILE)) && $(FORMATTER_CMD) $< $@ $(DEVNULL) $(ERR_DEVNULL))
+	@rm -rf $(TMP_STATIC_DIR) $(TMP_IMG_DIR)
   ifeq "$(VERBOSITY)" "2"
 	@pdffonts $@ | tail -n +3 | awk '{print $5}' | grep -v "yes" \
 		>& /dev/null && \
@@ -199,3 +269,4 @@ $(PROFILEDIR)/$(DOCNAME).ind: $(PROFILES)
 	$(XSLTPROC) $(ROOTSTRING) --xinclude --output $@ \
 	  --stylesheet $(STYLE_GENINDEX) --file $(PROFILED_MAIN) \
 	  $(XSLTPROCESSOR)
+

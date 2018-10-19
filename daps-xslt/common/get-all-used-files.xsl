@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  
+
   Purpose:
    Search for all xi:include elements in a given XML file
    and output the file list found in xi:include/@href and
    its descendant
-   
+
    DO NOT USE THE -xinclude OPTION! THE RESOLUTION WILL BE DONE
    BY THIS STYLESHEET!
-   
+
   The stylesheet contains two passes:
   1. Search for every xi:include element, memorize the href
      attribute and resolve it. Memorize the attributes from
      the root element (mainly id). Create an internal
      intermediate structure which looks like this:
      <files>
-       <div href="MAIN.daps.xml" remap="set" lang="en" text="false">         
+       <div href="MAIN.daps.xml" remap="set" lang="en" text="false">
          <div href="daps_user_install.xml" remap="include" ns="http://www.w3.org/2001/XInclude" text="false">
           <div id="cha.daps.user.inst" remap="chapter"/>
         </div>
@@ -27,15 +27,15 @@
         </div>
        </div>
      </files>
-     
-     
+
+
   2. Parse the intermediate XML structure and apply the /files
      template. If rootid is set, search for a div element which
      contains the correct id and href attributes and process all of its
-     children.     
-   
+     children.
+
    Used in combination with extract-files-and-images.xsl
-      
+
 
    Parameters:
      * separator (default: ' ')
@@ -46,29 +46,29 @@
 
      * intermediate.xml.filename (default: 'included-files-output.xml')
        Filename of the in-memory XML tree, when $output.intermediate.xml=1
-       
+
      * rootid (default: '')
        Only recognize elements with the correct id attribute:
-       
+
      * xml.src.path (default: '')
        Base path of XML files (ALWAYS end a trailing slash!)
-       
+
      * img.src.path (default: '')
        Base path for all graphic files (ALWAYS end a trailing slash!)
-       
+
      * text.src.path (default: '')
        Base path for all text files (ALWAYS end a trailing slash!)
 
      * mainfile (default: '')
        Name of the main file
-       
-   
+
+
    Input:
      Output from get-all-used-files.xsl
-     
+
    Output:
      List of filenames separated by $separator
-   
+
    DocBook 5 compatible:
      yes
 
@@ -93,27 +93,27 @@
   <xsl:param name="separator">
     <xsl:text> </xsl:text>
   </xsl:param>
-  
+
   <!-- Should the in-memory XML tree be saved? -->
   <xsl:param name="output.intermediate.xml" select="0"/>
   <!-- Filename of the in-memory XML tree -->
   <xsl:param name="intermediate.xml.filename">included-files-output.xml</xsl:param>
-  
+
   <!-- Only recognize elements with the correct id attribute: -->
   <xsl:param name="rootid"/>
-  
+
   <!-- Base path of XML files (ALWAYS end a trailing slash!): -->
   <xsl:param name="xml.src.path"/>
-  
+
   <!-- Base path for all graphic files (ALWAYS end a trailing slash!): -->
   <xsl:param name="img.src.path"/>
-  
+
   <!-- Base path for all text files (ALWAYS end a trailing slash!): -->
   <xsl:param name="text.src.path"/>
 
   <!-- Name of the main file: -->
   <xsl:param name="mainfile"/>
-  
+
   <!-- Profiling parameters -->
   <xsl:param name="profile.arch" select="''"/>
   <xsl:param name="profile.audience" select="''"/>
@@ -134,7 +134,7 @@
   <xsl:param name="profile.separator" select="';'"/>
 
   <xsl:template match="text()"/>
-  
+
   <xsl:template match="/">
     <xsl:comment>
       This is an intermediate XML file from
@@ -144,7 +144,7 @@
         <xsl:apply-templates mode="root"/>
     </files>
   </xsl:template>
-  
+
   <!-- This stylesheet gets only called once -->
   <xsl:template match="/*" mode="root">
     <div href="{concat($xml.src.path, $mainfile)}" remap="{local-name()}" text="false"  id="{(@id|@xml:id)[1]}">
@@ -152,7 +152,7 @@
         <xsl:apply-templates/>
     </div>
   </xsl:template>
-  
+
   <xsl:template match="*">
     <xsl:variable name="prof">
       <xsl:call-template name="check.profiling"/>
@@ -254,7 +254,5 @@
       </xsl:call-template>
     </xsl:if>
   </xsl:template>
-
-  <!-- dfasdfasdfsd -->
 
 </xsl:stylesheet>

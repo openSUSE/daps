@@ -1,0 +1,99 @@
+# -*-Shell-script-*-
+#
+# Copyright (C) 2015-2018 SUSE Linux GmbH
+#
+# Author:
+# Frank Sundermeyer <fsundermeyer at opensuse dot org>
+#
+###########################################################################
+#
+#  PACKAGING online-docs
+#
+#  Subcommands: online-docs
+#
+###########################################################################
+function online-docs {
+    local CONV_COUNT SHORT_OPTS LONG_OPTS SUB_CMD
+    SUB_CMD=$1
+    shift
+
+    CONV_COUNT=0
+
+    SHORT_OPTS="h"
+    LONG_OPTS="db5todb4,db5todb4nh,dbnoconv,export-dir:,formatter:,help,name:,noepub,nohtml,nopdf,noset,rootid:,optipng"
+
+    parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
+    eval set -- "$P_REMAIN_ARGS"
+
+    #------ Computing the values returned from the parser -----
+    if [[ 1 = "$P_HELP" ]]; then
+        help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
+        help_db5todb4
+        help_db5todb4nh
+        help_dbnoconv
+        help_export-dir
+        help_formatter
+        help_help
+        help_name
+        help_noepub
+        help_nohtml
+        help_nopdf
+        help_noset
+        help_rootid
+        help_optipng
+        echo
+        exit 0
+    fi
+
+    [[ -n "$P_NAME" ]]   && export PDFNAME="$P_NAME" BOOK="$P_NAME"
+    [[ 1 = "$P_NOEPUB" ]]  && export NOEPUB=1
+    [[ 1 = "$P_NOHTML" ]]  && export NOHTML=1
+    [[ 1 = "$P_NOPDF" ]]   && export NOPDF=1
+    [[ 1 = "$P_NOSET" ]]   && export NOSET=1
+    [[ -n "$P_ROOTID" ]] && export ROOTID="$P_ROOTID"
+    [[ 1 = "$P_OPTIPNG" ]] && export OPTIPNG=1
+
+    if [[ 1 = "$P_NOHTML" ]]; then
+        export NOHTML=1
+    else
+    # online-docs always builds a single HTML file
+        export HTMLSINGLE=1
+    fi
+
+    if [[ -n "$P_EXPORT_DIR" ]]; then
+        if [[ -d $P_EXPORT_DIR ]]; then
+            export OD_EXPORT_DIR="$P_EXPORT_DIR"
+        else
+            exit_on_error "Export directory \"P_EXPORT_DIR\"\ndoes not exist. Please create it first."
+        fi
+    fi
+    if [[ -n "$P_FORMATTER" ]]; then
+        if [[ xep = "$P_FORMATTER" || fop = "$P_FORMATTER" ]]; then
+            export FORMATTER="$P_FORMATTER"
+        else
+        exit_on_error "Wrong parameter for --formatter: must be \"xep\" or \"fop\"!"
+        fi
+    fi
+
+    case 1 in
+        $P_DB5TODB4)
+            let CONV_COUNT++
+            ;;
+        $P_DB5TODB4NH)
+            let CONV_COUNT++
+            ;;
+    esac
+
+    [[ $CONV_COUNT -gt 1 ]] && exit_on_error "The options --db5todb4 and --db5todb4nh exclude each other"
+
+    if [[ 4 = "$DOCBOOK_VERSION" ]]; then
+       [[ 1 = "$P_DB5TODB4" || 1 = "$P_DB5TODB4NH" ]] && ccecho "warn" "No DocBook 5 source: --db5todb4/--db5todb4nh is ignored"
+    fi
+
+    [[ 1 = "$P_DBNOCONV" ]]    && export DBNOCONV=1
+    [[ 1 = "$P_DB5TODB4" ]]    && export DB5TODB4=1
+    [[ 1 = "$P_DB5TODB4NH" ]]  && export DB5TODB4NH=1
+
+
+    call_make "$SUB_CMD" "$@"
+}

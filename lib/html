@@ -1,0 +1,74 @@
+# -*-Shell-script-*-
+#
+# Copyright (C) 2015-2018 SUSE Linux GmbH
+#
+# Author:
+# Frank Sundermeyer <fsundermeyer at opensuse dot org>
+#
+###########################################################################
+#
+# BUILD HTML and JSP
+#
+# Subcommands: html
+#
+###########################################################################
+function build_html_jsp {
+    local SHORT_OPTS LONG_OPTS SUB_CMD
+    SUB_CMD=$1
+    shift
+
+    SHORT_OPTS="h"
+    LONG_OPTS="clean,css:,draft,help,html5,jsp,name:,norefcheck,nostatic,meta,param:,remarks,rootid:,single,statdir:,static,stringparam:,xsltparam:"
+
+    parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
+    eval set -- "$P_REMAIN_ARGS"
+
+    #------ Computing the values returned from the parser -----
+    if [[ 1 = "$P_HELP" ]]; then
+        help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
+        help_clean
+        help_css
+        help_draft
+        help_help
+        help_html5
+        help_jsp
+        help_meta
+        help_name
+        help_norefcheck
+        help_nostatic
+        help_param
+        help_remarks
+        help_rootid
+        help_single
+        help_statdir
+        help_stringparam
+        help_xsltparam "creates $SUB_CMD from the profiled sources"
+        echo
+        exit 0
+    fi
+
+    [[ 1 = "$P_CLEAN" ]]       && export CLEAN_DIR=1
+    [[ -n "$P_CSS" ]]          && export HTML_CSS="$P_CSS"
+    [[ 1 = "$P_DRAFT" ]]       && DRAFT="yes"
+    [[ 1 = "$P_REMARKS" ]]     && REMARKS=1
+    # usemeta implies draft mode
+    [[ 1 = "$P_META" ]]        && META=1 DRAFT="yes"
+    [[ 1 = "$P_NOSTATIC" ]]    && export STATIC_HTML=0
+    [[ 1 = "$P_NOREFCHECK" ]]  && export NOREFCHECK=1
+    [[ 1 = "$P_HTML5" ]]       && export HTML5=1
+    [[ -n "$P_ROOTID" ]]       && export ROOTID="$P_ROOTID"
+    [[ -n "$P_NAME" ]]         && export PDFNAME="$P_NAME" BOOK="$P_NAME"
+    [[ -n "$P_STATIC_DIR" ]]   && export STATIC_DIR="$P_STATIC_DIR"
+    [[ -n "$P_PARAMS" ]]       && export PARAMS="$P_PARAMS"
+    [[ -n "$P_STRINGPARAMS" ]] && export STRINGPARAMS="$P_STRINGPARAMS"
+    [[ -n "$P_XSLTPARAM" ]]    && export XSLTPARAM="$XSLTPARAM $P_XSLTPARAM"
+
+    if [[ 1 = "$P_HTMLSINGLE" && 1 = "$P_JSP" ]]; then
+    exit_on_error "--single and --jsp are mutually exclusive"
+    else
+    [[ 1 = "$P_HTMLSINGLE" ]] && export HTMLSINGLE=1
+    [[ 1 = "$P_JSP" ]]        && export JSP=1
+    fi
+
+    call_make "$SUB_CMD" "$@"
+}

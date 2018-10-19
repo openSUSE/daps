@@ -1,4 +1,4 @@
-# Copyright (C) 2012-2015 SUSE Linux GmbH
+# Copyright (C) 2012-2017 SUSE Linux GmbH
 #
 # Author:
 # Frank Sundermeyer  <fsundermeyer at opensuse dot org>
@@ -87,7 +87,11 @@ endif
 #
 
 IMG_GENDIR         := $(BUILD_DIR)/.images
-IMG_SRCDIR         := $(DOC_DIR)/images/src
+ifneq "$(strip $(ADOC_IMG_DIR))" ""
+  IMG_SRCDIR := $(BUILD_DIR)/.adoc_images/src
+else
+  IMG_SRCDIR         := $(DOC_DIR)/images/src
+endif
 RESULT_DIR         := $(BUILD_DIR)/$(BOOK)
 TMP_DIR            := $(BUILD_DIR)/.tmp
 PACK_DIR           := $(RESULT_DIR)/package
@@ -246,7 +250,8 @@ PROFILED_MAIN := $(PROFILEDIR)/$(notdir $(MAIN))
 # DAPS version string params
 #
 DAPSSTRINGS := --stringparam "converter.name=$(MY_NAME)" \
-	--stringparam "converter.version=$(VERSION)"
+	--stringparam "converter.version=$(VERSION)" \
+	--stringparam "converter.url=$(MY_URL)"
 
 
 #-------

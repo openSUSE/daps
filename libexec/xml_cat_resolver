@@ -38,7 +38,7 @@ EOF_helptext
 # Check if parameter (URI) is passed to the script;
 #
 if [[ -z $1 ]]; then
-    exit_on_error "No paramter passed to $_ME"
+    exit_on_error "No parameter passed to $_ME"
 else
     case "$1" in
         --help|-h|?)
@@ -55,7 +55,7 @@ fi
 #
 [[ -z $XML_CATALOG_FILES ]] && exit_on_error "XML_CATALOG_FILES is not set"
 
-# Try to resolv URI with all catalogs from XML_CATALOG_FILES
+# Try to resolve URI with all catalogs from XML_CATALOG_FILES
 # exit on the first successful result
 #
 for _CAT in $XML_CATALOG_FILES; do

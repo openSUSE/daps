@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Copyright (C) 2012-2017 SUSE Linux GmbH
+# Copyright (C) 2012-2018 SUSE Linux GmbH
 #
 # Author:
 # Frank Sundermeyer <fsundermeyer at opensuse dot org>
@@ -65,9 +65,9 @@ Options:
     the subtitle of the document (<productnumber/> in the document's info
     section). Requires --productname.
 
-  --rootelement=<article|book>
+  --rootelement=<article|book|set>
     DocBook root element of the example document. Currently supported
-    are \"book\" and \"article\" (default).
+    are \"book\", \"article\" (default) and \"set\".
 
   --title=<TITLE>
     Title of the document. Default: "DAPS Example"
@@ -121,13 +121,7 @@ while true ; do
             shift 2
             ;;
         --docdir|-d)
-            if [[ -z "$2" ]]; then
-                exit_on_error "Please specify a directory"
-            else
-                DOC_DIR="$2"
-                #  strip trailing slash
-                DOC_DIR=${DOC_DIR%/}
-            fi
+            DOC_DIR="$2"
             shift 2
             ;;
         --docbook4|-4)
@@ -169,10 +163,10 @@ while true ; do
             shift 2
             ;;
         --rootelement|-r)
-            if [[ article = "$2" || book = "$2" ]]; then
+            if [[ article = "$2" || book = "$2" || "set" = "$2" ]]; then
                 ROOTELEMENT="$2"
             else
-                exit_on_error "Rootelement must be either \"article\" or \"book\""
+                exit_on_error "Rootelement must be either \"article\", \"book\" or \"set\""
             fi
             shift 2
             ;;
@@ -188,6 +182,13 @@ while true ; do
         *) exit_on_error "Wrong parameter: $1" ;;
     esac
 done
+
+if [[ -z "$DOC_DIR" ]]; then
+  exit_on_error "Please specify a directory with --docdir"
+else
+  #  strip trailing slash
+  DOC_DIR=${DOC_DIR%/}
+fi
 
 if [[ -n $PRODUCTNUMBER && -z $PRODUCTNAME ]]; then
     exit_on_error "--productnumber also requires --productname to be specified"
@@ -276,9 +277,9 @@ fi
 #----------------
 #
 ccecho "result" "Successfully created a DAPS Project at ${DOC_DIR}"
-echo "To build a PDF or HTML version of the example document enter
-daps -d $DC_FILE pdf
+echo "To build a PDF or HTML version of the example document, run:
+  daps -d $DC_FILE pdf
 or
-daps -d $DC_FILE html"
+  daps -d $DC_FILE html"
 
 exit 0;

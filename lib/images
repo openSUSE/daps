@@ -1,0 +1,52 @@
+# -*-Shell-script-*-
+#
+# Copyright (C) 2015-2018 SUSE Linux GmbH
+#
+# Author:
+# Frank Sundermeyer <fsundermeyer at opensuse dot org>
+#
+###########################################################################
+#
+#  IMAGES
+#
+#  Generate images. For debugging and testing purposes
+#
+###########################################################################
+
+function build_images {
+    local SHORT_OPTS LONG_OPTS SUB_CMD
+    SUB_CMD=$1
+    shift
+
+    SHORT_OPTS="h"
+    LONG_OPTS="color,gen,grayscale,online,rootid:"
+
+    parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
+    eval set -- "$P_REMAIN_ARGS"
+
+    #------ Computing the values returned from the parser -----
+    if [[ 1 = "$P_HELP" ]]; then
+        help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
+        help_color
+        help_gen
+        help_grayscale_images
+        help_help
+        help_online
+        help_rootid
+        echo
+        exit 0
+    fi
+
+    if [[ -z "$P_COLOR" && -z "$P_IMAGES_GEN" && -z "$P_GRAYSCALE" && -z "$P_IMAGES_ONLINE" ]]; then
+    export IMAGES_ALL=1
+    else
+    [[ -n "$P_COLOR" ]]            && export IMAGES_COLOR=1
+    [[ -n "$P_IMAGES_GEN" ]]       && export IMAGES_GEN=1
+    [[ -n "$P_GRAYSCALE" ]]        && export IMAGES_GRAYSCALE=1
+    [[ -n "$P_IMAGES_ONLINE" ]]    && export IMAGES_ONLINE=1
+    fi
+
+    [[ -n "$P_ROOTID" ]]           && export ROOTID="$P_ROOTID"
+
+    call_make "$SUB_CMD" "$@"
+}

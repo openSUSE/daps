@@ -101,7 +101,7 @@ trap "exit_on_error '\nCaught SIGTERM/SIGINT'" SIGTERM SIGINT
 #
 
 declare -a _REQUIREMENTS
-_REQUIREMENTS=( "epubcheck" "lynx" "pdfinfo" "xmllint" )
+_REQUIREMENTS=( "epubcheck" "lynx" "pdfinfo" "xmllint" "xmlstarlet" )
 
 for _REQ in "${_REQUIREMENTS[@]}"; do
     which --skip-alias --skip-functions $_REQ >/dev/null 2>&1 || exit_on_error "Requirement $_REQ is not installed, exiting"
@@ -124,7 +124,7 @@ done
 # SVN dependencies
 
 #_ARGS=$(getopt -o h -l all,builddir,epub,filelists,help,html,images,locdrop,online-docs,package-html,package-pdf,package-src,pdf,profiling,script,text,xsltprocessors: -n "$_ME" -- "$@")
-_ARGS=$(getopt -o h -l all,builddir,debug,epub,filelists,help,html,images,online-docs,package-html,package-pdf,package-src,pdf,profiling,script,text,xsltprocessors: -n "$_ME" -- "$@")
+_ARGS=$(getopt -o h -l all,asciidoc,builddir,debug,epub,filelists,help,html,images,online-docs,package-html,package-pdf,package-src,pdf,profiling,script,text,xsltprocessors: -n "$_ME" -- "$@")
 
 [[ 0 -ne $? ]] && exit_on_error "Argument parser error"
 
@@ -139,7 +139,11 @@ while true ; do
     case "$1" in
         --all)
 #           _TESTS=( "${_TESTS[@]}" "lib/001_script" "lib/005_profiling" "lib/007_images" "lib/009_builddir" "lib/020_pdf" "lib/022_html" "lib/023_text" "lib/025_epub" "lib/030_package-src" "lib/033_locdrop" "lib/035_online-docs" "lib/036_package-html" "lib/037_package-pdf" )
-            _TESTS=( "${_TESTS[@]}" "lib/001_script" "lib/005_profiling" "lib/007_images" "lib/009_builddir" "lib/020_pdf" "lib/022_html" "lib/023_text" "lib/025_epub" "lib/030_package-src" "lib/035_online-docs" "lib/036_package-html" "lib/037_package-pdf" )
+            _TESTS=( "${_TESTS[@]}" "lib/001_script" "lib/005_profiling" "lib/007_images" "lib/009_builddir" "lib/020_pdf" "lib/022_html" "lib/023_text" "lib/025_epub" "lib/030_package-src" "lib/035_online-docs" "lib/036_package-html" "lib/037_package-pdf" "lib/040_asciidoc" )
+            shift
+            ;;
+        --asciidoc)
+            _TESTS=( "${_TESTS[@]}" "lib/040_asciidoc" )
             shift
             ;;
         --builddir)

@@ -1,53 +1,40 @@
-##
-## Doc config file for the DAPS example document 
-## defined by §§MAIN§§
-##
-## See /etc/daps/config for documentation of the settings below
-##
-## These values are settings for the document defined by §§MAIN§§
-## only. Please do not add additional settings here - if you need to
-## customize other settings from /etc/daps/config, do so in
-## ~/.config/daps/dapsrc
+## Doc config file for §§MAIN§§
 
-## Mandatory Parameter
+## The following settings are only applied when building from this DC file.
+## To customize DAPS's global configuration, use the configuration file
+## ~/.config/daps/dapsrc (you may have to create that file initially).
+## For documentation of the settings below, see /etc/daps/config .
+
+## MAIN file of the document, mandatory
+## The MAIN file is the central DocBook XML file of your document that
+## references all other DocBook XML files that may be part of your document.
+## By convention, its name starts with "MAIN.".
 MAIN="§§MAIN§§"
 
 ##--------------------
-## Optional Parameters
-
-## ROOTID
-## If MAIN contains a set with several books and/or articles, use
-## a separate DC-file for each book/article and set ROOTID to
-## the id of the respective <book>/<article> element of the document
-## This will enable you to build individual books/article rather than
-## the whole set
-## See http://www.docbook.org/tdg/en/html/set.html for more information
-## on sets
+## Root ID, optional
+## If MAIN contains a set with several books and/or articles of which you only
+## want to build specific ones only, use a separate DC file for each book/
+## article and set ROOTID to the id/xml:id of the respective <book>/<article>
+## element of the document.
+## For more information about sets, see
+## https://tdg.docbook.org/tdg/5.1/set (for DocBook 5.1).
 ROOTID=""
 
 ##-------------------
-## Custom Stylesheets
+## Custom stylesheets, optional
 ## (if not defined, the DocBook stylesheets will be used)
-##
 #STYLEROOT=""
 #FALLBACK_STYLEROOT=""
 #HTML_CSS=""
 #EPUB_CSS=""
 
 ##---------------------
-## Profiling Parameters
+## Profiling parameters, optional
 ## For elements with arch="...", condition="...", os="..." and vendor="..."
-## See http://www.sagehill.net/docbookxsl/Profiling.html for more
-## information on profiling
-##
+## For information about profiling, see
+## http://www.sagehill.net/docbookxsl/Profiling.html .
 #PROFARCH=""
 #PROFCONDITION=""
 #PROFOS=""
 #PROFVENDOR=""
-
-
-## If you want to be able to source this file, so you do not have
-## to specify the -d/--docconfig option with daps, uncomment the
-## following line
-##
-#export DOCCONF_NAME=$BASH_SOURCE

@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 #
-# Copyright (C) 2012-2015 SUSE Linux GmbH
+# Copyright (C) 2012-2018 SUSE Linux GmbH
 #
 # Author:
 # Frank Sundermeyer <fsundermeyer at opensuse dot org>
@@ -351,8 +351,8 @@ sub check_svn_changes {
 
 
 #-----
-# Create the daps command and the logfile location
-# according to the data from the logfile
+# Create the daps command and the log file location
+# according to the data from the log file
 #
 sub set_daps_cmd_and_log {
     # Arguments (all mandatory):
@@ -472,7 +472,7 @@ sub build {
 	  $syncsubdir = catdir($syncdir, $book, $format);
 	}
         # If a build was successful, we want to remove the contents of a subdir
-        # in sync/ - easiest way is to remove ihttp://www.ikk-classic.de/t and create it again
+        # in sync/ - easiest way is to remove it and create it again
         if ( -d $syncsubdir ) {
             remove_tree("$syncsubdir") or warn "${bcol}Failed to remove sync dir \"$syncsubdir\".\n${ecol}";
         }
@@ -494,7 +494,7 @@ sub sources {
     # Arguments (all mandatory):
     #   set    : Section name from config
     #   syncdir: absolute path to sync/ directory
-    #   workdir: absolute path to workdir from config
+    #   workdir: absolute path to work dir from config
     #
     my ($set, $syncdir, $workdir) = @_;
     my $dcfile  = $cfg->val("$set", 'source-dc');
@@ -605,7 +605,7 @@ Usage: $me --config|-c FILE [OPTIONS]
                               building.
        --nosvnup            : Do not update the working directory with svn up
        --sections|s SECTIONS: Comma separated list of sections from ini file
-                              to use (skip all others). Cann also be specified
+                              to use (skip all others). Can also be specified
                               with multiple instances of --sections:
                               --sections SECT1,SECT2
                               or

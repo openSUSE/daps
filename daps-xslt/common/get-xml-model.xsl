@@ -27,6 +27,9 @@
      * Example 2:
        susedoc5.rnc
 
+   Links:
+     * http://xml-model.info/
+
    Author:    Thomas Schraitle <toms@opensuse.org>
    Copyright (C) 2016 SUSE Linux GmbH
    

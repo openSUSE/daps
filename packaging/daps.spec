@@ -1,7 +1,7 @@
 #
 # spec file for package daps
 #
-# Copyright (c) 2016 SUSE LINUX GmbH, Nuernberg, Germany.
+# Copyright (c) 2018 SUSE LINUX GmbH, Nuernberg, Germany.
 #
 # All modifications and additions to the file contributed by third parties
 # remain the property of their copyright owners, unless otherwise agreed
@@ -17,7 +17,7 @@
 
 
 Name:           daps
-Version:        2.4.0
+Version:        3.0.0
 Release:        0
 
 ###############################################################
@@ -65,15 +65,14 @@ BuildRequires:  libxml2-tools
 BuildRequires:  libxslt
 BuildRequires:  libxslt-tools
 BuildRequires:  poppler-tools
-BuildRequires:  python-lxml
-BuildRequires:  python-xml
+BuildRequires:  python3-lxml
 #BuildRequires:  sgml-skel
 BuildRequires:  suse-xsl-stylesheets
 BuildRequires:  svg-dtd
 BuildRequires:  transfig
+BuildRequires:  xerces-j2
 BuildRequires:  xml-commons-jaxp-1.3-apis
 BuildRequires:  xmlgraphics-fop >= 0.94
-BuildRequires:  xerces-j2
 BuildRequires:  xmlstarlet
 
 #
@@ -88,18 +87,19 @@ PreReq:         sgml-skel
 Requires:       ImageMagick
 Requires:       bash >= 4
 Requires:       dia
-Requires:       docbook_4
-Requires:       docbook_5
 Requires:       docbook-xsl-stylesheets >= 1.77
 Requires:       docbook5-xsl-stylesheets >= 1.77
+Requires:       docbook_4
+Requires:       docbook_5
 Requires:       ghostscript-library
 Requires:       inkscape
+Requires:       java >= 1.8.0
 Requires:       jing
 Requires:       libxslt
 Requires:       make
 Requires:       poppler-tools
-Requires:       python-lxml
 Requires:       python-xml
+Requires:       python3-lxml
 #Requires:       sgml-skel
 Requires:       suse-xsl-stylesheets
 Requires:       svg-schema
@@ -109,7 +109,6 @@ Requires:       xml-commons-jaxp-1.3-apis
 Requires:       xmlgraphics-fop >= 0.94
 Requires:       xmlstarlet
 Requires:       zip
-
 
 Recommends:     aspell-en
 Recommends:     calibre
@@ -149,6 +148,10 @@ for upgrade instructions.
 %setup -q -n %{name}
 #%%patch1 -p1
 
+# Correct shebang line as suggested in
+# https://lists.opensuse.org/opensuse-packaging/2018-03/msg00017.html
+sed -i '1 s|/usr/bin/env python|/usr/bin/python|' libexec/daps-xmlwellformed
+
 #--------------------------------------------------------------------------
 %build
 %configure --docdir=%{_defaultdocdir}/%{name} --disable-edit-rootcatalog
@@ -163,35 +166,12 @@ make install DESTDIR=$RPM_BUILD_ROOT
 
 #----------------------
 %post
-#
-# XML Catalog entries for daps profiling
-#
-# remove existing entries first (if existing) - needed for
-# zypper in, since it does not call postun
-#
-# delete in case of an update, which $1=2
-if [ "2" = "$1" ]; then
-  edit-xml-catalog --group --catalog /etc/xml/suse-catalog.xml \
-  --del %{name} || true
-fi
-# ... and readd it again
-edit-xml-catalog --group --catalog /etc/xml/suse-catalog.xml \
-  --add /etc/xml/%{daps_catalog}
-
+update-xml-catalog
 exit 0
 
 #----------------------
 %postun
-#
-# delete catalog entry for daps profiling
-# only run if package is really uninstalled ($1 = 0) and not
-# in case of an update
-#
-if [ 0 = $1 ]; then
-  edit-xml-catalog --group --catalog /etc/xml/suse-catalog.xml \
-  --del %{name}
-fi
-
+update-xml-catalog
 exit 0
 
 #----------------------
@@ -201,6 +181,7 @@ exit 0
 %files
 %defattr(-,root,root)
 
+%dir %{_datadir}/%{name}
 %dir %{_sysconfdir}/%{name}
 %dir %{_defaultdocdir}/%{name}
 
@@ -210,14 +191,18 @@ exit 0
 %dir %{_datadir}/xml/%{name}
 %dir %{_datadir}/xml/%{name}/schema
 
-%config %{_sysconfdir}/xml/*.xml
+# Catalogs
+%config %{_sysconfdir}/xml/catalog.d/%{name}.xml
+
+# Config files
 %config %{_sysconfdir}/%{name}/*
 
+# Man/Doc
 %doc %{_mandir}/man1/*.1%{ext_man}
 %doc %{_defaultdocdir}/%{name}/*
 
 %{_bindir}/*
-%{_datadir}/%{name}/*
+%attr(644, root, root) %{_datadir}/%{name}/libexec/*.xsl
 %{_datadir}/bash-completion/completions/%{name}
 %{_datadir}/emacs/site-lisp/docbook_macros.el
 %{_datadir}/xml/daps/schema/*

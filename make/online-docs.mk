@@ -176,9 +176,9 @@ endif
 # creates an archive with all generated graphics for HTML/EPUB
 #
 # fs 2013-11-24: Creating the tarball manually (rather than by just
-# adding $(ONLINE_IMAGES), because otherwise jpg would end up in
+# adding $(ONLINE_IMAGES), because otherwise jpg and svg would end up in
 # the png subdirectory as well. If other "online" images will be supported
-# in the future (SVG ??), a line for each format has to be added.
+# in the future, a line for each format has to be added.
 #
 
 $(OD_GRAPHICS): | $(OD_EXPORT_BOOKDIR)
@@ -196,6 +196,11 @@ $(OD_GRAPHICS): $(ONLINE_IMAGES)
 	tar rhf $(OD_GRAPHICS_TMP) --exclude-vcs --ignore-failed-read \
 	  --absolute-names --transform=s%$(IMG_GENDIR)/color%images/src/jpg% \
 	 $(IMG_GENDIR)/color/*.jpg
+      endif
+      ifneq "$(strip $(SVGONLINE))" ""
+	tar rhf $(OD_GRAPHICS_TMP) --exclude-vcs --ignore-failed-read \
+	  --absolute-names --transform=s%$(IMG_GENDIR)/color%images/src/svg% \
+	 $(IMG_GENDIR)/color/*.svg
       endif
 	bzip2 -9f $(OD_GRAPHICS_TMP)
   else

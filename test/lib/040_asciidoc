@@ -1,0 +1,126 @@
+#!/bin/bash
+#
+# Copyright (C) 2012-2018 SUSE Linux GmbH
+#
+# Author:
+# Frank Sundermeyer <fsundermeyer at opensuse dot org>
+#
+# Testing DAPS: Asciidoc
+#
+
+_ADOC_NAME_PATH=""
+_DCFILE=${_DOC_DIR}/DC-adoc_test
+_LOGFILE=""
+_SCHEMA="file:///usr/share/xml/docbook/schema/rng/5.1/docbookxi.rng"
+
+source lib/common_functions
+
+header "asciidoc"
+
+function oneTimeSetUp() {
+    local _LOG_DIR
+
+    # Clean up the build directory
+    clean_build_dir all
+    # get the profiling directory
+    _ADOC_NAME_PATH=$($_DAPSEXEC -d $_DCFILE profile 2>/dev/null)
+    if [ $? -ne 0 ]; then
+        exit_on_error " The initial DAPS call to process ASCIIDOC failed. Skipping tests"
+    fi
+}
+
+# Post
+# this function is run _after_ the tests are executed
+#
+function oneTimeTearDown() {
+    stats
+    # Clean up the build directory
+    clean_build_dir all
+}
+
+#---------------------------------------------------------------
+# TESTS
+#---------------------------------------------------------------
+#
+# Is the file build/.adoc/*.xml generated?
+# Is the file build/.profile/noprifile/*.xml generated?
+#
+function test_adoc_basic() {
+    local _XMLFILENAME
+
+    _XMLFILENAME=$($_DAPSEXEC -v0 -d $_DCFILE showvariable VARIABLE=BOOK 2>/dev/null)
+    assertTrue \
+        ' └─ Determining the XML filename failed' \
+        "$?"
+    assertTrue \
+        " └─ The result of the adoc to xml conversion (${_DOC_DIR}/build/.adoc/${_XMLFILENAME}.xml) does not exist." \
+        "[ -f ${_DOC_DIR}/build/.adoc/${_XMLFILENAME}.xml ]"
+    assertTrue \
+        " └─ The profiled XML ${_DOC_DIR}/build/.profiled/noprofile/${_XMLFILENAME}.xml does not exist." \
+        "[ -f ${_DOC_DIR}/build/.profiled/noprofile/${_XMLFILENAME}.xml ]"
+    #
+    # Validating resulting XML
+    #
+    $_DAPSEXEC -v0 -d $_DCFILE --schema $_SCHEMA validate >/dev/null 2>&1
+    assertTrue \
+        " └─ The profiled XML ${_DOC_DIR}/build/.profiled/noprofile/${_XMLFILENAME}.xml does not validate." \
+        "$?"
+
+}
+
+function test_adoc_advanced() {
+    local _DCFILE _TYPE_GET _TYPE_EXPECT _XMLFILENAME
+
+    clean_build_dir all
+
+    _DCFILE=${_DOC_DIR}/DC-adoc_advanced_test
+    _TYPE_EXPECT=book
+
+    _XMLFILENAME=$($_DAPSEXEC -v0 -d $_DCFILE showvariable VARIABLE=BOOK 2>/dev/null)
+    assertTrue \
+        ' └─ Determining the XML for advanced testing failed' \
+        "$?"
+
+    #
+    # Get log dir. On failure, skip remaining tests
+    #
+    _LOG_DIR=$($_DAPSEXEC -v0 -d $_DCFILE showvariable VARIABLE=LOG_DIR 2>/dev/null)
+    if [ $? -ne 0 ]; then
+        echo " The initial DAPS call to determine the LOG file failed. Skipping remaining tests"
+        startSkipping
+    fi
+    _LOGFILE=${_LOG_DIR}/make_profile.log
+
+    #
+    # Check thze logfile whether the post processing stylesheet wa used
+    # (daps-xslt/asciidoc/postprocess.xsl)
+    #
+    $_DAPSEXEC --debug -d $_DCFILE profile >/dev/null 2>&1
+    assertTrue \
+        ' └─ Profiling with $_DCFILE failed' \
+        "$?"
+    egrep -q -- "/daps-xslt/asciidoc/postprocess.xsl" $_LOGFILE 2>/dev/null
+    assertTrue \
+        " └─ The stylesheet for postprocessing the ASCIIDOC XML was not used." \
+        "$?"
+
+    #
+    # Check whther the root element is $_TYPE_EXPECT
+    #
+    _TYPE_GET=$(xmlstarlet sel -t -v "local-name(/*)" ${_DOC_DIR}/build/.profiled/noprofile/${_XMLFILENAME}.xml 2>/dev/null)
+    assertEquals \
+        " └─  Type was not changed to $_TYPE_EXPECT during postprocessing." \
+        "$_TYPE_EXPECT" "$_TYPE_GET"
+
+    #
+    # Validating resulting XML /that was generated via
+    # daps-xslt/asciidoc/postprocess.xsl
+    #
+    $_DAPSEXEC -v0 -d $_DCFILE --schema $_SCHEMA validate >/dev/null 2>&1
+    assertTrue \
+        " └─ The post-processed XML ${_DOC_DIR}/build/.profiled/noprofile/${_XMLFILENAME}.xml does not validate." \
+        "$?"
+}
+
+# source shUnit2 test
+source $_SHUNIT2SRC

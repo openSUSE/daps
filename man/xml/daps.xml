@@ -26,23 +26,18 @@
    </author>
    <author>
     <contrib>Developer</contrib>
-    <firstname>Karl</firstname>
-    <surname>Eichwalder</surname>
+    <firstname>Stefan</firstname>
+    <surname>Knorr</surname>
    </author>
-    <author>
-      <contrib>Previous Developer of susedoc</contrib>
-      <firstname>Berthold</firstname>
-      <surname>Gunreben</surname>
-    </author>
+   <author>
+    <contrib>Previous Developer of susedoc</contrib>
+    <firstname>Berthold</firstname>
+    <surname>Gunreben</surname>
+   </author>
    <author>
     <contrib>Previous Developer of susedoc</contrib>
     <firstname>Jana</firstname>
     <surname>Jaeger</surname>
-   </author>
-   <author>
-    <contrib>Developer</contrib>
-    <firstname>Stefan</firstname>
-    <surname>Knorr</surname>
    </author>
   </authorgroup>
  </refentryinfo>
@@ -83,7 +78,7 @@
  <refsect1 id="daps.description">
   <title>Description</title>
   <para>
-    DAPS contains a set of stylesheets, scripts and makefiles that enable
+    DAPS contains a set of stylesheets, scripts and Makefiles that enable
     you to create HTML, PDF, ePUB and other formats from DocBook XML with a
     single command. It also contains tools to generate profiled source
     tarballs for distributing your XML sources for translation or review.
@@ -106,9 +101,46 @@
   <title>Global Options</title>
   <variablelist>
    <varlistentry>
-    <term><option>--builddir=BUILDDIR</option></term>
+    <term><option>--adocattr="NAME=VALUE"</option></term>
+    <listitem>
+     <para>
+      Overwrite, define or delete an AsciiDoc document attribute. >To overwrite
+      an attribute already defined in the AsciiDoc document, use
+      <replaceable>NAME</replaceable>=<replaceable>VALUE</replaceable>, or just
+      <replaceable>NAME</replaceable> for attributes without a value. To delete
+      a value set in the document use <replaceable>NAME</replaceable>!. To set
+      a value that is not already set in the document, use
+      <replaceable>NAME</replaceable>=<replaceable>VALUE</replaceable>@.
+     </para>
+     <para>Default: unset.</para>
+     <para>
+      This option can be specified multiple times. Only works with
+      AsciiDoc sources and is ignored otherwise.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <option>--adocimgdir=<replaceable>IMAGE_DIR</replaceable></option>
+    </term>
+    <listitem>
+     <para>
+      Specify a directory for the images used in the AsciiDoc sources. Must
+      contain all images, subdirectories are ignored. Not required if the
+      images reside in the directory structure required for DocBook projects
+      (see DAPS manual).
+     </para>
+     <para>Default: unset.</para>
+     <para>
+      Only works with AsciiDoc sources and is ignored otherwise.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term><option>--builddir=<replaceable>BUILDDIR</replaceable></option></term>
     <listitem>
      <para>Directory where every output &dapsacr; generates will end up.</para>
+     <para>Default: <replaceable>DOC DIR</replaceable>/build/</para>
     </listitem>
    </varlistentry>
    <varlistentry>
@@ -117,7 +149,10 @@
      <para>
       By default errors, results, warnings and certain info messages are
       printed in color using bash color codes. Set to '0' to turn off
-      colors. Default: 1 (when the output does not go to a terminal, colored
+      colors.
+     </para>
+     <para>
+      Default: 1 (when the output does not go to a terminal, colored
       output will be disabled automatically).
      </para>
     </listitem>
@@ -132,35 +167,46 @@
     <term><option>--debug</option></term>
     <listitem>
      <para>
-      Print debugging messages. Alternatively see the --verbose options for an
+      Print debugging messages. Alternatively see the --verbosity options for an
       output that is better readable.
      </para>
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><option>--docconfig=DC-file, -d DC-file</option></term>
+    <term>
+     <option>--docconfig=<replaceable>DC-FILE</replaceable>, -d
+     <replaceable>DC-FILE</replaceable></option>
+    </term>
     <listitem>
      <para>
       Path to doc config file to use. Mandatory unless there is only a single
-      DC-file in the current directory or unless you have configured a default
-      value (DOCCONF_DEFAULT) in &dapsconf-user;. Note: Options
-      --docconfig and --main exclude each other.
+      <replaceable>DC-FILE</replaceable> in the current directory or unless you
+      have configured a default value (<envar>DOCCONF_DEFAULT</envar>) in
+      &dapsconf-user;.
+     </para>
+     <para>Default: unset.</para>
+     <para>
+      Note: Options <option>--docconfig</option> and <option>--main</option>
+      exclude each other.
      </para>
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><option>--fb_styleroot</option></term>
+    <term>
+     <option>--fb_styleroot=<replaceable>PATH_TO_STYLESHEET</replaceable></option>
+    </term>
     <listitem>
      <para>
       Fallback styleroot directories. Can only be used in conjunction with
-      --styleroot. By default, the DocBook stylesheets are used as a fallback
-      if custom styles for an output format are not present. With this option
-      you can specify a list of alternative fallbacks (space separated
-      absolute paths). The directories will be tested in the order specified,
-      the first one that applies to the requested format, will be used.  The
-      original DocBook stylesheets will be used as a last resort. Useful if
-      you have forks of your custom stylesheets.
+      <option>--styleroot</option>. By default, the DocBook stylesheets are
+      used as a fallback if custom styles for an output format are not
+      present. With this option you can specify a list of alternative fallbacks
+      (space separated absolute paths). The directories will be tested in the
+      order specified, the first one that applies to the requested format, will
+      be used.  The original DocBook stylesheets will be used as a last
+      resort. Useful if you have forks of your custom stylesheets.
      </para>
+     <para>Default: unset.</para>
     </listitem>
    </varlistentry>
    <varlistentry>
@@ -184,21 +230,28 @@
       Specify how many parallel jobs to use. Higher numbers will significantly
       increase the processing speed, but will also set your machine under
       heavy load, up to a point where it may become (temporarily)
-      unresponsive.  Default: Use as man jobs as available CPU cores.
+      unresponsive.
      </para>
+     <para>Default: Use as man jobs as available CPU cores.</para>
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><option>--main, -m</option></term>
+    <term>
+     <option>--main=<replaceable>FILE</replaceable>, -m
+     <replaceable>FILE</replaceable></option>
+    </term>
     <listitem>
      <para>
-      Path to the main file defining your document. Note: Options --main and
-      --docconfig exclude each other.
+      Path to the main file defining your document.
+     </para>
+     <para>
+      Note: Options <option>--main</option> and <option>--docconfig</option>
+      exclude each other.
      </para>
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><option>--schema</option></term>
+    <term><option>--schema=<replaceable>URN</replaceable></option></term>
     <listitem>
      <para>
       URN to a DocBook 5 schema that is to be used for validation. Will be
@@ -210,7 +263,9 @@
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><option>--styleroot</option></term>
+    <term>
+     <option>--styleroot=<replaceable>PATH_TO_STYLESHEET</replaceable></option>
+    </term>
     <listitem>
      <para>
       By default, &dapsacr; uses the DocBook Stylesheets to create output. If
@@ -241,22 +296,30 @@
    <varlistentry>
     <term><option>--verbosity=3, -v3, -vvv</option></term>
     <listitem>
-     <para>Verbosity Level 3 (print all commands, very verbose)</para>
+     <para>
+      Verbosity Level 3 (print all commands, very verbose). Parallelization of
+      jobs will be turned off, to increase the readability.
+     </para>
     </listitem>
    </varlistentry>
    <varlistentry>
     <term><option>--version</option></term>
     <listitem>
-     <para>Print version number</para>
+     <para>Print the version number</para>
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><option>--xsltprocessor=PROCESSOR</option></term>
+    <term>
+     <option>--xsltprocessor=<replaceable>PROCESSOR</replaceable></option>
+    </term>
     <listitem>
      <para>
-      Specify an xslt processor that is used to transorm the XML
+      Specify an XSLT processor that is used to transform the XML
       files. Currently supported are "xsltproc" and "saxon" (version
-      6). Default: xsltproc
+      6).
+     </para>
+     <para>
+      Default: xsltproc
      </para>
     </listitem>
    </varlistentry>
@@ -316,7 +379,7 @@
      <term><option>webhelp</option></term>
      <listitem>
       <para>
-       Generates an HTML book with collapsable TOC and search (experimental)
+       Generates an HTML book with collapsible TOC and search (experimental)
       </para>
      </listitem>
     </varlistentry>
@@ -330,7 +393,7 @@
      <listitem>
       <para>
        Lists the filename that contains the ID specified with the mandatory
-       parameter --rootid.
+       parameter <option>--rootid</option>.
       </para>
      </listitem>
     </varlistentry>
@@ -347,8 +410,9 @@
      <term><option>list-srcfiles-unused</option></term>
      <listitem>
       <para>
-       List files from the xml/ and images/src/ directories not used by the
-       document reference by the DC-file
+       List files from the <filename>xml/</filename> and
+       <filename>images/src/</filename> directories not used by the document
+       reference by the DC-file.
       </para>
      </listitem>
     </varlistentry>
@@ -365,7 +429,10 @@
      <term><option>list-images-multisrc</option></term>
      <listitem>
       <para>
-       List images for which mutiple sources exist (e.g. foo.svg and foo.png)
+       List images for which have the same basename
+       (e.g. <replaceable>foo.svg</replaceable> and
+       <replaceable>foo.png</replaceable>). Refer to the DAPS manual for more
+       information.
       </para>
      </listitem>
     </varlistentry>
@@ -391,7 +458,7 @@
      <listitem>
       <para>
        Remove all generated package data for the given DC-file. Generated
-       images and profiled sources will <emphasis>not</emphasis> be deleted
+       images and profiled sources will <emphasis>not</emphasis> be deleted.
       </para>
      </listitem>
     </varlistentry>
@@ -401,14 +468,14 @@
       <para>
        Remove all generated books, archives, and log files for the given
        DC-file. Generated images and profiled sources will
-       <emphasis>not</emphasis> be deleted
+       <emphasis>not</emphasis> be deleted.
       </para>
      </listitem>
     </varlistentry>
     <varlistentry>
      <term><option>clean-all, real-clean</option></term>
      <listitem>
-      <para>Remove everything generated by daps</para>
+      <para>Remove everything generated by DAPS.</para>
      </listitem>
     </varlistentry>
    </variablelist>
@@ -421,7 +488,7 @@
      <listitem>
       <para>
        Provide an HTML tarball (chunked HTML or single HTML), desktop,
-       document, and/or page files (for KDE and GNOME)
+       document, and/or page files (for KDE and GNOME).
       </para>
      </listitem>
     </varlistentry>
@@ -436,7 +503,8 @@
     <varlistentry>
      <term><option>package-src</option></term>
      <listitem>
-      <para>Provide profiled XML sources and graphics</para>
+      <para>Provide a TAR archive with profiled XML sources or AsciiDoc sources
+      and graphics files.</para>
      </listitem>
     </varlistentry>
    </variablelist>
@@ -447,7 +515,7 @@
     <varlistentry>
      <term><option>locdrop</option></term>
      <listitem>
-      <para>Provide everything that is needed to translate a set</para>
+      <para>Provide everything that is needed to translate the sources.</para>
      </listitem>
     </varlistentry>
     <varlistentry>
@@ -455,7 +523,10 @@
      <listitem>
       <para>
        Provide a profiled XML bigfile, a graphics tarball (PNG only),
-       color-pdf, epub, and a single-html archive
+       color-pdf, ePUB, and a single-html archive.
+      </para>
+      <para>
+       Not supported for AsciiDoc projects.
       </para>
      </listitem>
     </varlistentry>
@@ -464,6 +535,9 @@
      <listitem>
       <para>
        Unpack a localization drop packages source.
+      </para>
+      <para>
+       Not supported for AsciiDoc projects.
       </para>
      </listitem>
     </varlistentry>
@@ -475,48 +549,54 @@
     <varlistentry>
      <term><option>checklink</option></term>
      <listitem>
-      <para>Linkchecker for links from <![CDATA[<ulink>]]> tags</para>
+      <para>Linkchecker for links from <![CDATA[<ulink>]]> tags.</para>
      </listitem>
     </varlistentry>
     <varlistentry>
      <term><option>getimages</option></term>
      <listitem>
-      <para>List or display images from a profiled DocBook XML file</para>
+      <para>List or display images from a profiled DocBook XML file.</para>
      </listitem>
     </varlistentry>
     <varlistentry>
      <term><option>optipng</option></term>
      <listitem>
-      <para>Optimize (size) source PNGs</para>
+      <para>Optimize (size) source PNGs.</para>
      </listitem>
     </varlistentry>
     <varlistentry>
      <term><option>profile</option></term>
      <listitem>
-      <para>Profile XML sources</para>
+      <para>Profile XML sources.</para>
      </listitem>
     </varlistentry>
     <varlistentry>
      <term><option>spellcheck</option></term>
      <listitem>
       <para>
-       Spellchecks the file specified with --file or the document specified by
-       rootid.
+       Spellchecks the file specified with <option>--file</option> or the
+       document specified by <option>--rootid</option>.
       </para>
      </listitem>
     </varlistentry>
     <varlistentry>
      <term><option>stylecheck</option></term>
      <listitem>
-      <para>Performs a style check on the given DC-file or rootid</para>
+      <para>Performs a style check on the given DC-file or rootid.</para>
+      <para>
+       Not supported for AsciiDoc projects.
+      </para>
      </listitem>
     </varlistentry>
     <varlistentry>
      <term><option>validate</option></term>
      <listitem>
       <para>
-       Validate profiled sources. Automatically profiles the XML sources if
+       Validate profiled XML sources. Automatically profiles the XML sources if
        needed.
+      </para>
+      <para>
+       Not supported for AsciiDoc projects.
       </para>
      </listitem>
     </varlistentry>
@@ -525,6 +605,9 @@
      <listitem>
       <para>
        Prettify the XML source files using <command>daps-xmlformat</command>.
+      </para>
+      <para>
+       Not supported for AsciiDoc projects.
       </para>
      </listitem>
     </varlistentry>
@@ -565,6 +648,9 @@
        xi:includes. Useful for detecting validation errors that cannot be
        found otherwise.
       </para>
+      <para>
+       Not supported for AsciiDoc projects.
+      </para>
      </listitem>
     </varlistentry>
     <varlistentry>
@@ -586,7 +672,7 @@
      <listitem>
       <para>
        Print value of a given make variable: daps showvariable
-       VARIABLE=<replaceable>MAKE_VARIABLE</replaceable>
+       VARIABLE=<replaceable>VARIABLE_NAME</replaceable>
       </para>
      </listitem>
     </varlistentry>
@@ -664,25 +750,32 @@
          <para>DAPS project homepage</para>
        </listitem>
      </varlistentry>
-     <!--<varlistentry>
-       <term><ulink  url="http://daps.sf.net/docs/daps-quickstart.html"
-         >DAPS Quick Start</ulink></term>
-       <listitem>
-         <para>Contains an overview of basic concepts and how to create
-           your documents.</para>
+     <varlistentry>
+      <term>
+       <ulink url="https://opensuse.github.io/daps/doc/art.daps.quick.htm">DAPS
+       Quick Start</ulink>
+      </term>
+      <listitem>
+       <para>
+        Contains an overview of basic concepts and how to create your
+        documents.
+       </para>
+      </listitem>
+     </varlistentry>
+     <varlistentry>
+      <term>
+       <ulink url="https://opensuse.github.io/daps/doc/book.daps.user.html">DAPS
+       User Guide</ulink>
+      </term>
+      <listitem>
+       <para>
+        Is intended for users who want to make efficient use of DocBook XML for
+        editing and publishing their documentation.  Key knowledge of XML and
+        DocBook is expected, as well as key knowledge of using the Bash Shell
+        (or command line interfaces in general).
+       </para>
        </listitem>
-     </varlistentry>-->
-     <!--<varlistentry>
-       <!-\- FIXME: Add correct link-\->
-       <term><ulink url="http://daps.sf.net/docs/daps-userguide.html">DAPS User Guide</ulink></term>
-       <listitem>
-          <para>Is intended for users who want to make efficient use of
-            DocBook XML for editing and publishing their documentation.
-            Key knowledge of XML and DocBook is expected, as well as key
-            knowledge of using the Bash Shell (or command line
-            interfaces in general).</para>
-       </listitem>
-     </varlistentry>-->
+     </varlistentry>
      <!--<varlistentry>
        <term><ulink url="http://daps.sf.net/docs/daps-adminguide.html"
        >DAPS Administration Guide</ulink></term>

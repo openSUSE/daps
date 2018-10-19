@@ -128,7 +128,7 @@
 
   <!-- DocBook4 template rules in xref.target mode -->
   <xsl:template match="chapter|appendix|preface|part|
-                       sect1|sect2|sect3|sect4|sect5"  mode="xref.target">
+                       sect1|sect2|sect3|sect4|sect5|section"  mode="xref.target">
     <xsl:param name="target" select="."/>
     <xsl:param name="target.book.info"/>
     <xsl:variable name="title" select="(title|*/title)[1]"/>
@@ -144,7 +144,8 @@
     <xsl:if test="$target/self::sect1 or
                   $target/self::sect2 or
                   $target/self::sect3 or
-                  $target/self::sect4">
+                  $target/self::sect4 or
+                  $target/self::section">
       <xsl:call-template name="gentext">
         <xsl:with-param name="key" select="local-name($target)"/>
       </xsl:call-template>
@@ -208,7 +209,7 @@
 
   <!-- DocBook5 template rules in xref.target mode -->
   <xsl:template match="d:chapter|d:appendix|d:preface|d:part|
-                       d:sect1|d:sect2|d:sect3|d:sect4|d:sect5" mode="xref.target">
+                       d:sect1|d:sect2|d:sect3|d:sect4|d:sect5|d:section" mode="xref.target">
     <xsl:param name="target" select="."/>
     <xsl:param name="target.book.info"/>
     <xsl:variable name="title" select="(d:title|*/d:title)[1]"/>
@@ -224,7 +225,8 @@
     <xsl:if test="$target/self::d:sect1 or
                   $target/self::d:sect2 or
                   $target/self::d:sect3 or
-                  $target/self::d:sect4">
+                  $target/self::d:sect4 or
+                  $target/self::d:section">
       <xsl:call-template name="gentext">
         <xsl:with-param name="key" select="local-name($target)"/>
       </xsl:call-template>

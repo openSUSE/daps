@@ -9,8 +9,8 @@ dnl Frank Sundermeyer <fsundermeyer at opensuse dot org>
 dnl Thomas Schraitle  <toms at opensuse dot org>
 dnl
 
-m4_define(daps_version_major, 2)
-m4_define(daps_version_minor, 4)
+m4_define(daps_version_major, 3)
+m4_define(daps_version_minor, 0)
 m4_define(daps_version_micro, [0])
 # API version
 m4_define([daps_api_version],[daps_version_major])
@@ -215,15 +215,12 @@ AC_MSG_NOTICE([===== Checking for Python modules...])
 
 dnl python
 dnl We require Python3
-dnl AM_PATH_PYTHON([3.2])
-AM_PATH_PYTHON([2.6])
+AM_PATH_PYTHON([3.4])
+dnl AM_PATH_PYTHON([2.6])
 
 dnl Variables HAVE_PYMOD_* are filled with "yes" or "no"
-AC_PYTHON_MODULE([xml], [fatal])
-AC_SUBST(HAVE_PYMOD_XML)
-
-dnl AC_PYTHON_MODULE([lxml], [fatal])
-dnl AC_SUBST(HAVE_PYMOD_LXML)
+AC_PYTHON_MODULE([lxml], [fatal])
+AC_SUBST(HAVE_PYMOD_LXML)
 
 
 dnl --------------------------------------------------------------------------
@@ -249,12 +246,12 @@ fi
 dnl --------------------------------------------------------------------------
 AC_MSG_NOTICE([===== Checking for additional DocBook 4.5 identifiers (optional)...])
 
-for IDENT in "-//OASIS//ELEMENTS DocBook XML Information Pool V4.5//EN" \
-             "-//OASIS//ENTITIES DocBook XML Character Entities V4.5//EN" \
-             "-//OASIS//ENTITIES DocBook XML Notations V4.5//EN" \
-             "-//OASIS//ENTITIES DocBook XML Additional General Entities V4.5//EN" \
-             "-//OASIS//ELEMENTS DocBook XML Document Hierarchy V4.5//EN" \
-             "-//OASIS//DTD DocBook XML CALS Table Model V4.5//EN" \
+for IDENT in "-//OASIS//ELEMENTS DocBook Information Pool V4.5//EN" \
+             "-//OASIS//ENTITIES DocBook Character Entities V4.5//EN" \
+             "-//OASIS//ENTITIES DocBook Notations V4.5//EN" \
+             "-//OASIS//ENTITIES DocBook Additional General Entities V4.5//EN" \
+             "-//OASIS//ELEMENTS DocBook Document Hierarchy V4.5//EN" \
+             "-//OASIS//DTD DocBook CALS Table Model V4.5//EN" \
              "-//OASIS//DTD XML Exchange Table Model 19990315//EN" \
              ; do
  AC_MSG_CHECKING([for $IDENT])

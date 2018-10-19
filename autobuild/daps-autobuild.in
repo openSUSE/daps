@@ -58,6 +58,12 @@ Options:
     Path to config file. Can be specified relative or absolute.
     Default: unset
 
+  --dcfiles="dc-file1 dc-file2"
+    Space-separated list of dcfiles that should be build. Requires
+    --sections to be set. The dc-files specified need to be defined
+    in the given section
+    Default: not set (all dc-files from the section file will be build)
+
   --debug
     In case of a build failure, show a verbose DAPS log.
     Default: disabled
@@ -403,7 +409,7 @@ function failure_notification {
 #--------------------
 # Read command line options
 
-ARGS=$(getopt -o h -l config:,debug,force,help,helpconfig,list-sections,nosync,notify,rsync,schema:,sections:,validate -n "$ME" -- "$@")
+ARGS=$(getopt -o h -l config:,dcfiles:,debug,force,help,helpconfig,list-sections,nosync,notify,rsync,schema:,sections:,validate -n "$ME" -- "$@")
 
 # Exit when getopt returns errors
 #
@@ -416,6 +422,10 @@ while true ; do
         --config)
             [[ -f $2 ]] || exit_on_error "Not a valid path for --config"
             CONFIG="$(readlink -e "$2")"
+            shift 2
+            ;;
+        --dcfiles)
+            DC_FILES_USER="$2"
             shift 2
             ;;
         --debug)
@@ -475,6 +485,9 @@ if [[ -f $SCHEMA ]]; then
 else
     exit_on_error "Not a valid path for --schema"
 fi
+
+# Chech whether --sections was specified with --dcfiles
+[[ -n $DC_FILES_USER && -z $SECTIONS ]] && exit_on_error "You must specify one or more sections with --dcfiles"
 
 #--------------------
 # Validate the config file
@@ -542,17 +555,31 @@ for SET in $SECTIONS; do
         REBUILD="1"
     fi
 
-    # set up the sync directory
-    SYNCDIR="${_BUILDDIR}/$SET/sync/$SET"
-    rm -rf "$SYNCDIR" && mkdir -p "$SYNCDIR"
-
     echo -e "$SET\n-------------------------"
 
     #--------------------
     # read the given set and store the data
     #
-    _CHECKOUT="$(read_config_value "${START_XPATH}/vcs" "checkout")"
+
+    # DC-files first
+    #
     _DCFILES="$(read_config_value "$START_XPATH" "dcfiles")"
+
+    # if DC-files were provided at the command-line, check whether
+    # at least one of them appears in the current set
+    # If so, set _DCFILES to the DC files common in both lists and
+    # proceed. No only the DC-files provided by the user will be built
+    #
+    if [[ -n $DC_FILES_USER ]]; then
+        # Check if user provided DC-file appears in _DCFILES
+        _DCFILES=$(comm -1 -2 <(echo -e "$_DCFILES" | tr " " "\n" | sort -u) <(echo -e "$DC_FILES_USER" | tr " " "\n" | sort -u))
+        if [[ -z $_DCFILES ]]; then
+            $CCECHO "warn" "$SET does not contain the DC-file(s) specified!\nSkipping $SET.\n"
+            continue
+        fi
+    fi
+
+    _CHECKOUT="$(read_config_value "${START_XPATH}/vcs" "checkout")"
     _DRAFT="$(read_config_value "$START_XPATH" "@draft")"
     _FB_STYLEROOT="$(read_config_value "$START_XPATH" "fb-styleroot")"
     _FORMATS="$(read_config_value "$START_XPATH" "formats")"
@@ -622,6 +649,17 @@ for SET in $SECTIONS; do
     # build the manuals
 
     if [[ 1 -eq $REBUILD ]]; then
+
+        # set up the sync directory; do not delete it if
+        # $DC_FILES_USER ist set - in this case we only want to update
+        # a single manual rather than replacing everything with a new build
+        #
+        SYNCDIR="${_BUILDDIR}/$SET/sync/$SET"
+        if [[ -z $DC_FILES_USER ]]; then
+            rm -rf "$SYNCDIR"
+        fi
+        mkdir -p "$SYNCDIR"
+
         for DC in $_DCFILES; do
             for _FORMAT in $_FORMATS; do
                  # Build!
@@ -655,9 +693,27 @@ for SET in $SECTIONS; do
             esac
         fi
     else
-        # No build failures; set new revision to config
-        xml ed -P -L -u "/daps-autobuild/set[@id='$SET']/vcs/lastrev" -v "$NEWREV" "$CONFIG"
-        RSYNC_DELETE="--delete"
+        # No build failures;
+        #
+        # if DC_FILES_USER was set, we do not want to change the revision in the
+        # XML config file (because this affects the whole set).
+        # We also do not want to run rsync with --delete
+        #
+        # if we rebuild a complete section, the revision number needs to get
+        # updated and we also want rsny --delete
+        #
+        # In case a rebuild is forced, we do not check for a revision and
+        # therefore NEWREV is is not set -> check if NEWREV is not empty
+        # (seems better than to check for CHECK_VCS (from --force) - if
+        # NEWREV is empty, we do not want to touch the lastrev entry in the
+        # config file anyway
+        #
+        if [[ -z $DC_FILES_USER && -n $NEWREV ]]; then
+            xml ed -P -L -u "/daps-autobuild/set[@id='$SET']/vcs/lastrev" -v "$NEWREV" "$CONFIG"
+            RSYNC_DELETE="--delete"
+        else
+            RSYNC_DELETE=""
+        fi
     fi
 
     #--------------------

@@ -68,15 +68,15 @@ Mandatory parameters:
 
 
 Optional parameters:
- --catalogs                   Define a space-separated list of XML catalogs
-                              for resolving identifiers. to be used in addition
+ --catalogs="CATALOGS"        Define a space-separated list of XML catalogs
+                              for resolving identifiersr; to be used in addition
                               to the system wide default catalog.
 
  --debug                      Activate a debugging mode (verbose).
 
  --help, -h                   Print this help.
 
- --param=KEY=VALUE            Pass a parameter KEY with the numeric value VALUE
+ --param="KEY=VALUE"          Pass a parameter KEY with the numeric value VALUE
                               to the stylesheet. The key-value pair must be
                               written as KEY=VALUE. Use --stringparam to pass
                               string values. You may pass up to 32 key/value
@@ -196,7 +196,7 @@ process_params () {
     # This function ensure that we can pass a certain parameter twice, with
     # that last one specified taking precedence. This is needed to overwrite
     # stringparams already set in the makefiles.
-    # Natively xsltproc does not support specifying a parameter twice, so
+    # Natively, xsltproc does not support specifying a parameter twice, so
     # something like xsltproc --param foo bar --param foo baz will result
     # in an error.
     # This function takes care that all key/value with the same key are
