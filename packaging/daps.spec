@@ -66,7 +66,7 @@ BuildRequires:  libxslt
 BuildRequires:  libxslt-tools
 BuildRequires:  poppler-tools
 BuildRequires:  python3-lxml
-#BuildRequires:  sgml-skel
+BuildRequires:  python3-xml
 BuildRequires:  suse-xsl-stylesheets
 BuildRequires:  svg-dtd
 BuildRequires:  transfig
@@ -95,12 +95,13 @@ Requires:       ghostscript-library
 Requires:       inkscape
 Requires:       java >= 1.8.0
 Requires:       jing
+Requires:       libreoffice-draw
 Requires:       libxslt
 Requires:       make
 Requires:       poppler-tools
-Requires:       python-xml
 Requires:       python3-lxml
-#Requires:       sgml-skel
+Requires:       python3-xml
+Requires:       rubygem(%{rb_default_ruby_abi}:asciidoctor)
 Requires:       suse-xsl-stylesheets
 Requires:       svg-schema
 Requires:       transfig
@@ -118,10 +119,12 @@ Recommends:     optipng
 Recommends:     perl-checkbot
 Recommends:     remake
 Recommends:     suse-doc-style-checker
+Recommends:     suse-documentation-dicts-en
 Recommends:     w3m
+Recommends:     xmlformat
+
 # Internal XEP package:
 Recommends:     xep
-Recommends:     xmlformat
 
 Obsoletes:      susedoc < 4.3.32
 Provides:       susedoc = 4.3.32
