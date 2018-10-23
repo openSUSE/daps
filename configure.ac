@@ -123,6 +123,9 @@ AC_PATH_PROG([TAR], [tar], [0])
 dnl bzip2
 AC_PATH_PROG([BZIP], [bzip2], [0])
 
+dnl asciidoctor
+AC_PATH_PROG([ASCIIDOCTOR], [asciidoc], [0])
+
 dnl epubcheck
 AC_PATH_PROG([EPUBCHECK], [epubcheck], [0])
 
@@ -188,6 +191,9 @@ AC_PATH_PROG([INKSCAPE], [inkscape], [0])
 
 dnl optipng
 AC_PATH_PROG([OPTIPNG], [optipng], [0])
+
+dnl Libre Office Draw
+AC_PATH_PROG([OODRAW], [oodraw], [0])
 
 dnl pdffonts
 AC_PATH_PROG([PDFFONTS], [pdffonts], [0])
@@ -460,6 +466,13 @@ else
   AC_MSG_RESULT([DocBook 5.1 support              |   yes   |])
 fi
 
+dnl AsciiDoc support
+if test 0 = "$ASCIIDOCTOR"; then
+  AC_MSG_RESULT([Support AsciiDoc sources         |    no   | install the asciidoctor
+                                 |         | rubygem])
+else
+  AC_MSG_RESULT([Support AsciiDoc sources         |   yes   |])
+fi
 
 dnl Create ASCII (w3m)
 if test 0 = "$W3M"; then
@@ -481,6 +494,13 @@ if test 0 = "$DIA"; then
   AC_MSG_RESULT([Support for .dia images          |    no   | install dia])
 else
   AC_MSG_RESULT([Support for .dia images          |   yes   |])
+fi
+
+dnl ODG support
+if test 0 = "$OODRAW"; then
+  AC_MSG_RESULT([Support for .odg images          |    no   | install LibreOffice (Draw)])
+else
+  AC_MSG_RESULT([Support for .odg images          |   yes   |])
 fi
 
 dnl SVG support
