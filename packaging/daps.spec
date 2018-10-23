@@ -101,7 +101,6 @@ Requires:       make
 Requires:       poppler-tools
 Requires:       python3-lxml
 Requires:       python-xml
-Requires:       rubygem(%{rb_default_ruby_abi}:asciidoctor)
 Requires:       suse-xsl-stylesheets
 Requires:       svg-schema
 Requires:       transfig
@@ -110,6 +109,14 @@ Requires:       xml-commons-jaxp-1.3-apis
 Requires:       xmlgraphics-fop >= 0.94
 Requires:       xmlstarlet
 Requires:       zip
+
+# Asciidoctor is not available on Leap 42.3
+#
+%if 0%{?sle_version} == 120300 && 0%{?is_opensuse}
+  Recommends:   rubygem(%{rb_default_ruby_abi}:asciidoctor)
+%else
+  Requires:     rubygem(%{rb_default_ruby_abi}:asciidoctor)
+%endif
 
 Recommends:     aspell-en
 Recommends:     calibre
