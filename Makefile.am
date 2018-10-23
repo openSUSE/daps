@@ -87,12 +87,17 @@ MAN_BUILD_PATH := $(srcdir)/man/build/$(MAN_PAGE_DIR)/man/
 # Manuals
 DC_USERGUIDE    := $(srcdir)/doc/DC-daps-user
 DC_QUICKSTART   := $(srcdir)/doc/DC-daps-quick
+DC_ADOCGUIDE    := $(srcdir)/doc/DC-daps-asciidoc
 USERGUIDE_NAME  := daps-user
 QUICKSTART_NAME := daps-quick
+ADOCGUIDE_NAME  := daps-asciidoc
 USERGUIDE       := $(srcdir)/doc/build/$(USERGUIDE_NAME)/single-html/$(USERGUIDE_NAME)/$(USERGUIDE_NAME).html
 QUICKSTART      := $(srcdir)/doc/build/$(QUICKSTART_NAME)/single-html/$(QUICKSTART_NAME)/$(QUICKSTART_NAME).html
-MANUALS         := $(dir $(USERGUIDE)) $(dir $(QUICKSTART)) 
-
+ADOCGUIDE       := $(srcdir)/doc/build/$(ADOCGUIDE_NAME)/single-html/$(ADOCGUIDE_NAME)/$(ADOCGUIDE_NAME).html
+MANUALS         := $(dir $(USERGUIDE)) $(dir $(QUICKSTART))
+if HAS_ASCIIDOCTOR
+  MANUALS += $(dir $(ADOCGUIDE))
+endif
 
 #------------------------
 # Installation hooks
@@ -185,6 +190,14 @@ dist_man1_MANS      = $(addprefix $(MAN_BUILD_PATH), $(MAN_PAGES))
 # These targets need to be built _after_ the guides have been built, to make
 # sure the local config, as provided by the repo, is used. Otherwise we have
 # a mixture of system and repo setup and that will not work
+
+#
+# Only build the adoc guide if asciidoctor is installed
+#
+if HAS_ASCIIDOCTOR
+  bin/daps bin/daps-xmlformat etc/config $(FOP_CONFIG) $(JING_WRAPPER): $(ADOCGUIDE)
+  all-local: $(ADOCGUIDE)
+endif
 
 bin/daps bin/daps-xmlformat etc/config $(FOP_CONFIG) $(JING_WRAPPER): $(USERGUIDE) $(QUICKSTART) $(dist_man1_MANS)
 
@@ -309,6 +322,12 @@ $(QUICKSTART):
 	+$(Q)bin/daps $(DEBUG) --dapsroot=$(DAPSROOT)  \
 	    --styleroot=$(STYLEROOT) --docconfig=$(DC_QUICKSTART) html \
 	    --single --name=$(QUICKSTART_NAME)
+	+$(Q)$(srcdir)/bin/ccecho "result" "Created $@"
+
+$(ADOCGUIDE):
+	+$(Q)bin/daps $(DEBUG) --dapsroot=$(DAPSROOT)  \
+	    --styleroot=$(STYLEROOT) --docconfig=$(DC_ADOCGUIDE) html \
+	    --single --name=$(ADOCGUIDE_NAME)
 	+$(Q)$(srcdir)/bin/ccecho "result" "Created $@"
 
 # Generate man pages on the fly

@@ -61,12 +61,13 @@ BuildRequires:  docbook_4
 BuildRequires:  fdupes
 BuildRequires:  ghostscript
 BuildRequires:  inkscape
+BuildRequires:  jing
 BuildRequires:  libxml2-tools
 BuildRequires:  libxslt
 BuildRequires:  libxslt-tools
 BuildRequires:  poppler-tools
-BuildRequires:  python3-lxml
 BuildRequires:  python-xml
+BuildRequires:  python3-lxml
 BuildRequires:  suse-xsl-stylesheets
 BuildRequires:  svg-dtd
 BuildRequires:  transfig
@@ -74,6 +75,19 @@ BuildRequires:  xerces-j2
 BuildRequires:  xml-commons-jaxp-1.3-apis
 BuildRequires:  xmlgraphics-fop >= 0.94
 BuildRequires:  xmlstarlet
+
+# Asciidoctor is not available on Leap 42.3
+#  If we have asciidoctor we build the asciidoc manual
+#  for which we need docbook_5 and jing
+#
+%if 0%{?sle_version} == 120300 && 0%{?is_opensuse}
+Recommends:     rubygem(%{rb_default_ruby_abi}:asciidoctor)
+%else
+Requires:       rubygem(%{rb_default_ruby_abi}:asciidoctor)
+BuildRequires:  docbook_5
+BuildRequires:  jing
+BuildRequires:  rubygem(%{rb_default_ruby_abi}:asciidoctor)
+%endif
 
 #
 # In order to keep the requirements list as short as possible, only packages
@@ -99,8 +113,8 @@ Requires:       libreoffice-draw
 Requires:       libxslt
 Requires:       make
 Requires:       poppler-tools
-Requires:       python3-lxml
 Requires:       python-xml
+Requires:       python3-lxml
 Requires:       suse-xsl-stylesheets
 Requires:       svg-schema
 Requires:       transfig
@@ -109,14 +123,6 @@ Requires:       xml-commons-jaxp-1.3-apis
 Requires:       xmlgraphics-fop >= 0.94
 Requires:       xmlstarlet
 Requires:       zip
-
-# Asciidoctor is not available on Leap 42.3
-#
-%if 0%{?sle_version} == 120300 && 0%{?is_opensuse}
-  Recommends:   rubygem(%{rb_default_ruby_abi}:asciidoctor)
-%else
-  Requires:     rubygem(%{rb_default_ruby_abi}:asciidoctor)
-%endif
 
 Recommends:     aspell-en
 Recommends:     calibre

@@ -124,7 +124,7 @@ dnl bzip2
 AC_PATH_PROG([BZIP], [bzip2], [0])
 
 dnl asciidoctor
-AC_PATH_PROG([ASCIIDOCTOR], [asciidoc], [0])
+AC_PATH_PROG([ASCIIDOCTOR], [asciidoctor], [0])
 
 dnl epubcheck
 AC_PATH_PROG([EPUBCHECK], [epubcheck], [0])
@@ -421,6 +421,11 @@ dnl Add more distributions if needed
 AM_CONDITIONAL([DIST_REDHAT], [egrep -iq "^NAME=\"?(fedora|redhat)\"?" /etc/os-release])
 AM_CONDITIONAL([DIST_SUSE], [egrep -iq "^NAME=\"?(opensuse|sles|sled)\"?" /etc/os-release])
 AM_CONDITIONAL([DIST_DEBIAN], [egrep -iq "^NAME=\"?(ubuntu|debian)\"?" /etc/os-release])
+
+dnl -------------------------------------------------------------------------
+dnl Set a conditional to determine whether ADOC is supported
+AM_CONDITIONAL([HAS_ASCIIDOCTOR], [test 0 != "$ASCIIDOCTOR"])
+
 
 dnl No distribution-specific info in the BuildService 
 dnl /var/adm/fillup-templates is SUSE-specific

@@ -591,6 +591,8 @@ ac_subst_vars='LTLIBOBJS
 LIBOBJS
 DIST_SUSEBS_FALSE
 DIST_SUSEBS_TRUE
+HAS_ASCIIDOCTOR_FALSE
+HAS_ASCIIDOCTOR_TRUE
 DIST_DEBIAN_FALSE
 DIST_DEBIAN_TRUE
 DIST_SUSE_FALSE
@@ -2736,8 +2738,8 @@ fi
 
 
 
-# Extract the first word of "asciidoc", so it can be a program name with args.
-set dummy asciidoc; ac_word=$2
+# Extract the first word of "asciidoctor", so it can be a program name with args.
+set dummy asciidoctor; ac_word=$2
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
 $as_echo_n "checking for $ac_word... " >&6; }
 if ${ac_cv_path_ASCIIDOCTOR+:} false; then :
@@ -4209,6 +4211,16 @@ else
 fi
 
 
+ if test 0 != "$ASCIIDOCTOR"; then
+  HAS_ASCIIDOCTOR_TRUE=
+  HAS_ASCIIDOCTOR_FALSE='#'
+else
+  HAS_ASCIIDOCTOR_TRUE='#'
+  HAS_ASCIIDOCTOR_FALSE=
+fi
+
+
+
  if test -d /var/adm/fillup-templates; then
   DIST_SUSEBS_TRUE=
   DIST_SUSEBS_FALSE='#'
@@ -4395,6 +4407,10 @@ Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${DIST_DEBIAN_TRUE}" && test -z "${DIST_DEBIAN_FALSE}"; then
   as_fn_error $? "conditional \"DIST_DEBIAN\" was never defined.
+Usually this means the macro was only invoked conditionally." "$LINENO" 5
+fi
+if test -z "${HAS_ASCIIDOCTOR_TRUE}" && test -z "${HAS_ASCIIDOCTOR_FALSE}"; then
+  as_fn_error $? "conditional \"HAS_ASCIIDOCTOR\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${DIST_SUSEBS_TRUE}" && test -z "${DIST_SUSEBS_FALSE}"; then
@@ -5604,6 +5620,10 @@ Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${DIST_DEBIAN_TRUE}" && test -z "${DIST_DEBIAN_FALSE}"; then
   as_fn_error $? "conditional \"DIST_DEBIAN\" was never defined.
+Usually this means the macro was only invoked conditionally." "$LINENO" 5
+fi
+if test -z "${HAS_ASCIIDOCTOR_TRUE}" && test -z "${HAS_ASCIIDOCTOR_FALSE}"; then
+  as_fn_error $? "conditional \"HAS_ASCIIDOCTOR\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${DIST_SUSEBS_TRUE}" && test -z "${DIST_SUSEBS_FALSE}"; then
