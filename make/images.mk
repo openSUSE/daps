@@ -238,11 +238,9 @@ clean_links_for_odg: $(USED_ODG)
 	for _IMG in  $(notdir $(subst .odg,,$(USED_ODG))); do \
 	  if [ -h $(IMG_GENDIR)/gen/png/$${_IMG}.png ]; then \
 	    rm $(IMG_GENDIR)/gen/png/$$_IMG.png; \
-	    echo "==========> $(IMG_GENDIR)/gen/png/$$_IMG.png"; \
 	  fi; \
 	  if [ -h $(IMG_GENDIR)/gen/svg/$$_IMG.svg ]; then \
 	    rm $(IMG_GENDIR)/gen/svg/$$_IMG.svg; \
-	    echo "==========> $(IMG_GENDIR)/gen/svg/$$_IMG.svg"; \
 	  fi; \
 	done
 
