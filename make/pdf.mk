@@ -110,19 +110,18 @@ FOFILE := $(FOFILE)$(LANGSTRING).fo
 
 # Formatter dependent stuff
 #
+# Command line options are set via variables in the config files
+# and are processed in the wrapper files
+#
 ifeq "$(FORMATTER)" "fop"
   FOSTRINGS += --param "fop1.extensions=1" \
                --param "xep.extensions=0"
-  ifdef FOP_CONFIG_FILE
-    FORMATTER_CMD := $(FOP_WRAPPER) $(FOP_OPTIONS) -c $(FOP_CONFIG_FILE)
-  else
-    FORMATTER_CMD := $(FOP_WRAPPER) $(FOP_OPTIONS)
-  endif
+  FORMATTER_CMD := $(FOP_WRAPPER)
 endif
 ifeq "$(FORMATTER)" "xep"
   FOSTRINGS += --param "fop1.extensions=0" \
                --param "xep.extensions=1"
-  FORMATTER_CMD := $(XEP_WRAPPER) $(XEP_OPTIONS)
+  FORMATTER_CMD := $(XEP_WRAPPER)
 endif
 
 
