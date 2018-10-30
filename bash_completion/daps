@@ -62,7 +62,7 @@ _daps() {
                     _filedir -d
                     return 0
                     ;;
-                --css|--export-dir|--extra-dict|--file|--statdir)
+                --css|--extra-dict|--file|--statdir)
                     _filedir
                     return 0
                     ;;
@@ -88,6 +88,10 @@ _daps() {
             case "$prev" in
                 --builddir|--fb_styleroot|--styleroot|--adocimgdir)
                     _filedir -d
+                    return 0
+                    ;;
+                --config)
+                    _filedir
                     return 0
                     ;;
                 --color)

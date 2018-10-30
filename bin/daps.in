@@ -78,6 +78,7 @@ VARLIST=(
     DEBUG
     DISTVER
     DOC_DIR
+    DAPS_CONFIG_FILE
     DAPSROOT
     DAPSROOT_DEFAULT
     DEF_FILE
@@ -268,9 +269,17 @@ DAPSROOT_DEFAULT="@pkgdatadir@"
 DEFAULT_LIB_DIR="${DAPSROOT_DEFAULT}/lib"
 DEFAULT_LIBEXEC_DIR="${DAPSROOT_DEFAULT}/libexec"
 
-# user config file
+
+# Config files
+# ------------
+# By default USER_CONFIG is parsed
+# if DAPS_CONFIG_FILE is set (via --config on the command line),
+# USER_CONFIG is ignored
+# The file that is oparsed in the enbd is stored in CONF_TO_PARSE
+#
 USER_CONFIG_OLD="$HOME/.daps/config"
 USER_CONFIG="$HOME/.config/daps/dapsrc"
+CONF_TO_PARSE=""
 
 # if run from a terminal, set default verbosity to 1, otherwise (script, pipe)
 # set it to 0
@@ -701,6 +710,13 @@ Global Options:
                             Default: 1 (when the output does not go to a
                                         terminal, colored output will be
                                         disabled automatically)
+  --config                  Set a configuration file for DAPS that overwrites
+                            defaults set in /etc/daps/config.
+                            By default (when this option is not set)
+                            ~/.config/daps/dapsrc will be parsed, if existing.
+                            In case --config is set, ~/.config/daps/dapsrc
+                            will be ignored.
+                            Default: ~/.config/daps/dapsrc
   --commands                Show a list of available DAPS sub commands
   --debug                   Print debugging messages. Alternatively see the
                             verbosity options for an output that is better
@@ -1221,7 +1237,7 @@ export POSIXLY_CORRECT=1
 # Therefore we need to save each variable twice in order to recover the
 # original value.
 
-ARGS=$(getopt -o d:e:hm:v:: -l adocattr:,adocimgdir:,builddir:,color:,colour:,commands,debug,docconfig:,dapsroot:,envfile:,fb_styleroot:,force,help,jobs:,main:,schema:,styleroot:,verbosity::,version,xsltprocessor: -n "$ME" -- "$@")
+ARGS=$(getopt -o d:e:hm:v:: -l adocattr:,adocimgdir:,builddir:,config:,color:,colour:,commands,debug,docconfig:,dapsroot:,envfile:,fb_styleroot:,force,help,jobs:,main:,schema:,styleroot:,verbosity::,version,xsltprocessor: -n "$ME" -- "$@")
 
 # Exit when getopt returns errors
 #
@@ -1249,6 +1265,12 @@ while true ; do
             # make path absolute and strip trailing slash
             sanitize_path "$2" "BUILD_DIR_CMDL"
             BUILD_DIR="$BUILD_DIR_CMDL"
+            shift 2
+            ;;
+        --config)
+            [[ -s $2 ]] || exit_on_error "DAPS_CONFIG_FILE \"$2\" is not a valid file"
+            # make path absolute and strip trailing slash
+            sanitize_path "$2" "DAPS_CONFIG_FILE"
             shift 2
             ;;
         --color|--colour)
@@ -1388,6 +1410,14 @@ if [[ -n "$FALLBACK_STYLEROOT" && -z "$STYLEROOT" ]]; then
     fi
 fi
 
+# Set the config file that will get parsed:
+#
+if [[ -n $DAPS_CONFIG_FILE ]]; then
+    CONF_TO_PARSE="$DAPS_CONFIG_FILE"
+elif [[ -f $USER_CONFIG ]]; then
+    CONF_TO_PARSE="$USER_CONFIG"
+fi
+
 unset POSIXLY_CORRECT # we want the regular getopts behaviour on the second run
 
 #-----------------------------------
@@ -1474,47 +1504,51 @@ esac
 ############# INTERLUDE: Copy/Move USER_CONFIG_OLD #####################
 #
 # Move/copy an old DAPS config directory to ~/.config if not already existing
+# Only do this, if no config file was set with --config
 #
-MOVE_CONFIG=""
-if [[ -f $USER_CONFIG_OLD && ! -f $USER_CONFIG ]]; then
-    ccecho "warn" "The DAPS user configuration file has moved from\n~/.daps/config to ~/.config/daps/dapsrc"
-    NEW_CONFDIR=$(dirname "$USER_CONFIG")
-    NEW_CONFFILE=$(basename "$USER_CONFIG")
-    OLD_CONFDIR=$(dirname "$USER_CONFIG_OLD")
-    OLD_CONFFILE=$(basename "$USER_CONFIG_OLD")
-    while [[ ! $MOVE_CONFIG =~ ^[CcMmNn]$ ]] ; do
-        read -e -t 20 -i n -p "Do you want me to [c]opy it/[m]ove it/do [n]othing? " MOVE_CONFIG
-        [[ $? -gt 128 ]] && MOVE_CONFIG="n" # timeout reached
-    done
-    case "$MOVE_CONFIG" in
-        C|c)
-            cp -r "$OLD_CONFDIR" "$NEW_CONFDIR" && mv "${NEW_CONFDIR}/$OLD_CONFFILE" "${NEW_CONFDIR}/$NEW_CONFFILE"
-            if [[ 0 -eq $? ]]; then
-                ccecho "info" "The DAPS config directory $OLD_CONFDIR has been copied to $NEW_CONFDIR.\nThe DAPS config file has been renamed to $NEW_CONFFILE."
-            else
-                ccecho "warn" "Copying the DAPS config directory failed"
-            fi
-            ;;
-        M|m)
-            mv "$OLD_CONFDIR" "$NEW_CONFDIR" && mv "${NEW_CONFDIR}/$OLD_CONFFILE" "${NEW_CONFDIR}/$NEW_CONFFILE"
-            if [[ 0 -eq $? ]]; then
-                ccecho "info" "The DAPS config directory $OLD_CONFDIR has been moved to $NEW_CONFDIR.\nThe DAPS config file has been renamed to $NEW_CONFFILE."
-            else
-                ccecho "warn" "Moving the DAPS config file failed"
-            fi
-            ;;
-        *)
-            ccecho "info" "\nThe DAPS config has not been touched and will not be used in this DAPS run"
-            ;;
-    esac
+if [[ -z $DAPS_CONFIG_FILE ]]; then
+    MOVE_CONFIG=""
+    if [[ -f $USER_CONFIG_OLD && ! -f $USER_CONFIG ]]; then
+        ccecho "warn" "The DAPS user configuration file has moved from\n~/.daps/config to ~/.config/daps/dapsrc"
+        NEW_CONFDIR=$(dirname "$USER_CONFIG")
+        NEW_CONFFILE=$(basename "$USER_CONFIG")
+        OLD_CONFDIR=$(dirname "$USER_CONFIG_OLD")
+        OLD_CONFFILE=$(basename "$USER_CONFIG_OLD")
+        while [[ ! $MOVE_CONFIG =~ ^[CcMmNn]$ ]] ; do
+            read -e -t 20 -i n -p "Do you want me to [c]opy it/[m]ove it/do [n]othing? " MOVE_CONFIG
+            [[ $? -gt 128 ]] && MOVE_CONFIG="n" # timeout reached
+        done
+        case "$MOVE_CONFIG" in
+            C|c)
+                cp -r "$OLD_CONFDIR" "$NEW_CONFDIR" && mv "${NEW_CONFDIR}/$OLD_CONFFILE" "${NEW_CONFDIR}/$NEW_CONFFILE"
+                if [[ 0 -eq $? ]]; then
+                    ccecho "info" "The DAPS config directory $OLD_CONFDIR has been copied to $NEW_CONFDIR.\nThe DAPS config file has been renamed to $NEW_CONFFILE."
+                else
+                    ccecho "warn" "Copying the DAPS config directory failed"
+                fi
+                ;;
+            M|m)
+                mv "$OLD_CONFDIR" "$NEW_CONFDIR" && mv "${NEW_CONFDIR}/$OLD_CONFFILE" "${NEW_CONFDIR}/$NEW_CONFFILE"
+                if [[ 0 -eq $? ]]; then
+                    ccecho "info" "The DAPS config directory $OLD_CONFDIR has been moved to $NEW_CONFDIR.\nThe DAPS config file has been renamed to $NEW_CONFFILE."
+                else
+                    ccecho "warn" "Moving the DAPS config file failed"
+                fi
+                ;;
+            *)
+                ccecho "info" "\nThe DAPS config has not been touched and will not be used in this DAPS run"
+                ;;
+        esac
+    fi
 fi
 
-
-if [[ -f $USER_CONFIG && -z "$DAPSROOT_CMDL" ]]; then
-    parse_config "$USER_CONFIG"
+# Set DAPSROOT via user config file
+# fs 2018-20-19: Is this needed? Why setting the base dir to CONF_TO_PARSE??
+if [[ -s $CONF_TO_PARSE && -z "$DAPSROOT_CMDL" ]]; then
+    parse_config "$CONF_TO_PARSE"
     # make DAPSROOT path absolute and remove trailing /
     [[ -n "$DAPSROOT" ]] && sanitize_path "$DAPSROOT" "DAPSROOT" \
-        "$(readlink -en "$(dirname "$USER_CONFIG")")"
+        "$(readlink -en "$(dirname "$CONF_TO_PARSE")")"
     recover_cmdl_values
 fi
 
@@ -1564,14 +1598,15 @@ parse_config "$CONFIG"
 
 # Parse user config
 #
-if [[ -f $USER_CONFIG ]]; then
-    parse_config "$USER_CONFIG"
+if [[ -s $CONF_TO_PARSE ]]; then
+    parse_config "$CONF_TO_PARSE"
     # make paths from PATHLIST absolute and remove trailing /
-#    MY_BASEDIR=$(readlink -en $(dirname $USER_CONFIG))
-#    check_pathlist "$MY_BASEDIR"
+    # MY_BASEDIR=$(readlink -en $(dirname $USER_CONFIG))
+    #    check_pathlist "$MY_BASEDIR"
     # make DAPSROOT path absolute and remove trailing /
+    # fs 2018-10-29 ?????????? Why basedir from CONF_TO_PARSE ???
     [[ -n "$DAPSROOT" ]] && sanitize_path "$DAPSROOT" "DAPSROOT" \
-        "$(readlink -en "$(dirname "$USER_CONFIG")")"
+        "$(readlink -en "$(dirname "$CONF_TO_PARSE")")"
 fi
 recover_cmdl_values
 
