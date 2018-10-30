@@ -214,7 +214,7 @@ GEN_IMAGES       := $(addprefix $(IMG_GENDIR)/gen/pdf/,$(GEN_PDF)) $(addprefix $
 #
 # lodraw is not capable of being executed in parallel, therfore the image
 # creation via pattern targets is not possible. We use an empty target instead
-# and make it a dependenc of $(GEN_IMAGES) (ONLINE_IMAGES) (COLOR_IMAGES)
+# and make it a dependenc of $(GEN_IMAGES) $(ONLINE_IMAGES) $(COLOR_IMAGES)
 #
 
 # Only run the .odg_gen target if there are ODG files!!
@@ -223,7 +223,30 @@ ifneq "$(strip $(USED_ODG))" ""
   $(GEN_IMAGES) (ONLINE_IMAGES) (COLOR_IMAGES): $(IMG_GENDIR)/gen/.odg_gen
 endif
 
-$(IMG_GENDIR)/gen/.odg_gen: $(USED_ODG)
+# The ODG stuff is an ugly hack anyway, so this probably does not matter
+# any further (although it significantly increases the uglyness)
+#
+# In case an SVG has been replaced by an ODG or in case there are dual source
+# images (svg+odg) a link to the SVG/PNG is present in
+# $(IMG_GENDIR)/gen/svg|png/
+# If that is the case, lodraw follows this link and overwrites the source
+# file
+# Therefore we need to remove the links first
+#
+.PHONY: clean_links_for_odg
+clean_links_for_odg: $(USED_ODG)
+	for _IMG in  $(notdir $(subst .odg,,$(USED_ODG))); do \
+	  if [ -h $(IMG_GENDIR)/gen/png/$${_IMG}.png ]; then \
+	    rm $(IMG_GENDIR)/gen/png/$$_IMG.png; \
+	    echo "==========> $(IMG_GENDIR)/gen/png/$$_IMG.png"; \
+	  fi; \
+	  if [ -h $(IMG_GENDIR)/gen/svg/$$_IMG.svg ]; then \
+	    rm $(IMG_GENDIR)/gen/svg/$$_IMG.svg; \
+	    echo "==========> $(IMG_GENDIR)/gen/svg/$$_IMG.svg"; \
+	  fi; \
+	done
+
+$(IMG_GENDIR)/gen/.odg_gen: $(USED_ODG) clean_links_for_odg
 ifeq "$(VERBOSITY)" "2"
 	@echo "   Converting *.odg to PNG"
 endif
