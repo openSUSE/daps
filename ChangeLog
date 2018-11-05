@@ -1,30 +1,82 @@
 -------------------------------------------------------------------
-Tue Oct 30 13:50:26 UTC 2018 - fsundermeyer@opensuse.org
+Tue Nov 06 10:50:26 UTC 2018 - fsundermeyer@opensuse.org
 
 Stable release DAPS 3.0.0:
 
 * New Features:
-  - added full support for Python3
-	- added SVG support for online-docs
-	- added support to build AsciiDoc documentation
-	- integrated hunspell and make aspell optional
-	- implement file not found for XIncludes
+  - added support for ASCIIDOC sources
+  - added support for LibreOffice Draw images (*.odg)
+  - added support for specifying a config file on the command line
+    (with --config)
+  - added SVG support for HTML builds
+  - integrated hunspell and make aspell optional
+  - initial well-formedness check ignores duplicated IDs (this
+    allows to have identical IDs in parts that get profiled)
+  - initial well-formedness warns about missing xi:include files
+  - daps-autobuild now supports building single books (via the
+    --dcfiles option)
+  - DAPS prgram name and version are passed to stylesheets with
+    xslt parameters "converter.name" and "converter.version"
+  - implement file not found for XIncludes
+  - FOP and XEP version numbers are shown in debug/verbose output
+  - various improvements for the DocBook to NovDoc conversion
+  - split lib/daps_functions into several files to improve speed
+    and maintainability
 
 * Bugfixes:
+  - #476: DAPS generates ODG->SVG files into images/src
+  - #475: Tab completion creates error
+  - #474: Potentially wrong variable assignment
+  - #437: lodraw tries to convert empty SVG
+  - #469: RPMLINT complains about permissions of XSLT stylesheet
+  - #468: xmlwellformed script creates RPMLINT warning
+  - #466: Build issues with daps-xmlwellformed
+  - #464: xmlformat incorrectly formats variablelist terms
+  - #462: Implement file not found for XIncludes
+  - #459: By default, use the xep-daps.xml configuration from
+	  stylesheets
+  - #457: Ship the asciidoc postprocessing stylesheet
+  - #455: Transform glosslist into variablelist (NovDoc conversion)
+  - #453: Cleanup stylesheet for results from ASCIIDoctor
+  - #452: Make it possible to specify the ASCIIDOC doc type
+  - #439: Make xmlformat more verbose in debug mode
+  - #435: require java-devel >= 1.8.0
+  - #425: Well-formedness check fails with double occurrences
+	  of xml:ids
+  - #424: Fix XML catalog generation
+  - #422: Integrate hunspell and make aspell optional
+  - #421: Show FOP and XEP version in debug/verbose output
   - #419: HTML and PDF builds need different paths for Admonition
-	  and Callout Images
-	- #322: Add --xmlonly / --imgonly switches to list-srcfiles
-	- #416: DAPS Won't Built With UTF-8 Characters in XML Filenames
-	- #397: Spaces in path problem
-	- #469: RPMLINT complains about permissions of XSLT stylesheet
-	- #464: xmlformat incorrectly formats variablelist terms
-	- #466: Build issues
-	- #475: Tab completion creates error
-	- PDF fails when static links in build/.tmp already exist
+          and Callout Images
+  - #416: DAPS Won't Built With UTF-8 Characters in XML Filenames
+  - #415: Add support for LibreOffice Draw files
+  - #397: Spaces in path problem
+  - #322: Add documentation for  --xmlonly / --imgonly switches
+	  for the list-srcfiles subcommand
+  - #226: Let stylesheets know which version of DAPS calls them
+  - #119: daps-init: also include example for set
+  - show a warning when an existing PDF has a size of 0 bytes
+    (usually the result of a failed FOP build)
+  - PDF fails when static links in build/.tmp already exist
+  - fixed DocBook identifiers in configure.ac
+  - made unpack-lopcdrop more robust against non-critical issues;
+    improved its debugging output
 
 * Documentation:
-	- Various updates to reflect changes in the code
-	- Improve help text for daps-xslt
+  -new guide: ASCIIDOC Quick Start
+  - Various updates to reflect changes in the code
+  - Improve help text for daps-xslt
+  - Improve error message for IDs defined multiple times
+
+
+* Removed support for:
+  - sourcing DC-files
+  - help texts for deprecated daps 1.x commands
+
+* Misc:
+  - converted Python scripts to Python 3; changed build
+    dependencies to python3
+
 
 -------------------------------------------------------------------
 Tue May 30 12:32:26 UTC 2017 - fsundermeyer@opensuse.org
