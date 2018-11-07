@@ -1,3 +1,4 @@
+[[art.daps.asciidoc]]
 = DAPS AsciiDoc Quick Start Guide
 Frank Sundermeyer <fsundermeyer at opensuse dot org>
 :Revision: 0
@@ -26,10 +27,11 @@ Starting with the {daps} 3.0, {daps} supports {adoc} sources.
 Projects with {adoc} sources are handled the same way as regular {db} projects.
 Therefore, the full range of output formats supported by {daps} is supported for {adoc} sources (HTML, single HTML, PDF, EPUB, Mobipocket, plain text).
 This quick start guide focuses on using {daps} with {adoc} sources and requires basic {daps} knowledge and {adoc} writing experience.
-<<for_more>> contains links to documentation on {daps} and {adoc}.
+<<art.daps.asciidoc.more>> contains links to documentation on {daps} and {adoc}.
 
 The complete {daps} documentation is available online at https://opensuse.github.io/daps/.
 
+[[art.daps.asciidoc.motivation]]
 == Motivation
 
 Over the past years, a lot of software documentation projects have moved from {db} to {adoc}.
@@ -45,6 +47,7 @@ Whether you convert an existing {daps} project from {db} to {adoc}, or whether y
 
 However, {daps} cannot handle the conversion to {adoc} as the new source format.
 
+[[art.daps.asciidoc.requirements]]
 == Requirements
 
 To use {adoc} sources with {daps}, you need to install the following packages:
@@ -55,6 +58,7 @@ To use {adoc} sources with {daps}, you need to install the following packages:
 To install DAPS follow the https://github.com/asciidoctor/docbookrx[DAPS installation instructions].
 For install `asciidoctor` or `asciidoc` we recommend to use packages available for your Linux distribution.
 
+[[art.daps.asciidoc.project]]
 == Setting up a Project
 
 An {adoc} project has got the same directory structure as a regular {db} project managed with {daps} (see https://opensuse.github.io/daps/doc/cha.daps.user.features.html#sec.daps.user.basics.dirstruct[Directory Structure] for more information.
@@ -191,6 +195,7 @@ Because of the procedure described above, {daps} requires unique base names for 
 If you would have two files with different content but the same base name, for example `test.svg` and `test.dia`, the outcome of an automatic conversion would be uncertain (could be either one of the two files).
 Therefore make sure to always use unique base names. To test for non-unique images, use the following daps command: `daps -d _<DCFILE>_ list-images-multisrc`.
 
+[[art.daps.asciidoc.output]]
 == Creating Output with {daps}
 
 After you have set up the directory structure, created {adoc} documents, and images (optionally), you can use {daps} to create PDFs, HTML, EPUB and other output formats.
@@ -252,6 +257,7 @@ DAPS supports the backends aspell and hunspell for spellchecking.
 daps -d DC-_MYADOC_ spellcheck --lang=en_GB --spell-checker=hunspell
 ----
 
+[[art.daps.asciidoc.errors]]
 == Common Errors and Pitfalls
 
 Before generating output formats, {daps} internally converts {adoc} to DocBook XML.
@@ -288,6 +294,7 @@ Simplify the {adoc} code and try again.
 * {daps} currently does not support embedding videos
 
 
+[[art.daps.asciidoc.github]]
 == GitHub Integration
 
 One of the advantages of using {adoc} as a source for documentation is its seamless integration with GitHub.
@@ -333,7 +340,7 @@ To display these icons, you need to tell GitHub where to find them.
 \endif::[]
 ----
 
-[[for_more]]
+[[art.daps.asciidoc.more]]
 == For More Information
 
 Find links to useful online resources here.
@@ -361,6 +368,7 @@ Find links to useful online resources here.
 * https://github.com/asciidoctor/docbookrx[DocBookRx]
 
 [appendix]
+[[art.daps.asciidoc.appendix]]
 == Appendix
 
 === Command Line Options and Configuration Settings for {adoc}
