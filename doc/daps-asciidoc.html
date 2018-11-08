@@ -1,0 +1,428 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang=""><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>DAPS AsciiDoc Quick Start Guide</title><meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" /><link rel="stylesheet" type="text/css" href="static/css/style.css" /><link rel="stylesheet" type="text/css" href="static/css/highlight.css" /><meta name="generator" content="DAPS @PACKAGE_VERSION@ (https://opensuse.github.io/daps) using DAPS XSL Stylesheets 2.0.12 (based on DocBook XSL Stylesheets 1.78.1)" /><meta name="book-title" content="DAPS AsciiDoc Quick Start Guide" /><script type="text/javascript">
+
+var protocol = window.location.protocol.toLowerCase();
+if ( protocol != 'file:' ) {
+  var agent = navigator.userAgent.toLowerCase();
+  var wanted = ( protocol == 'https:') ? 'https' : 'http';
+  var file = 'fonts.css';
+  document.write('<link rel="stylesheet" type="text/css" href="' + wanted + '://static.opensuse.org/fonts/'+ file +'"></link>');
+}
+else {
+   document.write('<link rel="stylesheet" type="text/css" href="static/css/fonts-onlylocal.css"></link>');
+}
+
+</script><noscript><link rel="stylesheet" type="text/css" href="http://static.opensuse.org/fonts/fonts.css" /></noscript><script src="static/js/jquery-1.10.2.min.js" type="text/javascript"></script><script src="static/js/script.js" type="text/javascript"></script><script src="static/js/highlight.min.js" type="text/javascript"></script><script>
+
+$(document).ready(function() {
+  $('.verbatim-wrap.highlight').each(function(i, block) {
+    hljs.highlightBlock(block);
+  });
+});
+hljs.configure({
+  useBR: false
+});
+
+</script></head><body class="single nofooter offline js-off"><div id="_outer-wrap"><div id="_white-bg"><div id="_header"><div id="_logo"><a href="https://github.com/openSUSE/daps"><img src="static/images/logo.png" alt="Logo" /></a></div><div class="crumbs inactive"><a class="single-crumb" href="#id1700" accesskey="c"><span class="single-contents-icon"></span>DAPS AsciiDoc Quick Start Guide</a><div class="bubble-corner active-contents"></div></div><div class="clearme"></div></div></div><div id="_fixed-header-wrap" class="inactive"><div id="_fixed-header"><div class="crumbs inactive"><a class="single-crumb" href="#id1700" accesskey="c"><span class="single-contents-icon"></span>Show Contents: DAPS AsciiDoc Quick Start Guide</a></div><div class="buttons"><a class="top-button button" href="#">Top</a><div class="clearme"></div></div><div class="clearme"></div></div><div class="active-contents bubble"><div class="bubble-container"><div id="_bubble-toc"><ol><li class="inactive"><a href="#art.daps.asciidoc.motivation"><span class="number">1 </span><span class="name">Motivation</span></a></li><li class="inactive"><a href="#art.daps.asciidoc.requirements"><span class="number">2 </span><span class="name">Requirements</span></a></li><li class="inactive"><a href="#art.daps.asciidoc.project"><span class="number">3 </span><span class="name">Setting up a Project</span></a></li><li class="inactive"><a href="#art.daps.asciidoc.output"><span class="number">4 </span><span class="name">Creating Output with DAPS</span></a></li><li class="inactive"><a href="#art.daps.asciidoc.errors"><span class="number">5 </span><span class="name">Common Errors and Pitfalls</span></a></li><li class="inactive"><a href="#art.daps.asciidoc.github"><span class="number">6 </span><span class="name">GitHub Integration</span></a></li><li class="inactive"><a href="#art.daps.asciidoc.more"><span class="number">7 </span><span class="name">For More Information</span></a></li><li class="inactive"><a href="#art.daps.asciidoc.appendix"><span class="number">A </span><span class="name">Appendix</span></a></li></ol></div><div class="clearme"></div></div></div></div><div id="_toc-bubble-wrap"></div><div id="_content" class=""><div class="documentation"><div xml:lang="en" class="article " id="id1700" lang="en"><div class="titlepage"><div><div><h2 class="title"><span class="number"> </span><span xmlns:dm="urn:x-suse:ns:docmanager" class="name">DAPS AsciiDoc Quick Start Guide</span> <a title="Permalink" class="permalink" href="#id1700">#</a></h2></div><div class="author"><span class="imprint-label">Author: </span><span class="firstname">Frank</span> <span class="surname">Sundermeyer</span></div><div class="date"><span class="imprint-label">Publication Date: </span>2018-11-07</div></div></div><div class="line"><div class="toc"><dl><dt><span class="section"><a href="#art.daps.asciidoc.motivation"><span class="number">1 </span><span class="name">Motivation</span></a></span></dt><dt><span class="section"><a href="#art.daps.asciidoc.requirements"><span class="number">2 </span><span class="name">Requirements</span></a></span></dt><dt><span class="section"><a href="#art.daps.asciidoc.project"><span class="number">3 </span><span class="name">Setting up a Project</span></a></span></dt><dt><span class="section"><a href="#art.daps.asciidoc.output"><span class="number">4 </span><span class="name">Creating Output with DAPS</span></a></span></dt><dt><span class="section"><a href="#art.daps.asciidoc.errors"><span class="number">5 </span><span class="name">Common Errors and Pitfalls</span></a></span></dt><dt><span class="section"><a href="#art.daps.asciidoc.github"><span class="number">6 </span><span class="name">GitHub Integration</span></a></span></dt><dt><span class="section"><a href="#art.daps.asciidoc.more"><span class="number">7 </span><span class="name">For More Information</span></a></span></dt><dt><span class="appendix"><a href="#art.daps.asciidoc.appendix"><span class="number">A </span><span class="name">Appendix</span></a></span></dt><dd><dl><dt><span class="section"><a href="#_command_line_options_and_configuration_settings_for_asciidoc"><span class="number">A.1 </span><span class="name">Command Line Options and Configuration Settings for AsciiDoc</span></a></span></dt></dl></dd></dl></div></div>
+
+<p><a class="ulink" href="http://asciidoc.org/" target="_blank">AsciiDoc<span class="ulink-url"> (http://asciidoc.org/)</span></a> is a widely used markup language which, among other features, natively supports conversion to DocBook.
+Starting with the DAPS 3.0, DAPS supports AsciiDoc sources.
+AsciiDoc sources are converted to DocBook and then processed the same way as DocBook sources.
+Projects with AsciiDoc sources are handled the same way as regular DocBook projects.
+Therefore, the full range of output formats supported by DAPS is supported for AsciiDoc sources (HTML, single HTML, PDF, EPUB, Mobipocket, plain text).
+This quick start guide focuses on using DAPS with AsciiDoc sources and requires basic DAPS knowledge and AsciiDoc writing experience.
+<a class="xref" href="#art.daps.asciidoc.more" title="7. For More Information">Section 7, “For More Information”</a> contains links to documentation on DAPS and AsciiDoc.</p>
+<p>The complete DAPS documentation is available online at <a class="ulink" href="https://opensuse.github.io/daps/" target="_blank">https://opensuse.github.io/daps/<span class="ulink-url"> (https://opensuse.github.io/daps/)</span></a>.</p>
+<div class="sect1" id="art.daps.asciidoc.motivation"><div class="titlepage"><div><div><h2 class="title" id="art.daps.asciidoc.motivation"><span class="number">1 </span><span xmlns:dm="urn:x-suse:ns:docmanager" class="name">Motivation</span> <a title="Permalink" class="permalink" href="#art.daps.asciidoc.motivation">#</a></h2></div></div></div>
+
+<p>Over the past years, a lot of software documentation projects have moved from DocBook to AsciiDoc.
+With products and solutions becoming increasingly complex, documentation needs to rely more and more on external contributors.
+The hirdle to contribute is significantly lower when using AsciiDoc as it is with DocBook.
+Such a move not only requires converting the DocBook sources to AsciiDoc, but also changing the project setup, the toolchain and writing new stylesheets.
+The AsciiDoc support in DAPS saves you from switching to a new toolchain and new stylesheets.
+Whether you convert an existing DAPS project from DocBook to AsciiDoc, or whether you have used DAPS before and are starting an AsciiDoc project from scratch, DAPS lets you:</p>
+<div class="itemizedlist "><ul class="itemizedlist"><li class="listitem ">
+<p>use existing XSLT stylesheets (for converting DocBook into PDF, HTML, etc.)</p>
+</li><li class="listitem ">
+<p>use the same <code class="literal">daps</code> commands as with DocBook projects</p>
+</li><li class="listitem ">
+<p>use the same project setup as with DocBook projects</p>
+</li></ul></div>
+<p>However, DAPS cannot handle the conversion to AsciiDoc as the new source format.</p>
+</div>
+<div class="sect1" id="art.daps.asciidoc.requirements"><div class="titlepage"><div><div><h2 class="title" id="art.daps.asciidoc.requirements"><span class="number">2 </span><span xmlns:dm="urn:x-suse:ns:docmanager" class="name">Requirements</span> <a title="Permalink" class="permalink" href="#art.daps.asciidoc.requirements">#</a></h2></div></div></div>
+
+<p>To use AsciiDoc sources with DAPS, you need to install the following packages:</p>
+<div class="itemizedlist "><ul class="itemizedlist"><li class="listitem ">
+<p>DAPS 3.0 or better</p>
+</li><li class="listitem ">
+<p><code class="literal">asciidoctor</code> (strongly recommended) or <code class="literal">asciidoc</code></p>
+</li></ul></div>
+<p>To install DAPS follow the <a class="ulink" href="https://github.com/asciidoctor/docbookrx" target="_blank">DAPS installation instructions<span class="ulink-url"> (https://github.com/asciidoctor/docbookrx)</span></a>.
+For install <code class="literal">asciidoctor</code> or <code class="literal">asciidoc</code> we recommend to use packages available for your Linux distribution.</p>
+</div>
+<div class="sect1" id="art.daps.asciidoc.project"><div class="titlepage"><div><div><h2 class="title" id="art.daps.asciidoc.project"><span class="number">3 </span><span xmlns:dm="urn:x-suse:ns:docmanager" class="name">Setting up a Project</span> <a title="Permalink" class="permalink" href="#art.daps.asciidoc.project">#</a></h2></div></div></div>
+
+<p>An AsciiDoc project has got the same directory structure as a regular DocBook project managed with DAPS (see <a class="ulink" href="https://opensuse.github.io/daps/doc/cha.daps.user.features.html#sec.daps.user.basics.dirstruct" target="_blank">Directory Structure<span class="ulink-url"> (https://opensuse.github.io/daps/doc/cha.daps.user.features.html#sec.daps.user.basics.dirstruct)</span></a> for more information.
+However, there is one exception:
+For a DocBook project, images need to be saved in a directory structure where each image format has its own directory.
+To be able to also easily process AsciiDoc sources from a DAPS project with, for example, <code class="literal">asciidoctor</code> or to properly display the contents on, for example, GitHub, an AsciiDoc project can store all images in a single directory.</p>
+<div class="sect2" id="_the_directory_structure"><div class="titlepage"><div><div><h3 class="title" id="_the_directory_structure"><span class="number">3.1 </span><span xmlns:dm="urn:x-suse:ns:docmanager" class="name">The Directory Structure</span> <a title="Permalink" class="permalink" href="#_the_directory_structure">#</a></h3></div></div></div>
+
+<p>The following directory structure is recommended for AsciiDoc projects:</p>
+<div class="verbatim-wrap"><pre class="screen">PROJECT_ROOT/ <span id="CO1-1"></span><span class="callout">1</span>
+     |--DC-* <span id="CO1-2"></span><span class="callout">2</span>
+     |--adoc/ <span id="CO1-3"></span><span class="callout">3</span>
+     |   |--MAIN.adoc <span id="CO1-4"></span><span class="callout">4</span>
+     |   |--\*.adoc
+     |   |--images/ <span id="CO1-5"></span><span class="callout">5</span>
+     |   |  |--\*.dia/
+     |   |  |--\*.fig/
+     |   |  |--\*.jpg
+     |   |  |--\*.png/
+     |   |  |--\*.svg/</pre></div>
+<div class="calloutlist "><table border="0" summary="Callout list"><tr><td width="5%" valign="top" align="left"><p><a href="#CO1-1"><span class="callout">1</span></a> </p></td><td valign="top" align="left">
+<p>The project’s root directory (working directory) for the respective documentation project.</p>
+</td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#CO1-2"><span class="callout">2</span></a> </p></td><td valign="top" align="left">
+<p>One or more Doc Config files (DC files) defining your deliverables. Each DC file represents one book, article, or man page.</p>
+</td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#CO1-3"><span class="callout">3</span></a> </p></td><td valign="top" align="left">
+<p>The directory containing all AsciiDoc source files. It nust be named <code class="literal">adoc/</code>. AsciiDoc files in subdirectories are ignored.</p>
+</td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#CO1-4"><span class="callout">4</span></a> </p></td><td valign="top" align="left">
+<p>The MAIN file of the documentation project. It may be the only file, but may also include other AsciiDoc files via the <code class="literal">include</code> directive.</p>
+</td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#CO1-5"><span class="callout">5</span></a> </p></td><td valign="top" align="left">
+<p>The Directory containing image files. Place all images in this directory. Subdirectories are ignored. Either specify the path to this directory in the DC-file with <code class="literal">ADOC_IMG_DIR</code> (recommended) or on the command line with <code class="literal">--adocimgdir</code>.</p>
+</td></tr></table></div>
+</div>
+<div class="sect2" id="_the_doc_config_file_dc_file"><div class="titlepage"><div><div><h3 class="title" id="_the_doc_config_file_dc_file"><span class="number">3.2 </span><span xmlns:dm="urn:x-suse:ns:docmanager" class="name">The Doc Config File (DC File)</span> <a title="Permalink" class="permalink" href="#_the_doc_config_file_dc_file">#</a></h3></div></div></div>
+
+<p>A configuration file in the project directory.
+Each book, article, or man page in a project can have its own documentation configuration file (DC file).
+It defines several parameters for your documentation deliverable (for example, the MAIN file, layout variants, or whether to render the sources as article or book).
+Although not mandatory, creating a DC file for each deliverable is recommended.
+You can store deliverable-specific configuration options in the DC-file that you otherwise need to enter on the command line each time you call DAPS.</p>
+<p>DC files need to be placed in the project root. The file names need to start with <code class="literal">DC-</code>.
+The rest of the file name is used to name directories and files created by DAPS. For example, if a DC-file is named <code class="literal">DC-adoc_test</code>, file names and directories will start with <code class="literal">adoc_test</code>.</p>
+<p>Of the multiple parameters that can be set in the DC file, the only one required is MAIN. It points to the MAIN AsciiDoc file that you want to process.
+Create at least one DC file per book or article.</p>
+<p>
+<span class="formalpara-title">Example: A Typical DC File for an AsciiDoc Project. </span>
+
+</p><div class="verbatim-wrap"><pre class="screen">## Doc config file for the DAPS example document
+## See /etc/daps/config for documentation of the settings below
+##
+
+# MAIN file (mandatory) <span id="CO2-1"></span><span class="callout">1</span>
+#
+MAIN="MAIN-example.adoc"
+
+#----- optional parameters -----
+
+# Image directory  <span id="CO2-2"></span><span class="callout">2</span>
+#
+ADOC_IMG_DIR="adoc/images"
+
+# Type <span id="CO2-3"></span><span class="callout">3</span>
+#
+ADOC_TYPE="book"
+
+# Turn on postprocessing  <span id="CO2-4"></span><span class="callout">4</span>
+#
+ADOC_POST="yes"
+
+# Stylesheet directory  <span id="CO2-5"></span><span class="callout">5</span>
+#
+STYLEROOT="/usr/share/xml/docbook/stylesheet/daps2013"
+
+# XSLT Parameters for customizing the stylesheets <span id="CO2-6"></span><span class="callout">6</span>
+#
+XSLTPARAM="--stringparam homepage=https://github.com/openSUSE/daps"
+XSLTPARAM+="--param variablelist.as.blocks=1"</pre></div><p>
+
+</p>
+<div class="calloutlist "><table border="0" summary="Callout list"><tr><td width="5%" valign="top" align="left"><p><a href="#CO2-1"><span class="callout">1</span></a> </p></td><td valign="top" align="left">
+<p>Name of the main AsciiDoc file from the <code class="literal">adoc/</code> directory. You do not need to specify the full path, DAPS will automatically find it.</p>
+</td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#CO2-2"><span class="callout">2</span></a> </p></td><td valign="top" align="left">
+<p>Path to the image directory containing images referenced in the AsciiDoc sources. If you specify a relative path (recommended for portability), it needs to be specified relative to the directory containing the DC file.</p>
+</td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#CO2-3"><span class="callout">3</span></a> </p></td><td valign="top" align="left">
+<p>Document type (<code class="literal">article</code>, <code class="literal">book</code>, <code class="literal">manpage</code>).</p>
+</td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#CO2-4"><span class="callout">4</span></a> </p></td><td valign="top" align="left">
+<p>Parameter for applying the (default) post-processing XSLT stylesheet. It cleans up some of the DocBook XML constructs created by <code class="literal">asciidoctor</code>.</p>
+</td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#CO2-5"><span class="callout">5</span></a> </p></td><td valign="top" align="left">
+<p>For a custom layout, use the STYLEROOT parameter to specify the path to the directory containing the custom XSLT stylesheets. If not specified, DAPS will use the default DocBook stylesheets. For an introduction on how to create custom stylesheets, refer to <a class="ulink" href="https://opensuse.github.io/daps/doc/cha.daps.user.layout.html#sec.daps.user.layout.styleheets" target="_blank">Customizing the DocBook Stylesheets<span class="ulink-url"> (https://opensuse.github.io/daps/doc/cha.daps.user.layout.html#sec.daps.user.layout.styleheets)</span></a> (requires XSLT knowledge).</p>
+</td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#CO2-6"><span class="callout">6</span></a> </p></td><td valign="top" align="left">
+<p>If the stylesheets allow customization via parameters, you can specify these parameters here.</p>
+</td></tr></table></div>
+<p>The example above only shows a few options you can set.
+For a complete reference, refer to the DAPS configuration file at <code class="literal">/etc/daps/config</code>. An overview of the AsciiDoc-specific configuration options is also available at <a class="xref" href="#config-settings">Section A.1, “Command Line Options and Configuration Settings for AsciiDoc”</a>.</p>
+</div>
+<div class="sect2" id="_image_linking_and_processing"><div class="titlepage"><div><div><h3 class="title" id="_image_linking_and_processing"><span class="number">3.3 </span><span xmlns:dm="urn:x-suse:ns:docmanager" class="name">Image Linking and Processing</span> <a title="Permalink" class="permalink" href="#_image_linking_and_processing">#</a></h3></div></div></div>
+
+<p>One of the core features of DAPS is automatic image conversion.
+Whether images need to be converted to grayscale for a printable PDF, whether <code class="literal">.dia</code> images need to be converted to SVG, or whether <code class="literal">.svg</code> images need to be converted to PNG—​DAPS automatically takes care.
+You only need to make sure that the image is available in a supported format in the AsciiDoc images directory. Refer to <a class="ulink" href="https://opensuse.github.io/daps/doc/cha.daps.user.img.html" target="_blank">Image Handling<span class="ulink-url"> (https://opensuse.github.io/daps/doc/cha.daps.user.img.html)</span></a> for details.</p>
+<p>When linking an image in the AsciiDoc sources, use the attribute <code class="literal">:imagesdir:</code> in the document header. Always use the file name only.
+The path for <code class="literal">:imagesdir:</code> is best specified relatively (relative to the <code class="literal">adoc/</code> directory).
+Specifying <code class="literal">:imagesdir:</code> is optional, but recommended. It allows you to also process your AsciiDoc sources with tools other than DAPS.</p>
+<p>
+<span class="formalpara-title">Example: Linking Images in AsciiDoc. </span>
+
+</p><div class="verbatim-wrap"><pre class="screen">= Linking images
+
+:author: John Doe
+:imagesdir: images/
+
+This is an example of how to link images in AsciiDoc documents processed with DAPS.
+
+image::test.png[Test Image]</pre></div><p>
+
+</p>
+<p>For the example above, the images need to reside in <code class="literal">adoc/images</code>.
+Possible sources for the images in <code class="literal">adoc/images</code> are:</p>
+<div class="itemizedlist "><ul class="itemizedlist"><li class="listitem ">
+<p><code class="literal">adoc/images/test.dia</code></p>
+</li><li class="listitem ">
+<p><code class="literal">adoc/images/test.fig</code></p>
+</li><li class="listitem ">
+<p><code class="literal">adoc/images/test.jpg</code></p>
+</li><li class="listitem ">
+<p><code class="literal">adoc/images/test.png</code></p>
+</li><li class="listitem ">
+<p><code class="literal">adoc/images/test.svg</code></p>
+</li></ul></div>
+<p>The AsciiDoc source example requests a PNG file. If it exists, it will be used as is.
+If it does not exist, DAPS will search for an image with the base name
+<code class="literal">test</code> (<code class="literal">test.svg</code>, <code class="literal">test.dia</code>, or <code class="literal">test.fig</code>) and automatically convert it
+to PNG.</p>
+<div id="id1849" class="admonition important normal"><img class="symbol" alt="Important" title="Important" src="static/images/icon-important.png" /><h6>Important: Unique Image Names</h6>
+
+<p>Because of the procedure described above, DAPS requires unique base names for images.
+If you would have two files with different content but the same base name, for example <code class="literal">test.svg</code> and <code class="literal">test.dia</code>, the outcome of an automatic conversion would be uncertain (could be either one of the two files).
+Therefore make sure to always use unique base names. To test for non-unique images, use the following daps command: <code class="literal">daps -d <span class="emphasis"><em>&lt;DCFILE&gt;</em></span> list-images-multisrc</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect1" id="art.daps.asciidoc.output"><div class="titlepage"><div><div><h2 class="title" id="art.daps.asciidoc.output"><span class="number">4 </span><span xmlns:dm="urn:x-suse:ns:docmanager" class="name">Creating Output with DAPS</span> <a title="Permalink" class="permalink" href="#art.daps.asciidoc.output">#</a></h2></div></div></div>
+
+<p>After you have set up the directory structure, created AsciiDoc documents, and images (optionally), you can use DAPS to create PDFs, HTML, EPUB and other output formats.
+The command line syntax is the same as with DocBook projects:</p>
+<p>
+<span class="formalpara-title">Example: Creating HTML output. </span>
+
+</p><div class="verbatim-wrap"><pre class="screen">daps -d DC-_MYADOC_  html</pre></div><p>
+
+</p>
+<p>
+<span class="formalpara-title">Example: Creating Single Page HTML Output. </span>
+
+</p><div class="verbatim-wrap"><pre class="screen">daps -d DC-_MYADOC_  html --single</pre></div><p>
+
+</p>
+<p>
+<span class="formalpara-title">Example: Creating a PDF Directly from an AsciiDoc Source File. </span>
+
+</p><div class="verbatim-wrap"><pre class="screen">daps -m adoc/_MYADOC_.adoc pdf</pre></div><p>
+
+</p>
+<p>For more information, refer to <code class="literal">daps --help</code>.
+Help on the DAPS subcommands is available with the command <code class="literal">daps <span class="emphasis"><em>SUBCOMMAND</em></span> help</code>.</p>
+<div class="sect2" id="_creating_partial_output"><div class="titlepage"><div><div><h3 class="title" id="_creating_partial_output"><span class="number">4.1 </span><span xmlns:dm="urn:x-suse:ns:docmanager" class="name">Creating Partial Output</span> <a title="Permalink" class="permalink" href="#_creating_partial_output">#</a></h3></div></div></div>
+
+<p>If you want to create output for parts of the documents (for example, to send a single chapter or section for review), you do not need to create the whole document and cut out the parts you need.
+DAPS supports creating partial documents on section titles for any of the supported output formats.
+All that is required is an anchor preceding the section title:</p>
+<p>
+<span class="formalpara-title">Example: Section title with an Anchor. </span>
+
+</p><div class="verbatim-wrap"><pre class="screen">[[new_chapter]]
+== Brand New Chapter
+
+This chapter is brand new</pre></div><p>
+
+</p>
+<p>This anchor, <code class="literal">new_chapter</code> in the example above, can be passed to DAPS with the <code class="literal">--rootid</code> parameter.
+The following example shows how to build a PDF only containing the chapter "Brand New Chapter":</p>
+<div class="verbatim-wrap"><pre class="screen">daps -d DC-_MYADOC_ pdf --rootid="new_chapter"</pre></div>
+</div>
+<div class="sect2" id="_spell_checking"><div class="titlepage"><div><div><h3 class="title" id="_spell_checking"><span class="number">4.2 </span><span xmlns:dm="urn:x-suse:ns:docmanager" class="name">Spell Checking</span> <a title="Permalink" class="permalink" href="#_spell_checking">#</a></h3></div></div></div>
+
+<p>DAPS also supports spell checking your sources.
+This is especially convenient, when your sources contain include files.
+A spellcheck with DAPS automatically checks all included files.
+DAPS supports the backends aspell and hunspell for spellchecking.</p>
+<div class="verbatim-wrap"><pre class="screen">daps -d DC-_MYADOC_ spellcheck --lang=en_GB --spell-checker=hunspell</pre></div>
+</div>
+</div>
+<div class="sect1" id="art.daps.asciidoc.errors"><div class="titlepage"><div><div><h2 class="title" id="art.daps.asciidoc.errors"><span class="number">5 </span><span xmlns:dm="urn:x-suse:ns:docmanager" class="name">Common Errors and Pitfalls</span> <a title="Permalink" class="permalink" href="#art.daps.asciidoc.errors">#</a></h2></div></div></div>
+
+<p>Before generating output formats, DAPS internally converts AsciiDoc to DocBook XML.
+Because of that you may receive two different kind of errors when processing AsciiDoc sources:</p>
+<div class="variablelist "><dl class="variablelist"><dt id="id1894"><span class="term ">AsciiDoc Errors</span></dt><dd>
+<p>The conversion to DocBook XML is done by <code class="literal">asciidoc</code> or <code class="literal">asciidoctor</code>.
+In case there are syntax or structural errors in the AsciiDoc sources, you will get an appropriate error message. It usually contains the number of the line where the error occured.
+These errors need to be fixed before any further processing can be done.</p>
+<div id="id1900" class="admonition tip normal"><img class="symbol" alt="Tip" title="Tip" src="static/images/icon-tip.png" /><h6>Tip: Using <code class="literal">asciidoctor</code> Is Recommended</h6>
+
+<p>Compared to <code class="literal">asciidoc</code>, <code class="literal">asciidoctor</code> provides better error messages.</p>
+</div>
+</dd><dt id="id1906"><span class="term ">DAPS Errors</span></dt><dd>
+<p>After the internal conversion to DocBook XML is done, DAPS validates the resulting XML file to make sure it can properly be processed.
+Although this happens rarely, the conversion to DocBook XML might produce invalid XML. In this case, you will receive an error message claiming that "validation failed." The error message also contains the path to the file and the line number where the error occurred.</p>
+<p>To fix the error, look at the text in the XML file at the given line and locate that text in the AsciiDoc sources.
+The error might be the result of some unsupported special <code class="literal">asciidoctor</code> macro or of an overly complex structure.
+Simplify the AsciiDoc code and try again.</p>
+</dd></dl></div>
+<div class="sect2" id="_avoiding_mistakes"><div class="titlepage"><div><div><h3 class="title" id="_avoiding_mistakes"><span class="number">5.1 </span><span xmlns:dm="urn:x-suse:ns:docmanager" class="name">Avoiding Mistakes</span> <a title="Permalink" class="permalink" href="#_avoiding_mistakes">#</a></h3></div></div></div>
+
+<div class="itemizedlist "><div class="itemizedlist-title-wrap"><h6 class="itemizedlist-title"><span class="name">Section Titles (Headings) </span><a title="Permalink" class="permalink" href="#id1914">#</a></h6></div><ul class="itemizedlist"><li class="listitem ">
+<p>DAPS only allows a single Level 0 section at the beginning of the document</p>
+</li><li class="listitem ">
+<p>Section titles need to be in correct order. It is not possible to skip a level. So <code class="literal">== Level 2</code> followed by <code class="literal">==== Level 4</code> will not work.</p>
+</li></ul></div>
+<div class="itemizedlist "><div class="itemizedlist-title-wrap"><h6 class="itemizedlist-title"><span class="name">Multimedia </span><a title="Permalink" class="permalink" href="#id1922">#</a></h6></div><ul class="itemizedlist"><li class="listitem ">
+<p>DAPS currently does not support embedding videos</p>
+</li></ul></div>
+</div>
+</div>
+<div class="sect1" id="art.daps.asciidoc.github"><div class="titlepage"><div><div><h2 class="title" id="art.daps.asciidoc.github"><span class="number">6 </span><span xmlns:dm="urn:x-suse:ns:docmanager" class="name">GitHub Integration</span> <a title="Permalink" class="permalink" href="#art.daps.asciidoc.github">#</a></h2></div></div></div>
+
+<p>One of the advantages of using AsciiDoc as a source for documentation is its seamless integration with GitHub.
+GitHub not only renders AsciiDoc sources, but also allows to edit them directly in the Web interface.
+After having edited a document via the built-in editor, GitHub even automatically creates a pull request, depending on the repository setup.
+This improves the flow for external contributors.</p>
+<p>To enable a smooth GitHub integration, a few adjustments in the AsciiDoc source code are required.
+Using the <code class="literal">ifdef</code> preprocessor macro, you can set directives specific to GitHub.
+The following adjustments are required:</p>
+<div class="variablelist "><dl class="variablelist"><dt id="id1932"><span class="term ">Includes</span></dt><dd>
+<p>In addition to this, including documents via the <code class="literal">include</code> directive needs to be worked around, since this is not supported by GitHub for security reasons.
+Create an anchor (<code class="literal"><span id="ANCHOR"></span></code>) at the top-level of the documents you want to include and use the following syntax:</p>
+<div class="verbatim-wrap"><pre class="screen">// Links for GitHub
+ifdef::env-github[]
+ &lt;&lt;FILE1.adoc#ANCHOR, TITLE1&gt;&gt;
+ &lt;&lt;FILE2.adoc#ANCHOR, TITLE2&gt;&gt;
+endif::[]
+// includes for AsciiDoc processing
+ifndef::env-github[]
+ include::FILE1[]
+ include::FILE2[]
+endif::[]</pre></div>
+</dd><dt id="id1940"><span class="term ">Admonition Images</span></dt><dd>
+<p>Admonition boxes (warning, tip, etc.) usually come with an icon.
+To display these icons, you need to tell GitHub where to find them.</p>
+<div class="verbatim-wrap"><pre class="screen">ifdef::env-github[]
+//Admonitions
+:tip-caption: :bulb:
+:note-caption: :information_source:
+:important-caption: :heavy_exclamation_mark:
+:caution-caption: :fire:
+:warning-caption: :warning:
+endif::[]</pre></div>
+</dd></dl></div>
+</div>
+<div class="sect1" id="art.daps.asciidoc.more"><div class="titlepage"><div><div><h2 class="title" id="art.daps.asciidoc.more"><span class="number">7 </span><span xmlns:dm="urn:x-suse:ns:docmanager" class="name">For More Information</span> <a title="Permalink" class="permalink" href="#art.daps.asciidoc.more">#</a></h2></div></div></div>
+
+<p>Find links to useful online resources here.</p>
+<div class="sect2" id="_daps"><div class="titlepage"><div><div><h3 class="title" id="_daps"><span class="number">7.1 </span><span xmlns:dm="urn:x-suse:ns:docmanager" class="name">DAPS</span> <a title="Permalink" class="permalink" href="#_daps">#</a></h3></div></div></div>
+
+<div class="itemizedlist "><ul class="itemizedlist"><li class="listitem ">
+<p><a class="ulink" href="https://opensuse.github.io/daps/doc/book.daps.user.html" target="_blank">User Guide<span class="ulink-url"> (https://opensuse.github.io/daps/doc/book.daps.user.html)</span></a></p>
+</li><li class="listitem ">
+<p><a class="ulink" href="https://opensuse.github.io/daps/" target="_blank">Project Page<span class="ulink-url"> (https://opensuse.github.io/daps/)</span></a></p>
+</li><li class="listitem ">
+<p><a class="ulink" href="https://sourceforge.net/p/daps/discussion/General/" target="_blank">Discussion<span class="ulink-url"> (https://sourceforge.net/p/daps/discussion/General/)</span></a></p>
+</li></ul></div>
+</div>
+<div class="sect2" id="_asciidoc"><div class="titlepage"><div><div><h3 class="title" id="_asciidoc"><span class="number">7.2 </span><span xmlns:dm="urn:x-suse:ns:docmanager" class="name">AsciiDoc</span> <a title="Permalink" class="permalink" href="#_asciidoc">#</a></h3></div></div></div>
+
+<div class="itemizedlist "><ul class="itemizedlist"><li class="listitem ">
+<p><a class="ulink" href="https://powerman.name/doc/asciidoc" target="_blank">AsciiDoc Cheatsheet<span class="ulink-url"> (https://powerman.name/doc/asciidoc)</span></a></p>
+</li><li class="listitem ">
+<p><a class="ulink" href="https://asciidoctor.org/docs/asciidoc-syntax-quick-reference/" target="_blank">AsciiDoctor Syntax Quick Reference<span class="ulink-url"> (https://asciidoctor.org/docs/asciidoc-syntax-quick-reference/)</span></a></p>
+</li><li class="listitem ">
+<p><a class="ulink" href="https://asciidoctor.org/docs/asciidoc-writers-guide" target="_blank">AsciiDoctor Writer's Guide<span class="ulink-url"> (https://asciidoctor.org/docs/asciidoc-writers-guide)</span></a></p>
+</li><li class="listitem ">
+<p><a class="ulink" href="https://github.com/SUSE/doc-susemanager/wiki/Asciidoc-getting-started" target="_blank">Getting Started with Asciidoc (SUSE Syntax and Best practice for Contributors)<span class="ulink-url"> (https://github.com/SUSE/doc-susemanager/wiki/Asciidoc-getting-started)</span></a></p>
+</li></ul></div>
+</div>
+<div class="sect2" id="_example_asciidoc_code"><div class="titlepage"><div><div><h3 class="title" id="_example_asciidoc_code"><span class="number">7.3 </span><span xmlns:dm="urn:x-suse:ns:docmanager" class="name">Example AsciiDoc Code</span> <a title="Permalink" class="permalink" href="#_example_asciidoc_code">#</a></h3></div></div></div>
+
+<div class="itemizedlist "><ul class="itemizedlist"><li class="listitem ">
+<p><a class="ulink" href="https://raw.githubusercontent.com/openSUSE/daps/develop/doc/adoc/daps_asciidoc.adoc" target="_blank">This document was written in AsciiDoc<span class="ulink-url"> (https://raw.githubusercontent.com/openSUSE/daps/develop/doc/adoc/daps_asciidoc.adoc)</span></a></p>
+</li><li class="listitem ">
+<p><a class="ulink" href="https://github.com/openSUSE/daps/blob/develop/test/documents/adoc/book.adoc" target="_blank">The DAPS test documents contain example with complex, nested structures<span class="ulink-url"> (https://github.com/openSUSE/daps/blob/develop/test/documents/adoc/book.adoc)</span></a></p>
+</li></ul></div>
+</div>
+<div class="sect2" id="_converting_docbook_to_asciidoc"><div class="titlepage"><div><div><h3 class="title" id="_converting_docbook_to_asciidoc"><span class="number">7.4 </span><span xmlns:dm="urn:x-suse:ns:docmanager" class="name">Converting DocBook to AsciiDoc</span> <a title="Permalink" class="permalink" href="#_converting_docbook_to_asciidoc">#</a></h3></div></div></div>
+
+<div class="itemizedlist "><ul class="itemizedlist"><li class="listitem ">
+<p><a class="ulink" href="https://github.com/asciidoctor/docbookrx" target="_blank">DocBookRx<span class="ulink-url"> (https://github.com/asciidoctor/docbookrx)</span></a></p>
+</li></ul></div>
+</div>
+</div>
+<div class="appendix " id="art.daps.asciidoc.appendix"><div class="titlepage"><div><div><h2 class="title"><span class="number">A </span><span xmlns:dm="urn:x-suse:ns:docmanager" class="name">Appendix</span> <a title="Permalink" class="permalink" href="#art.daps.asciidoc.appendix">#</a></h2></div></div></div><div class="line"></div>
+
+<div class="sect2" id="_command_line_options_and_configuration_settings_for_asciidoc"><div class="titlepage"><div><div><h3 class="title" id="_command_line_options_and_configuration_settings_for_asciidoc"><span class="number">A.1 </span><span xmlns:dm="urn:x-suse:ns:docmanager" class="name">Command Line Options and Configuration Settings for AsciiDoc</span> <a title="Permalink" class="permalink" href="#_command_line_options_and_configuration_settings_for_asciidoc">#</a></h3></div></div></div>
+
+<p id="config-settings">DAPS supports the following AsciiDoc-specific command line options. These are global options and need to be specified before the subcommand.
+Additional configuration settings can be made in the DAPS configuration files (for example in a DC file).</p>
+<div class="table" id="id1995"><div class="table-title-wrap"><h6 class="table-title"><span class="number">Table A.1: </span><span class="name">Command Line Options/Configuration Settings for AsciiDoc </span><a title="Permalink" class="permalink" href="#id1995">#</a></h6></div><div class="table-contents">
+
+<table summary="Command Line Options/Configuration Settings for AsciiDoc" border="1"><colgroup><col class="col_1" /><col class="col_2" /><col class="col_3" /></colgroup><thead><tr><th align="left" valign="top">CLI Option</th><th align="left" valign="top">Config Setting</th><th align="left" valign="top">Explanation</th></tr></thead><tbody><tr><td align="left" valign="top"><p><code class="literal">--adocattr</code></p></td><td align="left" valign="top"><p><code class="literal">ADOC_ATTRIBUTES</code></p></td><td align="left" valign="top"><p>Define or delete AsciiDoc document attributes.
+Refer to the AsciiDoc documentation for more information.
+Examples:</p><p><code class="literal">daps -d DC-adoc --adocattr "author=John Doe"</code>
+<code class="literal">ADOC_ATTRIBUTES="author=myself"</code></p></td></tr><tr><td align="left" valign="top"><p><code class="literal">--adocimgdir</code></p></td><td align="left" valign="top"><p><code class="literal">ADOC_IMG_DIR</code></p></td><td align="left" valign="top"><p>Specify a directory for the images used in the AsciiDoc sources.
+Must contain all images, subdirectories are ignored.
+Examples:</p><p><code class="literal">daps -d DC-adoc --adocimgdir /projects/adoc/images</code>
+<code class="literal">ADOC_ATTRIBUTES="/documentation/adoc"</code></p></td></tr><tr><td align="left" valign="top"> </td><td align="left" valign="top"><p><code class="literal">ADOC_BACKEND</code></p></td><td align="left" valign="top"><p>Specify whether to use <code class="literal">asciidoc</code> or <code class="literal">asciidoctor</code>.
+Specifying this parameter is usually not necessary, because DAPS will automatically check which program is installed.
+If both are installed, <code class="literal">asciidoctor</code> will be preferred.
+Only required if the back-end binary is not in your path or if you prefer <code class="literal">asciidoc</code> over <code class="literal">asciidoctor</code>.
+Examples:</p><p><code class="literal">ADOC_BACKEND="/home/doc/asciidictor/asciidoctor"</code>
+<code class="literal">ADOC_BACKEND="/usr/bin/asciidoc"</code></p></td></tr><tr><td align="left" valign="top"> </td><td align="left" valign="top"><p><code class="literal">ADOC_POST</code></p></td><td align="left" valign="top"><p>If set to "yes", the XML produced from the AsciiDoc sources will be processed again before DAPS generates output.
+This can be used to change or clean up the XML.
+The stylesheet to be used can be specified via <code class="literal">ADOC_POST_STYLE</code>.
+By default this is set to "no". Example:</p><p><code class="literal">ADOC_POST="yes"</code></p></td></tr><tr><td align="left" valign="top"> </td><td align="left" valign="top"><p><code class="literal">ADOC_POST_STYLE</code></p></td><td align="left" valign="top"><p>Stylesheet to post-process the XML produced from the AsciiDoc sources.
+Requires <code class="literal">ADOC_POST</code> to be set to "yes" (will be ignored otherwise).
+By default it is set to a stylesheet shipped with DAPS that does some cleaning up.</p></td></tr><tr><td align="left" valign="top"> </td><td align="left" valign="top"><p><code class="literal">ADOC_TYPE</code></p></td><td align="left" valign="top"><p>Same option as you would set by --doctype with <code class="literal">asciidoc</code> or asciidoctor.
+Valid values are "article", "book", and "manpage".
+Do not use "inline" as it will not work with DAPS.
+Setting "manpage" requires manpage-specific content (refer to the AsciiDoc documentation). Otherwise processing the source will fail.
+This setting will override the :doctype: definition in the AsciiDoc source document.</p></td></tr></tbody></table>
+</div></div>
+<p>The following subcommands support AsciiDoc-specific commands:</p>
+<div class="variablelist "><dl class="variablelist"><dt id="id2074"><span class="term "><code class="literal">list-srcfiles</code></span></dt><dd>
+<p>This subcommand lists all files that are used to build the document, including images and the DC file.
+It supports several options for filtering the output.
+To restrict the results to only AsciiDoc files, use the option <code class="literal">--adoconly</code>.
+To exclude AsciiDoc files from the results, use the option <code class="literal">--noadoc</code>.
+Examples:</p>
+<div class="verbatim-wrap"><pre class="screen">tux &gt; gdaps -d DC-adoc_test list-srcfiles
+/home/doc/documents/DC-adoc_test
+/home/doc/documents/adoc/appendix.adoc
+/home/doc/documents/adoc/book.adoc
+/home/doc/documents/adoc/part_block.adoc
+/home/doc/documents/adoc/part_inlines.adoc
+/home/doc/documents/images/src/dia/dia_example.dia
+/home/doc/documents/images/src/fig/fig_example.fig
+/home/doc/documents/images/src/jpg/jpg_example.jpg
+/home/doc/documents/images/src/png/png_example.png
+/home/doc/documents/images/src/png/png_example2.png
+/home/doc/documents/images/src/svg/svg_example.svg
+
+tux &gt; gdaps -d DC-adoc_test list-srcfiles --adoconly
+/home/doc/documents/adoc/appendix.adoc
+/home/doc/documents/adoc/book.adoc
+/home/doc/documents/adoc/part_block.adoc
+/home/doc/documents/adoc/part_inlines.adoc
+
+tux &gt; gdaps -d DC-adoc_test list-srcfiles
+/home/doc/documents/DC-adoc_test
+/home/doc/documents/images/src/dia/dia_example.dia
+/home/doc/documents/images/src/fig/fig_example.fig
+/home/doc/documents/images/src/jpg/jpg_example.jpg
+/home/doc/documents/images/src/png/png_example.png
+/home/doc/documents/images/src/png/png_example2.png
+/home/doc/documents/images/src/svg/svg_example.svg</pre></div>
+</dd></dl></div>
+</div>
+</div>
+</div></div><div class="page-bottom"><div id="_share-print"><div class="online-contents share"><strong>Share this page: </strong><span class="share-buttons"><span id="_share-fb" class="bottom-button">Facebook</span><span class="spacer"> • </span><span id="_share-gp" class="bottom-button">Google+</span><span class="spacer"> • </span><span id="_share-tw" class="bottom-button">Twitter</span></span></div><div class="print"><span id="_print-button" class="bottom-button">Print this page</span></div><div class="clearme"></div></div></div></div></div></body></html>
