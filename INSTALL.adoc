@@ -87,7 +87,7 @@ will output detailed information about the support status on your system.
 |====
 
  ^1^: minimum version: 1.7.8
- ^2^: minimum version: 0.96, 1.x is recommended
+ ^2^: minimum version: 0.96, 1.x or better is recommended
 
 
 .*Required Packages for DocBook 5 Support*
@@ -99,6 +99,16 @@ will output detailed information about the support status on your system.
 |jing                    |jing                    |jing
 |====
 
+.*Required Packages for AsciiDoc Support*
+[options="header"]
+|====
+|SUSE                       |Debian/Ubuntu           |Fedora                   
+|rubygem(asciidoctor) ^3^   |asciidoctor             |asciidoctor
+|====
+^3^: The exact package name depends on the Ruby version installed on your system.
+Using ths capability string with `zypper install` ensures the correct package is 
+installed.
+
 .*Optional packages*
 [options="header"]
 |====
@@ -106,16 +116,17 @@ will output detailed information about the support status on your system.
 |aspell                  |aspell                  |aspell
 |epubcheck               |epubcheck               |?
 |exiftool                |libimage-exiftool-perl  |perl-Image-ExifTool
+|libreoffice-draw        |libreoffice-draw        |libreoffice-draw
 |optipng                 |optipng                 |optipng
 |perl-checkbot           |checkbot                |?
-|remake                  |remake                  |n/a^3^
+|remake                  |remake                  |n/a^4^
 |saxon6                  |libsaxon-java           |?
 |saxon6-scripts          |--                      |?
 |xmlformat               |xmlformat-perl          |?
 |transfig                |xfig                    |xfig
 |====
 
-^3^ The existing remake package on Fedora is a different software.
+^4^ The existing remake package on Fedora is a different software.
 
 In case you want to install the optional packages at a later point in time,
 run `daps-check-deps` to check for already installed and missing dependencies.
