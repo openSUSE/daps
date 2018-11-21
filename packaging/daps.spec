@@ -109,7 +109,6 @@ Requires:       ghostscript-library
 Requires:       inkscape
 Requires:       java >= 1.8.0
 Requires:       jing
-Requires:       libreoffice-draw
 Requires:       libxslt
 Requires:       make
 Requires:       poppler-tools
@@ -128,6 +127,9 @@ Recommends:     aspell-en
 Recommends:     calibre
 Recommends:     epubcheck
 Recommends:     exiftool
+%ifarch aarch64 %{ix86} x86_64
+Recommends:     libreoffice-draw
+%endif
 Recommends:     optipng
 Recommends:     perl-checkbot
 Recommends:     remake
