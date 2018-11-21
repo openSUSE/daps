@@ -109,7 +109,9 @@ Requires:       ghostscript-library
 Requires:       inkscape
 Requires:       java >= 1.8.0
 Requires:       jing
+%ifarch aarch64 %{ix86} x86_64
 Requires:       libreoffice-draw
+%endif
 Requires:       libxslt
 Requires:       make
 Requires:       poppler-tools
