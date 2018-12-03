@@ -42,7 +42,7 @@ Release:        0
 %define daps_catalog   for-catalog-%{name}.xml
 
 Summary:        DocBook Authoring and Publishing Suite
-License:        GPL-2.0-or-later
+License:        GPL-2.0-only OR GPL-3.0-only
 Group:          Productivity/Publishing/XML
 Url:            https://github.com/openSUSE/daps
 Source0:        %{name}-%{version}.tar.bz2
