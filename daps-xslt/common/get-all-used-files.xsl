@@ -217,6 +217,10 @@
       </xsl:choose>
     </xsl:variable>
 
+    <xsl:if test="not(@href) or @href=''">
+      <xsl:message terminate="yes">XInclude without href attribute or with empty href attribute found. Document is invalid.</xsl:message>
+    </xsl:if>
+
     <xsl:if test="$prof != 0">
       <div href="{concat($path, @href)}" remap="{local-name()}">
         <xsl:choose>
