@@ -1622,7 +1622,8 @@ install-dvi-am:
 
 install-exec-am: install-dist_binSCRIPTS \
 	install-dist_dapslibexecSCRIPTS
-
+	@$(NORMAL_INSTALL)
+	$(MAKE) $(AM_MAKEFLAGS) install-exec-hook
 install-html: install-html-recursive
 
 install-html-am:
@@ -1680,7 +1681,8 @@ uninstall-am: uninstall-dist_bashcompletionDATA \
 
 uninstall-man: uninstall-man1
 
-.MAKE: $(am__recursive_targets) install-am install-strip
+.MAKE: $(am__recursive_targets) install-am install-exec-am \
+	install-strip
 
 .PHONY: $(am__recursive_targets) CTAGS GTAGS TAGS all all-am all-local \
 	am--refresh check check-am clean clean-cscope clean-generic \
@@ -1705,24 +1707,25 @@ uninstall-man: uninstall-man1
 	install-dist_xsltprofilingDATA install-dist_xsltrelnotesDATA \
 	install-dist_xsltxhtmlDATA install-dist_xsltyelpDATA \
 	install-dvi install-dvi-am install-exec install-exec-am \
-	install-html install-html-am install-info install-info-am \
-	install-man install-man1 install-pdf install-pdf-am install-ps \
-	install-ps-am install-strip installcheck installcheck-am \
-	installdirs installdirs-am maintainer-clean \
-	maintainer-clean-generic mostlyclean mostlyclean-generic pdf \
-	pdf-am ps ps-am tags tags-am uninstall uninstall-am \
-	uninstall-dist_bashcompletionDATA uninstall-dist_binSCRIPTS \
-	uninstall-dist_catalogDATA uninstall-dist_dapsconfDATA \
-	uninstall-dist_dapslibDATA uninstall-dist_dapslibexecSCRIPTS \
-	uninstall-dist_dapsmakeDATA uninstall-dist_docDATA \
-	uninstall-dist_emacssiteDATA uninstall-dist_fopconfDATA \
-	uninstall-dist_hyphenDATA uninstall-dist_templateDATA \
-	uninstall-dist_xepconfDATA uninstall-dist_xsltasciidocDATA \
-	uninstall-dist_xsltcommonDATA uninstall-dist_xsltcontribDATA \
-	uninstall-dist_xsltdb5todb4DATA uninstall-dist_xsltdesktopDATA \
-	uninstall-dist_xsltepubDATA uninstall-dist_xsltindexDATA \
-	uninstall-dist_xsltjspDATA uninstall-dist_xsltlibDATA \
-	uninstall-dist_xsltmallardDATA uninstall-dist_xsltmigrateDATA \
+	install-exec-hook install-html install-html-am install-info \
+	install-info-am install-man install-man1 install-pdf \
+	install-pdf-am install-ps install-ps-am install-strip \
+	installcheck installcheck-am installdirs installdirs-am \
+	maintainer-clean maintainer-clean-generic mostlyclean \
+	mostlyclean-generic pdf pdf-am ps ps-am tags tags-am uninstall \
+	uninstall-am uninstall-dist_bashcompletionDATA \
+	uninstall-dist_binSCRIPTS uninstall-dist_catalogDATA \
+	uninstall-dist_dapsconfDATA uninstall-dist_dapslibDATA \
+	uninstall-dist_dapslibexecSCRIPTS uninstall-dist_dapsmakeDATA \
+	uninstall-dist_docDATA uninstall-dist_emacssiteDATA \
+	uninstall-dist_fopconfDATA uninstall-dist_hyphenDATA \
+	uninstall-dist_templateDATA uninstall-dist_xepconfDATA \
+	uninstall-dist_xsltasciidocDATA uninstall-dist_xsltcommonDATA \
+	uninstall-dist_xsltcontribDATA uninstall-dist_xsltdb5todb4DATA \
+	uninstall-dist_xsltdesktopDATA uninstall-dist_xsltepubDATA \
+	uninstall-dist_xsltindexDATA uninstall-dist_xsltjspDATA \
+	uninstall-dist_xsltlibDATA uninstall-dist_xsltmallardDATA \
+	uninstall-dist_xsltmigrateDATA \
 	uninstall-dist_xsltprofilingDATA \
 	uninstall-dist_xsltrelnotesDATA uninstall-dist_xsltxhtmlDATA \
 	uninstall-dist_xsltyelpDATA uninstall-local uninstall-man \
@@ -1766,6 +1769,12 @@ install-data-local:
 @CATALOG_EDIT_TRUE@	    END{print "</catalog>"}' >>$(TMP_CATALOG)
 @CATALOG_EDIT_TRUE@	chmod --reference=$(root_catalog) $(TMP_CATALOG)
 @CATALOG_EDIT_TRUE@	mv $(TMP_CATALOG) $(root_catalog)
+
+# Ugly Hack to prevent *.xsl files in libexec from being executable
+# a proper fix would be to move these files to daps-xslt
+#
+install-exec-hook:
+	chmod 644 $(DESTDIR)$(dapslibexecdir)/*.xsl
 
 #---------------------------Local UNINSTALL-----------------------------------
 @CATALOG_EDIT_TRUE@uninstall-local: TMP_CATALOG := $(shell mktemp -q $(BUILD_ROOT)/catalog.XXXXX)

@@ -184,6 +184,8 @@ dist_doc_DATA      = BUGS COPYING COPYING-2.0 COPYING-3.0 INSTALL.adoc \
 			README.adoc README.quickstart.adoc
 dist_man1_MANS      = $(addprefix $(MAN_BUILD_PATH), $(MAN_PAGES))
 
+
+
 #---------------------------Local TARGETS--------------------------------------
 
 #
@@ -233,6 +235,13 @@ if CATALOG_EDIT
 	chmod --reference=$(root_catalog) $(TMP_CATALOG)
 	mv $(TMP_CATALOG) $(root_catalog)
 endif
+
+# Ugly Hack to prevent *.xsl files in libexec from being executable
+# a proper fix would be to move these files to daps-xslt
+#
+install-exec-hook:
+	chmod 644 $(DESTDIR)$(dapslibexecdir)/*.xsl
+
 
 #---------------------------Local UNINSTALL-----------------------------------
 if CATALOG_EDIT
