@@ -245,6 +245,17 @@ if [[ 0 -eq $_nolint ]]; then
     fi
 fi
 
+# asciidoc/asciidoctor
+for _adoc in asciidoctor asciidoc; do
+    _adoc_cmd=$(check_prg "$_adoc") && break
+done
+if [[ -z $_adoc_cmd ]]; then
+    echo -e "${important_col}IMPORTANT: \"asciidoc\" or \"asciidoctor\" is missing (no ASCIIDoc support)${end_col}"
+else
+    echo -e "${ok_col}OK: $_adoc_cmd${end_col}"
+fi
+
+
 ########### Functions not working ################
 
 echo -e "\n##### Checking for non-critical dependency failures #####"

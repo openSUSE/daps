@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE refentry PUBLIC
+   "-//OASIS//DTD DocBook XML V4.5//EN"
+   "http://www.docbook.org/xml/4.5/docbookx.dtd"
+[
+  <!ENTITY daps_xmlf "daps-xmlformat">
+  <!ENTITY % entities SYSTEM "entity-decl.ent">
+  %entities;
+]>
+<refentry lang="en" id="daps_xmlf">
+ <refentryinfo>
+  <productname>&dapsacr;</productname>
+  <authorgroup>
+   <author>
+    <contrib>Developer</contrib>
+    <firstname>Frank</firstname>
+    <surname>Sundermeyer</surname>
+    <email>fsundermeyer@opensuse.org</email>
+   </author>
+  </authorgroup>
+ </refentryinfo>
+ <refmeta>
+  <refentrytitle>&dapsacr;</refentrytitle>
+  <manvolnum>1</manvolnum>
+  <refmiscinfo class="date"><?dbtimestamp format="Y B d"?></refmiscinfo>
+  <refmiscinfo class="version">&dapsversion;</refmiscinfo>
+  <refmiscinfo class="manual">&daps;</refmiscinfo>
+ </refmeta>
+ <refnamediv>
+  <refname>&daps_xmlf;</refname>
+  <refpurpose>
+   A wrapper script for xmlformat.pl/xmlformat.rb that calls a DAPS-specific
+   configuration file.
+  </refpurpose>
+ </refnamediv>
+ <refsynopsisdiv id="daps_xmlf.synopsis">
+  <title>Synopsis</title>
+  <cmdsynopsis>
+   <command>&daps_xmlf;</command>
+   <arg choice="opt"><replaceable>OPTIONS</replaceable></arg>
+   <arg choice="plain"><replaceable>FILE(S)</replaceable></arg>
+  </cmdsynopsis>
+ </refsynopsisdiv>
+ <refsect1>
+  <title>Description</title>
+  <para>
+   &daps_xmlf; calls xmlformat.pl/xmlformat.rb with a DAPS-specific
+   configuration file located at
+   <filename>@sysconfdir@/docbook-xmlformat.conf</filename>. Options are the
+   same as for xmlformat.pl/xmlformat.rb.  See <command>xmlformat.pl
+   --help</command> or <command>xmlformat.rb --help</command> for more
+   information.
+  </para>
+ </refsect1>
+ <refsect1 id="daps_xmlf.moreinfo">
+  <title>See Also</title>
+  <variablelist>
+   <varlistentry>
+    <term>
+     &dapsurl;
+    </term>
+    <listitem>
+     <para>DAPS project homepage</para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+ </refsect1>
+</refentry>
