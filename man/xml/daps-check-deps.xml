@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE refentry PUBLIC
+   "-//OASIS//DTD DocBook XML V4.5//EN"
+   "http://www.docbook.org/xml/4.5/docbookx.dtd"
+[
+  <!ENTITY daps_check "daps-check-deps">
+  <!ENTITY % entities SYSTEM "entity-decl.ent">
+  %entities;
+]>
+<refentry lang="en" id="daps_check">
+ <refentryinfo>
+  <productname>&dapsacr;</productname>
+  <authorgroup>
+   <author>
+    <contrib>Developer</contrib>
+    <firstname>Frank</firstname>
+    <surname>Sundermeyer</surname>
+    <email>fsundermeyer@opensuse.org</email>
+   </author>
+  </authorgroup>
+ </refentryinfo>
+ <refmeta>
+  <refentrytitle>&dapsacr;</refentrytitle>
+  <manvolnum>1</manvolnum>
+  <refmiscinfo class="date"><?dbtimestamp format="Y B d"?></refmiscinfo>
+  <refmiscinfo class="version">&dapsversion;</refmiscinfo>
+  <refmiscinfo class="manual">&daps;</refmiscinfo>
+ </refmeta>
+ <refnamediv>
+  <refname>&daps_check;</refname>
+  <refpurpose>
+   Checks the availability of external programs used by &dapsacr;.
+  </refpurpose>
+ </refnamediv>
+ <refsynopsisdiv id="daps_check.synopsis">
+  <title>Synopsis</title>
+  <cmdsynopsis>
+   <command>&daps_check;</command>
+  </cmdsynopsis>
+ </refsynopsisdiv>
+ <refsect1>
+  <title>Description</title>
+  <para>
+   &dapsacr; depends on a large number of external programs. Without some of
+   them, &dapsacr; will not run at all. Other programs are only used for
+   certain functions and are not critical. Use this script to check for the
+   availability of all external programs used by &dapsacr;.
+  </para>
+ </refsect1>
+ <refsect1 id="daps_check.moreinfo">
+  <title>See Also</title>
+  <variablelist>
+   <varlistentry>
+    <term>
+     &dapsurl;
+    </term>
+    <listitem>
+     <para>DAPS project homepage</para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+ </refsect1>
+</refentry>
