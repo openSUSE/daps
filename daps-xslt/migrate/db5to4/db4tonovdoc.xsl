@@ -136,6 +136,7 @@
   <xsl:template match="filename/@class"/>
   <xsl:template match="literallayout/@class"/>
   <xsl:template match="variablelist/@role"/>
+  <xsl:template match="imagedata/@depth"/>
 
   <xsl:template match="warning/@role|tip/@role|note/@role|important/@role|caution/@role"/>
   <xsl:template match="set/@label|article/@label|book/@label|part/@label|chapter/@label|*[contains(local-name(.), 'sect')]/@label">
