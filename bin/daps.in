@@ -863,6 +863,7 @@ function autoset_docconf {
 function set_mainfile {
     local MAINFILE
     MAINFILE="$1"
+
     if [[ -e "$MAINFILE" ]]; then
         # MAINFILE is a file or link
         sanitize_path "$MAINFILE" "MAIN_CMDL"
@@ -870,7 +871,11 @@ function set_mainfile {
             DOC_DIR=$(dirname "$MAIN_CMDL")
             DOC_DIR=${DOC_DIR%/${SRC_FORMAT}*} #remove SRC_FORMAT directory
         fi
-        [[ -e ${DOC_DIR}/${SRC_FORMAT}/$(basename "$MAIN_CMDL") ]] || exit_on_error "Source files must reside in an \"${SRC_FORMAT}/\" directory. \"$MAIN_CMDL\" is not a valid location."
+        if [[ ! -d "${DOC_DIR}/${SRC_FORMAT}" ]]; then
+            exit_on_error "Source files must reside in an \"${SRC_FORMAT}/\" directory.\n This directory does not exist."
+        elif [[ ! -e ${DOC_DIR}/${SRC_FORMAT}/$(basename "$MAIN_CMDL") ]]; then
+            exit_on_error "MAIN file \"$MAIN_CMDL\" does not exist."
+        fi
     else
         if [[ -e "${SRC_FORMAT}/$MAINFILE" ]]; then
             # MAIN is not a valid file, but ./${SRC_FORMAT}/$MAIN exists
@@ -884,7 +889,7 @@ function set_mainfile {
         else
             if [[ -n "$DOC_DIR" ]]; then
                 MAIN_CMDL="${DOC_DIR}/${SRC_FORMAT}/$(basename "$MAINFILE")"
-                [[ -e $MAIN_CMDL ]] || exit_on_error "Source files must reside in an \"${SRC_FORMAT}/\" directory. \"$MAIN_CMDL\" is not a valid location."
+                [[ -e $MAIN_CMDL ]] || exit_on_error "MAIN file \"$(basename $MAIN_CMDL)\" does not exist in the directory\n\"${DOC_DIR}/${SRC_FORMAT}/\". DAPS only works when this file is placed there."
             else
                 exit_on_error "Fatal error: ${PWD}/$MAINFILE does not exist."
             fi
@@ -1456,19 +1461,7 @@ fi
 
 if [[ -z "$DOCCONF_CMDL" && -z "$MAIN_CMDL" ]]; then
 # DOCCONF and MAIN were not set on the command line, check other possibilities
-    if [[ -n "$DOCCONF_NAME" ]]; then
-    # check if DOCCONF was parsed
-    # takes precedence over a default set in config
-        if [[ -e "$DOCCONF_NAME" ]]; then
-            sanitize_path "$DOCCONF_NAME" "DOCCONF_CMDL"
-            DOC_DIR=$(dirname "$DOCCONF_CMDL")
-            if [[ 2 -le $VERBOSITY ]]; then
-                echo "Using previously parsed DOCCONF $DOCCONF_CMDL"
-            fi
-        else
-            exit_on_error "Cannot find previously parsed DOCCONF \"$DOCCONF_NAME\".\nWhen sourcing the doc config, you either need to run $ME from the directory\nwhere you parsed the config, or you need to provide an absolute path when\nsourcing the doc config."
-        fi
-    elif [[ -n "$DOCCONF_DEFAULT" ]]; then
+    if [[ -n "$DOCCONF_DEFAULT" ]]; then
     # check if a default value was specified in the user/system config file
         if [[ -e $DOCCONF_DEFAULT ]]; then
             sanitize_path "$DOCCONF_DEFAULT" "DOCCONF_CMDL"
@@ -1477,7 +1470,7 @@ if [[ -z "$DOCCONF_CMDL" && -z "$MAIN_CMDL" ]]; then
                 echo "Using DOCCONF $DOCCONF_DEFAULT from config files"
             fi
         else
-            exit_on_error "DOCCONF_DEFAULT \"$DOCCONF_DEFAULT\" not found in current directory.\nCheck your config file at $USER_CONFIG."
+            exit_on_error "DOCCONF_DEFAULT \"$DOCCONF_DEFAULT\" not found in current directory.\nCheck your config file(s)."
         fi
     else
     # try to automatically set DOCCONF
@@ -1504,7 +1497,7 @@ fi
 # Checking MAIN_CMDL, DOCCONF_CMDL, DOC_DIR and DAPSROOT
 #
 
-[[ -z "$DOCCONF_CMDL" && -z "$MAIN_CMDL" ]] && exit_on_error "Fatal: Neither \$DOCCONF nor $MAIN are set. This should not have happened"
+[[ -z "$DOCCONF_CMDL" && -z "$MAIN_CMDL" ]] && exit_on_error "Fatal: Neither \$DOCCONF nor $MAIN are set. This should not have happened. Please report a bug."
 [[ -z "$DOC_DIR" ]] && exit_on_error "Fatal: \$DOC_DIR is not set. This should not have happened. Please report a bug."
 [[ -z "$DAPSROOT" ]] && exit_on_error "Fatal: \$DAPSROOT is not set. This should not have happened. Please report a bug."
 
