@@ -335,6 +335,7 @@ $(QUICKSTART):
 
 $(ADOCGUIDE):
 	+$(Q)bin/daps $(DEBUG) --dapsroot=$(DAPSROOT)  \
+            --schema "http://docbook.org/xml/5.0/rng/docbookxi.rng" \
 	    --styleroot=$(STYLEROOT) --docconfig=$(DC_ADOCGUIDE) html \
 	    --single --name=$(ADOCGUIDE_NAME)
 	+$(Q)$(srcdir)/bin/ccecho "result" "Created $@"

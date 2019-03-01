@@ -424,7 +424,7 @@ AM_CONDITIONAL([DIST_DEBIAN], [egrep -iq "^NAME=\"?(ubuntu|debian)\"?" /etc/os-r
 
 dnl -------------------------------------------------------------------------
 dnl Set a conditional to determine whether ADOC is supported
-AM_CONDITIONAL([HAS_ASCIIDOCTOR], [test 0 != "$ASCIIDOCTOR"])
+AM_CONDITIONAL([HAS_ASCIIDOCTOR], [test 0 != $ASCIIDOCTOR])
 
 
 dnl No distribution-specific info in the BuildService 
@@ -473,7 +473,7 @@ fi
 
 dnl AsciiDoc support
 if test 0 = "$ASCIIDOCTOR"; then
-  AC_MSG_RESULT([Support AsciiDoc sources         |    no   | install the asciidoctor
+  AC_MSG_RESULT([Support AsciiDoc sources         |    no   | install asciidoctor
                                  |         | rubygem])
 else
   AC_MSG_RESULT([Support AsciiDoc sources         |   yes   |])
