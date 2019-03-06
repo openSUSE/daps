@@ -519,7 +519,7 @@
     <xsl:apply-templates/>
   </xsl:template>
 
-  <xsl:template match="constant|errorcode|classname|code|computeroutput|methodname|
+  <xsl:template match="constant|errorcode|classname|code|computeroutput|function|methodname|
                        prompt[not(parent::screen)]|property|sgmltag|returnvalue|uri|userinput">
     <literal>
       <xsl:apply-templates/>
