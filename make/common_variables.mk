@@ -417,7 +417,7 @@ endif
 #
 ifeq "$(STATIC_HTML)" "0"
   # copy directories recursively, create links on files
-  HTML_GRAPH_COMMAND := cp -rs --remove-destination
+  HTML_GRAPH_COMMAND := cp -rsL --remove-destination
 else
   # copy and resolve links
   HTML_GRAPH_COMMAND := cp -rL --remove-destination
