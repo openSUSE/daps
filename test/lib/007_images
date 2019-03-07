@@ -115,7 +115,11 @@ function test_imagesDIA () {
 #--------------------------------
 # * Are the EPS images correctly converted to PDF and PNG?
 #
+
 function test_imagesEPS () {
+
+    startSkipping
+
     local _EPS_IMG
 
     _EPS_IMG=$(basename -s .eps $(find ${_IMGDIR_SRC}/eps -type f | head -1))
@@ -138,8 +142,10 @@ function test_imagesEPS () {
     assertTrue \
         " └─ Grayscale PNG for $_EPS_IMG is missing" \
         "[ -s ${_IMGDIR_GRAYSCALE}/${_EPS_IMG}.png ]"
-}
 
+    endSkipping
+
+}
 #--------------------------------
 # * Are the FIG images correctly converted to PDF, PNG and SVG?
 #
@@ -195,7 +201,7 @@ function test_imagesJPG () {
 }
 
 #--------------------------------
-# * Are the DIA images correctly converted to PDF, PNG and SVG?
+# * Are the ODG images correctly converted to PDF, PNG and SVG?
 #
 function test_imagesODG () {
     local _ODG_IMG
@@ -252,6 +258,9 @@ function test_imagesPNG () {
 # * Are the PDF images correctly linked and converted to PNG?
 #
 function test_imagesPDF () {
+
+    startSkipping
+
     local _PDF_IMG
 
     _PDF_IMG=$(basename -s .pdf $(find ${_IMGDIR_SRC}/pdf -type f | head -1))
@@ -271,6 +280,9 @@ function test_imagesPDF () {
     assertTrue \
         " └─ Grayscale PNG for $_PDF_IMG is missing" \
         "[ -s ${_IMGDIR_GRAYSCALE}/${_PDF_IMG}.png ]"
+
+    endSkipping
+
 }
 
 #--------------------------------
