@@ -60,4 +60,21 @@
    <xsl:apply-templates/>
   </xsl:element>
  </xsl:template>
+
+<xsl:template match="d:imagedata">
+ <xsl:copy>
+  <xsl:copy-of select="@*[local-name() != 'contentwidth']"/>
+  <xsl:choose>
+   <xsl:when test="@width">
+    <xsl:copy-of select="@width"/>
+   </xsl:when>
+   <xsl:otherwise>
+    <xsl:attribute name="width">
+     <xsl:value-of select="@contentwidth"/>
+    </xsl:attribute>
+   </xsl:otherwise>
+  </xsl:choose>
+ </xsl:copy>
+</xsl:template>
+
 </xsl:stylesheet>
