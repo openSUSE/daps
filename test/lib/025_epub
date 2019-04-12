@@ -32,11 +32,11 @@ function oneTimeSetUp() {
     # get the profiling directory
     _EPUB_NAME_PATH=$($_DAPSEXEC -d $_DCFILE epub-name 2>/dev/null)
     if [ $? -ne 0 ]; then
-	exit_on_error " The initial DAPS call to determine the path to the resulting ePUB failed. Skipping tests"
+        exit_on_error " The initial DAPS call to determine the path to the resulting ePUB failed. Skipping tests"
     fi
     _LOG_DIR=$($_DAPSEXEC -v0 -d $_DCFILE showvariable VARIABLE=LOG_DIR 2>/dev/null)
     if [ $? -ne 0 ]; then
-	exit_on_error " The initial DAPS call to determine the LOG file failed. Skipping tests"
+        exit_on_error " The initial DAPS call to determine the LOG file failed. Skipping tests"
     fi
     _LOGFILE=${_LOG_DIR}/make_epub.log
 }
@@ -65,11 +65,11 @@ function test_epub () {
         ' └─ The epub command itself failed' \
         "$?"
     assertTrue \
-	" └─ The resulting file (${_EPUB_BUILD_PATH}) does not exist." \
-	"[ -s $_EPUB_BUILD_PATH ]"
+        " └─ The resulting file (${_EPUB_BUILD_PATH}) does not exist." \
+        "[ -s $_EPUB_BUILD_PATH ]"
     assertEquals \
-	" └─ The resulting filename does not match the one retrieved with --epub-name" \
-	"$_EPUB_NAME_PATH" "$_EPUB_BUILD_PATH"
+        " └─ The resulting filename does not match the one retrieved with --epub-name" \
+        "$_EPUB_NAME_PATH" "$_EPUB_BUILD_PATH"
 }
 
 #--------------------------------
@@ -114,8 +114,8 @@ function test_epubStyleroot () {
     $_DAPSEXEC -d $_DCFILE --styleroot=${_DOC_DIR} --fb_styleroot=${_STANDARD_STYLES} --debug epub >/dev/null 2>&1
     egrep -q -- "--stylesheet /.*/${_STANDARD_STYLES}" $_LOGFILE 2>/dev/null
     assertTrue \
-	" └─ The Fallback Styleroot specified on the command line was not used." \
-	"$?"
+        " └─ The Fallback Styleroot specified on the command line was not used." \
+        "$?"
 
     clean_build_dir tmp
 
@@ -125,8 +125,8 @@ function test_epubStyleroot () {
     $_DAPSEXEC -d $_DCFILE --styleroot=${_DOC_DIR} --debug epub >/dev/null 2>&1
     grep -q -- "--stylesheet ${_DB_STYLES}" $_LOGFILE 2>/dev/null
     assertTrue \
-	" └─ The automatic DocBook Fallback Styleroot was not used." \
-	"$?"
+        " └─ The automatic DocBook Fallback Styleroot was not used." \
+        "$?"
 
     clean_build_dir tmp
 
@@ -135,8 +135,8 @@ function test_epubStyleroot () {
     eval "$_DAPSEXEC -d $_DCFILE --styleroot ${_STANDARD_STYLES} --debug epub >/dev/null 2>&1"
     egrep -q -- "--stylesheet /.*/${_STANDARD_STYLES}" $_LOGFILE 2>/dev/null
     assertTrue \
-	" └─ The Styleroot specified on the command line was not used." \
-	"$?"
+        " └─ The Styleroot specified on the command line was not used." \
+        "$?"
 }
 
 
@@ -150,7 +150,7 @@ function test_epubCSS () {
 
     _CSS_CMDL_NAME="test.css"
     _CSS_CMDL_PATH="${_DOC_DIR}/xml/${_CSS_CMDL_NAME}"
-    _CSS_DC_NAME="reference.css" # from $_DCFILE
+    _CSS_DC_NAME="susebooks.css" # from $_DCFILE
     _CSS_STYLE_NAME="style.css"
 
     # Does the EPUB contain the css file specified in the DC file?
@@ -217,12 +217,12 @@ function test_epubNAME () {
 
     _EPUB_BUILD_PATH=$($_DAPSEXEC -v0 -d $_DCFILE epub --name $_NAME 2>/dev/null)
     assertTrue \
-	" └─ Building an EPUB document with --name failed " \
+        " └─ Building an EPUB document with --name failed " \
        "$?"
 
     _EPUB_NAME_PATH=$($_DAPSEXEC -v0 -d $_DCFILE epub-name --name $_NAME 2>/dev/null)
    assertTrue \
-	' └─  Getting the filename for EPUB with --name failed ' \
+        ' └─  Getting the filename for EPUB with --name failed ' \
        "$?"
    assertEquals \
        " └─ The resulting filename does not match the one retrieved with --epub-name: " \
@@ -256,16 +256,16 @@ function test_epubRootid () {
 
     _EPUB_BUILD_PATH=$($_DAPSEXEC -d $_DCFILE --debug epub --rootid $_ROOTID 2>/dev/null | tail -n 1)
     assertTrue \
-	' └─ Building an EPUB with --rootid failed ' \
+        ' └─ Building an EPUB with --rootid failed ' \
        "$?"
     egrep -q -- "--stringparam\s+\"rootid=${_ROOTID}\"" $_LOGFILE 2>/dev/null
     assertTrue \
-	' └─ Stringparam for ROOTID is not correctly specified when generating the EPUB-file' \
-	"$?"
+        ' └─ Stringparam for ROOTID is not correctly specified when generating the EPUB-file' \
+        "$?"
     _EPUB_FILENAME_BUILD=$(basename $_EPUB_BUILD_PATH)
     assertEquals \
-	' └─ The resulting EPUB filename does not match the ROOTID:' \
-	"$_EPUB_FILENAME_EXPECTED" "$_EPUB_FILENAME_BUILD"
+        ' └─ The resulting EPUB filename does not match the ROOTID:' \
+        "$_EPUB_FILENAME_EXPECTED" "$_EPUB_FILENAME_BUILD"
 }
 
 # source shUnit2 test
