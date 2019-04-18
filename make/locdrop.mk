@@ -44,9 +44,27 @@ endif
 # Determine which XML files will be translated:
 #
 
+# WORKAROUND:
+#
+# Needs to be determined from DOCFILES rather than PROFILES, since the
+# latter does not contain all setfiles
+#
+# To allow <info> elements profiled with "os=xyz" the XPath
+# db5:info[contains(@os, '$(PROFOS)') is used. If this fails
+# the translation information is read from the first info element
+# available.
+# This has a few downsides:
+# 1. Only works for os ($PROFOS) profiling
+# 2. Only works for single values in PROFOS. If it is set to e.g.
+#    PROFOS="a;b" the XPath will fail in case of os="b;a" or os="a"
+# 3. If the first part of the XPath fails, the information will be read
+#    from the first info element. Although this seems to be a reasonable
+#    fallback, it may not be what is expected.
+
+
 define db5_get_trans
   for F in $(DOCFILES); do \
-    R=`$(XMLSTARLET) sel -N dm="urn:x-suse:ns:docmanager" -N db5="http://docbook.org/ns/docbook" -t -m "/*/db5:info/dm:docmanager" -v "normalize-space(dm:translation)" $$F 2>/dev/null || echo "no"`; \
+    R=`$(XMLSTARLET) sel -N dm="urn:x-suse:ns:docmanager" -N db5="http://docbook.org/ns/docbook" -t -m "/*/db5:info[contains(@os, '$(PROFOS)') or position()=1]/dm:docmanager" -v "normalize-space(dm:translation)" $$F 2>/dev/null || echo "no"`; \
     if [ "yes" = "$$R" ]; then echo -n "$$F "; fi \
   done 2>/dev/null
 endef
