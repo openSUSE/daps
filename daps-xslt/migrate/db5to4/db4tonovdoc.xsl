@@ -123,6 +123,7 @@
   <xsl:template match="@significance"/>
   <xsl:template match="@mark"/>
   <xsl:template match="@spacing"/>
+  <xsl:template match="@valign"/>
   <xsl:template match="*/@status"/>
   <xsl:template match="book/@xml:base"/>
   <xsl:template match="productname/@class"/>
