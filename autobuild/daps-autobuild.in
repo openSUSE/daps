@@ -225,20 +225,21 @@ function read_general {
 
 
 function process_git {
-    # Update a GIT repo and determine whether a rebuild is needed
+    # Update a Git repo and determine whether a rebuild is needed
     #
     # Return values:
     #
     # 0: Success
-    # 1: git pull failed
-    # 2: Getting latest revision number failed
-    # 3. Checking out branch failed
+    # 1: git fetch failed
+    # 2: Getting latest SHA hash failed
+    # 3: Checking out branch failed
     #
     local GITBRANCH
     # get branch
     GITBRANCH="$(read_config_value "/daps-autobuild/set[@id='$SET']/vcs" "@branch")"
-    git checkout -q "$GITBRANCH" >/dev/null || return 3
-    git pull -q || return 1
+    remote=$(git remote | head -1)
+    git fetch -p "$remote" || return 1
+    git checkout -q "$remote/$GITBRANCH" >/dev/null || return 3
     echo "  * Updated git branch $GITBRANCH"
     if [[ 1 -eq $CHECK_VCS ]]; then
         NEWREV="$(git rev-parse HEAD)" || return 2
@@ -617,15 +618,15 @@ for SET in $SECTIONS; do
         process_git
         case $? in
             1)
-                $CCECHO "warn" "  Running 'git pull' in $_CHECKOUT failed!\n  Skipping $SET"
+                $CCECHO "warn" "  Running 'git fetch' in $_CHECKOUT failed!\n  Skipping $SET"
                 failure_notification "$SET" "git"
                 continue
                 ;;
             2)
-                $CCECHO "warn" "  Wasn't able to get the current revision number from git"
+                $CCECHO "warn" "  Wasn't able to get the current SHA hash from Git"
                 ;;
             3)
-                $CCECHO "warn" "  Running 'git co <branch>' in $_CHECKOUT failed!\n  Skipping $SET"
+                $CCECHO "warn" "  Running 'git checkout <branch>' in $_CHECKOUT failed!\n  Skipping $SET"
                 failure_notification "$SET" "git"
                 continue
                 ;;
