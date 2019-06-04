@@ -233,12 +233,16 @@ function process_git {
     # 1: git fetch failed
     # 2: Getting latest SHA hash failed
     # 3: Checking out branch failed
+    # 4: More than remote (we don't know which to pick)
+    # 5: No remote (we can't update the repo at all)
     #
     local GITBRANCH
     # get branch
     GITBRANCH="$(read_config_value "/daps-autobuild/set[@id='$SET']/vcs" "@branch")"
-    remote=$(git remote | head -1)
-    git fetch -p "$remote" || return 1
+    remote=$(git remote)
+    [[ $(echo -e "$remote" | wc -l ) -ge 2 ]] && return 4
+    [[ -z "$remote" ]] && return 5
+    git fetch -qp "$remote" || return 1
     git checkout -q "$remote/$GITBRANCH" >/dev/null || return 3
     echo "  * Updated git branch $GITBRANCH"
     if [[ 1 -eq $CHECK_VCS ]]; then
@@ -627,6 +631,16 @@ for SET in $SECTIONS; do
                 ;;
             3)
                 $CCECHO "warn" "  Running 'git checkout <branch>' in $_CHECKOUT failed!\n  Skipping $SET"
+                failure_notification "$SET" "git"
+                continue
+                ;;
+            4)
+                $CCECHO "warn" "  There is more than one remote configured for $_CHECKOUT and daps-autobuild cannot decide which one to use.\n  Skipping $SET"
+                failure_notification "$SET" "git"
+                continue
+                ;;
+            5)
+                $CCECHO "warn" "  There is no remote configured in $_CHECKOUT and the repository cannot be updated.\n  Skipping $SET"
                 failure_notification "$SET" "git"
                 continue
                 ;;
