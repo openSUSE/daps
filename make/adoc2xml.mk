@@ -79,7 +79,7 @@ $(MAIN): $(ADOC_SRCFILES) | $(ADOC_DIR)
   ifeq "$(VERBOSITY)" "2"
 	@ccecho "info"  "   Creating XML from ASCIIDOC..."
   endif
-	$(ASCIIDOC) --attribute=imagesdir! $(ADOC_ATTRIBUTES) \
+	$(ASCIIDOC) --attribute=imagesdir! --attribute=data-uri! $(ADOC_ATTRIBUTES) \
           --backend=$(ADOC_BACKEND) --doctype=$(ADOC_TYPE) \
           --out-file=$@ $(ADOC_MAIN)
   ifeq "$(VERBOSITY)" "2"
