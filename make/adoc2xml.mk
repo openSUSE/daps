@@ -40,6 +40,7 @@ ADOC_SRCFILES := $(ADOC_MAIN) $(wildcard $(addprefix \
  $(DOC_DIR)/adoc/,$(shell egrep '^include::' $(ADOC_MAIN) 2>/dev/null | sed 's/.*::\([^\[]*\).*/\1/g' 2>/dev/null)))
 #ADOC_SRCFILES := $(wildcard $(DOC_DIR)/adoc/*.adoc)
 
+
 #
 # ADOC sources usually have images in a single directory. If ADOC_IMG_DIR
 # is set (via --adocimgdir), we will set up the required image structure
@@ -79,9 +80,13 @@ $(MAIN): $(ADOC_SRCFILES) | $(ADOC_DIR)
   ifeq "$(VERBOSITY)" "2"
 	@ccecho "info"  "   Creating XML from ASCIIDOC..."
   endif
-	$(ASCIIDOC) --attribute=imagesdir! --attribute=data-uri! $(ADOC_ATTRIBUTES) \
+	ADOC_OUTPUT=`$(ASCIIDOC) --attribute=imagesdir! --attribute=data-uri! $(ADOC_ATTRIBUTES) \
           --backend=$(ADOC_BACKEND) --doctype=$(ADOC_TYPE) \
-          --out-file=$@ $(ADOC_MAIN)
+          --out-file=$@ $(ADOC_MAIN) 2>&1`; \
+  if [ ! "$$ADOC_OUTPUT" = '' ]; then \
+  echo "$$ADOC_OUTPUT"; \
+  exit 1; \
+  fi
   ifeq "$(VERBOSITY)" "2"
 	@ccecho "info" "Successfully created XML file $@"
   endif
