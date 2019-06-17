@@ -242,6 +242,11 @@ function process_git {
     remote=$(git remote)
     [[ $(echo -e "$remote" | wc -l ) -ge 2 ]] && return 4
     [[ -z "$remote" ]] && return 5
+
+    # no clue why we'd ever have local changes but it just happened, so
+    # reset those
+    git reset --hard HEAD
+
     git fetch -qp "$remote" || return 1
     git checkout -q "$remote/$GITBRANCH" >/dev/null || return 3
     echo "  * Updated git branch $GITBRANCH"
