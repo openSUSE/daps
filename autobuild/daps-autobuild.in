@@ -245,10 +245,11 @@ function process_git {
 
     # no clue why we'd ever have local changes but it just happened, so
     # reset those
-    git reset --hard HEAD
+    git clean --quiet --force
+    git reset --quiet --hard HEAD
 
-    git fetch -qp "$remote" || return 1
-    git checkout -q "$remote/$GITBRANCH" >/dev/null || return 3
+    git fetch  --quiet --prune "$remote" || return 1
+    git checkout --quiet "$remote/$GITBRANCH" >/dev/null || return 3
     echo "  * Updated git branch $GITBRANCH"
     if [[ 1 -eq $CHECK_VCS ]]; then
         NEWREV="$(git rev-parse HEAD)" || return 2
