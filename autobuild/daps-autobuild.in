@@ -239,6 +239,8 @@ function process_git {
     local GITBRANCH
     # get branch
     GITBRANCH="$(read_config_value "/daps-autobuild/set[@id='$SET']/vcs" "@branch")"
+    [[ -z "$GITBRANCH" ]] && GITBRANCH='master'
+
     remote=$(git remote)
     [[ $(echo -e "$remote" | wc -l ) -ge 2 ]] && return 4
     [[ -z "$remote" ]] && return 5
@@ -248,8 +250,8 @@ function process_git {
     git clean --quiet --force
     git reset --quiet --hard HEAD
 
-    git fetch  --quiet --prune "$remote" || return 1
-    git checkout --quiet "$remote/$GITBRANCH" >/dev/null || return 3
+    git fetch --quiet --prune "$remote" || return 1
+    git checkout --quiet "remotes/$remote/$GITBRANCH" >/dev/null || return 3
     echo "  * Updated git branch $GITBRANCH"
     if [[ 1 -eq $CHECK_VCS ]]; then
         NEWREV="$(git rev-parse HEAD)" || return 2
