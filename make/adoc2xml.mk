@@ -79,8 +79,9 @@ $(MAIN): $(ADOC_SRCFILES) | $(ADOC_DIR)
   ifeq "$(VERBOSITY)" "2"
 	@ccecho "info"  "   Creating XML from ASCIIDOC..."
   endif
-	$(ASCIIDOC) --attribute=imagesdir! --attribute=data-uri! $(ADOC_ATTRIBUTES) \
-          --backend=$(ADOC_BACKEND) --doctype=$(ADOC_TYPE) \
+	$(ASCIIDOC) --attribute=data-uri! $(ADOC_ATTRIBUTES) \
+	  --attribute=imagesdir! --backend=$(ADOC_BACKEND) \
+	  --doctype=$(ADOC_TYPE) --failure-level $(ADOC_FAILURE_LEVEL) \
           --out-file=$@ $(ADOC_MAIN)
   ifeq "$(VERBOSITY)" "2"
 	@ccecho "info" "Successfully created XML file $@"
