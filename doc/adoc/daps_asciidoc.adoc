@@ -53,10 +53,10 @@ However, {daps} cannot handle the conversion to {adoc} as the new source format.
 To use {adoc} sources with {daps}, you need to install the following packages:
 
 * {daps} 3.0 or better
-* `asciidoctor` (strongly recommended) or `asciidoc`
+* `asciidoctor`
 
 To install DAPS follow the https://github.com/asciidoctor/docbookrx[DAPS installation instructions].
-For install `asciidoctor` or `asciidoc` we recommend to use packages available for your Linux distribution.
+For installing `asciidoctor` we recommend to use packages available for your Linux distribution.
 
 [[art.daps.asciidoc.project]]
 == Setting up a Project
@@ -64,7 +64,7 @@ For install `asciidoctor` or `asciidoc` we recommend to use packages available f
 An {adoc} project has got the same directory structure as a regular {db} project managed with {daps} (see https://opensuse.github.io/daps/doc/cha.daps.user.features.html#sec.daps.user.basics.dirstruct[Directory Structure] for more information.
 However, there is one exception:
 For a {db} project, images need to be saved in a directory structure where each image format has its own directory. 
-To be able to also easily process {adoc} sources from a {daps} project with, for example, `asciidoctor` or to properly display the contents on, for example, GitHub, an {adoc} project can store all images in a single directory.
+To be able to also easily process {adoc} sources from a {daps} project with `asciidoctor` or to properly display the contents on, for example, GitHub, an {adoc} project can store all images in a single directory.
 
 === The Directory Structure
 
@@ -266,14 +266,10 @@ Because of that you may receive two different kind of errors when processing {ad
 {adoc} Errors::
 +
 The conversion to DocBook XML is done by `asciidoc` or `asciidoctor`.
-In case there are syntax or structural errors in the {adoc} sources, you will get an appropriate error message. It usually contains the number of the line where the error occured.
+In case there are syntax or structural errors in the {adoc} sources, you will
+get an appropriate error or warning message.
+It usually contains the number of the line where the error occured.
 These errors need to be fixed before any further processing can be done.
-+
-.Using `asciidoctor` Is Recommended
-[TIP]
-====
-Compared to `asciidoc`, `asciidoctor` provides better error messages. 
-====
 
 {daps} Errors::
 +

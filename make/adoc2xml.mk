@@ -86,9 +86,6 @@ $(MAIN): $(ADOC_SRCFILES) | $(ADOC_DIR)
 	@ccecho "info" "Successfully created XML file $@"
   endif
 
-### 	asciidoc --attribute=imagesdir! \
-	  --doctype=$(ADOC_TYPE) --out-file=$@ $(ADOC_MAIN)
-
 $(DIA_DIR)/%.dia: $(ADOC_IMG_DIR)/%.dia | $(DIA_DIR)
 	(cd $(@D); ln -sf $<)
 
