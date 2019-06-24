@@ -65,6 +65,23 @@
 # 3. $HOME/.config/daps/.dapsrc (user config file)
 # 4. $DAPSROOT/etc/config
 
+## Key: ADOC_FAILURE_LEVEL
+## -----------------------
+## Description: Asciidoctor error level on which DAPS will exit
+##              when processing adoc files
+## Type:        String
+## VALUE:       FATAL|ERROR|WARN|INFO (empty value not allowed)
+## Default:     WARN
+#
+# By default, asciidoctor only returns != 0 on FATAL errors. However, when
+# converting to DocBook, errors of the level WARN usually prevent from
+# generating valid DocBook. Therefore DAPS sets the failure level to WARN and
+# therefore exits on asciidictor error levels FATAL, ERROR, and WARN.
+#
+# It is recommended to keep the default. If required, override it in a DC-file
+#
+ADOC_FAILURE_LEVEL="WARN"
+
 ## Key: ADOC_IMG_DIR
 ## --------------------
 ## Description: Directory hosting images for the ASCIIDOC documents

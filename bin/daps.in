@@ -54,6 +54,7 @@ declare -a VARLIST
 VARLIST=(
     ADOC_ATTRIBUTES
     ADOC_BACKEND
+    ADOC_FAILURE_LEVEL
     ADOC_IMG_DIR
     ADOC_POST
     ADOC_POST_STYLE
@@ -994,7 +995,7 @@ function parse_config {
         fi
 
         # check if KEY is a valid variable name
-        [[ "$KEY" =~ ^[_[:alpha:]][_[:alnum:]]*$ ]] || exit_on_error "Error: Invalid key value \"$KEY\" in config-file $CFG:$LINE_NO"
+        [[ "$KEY" =~ ^[_[:alpha:]][_[:alnum:]]*$ ]] || exit_on_error "Invalid key value \"$KEY\" in config-file $CFG:$LINE_NO"
 
         # set variables
         if [[ 1 = "$CONCAT" ]]; then
@@ -1265,7 +1266,7 @@ fi
 # Now that we have the subcommand, check whether it is valid
 #
 if [[ -z ${SUBCOMMANDS[$SUBCMD]} ]]; then
-    exit_on_error "Error: Unknown subcommand \"$SUBCMD\"\nType '$ME help' to get a list of global parameters and subcommands"
+    exit_on_error "Unknown subcommand \"$SUBCMD\"\nType '$ME help' to get a list of global parameters and subcommands"
 fi
 
 # Now check, whether subcommand help has been requested by -h or --help
@@ -1757,7 +1758,7 @@ if [[ "adoc" = "$SRC_FORMAT" ]]; then
     [[ 1 -eq $FORCE_REBUILD ]] && MOPTS="--always-make"
     [[ 2 -gt $VERBOSITY ]] && MOPTS="$MOPTS --silent"
 
-    make $MOPTS -f $DAPSROOT/make/adoc2xml.mk  || exit_on_error "Could not write XML from the ASCIIDOC sources"
+    make $MOPTS -f $DAPSROOT/make/adoc2xml.mk  || exit_on_error "\nConverting the ASCIIDOC sources to XML caused a fatal error.\nCheck the $(basename ${ASCIIDOC}) message above for details."
 fi
 #-------------------------------------------------------------------
 # Finally, run the Subcommands
