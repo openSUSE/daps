@@ -1,5 +1,58 @@
 == Block Elements
 
+=== Code Blocks
+
+==== Simple Code Block
+
+----
+> cd /usr/share/daps
+> ls -l
+total 0
+drwxr-xr-x 1 root root 152 May 21 14:21 daps-xslt
+drwxr-xr-x 1 root root 388 May 21 14:21 init_templates
+drwxr-xr-x 1 root root 456 May 21 14:21 lib
+drwxr-xr-x 1 root root 322 May 21 14:21 libexec
+drwxr-xr-x 1 root root 464 May 21 14:21 make
+----
+
+==== Code Block with Highlighting
+
+[source,bash]
+----
+# Verbose error handling
+#
+function exit_on_error {
+    echo -e "ERROR: ${1}" >&2
+    clean_daps
+    exit 1;
+}
+----
+==== Code Block with Highlighting and Caption
+
+.Makefile: Convert mp3 to flac
+[source,makefile]
+----
+.PHONY: all
+all: $(mp3_files) $(cover_file) $(replaygain)
+
+$(MP3_DIR)/%.mp3: $(FLAC_DIR)/%.flac | $(MP3_DIR)
+        ffmpeg -i $< -qscale:a 0 -v quiet "$@"
+
+$(cover_file): $(flac_files) | $(MP3_DIR)
+        glyrc cover \
+          --artist "$(album_artist)" \
+          --album "$(album_title)" \
+          --write "$(MP3_DIR)/$(COVER).:format:" \
+          --formats "jpeg" 2>/dev/null
+
+$(replaygain): $(mp3_files)
+        mp3gain -c -q -s i $^ >/dev/null
+        touch $@
+
+$(MP3_DIR):
+        mkdir -p $@
+----
+
 === Lists
 
 Lorem ipsum dolor sit amet;, consetetur sadipscing elitr, sed
