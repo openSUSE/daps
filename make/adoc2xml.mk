@@ -74,25 +74,38 @@ ifneq "$(strip $(ADOC_IMG_DIR))" ""
   all: $(NEW_IMAGES)
 endif
 
+#
+# Since asciidoctor only refuses to write a file on FATAL errors
+# (but we already exit on ERROR and WARN), we always need to rebuild
+# MAIN. According to https://stackoverflow.com/questions/7643838/how-to-force-make-to-always-rebuild-a-file
+# this should do the trick
+#
+
+.PHONY: FORCE
+FORCE:
 
 #
 # If ADOC_SET is set to 1 (and we are to create a set from an AsciiDoc
 # multipart book), pipe the asciidoctor output to an xsltproc call
 # runinng the "setify" stylesheet, otherwise let asciidoctor create
 # the file directly
+#
+# set -o pipefail makes sure make exits when the asciidoctor command
+# returns != 0
 
 #all: $(MAIN)
-$(MAIN): $(ADOC_SRCFILES) | $(ADOC_DIR)
+$(MAIN): FORCE $(ADOC_SRCFILES) | $(ADOC_DIR)
   ifeq "$(VERBOSITY)" "2"
 	@ccecho "info"  "   Creating XML from ASCIIDOC..."
   endif
   ifeq "$(ADOC_SET)" "yes"
-	$(ASCIIDOC) --attribute=data-uri! $(ADOC_ATTRIBUTES) \
+	  (set -o pipefail; $(ASCIIDOC) \
+	  --attribute=data-uri! $(ADOC_ATTRIBUTES) \
 	  --attribute=imagesdir! --backend=$(ADOC_BACKEND) \
 	  --doctype=$(ADOC_TYPE) --failure-level $(ADOC_FAILURE_LEVEL) \
 	  --out-file=- $(ADOC_MAIN) | $(XSLTPROC) --output $@ --xinclude \
 	  --stylesheet $(ADOC_SET_STYLE) $(XSLTPROCESSOR) $(DEVNULL) \
-	  $(ERR_DEVNULL)
+	  $(ERR_DEVNULL))
   else
 	$(ASCIIDOC) --attribute=data-uri! $(ADOC_ATTRIBUTES) \
 	  --attribute=imagesdir! --backend=$(ADOC_BACKEND) \
