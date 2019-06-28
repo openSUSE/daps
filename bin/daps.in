@@ -58,6 +58,8 @@ VARLIST=(
     ADOC_IMG_DIR
     ADOC_POST
     ADOC_POST_STYLE
+    ADOC_SET_STYLE
+    ADOC_SET
     ADOC_TYPE
     ASCIIDOC
     SPELL_CHECKER
@@ -206,6 +208,7 @@ unset "${VARLIST[@]}"
 #
 declare -a UNSETLIST
 UNSETLIST=(
+    ADOC_SET_CMDL
     BIN_DIR
     BUILD_DIR_CMDL
     COLOR_CMDL
@@ -503,6 +506,11 @@ Global Options:
                             Default: unset
                             Only works with ASCIIDOC sources and is ignored
                             otherwise.
+  --adocset                 If specified, DAPS tries to convert the AsciiDoc
+                            document into a set. Requires an AsciiDoc document
+                            that consists of parts (each part will be
+                            converted into a book in a set),
+                            Default: unset
   --builddir=BUILD_DIR      Directory where every output $ME generates will
                             end up.
                             Default: <doc dir>/build/
@@ -512,7 +520,7 @@ Global Options:
                             Default: 1 (when the output does not go to a
                                         terminal, colored output will be
                                         disabled automatically)
-  --config                  Set a configuration file for DAPS that overwrites
+  --config=CFG-FILE         Set a configuration file for DAPS that overwrites
                             defaults set in /etc/daps/config.
                             By default (when this option is not set)
                             ~/.config/daps/dapsrc will be parsed, if existing.
@@ -530,7 +538,7 @@ Global Options:
                             default value (DOCCONF_DEFAULT) in \$USER_CONFIG.
                             Note: Options --docconfig and --main exclude
                                   each other.
-  --fb_styleroot            Fallback styleroot directories. Can only be used in
+  --fb_styleroot=DIR        Fallback styleroot directories. Can only be used in
                             conjunction with --styleroot. By default, the
                             DocBook stylesheets are used as a fallback if
                             custom styles for an output format are not present.
@@ -545,22 +553,23 @@ Global Options:
   --force                   Force a rebuild of the document even when an
                             up-to-date version exists.
   --help, -h                Help
-  --jobs                    Specify how many parallel jobs to use. Higher
+  --jobs=X                  Specify how many parallel jobs to use. Higher
                             numbers will significantly increase the processing
                             speed, but will also set your machine under heavy
                             load, up to a point where it may become
                             (temporarily) unresponsive.
                             Default: Use as man jobs as available CPU cores.
-  --main, -m                Path to the main file defining your document.
+  --main=MAINFILE
+  -m MAINFILE               Path to the main file defining your document.
                             Note: Options --main and --docconfig exclude
                                   each other.
-  --schema                  URN to a DocBook 5 schema that is to be used for
+  --schema=URN              URN to a DocBook 5 schema that is to be used for
                             validation. Will be ignored when validating
                             DocBook 4 documents.
                             Note: To validate with a local schema, specify an
                                   absolute path with a "file://" prefix
                                   (e.g. "file:///foo/schema.rnc").
-  --styleroot               By default, daps uses the DocBook Stylesheets to
+  --styleroot=DIR           By default, daps uses the DocBook Stylesheets to
                             create output. If you have your own set of
                             stylesheets, specify the absolute path to the
                             stylesheet directory here. The DocBook stylesheets
@@ -903,6 +912,7 @@ function set_mainfile {
 # Recover command-line values
 #
 function recover_cmdl_values {
+    test -n "$ADOC_SET_CMDL"  && ADOC_SET="$ADOC_SET_CMDL"
     test -n "$BUILD_DIR_CMDL" && BUILD_DIR="$BUILD_DIR_CMDL"
     test -n "$COLOR_CMDL"     && COLOR="$COLOR_CMDL"
     test -n "$DOCBOOK5_RNG_URI_CMDL" && DOCBOOK5_RNG_URI="$DOCBOOK5_RNG_URI_CMDL"
@@ -1045,7 +1055,7 @@ export POSIXLY_CORRECT=1
 # Therefore we need to save each variable twice in order to recover the
 # original value.
 
-ARGS=$(getopt -o d:e:hm:v:: -l adocattr:,adocimgdir:,builddir:,config:,color:,colour:,commands,debug,docconfig:,dapsroot:,envfile:,fb_styleroot:,force,help,jobs:,main:,schema:,styleroot:,verbosity::,version,xsltprocessor: -n "$ME" -- "$@")
+ARGS=$(getopt -o d:e:hm:v:: -l adocattr:,adocimgdir:,adocset,builddir:,config:,color:,colour:,commands,debug,docconfig:,dapsroot:,envfile:,fb_styleroot:,force,help,jobs:,main:,schema:,styleroot:,verbosity::,version,xsltprocessor: -n "$ME" -- "$@")
 
 # Exit when getopt returns errors
 #
@@ -1066,6 +1076,11 @@ while true ; do
             sanitize_path "$2" "ADOC_IMG_DIR_CMDL"
             ADOC_IMG_DIR="$ADOC_IMG_DIR_CMDL"
             shift 2
+            ;;
+        --adocset)
+            ADOC_SET_CMDL="yes"
+	    ADOC_SET="$ADOC_SET_CMDL"
+            shift
             ;;
         --builddir)
             [[ -d $2 ]] || exit_on_error "BUILD_DIR \"$2\" is not a valid directory"
@@ -1519,6 +1534,7 @@ fi
 # $replacement for $substring.
 
 ADOC_POST_STYLE=${ADOC_POST_STYLE/#@pkgdatadir\@/${DAPSROOT}}
+ADOC_SET_STYLE=${ADOC_SET_STYLE/#@pkgdatadir\@/${DAPSROOT}}
 
 FOP_CONFIG_FILE=${FOP_CONFIG_FILE/#@sysconfdir\@\/daps/${DAPSROOT}/etc}
 FOP_WRAPPER=${FOP_WRAPPER/#@pkgdatadir\@/${DAPSROOT}}

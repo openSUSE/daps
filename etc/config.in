@@ -99,11 +99,11 @@ ADOC_IMG_DIR=""
 
 ## Key: ADOC_POST
 ## --------------------
-## Description: Do postprocessing on asciidoc-generated XML?
+## Description: Do postprocessing on asciidoctor-generated XML?
 ## Type:        yesno
 ## Default:     "no"
 #
-# If set to "yes", the DocBook XML asciidoc/asciidoctor produces
+# If set to "yes", the DocBook XML asciidoctor produces
 # will be processed again by a stylesheet defined with ADOC_POST_STYLE
 # Only valid for ASCIIDOC sources
 #
@@ -113,15 +113,15 @@ ADOC_IMG_DIR=""
 #
 ADOC_POST="no"
 
-## Key: ADOC_POST
+## Key: ADOC_POST_STYLE
 ## --------------------
 ## Description: Path to the stylesheet for postprocessing the DocBook
-## XML asciidoc/asciidoctor produces
+## XML ascidoctor produces
 ## Type:        path to stylesheet
 ## Default:     "@pkgdatadir@/daps-xslt/asciidoc/postprocess.xsl"
 #
 # This stylesheet will be applied to the DocBook file produced from adoc
-# by asciidoc/asciidoctor (build/.adoc/*.xml). The result will be written
+# by asciidoctor (build/.adoc/*.xml). The result will be written
 # to build/.profiled/noprofile/ and be used for further processing. Use
 # this if you need to change the DocBook file. Make sure it produces
 # valid DocBook.
@@ -131,9 +131,41 @@ ADOC_POST="no"
 # minimal changes. It is suggested to keep the  system-wide value and to
 # only overwrite this in a DC-file or in ~/.config/dapsrc
 #
-# See also: ADOC_POST_STYLE
+# See also: ADOC_POST
 #
 ADOC_POST_STYLE="@pkgdatadir@/daps-xslt/asciidoc/postprocess.xsl"
+
+## Key: ADOC_SET
+## --------------------
+## Description: Convert multipart AsciiDoc book into set?
+## Type:        yesno
+## Default:     "no"
+#
+# If set to "yes", the DocBook XML asciidoctor produces
+# will be processed again by a stylesheet defined with ADOC_SET_STYLE
+# and turned into a DocBook set. This requires an AsciiDoc multipart book.
+# Only valid for ASCIIDOC sources
+#
+# See also: ADOC_SET_STYLE
+#
+# Set this value in a DC-file
+ADOC_SET="no"
+
+## Key: ADOC_SET_STYLE
+## --------------------
+## Description: Path to the stylesheet that creates a DcoBook set from
+## an AsciiDoc multipart book
+## Type:        path to stylesheet
+## Default:     "@pkgdatadir@/daps-xslt/asciidoc/setify.xsl"
+#
+# This stylesheet will be applied to the DocBook file produced from adoc
+# by asciidoctor (build/.adoc/*.xml). The result will be written
+# to build/.adoc/ and be used for profiling.
+#
+# By default, this value is set to a stylesheet DAPS ships. There should
+# be no need to overwrite this default.
+#
+ADOC_SET_STYLE="@pkgdatadir@/daps-xslt/asciidoc/setify.xsl"
 
 ## Key: ADOC_TYPE
 ## --------------------
@@ -145,8 +177,8 @@ ADOC_POST_STYLE="@pkgdatadir@/daps-xslt/asciidoc/postprocess.xsl"
 #
 # Valid values: article, book, manpage
 #
-# NOTE: Same option as you would set by --doctype with asciidoc
-#       or asciidoctor. Do not use "inline" as it will not work with
+# NOTE: Same option as you would set by --doctype with asciidoctor
+#       Do not use "inline" as it will not work with
 #       DAPS. Setting "manpage" requires manpage-specific content,
 #       otherwise processing the source will fail.
 #       This setting will override the :doctype: definition in the

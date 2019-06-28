@@ -74,15 +74,31 @@ ifneq "$(strip $(ADOC_IMG_DIR))" ""
   all: $(NEW_IMAGES)
 endif
 
+
+#
+# If ADOC_SET is set to 1 (and we are to create a set from an AsciiDoc
+# multipart book), pipe the asciidoctor output to an xsltproc call
+# runinng the "setify" stylesheet, otherwise let asciidoctor create
+# the file directly
+
 #all: $(MAIN)
 $(MAIN): $(ADOC_SRCFILES) | $(ADOC_DIR)
   ifeq "$(VERBOSITY)" "2"
 	@ccecho "info"  "   Creating XML from ASCIIDOC..."
   endif
+  ifeq "$(ADOC_SET)" "yes"
+	$(ASCIIDOC) --attribute=data-uri! $(ADOC_ATTRIBUTES) \
+	  --attribute=imagesdir! --backend=$(ADOC_BACKEND) \
+	  --doctype=$(ADOC_TYPE) --failure-level $(ADOC_FAILURE_LEVEL) \
+	  --out-file=- $(ADOC_MAIN) | $(XSLTPROC) --output $@ --xinclude \
+	  --stylesheet $(ADOC_SET_STYLE) $(XSLTPROCESSOR) $(DEVNULL) \
+	  $(ERR_DEVNULL)
+  else
 	$(ASCIIDOC) --attribute=data-uri! $(ADOC_ATTRIBUTES) \
 	  --attribute=imagesdir! --backend=$(ADOC_BACKEND) \
 	  --doctype=$(ADOC_TYPE) --failure-level $(ADOC_FAILURE_LEVEL) \
           --out-file=$@ $(ADOC_MAIN)
+  endif
   ifeq "$(VERBOSITY)" "2"
 	@ccecho "info" "Successfully created XML file $@"
   endif
