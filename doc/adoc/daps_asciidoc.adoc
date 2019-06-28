@@ -265,11 +265,12 @@ Because of that you may receive two different kind of errors when processing {ad
 
 {adoc} Errors::
 +
-The conversion to DocBook XML is done by `asciidoc` or `asciidoctor`.
+The conversion to DocBook XML is done by ``asciidoctor`.
 In case there are syntax or structural errors in the {adoc} sources, you will
 get an appropriate error or warning message.
 It usually contains the number of the line where the error occured.
-These errors need to be fixed before any further processing can be done.
+These errors need to be fixed before any further processing can be done, DAPS
+will only proceed in case `asciidoctor` no longer produces errors or warnings.
 
 {daps} Errors::
 +
@@ -289,6 +290,55 @@ Simplify the {adoc} code and try again.
 .Multimedia
 * {daps} currently does not support embedding videos
 
+[[art.daps.asciidoc.set]]
+== Linking Between Multiple Books
+
+The  `asciidoctor` built-in way to do inter-document cross references (via
+`pass:[link:file.html#ID[TITLE]]`) does not work when generating the output via
+DocBook as DAPS does (and it only works for HTML output).
+
+DAPS provides a way to allow links between multiple books (inter-document
+cross references) by converting the {adoc} sources into a DocBook set.
+
+.Requirements for the {adoc} sources
+* The {adoc} sources need to combine all books into a single "master book"
+  (with the doctype book) by making each book a "part" of the master book. In
+  {adoc}, a part is introduced by a level 0 headline (`= HEADLINE`) that
+  follows the initial headline of the master book. See
+  https://asciidoctor.org/docs/user-manual/#book-parts-and-chapters[the
+  Asciidoctor documentation] for details.
+* The master book must only contain parts and no additional content outside
+  these parts.
+* Each part needs to begin with a unique custom ID (`pass:[[[UNIQUE_ID]]]`)  
+* You need to be extra carefule not to mess up the headline hierachy
+  throughout the master book. If you are using prefix, appendix,
+  glossary, etc. make sure you apply the special rules for parts regarding the
+  headline levels (refer to the
+  https://asciidoctor.org/docs/user-manual/[Asciidoctor documentation] for
+  details)
+* Abstracts for chapters do not seem to work in parts (is this a bug?)
+* All IDs you use need to be unique. Duplicated IDs will cause errors.
+* Create a DC-file for the master book to be able to easily build it with
+  DAPS (name it, for example,  `DC-multipart`). MAIN needs to point to the top
+  level {adoc} file that defines the master book.
+
+Since tha {adoc} source now combines everything into a single book, you can
+link to all IDs anywhere in the book using `\<<ID>>`.
+
+Once the "master book" builds without errors and you can see a part for each
+book you want to build, proceed as follows to create stand-alone books in
+HTML, PDF, etc:
+
+1. Copy the DC-file for the master book (name the copy, for example `DC-set`)
+2. Add the line `ADOC_SET="yes"` to the copy of the DC file
+3. Create a copy of the new DC-file (`DC-set`) for the first book represented
+by a part in the master book. Add the ID of the respective part to the DC-file
+by adding a line `ROOTID=<ID>` (where you replave `<ID>` with the respective
+part ID)
+4. Repeat the previous step for each book represented by a part.
+
+Using the respective DC-files you can now build the individual books. Using
+`DC-set` allows you to build the complete set. 
 
 [[art.daps.asciidoc.github]]
 == GitHub Integration
@@ -379,20 +429,35 @@ Additional configuration settings can be made in the {daps} configuration files 
 |CLI Option|Config Setting|Explanation
 
 |`--adocattr`|`ADOC_ATTRIBUTES`|
-Define or delete {adoc} document attributes.
+Define or delete {adoc} document attributes. To overwrite an attribute already
+defined in the AsciiDoc document, use NAME=VALUE, or just NAME for attributes
+without a value. To delete a value set in the document use NAME!. To set a
+value that is not already set in the document, use NAME=VALUE@.
 Refer to the {adoc} documentation for more information.
+
 Examples:
 
-`daps -d DC-adoc --adocattr "author=John Doe"`
-`ADOC_ATTRIBUTES="author=myself"`
+`daps -d DC-adoc --adocattr "author=John Doe" \`
+
+`--adocattr "revision=beta1"`
+
+You may specify this option multiple times to set more than one attribute.
+
+`ADOC_ATTRIBUTES="--attribute author=myself"`
+
+`ADOC_ATTRIBUTES+="--attribute "revision=beta1"`
+
+Note that when using the config file option, you always have to prefix the
+KEY=VALUE pair with `--attribute`. To specify more than one value, use the
+`+=` notation for subsequent values.
 
 |`--adocimgdir`|`ADOC_IMG_DIR`|
 Specify a directory for the images used in the {adoc} sources.
 Must contain all images, subdirectories are ignored.
 Examples:
 
-`daps -d DC-adoc --adocimgdir /projects/adoc/images`
-`ADOC_ATTRIBUTES="/documentation/adoc"`
+`daps -d DC-adoc --adocimgdir "adoc/images"`
+`ADOC_IMG_DIR="adoc/images"`
 
 ||`ADOC_BACKEND`|
 Specify whether to use `asciidoc` or `asciidoctor`.
@@ -416,6 +481,15 @@ By default this is set to "no". Example:
 Stylesheet to post-process the XML produced from the {adoc} sources.
 Requires `ADOC_POST` to be set to "yes" (will be ignored otherwise).
 By default it is set to a stylesheet shipped with {daps} that does some cleaning up.
+
+||`ADOC_SET`|
+If set to "yes" a multipart book in AsciiDoc will be converted to a set in
+DocBook. Each part of the original sources will becaome a book in DocBook.
+Require the AsciiDoc sources to only contain parts (one for what is to become
+a book) and no extra contant.
+By default this is set to "no". Example:
+
+`ADOC_SET="yes"`
 
 ||`ADOC_TYPE`|
 Same option as you would set by --doctype with `asciidoc` or asciidoctor.
