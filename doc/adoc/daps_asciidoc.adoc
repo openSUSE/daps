@@ -310,7 +310,7 @@ cross references) by converting the {adoc} sources into a DocBook set.
 * The master book must only contain parts and no additional content outside
   these parts.
 * Each part needs to begin with a unique custom ID (`pass:[[[UNIQUE_ID]]]`)  
-* You need to be extra carefule not to mess up the headline hierachy
+* You need to be extra careful not to mess up the headline hierachy
   throughout the master book. If you are using prefix, appendix,
   glossary, etc. make sure you apply the special rules for parts regarding the
   headline levels (refer to the
@@ -339,6 +339,10 @@ part ID)
 
 Using the respective DC-files you can now build the individual books. Using
 `DC-set` allows you to build the complete set. 
+
+.Restrictions
+* the individual books cannot contain parts
+* the `article` document type is not supported with this setup
 
 [[art.daps.asciidoc.github]]
 == GitHub Integration
