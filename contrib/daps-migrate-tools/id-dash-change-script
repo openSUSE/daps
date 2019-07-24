@@ -1,0 +1,52 @@
+#!/bin/bash
+
+# Either use the default ("xml/*.xml") or the arguments passed on the command line:
+
+ME="${0##*/}"
+
+verbose=0
+
+if [ "-h" = "$1" ] || [ "--help" = "$1" ]; then
+  echo "$ME [-h|--help]"
+  echo "$ME [-v|--verbose] [XML_FILE]..."
+  exit 0
+fi
+
+if [ "-v" = "$1" ] || [ "--verbose" = "$1" ]; then
+  verbose=1
+  shift
+fi
+
+SOURCE=${@:-xml/*.xml}
+
+while [[ $(grep -oP '^ROOTID *= *["'"'"']?([^"'"'"'\._]*)[\._]' DC-*) ]]; do
+  sed -i -r 's/ROOTID *= *["'"'"']?([^"'"'"'\._]*)([\._]([^"'"'"']*))?["'"'"']?/ROOTID=\1-\3/g' DC-*
+done
+sed -i -r 's/^(ROOTID=[^-]+(-[^-]+)+)-+$/\1/g' DC-*
+
+for f in $SOURCE; do
+  [[ "$verbose" = 1 ]] && echo "- space change [ $f ]"
+  cat $f | tr '\n' '\r' | sed -r -e 's/\b(linkend|arearefs|startref|xml:id|id)[\r\t ]*=[\r\t ]*(["'"'"'])/\1=\2/g' | tr '\r' '\n' > $f.0
+  mv $f.0 $f
+done
+
+n=1
+while [[ $(grep -oP '\b(linkend|arearefs|startref|xml:id|id)=["'"'"']([^"'"'"'\._]*)[\._]' $SOURCE) ]]; do
+  [[ "$verbose" = 1 ]] && echo "- id fix       [ iteration $n ]"
+  sed -i -r 's/\b(linkend|arearefs|startref|xml:id|id)=["'"'"']([^"'"'"'\._]*)([\._]([^"'"'"']*))?["'"'"']/\1="\2-\4"/g' $SOURCE
+  n=$((n + 1))
+done
+
+sed -i -r 's/\b(linkend|arearefs|startref|xml:id|id)="-+/\1="/g' $SOURCE
+
+sed -i -r 's/-+"/"/g' $SOURCE
+
+# remove temp files from sed
+if [[ $(ls xml/sed* 2>/dev/null) ]] || [[ $(ls sed* 2>/dev/null) ]]; then
+  for s in xml/sed* sed*; do
+    KNOWN=`git ls-files $s | wc -l`
+    if [ "$KNOWN" -ne "1" ]; then
+      rm -rf $s
+    fi
+  done
+fi
