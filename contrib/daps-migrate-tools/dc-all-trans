@@ -1,0 +1,20 @@
+#!/bin/bash
+
+
+for dc in trans/sles/*/DC-*;do cp ~/data/gits/doc-sle-bkp/$(basename $dc) $(dirname $dc);done;
+for dc in trans/sled/*/DC-*;do cp ~/data/gits/doc-sle-bkp/$(basename $dc) $(dirname $dc);done;
+
+for d in trans/sles/*;do cp ~/data/gits/doc-sle-bkp/DC-SLES-all $d;done;
+
+for d in trans/sled/*;do cp ~/data/gits/doc-sle-bkp/DC-SLED-all $d;done;
+
+
+for dc in trans/sles/*/DC-*;do sed -i -r 's/ +$//' $dc;done;
+for dc in trans/sled/*/DC-*;do sed -i -r 's/ +$//' $dc;done;
+
+
+for dc in trans/sle{s,d}/{ja,zh*}/DC-*;do sed -i -r 's/^## Profiling$/FOP_JAVA_FLAGS="-Xss3072K -Xms500m -Xmx750m"\n\n## Profiling/' $dc;done;
+#FOP_JAVA_FLAGS="-Xss3072K -Xms500m -Xmx750m"
+
+git add trans/sles/*/DC-* trans/sled/*/DC-*
+git commit -m"Add DC-*-all files, fix profiling in existing DC filesNecessary for Docserv2"
