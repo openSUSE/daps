@@ -3,136 +3,116 @@
 <head>
  <title>DAPS - The DocBook Authoring and Publishing Suite</title>
  <link rel="icon" type="image/x-icon" href="images/favicon.ico" />
- <link rel="stylesheet" title="Titel" href="css/daps.css" type=
- "text/css" />
- <link href=
- "https://fonts.googleapis.com/css?family=Exo+2:300,500,700"
- rel="stylesheet" type="text/css" /><!--[if gte IE 9]>
-  <style type="text/css">
-    .gradient {
-    filter: none;
-    }
-  </style>
-  <![endif]-->
+ <link rel="stylesheet" type="text/css" href="//static.opensuse.org/fonts/fonts.css"/>
+ <link rel="stylesheet" href="css/daps.css" type="text/css">
  <meta name="date" content="2015-03-18" />
- <meta name="description" xml:lang="en" content=
- "DAPS - The DocBook Authoring and Publishing Suite" lang="en" />
- <meta name="keywords" xml:lang="en" content=
- "DocBook, publish, book, article, EPUB, XML, author" lang="en" />
- <meta name="author" content=
- "Frank Sundermeyer, Thomas Schraitle, Stefan Knorr, and Tanja Roth" />
- <meta name="DC.description" content=
- "DocBook Publishing and Authoring Made Easy with a Single Command" />
- <meta name="DC.creator" content=
- "Frank Sundermeyer and Thomas Schraitle" />
- <meta name="DC.identifier" content="https://github.com/openSUSE/daps"
- scheme="DCTERMS.URI" />
+ <meta name="description" xml:lang="en" content="DAPS - DocBook Authoring and Publishing Suite" lang="en" />
+ <meta name="keywords" xml:lang="en" content="DocBook, publish, book, article, EPUB, XML, author" lang="en" />
+ <meta name="author" content="Frank Sundermeyer, Thomas Schraitle, Stefan Knorr, and Tanja Roth" />
+ <meta name="DC.description" content="DocBook Publishing and Authoring Made Easy with a Single Command" />
+ <meta name="DC.creator" content="Frank Sundermeyer and Thomas Schraitle" />
+ <meta name="DC.identifier" content="https://github.com/openSUSE/daps" scheme="DCTERMS.URI" />
  <meta name="DC.language" content="en" scheme="DCTERMS.RFC3066" />
  <meta name="DC.type" content="Text" scheme="DCTERMS.DCMIType" />
  <meta name="DC.format" content="text/html" scheme="DCTERMS.IMT" />
- <meta name="DC.title" content=
- "DAPS - The DocBook Authoring and Publishing Suite" />
+ <meta name="DC.title" content="DAPS - DocBook Authoring and Publishing Suite" />
 </head>
 
 <body>
- <div id="header">
-   <img src="images/dapsText.png" alt=
-  "DAPS: DocBook Authoring and Publishing Suite" />
-   <h1>DAPS<br />
-   <span class="expl">DocBook Authoring and Publishing
-   Suite</span>
-   </h1>
+ <header>
+   <img src="images/dapsText.png" alt="DAPS Logo"/>
+   <h1>DAPS</h1>
+   <h2>DocBook Authoring and Publishing Suite</h2>
 
- </div>
+   <nav>
+    <ul class="links">
+      <li>
+        <a href="doc/index.html">Documentation</a>
+      </li>
+      <li>
+        <a href="https://sourceforge.net/p/daps/discussion/" target="_blank">Forum</a>
+      </li>
+      <li>
+        <a href="https://github.com/openSUSE/daps" target="_blank">Git Repository</a>
+      </li>
+    </ul>
+   </nav>
 
- <div class="menu navi">
-  <ul class="links">
-   <li><a id="down" title="Download DAPS" class="button blue" href=
-   "https://github.com/openSUSE/daps/releases" name="down" target="_blank"><img src=
-   "images/document-save.png" alt="Download DAPS" /> Download</a></li>
+ </header>
 
-   <li><a id="documentation" title="Documentation" class=
-   "button orange" href=
-   "doc/index.html" name=
-   "documentation"><img src=
-   "images/gnome-mime-application-pdf.png" alt="Documentation" />
-   Documentation</a></li>
-
-   <li><a id="discuss" title="Discuss" class=
-   "button orange" href=
-   "https://sourceforge.net/p/daps/discussion/" name=
-   "discuss"><img src=
-   "images/user-info.png" alt="Discuss" />
-   Discuss</a></li>
-   
-   <li><a id="project" title="GitHub Project Repository" class="button blue"
-   href="https://github.com/openSUSE/daps" name="project" target="_blank"><img
-   src="images/applications-development.png" alt="GitHub Project Repository"/>
-   Repository</a></li>
-  </ul>
- </div>
-
- <div id="content">
-   <h2>DocBook Publishing Made Easy with a Single Command</h2>
-
-   <h4 style="text-align: center">
-     2018-11-08:
-     DAPS 3.0.0 has been released. In addition to DocBook, it also supports
-     AsciiDoc! <a href="https://github.com/openSUSE/daps/releases/latest">Download</a> / <a href="https://github.com/openSUSE/daps/releases/tag/3.0.0">Release Information</a>
-   </h4>
-     
-  <div id="main">
-   <h3>For Large Documentation Projects</h3>
-
-   <p>DocBook is the ideal framework when it comes to publishing
-   large documentation projects in different formats. DocBook
-   provides a <q>language</q> (DocBook XML) and a set of
-   stylesheets to translate this language into different output
-   formats such as HTML, PDF, and ePUB.</p>
-
-   <h3>An Easy-to-Use Toolchain</h3>
-
-   <p>Transforming the XML sources to output formats such as PDF,
-   requires several steps such as validating, filtering
-   (profiling), converting images, and generating an .fo file. As
-   DocBook does not provide a tool chain, custom solutions (written
-   with make, ant or a scripting language) are necessary for
-   publishing DocBook projects. That is a major hurdle for writers
-   who would like to use DocBook for their documentation
-   projects.</p>
-
-   <h3>Easy Creation and Publication</h3>
-
-   <p>The DocBook Authoring and Publishing Suite (DAPS) fills this
-   gap by providing a tool set for easy creation and publication of
-   DocBook sources on Linux. DAPS lets you create HTML (including
-   the brand new Web Help format), PDF, EPUB, man pages, and other
-   formats with a single command. It automatically takes care of
-   validating and filtering (profiling) your sources and of
-   converting the images into the format best suited for the
-   selected output format.</p>
-
-   <h3>Additional Benefits</h3>
-
-   <p>Furthermore you can easily create profiled source tarballs
-   for translation or review. DAPS supports authors by providing
-   linkchecker, validator, spellchecker, and editor macros. It is
-   perfectly suited to manage large documentation projects with
-   multiple authors using DAPS docmanager.</p>
-
-   <h3>100% Open Source</h3>
-
-   <p>DAPS offers a dual-licensing model at your choice: GPL 2.0 or
-   GPL 3.0.</p>
-
+  <div class="download-area">
+    <h2>New DAPS 3.0</h2>
+    <p>Publish DocBook &amp; AsciiDoc as HTML, PDF, EPUB</p>
+    <a class="button" href="https://github.com/openSUSE/daps/releases" target="_blank">Download</a>
   </div>
- </div>
 
- <div id="footer">
-  <hr />
+  <h2>News</h2>
+  <div class="item">
+    <h3>2018-11-08: DAPS 3.0</h3>
+    <p>
+      DAPS 3.0 has been released. In addition to DocBook, it also supports
+      AsciiDoc! <a href="https://github.com/openSUSE/daps/releases/latest">Download</a> / <a href="https://github.com/openSUSE/daps/releases/tag/3.0.0">Release Information</a>.
+    </p>
+  </div>
 
-  <p>Sponsored by <a href="http://www.suse.com"><img alt=
-  "SUSE Logo" src="images/suse_logo.png" class="suse_logo"/></a></p>
- </div>
+
+  <h2>Features</h2>
+
+  <div class="item">
+    <h3 class="feature">Great for Large Documentation Projects</h3>
+    <p>
+      DocBook is ideal when it comes to publishing large documentation
+      projects in different formats. DocBook provides a language (DocBook XML)
+      and a set of stylesheets to translate this language into different
+      output formats such as HTML, PDF, and EPUB.
+    </p>
+  </div>
+
+  <div class="item">
+    <h3 class="feature">An Easy-to-Use Toolchain</h3>
+    <p>
+      Transforming DocBook sources to output formats such as PDF requires
+      several steps such as validating, selecting appropriate conditional text
+      (profiling), converting images, and generating intermediary files. DAPS
+      automates these steps for you.
+    </p>
+  </div>
+
+  <div class="item">
+    <h3 class="feature">Create Output</h3>
+    <p>
+      DAPS lets you create HTML, PDF, EPUB, man pages, and other formats with
+      a single command. It does everything to get from your document sources
+      and images to the selected output format.
+    </p>
+  </div>
+
+  <div class="item">
+    <h3 class="feature">Authoring Support</h3>
+    <p>
+      DAPS supports you by providing a validator, link checker, spellchecker,
+      and editor macros.
+    </p>
+  </div>
+
+  <div class="item">
+    <h3 class="feature">Translate Documents</h3>
+    <p>
+      You can easily create profiled source archives for
+      translation or review.
+    </p>
+  </div>
+
+  <div class="item">
+   <h3 class="feature">All Open-Source</h3>
+   <p>
+     DAPS is dual-licensed under GPL 2.0 and GPL 3.0.
+   </p>
+  </div>
+
+
+ <footer>
+  <p>Sponsored by <a href="http://www.suse.com"><img alt="SUSE Logo" src="images/suse_logo.png"/></a></p>
+ </footer>
 </body>
 </html>
