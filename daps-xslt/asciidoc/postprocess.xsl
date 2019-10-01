@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
    Purpose:
-     Post process a DocBook document produced by AsciiDoc(tor)
+     Post-process a DocBook document produced by AsciiDoctor
 
    Parameters:
      None
@@ -14,8 +14,18 @@
 
      Currently, the following corrections are made:
      * simpara -> para
+       * allows GeekoDoc validation
+       * suse2013 =< 2.0.12 display improvement
      * sidebar -> note
+       * allows GeekoDoc validation
+       * suse2013 display improvement
      * literallayout[@class='monospaced'] -> screen
+       * allows GeekoDoc validation
+       * suse2013 layout improvement
+     * info + abstract -> info/abstract
+       * allows DocBook validation
+     * article/info/title -> article/title
+       * suse2013 =< 2.0.13 display improvement, suse-xsl#397
 
    Author:    Thomas Schraitle <toms@opensuse.org>
    Copyright (C) 2018 SUSE Linux GmbH
@@ -75,6 +85,29 @@
    </xsl:otherwise>
   </xsl:choose>
  </xsl:copy>
+</xsl:template>
+
+<xsl:template match="d:abstract[not(ancestor::d:info)]"/>
+<xsl:template match="d:info[following-sibling::d:abstract]">
+  <xsl:element name="{local-name(.)}" namespace="&db5ns;">
+    <xsl:apply-templates select="@*|node()"/>
+    <xsl:apply-templates select="following-sibling::d:abstract" mode="copy-element"/>
+  </xsl:element>
+</xsl:template>
+
+<xsl:template match="*" mode="copy-element">
+  <xsl:element name="{local-name(.)}" namespace="&db5ns;">
+    <xsl:apply-templates select="@*|node()"/>
+  </xsl:element>
+</xsl:template>
+
+<xsl:template match="d:article/d:info/d:title"/>
+<xsl:template match="d:article[d:info/d:title]">
+  <xsl:element name="{local-name(.)}" namespace="&db5ns;">
+    <xsl:apply-templates select="@*"/>
+    <xsl:apply-templates select="d:info/d:title" mode="copy-element"/>
+    <xsl:apply-templates select="node()"/>
+  </xsl:element>
 </xsl:template>
 
 </xsl:stylesheet>

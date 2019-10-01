@@ -1,19 +1,20 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
-# $Id: getentityname.py 33777 2008-08-08 09:20:06Z toms $
 #
-# Copyright (C) 2012-2015 SUSE Linux GmbH
+# Copyright (C) 2012-2019 SUSE Linux GmbH
 #
 # Author:
 # Thomas Schraitle <toms at opensuse dot org>
 #
 
 import os.path
+import re
 import sys
-import optparse
+import argparse
+
 
 __proc__ = os.path.basename(sys.argv[0])
-__version__ = "$Revision: 33777 $"[11:-2]
+__version__ = "0.9.0"
 __author__="Thomas Schraitle <thomas DOT schraitle AT suse DOT de>"
 __license__="GPL"
 __doc__= """%(cmd)s [OPTIONS] XMLFILE(S)
@@ -99,25 +100,25 @@ def joinEnts(unique, sep, ents):
     return sep.join(ents)
 
 
-def getAllEntities(options, filenames):
+def getAllEntities(args):
   """Collects *all* entities in XML files"""
   ents=[]
-  for f in filenames:
+  for f in args.xmlfiles:
+    f = os.path.abspath(f)
     if not os.path.exists(f):
       print("ERROR: File »%s« not found!" % sys.argv[1], file=sys.stderr)
       sys.exit(10)
     parser = make_parser()# ["drv_expat"]
     cwd=os.getcwd()
-    os.chdir(os.path.dirname(f)) 
+    os.chdir(os.path.dirname(f))
     parser.setEntityResolver(MyEntityResolver(f, ents))
     parser.parse(f)
     os.chdir(cwd)
 
-  print(joinEnts(options.unique, options.separator, ents))
+  return ents
 
 
-def getFirstEntity(options, filenames):
-  import re
+def getFirstEntity(args):
   # Mostly taken from xmllib.py
   # Regular expressions
   _space = '[ \t\r\n]'                    # whitespace
@@ -154,8 +155,7 @@ def getFirstEntity(options, filenames):
   entities = re.compile(_PEDecl)
   ents=[]
 
-  for f in filenames:
-    # print >> sys.stderr, "Analyzing %s" % f
+  for f in args.xmlfiles:
     name = open(f, 'r')
     lines=[]
     for i in range(50):
@@ -169,12 +169,11 @@ def getFirstEntity(options, filenames):
       #Name = match_obj.group('Name')
       #Type = match_obj.group('Type')
       #ExternalID = match_obj.group('ExternalID')
-      
-      #print >> sys.stderr, "Name:    %s" % Name
-      #print >> sys.stderr,"Type:    %s" % Type
-      #print >> sys.stderr,"ExtId:   %s" % ExternalID
-      #print >> sys.stderr,"Content: %s" % Content
-    
+      # print("Name:    %s" % Name, file=sys.stderr)
+      # print("Type:    %s" % Type, file=sys.stderr)
+      # print("ExtId:   %s" % ExternalID, file=sys.stderr)
+      # print("Content: %s" % Content, file=sys.stderr)
+
       if Content:
         # Only process, when there is an internal subset
         # Find comments without reg expressions:
@@ -189,7 +188,7 @@ def getFirstEntity(options, filenames):
           assert cs < ce, "ERROR: Internal error. " \
                 "Start index of XML comment must be smaller than end index!"
           Content = Content[1:cs] +  Content[ce+3:]
-        
+
         # Now it's easy. Search for all entity declarations in the internal subset:
         x=entities.findall(Content)
         for j in x:
@@ -199,7 +198,7 @@ def getFirstEntity(options, filenames):
           else:
             ents.append(j[1])
 
-  print(joinEnts(options.unique, options.separator, ents))
+  return ents
 
 
 def main():
@@ -207,52 +206,53 @@ def main():
     # Create global options parser.
     #global gparser # only need for 'help' command (optional)
     #import optparse
-    parser = optparse.OptionParser(__doc__.strip(), \
-                                   version="Revision %s" % __version__[11:-2])
-    parser.add_option("-f", "--only-first",
+    parser = argparse.ArgumentParser(description=__doc__.strip())
+    parser.add_argument("--version",
+                        action="version",
+                        version="%%(prog)s %s" % __version__[11:-2])
+    parser.add_argument("-f", "--only-first",
         dest="first",
+        default=False,
         action="store_true",
-        help="Never prompt (default %default)")
-    parser.add_option("-u", "--unique",
+        help="Never prompt (default %(default)s)")
+    parser.add_argument("-u", "--unique",
         dest="unique",
+        default=True,
         action="store_false",
-        help="Make entity filenames unique (default %default)")
-    parser.add_option("-s", "--separator",
+        help="Make entity filenames unique (default %(default)s")
+    parser.add_argument("-s", "--separator",
         dest="separator",
-        help="Set the separator between consecutive filenames (default '%default'). Use '\\n' and '\\t' to insert a CR and TAB character.")
 
-    parser.set_defaults( \
-        first=False,
-        unique=True,
-        separator=' ',
-      )
-    options, args = parser.parse_args()
-    if options.separator == '\\n':
-      options.separator = '\n'
-    elif options.separator == '\\t':
-      options.separator = '\t'
- 
-    resultargs = []
-    for fn in args:
-        if not os.path.isabs(fn):
-            fn = os.path.abspath(fn)
-        resultargs.append(fn)
+        default=" ",
+        help="Set the separator between consecutive filenames (default '%(default)s'). Use '\\n' and '\\t' to insert a CR and TAB character.")
+    parser.add_argument("xmlfiles",
+                        metavar="XMLFILES",
+                        nargs="+",
+                        help="One ore more XML files to search for entities")
 
-    return parser, options, resultargs
+    args = parser.parse_args()
+    if args.separator == '\\n':
+      args.separator = '\n'
+    elif args.separator == '\\t':
+      args.separator = '\t'
+
+    return parser, args
 
 
 if __name__=="__main__":
   try:
-    p, options, args = main()
+    p, args = main()
 
     if not args:
       p.print_usage()
       sys.exit(1)
-      
-    if options.first:
-      getFirstEntity(options, args)
+
+    if args.first:
+      ents = getFirstEntity(args)
     else:
-      getAllEntities(options, args)
+      ents = getAllEntities(args)
+    print(joinEnts(args.unique, args.separator, ents))
+
   except SAXParseException as e:
       print(e, file=sys.stderr)
       print(" ".join(resultEntities))
