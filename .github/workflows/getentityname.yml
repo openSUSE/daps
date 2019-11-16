@@ -1,0 +1,52 @@
+name: Test Python Package
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 4
+      matrix:
+        python-version: [3.5, 3.6, 3.7, 3.8]
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Output env variables
+        run: |
+           echo "GITHUB_WORKFLOW=${GITHUB_WORKFLOW}"
+           echo "GITHUB_ACTION=$GITHUB_ACTION"
+           echo "GITHUB_ACTIONS=$GITHUB_ACTIONS"
+           echo "GITHUB_ACTOR=$GITHUB_ACTOR"
+           echo "GITHUB_REPOSITORY=$GITHUB_REPOSITORY"
+           echo "GITHUB_EVENT_NAME=$GITHUB_EVENT_NAME"
+           echo "GITHUB_EVENT_PATH=$GITHUB_EVENT_PATH"
+           echo "GITHUB_WORKSPACE=$GITHUB_WORKSPACE"
+           echo "GITHUB_SHA=$GITHUB_SHA"
+           echo "GITHUB_REF=$GITHUB_REF"
+           echo "GITHUB_HEAD_REF=$GITHUB_HEAD_REF"
+           echo "GITHUB_BASE_REF=$GITHUB_BASE_REF"
+           echo "::debug::---Start content of file $GITHUB_EVENT_PATH"
+           cat $GITHUB_EVENT_PATH
+           echo "\n"
+           echo "::debug::---end"
+
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r devel-requirements.txt
+
+      - name: List preinstalled packages
+        run: |
+           pip list
+
+      - name: Call test suite for ${{ matrix.python-version }}
+        run: |
+          pytest -v
