@@ -202,7 +202,7 @@ def getFirstEntity(options, filenames):
   print(joinEnts(options.unique, options.separator, ents))
 
 
-def main():
+def main(cliargs=None):
     """ """
     # Create global options parser.
     #global gparser # only need for 'help' command (optional)
@@ -226,7 +226,7 @@ def main():
         unique=True,
         separator=' ',
       )
-    options, args = parser.parse_args()
+    options, args = parser.parse_args(cliargs)
     if options.separator == '\\n':
       options.separator = '\n'
     elif options.separator == '\\t':
