@@ -18,7 +18,7 @@ from logging.config import dictConfig
 __proc__ = os.path.basename(sys.argv[0])
 __version__ = "1.0.0"
 __author__="Thomas Schraitle <thomas DOT schraitle AT suse DOT de>"
-__license__="GPL"
+__license__="GPL 3"
 __doc__= """
 This script finds every external entity in the internal subset
 of the DTD, for example:
