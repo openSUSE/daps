@@ -14,6 +14,7 @@ import sys
 
 import logging
 from logging.config import dictConfig
+import tempfile
 
 __proc__ = os.path.basename(sys.argv[0])
 __version__ = "1.0.0"
@@ -74,8 +75,6 @@ LOGLEVELS = {None: logging.WARNING,  # 0
 log = logging.getLogger(__name__)
 
 
-from xml.sax import make_parser, handler, SAXParseException
-import tempfile
 
 # Contains the filenames found of every external entities:
 resultEntities=[]
@@ -108,58 +107,6 @@ DOCTYPE = ("""<!DOCTYPE{S}"""
            ")?"
            """{opS}>"""
           ).format(**locals())
-
-
-class  MyEntityResolver(handler.EntityResolver):
-   """Prints the system identifier of an external entity"""
-   def __init__(self, filename, ents=[]):
-      """Constructor of this class
-      filename - XML file to be investigated """
-      # Create a temporary file object
-      self.tmpfile=tempfile.NamedTemporaryFile()
-      self.filename=os.path.abspath(filename)
-      self.ents = ents
-      # log.debug("Created %s", type(self).__name__)
-
-   def getEntityList(self):
-      log.debug("Return found entities: %s", self.ents)
-      return self.ents
-
-   def resolveEntity(self, publicId, systemId):
-      """Print the system identifier only, ignoring the public"""
-      # log.debug("resolving entitiy publicID=%r, systemID=%r", publicId, systemId)
-      if publicId==None:
-        dirname = os.path.dirname(self.filename)
-
-        print("dirname:", dirname)
-
-        if not systemId in resultEntities:
-            # Remove # to enable absolute paths in self.ents list:
-            #self.ents.append( os.path.abspath(os.path.join( dirname, systemId)) ) 
-            self.ents.append(systemId)
-        return os.path.abspath(os.path.join( dirname, systemId))
-
-      elif publicId.startswith("-//OASIS//") or \
-           publicId.startswith("-//Novell//DTD"):
-        # Return a temporary filename without meaningful content
-        return self.tmpfile.name 
-
-      # ---------------------------------------------------
-      #elif publicId.startswith("-//OASIS//DTD DocBook") or \
-      #     publicId.startswith("-//OASIS//ENTITIES"):
-      #  dtdversion=publicId.split("//")[2][-3:]
-      #  filename = os.path.basename(systemId)
-      #  return "/usr/share/xml/docbook/schema/dtd/%s/%s" % (dtdversion ,filename)
-      #elif publicId.startswith("ISO 8879:1986//"):
-      #  dtdversion=publicId.split("//")[2][-3:]
-      #  filename = os.path.basename(systemId)
-      #  print >> sys.stderr, "dtdversion=%s, filename=%s, file=%s" % \
-      #   (dtdversion, filename, "/usr/share/xml/entities/xmlcharent/0.3/%s" % filename)
-      #  return "/usr/share/xml/entities/xmlcharent/0.3/%s" % filename
-
-      else:
-        # Should not happen...
-        return ""
 COMMENTOPEN = re.compile('<!--')
 COMMENTCLOSE = re.compile('-->')
 
@@ -489,9 +436,9 @@ def main(cliargs=None):
       getAllEntities(args)
     return 0
 
-  except SAXParseException as error:
-      log.fatal(error)
-      print(" ".join(resultEntities))
+  #except SAXParseException as error:
+  #    log.fatal(error)
+  #    print(" ".join(resultEntities))
   except IOError as error:
       log.fatal(error)
 
