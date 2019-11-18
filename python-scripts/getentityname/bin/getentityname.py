@@ -36,6 +36,8 @@ import sys
 import logging
 from logging.config import dictConfig
 import tempfile
+from xml.sax import make_parser, SAXParseException
+from xml.sax.handler import ContentHandler
 
 __proc__ = os.path.basename(sys.argv[0])
 __version__ = "1.0.0"
@@ -112,19 +114,14 @@ def xmlsyntaxcheck(xmlfile):
     """Check if the XML file is well-formed
 
     :param str xmlfile: XML filename
-    :return: True if the XML is well-formed, False otherwise
+    :return: Nothing if the XML is well-formed, otherwise it raises
+       a SAXParseException
     :rtype: bool
     """
-    from xml.sax.handler import ContentHandler
-    from xml.sax import SAXParseException
-    from xml.sax import make_parser
     parser = make_parser()
     parser.setContentHandler(ContentHandler())
-    try:
-        parser.parse(xmlfile)
-        return True
-    except SAXParseException:
-        return False
+
+    parser.parse(xmlfile)
 
 
 def joinEnts(ents, sep):
@@ -322,7 +319,8 @@ def main(cliargs=None):
 
     except IOError as error:
         log.fatal(error)
-
+    except SAXParseException as error:
+        log.fatal(error)
     return 1
 
 
