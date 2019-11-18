@@ -121,6 +121,12 @@ def test_regex_externalid(extid):
       'pubid': '"urn:x-test:tom"',
       'sysid': '"http://www.example.org/ent"'}
      ),
+     # no. 5
+     ("""<!ENTITY % phrases-entities SYSTEM "phrases-decl.ent">""",
+     {'PEDecl': 'phrases-entities',
+      'pubid': None,
+      'sysid': '"phrases-decl.ent"'}
+     ),
 ])
 def test_regex_entity(entity, expected):
     match = re.search(gen.ENTITY, entity, re.DOTALL|re.VERBOSE|re.MULTILINE)
