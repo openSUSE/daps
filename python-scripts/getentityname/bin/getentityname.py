@@ -39,7 +39,7 @@ import tempfile
 from xml.sax import make_parser, SAXParseException
 from xml.sax.handler import ContentHandler
 
-__version__ = "1.0.0"
+__version__ = "2.0.0"
 __author__="Thomas Schraitle <thomas DOT schraitle AT suse DOT de>"
 __license__="GPL 3"
 
