@@ -262,8 +262,10 @@ def parsecli(cliargs=None):
                         action="count",
                         help="Raise verbosity level",
                         )
+    parser.add_argument("-A", "--absolute",
                         default=False,
                         action="store_true",
+                        help="Make paths absolute")
     parser.add_argument("-s", "--separator",
                         default=' ',
                         help=("Set the separator between consecutive filenames "
