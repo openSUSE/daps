@@ -160,6 +160,8 @@ class  MyEntityResolver(handler.EntityResolver):
       else:
         # Should not happen...
         return ""
+COMMENTOPEN = re.compile('<!--')
+COMMENTCLOSE = re.compile('-->')
 
 
 def joinEnts(unique, sep, ents):
@@ -313,32 +315,37 @@ def getFirstEntity(args):
   print(joinEnts(args.unique, args.separator, ents))
 
 
-def remove_xml_comment(content):
-    """Remove first XML comments (<!-- ... -->) in a string
+def remove_xml_comments(content):
+    """Remove all XML comments (<!-- ... -->) in a string
 
     :param str content: the content with possible XML comments
     :return: a string without any XML comments
     :rtype: str
 
-    >>> remove_xml_comment('<!-- hello -->World')
+    >>> remove_xml_comments('<!-- hello -->World')
     'World'
-    >>> remove_xml_comment('<!-- h -->World<!-- is it? -->')
-    'World<!-- is it? -->'
+    >>> remove_xml_comments('<!-- h -->World<!-- is it? -->')
+    'World'
+    >>> remove_xml_comments('<!--A-->Hi <!--B--> World.')
+    'Hi  World.'
     """
-    # Only process, when there is an internal subset
-    # Find comments without reg expressions:
-    cs = content.find("<!--")
-    ce = content.find("-->")
-    if (cs < 0 and ce >= 0) or (cs >=0 and ce <0):
-        raise ValueError("ERROR: Wrong XML comment found!")
-          # log.fatal("ERROR: Wrong XML comment found!")
-          # sys.exit(100)
-    elif cs >= 0 and ce >= 0:
-        # If XML comment found, remove the substring (cs,ce)
-        assert cs < ce, "ERROR: Internal error. " \
-            "Start index of XML comment must be smaller than end index!"
-        content = content[1:cs] +  content[ce+3:]
-    return content
+    # Extract comment by using
+    while True:
+        if '<!--' not in content:
+            return content
+        start = COMMENTOPEN.search(content).start()
+        match = COMMENTCLOSE.search(content)
+        if not match:
+            raise ValueError("ERROR: Missing '-->' in comment!")
+        end = match.end()
+        # Extract the comment
+        comment = content[start:end][4:-3]
+        if '--' in comment:
+            raise ValueError("ERROR: '--' not allowed in comment")
+
+        # Remove the comment
+        content = content[0:start] + content[end:]
+
 
 
 def getEntities(args, linenr=50):

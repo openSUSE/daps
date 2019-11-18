@@ -13,9 +13,14 @@ def test_version(capsys):
     assert captured.out.rstrip() == gen.__version__
 
 
-def test_should_raise_valueerror_in_rm_xml_comment():
+def test_should_raise_valueerror_in_rm_xml_comment_with_missing_closecomment():
     with pytest.raises(ValueError):
-        gen.remove_xml_comment("<!-- Wrong XML comment")
+        gen.remove_xml_comments("<!-- Wrong XML comment")
+
+
+def test_should_raise_valueerror_in_rm_xml_comment_with_doubledashes():
+    with pytest.raises(ValueError):
+        gen.remove_xml_comments("<!-- Not--allowed-->")
 
 
 @pytest.mark.parametrize("space", [
