@@ -60,7 +60,7 @@ def test_regex_name(name):
     #"'http://example.org/foo%20\"bar#xyz'",
 #])
 #def test_regex_qstr(qstr):
-    #assert re.search(gen.QSTR, qstr) 
+    #assert re.search(gen.QSTR, qstr)
 
 
 @pytest.mark.parametrize("sysid", [
@@ -120,7 +120,7 @@ def test_regex_externalid(extid):
      {'PEDecl': 'ents',
       'pubid': '"urn:x-test:tom"',
       'sysid': '"http://www.example.org/ent"'}
-     ), 
+     ),
 ])
 def test_regex_entity(entity, expected):
     match = re.search(gen.ENTITY, entity, re.DOTALL|re.VERBOSE|re.MULTILINE)
@@ -157,7 +157,7 @@ DOCTYPE_TEST_DATA = (
     ),
 
     # no. 5
-    ("with-linebreaks",    
+    ("with-linebreaks",
     """
 <!DOCTYPE
 chapter
@@ -205,7 +205,7 @@ chapter
      dict(Name='chapter',
           pubid='"-//OASIS//DTD DocBook XML V4.5//EN"',
           sysid='"http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd"')
-    ),    
+    ),
 
     # no. 9
     ("with-public-identifier",
@@ -220,7 +220,7 @@ chapter
      dict(Name='chapter',
           pubid='"-//OASIS//DTD DocBook XML V4.5//EN"',
           sysid='"http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd"')
-    ),    
+    ),
 
 )
 
@@ -235,7 +235,6 @@ def test_regex_doctype(header, expected):
     resultdict = match.groupdict()
     del resultdict['IntSubset']
     assert resultdict == expected
-    
 
 
 ENTITIES_TEST_DATA = (
@@ -280,5 +279,5 @@ def test_should_match_entities(ent, expected):
     _, entities = gen.dtdmatcher()
     match = entities.search(ent)
     assert match
-    # print(">>> match:", match.groupdict())    
+    # print(">>> match:", match.groupdict())
     assert match.groupdict() == expected
