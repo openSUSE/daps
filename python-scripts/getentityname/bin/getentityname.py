@@ -165,11 +165,12 @@ def remove_xml_comments(content):
         content = content[0:start] + content[end:]
 
 
-def parse_ent_file(entityfile):
+def parse_ent_file(entityfile, args):
     """Parse entity file for other referenced entities
 
     :param str entityfile: filename to the referenced
                            entity file from XML
+    :param args: parsed arguments from CLI parser
     """
     # result = []
     # HINT: This reads the complete file.
@@ -177,6 +178,10 @@ def parse_ent_file(entityfile):
     content = open(entityfile, 'r').read()
     match = r_ENTITY.search(content)
     for entity in r_ENTITY.finditer(content):
+        if args.skip_public and entity['pubid']:
+            log.debug("Skipping public parameter entity %s %s",
+                      entity['pubid'].replace('\n', ''), entity['sysid'])
+            continue
         log.debug("Found match %s", entity['sysid'])
         # result.append(entity['sysid'][1:-1])
         yield entity['sysid'][1:-1]
@@ -219,7 +224,7 @@ def getentities(args, linenr=50):
             for match in r_ENTITY.finditer(content):
                 # Remove quotes:
                 entity = match['sysid'][1:-1]
-                log.info("Found entity %r", entity)
+                # log.info("Found entity %r", entity)
                 if entity in seen:
                     continue
                 seen.add(entity)
@@ -235,7 +240,7 @@ def getentities(args, linenr=50):
     resultdict = ents.copy()
     # Process ents to find other referenced PEs
     for absolute in ents.values():
-        for entity in parse_ent_file(absolute):
+        for entity in parse_ent_file(absolute, args):
             if entity not in seen:
                 seen.add(entity)
                 resultdict[entity] = os.path.join(os.path.dirname(absolute), entity)
@@ -267,6 +272,10 @@ def parsecli(cliargs=None):
                         default=False,
                         action="store_true",
                         help="Make paths absolute")
+    parser.add_argument("-P", "--skip-public",
+                        default=True,
+                        action="store_false",
+                        help="Skip parameter entities with public reference")
     parser.add_argument("-s", "--separator",
                         default=' ',
                         help=("Set the separator between consecutive filenames "
