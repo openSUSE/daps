@@ -301,14 +301,30 @@ def remove_xml_comments(content):
         content = content[0:start] + content[end:]
 
 
+def parse_ent_file(entityfile):
+    """Parse entity file for other referenced entities
+
+    :param str entityfile: filename to the referenced
+                           entity file from XML
+    """
+    # HINT: This reads the complete file.
+    log.debug("Investigate entity file %r", entityfile)
+    content = open(entityfile, 'r').read()
+    match = r_ENTITY.search(content)
+    if match:
+        log.debug("Found match %s", match['sysid'])
+        return match['sysid'][1:-1]
+
+
 def getentities(args, linenr=50):
     """Read first 50 lines (default) and return any parameter entity names
 
-    :param args:
+    :param args: parsed arguments from CLI parser
     :param int linenr: number of lines that should be investigated
     :return: a list of all found entities
     """
     ents = []
+    absents = []
     seen = set()
 
     for file in args.xmlfiles:
@@ -345,8 +361,15 @@ def getentities(args, linenr=50):
                     dirname = os.path.dirname(file)
                     # entity = os.path.join(dirname, entity)
                     ents.append(entity)
+                    # append
+                    absents.append(os.path.join(dirname, entity))
                 log.debug("ents: %s", ents)
-    # FIXME: Process ents to find other referenced PEs
+    # Process ents to find other referenced PEs
+    for e in absents:
+        result = parse_ent_file(e)
+        if result not in seen:
+            seen.add(result)
+            ents.append(result)
     return ents
 
 
@@ -432,7 +455,6 @@ def main(cliargs=None):
 
     ents = getentities(args)
     print(joinEnts(args.unique, args.separator, ents))
-    # print("-"*40)
     #if args.first:
       #getFirstEntity(args)
     #else:
