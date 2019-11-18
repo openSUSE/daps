@@ -108,7 +108,23 @@ COMMENTOPEN = re.compile('<!--')
 COMMENTCLOSE = re.compile('-->')
 
 
+def xmlsyntaxcheck(xmlfile):
+    """Check if the XML file is well-formed
 
+    :param str xmlfile: XML filename
+    :return: True if the XML is well-formed, False otherwise
+    :rtype: bool
+    """
+    from xml.sax.handler import ContentHandler
+    from xml.sax import SAXParseException
+    from xml.sax import make_parser
+    parser = make_parser()
+    parser.setContentHandler(ContentHandler())
+    try:
+        parser.parse(xmlfile)
+        return True
+    except SAXParseException:
+        return False
 
 
 def joinEnts(ents, sep):
