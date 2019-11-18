@@ -39,7 +39,6 @@ import tempfile
 from xml.sax import make_parser, SAXParseException
 from xml.sax.handler import ContentHandler
 
-__proc__ = os.path.basename(sys.argv[0])
 __version__ = "1.0.0"
 __author__="Thomas Schraitle <thomas DOT schraitle AT suse DOT de>"
 __license__="GPL 3"
@@ -188,20 +187,23 @@ def getentities(args, linenr=50):
     :param int linenr: number of lines that should be investigated
     :return: a list of all found entities
     """
-    ents = []
-    absents = []
+    ents = {}
     seen = set()
 
-    for file in args.xmlfiles:
+    for xmlfile in args.xmlfiles:
+        # Checks for well-formed XML; does nothing if all is ok,
+        # but if not, it raises a SAXParseException.
+        xmlsyntaxcheck(xmlfile)
+
         # Prepare the lines:
         lines = []
-        with open(file, 'r') as fh:
+        with open(xmlfile, 'r') as fh:
             for i in range(linenr):
                 lines.append(fh.readline())
         if len(lines) > 5:
             log.debug("First six lines:")
             for i in range(6):
-                log.debug("  line {%d}: %s", i, lines[i].strip())
+                log.debug("  line %d: %s", i+1, lines[i].strip())
         lines = "".join(lines)
 
         # Try to find matches
@@ -223,19 +225,18 @@ def getentities(args, linenr=50):
                 elif entity.startswith("http"):
                     ents.append(entity)
                 else:
-                    dirname = os.path.dirname(file)
-                    # entity = os.path.join(dirname, entity)
-                    ents.append(entity)
-                    # append
-                    absents.append(os.path.join(dirname, entity))
+                    # ents.append(entity)
+                    ents[entity] = os.path.join(os.path.dirname(xmlfile), entity)
                 log.debug("ents: %s", ents)
+
+    resultdict = ents.copy()
     # Process ents to find other referenced PEs
-    for e in absents:
-        result = parse_ent_file(e)
-        if result not in seen:
+    for rel, absolute in ents.items():
+        result = parse_ent_file(absolute)
+        if result is not None and result not in seen:
             seen.add(result)
-            ents.append(result)
-    return ents
+            resultdict[result] = os.path.join(os.path.dirname(absolute), result)
+    return resultdict
 
 
 def parsecli(cliargs=None):
@@ -314,7 +315,10 @@ def main(cliargs=None):
             sys.exit(1)
 
         ents = getentities(args)
-        print(joinEnts(ents, args.separator, ))
+        if args.absolute:
+            print(joinEnts(ents.values(), args.separator))
+        else:
+            print(joinEnts(ents, args.separator))
         return 0
 
     except IOError as error:
