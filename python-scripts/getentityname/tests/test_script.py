@@ -230,7 +230,8 @@ chapter
                          ids=[name for name, _, _ in DOCTYPE_TEST_DATA]
                          )
 def test_regex_doctype(header, expected):
-    match = re.search(gen.DOCTYPE, header, re.VERBOSE|re.DOTALL|re.MULTILINE)
+    # match = re.search(gen.DOCTYPE, header, re.VERBOSE|re.DOTALL|re.MULTILINE)
+    match = gen.r_DOCTYPE.search(header)
     assert match
     resultdict = match.groupdict()
     del resultdict['IntSubset']
@@ -243,8 +244,7 @@ ENTITIES_TEST_DATA = (
     ("system",
      """<!ENTITY % ent SYSTEM "foo.ent">""",
      {'PEDecl': 'ent',
-      'syslit': '"foo.ent"',
-      #'psyslit': None,
+      'sysid': '"foo.ent"',
       'pubid': None}
     ),
     # no. 2
@@ -252,8 +252,7 @@ ENTITIES_TEST_DATA = (
      """<!ENTITY % ent PUBLIC "-//TEST//ENTITIES V1.0//EN" "http://example.org/foo.ent">""",
      {'PEDecl': 'ent',
       'pubid': '"-//TEST//ENTITIES V1.0//EN"',
-      'syslit': '"http://example.org/foo.ent"',
-      #'syslit': None,
+      'sysid': '"http://example.org/foo.ent"',
       }
     ),
     # no. 3
@@ -264,8 +263,7 @@ ENTITIES_TEST_DATA = (
   "here.ent">
      """,
      {'PEDecl': 'here',
-      'syslit': '"here.ent"',
-      # 'psyslit': None,
+      'sysid': '"here.ent"',
       'pubid': None
       }
     ),
@@ -276,8 +274,7 @@ ENTITIES_TEST_DATA = (
                          ids=[name for name, _, _ in ENTITIES_TEST_DATA]
                          )
 def test_should_match_entities(ent, expected):
-    _, entities = gen.dtdmatcher()
-    match = entities.search(ent)
+    match = gen.r_ENTITY.search(ent)
     assert match
     # print(">>> match:", match.groupdict())
     assert match.groupdict() == expected
