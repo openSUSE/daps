@@ -171,13 +171,16 @@ def parse_ent_file(entityfile):
     :param str entityfile: filename to the referenced
                            entity file from XML
     """
+    # result = []
     # HINT: This reads the complete file.
     log.debug("Investigate entity file %r", entityfile)
     content = open(entityfile, 'r').read()
     match = r_ENTITY.search(content)
-    if match:
-        log.debug("Found match %s", match['sysid'])
-        return match['sysid'][1:-1]
+    for entity in r_ENTITY.finditer(content):
+        log.debug("Found match %s", entity['sysid'])
+        # result.append(entity['sysid'][1:-1])
+        yield entity['sysid'][1:-1]
+    # return result
 
 
 def getentities(args, linenr=50):
@@ -231,11 +234,11 @@ def getentities(args, linenr=50):
 
     resultdict = ents.copy()
     # Process ents to find other referenced PEs
-    for rel, absolute in ents.items():
-        result = parse_ent_file(absolute)
-        if result is not None and result not in seen:
-            seen.add(result)
-            resultdict[result] = os.path.join(os.path.dirname(absolute), result)
+    for absolute in ents.values():
+        for entity in parse_ent_file(absolute):
+            if entity not in seen:
+                seen.add(entity)
+                resultdict[entity] = os.path.join(os.path.dirname(absolute), entity)
     return resultdict
 
 
