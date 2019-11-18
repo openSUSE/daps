@@ -123,7 +123,7 @@ def remove_xml_comments(content):
     :return: a string without any XML comments
     :rtype: str
     :raises: ValueError when the end comment '-->' couldn't be find
-             or if there a double dashes '--' inside the comment.
+             or if there are double dashes '--' inside the comment.
 
     >>> remove_xml_comments('<!-- hello -->World')
     'World'
@@ -136,7 +136,6 @@ def remove_xml_comments(content):
     -->Hello''')
     'Hello'
     """
-    # Extract comment by using
     while True:
         if '<!--' not in content:
             return content
@@ -247,15 +246,8 @@ def parsecli(cliargs=None):
                         action="count",
                         help="Raise verbosity level",
                         )
-    parser.add_argument("-f", "--only-first",
-                        dest="first",
                         default=False,
                         action="store_true",
-                        help="Never prompt (default %(default)s)")
-    parser.add_argument("-u", "--unique",
-                        default=True,
-                        action="store_false",
-                        help="Make entity filenames unique (default %(default)s)")
     parser.add_argument("-s", "--separator",
                         default=' ',
                         help=("Set the separator between consecutive filenames "
