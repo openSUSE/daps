@@ -99,6 +99,7 @@ ENTITY = ("""<!ENTITY{S}%{S}"""
           """(?P<PEDecl>{NAME}){S}"""
           """{EXTERNALID}{opS}>"""
           ).format(**locals())
+r_ENTITY = re.compile(ENTITY, re.VERBOSE|re.DOTALL|re.MULTILINE)
 DOCTYPE = ("""<!DOCTYPE{S}"""
            "(?P<Name>{NAME})"
            "("
@@ -107,6 +108,7 @@ DOCTYPE = ("""<!DOCTYPE{S}"""
            ")?"
            """{opS}>"""
           ).format(**locals())
+r_DOCTYPE = re.compile(DOCTYPE, re.VERBOSE|re.DOTALL|re.MULTILINE)
 COMMENTOPEN = re.compile('<!--')
 COMMENTCLOSE = re.compile('-->')
 
@@ -180,7 +182,6 @@ def dtdmatcher():
                (?P<PEDecl>{_Name}){_S}
                {_ExternalId}{_oS}>
              """.format(**locals())
-             
 
 #  __dtd = ("<!DOCTYPE"
 #          "{s}+(?P<Name>{_Name})"
@@ -208,7 +209,7 @@ def dtdmatcher():
 
 
 def getFirstEntity(args):
-  doctype, entities = dtdmatcher()
+  # doctype, entities = dtdmatcher()
   ents=[]
 
   for f in args.xmlfiles:
@@ -268,6 +269,8 @@ def remove_xml_comments(content):
     :param str content: the content with possible XML comments
     :return: a string without any XML comments
     :rtype: str
+    :raises: ValueError when the end comment '-->' couldn't be find
+             or if there a double dashes '--' inside the comment.
 
     >>> remove_xml_comments('<!-- hello -->World')
     'World'
@@ -275,6 +278,10 @@ def remove_xml_comments(content):
     'World'
     >>> remove_xml_comments('<!--A-->Hi <!--B--> World.')
     'Hi  World.'
+    >>> remove_xml_comments('''<!-- <!ENTITY x\
+    "X"> \
+    -->Hello''')
+    'Hello'
     """
     # Extract comment by using
     while True:
@@ -294,8 +301,7 @@ def remove_xml_comments(content):
         content = content[0:start] + content[end:]
 
 
-
-def getEntities(args, linenr=50):
+def getentities(args, linenr=50):
     """Read first 50 lines (default) and return any parameter entity names
 
     :param args:
@@ -304,7 +310,6 @@ def getEntities(args, linenr=50):
     """
     ents = []
     seen = set()
-    doctype, entities = dtdmatcher()
 
     for file in args.xmlfiles:
         # Prepare the lines:
@@ -313,25 +318,22 @@ def getEntities(args, linenr=50):
             for i in range(linenr):
                 lines.append(fh.readline())
         if len(lines) > 5:
-            log.debug("First five lines:")
-            for i in range(5):
+            log.debug("First six lines:")
+            for i in range(6):
                 log.debug("  line {%d}: %s", i, lines[i].strip())
-        # log.debug("  line 1: %s", lines[0].strip())
-        # log.debug("  line 2: %s", lines[1].strip())
         lines = "".join(lines)
 
         # Try to find matches
-        match = doctype.search(lines)
+        match = r_DOCTYPE.search(lines)
         log.debug("Match: %s", match)
         if match:
-            content = match['IntSubset']
-            content = remove_xml_comment(content)
+            content = remove_xml_comments(match['IntSubset'])
 
             log.debug("Looking for entities...")
-            for match in entities.finditer(content):
+            for match in r_ENTITY.finditer(content):
                 # Remove quotes:
-                entity = match['syslit'][1:-1]
-                log.debug("Found entity %r", entity)
+                entity = match['sysid'][1:-1]
+                log.info("Found entity %r", entity)
                 if entity in seen:
                     continue
                 seen.add(entity)
@@ -341,7 +343,8 @@ def getEntities(args, linenr=50):
                     ents.append(entity)
                 else:
                     dirname = os.path.dirname(file)
-                    ents.append(os.path.join(dirname, entity))
+                    # entity = os.path.join(dirname, entity)
+                    ents.append(entity)
                 log.debug("ents: %s", ents)
     # FIXME: Process ents to find other referenced PEs
     return ents
@@ -427,13 +430,13 @@ def main(cliargs=None):
       args.parser.print_usage()
       sys.exit(1)
 
-    ents = getEntities(args)
+    ents = getentities(args)
     print(joinEnts(args.unique, args.separator, ents))
-    print("-"*40)
-    if args.first:
-      getFirstEntity(args)
-    else:
-      getAllEntities(args)
+    # print("-"*40)
+    #if args.first:
+      #getFirstEntity(args)
+    #else:
+      #getAllEntities(args)
     return 0
 
   #except SAXParseException as error:
