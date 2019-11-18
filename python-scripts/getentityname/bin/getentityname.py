@@ -6,22 +6,8 @@
 # Author:
 # Thomas Schraitle <toms at opensuse dot org>
 #
-
-import argparse
-import os.path
-import re
-import sys
-
-import logging
-from logging.config import dictConfig
-import tempfile
-
-__proc__ = os.path.basename(sys.argv[0])
-__version__ = "1.0.0"
-__author__="Thomas Schraitle <thomas DOT schraitle AT suse DOT de>"
-__license__="GPL 3"
-__doc__= """
-This script finds every external entity in the internal subset
+"""
+This script finds every external parameter entity in the internal subset
 of the DTD, for example:
 
  <!DOCTYPE book PUBLIC 
@@ -41,6 +27,20 @@ The output will be:
 
 The script detects XML comments inside the internal subset and removes them.
 """
+
+import argparse
+import os.path
+import re
+import sys
+
+import logging
+from logging.config import dictConfig
+import tempfile
+
+__proc__ = os.path.basename(sys.argv[0])
+__version__ = "1.0.0"
+__author__="Thomas Schraitle <thomas DOT schraitle AT suse DOT de>"
+__license__="GPL 3"
 
 DEFAULT_LOGGING_DICT = {
     'version': 1,
