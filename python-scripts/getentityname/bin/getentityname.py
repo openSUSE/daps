@@ -429,11 +429,6 @@ def parsecli(cliargs=None):
                               "(default '%(default)s'). Use '\\n' and '\\t' to "
                               "insert a CR and TAB character.")
                         )
-    parser.add_argument("-t", "--test",
-                        default=False,
-                        action="store_true",
-                        help="Just testing"
-                        )
     parser.add_argument("xmlfiles",
                         metavar="XMLFILES",
                         nargs="+",
@@ -464,33 +459,6 @@ def parsecli(cliargs=None):
     return args
 
 
-def test():
-    xml = """<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE chapter
-[
-  <!-- comment -->
-  <!ENTITY % entities SYSTEM "entity-decl.ent">
-   %entities;
-  <!ENTITY % general SYSTEM "general-decl.ent"
-  %general;
-  %
-]>"""
-    doctype, entities = dtdmatcher()
-    # print(">>> doctype:", doctype)
-    match = doctype.search(xml)
-    print(">>> doctype?", match)
-    if match is not None:
-        print("  >>> pos match:", match.groupdict())
-    match = entities.findall(xml, re.DOTALL)
-    print(">>> entities?")
-    if match is not None:
-        print("  >>> pos match:", match)
-    import doctest
-    doctest.testmod(optionflags=doctest.REPORT_NDIFF
-                                |doctest.IGNORE_EXCEPTION_DETAIL
-                                |doctest.NORMALIZE_WHITESPACE)
-
-
 def main(cliargs=None):
   """Entry point for the application script
 
@@ -500,10 +468,6 @@ def main(cliargs=None):
   """
   try:
     args = parsecli(cliargs)
-
-    if args.test:
-        test()
-        sys.exit(1)
 
     if not args:
       args.parser.print_usage()
