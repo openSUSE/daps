@@ -10,7 +10,7 @@
 This script finds every external parameter entity in the internal subset
 of the DTD, for example:
 
- <!DOCTYPE book PUBLIC 
+ <!DOCTYPE book PUBLIC
       "-//OASIS//DTD DocBook XML V4.4//EN"
       "http://www.docbook.org/xml/4.4/docbookx.dtd"
  [
@@ -29,19 +29,17 @@ The script detects XML comments inside the internal subset and removes them.
 """
 
 import argparse
+import logging
 import os.path
 import re
 import sys
-
-import logging
 from logging.config import dictConfig
-import tempfile
-from xml.sax import make_parser, SAXParseException
+from xml.sax import SAXParseException, make_parser
 from xml.sax.handler import ContentHandler
 
 __version__ = "2.0.0"
-__author__="Thomas Schraitle <thomas DOT schraitle AT suse DOT de>"
-__license__="GPL 3"
+__author__ = "Thomas Schraitle <thomas DOT schraitle AT suse DOT de>"
+__license__ = "GPL 3"
 
 DEFAULT_LOGGING_DICT = {
     'version': 1,
@@ -78,8 +76,8 @@ log = logging.getLogger(__name__)
 ###
 # Regular Expressions
 SPACE = r'[ \t\r\n]'                   # whitespace
-S = '%s+'  % SPACE                     # One or more whitespace
-opS = '%s*'% SPACE                     # Zero or more  whitespace
+S = '%s+' % SPACE                     # One or more whitespace
+opS = '%s*' % SPACE                     # Zero or more  whitespace
 oS = '%s?' % SPACE                     # Optional whitespace
 NAME = '[a-zA-Z_:][-a-zA-Z0-9._:]*'    # Valid XML name
 QSTR = "(?:'[^']*'|\"[^\"]*\")"        # Quoted XML string
@@ -95,16 +93,16 @@ ENTITY = ("""<!ENTITY{S}%{S}"""
           """(?P<PEDecl>{NAME}){S}"""
           """{EXTERNALID}{opS}>"""
           ).format(**locals())
-r_ENTITY = re.compile(ENTITY, re.VERBOSE|re.DOTALL|re.MULTILINE)
+r_ENTITY = re.compile(ENTITY, re.VERBOSE | re.DOTALL | re.MULTILINE)
 DOCTYPE = ("""<!DOCTYPE{S}"""
            "(?P<Name>{NAME})"
            "("
-             "({S}{EXTERNALID}{opS})?"
-             r"(?:{S}\[(?P<IntSubset>.*)\])?"
+             "({S}{EXTERNALID}{opS})?"  # noqa: 127
+             r"(?:{S}\[(?P<IntSubset>.*)\])?"  # noqa: 127
            ")?"
            """{opS}>"""
-          ).format(**locals())
-r_DOCTYPE = re.compile(DOCTYPE, re.VERBOSE|re.DOTALL|re.MULTILINE)
+           ).format(**locals())
+r_DOCTYPE = re.compile(DOCTYPE, re.VERBOSE | re.DOTALL | re.MULTILINE)
 COMMENTOPEN = re.compile('<!--')
 COMMENTCLOSE = re.compile('-->')
 
@@ -176,7 +174,6 @@ def parse_ent_file(entityfile, args):
     # HINT: This reads the complete file.
     log.debug("Investigate entity file %r", entityfile)
     content = open(entityfile, 'r').read()
-    match = r_ENTITY.search(content)
     for entity in r_ENTITY.finditer(content):
         if args.skip_public and entity['pubid']:
             log.debug("Skipping public parameter entity %s %s",
@@ -234,7 +231,8 @@ def getentities(args, linenr=50):
                     ents.append(entity)
                 else:
                     # ents.append(entity)
-                    ents[entity] = os.path.join(os.path.dirname(xmlfile), entity)
+                    ents[entity] = os.path.join(os.path.dirname(xmlfile),
+                                                entity)
                 log.debug("ents: %s", ents)
 
     resultdict = ents.copy()
@@ -243,7 +241,8 @@ def getentities(args, linenr=50):
         for entity in parse_ent_file(absolute, args):
             if entity not in seen:
                 seen.add(entity)
-                resultdict[entity] = os.path.join(os.path.dirname(absolute), entity)
+                resultdict[entity] = os.path.join(os.path.dirname(absolute),
+                                                  entity)
     return resultdict
 
 
@@ -257,8 +256,8 @@ def parsecli(cliargs=None):
     # Setup logging
     dictConfig(DEFAULT_LOGGING_DICT)
 
-    parser = argparse.ArgumentParser(description=__doc__.strip(), \
-                                     formatter_class=argparse.RawDescriptionHelpFormatter,
+    parser = argparse.ArgumentParser(description=__doc__.strip(),
+                                     formatter_class=argparse.RawDescriptionHelpFormatter,  # noqa: E501
                                      usage='%(prog)s [OPTIONS] XMLFILE...')
     parser.add_argument("--version",
                         action="version",
@@ -278,8 +277,9 @@ def parsecli(cliargs=None):
                         help="Skip parameter entities with public reference")
     parser.add_argument("-s", "--separator",
                         default=' ',
-                        help=("Set the separator between consecutive filenames "
-                              "(default '%(default)s'). Use '\\n' and '\\t' to "
+                        help=("Set the separator between consecutive "
+                              "filenames (default '%(default)s'). "
+                              "Use '\\n' and '\\t' to "
                               "insert a CR and TAB character.")
                         )
     parser.add_argument("xmlfiles",
@@ -297,9 +297,9 @@ def parsecli(cliargs=None):
 
     # Fix separators
     if args.separator == '\\n':
-      args.separator = '\n'
+        args.separator = '\n'
     elif args.separator == '\\t':
-      args.separator = '\t'
+        args.separator = '\t'
 
     resultargs = []
     for fn in args.xmlfiles:
@@ -340,5 +340,5 @@ def main(cliargs=None):
     return 1
 
 
-if __name__=="__main__":
+if __name__ == "__main__":
     sys.exit(main())
