@@ -170,7 +170,6 @@ def parse_ent_file(entityfile, args):
                            entity file from XML
     :param args: parsed arguments from CLI parser
     """
-    # result = []
     # HINT: This reads the complete file.
     log.debug("Investigate entity file %r", entityfile)
     content = open(entityfile, 'r').read()
@@ -180,9 +179,7 @@ def parse_ent_file(entityfile, args):
                       entity['pubid'].replace('\n', ''), entity['sysid'])
             continue
         log.debug("Found match %s", entity['sysid'])
-        # result.append(entity['sysid'][1:-1])
         yield entity['sysid'][1:-1]
-    # return result
 
 
 def getentities(args, linenr=50):
@@ -288,9 +285,10 @@ def parsecli(cliargs=None):
                         help="One or more XML files")
 
     args = parser.parse_args(cliargs)
-
-    log.setLevel(LOGLEVELS.get(args.verbose, logging.DEBUG))
-    log.debug("CLI args: %s", args)
+    level = LOGLEVELS.get(args.verbose, logging.DEBUG)
+    # log.setLevel(LOGLEVELS.get(args.verbose, logging.DEBUG))
+    log.setLevel(level)
+    log.info("CLI args: %s", args)
     log.debug("")
     # Save our parser instance:
     args.parser = parser
