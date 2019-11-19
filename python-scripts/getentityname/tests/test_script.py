@@ -228,6 +228,28 @@ chapter
           sysid='"http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd"')
     ),
 
+    # no. 10
+    ("with-comment-before-doctype",
+     """<!--
+A very
+
+long
+
+XML
+
+comment
+
+-->
+<!DOCTYPE chapter
+[
+  <!ENTITY % ents SYSTEM "entities.ent">
+]>
+     """,
+    dict(Name='chapter', pubid=None, sysid=None)
+    ),
+
+    # no. 11
+
 )
 
 
