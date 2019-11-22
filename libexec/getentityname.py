@@ -6,256 +6,337 @@
 # Author:
 # Thomas Schraitle <toms at opensuse dot org>
 #
-
-import os.path
-import re
-import sys
-import argparse
-
-
-__proc__ = os.path.basename(sys.argv[0])
-__version__ = "0.9.0"
-__author__="Thomas Schraitle <thomas DOT schraitle AT suse DOT de>"
-__license__="GPL"
-__doc__= """%(cmd)s [OPTIONS] XMLFILE(S)
-
-This script finds every external entity in the internal subset
+"""
+This script finds every external parameter entity in the internal subset
 of the DTD, for example:
 
- <!DOCTYPE book PUBLIC 
+ <!DOCTYPE book PUBLIC
       "-//OASIS//DTD DocBook XML V4.4//EN"
       "http://www.docbook.org/xml/4.4/docbookx.dtd"
  [
    <!-- The external subset -->
-   <!ENTITY %% entities SYSTEM "entity-decl.ent">
-   %%entities;
-   <!ENTITY %% entities SYSTEM "foo.ent">
-   %%foo.ent;
+   <!ENTITY % entities SYSTEM "entity-decl.ent">
+   %entities;
+   <!ENTITY % entities SYSTEM "foo.ent">
+   %foo.ent;
  ]>
 
 The output will be:
-entity-decl.ent foo.ent
+
+   entity-decl.ent foo.ent
 
 The script detects XML comments inside the internal subset and removes them.
-""".format(cmd=__proc__)
+"""
 
-from xml.sax import make_parser, handler, SAXParseException
-import tempfile
+import argparse
+import logging
+import os.path
+import re
+import sys
+from logging.config import dictConfig
+from xml.sax import SAXParseException, make_parser
+from xml.sax.handler import ContentHandler
 
-# Contains the filenames found of every external entities:
-resultEntities=[]
+__version__ = "2.0.0"
+__author__ = "Thomas Schraitle <thomas DOT schraitle AT suse DOT de>"
+__license__ = "GPL 3"
 
-class  MyEntityResolver(handler.EntityResolver):
-   """Prints the system identifier of an external entity"""
-   def __init__(self, filename, ents=[]):
-      """Constructor of this class
-      filename - XML file to be investigated """
-      # Create a temporary file object
-      self.tmpfile=tempfile.NamedTemporaryFile()
-      self.filename=os.path.abspath(filename)
-      self.ents = ents
+DEFAULT_LOGGING_DICT = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'standard': {'format': '[%(levelname)s] %(funcName)s: %(message)s'},
+    },
+    'handlers': {
+        'default': {
+            'level': 'NOTSET',
+            'formatter': 'standard',
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        __name__: {
+            'handlers': ['default'],
+            'level': 'INFO',
+            'propagate': True
+        }
+    }
+}
 
-   def getEntityList(self):
-      return self.ents
+#: Map verbosity level (int) to log level
+LOGLEVELS = {None: logging.WARNING,  # 0
+             0: logging.WARNING,
+             1: logging.INFO,
+             2: logging.DEBUG,
+             }
 
-   def resolveEntity(self, publicId, systemId):
-      """Print the system identifier only, ignoring the public"""
-      if publicId==None:
-        dirname = os.path.dirname(self.filename)
+#: Instantiate our logger
+log = logging.getLogger(__name__)
 
-        if not systemId in resultEntities:
-            # Remove # to enable absolute paths in self.ents list:
-            #self.ents.append( os.path.abspath(os.path.join( dirname, systemId)) ) 
-            self.ents.append(systemId)
-        return os.path.abspath(os.path.join( dirname, systemId))
+###
+# Regular Expressions
+SPACE = r'[ \t\r\n]'                   # whitespace
+S = '%s+' % SPACE                     # One or more whitespace
+opS = '%s*' % SPACE                     # Zero or more  whitespace
+oS = '%s?' % SPACE                     # Optional whitespace
+NAME = '[a-zA-Z_:][-a-zA-Z0-9._:]*'    # Valid XML name
+QSTR = "(?:'[^']*'|\"[^\"]*\")"        # Quoted XML string
+QUOTES = "(?:'[^']'|\"[^\"]\")"
+SYSTEMLITERAL = '(?P<sysid>%s)' % QSTR
+PUBLICLITERAL = (r'(?P<pubid>"[-\'\(\)+,./:=?;!*#@$_%% \n\ra-zA-Z0-9]*"|'
+                 r"'[-\(\)+,./:=?;!*#@$_%% \n\ra-zA-Z0-9]*')"
+                 )
+EXTERNALID = ("""(?:SYSTEM|PUBLIC{S}{PUBLICLITERAL})"""
+              """{S}{SYSTEMLITERAL}"""
+              ).format(**locals())
+ENTITY = ("""<!ENTITY{S}%{S}"""
+          """(?P<PEDecl>{NAME}){S}"""
+          """{EXTERNALID}{opS}>"""
+          ).format(**locals())
+r_ENTITY = re.compile(ENTITY, re.VERBOSE | re.DOTALL | re.MULTILINE)
+DOCTYPE = ("""<!DOCTYPE{S}"""
+           "(?P<Name>{NAME})"
+           "("
+             "({S}{EXTERNALID}{opS})?"  # noqa: 127
+             r"(?:{S}\[(?P<IntSubset>.*)\])?"  # noqa: 127
+           ")?"
+           """{opS}>"""
+           ).format(**locals())
+r_DOCTYPE = re.compile(DOCTYPE, re.VERBOSE | re.DOTALL | re.MULTILINE)
+COMMENTOPEN = re.compile('<!--')
+COMMENTCLOSE = re.compile('-->')
 
-      elif publicId.startswith("-//OASIS//") or \
-           publicId.startswith("-//Novell//DTD"):
-        # Return a temporary filename without meaningful content
-        return self.tmpfile.name 
 
-      # ---------------------------------------------------
-      #elif publicId.startswith("-//OASIS//DTD DocBook") or \
-      #     publicId.startswith("-//OASIS//ENTITIES"):
-      #  dtdversion=publicId.split("//")[2][-3:]
-      #  filename = os.path.basename(systemId)
-      #  return "/usr/share/xml/docbook/schema/dtd/%s/%s" % (dtdversion ,filename)
-      #elif publicId.startswith("ISO 8879:1986//"):
-      #  dtdversion=publicId.split("//")[2][-3:]
-      #  filename = os.path.basename(systemId)
-      #  print >> sys.stderr, "dtdversion=%s, filename=%s, file=%s" % \
-      #   (dtdversion, filename, "/usr/share/xml/entities/xmlcharent/0.3/%s" % filename)
-      #  return "/usr/share/xml/entities/xmlcharent/0.3/%s" % filename
+def xmlsyntaxcheck(xmlfile):
+    """Check if the XML file is well-formed
 
-      else:
-        # Should not happen...
-        return ""
+    :param str xmlfile: XML filename
+    :return: Nothing if the XML is well-formed, otherwise it raises
+       a SAXParseException
+    :rtype: bool
+    """
+    parser = make_parser()
+    parser.setContentHandler(ContentHandler())
+
+    parser.parse(xmlfile)
 
 
-def joinEnts(unique, sep, ents):
-  """Returns a string of names, separated by 'sep'."""
-  if unique:
-    return sep.join(list(set(ents)))
-  else:
+def joinEnts(ents, sep):
+    """Returns a string of names, separated by 'sep'."""
     return sep.join(ents)
 
 
-def getAllEntities(args):
-  """Collects *all* entities in XML files"""
-  ents=[]
-  for f in args.xmlfiles:
-    f = os.path.abspath(f)
-    if not os.path.exists(f):
-      print("ERROR: File »%s« not found!" % sys.argv[1], file=sys.stderr)
-      sys.exit(10)
-    parser = make_parser()# ["drv_expat"]
-    cwd=os.getcwd()
-    os.chdir(os.path.dirname(f))
-    parser.setEntityResolver(MyEntityResolver(f, ents))
-    parser.parse(f)
-    os.chdir(cwd)
+def remove_xml_comments(content):
+    """Remove all XML comments (<!-- ... -->) in a string
 
-  return ents
+    :param str content: the content with possible XML comments
+    :return: a string without any XML comments
+    :rtype: str
+    :raises: ValueError when the end comment '-->' couldn't be find
+             or if there are double dashes '--' inside the comment.
 
+    >>> remove_xml_comments('<!-- hello -->World')
+    'World'
+    >>> remove_xml_comments('<!-- h -->World<!-- is it? -->')
+    'World'
+    >>> remove_xml_comments('<!--A-->Hi <!--B--> World.')
+    'Hi  World.'
+    >>> remove_xml_comments('''<!-- <!ENTITY x\
+    "X"> \
+    -->Hello''')
+    'Hello'
+    """
+    while True:
+        if '<!--' not in content:
+            return content
+        start = COMMENTOPEN.search(content).start()
+        match = COMMENTCLOSE.search(content)
+        if not match:
+            raise ValueError("ERROR: Missing '-->' in comment!")
+        end = match.end()
+        # Extract the comment
+        comment = content[start:end][4:-3]
+        if '--' in comment:
+            raise ValueError("ERROR: '--' not allowed in comment")
 
-def getFirstEntity(args):
-  # Mostly taken from xmllib.py
-  # Regular expressions
-  _space = '[ \t\r\n]'                    # whitespace
-  _S = '%s+'  % _space                    # One or more whitespace
-  _opS = '%s*'% _space                    # Zero or more  whitespace
-  _oS = '%s?' % _space                    # Optional whitespace
-  _Name = '[a-zA-Z_:][-a-zA-Z0-9._:]*'    # Valid XML name
-  _QStr = "(?:'[^']*'|\"[^\"]*\")"        # Quoted XML string
-  _quotes = "(?:'[^']'|\"[^\"]\")"
-  _SystemLiteral = '(?P<%s>'+_QStr+')'
-  _PublicLiteral = '(?P<%s>"[-\'\(\)+,./:=?;!*#@$_%% \n\ra-zA-Z0-9]*"|' \
-                          "'[-\(\)+,./:=?;!*#@$_%% \n\ra-zA-Z0-9]*')" % 'pubid'
-  _ExternalId = 'SYSTEM' +_S+'('+_SystemLiteral % 'syslit'+')' \
-                '|' + \
-                'PUBLIC'+_S+'('+_PublicLiteral+_S+_SystemLiteral % 'psyslit'+')'
-  # Normally, this is the EBNF from the XML Spec:
-  # [74] PEDef     ::=      EntityValue | ExternalID
-  # As we are only interested in ExternalIDs, we omit EntityValue
-  _PEDef = _ExternalId
-  
-  # [72] PEDecl     ::=     '<!ENTITY' S '%' S Name S PEDef S? '>'
-  _PEDecl = '<!ENTITY' + _S + '%' + _S + '(?P<PEDecl>' + \
-            _Name + ')' + _S + _PEDef + _oS + '>'
-  
-  __dtd = r"""<!DOCTYPE""" \
-          r"""%(spc)s+(?P<Name>%(_Name)s)""" \
-          r"""%(spc)s+(?P<Type>PUBLIC|SYSTEM)""" \
-          r"""%(spc)s+(?P<ExternalID>.*)"""  \
-          r"""%(spc)s+\[(?P<IntSubset>.*)\]%(spc)s?>""" % { 
-                   'spc':   _space,
-                   '_Name':    _Name}
-
-  doctype = re.compile(__dtd)
-  entities = re.compile(_PEDecl)
-  ents=[]
-
-  for f in args.xmlfiles:
-    name = open(f, 'r')
-    lines=[]
-    for i in range(50):
-      lines.append( name.readline() )
-    lines = "".join(lines)
-
-    match_obj = re.search(__dtd, lines,  re.DOTALL)
-    if match_obj:
-      # Only process, when the internal subset has been found:
-      Content = match_obj.group('IntSubset')
-      #Name = match_obj.group('Name')
-      #Type = match_obj.group('Type')
-      #ExternalID = match_obj.group('ExternalID')
-      # print("Name:    %s" % Name, file=sys.stderr)
-      # print("Type:    %s" % Type, file=sys.stderr)
-      # print("ExtId:   %s" % ExternalID, file=sys.stderr)
-      # print("Content: %s" % Content, file=sys.stderr)
-
-      if Content:
-        # Only process, when there is an internal subset
-        # Find comments without reg expressions:
-        cs = Content.find("<!--")
-        ce = Content.find("-->")
-
-        if (cs < 0 and ce >= 0) or (cs >=0 and ce <0):
-          print("ERROR: Wrong XML comment found!", file=sys.stderr)
-          sys.exit(100)
-        elif cs >= 0 and ce >= 0:
-          # If XML comment found, remove the substring (cs,ce)
-          assert cs < ce, "ERROR: Internal error. " \
-                "Start index of XML comment must be smaller than end index!"
-          Content = Content[1:cs] +  Content[ce+3:]
-
-        # Now it's easy. Search for all entity declarations in the internal subset:
-        x=entities.findall(Content)
-        for j in x:
-          if j[1][0] in  ('"', "'"):
-            # Chop quotes
-            ents.append( j[1][1:-1] )
-          else:
-            ents.append(j[1])
-
-  return ents
+        # Remove the comment
+        content = content[0:start] + content[end:]
 
 
-def main():
-    """ """
-    # Create global options parser.
-    #global gparser # only need for 'help' command (optional)
-    #import optparse
-    parser = argparse.ArgumentParser(description=__doc__.strip())
+def parse_ent_file(entityfile, args):
+    """Parse entity file for other referenced entities
+
+    :param str entityfile: filename to the referenced
+                           entity file from XML
+    :param args: parsed arguments from CLI parser
+    """
+    # HINT: This reads the complete file.
+    log.debug("Investigate entity file %r", entityfile)
+    content = open(entityfile, 'r').read()
+    for entity in r_ENTITY.finditer(content):
+        if args.skip_public and entity['pubid']:
+            log.debug("Skipping public parameter entity %s %s",
+                      entity['pubid'].replace('\n', ''), entity['sysid'])
+            continue
+        log.debug("Found match %s", entity['sysid'])
+        yield entity['sysid'][1:-1]
+
+
+def getentities(args, linenr=50):
+    """Read first 50 lines (default) and return any parameter entity names
+
+    :param args: parsed arguments from CLI parser
+    :param int linenr: number of lines that should be investigated
+    :return: a list of all found entities
+    """
+    ents = {}
+    seen = set()
+
+    for xmlfile in args.xmlfiles:
+        # Checks for well-formed XML; does nothing if all is ok,
+        # but if not, it raises a SAXParseException.
+        xmlsyntaxcheck(xmlfile)
+
+        # Prepare the lines:
+        lines = []
+        with open(xmlfile, 'r') as fh:
+            for i in range(linenr):
+                lines.append(fh.readline())
+        if len(lines) > 5:
+            log.debug("First six lines:")
+            for i in range(6):
+                log.debug("  line %d: %s", i+1, lines[i].strip())
+        lines = "".join(lines)
+
+        # Try to find matches
+        match = r_DOCTYPE.search(lines)
+        log.debug("Match: %s", match)
+        if match:
+            content = remove_xml_comments(match['IntSubset'])
+
+            log.debug("Looking for entities...")
+            for match in r_ENTITY.finditer(content):
+                # Remove quotes:
+                entity = match['sysid'][1:-1]
+                # log.info("Found entity %r", entity)
+                if entity in seen:
+                    continue
+                seen.add(entity)
+                if entity.startswith("/"):
+                    ents.append(entity)
+                elif entity.startswith("http"):
+                    ents.append(entity)
+                else:
+                    # ents.append(entity)
+                    ents[entity] = os.path.join(os.path.dirname(xmlfile),
+                                                entity)
+                log.debug("ents: %s", ents)
+
+    resultdict = ents.copy()
+    # Process ents to find other referenced PEs
+    for absolute in ents.values():
+        for entity in parse_ent_file(absolute, args):
+            if entity not in seen:
+                seen.add(entity)
+                resultdict[entity] = os.path.join(os.path.dirname(absolute),
+                                                  entity)
+    return resultdict
+
+
+def parsecli(cliargs=None):
+    """Parse CLI with :class:`argparse.ArgumentParser` and return parsed result
+
+    :param list cliargs: Arguments to parse or None (=use sys.argv)
+    :return: parsed CLI result
+    :rtype: :class:`argparse.Namespace`
+    """
+    # Setup logging
+    dictConfig(DEFAULT_LOGGING_DICT)
+
+    parser = argparse.ArgumentParser(description=__doc__.strip(),
+                                     formatter_class=argparse.RawDescriptionHelpFormatter,  # noqa: E501
+                                     usage='%(prog)s [OPTIONS] XMLFILE...')
     parser.add_argument("--version",
                         action="version",
-                        version="%%(prog)s %s" % __version__[11:-2])
-    parser.add_argument("-f", "--only-first",
-        dest="first",
-        default=False,
-        action="store_true",
-        help="Never prompt (default %(default)s)")
-    parser.add_argument("-u", "--unique",
-        dest="unique",
-        default=True,
-        action="store_false",
-        help="Make entity filenames unique (default %(default)s")
-    parser.add_argument("-s", "--separator",
-        dest="separator",
+                        version=__version__)
 
-        default=" ",
-        help="Set the separator between consecutive filenames (default '%(default)s'). Use '\\n' and '\\t' to insert a CR and TAB character.")
+    parser.add_argument('-v', '--verbose',
+                        action="count",
+                        help="Raise verbosity level",
+                        )
+    parser.add_argument("-A", "--absolute",
+                        default=False,
+                        action="store_true",
+                        help="Make paths absolute")
+    parser.add_argument("-P", "--skip-public",
+                        default=True,
+                        action="store_false",
+                        help="Skip parameter entities with public reference")
+    parser.add_argument("-s", "--separator",
+                        default=' ',
+                        help=("Set the separator between consecutive "
+                              "filenames (default '%(default)s'). "
+                              "Use '\\n' and '\\t' to "
+                              "insert a CR and TAB character.")
+                        )
     parser.add_argument("xmlfiles",
                         metavar="XMLFILES",
                         nargs="+",
-                        help="One ore more XML files to search for entities")
+                        help="One or more XML files")
 
-    args = parser.parse_args()
+    args = parser.parse_args(cliargs)
+    level = LOGLEVELS.get(args.verbose, logging.DEBUG)
+    # log.setLevel(LOGLEVELS.get(args.verbose, logging.DEBUG))
+    log.setLevel(level)
+    log.info("CLI args: %s", args)
+    log.debug("")
+    # Save our parser instance:
+    args.parser = parser
+
+    # Fix separators
     if args.separator == '\\n':
-      args.separator = '\n'
+        args.separator = '\n'
     elif args.separator == '\\t':
-      args.separator = '\t'
+        args.separator = '\t'
 
-    return parser, args
+    resultargs = []
+    for fn in args.xmlfiles:
+        if not os.path.isabs(fn):
+            fn = os.path.abspath(fn)
+        resultargs.append(fn)
+
+    args.xmlfiles = resultargs
+
+    return args
 
 
-if __name__=="__main__":
-  try:
-    p, args = main()
+def main(cliargs=None):
+    """Entry point for the application script
 
-    if not args:
-      p.print_usage()
-      sys.exit(1)
+    :param list cliargs: Arguments to parse or None (=use :class:`sys.argv`)
+    :return: error code; 0 => everything was succesfull, !=0 => error
+    :rtype: int
+    """
+    try:
+        args = parsecli(cliargs)
 
-    if args.first:
-      ents = getFirstEntity(args)
-    else:
-      ents = getAllEntities(args)
-    print(joinEnts(args.unique, args.separator, ents))
+        if not args:
+            args.parser.print_usage()
+            sys.exit(1)
 
-  except SAXParseException as e:
-      print(e, file=sys.stderr)
-      print(" ".join(resultEntities))
-  except IOError as e:
-      print(e, file=sys.stderr)
+        ents = getentities(args)
+        if args.absolute:
+            print(joinEnts(ents.values(), args.separator))
+        else:
+            print(joinEnts(ents, args.separator))
+        return 0
 
+    except IOError as error:
+        log.fatal(error)
+    except SAXParseException as error:
+        log.fatal(error)
+    return 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())
