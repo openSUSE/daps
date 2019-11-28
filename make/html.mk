@@ -287,9 +287,9 @@ $(HTML_RESULT): $(PROFILES) $(PROFILEDIR)/.validate $(DOCFILES)
       ifdef ROOTID
 	if [ ! -e $@ ]; then \
 	  (cd $(HTML_DIR) && ln -sf $(ROOTID).$(HTML_SUFFIX) $@) \
-	else \
+	elif [ ! -e $(HTML_DIR)/$(ROOTID).$(HTML_SUFFIX) ]; then \
 	  (cd $(HTML_DIR) && ln -sf $(notdir $@) $(ROOTID).$(HTML_SUFFIX)); \
-        fi;	
+        fi;
       endif
     endif
   endif
