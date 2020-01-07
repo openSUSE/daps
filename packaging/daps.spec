@@ -1,7 +1,7 @@
 #
 # spec file for package daps
 #
-# Copyright (c) 2018 SUSE LINUX GmbH, Nuernberg, Germany.
+# Copyright (c) 2020 SUSE LLC
 #
 # All modifications and additions to the file contributed by third parties
 # remain the property of their copyright owners, unless otherwise agreed
@@ -12,7 +12,7 @@
 # license that conforms to the Open Source Definition (Version 1.9)
 # published by the Open Source Initiative.
 
-# Please submit bugfixes or comments via http://bugs.opensuse.org/
+# Please submit bugfixes or comments via https://bugs.opensuse.org/
 #
 
 
@@ -44,7 +44,7 @@ Release:        0
 Summary:        DocBook Authoring and Publishing Suite
 License:        GPL-2.0-only OR GPL-3.0-only
 Group:          Productivity/Publishing/XML
-Url:            https://github.com/openSUSE/daps
+URL:            https://github.com/openSUSE/daps
 Source0:        %{name}-%{version}.tar.bz2
 Source1:        %{name}.rpmlintrc
 Source2:        %{name}-fetch-source-git
@@ -72,7 +72,7 @@ BuildRequires:  suse-xsl-stylesheets
 BuildRequires:  svg-dtd
 BuildRequires:  transfig
 BuildRequires:  xerces-j2
-BuildRequires:  xml-commons-jaxp-1.3-apis
+BuildRequires:  xml-apis
 BuildRequires:  xmlgraphics-fop >= 0.94
 BuildRequires:  xmlstarlet
 
@@ -118,7 +118,7 @@ Requires:       suse-xsl-stylesheets
 Requires:       svg-schema
 Requires:       transfig
 Requires:       xerces-j2
-Requires:       xml-commons-jaxp-1.3-apis
+Requires:       xml-apis
 Requires:       xmlgraphics-fop >= 0.94
 Requires:       xmlstarlet
 Requires:       zip
