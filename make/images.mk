@@ -30,6 +30,8 @@
 # -----------------------------
 #  DIA   |   PNG     | SVG,PDF
 #........|...........|..........
+#  DITAA |   PNG     |   PNG
+#........|...........|..........
 #  EPS   |   PNG     |   PDF
 #........|...........|..........
 #  FIG   |   PNG     | SVG,PDF
@@ -44,6 +46,11 @@
 #........|...........|..........
 #  SVG   |   PNG     | SVG,PDF
 #........|...........|..........
+#
+# NOTE on DITAA:
+# Version 0.10 that is packaged for openSUSE does not support SVG output
+# upstream 0.11 has SVG support (--svg)
+#
 #
 # $DOC_DIR/images/src/<FORMAT>/ is _never_ used for manual creation, the
 # images are rather created or linked into $IMG_GENDIR/color/ (color images)
@@ -74,6 +81,7 @@ STYLESVG2GRAY  := $(DAPSROOT)/daps-xslt/common/svg.color2grayscale.xsl
 
 # generate lists of all existing images
 SRCDIA     := $(wildcard $(IMG_SRCDIR)/dia/*.dia)
+SRCDITAA   := $(wildcard $(IMG_SRCDIR)/ditaa/*.ditaa)
 SRCEPS     := $(wildcard $(IMG_SRCDIR)/eps/*.eps)
 SRCFIG     := $(wildcard $(IMG_SRCDIR)/fig/*.fig)
 SRCJPG     := $(wildcard $(IMG_SRCDIR)/jpg/*.jpg)
@@ -81,10 +89,10 @@ SRCODG     := $(wildcard $(IMG_SRCDIR)/odg/*.odg)
 SRCPDF     := $(wildcard $(IMG_SRCDIR)/pdf/*.pdf)
 SRCPNG     := $(wildcard $(IMG_SRCDIR)/png/*.png)
 SRCSVG     := $(wildcard $(IMG_SRCDIR)/svg/*.svg)
-SRCALL     := $(SRCDIA) $(SRCEPS) $(SRCFIG) $(SRCJPG) $(SRCODG) \
+SRCALL     := $(SRCDIA) $(SRCDITAA) $(SRCEPS) $(SRCFIG) $(SRCJPG) $(SRCODG) \
 		$(SRCPDF) $(SRCPNG) $(SRCSVG)
 IMGDIRS    := $(sort $(dir $(SRCALL)))
-IMGFORMATS := dia eps fig jpg odg pdf png svg
+IMGFORMATS := dia ditaa eps fig jpg odg pdf png svg
 
 
 # get all images used in the current Document
@@ -109,6 +117,9 @@ USED_PDF := $(filter $(addprefix $(IMG_SRCDIR)/pdf/,$(USED)), $(SRCPDF))
 USED_DIA := $(filter \
 	$(addprefix $(IMG_SRCDIR)/dia/,$(addsuffix .dia,$(basename $(USED)))), \
 	$(SRCDIA))
+USED_DITAA := $(filter \
+	$(addprefix $(IMG_SRCDIR)/ditaa/,$(addsuffix .ditaa,$(basename $(USED)))), \
+	$(SRCDITAA))
 USED_EPS := $(filter \
 	$(addprefix $(IMG_SRCDIR)/eps/,$(addsuffix .eps,$(basename $(USED)))), \
 	$(SRCEPS))
@@ -121,8 +132,8 @@ USED_ODG := $(filter \
 USED_SVG := $(filter \
 	$(addprefix $(IMG_SRCDIR)/svg/,$(addsuffix .svg,$(basename $(USED)))), \
 	$(SRCSVG))
-USED_ALL := $(USED_DIA) $(USED_EPS) $(USED_FIG) $(USED_JPG) $(USED_ODG) \
-		$(USED_PNG) $(USED_PDF) $(USED_SVG)
+USED_ALL := $(USED_DIA) $(USED_DITAA) $(USED_EPS) $(USED_FIG) $(USED_JPG) \
+                $(USED_ODG) $(USED_PNG) $(USED_PDF) $(USED_SVG)
 
 # generated images
 #
@@ -132,6 +143,7 @@ GEN_PDF := $(subst .dia,.pdf,$(notdir $(USED_DIA))) \
 		$(subst .odg,.pdf,$(notdir $(USED_ODG))) \
 		$(subst .svg,.pdf,$(notdir $(USED_SVG)))
 GEN_PNG := $(subst .dia,.png,$(notdir $(USED_DIA))) \
+		$(subst .ditaa,.png,$(notdir $(USED_DITAA))) \
 		$(subst .eps,.png,$(notdir $(USED_EPS))) \
 		$(subst .fig,.png,$(notdir $(USED_FIG))) \
 		$(subst .odg,.png,$(notdir $(USED_ODG))) \
@@ -460,6 +472,15 @@ endif
 	LANG=C dia -t png --export=$@ $< $(DEVNULL) $(ERR_DEVNULL)
 	$(run_optipng)
 
+# DITAA -> PNG
+# create color PNGs from DITAA
+$(IMG_GENDIR)/gen/png/%.png: $(IMG_SRCDIR)/ditaa/%.ditaa | $(IMG_DIRECTORIES)
+ifeq "$(VERBOSITY)" "2"
+	@echo "   Converting $(notdir $<) to PNG"
+endif
+	$(remove_link)
+	ditaa $< $@ -T -o $(DEVNULL) $(ERR_DEVNULL)
+	$(run_optipng)
 
 # EPS -> PNG
 # create color PNGs from EPS
