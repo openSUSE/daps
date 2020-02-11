@@ -96,9 +96,17 @@ nav ul {
   display: block;
 }
 
+nav ul::after {
+  content: '';
+  clear: both;
+  display: block;
+}
+
 nav li {
-  display: inline-block;
+  display: block;
+  float: left;
   padding: 0;
+  border-right: .1rem rgba(255,255,255,0.3) solid;
   margin: 0;
 }
 
