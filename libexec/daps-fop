@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Copyright (C) 2012-2015 SUSE Linux GmbH
+# Copyright (C) 2012-2020 SUSE, LLC
 #
 # Authors:
 # Frank Sundermeyer <fsundermeyer at opensuse dot org>
@@ -30,21 +30,23 @@ else
     FOP_CMD_SWITCHES="$FOP_DEFAULT_CMD_OPTIONS $FOP_CMD_OPTIONS"
 fi
 
-# set initial/maximum java heap size
+
+# override the following by exporting FOP_STACKSIZE / FOP_MEMORY
+# with different values
 #
-#FOP_MEMORY=${FOP_MEMORY:-"-Xms400 -Xmx500m"}
 # set java thread stack size
-#
 FOP_STACKSIZE=${FOP_STACKSIZE:-"-Xss2048K"}
+# set initial/maximum java heap size
+FOP_MEMORY=${FOP_MEMORY:-"-Xms256m -Xmx2048m"} # min - max
 
 # Default JAVA/FOP setup for FOP needed by DAPS
 # ----------------------------------------------
 # do not change
 # To add additional flags/jars/options use
 #
-# FOP_FLAGS
-# FOP_JARS
-# FOP_OPTIONS
+# FOP_JAVA_FLAGS
+# FOP_JAVA_JARS
+# FOP_JAVA_OPTIONS
 #
 # in the config. These values will be used in addition to the default values
 # specified below
