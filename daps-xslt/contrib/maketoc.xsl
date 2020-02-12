@@ -13,7 +13,7 @@
      DocBook XML toc structure, see http://www.docbook.org/tdg/en/html/toc.html
    
    Author:    Thomas Schraitle <toms@opensuse.org>
-   Copyright (C) 2012-2015 SUSE Linux GmbH
+   Copyright (C) 2012-2020 SUSE Software Solutions Germany GmbH
    
 -->
 

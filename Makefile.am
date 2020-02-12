@@ -1,4 +1,4 @@
-# Copyright (C) 2012-2016 SUSE Linux GmbH
+# Copyright (C) 2012-2020 SUSE Software Solutions Germany GmbH
 #
 # Author:
 # Frank Sundermeyer <fsundermeyer at opensuse dot org>

@@ -13,7 +13,7 @@
      DocBook 5 document without the DocBook 5 namespace
    
    Author:    Thomas Schraitle <toms@opensuse.org>
-   Copyright (C) 2012-2015 SUSE Linux GmbH
+   Copyright (C) 2012-2020 SUSE Software Solutions Germany GmbH
 
 -->
 <xsl:stylesheet version="1.0"
