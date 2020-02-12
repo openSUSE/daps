@@ -34,16 +34,18 @@
 # ======================================================================
 -->
 
-  <xsl:output 
+  <xsl:output
     method="xml"
     encoding="utf-8"
     indent="yes"
-    omit-xml-declaration="yes"/>
-   <xsl:preserve-space elements="*"/>
+    omit-xml-declaration="no"/>
+  <xsl:preserve-space elements="*"/>
   <xsl:preserve-space elements="screen address programlisting"/>
   <!--<xsl:strip-space elements="*"/>-->
 
-
+  <!-- Set this to 0 if you want to avoid a DOCTYPE declaration -->
+  <xsl:param name="doctype" select="1"/>
+  <!-- DocBook version -->
   <xsl:param name="db5.version" select="'5.0'"/>
   <!-- DocBook version for the output 5.0 and 5.1 only current values -->
   <xsl:param name="db5.version.string" select="$db5.version"/>
@@ -76,6 +78,27 @@
       <xsl:apply-templates/>
     </xsl:variable>
 
+   <xsl:processing-instruction name="xml-stylesheet"
+    >href="<xsl:value-of select="concat('urn:x-suse:xslt:profiling:docbook',
+      translate($db5.version, '.', ''),
+     '-profile.xsl')"/>"
+    type="text/xml"
+    title="Profiling step"
+</xsl:processing-instruction>
+   <xsl:text>&#10;</xsl:text>
+
+   <xsl:if test="$doctype = 1">
+     <xsl:text disable-output-escaping="yes">&lt;!DOCTYPE </xsl:text>
+     <xsl:value-of select="local-name(/*)"/>
+     <xsl:text disable-output-escaping="yes">
+[
+   &lt;!ENTITY % entities SYSTEM "entity-decl.ent">
+   %entities;
+]>
+
+</xsl:text>
+   </xsl:if>
+
     <xsl:if test="$xml-model = 1">
       <xsl:processing-instruction name="xml-model">href="http://docbook.org/xml/<xsl:value-of select="$db5.version"/>/rng/docbook.rng" schematypens="http://relaxng.org/ns/structure/1.0"</xsl:processing-instruction>
       <xsl:text>&#10;</xsl:text>
@@ -83,11 +106,6 @@
       <xsl:text>&#10;&#10;</xsl:text>
     </xsl:if>
 
-    <xsl:comment>
-      <xsl:text> Converted by suse-upgrade version </xsl:text>
-      <xsl:value-of select="$version"/>
-      <xsl:text> </xsl:text>
-    </xsl:comment>
     <xsl:text>&#10;</xsl:text>
 
     <xsl:apply-templates select="exsl:node-set($converted)/node()"
@@ -785,6 +803,25 @@
     </xsl:copy>
   </xsl:template>
 
+  <xsl:template match="link[@linkend]" priority="200">
+   <xsl:call-template name="emit-message">
+    <xsl:with-param name="message">
+     <xsl:text>Converting link[@linkend] to xref.</xsl:text>
+    </xsl:with-param>
+   </xsl:call-template>
+   <xsl:choose>
+    <xsl:when test="count(*)>0 or normalize-space(text()) != ''">
+     <xsl:copy-of select="*"/>
+     <xsl:text> (</xsl:text>
+     <xref linkend="{@linkend}"/>
+     <xsl:text>)</xsl:text>
+    </xsl:when>
+    <xsl:otherwise>
+     <xref linkend="{@linkend}"/>
+    </xsl:otherwise>
+   </xsl:choose>
+  </xsl:template>
+
   <xsl:template match="ulink" priority="200">
     <xsl:choose>
       <xsl:when test="node()">
@@ -1381,7 +1418,28 @@
       <xsl:apply-templates/>
     </varname>
   </xsl:template>
-  <!-- ====================================================================== -->
+
+  <xsl:template match="table[@width]|informaltable[@width]">
+   <xsl:element name="{local-name(.)}">
+    <xsl:if test="@id">
+     <xsl:attribute name="xml:id">
+      <xsl:value-of select="@id"/>
+     </xsl:attribute>
+    </xsl:if>
+    <xsl:apply-templates/>
+   </xsl:element>
+  </xsl:template>
+
+  <xsl:template match="row[@id]">
+   <xsl:element name="{local-name(.)}">
+    <!--<xsl:call-template name="copy.attributes">
+     <xsl:with-param name="suppress">id</xsl:with-param>
+    </xsl:call-template>-->
+    <xsl:comment>id=<xsl:value-of select="@id"/></xsl:comment>
+    <xsl:apply-templates/>
+   </xsl:element>
+  </xsl:template>
+ <!-- ====================================================================== -->
   <!-- glossterm and term have broader content models in 4.x than 5.0.
      Warn when an unsupported element is found under glossterm.
      Because the synopsis elements can contain things that phrase cannot,
@@ -1528,11 +1586,6 @@
     <xsl:copy-of select="."/>
   </xsl:template>
 
-  <!--
-<xsl:template match="comment()|processing-instruction()|text()" mode="copy">
-  <xsl:copy/>
-</xsl:template>
--->
 
   <!-- ====================================================================== -->
 
@@ -1738,6 +1791,9 @@
     mode="addNS">
     <xsl:copy/>
   </xsl:template>
+
+  <xsl:template match="/processing-instruction('xml-stylesheet')|
+                       /processing-instruction('provo')"/>
 
   <!--  -->
   <!--<xsl:template match="/*" mode="addNS">
