@@ -19,13 +19,15 @@ import os
 import re
 import sys
 import textwrap
+import warnings
+
 from lxml import etree
 
 HERE = os.path.dirname(os.path.realpath(__file__))
 BASE = os.path.basename(__file__)
 XINCLUDE_XSLT = os.path.join(HERE, "%s-xinclude.xsl" % BASE)
 SUSE_NS = "urn:x-suse:ns:python"
-ENTITY_NOT_FOUND = re.compile(r'Entity\s+.*\s+not defined')
+ENTITY_NOT_FOUND = re.compile(r'Entity\s+(.*)\s+not defined')
 
 
 if etree.LXML_VERSION < (3, 4, 0):
@@ -40,7 +42,7 @@ if not os.path.exists(XINCLUDE_XSLT):
 # ------------------------------------------------------------
 # Extension Functions in a SUSE namespace
 
-def exists(context, f):
+def exists(context, f) -> bool:
     """Test whether a path exists.  Returns False for
        broken symbolic links
 
@@ -57,7 +59,7 @@ def exists(context, f):
     return os.path.exists(os.path.join(d, f))
 
 
-def abspath(context, f):
+def abspath(context, f) -> str:
     """Return the absolute path of the context node
 
         :param context:
@@ -76,7 +78,7 @@ def abspath(context, f):
 # ------------------------------------------------------------
 #
 
-def process_xinclude(tree):
+def process_xinclude(tree) -> list:
     """Process the tree with a XSLT stylesheet which
        resolves any XIncludes. Prints
 
@@ -100,30 +102,43 @@ def process_xinclude(tree):
     #    second level
     # 2. we need to handle cases where the file cannot be found
     xitransform = etree.XSLT(etree.parse(XINCLUDE_XSLT))
-    warnfiles = []
+    problems = []
     try:
         result = xitransform(tree)
         for entry in xitransform.error_log:
-            if ":" in entry.message:
-                level, msg = entry.message.split(':', maxsplit=1)
-            else:
-                level = 'INFO'
-                msg = entry.message
-                # Skip if we find not defined entities:
-                if ENTITY_NOT_FOUND.match(msg):
-                    continue
-            # print(level, msg, file=sys.stderr)
-            if level == 'WARN':
-                warnfiles.append(msg)
+            msg = entry.message
+            if msg.startswith("INFO"):
+                continue
+
+            # If there is an unresolved/undefined entity,
+            # warn about it:
+            if ENTITY_NOT_FOUND.match(msg):
+                problems.append(msg)
+                warnings.warn_explicit(msg,
+                                       category=Warning,
+                                       filename=entry.filename,
+                                       lineno=entry.line,
+                                       )
+            # Anything related to unresolved <xi:include/> elements:
+            if msg.startswith("WARN"):
+                problems.append(msg)
+                warnings.warn_explicit(msg[6:],
+                                       category=Warning,
+                                       filename=entry.filename,
+                                       lineno=entry.line,
+                                       )
+
     except etree.XSLTApplyError as err:
         # We search for "Cannot resolve URI <FILENAME>"
         uri = err.args[0].split("URI ")[-1]
-        warnfiles.append(uri)
+        problems.append(uri)
 
-    return warnfiles
+    return problems
 
 
-def check_wellformedness(xmlfile, warnings_as_errors=False, xinclude=True):
+def check_wellformedness(xmlfile,
+                         warnings_as_errors=False,
+                         xinclude=True) -> int:
     """Checks a file for well-formedness
 
     This only works with lxml >= 3.4.0 (because of collect_ids option)
@@ -141,12 +156,11 @@ def check_wellformedness(xmlfile, warnings_as_errors=False, xinclude=True):
         if xinclude:
             r = process_xinclude(tree)
             if r and warnings_as_errors:
-                raise ValueError(", ".join(r))
+                raise ValueError()
         return 0
 
     except ValueError as err:
-        print("ERROR: The following file(s) cannot be found:\n "
-              "%s" % err, file=sys.stderr)
+        # print("ERROR", file=sys.stderr)
         return 20
 
     except (etree.XMLSyntaxError, etree.XIncludeError) as err:
@@ -155,7 +169,7 @@ def check_wellformedness(xmlfile, warnings_as_errors=False, xinclude=True):
         return 10
 
 
-def parse_cli(args=None):
+def parse_cli(args=None) -> argparse.Namespace:
     """Parse CLI arguments
 
     :param list args: Use the list or sys.args
@@ -182,8 +196,16 @@ def parse_cli(args=None):
                               "be found; "
                               "(default: %(default)s)")
                         )
-    parser.add_argument("xmlfile",
-                        help="XML file to check well-formedness"
+    parser.add_argument("-S", "--stats",
+                        action="store_true",
+                        default=False,
+                        help=("Print statistic about successful/"
+                              "failed files"
+                              )
+                        )
+    parser.add_argument("xmlfiles",
+                        nargs="+",
+                        help="XML file(s) to check for well-formedness"
                         )
     args = parser.parse_args(args)
     # print(args, file=sys.stderr)
@@ -192,7 +214,21 @@ def parse_cli(args=None):
 
 if __name__ == "__main__":
     args = parse_cli()
-    result = check_wellformedness(args.xmlfile,
+    endresult=0
+    failures=0
+    successes=0
+    for xmlfile in args.xmlfiles:
+        result = check_wellformedness(xmlfile,
                                   args.warnings_as_errors,
                                   args.xinclude)
-    sys.exit(result)
+        if result:
+            failures += 1
+        else:
+            successes += 1
+        endresult += result
+    if args.stats:
+        msg = ("--- Successful Files={successes}, "
+               "Failed files={failures} ---").format(**locals())
+        print(msg, file=sys.stderr)
+
+    sys.exit(endresult)

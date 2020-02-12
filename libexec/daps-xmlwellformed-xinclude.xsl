@@ -37,7 +37,7 @@
     <xsl:apply-templates select="document($abspath, .)"/>
    </xsl:when>
    <xsl:otherwise>
-    <xsl:message>WARN:<xsl:value-of select="@href"/></xsl:message>
+    <xsl:message>WARN: File not found "<xsl:value-of select="@href"/>"</xsl:message>
    </xsl:otherwise>
   </xsl:choose>
  </xsl:template>
