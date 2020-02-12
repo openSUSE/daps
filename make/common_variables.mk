@@ -257,9 +257,7 @@ DAPSSTRINGS := --stringparam "converter.name=$(MY_NAME)" \
 #-------
 # Image Directories
 #
-IMG_DIRECTORIES := $(IMG_SRCDIR)/dia $(IMG_SRCDIR)/eps $(IMG_SRCDIR)/fig \
-                   $(IMG_SRCDIR)/pdf $(IMG_SRCDIR)/png $(IMG_SRCDIR)/svg \
-                   $(IMG_GENDIR)/gen/png $(IMG_GENDIR)/gen/pdf \
+IMG_DIRECTORIES := $(IMG_GENDIR)/gen/png $(IMG_GENDIR)/gen/pdf \
                    $(IMG_GENDIR)/gen/svg \
                    $(IMG_GENDIR)/color $(IMG_GENDIR)/grayscale
 

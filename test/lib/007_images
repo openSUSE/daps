@@ -9,6 +9,7 @@
 #
 # * Are the images correctly converted:
 #   -DIA: -> PDF, PNG, SVG
+#   -DITAA: -> PNG
 #   -EPS: -> PDF, PNG
 #   -FIG: -> PDF, PNG, SVG
 #   -JPG: -> JPG (copy)
@@ -235,6 +236,25 @@ function test_imagesODG () {
     assertTrue \
         " └─ Grayscale SVG for $_ODG_IMG is missing" \
         "[ -s ${_IMGDIR_GRAYSCALE}/${_ODG_IMG}.svg ]"
+}
+
+#--------------------------------
+# * Are the DITAA images correctly converted to PNG?
+#
+function test_imagesDITAA () {
+    local _DITAA_IMG
+
+    _DITAA_IMG=$(basename -s .ditaa $(find ${_IMGDIR_SRC}/ditaa -type f | head -1))
+
+    assertTrue \
+        " └─ DITAA to PNG generation failed" \
+        "[ -s ${_IMGDIR_GEN}/png/${_DITAA_IMG}.png ]"
+    assertTrue \
+        " └─ Color PNG link for $_DITAA_IMG is missing" \
+        "[ -L ${_IMGDIR_COLOR}/${_DITAA_IMG}.png ]"
+    assertTrue \
+        " └─ Grayscale PNG for $_DITAA_IMG is missing" \
+        "[ -s ${_IMGDIR_GRAYSCALE}/${_DITAA_IMG}.png ]"
 }
 
 

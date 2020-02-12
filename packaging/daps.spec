@@ -125,6 +125,7 @@ Requires:       zip
 
 Recommends:     aspell-en
 Recommends:     calibre
+Recommends:     ditaa
 Recommends:     epubcheck
 Recommends:     exiftool
 %ifarch aarch64 %{ix86} x86_64

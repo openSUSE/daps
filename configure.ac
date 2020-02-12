@@ -126,6 +126,9 @@ AC_PATH_PROG([BZIP], [bzip2], [0])
 dnl asciidoctor
 AC_PATH_PROG([ASCIIDOCTOR], [asciidoctor], [0])
 
+dnl ditaa
+AC_PATH_PROG([DITAA], [ditaa], [0])
+
 dnl epubcheck
 AC_PATH_PROG([EPUBCHECK], [epubcheck], [0])
 
@@ -499,6 +502,13 @@ if test 0 = "$DIA"; then
   AC_MSG_RESULT([Support for .dia images          |    no   | install dia])
 else
   AC_MSG_RESULT([Support for .dia images          |   yes   |])
+fi
+
+dnl DITAA support
+if test 0 = "$DITAA"; then
+  AC_MSG_RESULT([Support for .ditaa images        |    no   | install ditaa])
+else
+  AC_MSG_RESULT([Support for .ditaa images        |   yes   |])
 fi
 
 dnl ODG support
