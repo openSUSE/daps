@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2012-2019 SUSE Linux GmbH
+# Copyright (C) 2012-2020 SUSE Software Solutions Germany GmbH
 #
 # Author:
 # Thomas Schraitle <toms at opensuse dot org>

@@ -27,7 +27,7 @@
      and differ between runs. Currently, the .page generation runs before
      the actual HTML is generated.
 
-     Copyright (C) 2012-2015 SUSE Linux GmbH
+     Copyright (C) 2012-2020 SUSE Software Solutions Germany GmbH
 
 -->
 <!DOCTYPE xsl:stylesheet [
