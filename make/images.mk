@@ -479,7 +479,7 @@ ifeq "$(VERBOSITY)" "2"
 	@echo "   Converting $(notdir $<) to PNG"
 endif
 	$(remove_link)
-	ditaa $< $@ -T -o $(DEVNULL) $(ERR_DEVNULL)
+	ditaa $< $@ --transparent --overwrite --scale 2.5 --no-shadows $(DEVNULL) $(ERR_DEVNULL)
 	$(run_optipng)
 
 # EPS -> PNG
