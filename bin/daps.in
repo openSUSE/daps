@@ -569,6 +569,9 @@ Global Options:
                             Note: To validate with a local schema, specify an
                                   absolute path with a "file://" prefix
                                   (e.g. "file:///foo/schema.rnc").
+  --set-date                Set a publication date. If not set, the current
+                            date will automatically be chosen.
+                            Default: current date
   --styleroot=DIR           By default, daps uses the DocBook Stylesheets to
                             create output. If you have your own set of
                             stylesheets, specify the absolute path to the
@@ -1055,7 +1058,7 @@ export POSIXLY_CORRECT=1
 # Therefore we need to save each variable twice in order to recover the
 # original value.
 
-ARGS=$(getopt -o d:e:hm:v:: -l adocattr:,adocimgdir:,adocset,builddir:,config:,color:,colour:,commands,debug,docconfig:,dapsroot:,envfile:,fb_styleroot:,force,help,jobs:,main:,schema:,styleroot:,verbosity::,version,xsltprocessor: -n "$ME" -- "$@")
+ARGS=$(getopt -o d:e:hm:v:: -l adocattr:,adocimgdir:,adocset,builddir:,config:,color:,colour:,commands,debug,docconfig:,dapsroot:,envfile:,fb_styleroot:,force,help,jobs:,main:,schema:,set-date:,styleroot:,verbosity::,version,xsltprocessor: -n "$ME" -- "$@")
 
 # Exit when getopt returns errors
 #
@@ -1079,7 +1082,7 @@ while true ; do
             ;;
         --adocset)
             ADOC_SET_CMDL="yes"
-	    ADOC_SET="$ADOC_SET_CMDL"
+            ADOC_SET="$ADOC_SET_CMDL"
             shift
             ;;
         --builddir)
@@ -1174,6 +1177,10 @@ while true ; do
         --schema)
             DOCBOOK5_RNG_URI="$2"
             DOCBOOK5_RNG_URI_CMDL="$DOCBOOK5_RNG_URI"
+            shift 2
+            ;;
+        --set-date)
+            SETDATE=$(date -d "$2" +"%b %d %Y" 2>/dev/null) || exit_on_error "Wrong value for set-date: must be in a \"date\" compatible format,\ne.g. \"YYYY-MM-DD\"!"
             shift 2
             ;;
         --styleroot)
