@@ -178,6 +178,10 @@ def get_all_files(xmlfile: str, xinclude: bool):
     except ValueError as err:
         error = err
         rc = ReturnCode.value_err
+    except etree.XSLTApplyError as err:
+        # We search for "Cannot resolve URI <FILENAME>"
+        uri = err.args[0].split("URI ")[-1]
+        problems.append(uri)
     except etree.XIncludeError as error:
         error = err
         rc = ReturnCode.xinclude_err
