@@ -8,54 +8,29 @@
 
 
 code=0
-log=
 
-checked=
 todo=
 
-
-brexit() {
-  # $1 - message
-  # $2 - error code
-  echo -e "error: $1"
-  [[ "$2" =~ ^[0-9]+$ ]] && exit "$2"
-  exit 1
-}
-
-lint() {
-  # $1 - file to check
-  checked+="$1\n"
-  [ ! -f "$1" ] && { log+="error: File $infile does not exist\n"; code=20; return 1; }
-  local messages
-  messages=$(xmllint --noout --noent --nonet "$1" 2>&1)
-  [ -n "$messages" ] && { log+="$messages\n"; code=20; return 1; }
-  return 0
-}
 
 find_includes() {
   # $1 - file to find includes in
   local includes
+  local new_todo
   # FIXME: unsolved issues:
-  # - recognize empty href attributes
+  # - (explicitly) recognize empty href attributes -- we should be outputting
+  #   a file error already though
   # - handle symlinks without going into an endless circle
   # - deal with protocols & non-Unix file systems (https://, file:, C:\\)
-  includes=$(xml sel -N xi="http://www.w3.org/2001/XInclude" \
-    -t -v '//xi:include/@href' "$1" | sed -r 's,^[^/],'"$indir"'/&,')
-  [ -z "$includes" ] && return 0
-  [ -z "$todo" ] && { todo=$(comm -1 -3 <(filter "$checked") <(filter "$todo\n$includes")); return 1; }
-  todo=$(comm -1 -3 <(filter "$checked") <(filter "$todo\n$includes"))
-}
 
-update_todos() {
-  #1 - line to remove
-  local todo_temp
-  todo_temp=
-  # this seemed the safest option to handle file names, as it does not
-  # involve regexes; probably slows us down, however
-  while read -r line; do
-    [[ "$line" != "$1" ]] && todo_temp+="$line\n"
-  done < <(echo -e "$todo")
-  todo=$(filter "$todo_temp")
+  # xmlstarlet has the same error code (1) for "bad entity" and for "no xinclude" :(
+  includes=$(xml sel -N xi="http://www.w3.org/2001/XInclude" \
+    -t -v '//xi:include/@href' "$1" 2>/tmp/eelform)
+  [[ -n $(<"/tmp/eelform") ]] && { cat "/tmp/eelform"; code=20; }
+  [ -z "$includes" ] && return 0
+  includes=$(echo -e "$includes" | sed -r 's,^[^/],'"$indir"'/&,')
+  new_todo=$(comm -1 -3 <(filter "$todo") <(filter "$includes"))
+  [ -z "$new_todo" ] && return 0
+  todo=$(echo -e "$todo\n$new_todo")
 }
 
 filter() {
@@ -68,14 +43,20 @@ infile=$(realpath "$1")
 indir=$(dirname "$infile")
 
 
-[ ! -f "$infile" ] && brexit "error: Input file $infile does not exist" 10
+[ ! -f "$infile" ] && { echo "$infile: input file does not exist"; exit 10; }
 
+n=0
 todo="$infile"
-while [ -n "$todo" ]; do
-  next=$(echo -e "$todo" | head -1)
-  lint "$next" && find_includes "$next"
-  update_todos "$next"
+while true; do
+  n=$((n+1))
+  if [[ $(echo -e "$todo" | wc -l) -ge "$n" ]]; then
+    next=$(echo -e "$todo" | sed -n "$n p")
+    [[ ! -f "$next" ]] && { echo "$next: file does not exist"; code=20; continue; }
+    find_includes "$next"
+  else
+    break
+  fi
 done
 
-[[ $code -gt 0 ]] && echo -e "$log\nThere were errors. (code $code)"
+[[ $code -gt 0 ]] && echo -e "\nThere were errors. (code $code)"
 exit $code
