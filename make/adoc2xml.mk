@@ -29,6 +29,20 @@ ifndef ADOC_MAIN
   $(error $(shell ccecho "error" "Fatal error: No MAIN file set"))
 endif
 
+# ADOC default attributes
+#
+# We need to get rid of any data-url and imagesdir definitions to make DAPS
+# produce correct links. idprefix and idseperator are set to avoid the
+# default underscores which will appear in URls and are causing SEO penalties
+# by Google (however, we only replace id* attributes if not set in the
+# .adoc sources)
+
+
+ADOC_DEFAULT_ATTRIBUTES := --attribute=data-uri! \
+		 	   --attribute=imagesdir! \
+			   --attribute="idprefix=@" \
+			   --attribute="idseparator=-@"
+
 # Get the adoc sourcefiles
 #
 # include statements always start at the begin of the line, no other
@@ -99,18 +113,16 @@ $(MAIN): FORCE $(ADOC_SRCFILES) | $(ADOC_DIR)
 	@ccecho "info"  "   Creating XML from ASCIIDOC..."
   endif
   ifeq "$(ADOC_SET)" "yes"
-	  (set -o pipefail; $(ASCIIDOC) \
-	  --attribute=data-uri! $(ADOC_ATTRIBUTES) \
-	  --attribute=imagesdir! --backend=$(ADOC_BACKEND) \
+	  (set -o pipefail; $(ASCIIDOC) $(ADOC_ATTRIBUTES) \
+	  $(ADOC_DEFAULT_ATTRIBUTES) --backend=$(ADOC_BACKEND) \
 	  --doctype=$(ADOC_TYPE) --failure-level $(ADOC_FAILURE_LEVEL) \
 	  --out-file=- $(ADOC_MAIN) | $(XSLTPROC) --output $@ --xinclude \
 	  --stylesheet $(ADOC_SET_STYLE) $(XSLTPROCESSOR) $(DEVNULL) \
 	  $(ERR_DEVNULL))
   else
-	$(ASCIIDOC) --attribute=data-uri! $(ADOC_ATTRIBUTES) \
-	  --attribute=imagesdir! --backend=$(ADOC_BACKEND) \
-	  --doctype=$(ADOC_TYPE) --failure-level $(ADOC_FAILURE_LEVEL) \
-          --out-file=$@ $(ADOC_MAIN)
+	$(ASCIIDOC) $(ADOC_ATTRIBUTES) $(ADOC_DEFAULT_ATTRIBUTES) \
+	  --backend=$(ADOC_BACKEND) --doctype=$(ADOC_TYPE) \
+	  --failure-level $(ADOC_FAILURE_LEVEL) --out-file=$@ $(ADOC_MAIN)
   endif
   ifeq "$(VERBOSITY)" "2"
 	@ccecho "info" "Successfully created XML file $@"
