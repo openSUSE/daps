@@ -6,11 +6,8 @@
 # - 10 = input file does not exist
 # - 20 = dependent files do not exist/there are wellformedness issues
 
-
 code=0
-
 todo=
-
 
 find_includes() {
   # $1 - file to find includes in
@@ -31,6 +28,7 @@ find_includes() {
   new_todo=$(comm -1 -3 <(filter "$todo") <(filter "$includes"))
   [ -z "$new_todo" ] && return 0
   todo=$(echo -e "$todo\n$new_todo")
+  total_todo=$(echo -e "$todo" | wc -l)
 }
 
 filter() {
@@ -47,12 +45,13 @@ indir=$(dirname "$infile")
 
 n=0
 todo="$infile"
+total_todo=1
 while true; do
   n=$((n+1))
-  if [[ $(echo -e "$todo" | wc -l) -ge "$n" ]]; then
-    next=$(echo -e "$todo" | sed -n "$n p")
-    [[ ! -f "$next" ]] && { echo "$next: file does not exist"; code=20; continue; }
-    find_includes "$next"
+  if [ "$total_todo" -ge "$n" ]; then
+    file=$(echo -e "$todo" | sed -n "$n p")
+    [ ! -f "$file" ] && { echo "$next: file does not exist"; code=20; continue; }
+    find_includes "$file"
   else
     break
   fi
