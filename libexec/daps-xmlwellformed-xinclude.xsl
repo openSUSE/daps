@@ -33,11 +33,13 @@
   <xsl:variable name="abspath" select="s:abspath(@href)"/>
   <xsl:choose>
    <xsl:when test="s:exists(@href)">
-    <xsl:message>INFO: XIncluding <xsl:value-of select="$abspath"/></xsl:message>
+    <xsl:text>FILE:</xsl:text>
+    <xsl:value-of select="$abspath"/>
+    <xsl:text>&#10;</xsl:text>
     <xsl:apply-templates select="document($abspath, .)"/>
    </xsl:when>
    <xsl:otherwise>
-    <xsl:message>WARN: File not found "<xsl:value-of select="@href"/>"</xsl:message>
+    <xsl:message>WARN:File not found "<xsl:value-of select="@href"/>"</xsl:message>
    </xsl:otherwise>
   </xsl:choose>
  </xsl:template>
