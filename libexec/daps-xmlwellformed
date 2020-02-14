@@ -36,8 +36,8 @@ NOTFOUND=[]
 PROBLEMS=[]
 
 
-if etree.LXML_VERSION < (4, 2, 1):
-    print("ERROR: Need minimum version 4.2.1 of lxml.",
+if etree.LXML_VERSION < (3, 4, 0):
+    print("ERROR: Need minimum version 3.4.0 of lxml.",
           file=sys.stderr)
     sys.exit(10)
 
