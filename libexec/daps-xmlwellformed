@@ -48,37 +48,64 @@ if not os.path.exists(XINCLUDE_XSLT):
 # ------------------------------------------------------------
 # Extension Functions in a SUSE namespace
 
-def exists(context, f) -> bool:
+def exists(context, node) -> bool:
     """Test whether a path exists.  Returns False for
        broken symbolic links
 
-        :param context:
+        :param context: context node
         :param list f: list of path name (however, we
                        are only interested in the first
                        item
         :return: True=Path exists, False otherwise
         :rtype: bool
     """
-    f = f[0]
-    d = context.context_node.getroottree().docinfo.URL
-    d = os.path.dirname(d)
+    f = node[0]
+    d = os.path.dirname(context.context_node.getroottree().docinfo.URL)
     return os.path.exists(os.path.join(d, f))
+
+
+def base(context) -> str:
+    """Returns the base file path from the context node
+
+        :param context: context node
+    """
+    ctxnode = context.context_node
+    return ctxnode.base
 
 
 def abspath(context, f) -> str:
     """Return the absolute path of the context node
 
-        :param context:
+        :param context: context node
         :param list f: list of path name (however, we
                        are only interested in the first
                        item
         :return: absolute path
-        :rtype: str
     """
     f = f[0]
     d = context.context_node.getroottree().docinfo.URL
     d = os.path.dirname(d)
     return os.path.abspath(os.path.join(d, f))
+
+
+def errormsg(context, base: list, href: list) -> str:
+    """Returns a error message string.
+
+        :param context: the context node
+        :param base: the file name where the <xi:include/> element is located
+        :param href: the file name where the <xi:include/> element is pointing to
+        :return: an error message
+    """
+    template = "NOTFOUND:{parent}:{lineno}:0:ERROR:XINCLUDE:NOT_FOUND:{href}"
+    ctxnode = context.context_node
+    d = os.path.dirname(context.context_node.getroottree().docinfo.URL)
+    base = os.path.abspath(os.path.join(d, base[0]))
+    href = href[0]
+
+    return template.format(parent=base,
+                           lineno=ctxnode.sourceline,
+                           href=href
+                           )
 
 
 # ------------------------------------------------------------
@@ -102,7 +129,7 @@ def parse_cli(args=None) -> argparse.Namespace:
                         default=False,
                         help="Do XInclude processing"
                         )
-    parser.add_argument("-X", "--list-files",
+    parser.add_argument("-l", "--list-files",
                         action="store_true",
                         default=False,
                         help="List all XML files which were found"
@@ -155,6 +182,8 @@ def get_all_files(xmlfile: str, xinclude: bool):
     ns = etree.FunctionNamespace(SUSE_NS)
     ns['exists'] = exists
     ns['abspath'] = abspath
+    ns['base'] = base
+    ns['errormsg'] = errormsg
 
     xifiles = []
     notfound = []
@@ -168,8 +197,8 @@ def get_all_files(xmlfile: str, xinclude: bool):
             result = transform(tree)
             for entry in transform.error_log:
                 msg = entry.message
-                if msg.startswith("WARN:"):
-                    _, f = msg.split(":")
+                if msg.startswith("NOTFOUND:"):
+                    _, f = msg.split(":", 1)
                     notfound.append(f)
                 else:
                     problems.append(str(entry))
@@ -177,21 +206,24 @@ def get_all_files(xmlfile: str, xinclude: bool):
 
     except ValueError as err:
         error = err
-        rc = ReturnCode.value_err
+        rc = 10
     except etree.XSLTApplyError as err:
         # We search for "Cannot resolve URI <FILENAME>"
         uri = err.args[0].split("URI ")[-1]
         problems.append(uri)
-    except etree.XIncludeError as error:
+    except etree.XIncludeError as err:
         error = err
-        rc = ReturnCode.xinclude_err
+        rc = 20
     except etree.XMLSyntaxError as err:
         error = err
-        rc = ReturnCode.syntax_error
+        rc = 30
+    except OSError as err:
+        error = err
+        rc = 40
 
     if error:
         print(error, file=sys.stderr)
-        sys.exit(rc.value)
+        sys.exit(rc)
 
     return xifiles, notfound, problems
 

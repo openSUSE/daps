@@ -29,17 +29,33 @@
  <xsl:output method="text"/>
  <xsl:template match="text()"/>
 
+ <xsl:template match="*" mode="included">
+  <xsl:param name="base"/>
+  <xsl:copy>
+   <xsl:copy-of select="@*"/>
+   <xsl:attribute name="xml:base">
+    <xsl:value-of select="$base"/>
+   </xsl:attribute>
+   <xsl:apply-templates>
+    <xsl:with-param name="base" select="$base"/>
+   </xsl:apply-templates>
+  </xsl:copy>
+ </xsl:template>
+
  <xsl:template match="xi:include">
+  <xsl:param name="base" select="s:base()"/>
   <xsl:variable name="abspath" select="s:abspath(@href)"/>
   <xsl:choose>
    <xsl:when test="s:exists(@href)">
     <xsl:text>FILE:</xsl:text>
     <xsl:value-of select="$abspath"/>
     <xsl:text>&#10;</xsl:text>
-    <xsl:apply-templates select="document($abspath, .)"/>
+    <xsl:apply-templates select="document($abspath, .)" mode="included">
+      <xsl:with-param name="base" select="@href"/>
+    </xsl:apply-templates>
    </xsl:when>
    <xsl:otherwise>
-    <xsl:message>WARN:File not found "<xsl:value-of select="@href"/>"</xsl:message>
+    <xsl:message><xsl:value-of select="s:errormsg($base, @href)"/></xsl:message>
    </xsl:otherwise>
   </xsl:choose>
  </xsl:template>
