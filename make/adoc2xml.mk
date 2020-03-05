@@ -39,7 +39,7 @@ endif
 
 
 ADOC_DEFAULT_ATTRIBUTES := --attribute=data-uri! \
-		 	   --attribute=imagesdir! \
+			   --attribute=imagesdir! \
 			   --attribute="idprefix=@" \
 			   --attribute="idseparator=-@"
 
