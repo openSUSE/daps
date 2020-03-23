@@ -40,7 +40,7 @@ endif
 
 ADOC_DEFAULT_ATTRIBUTES := --attribute=data-uri! \
 			   --attribute=imagesdir! \
-			   --attribute="idprefix=@" \
+			   --attribute="idprefix=id-@" \
 			   --attribute="idseparator=-@"
 
 # Get the adoc sourcefiles
