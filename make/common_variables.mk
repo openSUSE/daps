@@ -46,8 +46,8 @@ endif
 # a space is needed, since it is not possible to replace a literal
 # space (same goes for comma)
 #
-SPACE :=
-SPACE +=
+empty :=
+SPACE := $(empty) $(empty)
 
 COMMA := ,
 
