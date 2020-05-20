@@ -43,6 +43,9 @@
  <xsl:import href="../common/copy.xsl"/>
  <xsl:output indent="yes"/>
 
+ <!-- Not supported in GeekoDoc -->
+ <xsl:template match="authorinitials"/>
+
  <xsl:template match="d:guibutton|d:guimenuitem|d:guisubmenu">
    <xsl:element name="guimenu" namespace="&db5ns;">
     <xsl:copy-of select="@*"/>
