@@ -28,7 +28,9 @@
        * suse2013 =< 2.0.13 display improvement, suse-xsl#397
      * remove authorinitials
        * allows validation with GeekoDoc
-
+     * fold othername into firstname and lineage into surname
+       * allows GeekoDoc validation
+       * neither rule should be necessary, GeekoDoc should be fixed (FIXME!)
 
    Author:    Thomas Schraitle <toms@opensuse.org>
    Copyright (C) 2018 SUSE Linux GmbH
@@ -47,6 +49,26 @@
   <xsl:output indent="yes"/>
 
   <xsl:template match="d:authorinitials"/>
+  <!-- othername & lineage arguably out to be supported by GeekoDoc but aren't currently. -->
+  <xsl:template match="d:othername|d:lineage"/>
+  <xsl:template match="d:othername|d:lineage" mode="take">
+    <xsl:text> </xsl:text>
+    <xsl:apply-templates/>
+  </xsl:template>
+  <xsl:template match="d:firstname[following-sibling::d:othername]">
+    <xsl:element name="firstname" namespace="&db5ns;">
+      <xsl:copy-of select="@*"/>
+      <xsl:apply-templates/>
+      <xsl:apply-templates select="following-sibling::d:othername" mode="take"/>
+    </xsl:element>
+  </xsl:template>
+  <xsl:template match="d:surname[following-sibling::d:lineage]">
+    <xsl:element name="surname" namespace="&db5ns;">
+      <xsl:copy-of select="@*"/>
+      <xsl:apply-templates/>
+      <xsl:apply-templates select="following-sibling::d:lineage" mode="take"/>
+    </xsl:element>
+  </xsl:template>
 
   <xsl:template match="d:guibutton|d:guimenuitem|d:guisubmenu">
     <xsl:element name="guimenu" namespace="&db5ns;">
