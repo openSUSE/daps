@@ -41,8 +41,9 @@
    <!ENTITY db5ns "http://docbook.org/ns/docbook">
 ]>
 <xsl:stylesheet version="1.0"
- xmlns:d="&db5ns;"
  xmlns="&db5ns;"
+ xmlns:d="&db5ns;"
+ xmlns:xlink="http://www.w3.org/1999/xlink"
  xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
   <xsl:import href="../common/copy.xsl"/>
@@ -135,6 +136,38 @@
       <xsl:apply-templates select="d:info/d:title" mode="copy-element"/>
       <xsl:apply-templates select="node()"/>
     </xsl:element>
+  </xsl:template>
+
+  <xsl:template match="d:link[@linkend]">
+    <xsl:call-template name="make-xref">
+      <xsl:with-param name="linkend" select="normalize-space(@linkend)"/>
+      <xsl:with-param name="text" select="."/>
+    </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template match="d:link[starts-with(@xlink:href, '#')]">
+    <xsl:call-template name="make-xref">
+      <xsl:with-param name="linkend" select="normalize-space(substring-after(@xlink:href, '#'))"/>
+      <xsl:with-param name="text" select="."/>
+    </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template name="make-xref">
+    <xsl:param name="linkend" select="''"/>
+    <xsl:param name="text" select="''"/>
+
+    <xsl:if test="normalize-space($text)">
+      <xsl:value-of select="$text"/>
+      <xsl:text> (</xsl:text>
+    </xsl:if>
+    <xsl:element name="xref">
+    <xsl:attribute name="linkend">
+      <xsl:value-of select="$linkend"/>
+    </xsl:attribute>
+    </xsl:element>
+    <xsl:if test="normalize-space($text)">
+      <xsl:text>)</xsl:text>
+    </xsl:if>
   </xsl:template>
 
 </xsl:stylesheet>
