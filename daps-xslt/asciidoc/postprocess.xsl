@@ -26,6 +26,9 @@
        * allows DocBook validation
      * article/info/title -> article/title
        * suse2013 =< 2.0.13 display improvement, suse-xsl#397
+     * remove authorinitials
+       * allows validation with GeekoDoc
+
 
    Author:    Thomas Schraitle <toms@opensuse.org>
    Copyright (C) 2018 SUSE Linux GmbH
@@ -43,8 +46,7 @@
   <xsl:import href="../common/copy.xsl"/>
   <xsl:output indent="yes"/>
 
-  <!-- Not supported in GeekoDoc -->
-  <xsl:template match="authorinitials"/>
+  <xsl:template match="d:authorinitials"/>
 
   <xsl:template match="d:guibutton|d:guimenuitem|d:guisubmenu">
     <xsl:element name="guimenu" namespace="&db5ns;">
