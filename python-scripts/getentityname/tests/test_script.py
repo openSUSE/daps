@@ -5,16 +5,8 @@ import pytest
 import gen
 
 
-def test_version(capsys):
-    ver = None
-    with pytest.raises(SystemExit):
-        ver = gen.main(["--version"])
-    captured = capsys.readouterr()
-    assert captured.out.rstrip() == gen.__version__
-
-
 def test_should_raise_valueerror_in_rm_xml_comment_with_missing_closecomment():
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match=".* Missing '-->' .*"):
         gen.remove_xml_comments("<!-- Wrong XML comment")
 
 
@@ -131,7 +123,9 @@ def test_regex_externalid(extid):
 def test_regex_entity(entity, expected):
     match = re.search(gen.ENTITY, entity, re.DOTALL|re.VERBOSE|re.MULTILINE)
     assert match
-    assert match.groupdict() == expected
+    resultdict = match.groupdict()
+    resultdict.pop("quote", None)
+    assert resultdict == expected
 
 
 
@@ -262,7 +256,8 @@ def test_regex_doctype(header, expected):
     match = gen.r_DOCTYPE.search(header)
     assert match
     resultdict = match.groupdict()
-    del resultdict['IntSubset']
+    resultdict.pop('IntSubset', None)
+    resultdict.pop("quote", None)
     assert resultdict == expected
 
 
@@ -304,5 +299,13 @@ ENTITIES_TEST_DATA = (
 def test_should_match_entities(ent, expected):
     match = gen.r_ENTITY.search(ent)
     assert match
+    # Remove quotes
     # print(">>> match:", match.groupdict())
-    assert match.groupdict() == expected
+    resultdict = match.groupdict()
+    resultdict.pop("quote", None)
+    assert resultdict == expected
+
+
+def test_joinents():
+    assert gen.joinEnts(["a", "b"], "-") == "a-b"
+
