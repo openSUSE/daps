@@ -20,7 +20,7 @@
    Output:
      DocBook5 document with the following changes:
 
-     * procedure or substeps -> itemizedlist
+     * procedure or substeps -> orderedlist
      * steps -> listitem
 
    See Also:
@@ -39,9 +39,9 @@
    <xsl:import href="../common/copy.xsl"/>
 
    <xsl:template match="d:procedure|d:substeps">
-      <itemizedlist>
+      <orderedlist>
          <xsl:apply-templates select="@*|node()"/>
-      </itemizedlist>
+      </orderedlist>
    </xsl:template>
 
    <xsl:template match="d:step">
