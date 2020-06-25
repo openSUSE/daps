@@ -84,7 +84,8 @@ endif
 # change. 
 # The like is also true for the DC file.
 #
-$(PROFILES): $(ENTITIES_DOC) $(DOCCONF)
+
+$(PROFILES):
 ifdef TEXTFILES
   $(PROFILES): link_txt_files
 endif
@@ -107,9 +108,9 @@ profile: $(PROFILES)
 # entities are already resolved
 #
 ifeq "$(strip $(SRC_FORMAT))" "xml"
-  $(PROFILEDIR)/%.xml: $(DOC_DIR)/xml/%.xml | $(PROFILEDIR)
+  $(PROFILEDIR)/%.xml: $(DOC_DIR)/xml/%.xml $(ENTITIES_DOC) $(DOCCONF) | $(PROFILEDIR)
 else
-  $(PROFILEDIR)/%.xml: $(ADOC_DIR)/%.xml | $(PROFILEDIR)
+  $(PROFILEDIR)/%.xml: $(ADOC_DIR)/%.xml $(ENTITIES_DOC) $(DOCCONF) | $(PROFILEDIR)
 endif
     ifeq "$(VERBOSITY)" "2"
 	@(tput el1; echo -en "\r   Profiling $<")
