@@ -43,6 +43,27 @@ ADOC_DEFAULT_ATTRIBUTES := --attribute=data-uri! \
 			   --attribute="idprefix=id-@" \
 			   --attribute="idseparator=-@"
 
+
+# Check whether asciidoctor supports --failure-level (since version 1.5.7)
+#
+_ADOC_VERSION := 1.5.7
+_ADOC_VERSION += $(shell $(ASCIIDOC) --version | head -n1 | awk '{print $$2}')
+
+#
+# Nasty workaround to compare version strings. First use sort's version string
+# sort option to do the sorting, then compare the sorted string with the
+# original one. If they are identical, asciidoctor's version is bigger or
+# identical to 1.5.7 and --failure-level is supported.
+#
+
+_ADOC_VERSION_SORT := $(shell echo "$(_ADOC_VERSION)" | tr " " "\n" | sort -b --version-sort )
+
+_ADOC_SUPPORTS_FAILURE := $(shell if [ "$(_ADOC_VERSION)" == "$(_ADOC_VERSION_SORT)" ]; then echo "yes"; else echo "no"; fi)
+
+ifeq "$(strip $(_ADOC_SUPPORTS_FAILURE))" "yes"
+  ADOC_FAILURE := --failure-level $(ADOC_FAILURE_LEVEL)
+endif
+
 # Get the adoc sourcefiles
 #
 # include statements always start at the begin of the line, no other
@@ -115,14 +136,14 @@ $(MAIN): FORCE $(ADOC_SRCFILES) | $(ADOC_DIR)
   ifeq "$(ADOC_SET)" "yes"
 	  (set -o pipefail; $(ASCIIDOC) $(ADOC_ATTRIBUTES) \
 	  $(ADOC_DEFAULT_ATTRIBUTES) --backend=$(ADOC_BACKEND) \
-	  --doctype=$(ADOC_TYPE) --failure-level $(ADOC_FAILURE_LEVEL) \
+	  --doctype=$(ADOC_TYPE) $(ADOC_FAILURE) \
 	  --out-file=- $(ADOC_MAIN) | $(XSLTPROC) --output $@ --xinclude \
 	  --stylesheet $(ADOC_SET_STYLE) $(XSLTPROCESSOR) $(DEVNULL) \
 	  $(ERR_DEVNULL))
   else
 	$(ASCIIDOC) $(ADOC_ATTRIBUTES) $(ADOC_DEFAULT_ATTRIBUTES) \
 	  --backend=$(ADOC_BACKEND) --doctype=$(ADOC_TYPE) \
-	  --failure-level $(ADOC_FAILURE_LEVEL) --out-file=$@ $(ADOC_MAIN)
+	  $(ADOC_FAILURE) --out-file=$@ $(ADOC_MAIN)
   endif
   ifeq "$(VERBOSITY)" "2"
 	@ccecho "info" "Successfully created XML file $@"
