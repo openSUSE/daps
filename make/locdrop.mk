@@ -33,6 +33,16 @@
 # executing the locdrop target
 #################################
 
+#################################
+# !!! IMPORTANT !!!
+#
+# Files included with <xi:include parse=text">
+# will never be tranlated! Therefore TEXFILES will be added to the
+# notrans tarball
+#
+#################################
+
+
 
 ifndef LOCDROP_EXPORT_DIR
   LOCDROP_EXPORT_BOOKDIR := $(RESULT_DIR)/locdrop
@@ -77,9 +87,13 @@ endif
 
 TO_TRANS_TAR := $(LOCDROP_EXPORT_BOOKDIR)/translation-$(DOCNAME)$(LANGSTRING).tar
 
-# XML Files that do not get translated
+# Files that do not get translated
 #
 NO_TRANS_FILES := $(filter-out $(TO_TRANS_FILES),$(subst $(DOC_DIR)/xml,$(PROFILEDIR),$(SRCFILES)))
+ifdef TEXTFILES
+  NO_TRANS_FILES += $(sort $(wildcard $(addprefix $(PROFILEDIR)/, $(TEXTFILES))))
+endif
+
 ifneq "$(strip $(NO_TRANS_FILES))" ""
   NO_TRANS_TAR   := $(LOCDROP_EXPORT_BOOKDIR)/setfiles-$(DOCNAME)$(LANGSTRING).tar
 endif

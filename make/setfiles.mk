@@ -115,7 +115,6 @@ endif
 ENTITIES_DOC := $(addprefix $(DOC_DIR)/xml/,\
 	      $(shell $(LIBEXEC_DIR)/getentityname.py $(DOCFILES) 2>/dev/null))
 
-
 # files xi:included with parse="text"
 #
 # SRCFILES and DOCFILES only include regular XML files. To also support

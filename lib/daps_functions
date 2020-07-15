@@ -908,9 +908,9 @@ function filelists {
     # --imgonly and --xmlonly are shortcuts
     #
     if [[ 1 = "$P_LIST_IMG_ONLY" ]]; then
-        export LIST_NODC=1 LIST_NOENT=1 LIST_NOXML=1
+        export LIST_NODC=1 LIST_NOENT=1 LIST_NOXML=1 LIST_NOMISC=1
     elif [[ 1 = "$P_LIST_XML_ONLY" ]]; then
-        export LIST_NODC=1 LIST_NOENT=1 LIST_NOIMG=1
+        export LIST_NODC=1 LIST_NOENT=1 LIST_NOIMG=1 LIST_NOMISC=1
     fi
 
     if [[ $SUB_CMD = list-file && -z $ROOTID ]]; then

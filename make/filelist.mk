@@ -17,7 +17,10 @@ ifeq "$(strip $(SRC_FORMAT))" "adoc"
   DOCFILES := $(ADOC_SRCFILES)
 endif
 
-USED_FILES    := $(ENTITIES_DOC) $(DOCCONF) $(DOCFILES) $(USED_ALL)
+_TEXT_FILES :=  $(addprefix $(XML_SRC_PATH), $(TEXTFILES))
+
+
+USED_FILES    := $(ENTITIES_DOC) $(DOCCONF) $(DOCFILES) $(USED_ALL) $(_TEXT_FILES)
 
 # Using tar is the easiest way to search for files excluding versioning system
 # files and directories. A simple tar cv >/dev/null does not work, because
@@ -40,6 +43,9 @@ ifeq "$(LIST_NOENT)" "1"
 endif
 ifeq "$(LIST_NODC)" "1"
   USED_FILES := $(filter-out $(DOCCONF),$(USED_FILES))
+endif
+ifeq "$(LIST_NOMISC)" "1"
+  USED_FILES := $(filter-out $(_TEXT_FILES),$(USED_FILES))
 endif
 ifeq "$(LIST_NOXML)" "1"
   USED_FILES   := $(filter-out $(DOCFILES),$(USED_FILES))

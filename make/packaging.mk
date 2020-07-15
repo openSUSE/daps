@@ -26,7 +26,9 @@ $(DESKTOP_FILES_DIR) $(PACK_DIR) $(PACKAGE_HTML_DIR) $(PACKAGE_PDF_DIR):
 #
 # If a DEF-file is specified, get additional DC-files from the DEF file
 #
-
+#
+# TEXTFILES contains files that are xi:included with parse="text"
+#
 # fs 2012-10-25:
 # TODO: Add a --addfiles option that allows to add files from everywhere
 #       in the filesystem. 
@@ -37,11 +39,14 @@ ifeq "$(OPTIPNG)" "1"
   package-src: optipng
 endif
 ifdef DEF_FILE
-  package-src: DC_FILES := $(addprefix $(DOC_DIR)/,$(shell awk '/^[ \t]*#/ {next};NF {printf "DC-%s ", $$2}' $(DEF_FILE) 2>/dev/null))
+  package-src: _DC_FILES := $(addprefix $(DOC_DIR)/,$(shell awk '/^[ \t]*#/ {next};NF {printf "DC-%s ", $$2}' $(DEF_FILE) 2>/dev/null))
+endif
+ifdef TEXTFILES
+  package-src: _TEXT_FILES := $(sort $(wildcard $(addprefix $(XML_SRC_PATH), $(TEXTFILES))))
 endif
 ifdef IS_LOCDROP
-  package-src: MFT_TRANS := $(wildcard $(addprefix $(DOC_DIR)/,$(notdir $(MANIFEST_TRANS))))
-  package-src: MFT_NOTRANS := $(wildcard $(addprefix $(DOC_DIR)/,$(notdir $(MANIFEST_NOTRANS))))
+  package-src: _MFT_TRANS := $(wildcard $(addprefix $(DOC_DIR)/,$(notdir $(MANIFEST_TRANS))))
+  package-src: _MFT_NOTRANS := $(wildcard $(addprefix $(DOC_DIR)/,$(notdir $(MANIFEST_NOTRANS))))
 endif
 package-src: $(PROFILES) $(PROFILEDIR)/.validate
   ifdef MISSING
@@ -60,11 +65,15 @@ package-src: $(PROFILES) $(PROFILEDIR)/.validate
 	  --transform=s%$(DOC_DIR)/%% $(USED_ALL) $(DOCCONF)
     ifdef DEF_FILE
 	tar rfh $(PACKAGE_SRC_TARBALL) --absolute-names \
-	  --transform=s%$(DOC_DIR)/%% $(DC_FILES)
+	  --transform=s%$(DOC_DIR)/%% $(_DC_FILES)
+    endif
+    ifdef TEXTFILES
+	tar rfh $(PACKAGE_SRC_TARBALL) --absolute-names \
+	  --transform=s%$(DOC_DIR)/%% $(_TEXT_FILES)
     endif
     ifdef IS_LOCDROP
 	tar rfh $(PACKAGE_SRC_TARBALL) --absolute-names \
-	  --transform=s%$(DOC_DIR)/%% $(MFT_TRANS) $(MFT_NOTRANS)
+	  --transform=s%$(DOC_DIR)/%% $(_MFT_TRANS) $(_MFT_NOTRANS)
     endif
 	bzip2 -9f $(PACKAGE_SRC_TARBALL)
 	@ccecho "result" "Find the sources at:\n$(PACKAGE_SRC_RESULT)"
