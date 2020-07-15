@@ -49,12 +49,13 @@ ADOC_DEFAULT_ATTRIBUTES := --attribute=data-uri! \
 _ADOC_VERSION := 1.5.7
 _ADOC_VERSION += $(shell $(ASCIIDOC) --version | head -n1 | awk '{print $$2}')
 
-#
-# Nasty workaround to compare version strings. First use sort's version string
-# sort option to do the sorting, then compare the sorted string with the
-# original one. If they are identical, asciidoctor's version is bigger or
-# identical to 1.5.7 and --failure-level is supported.
-#
+# Nasty workaround to compare version strings. 
+# We are creating a string with "1.5.7 <current>",
+#  e.g. "1.5.7 1.2.1" in $(_ADOC_VERSION)
+# Afterwards we are sorting it (lowest first) in $(_ADOC_VERSION_SORT)
+# Afterwards both strings are compared. If both are the same, the asciidoctor
+# version is >=1.5.7, otherwise it is lower than that (which means it does not
+# support the --failure-level switch)
 
 _ADOC_VERSION_SORT := $(shell echo "$(_ADOC_VERSION)" | tr " " "\n" | sort -b --version-sort )
 
