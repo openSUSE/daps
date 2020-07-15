@@ -31,13 +31,13 @@ function oneTimeSetUp() {
     # get the profiling directory
     _SRC_NAME_PATH=$($_DAPSEXEC -d $_DCFILE package-src-name 2>/dev/null)
     if [ $? -ne 0 ]; then
-	exit_on_error " The initial DAPS call to determine the path to the resulting source package failed. Skipping tests"
+        exit_on_error " The initial DAPS call to determine the path to the resulting source package failed. Skipping tests"
     fi
     _LOG_DIR=$($_DAPSEXEC -v0 -d $_DCFILE showvariable VARIABLE=LOG_DIR 2>/dev/null)
     if [ $? -ne 0 ]; then
-	exit_on_error " The initial DAPS call to determine the LOG file failed. Skipping tests"
+        exit_on_error " The initial DAPS call to determine the LOG file failed. Skipping tests"
     fi
-    _LOGFILE=${_LOG_DIR}/make_package-src.log 
+    _LOGFILE=${_LOG_DIR}/make_package-src.log
 
     # create temp dir
     #
@@ -71,11 +71,11 @@ function test_packagesrc () {
         ' └─ The package-src command itself failed' \
         "$?"
     assertTrue \
-	" └─ The resulting file (${_SRC_BUILD_PATH}) does not exist." \
-	"[ -s $_SRC_BUILD_PATH ]"
+        " └─ The resulting file (${_SRC_BUILD_PATH}) does not exist." \
+        "[ -s $_SRC_BUILD_PATH ]"
     assertEquals \
-	" └─ The resulting filename does not match the one retrieved with --package-src-name" \
-	"$_SRC_NAME_PATH" "$_SRC_BUILD_PATH"
+        " └─ The resulting filename does not match the one retrieved with --package-src-name" \
+        "$_SRC_NAME_PATH" "$_SRC_BUILD_PATH"
 }
 
 #--------------------------------
@@ -94,7 +94,7 @@ function test_packagesrcFilelist () {
 
     # XML files
     #
-    for _FILE in $_SET_FILES; do
+    for _FILE in $_SET_FILES $_SRC_INCLUDE; do
         [[ -f "${_SRC_TEMPDIR}/xml/$_FILE" ]] || _MISSING="$_MISSING $_FILE"
     done
     assertNull \
@@ -105,7 +105,7 @@ function test_packagesrcFilelist () {
     #
     _MISSING=""
     for _IMG in $_SET_IMAGES; do
-	[[ -f "${_SRC_TEMPDIR}/images/src/$_IMG" ]] || _MISSING="$_MISSING $_IMG"
+        [[ -f "${_SRC_TEMPDIR}/images/src/$_IMG" ]] || _MISSING="$_MISSING $_IMG"
     done
     assertNull \
         " └─ Image(s) '$_MISSING' is/are missing in the source archive" \
@@ -114,7 +114,7 @@ function test_packagesrcFilelist () {
     # DC file
     #
     assertTrue \
-	" └─ $_DCFILE is missing in the source archive" \
+        " └─ $_DCFILE is missing in the source archive" \
         "[[ -f ${_SRC_TEMPDIR}/$(basename $_DCFILE) ]]"
 
     clean_build_dir results
@@ -128,7 +128,7 @@ function test_packagesrcFilelist () {
     (cd $_SRC_TEMPDIR && tar xfj $_SRC_BUILD_PATH)
 
     assertTrue \
-	" └─ $_ADDED_DC (added via DEF file) is missing in the source archive" \
+        " └─ $_ADDED_DC (added via DEF file) is missing in the source archive" \
         "[[ -f ${_SRC_TEMPDIR}/$_ADDED_DC ]]"
 
 }
@@ -145,12 +145,12 @@ function test_packagesrcNAME () {
 
     _SRC_BUILD_PATH=$($_DAPSEXEC -v0 -d $_DCFILE package-src --name $_NAME 2>/dev/null)
     assertTrue \
-	" └─ Building a package-src archive with --name failed " \
+        " └─ Building a package-src archive with --name failed " \
        "$?"
 
     _SRC_NAME_PATH=$($_DAPSEXEC -v0 -d $_DCFILE package-src-name --name $_NAME 2>/dev/null)
    assertTrue \
-	' └─  Getting the filename for package-src with --name failed ' \
+        ' └─  Getting the filename for package-src with --name failed ' \
        "$?"
    assertEquals \
        " └─ The resulting filename does not match the one retrieved with --package-src-name: " \
@@ -181,8 +181,8 @@ function test_packagesrcSetDate () {
 
     _SRC_BUILD_PATH=$($_DAPSEXEC -v0 -d $_DCFILE package-src --set-date="$_DATE")
     assertTrue \
-	" └─ Building a package-src archive with --set-date failed " \
-	"$?"
+        " └─ Building a package-src archive with --set-date failed " \
+        "$?"
 
     # clean tmp and unpack new archive
     [[ -d ${_SRC_TEMPDIR} ]] && rm -rf "${_SRC_TEMPDIR}" && mkdir -p "${_SRC_TEMPDIR}"
@@ -191,8 +191,8 @@ function test_packagesrcSetDate () {
     grep -q "$_DATE" ${_SRC_TEMPDIR}/xml/$_MAIN 2>/dev/null
 
     assertTrue \
-	" └─ The date set with --set-date does not appear in $_MAIN." \
-	"$?"
+        " └─ The date set with --set-date does not appear in $_MAIN." \
+        "$?"
 }
 
 # source shUnit2 test

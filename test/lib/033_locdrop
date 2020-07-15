@@ -33,14 +33,14 @@ function oneTimeSetUp() {
     # Clean up the build directory
     clean_build_dir all
 
-    _LOCDROP_NAME_DIR=$($_DAPSEXEC -v0 -d $_DCFILE showvariable VARIABLE=LOCDROP_EXPORT_BOOKDIR 2>/dev/null)
+    _LOCDROP_NAME_DIR=$($_DAPSEXEC -v0 -d $_DCFILE_5 showvariable VARIABLE=LOCDROP_EXPORT_BOOKDIR 2>/dev/null)
     if [ $? -ne 0 ]; then
-	exit_on_error " The initial DAPS call to determine the path to the resulting locdrop directory failed. Skipping tests"
+        exit_on_error " The initial DAPS call to determine the path to the resulting locdrop directory failed. Skipping tests"
     fi
 
-    _LOG_DIR=$($_DAPSEXEC -v0 -d $_DCFILE showvariable VARIABLE=LOG_DIR 2>/dev/null)
+    _LOG_DIR=$($_DAPSEXEC -v0 -d $_DCFILE_5 showvariable VARIABLE=LOG_DIR 2>/dev/null)
     if [ $? -ne 0 ]; then
-	exit_on_error " The initial DAPS call to determine the LOG file failed. Skipping tests"
+        exit_on_error " The initial DAPS call to determine the LOG file failed. Skipping tests"
     fi
     _LOGFILE=${_LOG_DIR}/make_locdrop.log
 
@@ -70,13 +70,13 @@ function oneTimeTearDown() {
 function test_locdrop () {
     local _LOCDROP_BUILD_PATH
 
-    _LOCDROP_BUILD_PATH=$($_DAPSEXEC -v0 -d $_DCFILE locdrop 2>/dev/null)
+    _LOCDROP_BUILD_PATH=$($_DAPSEXEC -v0 -d $_DCFILE_5 locdrop 2>/dev/null)
     assertTrue \
         ' └─ The locdrop command itself failed' \
         "$?"
     assertTrue \
-	" └─ The resulting file (${_LOCDROP_BUILD_PATH}) does not exist." \
-	"[ -s $_LOCDROP_BUILD_PATH ]"
+        " └─ The resulting file (${_LOCDROP_BUILD_PATH}) does not exist." \
+        "[ -s $_LOCDROP_BUILD_PATH ]"
 
 }
 
@@ -91,7 +91,7 @@ function test_locdropFiles () {
     local  _TAR_TRANS _TRANS_FILE _TRANS_IMAGE
 
     _ADDED_DC=DC-booktest_DEF
-    _TRANS_FILE="appendix.xml"
+    _TRANS_FILE="appendix_5.xml"
     _TRANS_IMAGE="png/png_example2.png"
 
     declare -a _ALL_FILES=( $_SET_FILES )
@@ -100,7 +100,7 @@ function test_locdropFiles () {
     # ------
     # Tarball with XML file for translation
     #
-    _TAR_TRANS=$($_DAPSEXEC -v0 -d $_DCFILE showvariable VARIABLE=TO_TRANS_TAR 2>/dev/null)
+    _TAR_TRANS=$($_DAPSEXEC -v0 -d $_DCFILE_5 showvariable VARIABLE=TO_TRANS_TAR 2>/dev/null)
     assertTrue \
         ' └─ The command to determine the name of the translation tarball failed' \
         "$?"
@@ -116,7 +116,7 @@ function test_locdropFiles () {
     # ------
     # Tarball with XML files not translated
     #
-    _TAR_NOTRANS=$($_DAPSEXEC -v0 -d $_DCFILE showvariable VARIABLE=NO_TRANS_TAR 2>/dev/null).bz2
+    _TAR_NOTRANS=$($_DAPSEXEC -v0 -d $_DCFILE_5 showvariable VARIABLE=NO_TRANS_TAR 2>/dev/null).bz2
     assertTrue \
         ' └─ The command to determine the name of the not-for-translation tarball failed' \
         "$?"
@@ -136,7 +136,7 @@ function test_locdropFiles () {
     [[ -d "${_LOCDROP_TEMPDIR}" ]] && rm -rf "${_LOCDROP_TEMPDIR}" && mkdir -p "${_LOCDROP_TEMPDIR}"
     (cd $_LOCDROP_TEMPDIR; tar xfj $_TAR_NOTRANS)
     for _FILE in ${_NOTRANS_FILES[*]}; do
-	[[ -f ${_LOCDROP_TEMPDIR}/xml/$_FILE ]] || _MISSING="$_MISSING $_FILE"
+        [[ -f ${_LOCDROP_TEMPDIR}/xml/$_FILE ]] || _MISSING="$_MISSING $_FILE"
     done
     assertNull \
         " └─ File(s) '$_MISSING' is/are missing in the not-for-translation tarball" \
@@ -145,7 +145,7 @@ function test_locdropFiles () {
     # ------
     # Tarball with images "to translate"
     #
-    _TAR_IMAGES=$($_DAPSEXEC -v0 -d $_DCFILE showvariable VARIABLE=TO_TRANS_IMG_TAR 2>/dev/null)
+    _TAR_IMAGES=$($_DAPSEXEC -v0 -d $_DCFILE_5 showvariable VARIABLE=TO_TRANS_IMG_TAR 2>/dev/null)
     assertTrue \
         ' └─ The command to determine the name of the image tarball failed' \
         "$?"
@@ -163,7 +163,7 @@ function test_locdropFiles () {
     # ------
     # PDF file
     #
-    _PDF_NAME_PATH=$(basename $($_DAPSEXEC -v0 -d $_DCFILE pdf-name 2>/dev/null))
+    _PDF_NAME_PATH=$(basename $($_DAPSEXEC -v0 -d $_DCFILE_5 pdf-name 2>/dev/null))
     assertTrue \
         " └─ The reference PDF (${_LOCDROP_NAME_DIR}/$_PDF_NAME_PATH) does not exist or has size 0" \
         "[[ -s ${_LOCDROP_NAME_DIR}/$_PDF_NAME_PATH ]]"
@@ -174,14 +174,14 @@ function test_locdropFiles () {
     #
     clean_build_dir results
 
-    $_DAPSEXEC -v0 -d $_DCFILE locdrop --def-file=${_DOC_DIR}/DEF-booktest >/dev/null 2>&1
+    $_DAPSEXEC -v0 -d $_DCFILE_5 locdrop --def-file=${_DOC_DIR}/DEF-booktest >/dev/null 2>&1
 
     # clean tmp and unpack new archive
     [[ -d "${_LOCDROP_TEMPDIR}" ]] && rm -rf "${_LOCDROP_TEMPDIR}" && mkdir -p "${_LOCDROP_TEMPDIR}"
     (cd $_LOCDROP_TEMPDIR && tar xfj $_TAR_NOTRANS)
 
     assertTrue \
-	" └─ $_ADDED_DC (added via DEF file) is missing in the source archive" \
+        " └─ $_ADDED_DC (added via DEF file) is missing in the source archive" \
         "[[ -f ${_LOCDROP_TEMPDIR}/$_ADDED_DC ]]"
 
 }
@@ -200,17 +200,17 @@ function test_locdropRootid () {
 
     clean_build_dir results
 
-    _LOCDROP_BUILD_PATH=$($_DAPSEXEC -d $_DCFILE --debug locdrop --rootid $_ROOTID 2>/dev/null | tail -n 1)
+    _LOCDROP_BUILD_PATH=$($_DAPSEXEC -d $_DCFILE_5 --debug locdrop --rootid $_ROOTID 2>/dev/null | tail -n 1)
     assertTrue \
         ' └─ Building a locdrop with --rootid failed' \
         "$?"
     egrep -q -- "--stringparam\s+\"rootid=$_ROOTID\"" $_LOGFILE 2>/dev/null
     assertTrue \
-	' └─ Stringparam for ROOTID is not correctly specified when generating the locdrop' \
-	"$?"
+        ' └─ Stringparam for ROOTID is not correctly specified when generating the locdrop' \
+        "$?"
 
     # filename of the trans tarball
-    _TAR_TRANS=$($_DAPSEXEC -v0 -d $_DCFILE showvariable --rootid $_ROOTID VARIABLE=TO_TRANS_TAR 2>/dev/null)
+    _TAR_TRANS=$($_DAPSEXEC -v0 -d $_DCFILE_5 showvariable --rootid $_ROOTID VARIABLE=TO_TRANS_TAR 2>/dev/null)
 
     echo $_TAR_TRANS | grep -q $_ROOTID
     assertTrue \
@@ -221,7 +221,7 @@ function test_locdropRootid () {
     # Tarball with images _not_ "to translate"
     # (will only be generated if ROOTID is set)
     #
-    _TAR_NOTRANS_IMAGES=$($_DAPSEXEC -v0 -d $_DCFILE showvariable --rootid $_ROOTID VARIABLE=NO_TRANS_IMG_TAR 2>/dev/null)
+    _TAR_NOTRANS_IMAGES=$($_DAPSEXEC -v0 -d $_DCFILE_5 showvariable --rootid $_ROOTID VARIABLE=NO_TRANS_IMG_TAR 2>/dev/null)
     assertTrue \
         ' └─ The command to determine the name of the "not-for-translation" image tarball failed' \
         "$?"
@@ -233,7 +233,7 @@ function test_locdropRootid () {
     [[ -d "${_LOCDROP_TEMPDIR}" ]] && rm -rf "${_LOCDROP_TEMPDIR}" && mkdir -p "${_LOCDROP_TEMPDIR}"
     (cd $_LOCDROP_TEMPDIR; tar xfj $_TAR_NOTRANS_IMAGES)
     for _FILE in ${_NOTRANS_FILES[*]}; do
-	[[ -f ${_LOCDROP_TEMPDIR}/xml/$_FILE ]] || _MISSING="$_MISSING $_FILE"
+        [[ -f ${_LOCDROP_TEMPDIR}/xml/$_FILE ]] || _MISSING="$_MISSING $_FILE"
     done
     assertNull \
         " └─ File(s) '$_MISSING' is/are missing in the not-for-translation tarball" \
@@ -250,12 +250,12 @@ function test_locdropNopdf () {
 
     clean_build_dir results
 
-    _LOCDROP_BUILD_PATH=$($_DAPSEXEC -d $_DCFILE locdrop --nopdf 2>/dev/null)
+    _LOCDROP_BUILD_PATH=$($_DAPSEXEC -d $_DCFILE_5 locdrop --nopdf 2>/dev/null)
     assertTrue \
         ' └─ Building a locdrop with --nopdf failed' \
         "$?"
 
-    _PDF_NAME_PATH=$($_DAPSEXEC -v0 -d $_DCFILE pdf-name 2>/dev/null)
+    _PDF_NAME_PATH=$($_DAPSEXEC -v0 -d $_DCFILE_5 pdf-name 2>/dev/null)
     assertFalse \
         ' └─ A PDF was build despite having specified --nopdf' \
         "[ -f ${_LOCDROP_NAME_DIR}/_PDF_NAME_PATH ]"
@@ -273,13 +273,13 @@ function test_locdropName () {
 
     clean_build_dir results
 
-    _LOCDROP_BUILD_PATH=$($_DAPSEXEC -d $_DCFILE locdrop --name $_NAME 2>/dev/null)
+    _LOCDROP_BUILD_PATH=$($_DAPSEXEC -d $_DCFILE_5 locdrop --name $_NAME 2>/dev/null)
     assertTrue \
         ' └─ Building a locdrop with --name failed' \
         "$?"
 
     # filename of the trans tarball
-    _TAR_TRANS=$($_DAPSEXEC -v0 -d $_DCFILE showvariable --name $_NAME VARIABLE=TO_TRANS_TAR 2>/dev/null)
+    _TAR_TRANS=$($_DAPSEXEC -v0 -d $_DCFILE_5 showvariable --name $_NAME VARIABLE=TO_TRANS_TAR 2>/dev/null)
 
     _BUILD_SUBDIR_NAME=$(basename $(dirname "$_LOCDROP_BUILD_PATH"))
     echo $_TAR_TRANS | grep -q $_NAME
@@ -305,7 +305,7 @@ function test_locdropExportdir () {
 
     clean_build_dir results
 
-    _LOCDROP_BUILD_PATH=$($_DAPSEXEC -d $_DCFILE locdrop --export-dir $_EXPORT_DIR 2>/dev/null)
+    _LOCDROP_BUILD_PATH=$($_DAPSEXEC -d $_DCFILE_5 locdrop --export-dir $_EXPORT_DIR 2>/dev/null)
     assertTrue \
         ' └─ Building a locdrop with --export-dir failed' \
         "$?"
@@ -314,7 +314,7 @@ function test_locdropExportdir () {
     # sufficient to test whether an appropriate number of files is present
     # in the export directory
     #
-    _DOCNAME=$($_DAPSEXEC -d $_DCFILE showvariable VARIABLE=DOCNAME 2>/dev/null)
+    _DOCNAME=$($_DAPSEXEC -d $_DCFILE_5 showvariable VARIABLE=DOCNAME 2>/dev/null)
     _FILE_NO_BUILD=$(find $_LOCDROP_BUILD_PATH -name "*${_DOCNAME}*" -type f 2>/dev/null | wc -l)
     assertEquals \
         ' └─ The number of files in the export directory does not equal the expected value:' \

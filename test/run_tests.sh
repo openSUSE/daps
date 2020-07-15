@@ -25,6 +25,7 @@ declare -a _XSLT_PROCESSORS
 # XML sources
 export _DOC_DIR="documents"
 export _DCFILE="${_DOC_DIR}/DC-booktest_docbook"
+export _DCFILE_5="${_DOC_DIR}/DC-booktest_docbook_5"
 export _MAIN="book.xml"
 export _MAINPATH="${_DOC_DIR}/xml/$_MAIN"
 export _MAIN_NOPROF="book_noprofile.xml"
@@ -39,12 +40,13 @@ export _STATIC_STYLES="${_DOC_DIR}/styles/statdir"
 export _ALT_STATIC_STYLES="${_DOC_DIR}/styles/alt_statdir/"
 
 # arrays cannot be exported in bash (yet) ;-((
-export _XML_FILES="appendix.xml part_blocks.xml part_inlines.xml part_profiling.xml"
+export _XML_FILES="appendix.xml part_blocks.xml part_inlines.xml part_profiling.xml part_include_source.xml"
+export _SRC_INCLUDE="test.css"
 export _SET_FILES="$_XML_FILES $_MAIN"
 export _NO_SET_FILE="not_in_set.xml"
 
 #export _SET_IMAGES="dia/dia_example.dia eps/eps_example.eps fig/fig_example.fig jpg/jpg_example.jpg pdf/pdf_example.pdf png/png_example.png png/png_example2.png svg/svg_example.svg"
-export _SET_IMAGES="dia/dia_example.dia fig/fig_example.fig jpg/jpg_example.jpg png/png_example.png png/png_example2.png svg/svg_example.svg"
+export _SET_IMAGES="dia/dia_example.dia ditaa/ditaa_example.ditaa fig/fig_example.fig jpg/jpg_example.jpg png/png_example.png odg/odg_example.odg png/png_example2.png svg/svg_example.svg"
 export _NO_SET_IMAGE="png/z_not_included.png"
 export _MULTISRC_IMAGE="${_DOC_DIR}/images/src/svg/png_example.svg"
 
@@ -125,7 +127,7 @@ done
 # SVN dependencies
 
 #_ARGS=$(getopt -o h -l all,builddir,epub,filelists,help,html,images,locdrop,online-docs,package-html,package-pdf,package-src,pdf,profiling,script,text,xsltprocessors: -n "$_ME" -- "$@")
-_ARGS=$(getopt -o h -l all,asciidoc,builddir,debug,epub,filelists,help,html,images,online-docs,package-html,package-pdf,package-src,pdf,profiling,script,text,xsltprocessors: -n "$_ME" -- "$@")
+_ARGS=$(getopt -o h -l all,asciidoc,builddir,debug,epub,filelists,help,html,images,locdrop,online-docs,package-html,package-pdf,package-src,pdf,profiling,script,text,xsltprocessors: -n "$_ME" -- "$@")
 
 [[ 0 -ne $? ]] && exit_on_error "Argument parser error"
 

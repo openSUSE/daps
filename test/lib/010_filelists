@@ -63,8 +63,8 @@ function test_filelistsListfile () {
     # To be fixed in stylesheet (extract-files-and-images.xsl)
     _FILE_NAME_BUILD=${_FILE_NAME_BUILD%[[:space:]]}
     assertEquals \
-	" └─ The list-file value does not match the one expected:" \
-	"$_FILE_NAME_EXPECTED" "$_FILE_NAME_BUILD"
+        " └─ The list-file value does not match the one expected:" \
+        "$_FILE_NAME_EXPECTED" "$_FILE_NAME_BUILD"
 }
 
 #--------------------------------
@@ -75,11 +75,11 @@ function test_filelistsSRCfiles () {
     declare -a _FILE_NAMES_BUILD
     declare -a _FILE_NAMES_EXPECTED
 
-    for _FILE in $_SET_FILES; do
-	_FILE_NAMES_EXPECTED=( ${_FILE_NAMES_EXPECTED[@]} "${_DOC_DIR_ABS}/xml/$_FILE" )
+    for _FILE in $_SET_FILES $_SRC_INCLUDE; do
+        _FILE_NAMES_EXPECTED=( ${_FILE_NAMES_EXPECTED[@]} "${_DOC_DIR_ABS}/xml/$_FILE" )
     done
     for _FILE in $_SET_IMAGES; do
-	_FILE_NAMES_EXPECTED=( ${_FILE_NAMES_EXPECTED[@]} "${_DOC_DIR_ABS}/images/src/$_FILE" )
+        _FILE_NAMES_EXPECTED=( ${_FILE_NAMES_EXPECTED[@]} "${_DOC_DIR_ABS}/images/src/$_FILE" )
     done
     _DC=$(basename "$_DCFILE")
     _FILE_NAMES_EXPECTED=( ${_FILE_NAMES_EXPECTED[@]} "${_DOC_DIR_ABS}/$_DC" )
@@ -100,8 +100,8 @@ function test_filelistsSRCfiles () {
     _FILES_DIFF=$(comm -3 <(echo "${_FILE_NAMES_BUILD[*]}" | sort -u) <(echo "${_FILE_NAMES_EXPECTED[*]}" | sort -u))
     IFS=$_oldIFS
     assertNull \
-	" └─ The list of file from the list-srcfiles command does not match the real list of files ($_FILES_DIFF)." \
-	"$_FILES_DIFF"
+        " └─ The list of file from the list-srcfiles command does not match the real list of files ($_FILES_DIFF)." \
+        "$_FILES_DIFF"
 
 }
 
@@ -244,15 +244,15 @@ function test_filelistsImagesMultisrc () {
         "$?"
     echo $_MSRC_IMAGE_BUILD | grep -q "$_MSRC_IMAGE" 2>/dev/null
     assertTrue \
-	' └─ The list-images-unused command did not produce the correct result: ' \
-	"$?"
+        ' └─ The list-images-unused command did not produce the correct result: ' \
+        "$?"
 }
 
 # --------------------------------
 # * Does the list-images-missing command show the correct files?
 
 function test_filelistsImagesMissing () {
-    
+
     local _MISSING_IMG _MISSING_IMG_BUILD _MISSING_IMG_MAIN
 
     _MISSING_IMG="missing_image_file"
@@ -261,12 +261,12 @@ function test_filelistsImagesMissing () {
     _MISSING_IMG_BUILD=$($_DAPSEXEC -v0 --main $_MISSING_IMG_MAIN list-images-missing 2>/dev/null)
      assertTrue \
         ' └─ The list-images-missing command failed.' \
-        "$?"   
+        "$?"
 
     echo "$_MISSING_IMG_BUILD" | grep -q "$_MISSING_IMG" 2>/dev/null
     assertTrue \
-	' └─ The list-images-missing command did not produce the correct result: ' \
-	"$?"    
+        ' └─ The list-images-missing command did not produce the correct result: ' \
+        "$?"
 }
 
 # source shUnit2 test
