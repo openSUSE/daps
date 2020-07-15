@@ -130,7 +130,7 @@ USED_ODG := $(filter \
 	$(addprefix $(IMG_SRCDIR)/odg/,$(addsuffix .odg,$(basename $(USED)))), \
 	$(SRCODG))
 USED_SVG := $(filter \
-	$(addprefix $(IMG_SRCDIR)/svg/,$(addsuffix .svg,$(basename $(USED)))), \
+$(addprefix $(IMG_SRCDIR)/svg/,$(addsuffix .svg,$(basename $(USED)))), \
 	$(SRCSVG))
 USED_ALL := $(USED_DIA) $(USED_DITAA) $(USED_EPS) $(USED_FIG) $(USED_JPG) \
                 $(USED_ODG) $(USED_PNG) $(USED_PDF) $(USED_SVG)
@@ -397,6 +397,26 @@ list-images-multisrc warn-images:
 # Color images are placed in $IMAGES_GENDIR/color/
 # Grayscale images are placed in $IMAGES_GENDIR/grayscale/
 
+#
+# Inscape changed command line option in version 1.0
+#
+# Check whether we have inkscape >= 1.0 or the old version (<1.0)
+#
+_INKSCAPE_VERSION := 1.0
+_INKSCAPE_VERSION += $(shell inkscape --version 2>/dev/null | awk '{print $$2}')
+
+#
+# Nasty workaround to compare version strings. 
+# We are creating a string with "1.0 <current>", e.g. "1.0 0.91" in $(_INKSCAPE_VERSION)
+# Afterwards we are sorting it (lowest version first) in $(_INKSCAPE_VERSION_SORT)
+# Afterwards both strings are compared. If both are the same, the inkscape version
+# is >=1.0, otherwise it is lower than 1.0 (which means it requires the old
+# command line switches)
+
+_INKSCAPE_VERSION_SORT := $(shell echo "$(_INKSCAPE_VERSION)" | tr " " "\n" | sort -b --version-sort )
+
+_INKSCAPE_IS_NEW := $(shell if [ "$(_INKSCAPE_VERSION)" == "$(_INKSCAPE_VERSION_SORT)" ]; then echo "yes"; else echo "no"; fi)
+
 #------------------------------------------------------------------------
 # PNG
 #
@@ -445,11 +465,6 @@ endif
 # remove_link and the optipng call are used more than once, so
 # let's define them here
 
-# A note on inkscape:
-# Inkscape always returns 0, even when it fails to create an image
-# in order to exit properly, if an inkscape command has failed, we
-# need to work around this by testing if the result file exists
-# inkscape && (test -f $< || false )
 define remove_link
 if test -L $@; then \
 rm -f $@; \
@@ -522,8 +537,11 @@ ifeq "$(VERBOSITY)" "2"
 	@echo "   Converting $(notdir $<) to PNG"
 endif
 	$(remove_link)
-	inkscape $(INK_OPTIONS) -e $@ -f $< $(DEVNULL) && \
-	  ( test -f $< || false )
+ifeq "$(_INKSCAPE_IS_NEW)" "yes"
+	inkscape $(INK_OPTIONS) --export-type="png" --export-filename $@ $< $(ERR_DEVNULL)
+else
+	inkscape -z -e $@ -f $< $(DEVNULL) && ( test -f $< || false )
+endif
 	$(run_optipng)
 
 
@@ -648,9 +666,11 @@ $(IMG_GENDIR)/gen/pdf/%.pdf: $(IMG_GENDIR)/gen/svg/%.svg | $(IMG_DIRECTORIES)
 ifeq "$(VERBOSITY)" "2"
 	@echo "   Converting $(notdir $<) to PDF"
 endif
-	inkscape $(INK_OPTIONS) --export-pdf=$@ -f $< $(DEVNULL) && \
-	  ( test -f $< || false )
-
+ifeq "$(_INKSACPE_IS_NEW)" "yes"
+	inkscape $(INK_OPTIONS) --export-type="png" --export-filename $@ $< $(DEVNULL)
+else
+	inkscape -z -e $@ -f $< $(DEVNULL) && ( test -f $< || false )
+endif 
 
 #------------------------------------------------------------------------
 # JPG
