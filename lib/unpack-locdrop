@@ -87,10 +87,12 @@ function unpack-locdrop {
             # Therefore we need to generate appropriate lists
             #
             FILES_IN_TAR=$(tar tfj "$TAR" | sort -u)
-            FILES_TRANS_IN_MANIFEST=$(cat "$MANIFEST_TRANS" | sort -u)
+
+            FILES_TRANS_IN_MANIFEST=$(cat "$MANIFEST_TRANS" | awk NF | tr ' ' '\n' | sort -u)
+
             FILES_MANIFEST_ONLY=$(comm -1 -3 <(echo -e "$FILES_IN_TAR") <(echo -e "$FILES_TRANS_IN_MANIFEST"))
             [[ -n $FILES_MANIFEST_ONLY ]] && ccecho "warn" "Warning: The following files from the manifest are not part of the tarball:\n$FILES_MANIFEST_ONLY"
-            FILES_TRANS_EXTRACT="$(echo $FILES_TRANS_IN_MANIFEST | tr '\n' ' ')"
+            FILES_TRANS_EXTRACT="$(echo $FILES_TRANS_IN_MANIFEST)"
             for WRONG in $FILES_MANIFEST_ONLY; do
                 FILES_TRANS_EXTRACT="${FILES_TRANS_EXTRACT/$WRONG/}"
             done
@@ -134,8 +136,8 @@ function unpack-locdrop {
     #
     # Now create a complete list of translated/untranslated files
     #
-    ALL_TRANS_FILES=$(cat "${ALL_MANIFEST_TRANS_FILES[@]}" | sort -u)
-    ALL_NOTRANS_FILES=$(cat "${ALL_MANIFEST_NOTRANS_FILES[@]}" | sort -u)
+    ALL_TRANS_FILES=$(cat "${ALL_MANIFEST_TRANS_FILES[@]}" | awk NF | tr ' ' '\n' | sort -u)
+    ALL_NOTRANS_FILES=$(cat "${ALL_MANIFEST_NOTRANS_FILES[@]}" | awk NF | tr ' ' '\n' | sort -u)
 
     # get all files unique to the notrans lists (the ones that have not
     # been translated)
