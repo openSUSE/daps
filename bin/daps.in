@@ -912,6 +912,9 @@ function set_mainfile {
 # Recover command-line values
 #
 function recover_cmdl_values {
+    # adoc attributes is special becauzse it can be specified multiple times
+    # we want to keep all values
+    test -n "$ADOC_ATTRIBUTES_CMDL" && ADOC_ATTRIBUTES="$ADOC_ATTRIBUTES $ADOC_ATTRIBUTES_CMDL"
     test -n "$ADOC_SET_CMDL"  && ADOC_SET="$ADOC_SET_CMDL"
     test -n "$BUILD_DIR_CMDL" && BUILD_DIR="$BUILD_DIR_CMDL"
     test -n "$COLOR_CMDL"     && COLOR="$COLOR_CMDL"
@@ -1067,7 +1070,7 @@ eval set -- "$ARGS"
 while true ; do
     case "$1" in
         --adocattr)
-            ADOC_ATTRIBUTES="$ADOC_ATTRIBUTES --attribute=\"$2\""
+            ADOC_ATTRIBUTES_CMDL="$ADOC_ATTRIBUTES_CMDL --attribute=\"$2\""
             shift 2
             ;;
         --adocimgdir)
@@ -1079,7 +1082,7 @@ while true ; do
             ;;
         --adocset)
             ADOC_SET_CMDL="yes"
-	    ADOC_SET="$ADOC_SET_CMDL"
+            ADOC_SET="$ADOC_SET_CMDL"
             shift
             ;;
         --builddir)
