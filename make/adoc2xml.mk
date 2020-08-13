@@ -30,18 +30,20 @@ ifndef ADOC_MAIN
 endif
 
 # ADOC default attributes
-#
-# We need to get rid of any data-url and imagesdir definitions to make DAPS
-# produce correct links. idprefix and idseperator are set to avoid the
-# default underscores which will appear in URls and are causing SEO penalties
+
+# overridable defaults: idprefix and idseparator are set to avoid AsciiDoctor's
+# default underscores which will appear in URLs and are causing SEO penalties
 # by Google (however, we only replace id* attributes if not set in the
 # .adoc sources)
 
+ADOC_OVERRIDABLE_ATTRIBUTES := --attribute="idprefix=id-@" \
+			   --attribute="idseparator=-@"
+
+# fixed defaults: get rid of any data-url and imagesdir definitions to make
+# DAPS produce correct links.
 
 ADOC_DEFAULT_ATTRIBUTES := --attribute=data-uri! \
-			   --attribute=imagesdir! \
-			   --attribute="idprefix=id-@" \
-			   --attribute="idseparator=-@"
+			   --attribute=imagesdir!
 
 
 # Check whether asciidoctor supports --failure-level (since version 1.5.7)
@@ -135,14 +137,16 @@ $(MAIN): FORCE $(ADOC_SRCFILES) | $(ADOC_DIR)
 	@ccecho "info"  "   Creating XML from ASCIIDOC..."
   endif
   ifeq "$(ADOC_SET)" "yes"
-	  (set -o pipefail; $(ASCIIDOC) $(ADOC_ATTRIBUTES) \
-	  $(ADOC_DEFAULT_ATTRIBUTES) --backend=$(ADOC_BACKEND) \
+	  (set -o pipefail; $(ASCIIDOC) \
+	  $(ADOC_OVERRIDABLE_ATTRIBUTES) $(ADOC_ATTRIBUTES) $(ADOC_DEFAULT_ATTRIBUTES) \
+	  --backend=$(ADOC_BACKEND) \
 	  --doctype=$(ADOC_TYPE) $(ADOC_FAILURE) \
 	  --out-file=- $(ADOC_MAIN) | $(XSLTPROC) --output $@ --xinclude \
 	  --stylesheet $(ADOC_SET_STYLE) $(XSLTPROCESSOR) $(DEVNULL) \
 	  $(ERR_DEVNULL))
   else
-	$(ASCIIDOC) $(ADOC_ATTRIBUTES) $(ADOC_DEFAULT_ATTRIBUTES) \
+	$(ASCIIDOC) \
+	  $(ADOC_OVERRIDABLE_ATTRIBUTES) $(ADOC_ATTRIBUTES) $(ADOC_DEFAULT_ATTRIBUTES) \
 	  --backend=$(ADOC_BACKEND) --doctype=$(ADOC_TYPE) \
 	  $(ADOC_FAILURE) --out-file=$@ $(ADOC_MAIN)
   endif
