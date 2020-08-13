@@ -3,10 +3,10 @@
 # Include the wrappers utility script
 . /usr/lib/java-wrappers/java-wrappers.sh
 
-# We prefer to use openjdk or Sun's java if available
-find_java_runtime openjdk sun || find_java_runtime
+# We prefer to use openjdk if available
+find_java_runtime openjdk || find_java_runtime
 
-# Set dfault (and local) classpath
+# Set default (and local) classpath
 JAVA_CLASSPATH="/usr/share/java"
 
 if [ "$1" = "classpath" ]
@@ -20,7 +20,6 @@ export CLASSPATH
 
 JAVA_ARGS="-Dorg.apache.xerces.xni.parser.XMLParserConfiguration=org.apache.xerces.parsers.XIncludeParserConfiguration"
 
-#find_jars jing xercesImpl xmlParserAPIs xml-apis saxon xml-resolver avalon-framework batik-all
 find_jars jing xercesImpl xmlParserAPIs xml-apis saxon xml-resolver
 
 run_java com.thaiopensource.relaxng.util.Driver "$@"
