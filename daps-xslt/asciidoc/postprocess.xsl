@@ -31,6 +31,8 @@
      * fold othername into firstname and lineage into surname
        * allows GeekoDoc validation
        * neither rule should be necessary, GeekoDoc should be fixed (FIXME!)
+     * formalpara[para/screen] and informalexample/formalpara[para/screen] -> example
+       para/screen is not allowed in GeekoDoc
 
    Author:    Thomas Schraitle <toms@opensuse.org>
    Copyright (C) 2018 SUSE Linux GmbH
@@ -168,6 +170,19 @@
     <xsl:if test="normalize-space($text)">
       <xsl:text>)</xsl:text>
     </xsl:if>
+  </xsl:template>
+
+  <xsl:template match="d:formalpara[d:para/d:screen]">
+    <xsl:element name="example" namespace="&db5ns;">
+      <xsl:apply-templates select="@*|d:title|d:para/*"/>
+    </xsl:element>
+  </xsl:template>
+
+  <xsl:template match="d:informalexample[d:formalpara[d:para/d:screen]]">
+    <xsl:element name="example" namespace="&db5ns;">
+      <xsl:apply-templates select="@*|d:formalpara/d:title|d:formalpara/d:para/*"/>
+      <xsl:apply-templates select="*[not(self::d:formalpara)]"/>
+    </xsl:element>
   </xsl:template>
 
 </xsl:stylesheet>
