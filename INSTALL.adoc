@@ -22,10 +22,15 @@ repositories:
 SUSE::
 	http://download.opensuse.org/repositories/Documentation:Tools/ +
 	Browse to this URl and choose you SUSE version to get the complete
-	 repository URl and add it with the `zypper ar` command, for example:
+	repository URl and add it with the `zypper ar` command, for example:
 	`zypper ar -f http://download.opensuse.org/repositories/Documentation:Tools/openSUSE_Leap_42.2 Documentation:Tools`
-	 To be able to use the complete functionality of DAPS, make sure to
-	also install all recommended packages (`zypper in --recommends --from Documentation:Tools daps`)
+	To be able to use the complete functionality of DAPS, make sure to
+	also install all recommended packages (`zypper in --recommends --from Documentation:Tools daps`) +
+        +
+	Packages for daily builds are available from
+	http://download.opensuse.org/repositories/Documentation:Tools:Auto/
+        Note that they have not yet been tested and may contain bugs. 
+
 ////	 
 Ubuntu::
 	https://launchpad.net/~sascha-manns-h/+archive/ubuntu/daps/ +
@@ -134,8 +139,8 @@ run `daps-check-deps` to check for already installed and missing dependencies.
 === Installation
 
 1. Download the https://github.com/openSUSE/daps/releases/latest[latest DAPS version]
-archive and unpack it _or_, alternatively clone the master branch from GitHub: +
-   `git clone https://github.com/openSUSE/daps.git -b master --single-branch` 
+archive and unpack it _or_, alternatively clone the main branch from GitHub: +
+   `git clone https://github.com/openSUSE/daps.git -b main --single-branch` 
 2. Change into the daps directory
 3. Run `./configure --sysconfdir=/etc` +
    Carefully check the configuration summary. Run `./configure --help` for
@@ -155,7 +160,7 @@ development version, you can run DAPS directly from the GitHub checkout.
 2. Check out DAPS. Either choose the latest stable version (safe) or the
    development version (may not work)
    Checking out the latest release::
-	`git clone https://github.com/openSUSE/daps.git -b master --single-branch`
+	`git clone https://github.com/openSUSE/daps.git -b main --single-branch`
    Checking out the latest development version::
 	 `git clone https://github.com/openSUSE/daps.git`
 3. (Skip this step for SUSE). Go to the checkout dicrectory and enter the
