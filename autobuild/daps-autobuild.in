@@ -239,7 +239,7 @@ function process_git {
     local GITBRANCH
     # get branch
     GITBRANCH="$(read_config_value "/daps-autobuild/set[@id='$SET']/vcs" "@branch")"
-    [[ -z "$GITBRANCH" ]] && GITBRANCH='master'
+    [[ -z "$GITBRANCH" ]] && GITBRANCH='main'
 
     remote=$(git remote)
     [[ $(echo -e "$remote" | wc -l ) -ge 2 ]] && return 4
