@@ -403,6 +403,7 @@ list-images-multisrc warn-images:
 # Check whether we have inkscape >= 1.0 or the old version (<1.0)
 #
 _INKSCAPE_VERSION := 1.0
+_INKSCAPE_TEST    := $(_INKSCAPE_VERSION)
 _INKSCAPE_VERSION += $(shell inkscape --version 2>/dev/null | awk '{print $$2}')
 
 #
@@ -413,9 +414,9 @@ _INKSCAPE_VERSION += $(shell inkscape --version 2>/dev/null | awk '{print $$2}')
 # is >=1.0, otherwise it is lower than 1.0 (which means it requires the old
 # command line switches)
 
-_INKSCAPE_VERSION_SORT := $(shell echo "$(_INKSCAPE_VERSION)" | tr " " "\n" | sort -b --version-sort )
+_INKSCAPE_VERSION_SORT := $(shell echo "$(_INKSCAPE_VERSION)" | tr " " "\n" | sort -b --version-sort | head -n1)
 
-_INKSCAPE_IS_NEW := $(shell if [ "$(_INKSCAPE_VERSION)" == "$(_INKSCAPE_VERSION_SORT)" ]; then echo "yes"; else echo "no"; fi)
+_INKSCAPE_IS_NEW := $(shell if [ "$(_INKSCAPE_TEST)" == "$(_INKSCAPE_VERSION_SORT)" ]; then echo "yes"; else echo "no"; fi)
 
 #------------------------------------------------------------------------
 # PNG
@@ -666,8 +667,8 @@ $(IMG_GENDIR)/gen/pdf/%.pdf: $(IMG_GENDIR)/gen/svg/%.svg | $(IMG_DIRECTORIES)
 ifeq "$(VERBOSITY)" "2"
 	@echo "   Converting $(notdir $<) to PDF"
 endif
-ifeq "$(_INKSACPE_IS_NEW)" "yes"
-	inkscape $(INK_OPTIONS) --export-type="png" --export-filename $@ $< $(DEVNULL)
+ifeq "$(_INKSCAPE_IS_NEW)" "yes"
+	inkscape $(INK_OPTIONS) --export-type="pdf" --export-filename $@ $< $(DEVNULL)
 else
 	inkscape -z -e $@ -f $< $(DEVNULL) && ( test -f $< || false )
 endif 
