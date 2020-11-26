@@ -90,8 +90,6 @@ ifneq "$(strip $(ADOC_IMG_DIR))" ""
   DIA     := $(subst $(ADOC_IMG_DIR)/,$(DIA_DIR)/,$(wildcard $(ADOC_IMG_DIR)/*.dia))
   EPS_DIR := $(IDIR)/eps
   EPS     := $(subst $(ADOC_IMG_DIR)/,$(EPS_DIR)/,$(wildcard $(ADOC_IMG_DIR)/*.eps))
-  FIG_DIR := $(IDIR)/fig
-  FIG     := $(subst $(ADOC_IMG_DIR)/,$(FIG_DIR)/,$(wildcard $(ADOC_IMG_DIR)/*.fig))
   JPG_DIR := $(IDIR)/jpg
   JPG     := $(subst $(ADOC_IMG_DIR)/,$(JPG_DIR)/,$(wildcard $(ADOC_IMG_DIR)/*.jpg))
   ODG_DIR := $(IDIR)/odg
@@ -103,8 +101,8 @@ ifneq "$(strip $(ADOC_IMG_DIR))" ""
   SVG_DIR := $(IDIR)/svg
   SVG     := $(subst $(ADOC_IMG_DIR)/,$(SVG_DIR)/,$(wildcard $(ADOC_IMG_DIR)/*.svg))
 
-  NEW_IMAGES      := $(DIA) $(EPS) $(FIG) $(JPG) $(ODG) $(PDF) $(PNG) $(SVG)
-  NEW_IMAGES_DIRS := $(DIA_DIR) $(EPS_DIR) $(FIG_DIR) $(JPG_DIR) $(ODG_DIR) $(PDF_DIR) $(PNG_DIR) $(SVG_DIR)
+  NEW_IMAGES      := $(DIA) $(EPS) $(JPG) $(ODG) $(PDF) $(PNG) $(SVG)
+  NEW_IMAGES_DIRS := $(DIA_DIR) $(EPS_DIR) $(JPG_DIR) $(ODG_DIR) $(PDF_DIR) $(PNG_DIR) $(SVG_DIR)
 endif
 
 all: $(MAIN)
@@ -158,9 +156,6 @@ $(DIA_DIR)/%.dia: $(ADOC_IMG_DIR)/%.dia | $(DIA_DIR)
 	(cd $(@D); ln -sf $<)
 
 $(EPS_DIR)/%.eps: $(ADOC_IMG_DIR)/%.eps | $(EPS_DIR)
-	(cd $(@D); ln -sf $<)
-
-$(FIG_DIR)/%.fig: $(ADOC_IMG_DIR)/%.fig | $(FIG_DIR)
 	(cd $(@D); ln -sf $<)
 
 $(JPG_DIR)/%.jpg: $(ADOC_IMG_DIR)/%.jpg | $(JPG_DIR)

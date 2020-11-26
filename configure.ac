@@ -201,9 +201,6 @@ AC_PATH_PROG([OODRAW], [lodraw], [0])
 dnl pdffonts
 AC_PATH_PROG([PDFFONTS], [pdffonts], [0])
 
-dnl xfig
-AC_PATH_PROG([XFIG], [xfig], [0])
-
 dnl svg DTD
 for SVG_DTD in "-//W3C//DTD SVG 1.0//EN" \
                "-//W3C//DTD SVG 1.1 Basic//EN" ; do
@@ -523,13 +520,6 @@ if test 0 = "$INKSCAPE" -o 0 = "$HAVE_SVGDTD"; then
   AC_MSG_RESULT([Support for .svg images          |    no   | install inkscape and/or the SVG DTD])
 else
   AC_MSG_RESULT([Support for .svg images          |   yes   |])
-fi
-
-dnl XFIG support
-if test 0 = "$XFIG"; then
-  AC_MSG_RESULT([Support for .fig images          |    no   | install xfig (transfig)])
-else
-  AC_MSG_RESULT([Support for .fig images          |   yes   |])
 fi
 
 dnl Optimize PNGs (optipng)

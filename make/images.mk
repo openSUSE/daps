@@ -19,7 +19,7 @@
 
 # Overview
 # DAPS uses images in $DOC_DIR/images/src/<FORMAT>/
-# Supported image formats are .dia, .eps, .fig, .png, .pdf, and .svg
+# Supported image formats are .dia, .ditaa, .eps, .odg, .png, .pdf, and .svg
 # - When creating HTML manuals all formats are converted to PNG
 # - When creating PDF manuals all formats are converted to
 #   either PNG, PDF, SVG depending on the "format" attribute in the
@@ -33,8 +33,6 @@
 #  DITAA |   PNG     |   PNG
 #........|...........|..........
 #  EPS   |   PNG     |   PDF
-#........|...........|..........
-#  FIG   |   PNG     | SVG,PDF
 #........|...........|..........
 #  JPG   |   JPG     |   JPG
 #........|...........|..........
@@ -83,16 +81,15 @@ STYLESVG2GRAY  := $(DAPSROOT)/daps-xslt/common/svg.color2grayscale.xsl
 SRCDIA     := $(wildcard $(IMG_SRCDIR)/dia/*.dia)
 SRCDITAA   := $(wildcard $(IMG_SRCDIR)/ditaa/*.ditaa)
 SRCEPS     := $(wildcard $(IMG_SRCDIR)/eps/*.eps)
-SRCFIG     := $(wildcard $(IMG_SRCDIR)/fig/*.fig)
 SRCJPG     := $(wildcard $(IMG_SRCDIR)/jpg/*.jpg)
 SRCODG     := $(wildcard $(IMG_SRCDIR)/odg/*.odg)
 SRCPDF     := $(wildcard $(IMG_SRCDIR)/pdf/*.pdf)
 SRCPNG     := $(wildcard $(IMG_SRCDIR)/png/*.png)
 SRCSVG     := $(wildcard $(IMG_SRCDIR)/svg/*.svg)
-SRCALL     := $(SRCDIA) $(SRCDITAA) $(SRCEPS) $(SRCFIG) $(SRCJPG) $(SRCODG) \
+SRCALL     := $(SRCDIA) $(SRCDITAA) $(SRCEPS) $(SRCJPG) $(SRCODG) \
 		$(SRCPDF) $(SRCPNG) $(SRCSVG)
 IMGDIRS    := $(sort $(dir $(SRCALL)))
-IMGFORMATS := dia ditaa eps fig jpg odg pdf png svg
+IMGFORMATS := dia ditaa eps jpg odg pdf png svg
 
 
 # get all images used in the current Document
@@ -110,9 +107,10 @@ USED_PNG := $(filter $(addprefix $(IMG_SRCDIR)/png/,$(USED)), $(SRCPNG))
 USED_PDF := $(filter $(addprefix $(IMG_SRCDIR)/pdf/,$(USED)), $(SRCPDF))
 
 # For HTML builds SVG and EPS are not directly used, but rather converted to PNG
-# DIA and FIG are never directly used in the XML sources, but converted
-# to SVG/PNG first. So we pretend all files in USED are SVG/FIG/DIA files
-# and then generate a list of files common to the fake USED and SRCFIG/SRCDIA
+# DIA, EPS, and DITAA are never directly used in the XML sources, but converted
+# to SVG/PNG first. So we pretend all files in USED are SVG/DITAA/EPS/DIA files
+# and then generate a list of files common to the fake USED and
+# SRCDITAA/SRCDIA/SRCeps
 #
 USED_DIA := $(filter \
 	$(addprefix $(IMG_SRCDIR)/dia/,$(addsuffix .dia,$(basename $(USED)))), \
@@ -123,34 +121,28 @@ USED_DITAA := $(filter \
 USED_EPS := $(filter \
 	$(addprefix $(IMG_SRCDIR)/eps/,$(addsuffix .eps,$(basename $(USED)))), \
 	$(SRCEPS))
-USED_FIG := $(filter \
-	$(addprefix $(IMG_SRCDIR)/fig/,$(addsuffix .fig,$(basename $(USED)))), \
-	$(SRCFIG))
 USED_ODG := $(filter \
 	$(addprefix $(IMG_SRCDIR)/odg/,$(addsuffix .odg,$(basename $(USED)))), \
 	$(SRCODG))
 USED_SVG := $(filter \
 $(addprefix $(IMG_SRCDIR)/svg/,$(addsuffix .svg,$(basename $(USED)))), \
 	$(SRCSVG))
-USED_ALL := $(USED_DIA) $(USED_DITAA) $(USED_EPS) $(USED_FIG) $(USED_JPG) \
+USED_ALL := $(USED_DIA) $(USED_DITAA) $(USED_EPS) $(USED_JPG) \
                 $(USED_ODG) $(USED_PNG) $(USED_PDF) $(USED_SVG)
 
 # generated images
 #
 GEN_PDF := $(subst .dia,.pdf,$(notdir $(USED_DIA))) \
 		$(subst .eps,.pdf,$(notdir $(USED_EPS))) \
-		$(subst .fig,.pdf,$(notdir $(USED_FIG))) \
 		$(subst .odg,.pdf,$(notdir $(USED_ODG))) \
 		$(subst .svg,.pdf,$(notdir $(USED_SVG)))
 GEN_PNG := $(subst .dia,.png,$(notdir $(USED_DIA))) \
 		$(subst .ditaa,.png,$(notdir $(USED_DITAA))) \
 		$(subst .eps,.png,$(notdir $(USED_EPS))) \
-		$(subst .fig,.png,$(notdir $(USED_FIG))) \
 		$(subst .odg,.png,$(notdir $(USED_ODG))) \
 		$(subst .pdf,.png,$(notdir $(USED_PDF))) \
 		$(subst .svg,.png,$(notdir $(USED_SVG)))
 GEN_SVG := $(subst .dia,.svg,$(notdir $(USED_DIA))) \
-		$(subst .fig,.svg,$(notdir $(USED_FIG))) \
 		$(subst .odg,.svg,$(notdir $(USED_ODG)))
 
 
@@ -383,7 +375,7 @@ list-images-multisrc warn-images:
 #
 # While PDFs support EPSs, SVGs and PNGs, all other output formats need PNG
 # (Browser support for SVG is still not common enough). So we convert
-# EPS, FIG and SVGs to PNG. FIG and DIA files are also converted to SVG
+# EPS and SVGs to PNG. DIA files are also converted to SVG
 # because they are unsupported in the output formats.
 #
 # We assume source images are generally color images, regardless of the format.
@@ -416,7 +408,7 @@ _INKSCAPE_VERSION += $(shell inkscape --version 2>/dev/null | awk '{print $$2}')
 
 _INKSCAPE_VERSION_SORT := $(shell echo "$(_INKSCAPE_VERSION)" | tr " " "\n" | sort -b --version-sort | head -n1)
 
-_INKSCAPE_IS_NEW := $(shell if [ "$(_INKSCAPE_TEST)" == "$(_INKSCAPE_VERSION_SORT)" ]; then echo "yes"; else echo "no"; fi)
+_INKSCAPE_IS_NEW := $(shell if [[ "$(_INKSCAPE_TEST)" = "$(_INKSCAPE_VERSION_SORT)" ]]; then echo "yes"; else echo "no"; fi)
 
 #------------------------------------------------------------------------
 # PNG
@@ -509,17 +501,6 @@ endif
 	$(run_optipng)
 
 
-# FIG -> PNG
-# create color PNGs from FIG
-$(IMG_GENDIR)/gen/png/%.png: $(IMG_SRCDIR)/fig/%.fig | $(IMG_DIRECTORIES)
-ifeq "$(VERBOSITY)" "2"
-	@echo "   Converting $(notdir $<) to PNG"
-endif
-	$(remove_link)
-	fig2dev -L png $< $@ $(DEVNULL)
-	$(run_optipng)
-
-
 # PDF -> PNG
 # create color PNGs from PDF
 $(IMG_GENDIR)/gen/png/%.png: $(IMG_SRCDIR)/pdf/%.pdf | $(IMG_DIRECTORIES)
@@ -590,15 +571,6 @@ ifeq "$(VERBOSITY)" "2"
 	@echo "   Converting $(notdir $<) to SVG"
 endif
 	LANG=C dia -t svg --export=$@ $< $(DEVNULL) $(ERR_DEVNULL)
-
-# FIG -> SVG
-#
-$(IMG_GENDIR)/gen/svg/%.svg: $(IMG_SRCDIR)/fig/%.fig | $(IMG_DIRECTORIES)
-ifeq "($(VERBOSITY)" "2"
-	@echo "   Converting $(notdir $<) to SVG"
-endif
-	fig2dev -L svg $< $@ $(DEVNULL)
-
 
 # SVG -> SVG
 #

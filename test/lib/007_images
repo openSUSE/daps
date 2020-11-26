@@ -11,7 +11,6 @@
 #   -DIA: -> PDF, PNG, SVG
 #   -DITAA: -> PNG
 #   -EPS: -> PDF, PNG
-#   -FIG: -> PDF, PNG, SVG
 #   -JPG: -> JPG (copy)
 #   -ODG: -> PDF, PNG, SVG
 #   -PNG: -> PNG (copy)
@@ -145,43 +144,6 @@ function test_imagesEPS () {
         "[ -s ${_IMGDIR_GRAYSCALE}/${_EPS_IMG}.png ]"
 
     endSkipping
-
-}
-#--------------------------------
-# * Are the FIG images correctly converted to PDF, PNG and SVG?
-#
-function test_imagesFIG () {
-    local _FIG_IMG
-
-    _FIG_IMG=$(basename -s .fig $(find ${_IMGDIR_SRC}/fig -type f | head -1))
-
-    assertTrue \
-        " └─ FIG to PDF generation failed" \
-        "[ -s ${_IMGDIR_GEN}/pdf/${_FIG_IMG}.pdf ]"
-    assertTrue \
-        " └─ FIG to PNG generation failed" \
-        "[ -s ${_IMGDIR_GEN}/png/${_FIG_IMG}.png ]"
-    assertTrue \
-        " └─ FIG to SVG generation failed" \
-        "[ -s ${_IMGDIR_GEN}/svg/${_FIG_IMG}.svg ]"
-    assertTrue \
-        " └─ Color PDF link for $_FIG_IMG is missing" \
-        "[ -L ${_IMGDIR_COLOR}/${_FIG_IMG}.pdf ]"
-    assertTrue \
-        " └─ Color PNG link for $_FIG_IMG is missing" \
-        "[ -L ${_IMGDIR_COLOR}/${_FIG_IMG}.png ]"
-    assertTrue \
-        " └─ Color SVG for $_FIG_IMG is missing" \
-        "[ -s ${_IMGDIR_COLOR}/${_FIG_IMG}.svg ]"
-    assertTrue \
-        " └─ Grayscale PDF for $_FIG_IMG is missing" \
-        "[ -s ${_IMGDIR_GRAYSCALE}/${_FIG_IMG}.pdf ]"
-    assertTrue \
-        " └─ Grayscale PNG for $_FIG_IMG is missing" \
-        "[ -s ${_IMGDIR_GRAYSCALE}/${_FIG_IMG}.png ]"
-    assertTrue \
-        " └─ Grayscale SVG for $_FIG_IMG is missing" \
-        "[ -s ${_IMGDIR_GRAYSCALE}/${_FIG_IMG}.svg ]"
 
 }
 

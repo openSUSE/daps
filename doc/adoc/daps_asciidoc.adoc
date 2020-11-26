@@ -79,7 +79,6 @@ PROJECT_ROOT/ <1>
      |   |--\*.adoc
      |   |--images/ <5>
      |   |  |--\*.dia/
-     |   |  |--\*.fig/
      |   |  |--\*.jpg
      |   |  |--\*.png/
      |   |  |--\*.svg/
@@ -179,14 +178,13 @@ For the example above, the images need to reside in `adoc/images`.
 Possible sources for the images in `adoc/images` are:
 
 * `adoc/images/test.dia`
-* `adoc/images/test.fig`
 * `adoc/images/test.jpg`
 * `adoc/images/test.png`
 * `adoc/images/test.svg`
 
 The {adoc} source example requests a PNG file. If it exists, it will be used as is.
 If it does not exist, {daps} will search for an image with the base name
-`test` (`test.svg`, `test.dia`, or `test.fig`) and automatically convert it
+`test` (`test.svg`, `test.dia`) and automatically convert it
 to PNG.
 
 .Unique Image Names
@@ -515,29 +513,27 @@ Examples:
 +
 [source,shell]
 ----
-tux > gdaps -d DC-adoc_test list-srcfiles
+tux > daps -d DC-adoc_test list-srcfiles
 /home/doc/documents/DC-adoc_test
 /home/doc/documents/adoc/appendix.adoc
 /home/doc/documents/adoc/book.adoc
 /home/doc/documents/adoc/part_block.adoc
 /home/doc/documents/adoc/part_inlines.adoc
 /home/doc/documents/images/src/dia/dia_example.dia
-/home/doc/documents/images/src/fig/fig_example.fig
 /home/doc/documents/images/src/jpg/jpg_example.jpg
 /home/doc/documents/images/src/png/png_example.png
 /home/doc/documents/images/src/png/png_example2.png
 /home/doc/documents/images/src/svg/svg_example.svg
 
-tux > gdaps -d DC-adoc_test list-srcfiles --adoconly
+tux > daps -d DC-adoc_test list-srcfiles --adoconly
 /home/doc/documents/adoc/appendix.adoc
 /home/doc/documents/adoc/book.adoc
 /home/doc/documents/adoc/part_block.adoc
 /home/doc/documents/adoc/part_inlines.adoc
 
-tux > gdaps -d DC-adoc_test list-srcfiles
+tux > daps -d DC-adoc_test list-srcfiles
 /home/doc/documents/DC-adoc_test
 /home/doc/documents/images/src/dia/dia_example.dia
-/home/doc/documents/images/src/fig/fig_example.fig
 /home/doc/documents/images/src/jpg/jpg_example.jpg
 /home/doc/documents/images/src/png/png_example.png
 /home/doc/documents/images/src/png/png_example2.png

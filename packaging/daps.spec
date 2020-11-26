@@ -70,7 +70,6 @@ BuildRequires:  python-xml
 BuildRequires:  python3-lxml
 BuildRequires:  suse-xsl-stylesheets
 BuildRequires:  svg-dtd
-BuildRequires:  transfig
 BuildRequires:  xerces-j2
 BuildRequires:  xml-apis
 BuildRequires:  xmlgraphics-fop >= 0.94
@@ -116,7 +115,6 @@ Requires:       python-xml
 Requires:       python3-lxml
 Requires:       suse-xsl-stylesheets
 Requires:       svg-schema
-Requires:       transfig
 Requires:       xerces-j2
 Requires:       xml-apis
 Requires:       xmlgraphics-fop >= 0.94
