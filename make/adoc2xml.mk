@@ -45,6 +45,16 @@ ADOC_OVERRIDABLE_ATTRIBUTES := --attribute="idprefix=id-@" \
 ADOC_DEFAULT_ATTRIBUTES := --attribute=data-uri! \
 			   --attribute=imagesdir!
 
+# If DAPS is called with --<TBD>, the asciidoc attribute "daps-adoc-attributes"
+# will be set and will contain all asciidoctor parameters --attribute=XYZ that
+# have been provided on the command line or in the DC-file
+# This allows to use daps-adoc-attributes in the asciidoc sources in order to
+# display these very parameters
+#
+
+#ifneq "$(strip $(????))" ""
+ADOC_SHOW_ATTRIBUTES := --attribute=daps-adoc-attributes="$(strip $(ADOC_ATTRIBUTES))"
+#endif
 
 # Check whether asciidoctor supports --failure-level (since version 1.5.7)
 #
@@ -136,7 +146,7 @@ $(MAIN): FORCE $(ADOC_SRCFILES) | $(ADOC_DIR)
   endif
   ifeq "$(ADOC_SET)" "yes"
 	  (set -o pipefail; $(ASCIIDOC) \
-	  $(ADOC_OVERRIDABLE_ATTRIBUTES) $(ADOC_ATTRIBUTES) $(ADOC_DEFAULT_ATTRIBUTES) \
+	  $(ADOC_OVERRIDABLE_ATTRIBUTES) $(ADOC_ATTRIBUTES) $(ADOC_DEFAULT_ATTRIBUTES)  $(ADOC_SHOW_ATTRIBUTES) \
 	  --backend=$(ADOC_BACKEND) \
 	  --doctype=$(ADOC_TYPE) $(ADOC_FAILURE) \
 	  --out-file=- $(ADOC_MAIN) | $(XSLTPROC) --output $@ --xinclude \
@@ -144,7 +154,7 @@ $(MAIN): FORCE $(ADOC_SRCFILES) | $(ADOC_DIR)
 	  $(ERR_DEVNULL))
   else
 	$(ASCIIDOC) \
-	  $(ADOC_OVERRIDABLE_ATTRIBUTES) $(ADOC_ATTRIBUTES) $(ADOC_DEFAULT_ATTRIBUTES) \
+	  $(ADOC_OVERRIDABLE_ATTRIBUTES) $(ADOC_ATTRIBUTES) $(ADOC_DEFAULT_ATTRIBUTES) $(ADOC_SHOW_ATTRIBUTES) \
 	  --backend=$(ADOC_BACKEND) --doctype=$(ADOC_TYPE) \
 	  $(ADOC_FAILURE) --out-file=$@ $(ADOC_MAIN)
   endif
