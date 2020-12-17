@@ -1,0 +1,137 @@
+#!/bin/bash
+
+# Either use the default ("xml/*.xml") or the arguments passed on the command line:
+
+me="${0##*/}"
+medir=$(dirname "$0")
+
+verbose=0
+
+if [ "-h" = "$1" ] || [ "--help" = "$1" ]; then
+  echo "$ME [-h|--help]"
+  echo "$ME [-v|--verbose] [XML_FILE]..."
+  exit 0
+fi
+
+if [ "-v" = "$1" ] || [ "--verbose" = "$1" ]; then
+  verbose=1
+  shift
+fi
+
+if [ "-vv" = "$1" ] || [ "-v" = "$1" ] || [ "--verbose" = "$1" ]; then
+  verbose=2
+  shift
+fi
+
+source=${@:-xml/*.xml}
+
+for f in $source; do
+  [[ "$verbose" -ge 1 ]] && echo "- terms/titles in [ $f ]"
+  ttl=$(grep -Pn '<(title|term)>' "$f")
+  len=$(echo -e "$ttl" | wc -l)
+  [[ "$ttl" == "" ]] && continue
+  for i in $(seq 1 ${len}); do
+    ful=$(echo -e "$ttl" | sed -n "$i p")
+    num=$(echo "$ful" | grep -Po '^[0-9]+')
+    lin=$(echo "$ful" | sed -r 's/^[0-9]+://')
+    pre=$(echo "$lin" | grep -Po '^.*<(title|term)>')
+    pos=$(echo "$lin" | grep -Po '</(title|term)>.*$')
+    met=$(echo "$lin" | sed -r -e 's_^.*<(title|term)>__' -e 's_</(title|term)>.*$__')
+    unp="$met"
+    ini=1
+    pro=""
+    [[ "$verbose" -ge 1 ]] && echo "${num} -| ${unp}"
+    while [[ "$unp" ]]; do
+     # self-closing tags
+     if [[ $(echo "$unp" | grep -Po "^<[^ >]+ *([^= >]+=['"'"'"][^'"'"'"]*['"'"'"] *)*/>") ]]; then
+       wor=$(echo "$unp" | grep -Po "^<[^ >]+ *([^= >]+=['"'"'"][^'"'"'"]*['"'"'"] *)*/>")
+       unp=$(echo "$unp" | sed -r "s_^<[^ >]+ *([^= >]+=['"'"'"][^'"'"'"]*['"'"'"] *)*/>__")
+       pro+="$wor"
+       [[ "$verbose" -eq 2 ]] && echo "SCT |$wor|"
+       continue
+     # comments
+     elif [[ $(echo "$unp" | grep "^<!") ]]; then
+       wor=$(echo "$unp" | grep -Po '^<![^>]+>')
+       unp=$(echo "$unp" | sed -r 's_^<![^>]+>__')
+       pro+="$wor"
+       [[ "$verbose" -eq 2 ]] && echo "COM $wor"
+       continue
+     # tags within which we want to change capitalization of the content
+     # guimenus need internal sentence-casing -> reset $ini
+     elif [[ $(echo "$unp" | grep -P "^</?(citetitle|emphasis|guimenu|u?link|menuchoice|phrase|quote)") ]]; then
+       wor=$(echo "$unp" | grep -Po '^<[^>]+>')
+       unp=$(echo "$unp" | sed -r 's_^<[^>]+>__')
+       pro+="$wor"
+       [[ "$verbose" -eq 2 ]] && echo "SCT |$wor|"
+       [[ $(echo "$wor" | grep -Po '^<guimenu') ]] && { [[ "$verbose" -eq 2 ]] && echo "(within guimenu, start with capitalized word)"; ini=1; }
+       continue
+     # closing tags that cannot be recognized properly because they are nested
+     elif [[ $(echo "$unp" | grep "^</") ]]; then
+       wor=$(echo "$unp" | grep -Po '^</[^>]+>')
+       unp=$(echo "$unp" | sed -r 's_^</[^>]+>__')
+       pro+="$wor"
+       [[ "$verbose" -eq 2 ]] && echo "FLT |$wor|"
+       continue
+     # tags where we don't want to change capitalization
+     elif [[ $(echo "$unp" | grep "^<") ]]; then
+       wor=$(echo "$unp" | grep -Po '^<[^>]+>[^<]+<[^>]+>')
+       unp=$(echo "$unp" | sed -r 's_^<[^>]+>[^<]+<[^>]+>__')
+       pro+="$wor"
+       [[ "$verbose" -eq 2 ]] && echo "TAG |$wor|"
+       continue
+     # entities
+     elif [[ $(echo "$unp" | grep "^\&") ]]; then
+       wor=$(echo "$unp" | grep -Po '^\&[^;]+;')
+       unp=$(echo "$unp" | sed -r 's_^\&[^;]+;__')
+       pro+="$wor"
+       [[ "$verbose" -eq 2 ]] && echo "ENT |$wor|"
+       continue
+     # special-case "I/O"
+     elif [[ $(echo "$unp" | grep "^I/O") ]]; then
+       wor=$(echo "$unp" | grep -Po '^I/O')
+       unp=$(echo "$unp" | sed -r 's_^I/O__')
+       pro+="$wor"
+       [[ "$verbose" -eq 2 ]] && echo "I/O |$wor|"
+       continue
+     # punctuation
+     elif [[ $(echo "$unp" | grep -P "^[ >,:;!?(/-]+") ]]; then
+       wor=$(echo "$unp" | grep -Po '^[ >,:;!?(/-]+')
+       unp=$(echo "$unp" | sed -r 's_^[ >,:;!?(/-]+__')
+       pro+="$wor"
+       [[ "$verbose" -eq 2 ]] && echo "PUN |$wor|"
+       continue
+     else
+       wor=$(echo "$unp" | grep -Po '^[^ <>,:;!?(/-]*')
+       unp=$(echo "$unp" | sed -r 's_^[^ <>,:;!?(/-]*__')
+       [[ "$verbose" -eq 2 ]] && echo -n "WOR |$wor| "
+     fi
+     # never change the first word
+     if [[ $ini -eq 1 ]]; then
+       pro+="$wor"
+       [[ "$verbose" -eq 2 ]] && echo "-> INI"
+     # never change acronyms, which we assume are characterized by at least two leading capitals
+     elif [[ $(echo "$wor" | grep "^[A-Z][A-Z]" ) ]]; then
+       pro+="$wor"
+       [[ "$verbose" -eq 2 ]] && echo "-> ACR"
+     # never change the words from the list
+     # -F fixed-strings, no regex support; -w word-based; -f load strings from file
+     elif [[ $(echo "$wor" | grep -Fw -f "$medir/keep-case-list" ) ]]; then
+       pro+="$wor"
+       [[ "$verbose" -eq 2 ]] && echo "-> LIS"
+     # -> change these things
+     elif [[ $(echo "$wor" | grep "^[A-Z]" ) ]]; then
+       pro+=$(echo -n "$wor" | sed -r 's/(.)(.*)/\L\1\E\2/')
+       [[ "$verbose" -eq 2 ]] && echo "-> CHG"
+     # never change anything else
+     else
+       pro+="$wor"
+       [[ "$verbose" -eq 2 ]] && echo "-> OTH"
+     fi
+     ini=0
+    done
+    [[ "$verbose" -ge 1 ]] && echo -e "${num} +| ${pro}\n"
+    rea=$(echo "${pre}${pro}${pos}" | sed -e 's_/_\\/_g' -e 's_\&_\\\&_g' )
+    sed -i "${num}"' s/.*/'"$rea"'/' "$f"
+  done
+  [[ "$verbose" -ge 1 ]] && echo -e "----\n"
+done
