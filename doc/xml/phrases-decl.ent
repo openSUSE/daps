@@ -162,26 +162,15 @@
     <procedure>
      <title>Installing &dapsacr; via Zypper From &suse-dapsrepo;</title>
      <step>
-      <para>Open a browser and enter the following URL: <ulink url="http://download.opensuse.org/repositories/Documentation:/Tools"></ulink></para>
-     </step>
-     <step>
-      <para>Select your distribution and product number to make the browser show the URL for the respective repository.</para>
-     </step>
-     <step>
-      <para>Copy the URL from the address bar.</para>
-     </step>
-     <step>
       <para>Open a terminal.</para>
      </step>
      <step>
-      <para>Add the repository with the following zypper command:</para>
-      <screen>&prompt.root;<command>zypper ar -f <replaceable>URL</replaceable> &suse-dapsrepo;</command></screen>
-      <para>Replace <replaceable>URL</replaceable> with the URL you pasted from
-      your browser.</para>
+      <para>Add the &suse-dapsrepo; repository with the following zypper command:</para>
+      <screen>&prompt.root;<command>zypper addrepo --refresh obs://Documentation:Tool &suse-dapsrepo;</command></screen>
      </step>
      <step>
       <para>Install &dapsacr; with the following zypper command:</para>
-      <screen>&prompt.root;<command>zypper in --from &suse-dapsrepo; daps</command></screen>
+      <screen>&prompt.root;<command>zypper install --from &suse-dapsrepo; daps</command></screen>
       <para>In order to install &dapsacr; you have to trust the <systemitem>&suse-dapsrepo;</systemitem> repository.</para>
      </step>
     </procedure>
