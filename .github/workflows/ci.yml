@@ -1,0 +1,110 @@
+---
+name: daps CI
+
+on:
+  push:
+    branches-ignore:
+      - gh-pages
+  pull_request:
+    branches-ignore:
+      - gh-pages
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+
+jobs:
+  test:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Output env variables
+        run: |
+          # Just for debugging purposes. Can be removed once it's stable
+          echo "Default branch=${default-branch}"
+          echo "GITHUB_WORKFLOW=${GITHUB_WORKFLOW}"
+          echo "GITHUB_ACTION=$GITHUB_ACTION"
+          echo "GITHUB_ACTIONS=$GITHUB_ACTIONS"
+          echo "GITHUB_ACTOR=$GITHUB_ACTOR"
+          echo "GITHUB_REPOSITORY=$GITHUB_REPOSITORY"
+          echo "GITHUB_EVENT_NAME=$GITHUB_EVENT_NAME"
+          echo "GITHUB_EVENT_PATH=$GITHUB_EVENT_PATH"
+          echo "GITHUB_WORKSPACE=$GITHUB_WORKSPACE"
+          echo "GITHUB_SHA=$GITHUB_SHA"
+          echo "GITHUB_REF=$GITHUB_REF"
+          echo "GITHUB_HEAD_REF=$GITHUB_HEAD_REF"
+          echo "GITHUB_BASE_REF=$GITHUB_BASE_REF"
+          echo "::debug::---Start content of file $GITHUB_EVENT_PATH"
+          cat $GITHUB_EVENT_PATH
+          echo "\n"
+          echo "::debug::---end"
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get install -y autoconf \
+                              automake \
+                              autotools-dev \
+                              checkbot \
+                              dia \
+                              docbook \
+                              docbook-xml \
+                              docbook-xsl \
+                              docbook-xsl-ns \
+                              docbook-xsl-saxon \
+                              docbook5-xml \
+                              fop \
+                              ghostscript \
+                              imagemagick \
+                              inkscape \
+                              jing \
+                              libimage-exiftool-perl \
+                              libsaxon-java \
+                              libtool \
+                              libxml-commons-external-java \
+                              libxml2 \
+                              libxml2-utils \
+                              libxmlgraphics-commons-java \
+                              libxslt1.1 \
+                              optipng \
+                              poppler-utils \
+                              python3 \
+                              python3-lxml \
+                              remake \
+                              sgml-base \
+                              sgml-data \
+                              shtool \
+                              shunit2 \
+                              w3m \
+                              xfig \
+                              xmlstarlet \
+                              xsltproc \
+                              zip
+
+      - uses: actions/checkout@v2
+
+      - uses: actions/checkout@v2
+        with:
+          repository: openSUSE/suse-xsl
+          path: suse
+
+      - name: Configure
+        run: ./configure --sysconfdir=/etc
+
+      - name: make
+        run: make
+
+      - name: make install
+        run: sudo make install
+
+      - name: Running daps XML syntax check for duplicated IDs...
+        env:
+          TESTDIR: test/xml-syntax-check
+        run: |
+          ./libexec/daps-xmlwellformed \
+           $TESTDIR/double-ids.xml && echo "ok" || echo "Failed"
+
+      - name: Running daps XML syntax check for XML file with syntax errors...
+        env:
+          TESTDIR: test/xml-syntax-check
+        run: |
+          ./libexec/daps-xmlwellformed \
+            $TESTDIR/syntax-error.xml 2>/dev/null && echo "Failed" || echo "ok"
