@@ -948,6 +948,8 @@ function parse_config {
     OLD_IFS="$IFS"
     shopt -s extglob
     while IFS='= ' read KEY VALUE; do
+        # no cocatenation by default
+        CONCAT=0
         let LINE_NO++
         # skip empty lines
         [[ -z "$KEY" ]] && continue
@@ -1005,9 +1007,6 @@ function parse_config {
         elif [[ "$KEY" =~ \+$ ]]; then
             CONCAT=1
             KEY="${KEY%*+}"           # del trailing "+"
-        else
-            # Do not concatenate values that have no +=, overwrite them
-            CONCAT=0
         fi
 
         # check if KEY is a valid variable name
