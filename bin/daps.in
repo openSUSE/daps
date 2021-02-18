@@ -912,7 +912,7 @@ function set_mainfile {
 # Recover command-line values
 #
 function recover_cmdl_values {
-    # adoc attributes is special becauzse it can be specified multiple times
+    # adoc attributes is special because it can be specified multiple times
     # we want to keep all values
     test -n "$ADOC_ATTRIBUTES_CMDL" && ADOC_ATTRIBUTES="$ADOC_ATTRIBUTES $ADOC_ATTRIBUTES_CMDL"
     test -n "$ADOC_SET_CMDL"  && ADOC_SET="$ADOC_SET_CMDL"
@@ -1005,6 +1005,9 @@ function parse_config {
         elif [[ "$KEY" =~ \+$ ]]; then
             CONCAT=1
             KEY="${KEY%*+}"           # del trailing "+"
+        else
+            # Do not concatenate values that have no +=, overwrite them
+            CONCAT=0
         fi
 
         # check if KEY is a valid variable name
@@ -1175,8 +1178,8 @@ while true ; do
             shift 2
             ;;
         --schema)
-            DOCBOOK5_RNG_URI="$2"
-            DOCBOOK5_RNG_URI_CMDL="$DOCBOOK5_RNG_URI"
+            DOCBOOK5_RNG_URI_CMDL="$2"
+            DOCBOOK5_RNG_URI="$DOCBOOK5_RNG_URI_CMDL"
             shift 2
             ;;
         --styleroot)
