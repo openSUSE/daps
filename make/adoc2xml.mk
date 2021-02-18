@@ -53,7 +53,9 @@ ADOC_DEFAULT_ATTRIBUTES := --attribute=data-uri! \
 #
 
 #ifneq "$(strip $(????))" ""
-ADOC_SHOW_ATTRIBUTES := --attribute=daps-adoc-attributes="$(strip $(ADOC_ATTRIBUTES))"
+ADOC_SHOW_ATTRIBUTES := $(subst --attribute=,,$(ADOC_ATTRIBUTES))
+ADOC_SHOW_ATTRIBUTES := $(sort $(strip $(subst --attribute,,$(ADOC_SHOW_ATTRIBUTES))))
+ADOC_SHOW_ATTRIBUTES := --attribute=daps-adoc-attributes="$(ADOC_SHOW_ATTRIBUTES)"
 #endif
 
 # Check whether asciidoctor supports --failure-level (since version 1.5.7)
