@@ -297,10 +297,29 @@ while true; do
         -o|--output)
             OUTPUT="-o $2"
             shift 2;;
-        --param)
-            # Test for equal sign
+        --param|--stringparam)
+            # Slightly hacky:
+            # While xsltproc may make a few memory optimizations based on
+            # whether it receives --stringparam or --param parameters, XSLT
+            # itself is not statically typed in any sense and does not need the
+            # differentiation.
+            # However, if you specify --param foo=1 and --stringparam "foo=1",
+            # xsltproc will exit with an error, because "$foo" has been declared
+            # twice. Changing process_params to correct this properly (keeping
+            # separate, but deduplicated against each other lists of params and
+            # stringparams) would be a major effort, so we will simply treat
+            # everything as a --stringparam by only writing to
+            # STRPARMS. This fixes DAPS issue #589.
+
+            # The precedence of parameters is slightly buggy: parameters
+            # specified as --stringparam will always win over plain --param
+            # (stringparam is defined after param in the getopt optstring
+            # above). Besides that, the last parameter specified on the
+            # command line wins.
+
+            # check for equal sign
             if [[ $2 =~ = ]]; then
-                PARMS+=("\"$2\"")
+                STRPARMS+=("\"$2\"")
             else
                 exit_on_error "--param requires \"KEY=VALUE\" as parameter"
             fi
@@ -313,12 +332,6 @@ while true; do
             SAXON6_ARGS="$2"
             shift 2
             ;;
-        --stringparam)
-            # check for equal sign
-            if [[ $2 =~ = ]]; then
-                STRPARMS+=("\"$2\"")
-            fi
-            shift 2;;
         -x|--xinclude)
             XINCLUDE="--xinclude"
             shift;;
@@ -383,12 +396,9 @@ fi
 # run the XSLT processor
 #
 if [[ $PROCESSOR =~ xsltproc ]]; then
-    # Process stringparam and param values for xsltproc
+    # Process stringparam/param values for xsltproc
     if [[ -n "${STRPARMS[@]}" ]]; then
         PARAMETERS=("$(process_params "stringparam" "${STRPARMS[@]}")") || exit_on_error "wrong parameter for function process_params, must be either \"param\" or \"stringparam\""
-    fi
-    if [[ -n "${PARMS[@]}" ]]; then
-        PARAMETERS+=("$(process_params "param" "${PARMS[@]}")") || exit_on_error "wrong parameter  for function process_params, must be either \"param\" or \"stringparam\""
     fi
 
     COMMAND="$XSLTPROC $XSLTPROC_ARGS $XINCLUDE ${PARAMETERS[*]} $OUTPUT $STYLESHEET $XMLFILE"
