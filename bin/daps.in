@@ -1132,7 +1132,7 @@ while true ; do
         -m|--main)
             # make path absolute and strip trailing slash
             sanitize_path "$2" "MAIN_CMDL"
-            #MAIN="$MAIN_CMDL"
+            MAIN="$MAIN_CMDL"
             shift 2
             ;;
         --schema)
@@ -1195,14 +1195,6 @@ if [[ -n "$FALLBACK_STYLEROOT" && -z "$STYLEROOT" ]]; then
     if [[ 0 != $VERBOSITY ]]; then
         echo "Warning: --styleroot is not specified, ignoring --fb_styleroot" >&2
     fi
-fi
-
-# Set the config file that will get parsed:
-#
-if [[ -n $DAPS_CONFIG_FILE ]]; then
-    CONF_TO_PARSE="$DAPS_CONFIG_FILE"
-elif [[ -f $USER_CONFIG ]]; then
-    CONF_TO_PARSE="$USER_CONFIG"
 fi
 
 unset POSIXLY_CORRECT # we want the regular getopts behaviour on the second run
@@ -1278,64 +1270,35 @@ esac
 # In order to make developing easier, there is a hidden feature to set
 # DAPSROOT, allowing to have multiple daps versions installed into
 # different directories. You can switch between them by setting DAPSROOT
-# accordingly. Either by command line switch --dtdroot or in  your user
+# accordingly. Either by command line switch --dapsroot or in  your user
 # config file (DAPSROOT="<path>")
 #
 # Since command line values take precedence we need to recover them every
 # time we source a file
 #
 
+# Set the config file that will get parsed:
+#
+if [[ -n $DAPS_CONFIG_FILE ]]; then
+    CONF_TO_PARSE="$DAPS_CONFIG_FILE"
+elif [[ -f $USER_CONFIG ]]; then
+    CONF_TO_PARSE="$USER_CONFIG"
+fi
+
+#
 # source the user config for the first time to get DAPSROOT
 #
 
-############# INTERLUDE: Copy/Move USER_CONFIG_OLD #####################
-#
-# Move/copy an old DAPS config directory to ~/.config if not already existing
-# Only do this, if no config file was set with --config
-#
-if [[ -z $DAPS_CONFIG_FILE ]]; then
-    MOVE_CONFIG=""
-    if [[ -f $USER_CONFIG_OLD && ! -f $USER_CONFIG ]]; then
-        ccecho "warn" "The DAPS user configuration file has moved from\n~/.daps/config to ~/.config/daps/dapsrc"
-        NEW_CONFDIR=$(dirname "$USER_CONFIG")
-        NEW_CONFFILE=$(basename "$USER_CONFIG")
-        OLD_CONFDIR=$(dirname "$USER_CONFIG_OLD")
-        OLD_CONFFILE=$(basename "$USER_CONFIG_OLD")
-        while [[ ! $MOVE_CONFIG =~ ^[CcMmNn]$ ]] ; do
-            read -e -t 20 -i n -p "Do you want me to [c]opy it/[m]ove it/do [n]othing? " MOVE_CONFIG
-            [[ $? -gt 128 ]] && MOVE_CONFIG="n" # timeout reached
-        done
-        case "$MOVE_CONFIG" in
-            C|c)
-                cp -r "$OLD_CONFDIR" "$NEW_CONFDIR" && mv "${NEW_CONFDIR}/$OLD_CONFFILE" "${NEW_CONFDIR}/$NEW_CONFFILE"
-                if [[ 0 -eq $? ]]; then
-                    ccecho "info" "The DAPS config directory $OLD_CONFDIR has been copied to $NEW_CONFDIR.\nThe DAPS config file has been renamed to $NEW_CONFFILE."
-                else
-                    ccecho "warn" "Copying the DAPS config directory failed"
-                fi
-                ;;
-            M|m)
-                mv "$OLD_CONFDIR" "$NEW_CONFDIR" && mv "${NEW_CONFDIR}/$OLD_CONFFILE" "${NEW_CONFDIR}/$NEW_CONFFILE"
-                if [[ 0 -eq $? ]]; then
-                    ccecho "info" "The DAPS config directory $OLD_CONFDIR has been moved to $NEW_CONFDIR.\nThe DAPS config file has been renamed to $NEW_CONFFILE."
-                else
-                    ccecho "warn" "Moving the DAPS config file failed"
-                fi
-                ;;
-            *)
-                ccecho "info" "\nThe DAPS config has not been touched and will not be used in this DAPS run"
-                ;;
-        esac
-    fi
+# Removing the Code to move an old user config and replace it with an error
+if [[ -f $USER_CONFIG_OLD && ! -f $USER_CONFIG ]]; then
+        exit_on_error "The DAPS user configuration file has moved from\n~/.daps/config to ~/.config/daps/dapsrc\nPlease move or delete $USER_CONFIG_OLD"
 fi
 
 # Set DAPSROOT via user config file
-# fs 2018-20-19: Is this needed? Why setting the base dir to CONF_TO_PARSE??
 if [[ -s $CONF_TO_PARSE && -z "$DAPSROOT_CMDL" ]]; then
     parse_config "$CONF_TO_PARSE"
     # make DAPSROOT path absolute and remove trailing /
-    [[ -n "$DAPSROOT" ]] && sanitize_path "$DAPSROOT" "DAPSROOT" \
-        "$(readlink -en "$(dirname "$CONF_TO_PARSE")")"
+    [[ -n "$DAPSROOT" ]] && sanitize_path "$DAPSROOT" "DAPSROOT"
     recover_cmdl_values
 fi
 
@@ -1354,16 +1317,15 @@ if [[ -n "$DAPSROOT" ]]; then
         LIBEXEC_DIR="${DAPSROOT}/libexec"
         CONFIG="${DAPSROOT}/etc/config"
         XML_DEVEL_CATALOG="$XML_DEVEL_CATALOG $DAPSROOT/etc/catalog.xml"
-#        XML_CATALOG_FILES="$XML_DEVEL_CATALOG $XML_CATALOG_FILES"
     fi
 else
     # default DAPSROOT
     # no need to set BIN_DIR here, since it should be in the default path
     #
-    # if DAPSROOT_DEFAULT contains @...@ we are operating from an SVN
+    # if DAPSROOT_DEFAULT contains @...@ we are operating from a Git
     # checkout and no  --dapsroot was set
     #
-    [[ $DAPSROOT_DEFAULT =~ @[a-zA-Z]*@ ]] && exit_on_error "You need to specify a DAPSROOT when using an SVN checkout"
+    [[ $DAPSROOT_DEFAULT =~ @[a-zA-Z]*@ ]] && exit_on_error "You need to specify a DAPSROOT when using a Git checkout"
     DAPSROOT="$DAPSROOT_DEFAULT"
     LIB_DIR="$DEFAULT_LIB_DIR"
     LIBEXEC_DIR="$DEFAULT_LIBEXEC_DIR"
@@ -1372,7 +1334,7 @@ fi
 
 # Path to the xslt processor wrapper script
 #
-XSLTPROC=${DAPSROOT}/libexec/daps-xslt
+XSLTPROC=${LIBEXEC_DIR}/daps-xslt
 
 
 # ---------------------------------------------
@@ -1387,13 +1349,8 @@ parse_config "$CONFIG"
 #
 if [[ -s $CONF_TO_PARSE ]]; then
     parse_config "$CONF_TO_PARSE"
-    # make paths from PATHLIST absolute and remove trailing /
-    # MY_BASEDIR=$(readlink -en $(dirname $USER_CONFIG))
-    #    check_pathlist "$MY_BASEDIR"
-    # make DAPSROOT path absolute and remove trailing /
-    # fs 2018-10-29 ?????????? Why basedir from CONF_TO_PARSE ???
-    [[ -n "$DAPSROOT" ]] && sanitize_path "$DAPSROOT" "DAPSROOT" \
-        "$(readlink -en "$(dirname "$CONF_TO_PARSE")")"
+    # make DAPSROOT path absolute and remove trailing / (again)
+    [[ -n "$DAPSROOT" ]] && sanitize_path "$DAPSROOT" "DAPSROOT"
 fi
 recover_cmdl_values
 
@@ -1422,8 +1379,6 @@ fi
 
 #-------------------------------------
 # Parse DOCCONF and set up MAIN, DOC_DIR
-#
-# The black magic part of daps ... ;-)
 #
 # Three possibilities:
 # 1. MAIN was set on the command line or via user config
@@ -1492,10 +1447,6 @@ fi
 # Check if a MAIN has been set
 [[ -z "$MAIN" && -z "$MAIN_CMDL" ]] &&  exit_on_error "Fatal: No MAIN file has been set. Please specify one via command line or config file"
 
-echo "------------- x${MAIN}x || x${MAIN_CMDL}x -----------------"
-echo "----------------- $DOC_DIR -----------------"
-
-
 # get the source format (XML/ADOC) from MAIN
 [[ -z $SRC_FORMAT ]] && SRC_FORMAT=${MAIN##*.}
 
@@ -1527,12 +1478,6 @@ if [[ -z "$MAIN_CMDL" ]]; then
 else
     MAIN="$MAIN_CMDL"
 fi
-
-echo "------------- $MAIN || _${MAIN_CMDL}_ -----------------"
-echo "----------------- $DOC_DIR -----------------"
-
-
-
 
 # FOP/XEP/ASCIIDOC CONFIG and WRAPPER / JING WRAPPER
 # when using a Git checkout, @sysconfdir@ and @pkgdatadir have not been
