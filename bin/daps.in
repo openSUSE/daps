@@ -279,7 +279,7 @@ DEFAULT_LIBEXEC_DIR="${DAPSROOT_DEFAULT}/libexec"
 # By default USER_CONFIG is parsed
 # if DAPS_CONFIG_FILE is set (via --config on the command line),
 # USER_CONFIG is ignored
-# The file that is oparsed in the enbd is stored in CONF_TO_PARSE
+# The file that is parsed in the end is stored in CONF_TO_PARSE
 #
 USER_CONFIG_OLD="$HOME/.daps/config"
 USER_CONFIG="$HOME/.config/daps/dapsrc"
@@ -866,47 +866,6 @@ function autoset_docconf {
     fi
 }
 
-# ---------
-# Set MAIN to an absolute path
-#
-
-function set_mainfile {
-    local MAINFILE
-    MAINFILE="$1"
-
-    if [[ -e "$MAINFILE" ]]; then
-        # MAINFILE is a file or link
-        sanitize_path "$MAINFILE" "MAIN_CMDL"
-        if [[ -z "$DOC_DIR" ]]; then
-            DOC_DIR=$(dirname "$MAIN_CMDL")
-            DOC_DIR=${DOC_DIR%/${SRC_FORMAT}*} #remove SRC_FORMAT directory
-        fi
-        if [[ ! -d "${DOC_DIR}/${SRC_FORMAT}" ]]; then
-            exit_on_error "Source files must reside in an \"${SRC_FORMAT}/\" directory.\n This directory does not exist."
-        elif [[ ! -e ${DOC_DIR}/${SRC_FORMAT}/$(basename "$MAIN_CMDL") ]]; then
-            exit_on_error "MAIN file \"$MAIN_CMDL\" does not exist."
-        fi
-    else
-        if [[ -e "${SRC_FORMAT}/$MAINFILE" ]]; then
-            # MAIN is not a valid file, but ./${SRC_FORMAT}/$MAIN exists
-            sanitize_path "${SRC_FORMAT}/$MAINFILE" "MAIN_CMDL"
-            if [[ -z "$DOC_DIR" ]]; then
-                DOC_DIR="$PWD"
-            fi
-            if [[ 2 -le $VERBOSITY ]]; then
-                echo "Using MAIN file $MAIN_CMDL"
-            fi
-        else
-            if [[ -n "$DOC_DIR" ]]; then
-                MAIN_CMDL="${DOC_DIR}/${SRC_FORMAT}/$(basename "$MAINFILE")"
-                [[ -e $MAIN_CMDL ]] || exit_on_error "MAIN file \"$(basename $MAIN_CMDL)\" does not exist in the directory\n\"${DOC_DIR}/${SRC_FORMAT}/\". DAPS only works when this file is placed there."
-            else
-                exit_on_error "Fatal error: ${PWD}/$MAINFILE does not exist."
-            fi
-        fi
-    fi
-}
-
 
 # ---------
 # Recover command-line values
@@ -1173,7 +1132,7 @@ while true ; do
         -m|--main)
             # make path absolute and strip trailing slash
             sanitize_path "$2" "MAIN_CMDL"
-            MAIN="$MAIN_CMDL"
+            #MAIN="$MAIN_CMDL"
             shift 2
             ;;
         --schema)
@@ -1500,10 +1459,16 @@ if [[ -z "$DOCCONF_CMDL" && -z "$MAIN_CMDL" ]]; then
 elif [[ -n "$MAIN_CMDL" ]]; then
     # MAIN was set on the command line or in the user config
 
+    # if MAIN was set on the command line, we are good, path was already
+    # checked
+    # Checking path in case that a wrong path was specified by the user config
+    [[ -e "$MAIN_CMDL" ]] || exit_on_error "MAIN \"$MAIN_CMDL\" that was specified in the config file does not exist"
+
     # get the source format (XML/ADOC) from MAIN
     SRC_FORMAT=${MAIN_CMDL##*.}
-
-    set_mainfile "$MAIN_CMDL"
+    # Set a DOC_DIR
+    DOC_DIR=$(readlink -en "$(dirname "$MAIN_CMDL")")
+    DOC_DIR=${DOC_DIR%*/$SRC_FORMAT}
 elif [[ -n "$DOCCONF_CMDL" ]]; then
     # check if DOCCONF is a regular file
     if [[ -e $DOCCONF_CMDL ]]; then
@@ -1517,7 +1482,6 @@ fi
 #
 # Checking MAIN_CMDL, DOCCONF_CMDL, DOC_DIR and DAPSROOT
 #
-
 [[ -z "$DOCCONF_CMDL" && -z "$MAIN_CMDL" ]] && exit_on_error "Fatal: Neither \$DOCCONF nor $MAIN are set. This should not have happened. Please report a bug."
 [[ -z "$DOC_DIR" ]] && exit_on_error "Fatal: \$DOC_DIR is not set. This should not have happened. Please report a bug."
 [[ -z "$DAPSROOT" ]] && exit_on_error "Fatal: \$DAPSROOT is not set. This should not have happened. Please report a bug."
@@ -1525,13 +1489,53 @@ fi
 # FINALLY! Parse the DOCCONF file, recover the command line values
 [[ -n "$DOCCONF_CMDL" ]] && parse_config "$DOCCONF_CMDL"
 
+# Check if a MAIN has been set
+[[ -z "$MAIN" && -z "$MAIN_CMDL" ]] &&  exit_on_error "Fatal: No MAIN file has been set. Please specify one via command line or config file"
+
+echo "------------- x${MAIN}x || x${MAIN_CMDL}x -----------------"
+echo "----------------- $DOC_DIR -----------------"
+
+
 # get the source format (XML/ADOC) from MAIN
 [[ -z $SRC_FORMAT ]] && SRC_FORMAT=${MAIN##*.}
+
 # Validate SRC_FORMAT - needs to be xml or adoc
 [[ "adoc" = "$SRC_FORMAT" || "xml" = "$SRC_FORMAT" ]] || exit_on_error "$MAIN is an unsupported file type (.$SRC_FORMAT)\nmust be ASCIIDOC (.adoc) or DocBook (.xml)"
 
+# Check whether "${DOC_DIR}/${SRC_FORMAT}" exists
+[[ -d "${DOC_DIR}/${SRC_FORMAT}" ]] || exit_on_error "Source files must reside in  \"${DOC_DIR}/${SRC_FORMAT}/\".\n This directory does not exist."
+
+# Set MAIN if necessary
+if [[ -z "$MAIN_CMDL" ]]; then
+    # MAIN was provided without any path
+    if [[ -e "${DOC_DIR}/${SRC_FORMAT}/$MAIN" ]]; then
+        MAIN="${DOC_DIR}/${SRC_FORMAT}/$MAIN"
+    # MAIN was provided with a relative path
+    elif [[ -e "${DOC_DIR}/$MAIN" ]]; then
+        MAIN="${DOC_DIR}/$MAIN"
+    # MAIN was provided with an absolute path
+    elif [[ "$MAIN" =~ ^/ ]]; then
+        # if path to $MAIN does not match DOC_DIR/SRC_FORMAT DC file and MAIN
+        # are in different directories, this should not happen
+        #
+        # In case both match, we can use MAIN as is
+        #
+        [[ $(dirname $MAIN) = "${DOC_DIR}/${SRC_FORMAT}" ]] || exit_on_error "MAIN and DC-file reside in different base directories, this is not supported:\n\tMAIN: $MAIN\n\tDC-file: $DOCCONF"
+    else
+        exit_on_error "$MAIN does not exist or does not reside in $DOC_DIR, please check your config"
+    fi
+else
+    MAIN="$MAIN_CMDL"
+fi
+
+echo "------------- $MAIN || _${MAIN_CMDL}_ -----------------"
+echo "----------------- $DOC_DIR -----------------"
+
+
+
+
 # FOP/XEP/ASCIIDOC CONFIG and WRAPPER / JING WRAPPER
-# when using an SVN checkout, @sysconfdir@ and @pkgdatadir have not been
+# when using a Git checkout, @sysconfdir@ and @pkgdatadir have not been
 # replaced
 #
 # ${string/#substring/replacement}
@@ -1551,24 +1555,12 @@ XEP_WRAPPER=${XEP_WRAPPER/#@pkgdatadir\@/${DAPSROOT}}
 
 XMLFORMAT_CONFIG_FILE=${XMLFORMAT_CONFIG_FILE/#@sysconfdir\@\/daps/${DAPSROOT}/etc}
 
-
-# make all paths absolute, remove trailing / and check
-if [[ -n $DOCCONF_CMDL ]]; then
-    MY_BASEDIR=$(readlink -en "$(dirname "$DOCCONF_CMDL")")
-elif [[ -n $MAIN_CMDL ]]; then
-    MY_BASEDIR=$(readlink -en "$(dirname "$MAIN_CMDL")")
-else
-    exit_on_error "Fatal: Neither a DC nor a MAIN file is set"
-fi
+#
+# Now that we are set, recover the command line values one last time and
+# check all paths
+#
 recover_cmdl_values
-
-# If MAIN was not specified on the command line, set MAIN to an absolute
-# path
-if [[ -z "$MAIN_CMDL" ]]; then
-    set_mainfile "$MAIN"
-    MAIN="$MAIN_CMDL"
-fi
-check_pathlist "$MY_BASEDIR"
+check_pathlist "$DOC_DIR"
 
 #----------
 # Values that need to be exported and are not set in the config
