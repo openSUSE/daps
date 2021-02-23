@@ -33,6 +33,31 @@
 # executing the locdrop target
 #################################
 
+#
+# For unprofiled sources we need to determine the fill set of files
+# by creating fillist without using profiling
+# Therefore recreating filelist like in setfiles.mk and images.mk
+#
+
+#ifneq "$(CREATE_PROFILED)" "1"
+#SETFILES_LCD := $(shell mktemp -q --tmpdir daps_lcdfiles.XXXXXXXX 2>/dev/null)
+
+#SETFILES_LCD := $(shell $(XSLTPROC) --output $(SETFILES_LCD) \
+#	      --stringparam "xml.src.path=$(XML_SRC_PATH)" \
+#	      --stringparam "mainfile=$(notdir $(MAIN))" \
+#	      --stylesheet $(DAPSROOT)/daps-xslt/common/get-all-used-files.xsl \
+#	      --file $(MAIN) $(XSLTPROCESSOR) && echo 1)
+
+#SRCFILES_LCD := $(sort $(shell $(XSLTPROC) --stringparam "filetype=xml" \
+#	      --file $(SETFILES_LCD) \
+#	      --stylesheet $(DAPSROOT)/daps-xslt/common/extract-files-and-images.xsl $(XSLTPROCESSOR) 2>/dev/null))
+
+
+#IMAGES_LCD := $(sort $(shell $(XSLTPROC) --stringparam "filetype=img" \
+#	      --file $(SETFILES_LCD) \
+#             --stylesheet $(DAPSROOT)/daps-xslt/common/extract-files-and-images.xsl $(XSLTPROCESSOR) 2>/dev/null))
+#endif
+
 
 ifndef LOCDROP_EXPORT_DIR
   LOCDROP_EXPORT_BOOKDIR := $(RESULT_DIR)/locdrop
@@ -70,16 +95,31 @@ define db5_get_trans
 endef
 
 ifdef USESVN
-  TO_TRANS_FILES := $(subst $(DOC_DIR)/xml,$(PROFILEDIR),$(shell svn pl -v --xml $(DOCFILES) | $(XSLTPROC) --stylesheet $(DAPSROOT)/daps-xslt/common/get-svn-props.xsl $(XSLTPROCESSOR) 2>/dev/null))
+  ifeq "$(CREATE_PROFILED)" "1"
+    TO_TRANS_FILES := $(subst $(DOC_DIR)/xml,$(PROFILEDIR),$(shell svn pl -v --xml $(DOCFILES) | $(XSLTPROC) --stylesheet $(DAPSROOT)/daps-xslt/common/get-svn-props.xsl $(XSLTPROCESSOR) 2>/dev/null))
+  else
+    TO_TRANS_FILES := $(shell svn pl -v --xml $(DOCFILES) | $(XSLTPROC) --stylesheet $(DAPSROOT)/daps-xslt/common/get-svn-props.xsl $(XSLTPROCESSOR) 2>/dev/null) $(ENTITIES_DOC)
+  endif
 else
-  TO_TRANS_FILES := $(subst $(DOC_DIR)/xml,$(PROFILEDIR),$(shell $(db5_get_trans)))
+  ifeq "$(CREATE_PROFILED)" "1"
+    TO_TRANS_FILES := $(subst $(DOC_DIR)/xml,$(PROFILEDIR),$(shell $(db5_get_trans)))
+  else
+    TO_TRANS_FILES := $(shell $(db5_get_trans)) $(ENTITIES_DOC)
+  endif
 endif
 
 TO_TRANS_TAR := $(LOCDROP_EXPORT_BOOKDIR)/translation-$(DOCNAME)$(LANGSTRING).tar
 
 # XML Files that do not get translated
 #
-NO_TRANS_FILES := $(filter-out $(TO_TRANS_FILES),$(subst $(DOC_DIR)/xml,$(PROFILEDIR),$(SRCFILES)))
+# If CREATE_PROFILED is set to 1 use profiled sources from PROFILEDIR,
+# otherwise use the original XML from SRCFILE
+#
+ifeq "$(CREATE_PROFILED)" "1"
+  NO_TRANS_FILES := $(filter-out $(TO_TRANS_FILES),$(subst $(DOC_DIR)/xml,$(PROFILEDIR),$(SRCFILES)))
+else
+  NO_TRANS_FILES := $(filter-out $(TO_TRANS_FILES),$(SRCFILES))
+endif
 ifneq "$(strip $(NO_TRANS_FILES))" ""
   NO_TRANS_TAR   := $(LOCDROP_EXPORT_BOOKDIR)/setfiles-$(DOCNAME)$(LANGSTRING).tar
 endif
@@ -89,7 +129,11 @@ endif
 # for translation. If this list is not empty, a warning will be issued
 # during locdrop processing
 #
-NO_TRANS_BOOK := $(filter-out $(subst $(PROFILEDIR)/,,$(TO_TRANS_FILES)),$(subst $(DOC_DIR)/xml/,,$(DOCFILES)))
+ifeq "$(CREATE_PROFILED)" "1"
+  NO_TRANS_BOOK := $(filter-out $(subst $(PROFILEDIR)/,,$(TO_TRANS_FILES)),$(subst $(DOC_DIR)/xml/,,$(DOCFILES)))
+else
+  NO_TRANS_BOOK := $(subst $(DOC_DIR)/xml/,,$(filter-out $(TO_TRANS_FILES),$(DOCFILES)))
+endif
 ifneq "$(strip $(NO_TRANS_BOOK))" ""
   NO_TRANS_BOOK := $(subst $(SPACE),\n,$(NO_TRANS_BOOK))
 endif
@@ -169,9 +213,14 @@ locdrop: $(SRCFILES) $(MANIFEST_TRANS) $(MANIFEST_NOTRANS) $(USED_ALL) $(PROFILE
   ifneq "$(strip $(NO_TRANS_BOOK))" ""
 	ccecho "warn" "Warning: The following files are not marked for translation:\n$(NO_TRANS_BOOK)" >&2
   endif
+  ifeq "$(CREATE_PROFILED)" "1"
         # tarball with files for translation
 	tar chf $(TO_TRANS_TAR) --absolute-names \
 	  --transform=s%$(PROFILEDIR)/%xml/% $(TO_TRANS_FILES)
+  else
+	tar chf $(TO_TRANS_TAR) --absolute-names \
+	  --transform=s%$(DOC_DIR)/%% $(TO_TRANS_FILES)
+  endif
 	tar rhf $(TO_TRANS_TAR) --absolute-names \
 	  --transform=s%$(LOCDROP_TMP_DIR)/%% $(MANIFEST_TRANS)
         # tarball with files not being translated
@@ -180,27 +229,32 @@ locdrop: $(SRCFILES) $(MANIFEST_TRANS) $(MANIFEST_NOTRANS) $(USED_ALL) $(PROFILE
 	  $(DOCCONF)
 	tar rhf $(NO_TRANS_TAR) --absolute-names \
 	  --transform=s%$(LOCDROP_TMP_DIR)/%% $(MANIFEST_NOTRANS)
-    ifneq "$(strip $(NO_TRANS_FILES))" ""
+  ifneq "$(strip $(NO_TRANS_FILES))" ""
+    ifeq "$(CREATE_PROFILED)" "1"
 	tar rhf $(NO_TRANS_TAR) --absolute-names \
 	  --transform=s%$(PROFILEDIR)/%xml/% $(NO_TRANS_FILES)
+    else
+	tar rhf $(NO_TRANS_TAR) --absolute-names \
+	  --transform=s%$(DOC_DIR)/%% $(NO_TRANS_FILES)
     endif
-    ifneq "$(strip $(DEF_FILE))" ""
+  endif
+  ifneq "$(strip $(DEF_FILE))" ""
 	tar rhf $(NO_TRANS_TAR) --absolute-names --transform=s%$(DOC_DIR)/%% \
 	  $(DEF_FILE) $(DC_FILES)
-    endif
-    ifneq "$(strip $(TO_TRANS_IMGS))" ""
+  endif
+  ifneq "$(strip $(TO_TRANS_IMGS))" ""
         # graphics tarball "translated graphics"
 	BZIP2=--best tar cfhj $(TO_TRANS_IMG_TAR) \
 	  --absolute-names --transform=s%$(DOC_DIR)/%% $(TO_TRANS_IMGS)
-    endif
-    ifneq "$(strip $(NO_TRANS_IMGS))" ""
+  endif
+  ifneq "$(strip $(NO_TRANS_IMGS))" ""
         # graphics tarball "translated graphics"
 	BZIP2=--best tar cfhj $(NO_TRANS_IMG_TAR) \
 	  --absolute-names --transform=s%$(DOC_DIR)/%% $(NO_TRANS_IMGS)
-    endif
-    ifneq "$(NOPDF)" "1"
+  endif
+  ifneq "$(NOPDF)" "1"
 	cp $(PDF_RESULT) $(LOCDROP_EXPORT_BOOKDIR)
-    endif
+  endif
 	@if test -f $(NO_TRANS_TAR); then bzip2 -9f $(NO_TRANS_TAR); fi
 	@if test -f $(TO_TRANS_TAR); then bzip2 -9f $(TO_TRANS_TAR); fi
 	@ccecho "result" "Find the locdrop results at:\n$(LOCDROP_EXPORT_BOOKDIR)"
@@ -211,8 +265,13 @@ locdrop: $(SRCFILES) $(MANIFEST_TRANS) $(MANIFEST_NOTRANS) $(USED_ALL) $(PROFILE
 $(MANIFEST_TRANS): | $(LOCDROP_TMP_DIR)
 	@echo -e "$(subst $(DOC_DIR)/,,$(DOCCONF))" > $@
   ifdef TO_TRANS_FILES
+    ifeq "$(CREATE_PROFILED)" "1"
 	@echo -e "$(subst $(SPACE),\n,$(sort $(subst \
 	   $(PROFILEDIR),xml,$(TO_TRANS_FILES))))" >> $@
+    else
+	@echo -e "$(subst $(SPACE),\n,$(sort $(subst \
+	   $(DOC_DIR),,$(TO_TRANS_FILES))))" >> $@
+    endif
   endif
   ifdef TO_TRANS_IMGS
 	@echo -e "$(subst $(SPACE),\n,$(sort $(subst \
@@ -223,7 +282,13 @@ $(MANIFEST_TRANS): | $(LOCDROP_TMP_DIR)
 $(MANIFEST_NOTRANS): | $(LOCDROP_TMP_DIR)
 	echo -n > $@
   ifdef NO_TRANS_FILES
-	@echo -e "$(subst $(SPACE),\n,$(sort $(subst $(PROFILEDIR),xml,$(NO_TRANS_FILES))))" >> $@
+    ifeq "$(CREATE_PROFILED)" "1"
+	@echo -e "$(subst $(SPACE),\n,$(sort $(subst \
+	  $(PROFILEDIR),xml,$(NO_TRANS_FILES))))" >> $@
+    else
+	@echo -e "$(subst $(SPACE),\n,$(sort $(subst \
+	  $(DOC_DIR),,$(NO_TRANS_FILES))))" >> $@
+    endif
   endif
   ifdef DEF_FILE
 	@echo -e "$(subst $(SPACE),\n,$(sort $(subst $(DOC_DIR)/,,$(DC_FILES))))" >> $@

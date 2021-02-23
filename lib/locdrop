@@ -18,7 +18,7 @@ function build_locdrop {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="def-file:,export-dir:,help,name:,nopdf,optipng,rootid:"
+    LONG_OPTS="def-file:,export-dir:,help,name:,nopdf,optipng,profiled,rootid:"
 
     parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -31,8 +31,9 @@ function build_locdrop {
         help_help
         help_name
         help_nopdf
+        help_profiled
+        help_optipng
         help_rootid
-    help_optipng
         echo
         exit 0
     fi
@@ -41,6 +42,7 @@ function build_locdrop {
     [[ -n "$P_NOPDF" ]]      && export export NOPDF=1
     [[ -n "$P_ROOTID" ]]     && export ROOTID="$P_ROOTID"
     [[ -n "$P_EXPORT_DIR" ]] && export LOCDROP_EXPORT_DIR="$P_EXPORT_DIR"
+    [[ -n "P_CREATE_PROFILED" ]] && export CREATE_PROFILED="$P_CREATE_PROFILED"
     [[ 1 = "$P_OPTIPNG" ]]     && export OPTIPNG=1
 
     if [[ -f "$P_DEF_FILE" ]]; then

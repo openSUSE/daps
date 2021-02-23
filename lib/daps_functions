@@ -257,6 +257,10 @@ function parse_args {
                 P_PRETTY=1
                 shift
                 ;;
+            --profiled)
+                P_CREATE_PROFILED=1
+                shift
+                ;;
             --remarks)
                 P_REMARKS=1
                 shift
@@ -1496,6 +1500,14 @@ EOF
 function help_pretty {
     cat <<EOF
     --pretty                  Pretty print file lists (one filename per line)
+EOF
+}
+function help_profiled {
+    cat <<EOF
+    --profiled                Use this option to create the localisation
+                              tarballs from profiled sources (with conditional
+                              context removed and entities resolved).
+                              Default: off
 EOF
 }
 function help_remarks {
