@@ -21,6 +21,26 @@
 #MANIFEST_TRANS
 #MANIFEST_NOTRANS
 
+ifneq "$(CREATE_PROFILED)" "1"
+  UP_SETFILES := $(shell $(XSLTPROC) \
+	      --output $(UP_SETFILES_TMP) \
+	      --stringparam "xml.src.path=$(XML_SRC_PATH)" \
+	      --stringparam "mainfile=$(notdir $(MAIN))" \
+	      --stylesheet $(DAPSROOT)/daps-xslt/common/get-all-used-files.xsl \
+	      --file $(MAIN) $(XSLTPROCESSOR) && echo 1)
+
+  # $(shell) does not cause make to exit in case it fails, so we need to
+  # check manually
+  ifndef UP_SETFILES
+    $(error Fatal error: Could not compute the list of UP Setfiles)
+  endif
+  # XML source files for the whole unprofiled set
+  #
+  DOCFILES := $(sort $(shell $(XSLTPROC) --stringparam "filetype=xml" \
+	      --file $(UP_SETFILES_TMP) \
+	      --stylesheet $(DAPSROOT)/daps-xslt/common/extract-files-and-images.xsl $(XSLTPROCESSOR) 2>/dev/null))
+endif
+
 
 ################################
 #  !!!! IMPORTANT !!!! 
@@ -118,7 +138,7 @@ TO_TRANS_TAR := $(LOCDROP_EXPORT_BOOKDIR)/translation-$(DOCNAME)$(LANGSTRING).ta
 ifeq "$(CREATE_PROFILED)" "1"
   NO_TRANS_FILES := $(filter-out $(TO_TRANS_FILES),$(subst $(DOC_DIR)/xml,$(PROFILEDIR),$(SRCFILES)))
 else
-  NO_TRANS_FILES := $(filter-out $(TO_TRANS_FILES),$(SRCFILES))
+  NO_TRANS_FILES := $(filter-out $(TO_TRANS_FILES),$(DOCFILES))
 endif
 ifneq "$(strip $(NO_TRANS_FILES))" ""
   NO_TRANS_TAR   := $(LOCDROP_EXPORT_BOOKDIR)/setfiles-$(DOCNAME)$(LANGSTRING).tar

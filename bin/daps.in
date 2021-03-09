@@ -697,6 +697,7 @@ function daps_commands {
 #
 function clean_daps {
     [[ -f $SETFILES_TMP ]] && rm -f "$SETFILES_TMP"
+    [[ -f $UP_SETFILES_TMP ]] && rm -f "$UP_SETFILES_TMP"
 }
 
 # ---------
@@ -1750,6 +1751,10 @@ export "${VARLIST[@]}"
 #
 SETFILES_TMP=$(mktemp -q --tmpdir daps_setfiles.XXXXXXXX 2>/dev/null) || exit_on_error "Could not write temporary SETFILES file."
 export SETFILES_TMP
+
+UP_SETFILES_TMP=$(mktemp -q --tmpdir daps_up_setfiles.XXXXXXXX 2>/dev/null) || exit_on_error "Could not write temporary UP'_SETFILES file."
+export UP_SETFILES_TMP
+
 
 #-------------------------------------------------------------------
 # Create XML from ASCIIDOC
