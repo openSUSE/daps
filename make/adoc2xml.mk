@@ -45,18 +45,26 @@ ADOC_OVERRIDABLE_ATTRIBUTES := --attribute="idprefix=id-@" \
 ADOC_DEFAULT_ATTRIBUTES := --attribute=data-uri! \
 			   --attribute=imagesdir!
 
-# If DAPS is called with --<TBD>, the asciidoc attribute "daps-adoc-attributes"
-# will be set and will contain all asciidoctor parameters --attribute=XYZ that
-# have been provided on the command line or in the DC-file
+# If ASCIICoc attrributes are specified with the DAPS command line or
+# via the DC file, the asciidoc attribute "daps-adoc-attributes"
+# will be set and will contain all key=value paiirs specified this way.
 # This allows to use daps-adoc-attributes in the asciidoc sources in order to
-# display these very parameters
+# display these very parameters by using something like
 #
-
-#ifneq "$(strip $(????))" ""
+# ifeval::[ "\{daps-adoc-attributes}" != "" ]
+# This document was build using the following {adoc} attributes:
+#
+# [source, subs="attributes"]
+# ----
+# {daps-adoc-attributes}
+# ----
+# endif::[]
+#
+# remove  --attribute= and sort key/value pairs
+#
 ADOC_SHOW_ATTRIBUTES := $(subst --attribute=,,$(ADOC_ATTRIBUTES))
 ADOC_SHOW_ATTRIBUTES := $(sort $(strip $(subst --attribute,,$(ADOC_SHOW_ATTRIBUTES))))
 ADOC_SHOW_ATTRIBUTES := --attribute=daps-adoc-attributes="$(ADOC_SHOW_ATTRIBUTES)"
-#endif
 
 # Check whether asciidoctor supports --failure-level (since version 1.5.7)
 #
