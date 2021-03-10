@@ -31,6 +31,7 @@ This quick start guide focuses on using {daps} with {adoc} sources and requires 
 
 The complete {daps} documentation is available online at https://opensuse.github.io/daps/.
 
+
 [[art.daps.asciidoc.motivation]]
 == Motivation
 
@@ -432,9 +433,9 @@ Additional configuration settings can be made in the {daps} configuration files 
 
 |`--adocattr`|`ADOC_ATTRIBUTES`|
 Define or delete {adoc} document attributes. To overwrite an attribute already
-defined in the AsciiDoc document, use NAME=VALUE, or just NAME for attributes
-without a value. To delete a value set in the document use NAME!. To set a
-value that is not already set in the document, use NAME=VALUE@.
+defined in the AsciiDoc document, use `NAME=VALUE`, or just `NAME` for attributes
+without a value. To delete a value set in the document use `NAME!`. To set a
+value that is not already set in the document, use `NAME=VALUE@`.
 Refer to the {adoc} documentation for more information.
 
 Examples:
@@ -445,13 +446,46 @@ Examples:
 
 You may specify this option multiple times to set more than one attribute.
 
+You may also specify these attributes in the Doc Config file (DC-file) using
+the following syntax.
+This way the attributes will always be applied whenever you call {daps} with
+a DC-file.
+This can be handy when creating different versions of a document
+from a single source by using attributes and {adoc}'s if-statements to decide
+whether to display parts of the document or not (see
+https://blog.mrhaki.com/2014/08/awesome-asciidoc-using-conditional.html[Awesome
+Asciidoctor: Using Conditional Directives] for more information).
+You can create a DC-file containing different attribute settings for each document version.
+
 `ADOC_ATTRIBUTES="--attribute author=myself"`
 
 `ADOC_ATTRIBUTES+="--attribute "revision=beta1"`
 
 Note that when using the config file option, you always have to prefix the
 KEY=VALUE pair with `--attribute`. To specify more than one value, use the
-`+=` notation for subsequent values.
+`+=` notation for subsequent values as shown above.
+
+
+*Displaying Attributes in the Resulting Document*:
+
+All {adoc} attributes passed to {daps} on the command line or via the DC-file
+can be displayed in the document by using the contents of the variable
+`daps-adoc-attributes`, for example:
+
+`ifeval::[ "\{daps-adoc-attributes}" != "" ]`
+
+`This document was build using the following {adoc} attributes:`
+
+`[source, subs="attributes"]`
+
+`----`
+
+`\{daps-adoc-attributes}`
+
+`----`
+
+`endif::[]`
+
 
 |`--adocimgdir`|`ADOC_IMG_DIR`|
 Specify a directory for the images used in the {adoc} sources.
