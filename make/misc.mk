@@ -73,7 +73,8 @@ checklink:
 	@echo "   Running linkchecker"
   endif
 	$(XSLTPROC) --xinclude $(ROOTSTRING) -o $(TESTPAGE) \
-	  --stylesheet $(STYLELINKS) --file $(PROFILED_MAIN) $(XSLTPROCESSOR)
+	  --stylesheet $(STYLELINKS) --file $(PROFILED_MAIN) $(XSLTPROCESSOR) \
+	  $(ERR_DEVNULL)
 	checkbot --url file://localhost$(TESTPAGE) $(CB_VERBOSITY) \
 	  $(CB_OPTIONS) --file $(TMP_DIR)/$(BOOK)-checkbot.html $(DEVNULL)
   ifeq "$(SHOW)" "1"
