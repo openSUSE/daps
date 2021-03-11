@@ -37,7 +37,10 @@ $(PROFILEDIR)/.validate validate: $(PROFILES)
   ifeq "$(DOCBOOK_VERSION)" "4"
 	xmllint --noent --postvalid --noout --xinclude $(PROFILED_MAIN)
   else
-	$(JING_WRAPPER) $(JING_FLAGS) $(DOCBOOK5_RNG) $(PROFILED_MAIN)
+	@ccecho "info" "Resolving XIncludes and XPointers..."
+	xmllint --output $(PROFILED_MAIN).resolved  --noent --xinclude $(PROFILED_MAIN)
+	@ccecho "info" "Validating with Jing..."
+	$(JING_WRAPPER) $(JING_FLAGS) $(DOCBOOK5_RNG) $(PROFILED_MAIN).resolved
   endif
 	touch $(PROFILEDIR)/.validate
   ifeq "$(TARGET)" "validate"
