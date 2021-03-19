@@ -194,6 +194,17 @@ Because of the procedure described above, {daps} requires unique base names for 
 If you would have two files with different content but the same base name, for example `test.svg` and `test.dia`, the outcome of an automatic conversion would be uncertain (could be either one of the two files).
 Therefore make sure to always use unique base names. To test for non-unique images, use the following daps command: `daps -d <DCFILE> list-images-multisrc`.
 
+In {adoc}, image scaling is often achieved by setting pixel height/width.
+However, using plain pixel values for scaling is not supported well in {daps} and will usually cause issues in PDF builds.
+To scale images, instead use the `scaledwidth` attribute with a percentage:
+
+.Example: Adding a scaled image
+[source]
+----
+image::test.png[Test Image, scaledwidth=100%]
+----
+
+
 [[art.daps.asciidoc.output]]
 == Creating Output with {daps}
 
