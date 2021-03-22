@@ -37,7 +37,7 @@ function build_locdrop {
         exit 0
     fi
 
-    [[ -n "$P_NAME" ]]       && export PDFNAME="$P_NAME" BOOK="$P_NAME"
+    [[ -n "$P_NAME" ]]       && export OUTPUTNAME="$P_NAME" BOOK="$P_NAME"
     [[ -n "$P_NOPDF" ]]      && export export NOPDF=1
     [[ -n "$P_ROOTID" ]]     && export ROOTID="$P_ROOTID"
     [[ -n "$P_EXPORT_DIR" ]] && export LOCDROP_EXPORT_DIR="$P_EXPORT_DIR"

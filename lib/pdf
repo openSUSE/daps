@@ -52,7 +52,7 @@ function build_pdfs {
     [[ 1 = "$P_GRAYSCALE" ]]   && export GRAYSCALE=1
     [[ 1 = "$P_LEAN" ]]        && export LEAN=1
     [[ 1 = "$P_NOREFCHECK" ]]  && export NOREFCHECK=1
-    [[ -n "$P_NAME" ]]         && export PDFNAME="$P_NAME" BOOK="$P_NAME"
+    [[ -n "$P_NAME" ]]         && export OUTPUTNAME="$P_NAME" BOOK="$P_NAME"
     [[ -n "$P_ROOTID" ]]       && export ROOTID="$P_ROOTID"
     [[ -n "$P_PARAMS" ]]       && export PARAMS="$P_PARAMS"
     [[ -n "$P_STRINGPARAMS" ]] && export STRINGPARAMS="$P_STRINGPARAMS"

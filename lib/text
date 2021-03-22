@@ -38,7 +38,7 @@ function build_text {
     fi
 
     [[ 1 = "$P_TXT_IGNORE_STYLEROOT" ]] && export TXT_IGNORE_STYLEROOT="yes"
-    [[ -n "$P_NAME" ]]         && export PDFNAME="$P_NAME" BOOK="$P_NAME"
+    [[ -n "$P_NAME" ]]         && export OUTPUTNAME="$P_NAME" BOOK="$P_NAME"
     [[ -n "$P_NOREFCHECK" ]]   && export NOREFCHECK=1
     [[ -n "$P_ROOTID" ]]       && export ROOTID="$P_ROOTID"
     [[ -n "$P_STRINGPARAMS" ]] && export STRINGPARAMS="$P_STRINGPARAMS"

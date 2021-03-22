@@ -48,7 +48,7 @@ function package-pdf {
     [[ 1 = "$P_PAGEFILES" ]]     && export export PAGEFILES=1
     [[ 1 = "$P_CROPMARKS" ]]     && export CROPMARKS=1
     [[ 1 = "$P_GRAYSCALE" ]]     && export GRAYSCALE=1
-    [[ -n "$P_NAME" ]]         && export PDFNAME="$P_NAME" BOOK="$P_NAME"
+    [[ -n "$P_NAME" ]]         && export OUTPUTNAME="$P_NAME" BOOK="$P_NAME"
     [[ -n "$P_ROOTID" ]]       && export ROOTID="$P_ROOTID"
     [[ -n "$P_PARAMS" ]]       && export PARAMS="$P_PARAMS"
     [[ -n "$P_STRINGPARAMS" ]] && export STRINGPARAMS="$P_STRINGPARAMS"

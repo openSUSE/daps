@@ -43,7 +43,7 @@ function build_epub {
     [[ 1 = "$P_REMARKS" ]]  && REMARKS=1
     [[ 1 = "$P_EPUB3" ]]  && export EPUB3=1
     [[ 1 = "$P_NOREFCHECK" ]]  && export NOREFCHECK=1
-    [[ -n "$P_NAME" ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
+    [[ -n "$P_NAME" ]]      && export OUTPUTNAME="$P_NAME" BOOK="$P_NAME"
     [[ -n "$P_ROOTID" ]]    && export ROOTID="$P_ROOTID"
     [[ -n "$P_STATIC_DIR" ]] && export STATIC_DIR="$P_STATIC_DIR"
     [[ -n "$P_PARAMS" ]]       && export PARAMS="$P_PARAMS"

@@ -37,7 +37,7 @@ function bigfile {
         exit 0
     fi
 
-    [[ -n "$P_NAME" ]]         && export PDFNAME="$P_NAME" BOOK="$P_NAME"
+    [[ -n "$P_NAME" ]]         && export OUTPUTNAME="$P_NAME" BOOK="$P_NAME"
     [[ -n "$P_NOREFCHECK" ]]   && export NOREFCHECK=1
     [[ -n "$P_ROOTID" ]]       && export ROOTID="$P_ROOTID"
     [[ -n "$P_STRINGPARAMS" ]] && export STRINGPARAMS="$P_STRINGPARAMS"

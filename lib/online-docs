@@ -45,7 +45,7 @@ function online-docs {
         exit 0
     fi
 
-    [[ -n "$P_NAME" ]]   && export PDFNAME="$P_NAME" BOOK="$P_NAME"
+    [[ -n "$P_NAME" ]]   && export OUTPUTNAME="$P_NAME" BOOK="$P_NAME"
     [[ 1 = "$P_NOEPUB" ]]  && export NOEPUB=1
     [[ 1 = "$P_NOHTML" ]]  && export NOHTML=1
     [[ 1 = "$P_NOPDF" ]]   && export NOPDF=1

@@ -143,9 +143,9 @@ VARLIST=(
     NOVALID
     NOXML
     OPTIPNG
+    OUTPUTNAME
     PAGEFILES
     PARAMS
-    PDFNAME
     PROFARCH
     PROFAUDIENCE
     PROFCONDITION
@@ -1512,8 +1512,17 @@ check_pathlist "$DOC_DIR"
 #
 
 # book name
-if [[ -n "$PDFNAME" ]]; then
-    export BOOK="$PDFNAME"
+
+# Backwards compatability:
+# In DAPS 3.1 PDFNAME was replaced by OUTPUTNAME. Use the following code
+# to stay backwards compatible
+
+if [[ -n "$PDFNAME" && -z "$OUTPUTNAME" ]]; then
+    OUTPUTNAME="$PDFNAME"
+fi
+
+if [[ -n "$OUTPUTNAME" ]]; then
+    export BOOK="$OUTPUTNAME"
 else
     if [[ -n "$DOCCONF" ]]; then
         DC_FILE=$(basename "$DOCCONF")

@@ -37,7 +37,7 @@ function package-src {
     fi
 
     [[ 1 = "$P_IS_LOCDROP" ]] && export IS_LOCDROP=1
-    [[ -n "$P_NAME" ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
+    [[ -n "$P_NAME" ]]      && export OUTPUTNAME="$P_NAME" BOOK="$P_NAME"
     [[ 1 = "$P_OPTIPNG" ]]    && export OPTIPNG=1
 
     if [[ -n "$P_DEF_FILE" ]]; then

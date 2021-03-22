@@ -51,7 +51,7 @@ function package-html {
     [[ 1 = "$P_PAGEFILES" ]]     && export export PAGEFILES=1
     [[ 1 = "$P_HTML5" ]]         && export HTML5=1
     [[ -n "$P_CSS" ]]          && export HTML_CSS="$P_CSS"
-    [[ -n "$P_NAME" ]]         && export PDFNAME="$P_NAME" BOOK="$P_NAME"
+    [[ -n "$P_NAME" ]]         && export OUTPUTNAME="$P_NAME" BOOK="$P_NAME"
     [[ -n "$P_ROOTID" ]]       && export ROOTID="$P_ROOTID"
     [[ -n "$P_STATIC_DIR" ]]   && export STATIC_DIR="$P_STATIC_DIR"
     [[ -n "$P_PARAMS" ]]       && export PARAMS="$P_PARAMS"

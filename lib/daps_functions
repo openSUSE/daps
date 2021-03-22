@@ -335,6 +335,12 @@ function parse_args {
 
     P_REMAIN_ARGS="$*"
 
+    # Deprecation warning if PDFNAME is still used (and does not
+    # get overwritten by --name)
+    #
+    if [[ -n "$PDFNAME" && -z "$P_NAME" ]]; then
+        echo -e "Warning: PDFNAME is deprecated. Use OUTPUTNAME instead."
+    fi
 }
 
 ###########################################################################
@@ -769,7 +775,7 @@ function build_generic {
         exit 0
     fi
 
-    [[ -n "$P_NAME" ]]         && export PDFNAME="$P_NAME" BOOK="$P_NAME"
+    [[ -n "$P_NAME" ]]         && export OUTPUTNAME="$P_NAME" BOOK="$P_NAME"
     [[ -n "$P_NOREFCHECK" ]]   && export NOREFCHECK=1
     [[ -n "$P_ROOTID" ]]       && export ROOTID="$P_ROOTID"
     [[ -n "$P_STRINGPARAMS" ]] && export STRINGPARAMS="$P_STRINGPARAMS"
@@ -815,7 +821,7 @@ function profile_first {
 
     [[ 1 = "$P_DRAFT" ]]    && DRAFT="yes"
     [[ 1 = "$P_REMARKS" ]]  && REMARKS=1
-    [[ -n "$P_NAME" ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
+    [[ -n "$P_NAME" ]]      && export OUTPUTNAME="$P_NAME" BOOK="$P_NAME"
     [[ -n "$P_ROOTID" ]]    && export ROOTID="$P_ROOTID"
 
     # we do not want to write a logfile this time
@@ -967,7 +973,7 @@ function show_names {
     [[ 1 = "$P_CROPMARKS" ]]  && export CROPMARKS=1
     [[ 1 = "$P_GRAYSCALE" ]]  && export GRAYSCALE=1
     [[ -n "$P_ROOTID" ]]      && export ROOTID="$P_ROOTID"
-    [[ -n "$P_NAME" ]]        && export PDFNAME="$P_NAME" BOOK="$P_NAME"
+    [[ -n "$P_NAME" ]]        && export OUTPUTNAME="$P_NAME" BOOK="$P_NAME"
 
     if [[ 1 = "$P_HTMLSINGLE" && 1 = "$P_JSP" ]]; then
     exit_on_error "--single and --jsp are mutually exclusive"
@@ -1018,7 +1024,7 @@ function debugging {
         exit 0
     fi
 
-    [[ -n "$P_NAME" ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
+    [[ -n "$P_NAME" ]]      && export OUTPUTNAME="$P_NAME" BOOK="$P_NAME"
     [[ -n "$P_ROOTID" ]]    && export ROOTID="$P_ROOTID"
     [[ -n "$P_TARGET" ]]    && export TARGET="$P_TARGET"
 

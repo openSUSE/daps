@@ -59,7 +59,7 @@ function webhelp {
     [[ 1 = "$P_NOSEARCH" ]]    && export WH_SEARCH="no"
     [[ 1 = "$P_NOREFCHECK" ]]  && export NOREFCHECK=1
     [[ -n "$P_ROOTID" ]]       && export ROOTID="$P_ROOTID"
-    [[ -n "$P_NAME" ]]         && export PDFNAME="$P_NAME" BOOK="$P_NAME"
+    [[ -n "$P_NAME" ]]         && export OUTPUTNAME="$P_NAME" BOOK="$P_NAME"
     [[ -n "$P_PARAMS" ]]       && export PARAMS="$P_PARAMS"
     [[ -n "$P_STRINGPARAMS" ]] && export STRINGPARAMS="$P_STRINGPARAMS"
     [[ -n "$P_XSLTPARAM" ]]    && export XSLTPARAM="$XSLTPARAM $P_XSLTPARAM"
