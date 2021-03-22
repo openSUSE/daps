@@ -56,7 +56,7 @@ $(BIGFILE): $(PROFILES)
 	  $(XSLTPROCESSOR) $(ERR_DEVNULL)
 
 #--------------
-# checklink
+# linkcheck
 #
 STYLELINKS := $(DAPSROOT)/daps-xslt/common/get-links.xsl
 TESTPAGE   := $(TMP_DIR)/$(DOCNAME)-links.html
@@ -65,10 +65,10 @@ ifeq "$(VERBOSITY)" "2"
   CB_VERBOSITY := --verbose
 endif
 
-.PHONY: checklink
-checklink: | $(TMP_DIR)
-checklink: $(PROFILEDIR)/.validate 
-checklink:
+.PHONY: linkcheck
+linkcheck: | $(TMP_DIR)
+linkcheck: $(PROFILEDIR)/.validate 
+linkcheck:
   ifeq "$(VERBOSITY)" "2"
 	@echo "   Running linkchecker"
   endif
