@@ -982,7 +982,8 @@ function parse_config {
         if [[ "$VALUE" = "\"\"" || "$VALUE" = "''" ]]; then
             ccecho "warn" "Warning: Quotes-only value for \"$KEY\" in config-file $CFG:$LINE_NO"
         fi
-    done < "$CFG"
+    done < <(grep "" "$CFG")
+    # above: see https://stackoverflow.com/questions/4165135/how-to-use-while-read-bash-to-read-the-last-line-in-a-file-if-there-s-no-new
     shopt -u extglob
     IFS="$OLD_IFS"
 }
