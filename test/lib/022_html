@@ -25,7 +25,7 @@
 # * Can a --nostatic and a regular build be used in turns?
 # * Is the --name option correctly implemented?
 # * Does the --rootid option work correctly?
-# * Are parameters passed with --xsltparam correctly processed?
+# * Are parameters passed with --param correctly processed?
 # * Do the --styleroot and --fb_styleroot options work?
 # * Does the automatic fallback to the DoBook stylesheets work?
 # * Standard DocBook layout for ressources (CSS):
@@ -401,7 +401,7 @@ function test_htmlNAME () {
 
 #--------------------------------
 # * Does the --rootid option work correctly?
-# * Are parameters passed with --xsltparam correctly processed?
+# * Are parameters passed with --param correctly processed?
 #
 function test_htmlRootidXsltparam () {
     local _BUILD_SUBDIR_NAME _BUILD_SUBDIR_ROOTID _FILECOUNT _FILECOUNT_EXPECTED _HTML_BUILD_PATH
@@ -410,13 +410,13 @@ function test_htmlRootidXsltparam () {
     _ROOTID=appendix
     _FILECOUNT_EXPECTED=1
     # will generate HTML files with .xhtml extension
-    _XSLTPARAM="'--param spacing.paras=1'"
+    _XSLTPARAM="spacing.paras=1"
 
     clean_build_dir results
 
-    _HTML_BUILD_PATH=$($_DAPSEXEC -d $_DCFILE --debug html --rootid $_ROOTID --xsltparam="$_XSLTPARAM" 2>/dev/null | tail -n 1)
+    _HTML_BUILD_PATH=$($_DAPSEXEC -d $_DCFILE --debug html --rootid $_ROOTID --param="$_XSLTPARAM" 2>/dev/null | tail -n 1)
     assertTrue \
-        ' └─ Building a html document with --rootid and --xsltparam failed ' \
+        ' └─ Building a html document with --rootid and --param failed ' \
        "$?"
 
     egrep -q -- "--stringparam\s+\"rootid=$_ROOTID\"" $_LOGFILE 2>/dev/null

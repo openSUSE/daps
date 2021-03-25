@@ -37,8 +37,6 @@ function bigfile {
         exit 0
     fi
 
-    [[ -n "$P_XSLTPARAM" ]]    && export XSLTPARAM="$XSLTPARAM $P_XSLTPARAM"
-
     # If --novalid was called, a validation check on the resulting file
     # is automatically performed
     # Checking the result requires a minimum verbosity level of 1

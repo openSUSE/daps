@@ -44,7 +44,5 @@ function build_pdfs {
         exit 0
     fi
 
-    [[ -n "$P_XSLTPARAM" ]]    && export XSLTPARAM="$XSLTPARAM $P_XSLTPARAM"
-
     call_make "$SUB_CMD" "$@"
 }

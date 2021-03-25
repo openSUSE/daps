@@ -52,8 +52,6 @@ function webhelp {
     fi
     done
 
-    [[ -n "$P_XSLTPARAM" ]]    && export XSLTPARAM="$XSLTPARAM $P_XSLTPARAM"
-
     if [[ -n "$P_CSS" ]]; then
         if [[ $P_CSS = "none" || -f "$P_CSS" ]]; then
             export HTML_CSS="$P_CSS"

@@ -426,11 +426,6 @@ function parse_args {
                 P_LIST_XML_ONLY=1
                 shift
                 ;;
-            --xsltparam)
-                ccecho -- "warn" "--xsltparam is deprecated, please use --param/--stringparam instead."
-                P_XSLTPARAM="$2"
-                shift 2
-                ;;
             --)
                 shift
                 break
@@ -884,8 +879,6 @@ function build_generic {
         echo
         exit 0
     fi
-
-    [[ -n "$P_XSLTPARAM" ]]    && export XSLTPARAM="$XSLTPARAM $P_XSLTPARAM"
 
     call_make "$SUB_CMD" "$@"
 }
@@ -1669,11 +1662,5 @@ function help_xmlonly {
     cat <<EOF
     --xmlonly                 Only list XML files.
                               Shortcut for --nodc --noent --noimg.
-EOF
-}
-function help_xsltparam {
-    cat <<EOF
-    --xsltparam=STRING        ** Deprecated **
-                              Use --param and/or --stringparam instead.
 EOF
 }

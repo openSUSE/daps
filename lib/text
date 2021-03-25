@@ -40,7 +40,5 @@ function build_text {
     # compatibility
     [[ "yes" = "$TXT_IGNORE_STYLEROOT" ]] && export TXT_IGNORE_STYLEROOT="1"
 
-    [[ -n "$P_XSLTPARAM" ]]    && export XSLTPARAM="$XSLTPARAM $P_XSLTPARAM"
-
     call_make "$SUB_CMD" "$@"
 }
