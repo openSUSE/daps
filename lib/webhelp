@@ -24,7 +24,7 @@ function webhelp {
     eval set -- "$P_REMAIN_ARGS"
 
     #------ Computing the values returned from the parser -----
-    if [[ 1 = "$P_HELP" ]]; then
+    if [[ 1 -eq $P_HELP ]]; then
         help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
         help_clean
         help_css

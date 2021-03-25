@@ -24,7 +24,7 @@ function stylecheck {
     eval set -- "$P_REMAIN_ARGS"
 
     #------ Computing the values returned from the parser -----
-    if [[ 1 = "$P_HELP" ]]; then
+    if [[ 1 -eq $P_HELP ]]; then
         help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
         help_file
         help_help
@@ -36,7 +36,7 @@ function stylecheck {
     fi
 
     if [[ -z "$P_ROOTID" && -z "$P_FILE" ]]; then
-        if [[ 0 != $VERBOSITY ]]; then
+        if [[ 0 -eq $VERBOSITY ]]; then
             ccecho "info" "Neither file nor rootid specified, using rootid from DC-file"
         fi
     elif [[ -n "$P_ROOTID" && -n "$P_FILE" ]]; then

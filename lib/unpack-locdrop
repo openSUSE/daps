@@ -40,7 +40,7 @@ function unpack-locdrop {
     eval set -- "$P_REMAIN_ARGS"
 
     #------ Computing the values returned from the parser -----
-    if [[ 1 = "$P_HELP" ]]; then
+    if [[ 1 -eq $P_HELP ]]; then
         help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
         help_trans-files
         help_help
@@ -170,10 +170,8 @@ function unpack-locdrop {
     # to send them
     #
 
-    if [[ 1  = "$P_REMOVEDM" ]]; then
-
+    if [[ 1 -eq $P_REMOVEDM ]]; then
         echo "Removing <dm:docmanager> blocks"
-
         # check for xmlstarlet binary
         for _binary in xmlstarlet xml; do
             XMLSTARLET=$(which $_binary 2>/dev/null)
@@ -197,7 +195,7 @@ function unpack-locdrop {
     for DATA in $NO_DCFILE_LIST; do
     if [[ -f ${P_NOTRANS_DIR}/$DATA ]]; then
         DIR="$(dirname "$DATA")"
-        if [[ "." == "$DIR" ]]; then
+        if [[ "." = "$DIR" ]]; then
             [[ 1 -eq $DEBUG ]] && echo "Linking ${P_NOTRANS_DIR}/$DATA"
             ln -sf "${P_NOTRANS_DIR}/$DATA"
         else

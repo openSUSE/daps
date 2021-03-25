@@ -761,7 +761,7 @@ function sanitize_path {
     if [[ "/" != ${MYPATH:0:1} ]]; then
         [[ -n "$BASEDIR" ]] && MYPATH="${BASEDIR}/${MYPATH}"
         ABSPATH=$(readlink -en "$MYPATH")
-        if [[ 0 = "$?" ]]; then
+        if [[ 0 -eq $? ]]; then
             declare -g $VARNAME="$ABSPATH"
         else
             WRONGPATH=1
@@ -822,7 +822,7 @@ function autoset_docconf {
     local DC_FILENAME DC_PARENT DC_REAL_PATH DC_REAL_DIR
     declare -a DC_COUNT
     DC_COUNT=( $(find -L . -maxdepth 1 -name "${CONF_PREFIX}*" -type f) )
-    if [[ 1 = "${#DC_COUNT[@]}" ]]; then
+    if [[ 1 -eq ${#DC_COUNT[@]} ]]; then
         # There is only one DOCCONF file
         #
         # two possibilities:
@@ -833,7 +833,7 @@ function autoset_docconf {
         if [[ -h ${DC_COUNT[0]} ]]; then
             # DOCCONF is a link
             DC_REAL_PATH=$(readlink -nm "${DC_COUNT[0]}")
-            if [[ 0 = "$?" ]]; then
+            if [[ 0 -eq $? ]]; then
             declare -g $VARNAME="$ABSPATH"
         else
             exit_on_error "$VARNAME=$MYPATH: Path does not exist"
@@ -971,7 +971,7 @@ function parse_config {
         [[ "$KEY" =~ ^[_[:alpha:]][_[:alnum:]]*$ ]] || exit_on_error "Invalid key value \"$KEY\" in config-file $CFG:$LINE_NO"
 
         # set variables
-        if [[ 1 = "$CONCAT" ]]; then
+        if [[ 1 -eq $CONCAT ]]; then
             declare -g $KEY="${!KEY} $VALUE"
         else
             declare -g $KEY="$VALUE"
@@ -1023,7 +1023,7 @@ ARGS=$(getopt -o d:e:hm:v:: -l adocattr:,adocimgdir:,adocset,builddir:,config:,c
 # Exit when getopt returns errors
 #
 GETOPT_RETURN_CODE=$?
-[[ 0 != $GETOPT_RETURN_CODE ]] && exit $GETOPT_RETURN_CODE
+[[ 0 -ne $GETOPT_RETURN_CODE ]] && exit $GETOPT_RETURN_CODE
 
 eval set -- "$ARGS"
 
@@ -1060,7 +1060,7 @@ while true ; do
             shift 2
             ;;
         --color|--colour)
-            if [[ 1 != $2 && 0 != $2 ]]; then
+            if [[ 1 -ne $2 && 0 -ne $2 ]]; then
                 exit_on_error "Wrong value ($2) for COLOR. Must be \"0\" or \"1\""
             fi
             COLOR_CMDL=$2
@@ -1151,7 +1151,7 @@ while true ; do
             # VERBOSITY=1: results of each target that is called
             # VERBOSITY=2: detailed output of each target
             #
-            if [[ 1 = "$DEBUG" ]]; then
+            if [[ 1 -eq $DEBUG ]]; then
                 VERBOSITY_CMDL=2
             else
                 if [[ 0 = "$2" ]]; then
@@ -1191,7 +1191,7 @@ fi
 # Check FALLBACK_STYLEROOT and STYLEROOT
 #
 if [[ -n "$FALLBACK_STYLEROOT" && -z "$STYLEROOT" ]]; then
-    if [[ 0 != $VERBOSITY ]]; then
+    if [[ 0 -ne $VERBOSITY ]]; then
         echo "Warning: --styleroot is not specified, ignoring --fb_styleroot" >&2
     fi
 fi
@@ -1223,7 +1223,7 @@ elif [[ help = "$1" && -n "$2" ]]; then
     #
     SUBCMD=$2
     declare -a SCMD_ARGS=( "-h" )
-elif [[ 1 = "$CALL_SCMDHELP" ]]; then
+elif [[ 1 -eq $CALL_SCMDHELP ]]; then
     SUBCMD=$1
     declare -a SCMD_ARGS=( "-h" )
 else
@@ -1569,7 +1569,7 @@ if [[ "adoc" = "$SRC_FORMAT" ]]; then
     DOCBOOK_VERSION=5
     ADOC_BACKEND=docbook5
     ASCIIDOC=$(which asciidoctor 2>/dev/null)
-    if [[ 1 = "$?" ]]; then
+    if [[ 1 -eq $? ]]; then
         exit_on_error "asciidoctor is not installed, you cannot parse ASCIIDoc sources."
     fi
 else
@@ -1578,7 +1578,7 @@ fi
 
 # DocBook 5
 #
-if [[ 5 = "$DOCBOOK_VERSION" ]]; then
+if [[ 5 -eq $DOCBOOK_VERSION ]]; then
     # resolve stylesheet URN
     #
     if [[ ${DOCBOOK5_STYLE_URI:0:5} = file: ]]; then
@@ -1628,7 +1628,7 @@ if [[ 5 = "$DOCBOOK_VERSION" ]]; then
 
 # DocBook 4
 #
-elif [[ 4 = "$DOCBOOK_VERSION" ]]; then
+elif [[ 4 -eq $DOCBOOK_VERSION ]]; then
     # resolve stylesheet URN
     #
     if [[ ${DOCBOOK4_STYLE_URI:0:5} = file: ]]; then

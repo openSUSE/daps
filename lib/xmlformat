@@ -34,7 +34,7 @@ function xmlformat {
     fi
 
     #------ Computing the values returned from the parser -----
-    if [[ 1 = "$P_HELP" ]]; then
+    if [[ 1 -eq $P_HELP ]]; then
         help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
         help_file
         help_help
@@ -44,7 +44,7 @@ function xmlformat {
     fi
 
     if [[ -z "$P_ROOTID" && -z "$P_FILE" ]]; then
-        if [[ 0 != $VERBOSITY ]]; then
+        if [[ 0 -ne $VERBOSITY ]]; then
             ccecho "info" "Neither file nor rootid specified, using rootid from DC-file"
         fi
     elif [[ -n "$P_ROOTID" && -n "$P_FILE" ]]; then
@@ -68,14 +68,14 @@ function xmlformat {
     else
         [[ -n "$P_ROOTID" ]] && export ROOTID="$P_ROOTID"
         FILELIST=( $(call_make list-srcfiles silent LIST_NODC=1 LIST_NOENT=1 LIST_NOIMG=1 ) )
-        if [[ 0 != $? ]]; then
+        if [[ 0 -ne $? ]]; then
             exit_on_error "Failed to get filelist for ROOTID \"$ROOTID\""
         fi
     fi
 
     # Be more verbose in debug or -vv mode
     #
-    if [[ 1 = "$DEBUG" || 2 -le "$VERBOSITY" ]]; then
+    if [[ 1 -eq $DEBUG || 2 -le "$VERBOSITY" ]]; then
         _XMLFORMAT_FLAGS="-i -v"
     else
         _XMLFORMAT_FLAGS="-i"
@@ -84,12 +84,12 @@ function xmlformat {
     #
     # ignore $MAIN with --file or --rootid
     #
-    [[ 0 != "$VERBOSITY" ]] && echo "Prettifying the following files:"
+    [[ 0 -ne $VERBOSITY ]] && echo "Prettifying the following files:"
     for FILE in "${FILELIST[@]}"; do
         if [[ -n "$P_FILE" || -n "$ROOTID" ]]; then
-            [[ "$FILE" == "$MAIN" ]] && continue
+            [[ "$FILE" = "$MAIN" ]] && continue
         fi
-        [[ 0 != "$VERBOSITY" ]] && echo -e "  $FILE"
+        [[ 0 -ne $VERBOSITY ]] && echo -e "  $FILE"
         $DAPSXMLFORMAT $_XMLFORMAT_FLAGS "$FILE" >/dev/null
     done
 }

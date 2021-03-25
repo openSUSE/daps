@@ -25,7 +25,7 @@ function build_images {
     eval set -- "$P_REMAIN_ARGS"
 
     #------ Computing the values returned from the parser -----
-    if [[ 1 = "$P_HELP" ]]; then
+    if [[ 1 -eq $P_HELP ]]; then
         help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
         help_color
         help_gen
@@ -37,7 +37,7 @@ function build_images {
         exit 0
     fi
 
-    if [[ 1 != "$IMAGES_COLOR" && 1 != "$IMAGES_GEN" && 1 != "$GRAYSCALE" && 1 != "$IMAGES_ONLINE" ]]; then
+    if [[ 1 -ne $IMAGES_COLOR && 1 -ne $IMAGES_GEN && 1 -ne $GRAYSCALE && 1 -ne $IMAGES_ONLINE ]]; then
         export IMAGES_ALL=1
     fi
 

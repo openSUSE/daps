@@ -26,7 +26,7 @@ function online-docs {
     eval set -- "$P_REMAIN_ARGS"
 
     #------ Computing the values returned from the parser -----
-    if [[ 1 = "$P_HELP" ]]; then
+    if [[ 1 -eq $P_HELP ]]; then
         help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
         help_db5todb4
         help_db5todb4nh
@@ -46,16 +46,16 @@ function online-docs {
     fi
 
     # online-docs always builds a single HTML file
-    if [[ 1 != "$NOHTML" ]]; then
+    if [[ 1 -ne $NOHTML ]]; then
         export HTMLSINGLE=1
     fi
 
-    if [[ 1 = "$DB5TODB4" && 1 = "$DB5TODB4NH" ]]; then
+    if [[ 1 -eq $DB5TODB4 && 1 -eq $DB5TODB4NH ]]; then
         exit_on_error "The options --db5todb4 and --db5todb4nh exclude each other"
     fi
 
-    if [[ 4 = "$DOCBOOK_VERSION" ]]; then
-       [[ 1 = "$DB5TODB4" || 1 = "$DB5TODB4NH" ]] && ccecho "warn" "No DocBook 5 source: --db5todb4/--db5todb4nh is ignored"
+    if [[ 4 -eq $DOCBOOK_VERSION ]]; then
+       [[ 1 -eq $DB5TODB4 || 1 -eq $DB5TODB4NH ]] && ccecho "warn" "No DocBook 5 source: --db5todb4/--db5todb4nh is ignored"
     fi
 
     call_make "$SUB_CMD" "$@"

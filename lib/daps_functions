@@ -33,7 +33,7 @@ function parse_args {
     shift 3
 
     C_ARGS=$(getopt -s bash -o "$SHORT_OPTS" -l "$LONG_OPTS" -n "$0" -- "$@")
-    if [[ 1 = "$?" ]]; then
+    if [[ 1 -eq $? ]]; then
         wrong_parameter "$SUB_CMD"
     fi
 
@@ -45,7 +45,7 @@ function parse_args {
                 # epub: validating result
                 # also requires a minimum verbosity level of 1
                 #
-                [[ 0 = "$VERBOSITY" ]] && export VERBOSITY=1
+                [[ 0 -eq "$VERBOSITY" ]] && export VERBOSITY=1
                 export RESULTCHECK=1
                 shift
                 ;;
@@ -466,14 +466,14 @@ function init_env {
     # create directories
 
     mkdir -p "$R_DIR"
-    if [[ 1 = "$WRITE_LOG" ]]; then
+    if [[ 1 -eq $WRITE_LOG ]]; then
         mkdir -p "$LOG_DIR" || exit_on_error "Cannot create $LOG_DIR"
     fi
 
 
     if [[ -n $"$DOCCONF" && ! -f ${R_DIR}/$(basename "$DOCCONF") ]]; then
         ln -sf "$DOCCONF" "${R_DIR}/$(basename "$DOCCONF")"
-        if [[ 0 != "$?" && 0 != "$VERBOSITY" ]]; then
+        if [[ 0 -ne $? && 0 -ne $VERBOSITY ]]; then
             ccecho "warn" "Warning: Cannot create link to $DOCCONF in $R_DIR"
         fi
     fi
@@ -481,7 +481,7 @@ function init_env {
     # There should only be one DC-file in $R_DIR
     #
     DC_COUNT=$(find -L "$R_DIR" -maxdepth 1 -name "${CONF_PREFIX}*" -type f | wc -l 2>/dev/null)
-    if [[ $DC_COUNT -gt 1 && 0 != "$VERBOSITY" ]]; then
+    if [[ $DC_COUNT -gt 1 && 0 -ne $VERBOSITY ]]; then
         ccecho "warn" "$R_DIR contains more than one DC-file"
     fi
 
@@ -490,9 +490,9 @@ function init_env {
     if [[ -n "$ROOTID" ]]; then
         EXISTS_ROOTID=$($XSLTPROC --stringparam "rootid=$ROOTID" --xinclude --stylesheet "${DAPSROOT}/daps-xslt/common/check_rootid.xsl" --file "$MAIN" "$XSLTPROCESSOR" 2>/dev/null)
         TEST_ROOTID_RESULT=$?
-        if [[ 0 == "$TEST_ROOTID_RESULT"  && "yes" != "$EXISTS_ROOTID" ]]; then
+        if [[ 0 -eq $TEST_ROOTID_RESULT  && "yes" != "$EXISTS_ROOTID" ]]; then
             exit_on_error "Fatal: ROOTID \"$ROOTID\" does not exist."
-        elif [[ 0 != $TEST_ROOTID_RESULT && 0 != $VERBOSITY ]]; then
+        elif [[ 0 -ne $TEST_ROOTID_RESULT && 0 -ne $VERBOSITY ]]; then
             ccecho "warn" "Warning: Was not able to determine if ROOTID exists."
         fi
     fi
@@ -647,8 +647,8 @@ function call_make {
 
     MAKE_OPTIONS="-f $DAPSROOT/make/selector.mk"
     MAKE_BIN="/usr/bin/make"
-    if [[ 1 != "$SILENT" ]]; then
-        if [[ 1 = "$DEBUG" || 3 = "$VERBOSITY" ]]; then
+    if [[ 1 -ne $SILENT ]]; then
+        if [[ 1 -eq $DEBUG || 3 -eq $VERBOSITY ]]; then
             # use remake if installed when in debug or highest verbosity mode
             IS_REMAKE=$(which remake 2>/dev/null)
             [[ -n "$IS_REMAKE" ]] && MAKE_BIN="/usr/bin/remake"
@@ -660,22 +660,22 @@ function call_make {
     # CPU cores. This can be overwritten with --jobs.
     # If verbosity 3 (-v3) is set, "make -j1" is forced
     #
-    if [[ 0 = "$VERBOSITY" || 1 = "$VERBOSITY" || 2 = "$VERBOSITY" ]]; then
+    if [[ 0 -eq $VERBOSITY || 1 -eq $VERBOSITY || 2 -eq $VERBOSITY ]]; then
         MAKE_OPTIONS="$MAKE_OPTIONS -j${JOBS}"
-        [[ 1 != "$DEBUG" || 1 = "$SILENT" ]] && MAKE_OPTIONS="$MAKE_OPTIONS -s"
+        [[ 1 -ne $DEBUG || 1 -eq $SILENT ]] && MAKE_OPTIONS="$MAKE_OPTIONS -s"
     else
         # highest verbosity level - use -j1 for a better readability
         MAKE_OPTIONS="$MAKE_OPTIONS -j1"
     fi
 
     # Is --force set to force a rebuild?
-    [[ 1 = "$FORCE_REBUILD" ]] &&  MAKE_OPTIONS="$MAKE_OPTIONS --always-make"
+    [[ 1 -eq $FORCE_REBUILD ]] &&  MAKE_OPTIONS="$MAKE_OPTIONS --always-make"
 
     MAKE_CMD="$MAKE_BIN $MAKE_OPTIONS $SUB_CMD $*"
 
 
     # Variable settings summary printed on debug and high verbosity mode
-    if [[ 2 -le $VERBOSITY && 1 != "$SILENT" ]]; then
+    if [[ 2 -le $VERBOSITY && 1 -ne $SILENT ]]; then
     # list of profiling variables for the debug output
     #
         PROFVARIABLES=(
@@ -792,23 +792,23 @@ function call_make {
         echo -e "\n---------------\n"
     fi
 
-    if [[ 1 = "$WRITE_LOG" ]]; then
+    if [[ 1 -eq $WRITE_LOG ]]; then
         LOGFILE="${LOG_DIR}/make_${SUB_CMD}.log"
         date &> "$LOGFILE"
     fi
 
-    if [[ 0 != "$VERBOSITY" ]]; then
-        if [[ 1 = "$WRITE_LOG" ]]; then
+    if [[ 0 -ne $VERBOSITY ]]; then
+        if [[ 1 -eq $WRITE_LOG ]]; then
             $MAKE_CMD 2>&1 | tee -a "$LOGFILE"
             # see http://www.unix.com/shell-programming-scripting/92163-command-does-not-return-exit-status-due-tee.html
-            [[ 0 = "${PIPESTATUS[0]}" ]] || exit 1
+            [[ 0 -eq ${PIPESTATUS[0]} ]] || exit 1
         else
             $MAKE_CMD 2>&1
         fi
     else
-        if [[ 1 = "$WRITE_LOG" ]]; then
+        if [[ 1 -eq $WRITE_LOG ]]; then
             $MAKE_CMD >> "$LOGFILE" 2>&1
-            if [[ 0 = "$?" ]]; then
+            if [[ 0 -eq $? ]]; then
                 # make command successful, only show last line (aka result)
                 tail -n 1 "$LOGFILE"
             else
@@ -873,7 +873,7 @@ function build_generic {
     eval set -- "$P_REMAIN_ARGS"
 
     #------ Computing the values returned from the parser -----
-    if [[ 1 = "$P_HELP" ]]; then
+    if [[ 1 -eq $P_HELP ]]; then
         help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
         help_help
         help_name
@@ -914,7 +914,7 @@ function profile_first {
     eval set -- "$P_REMAIN_ARGS"
 
     #------ Computing the values returned from the parser -----
-    if [[ 1 = "$P_HELP" ]]; then
+    if [[ 1 -eq $P_HELP ]]; then
         help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
         help_draft
         help_name
@@ -950,7 +950,7 @@ function comments_remarks {
     eval set -- "$P_REMAIN_ARGS"
 
     #------ Computing the values returned from the parser -----
-    if [[ 1 = "$P_HELP" ]]; then
+    if [[ 1 -eq $P_HELP ]]; then
         help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
         help_norefcheck
         help_remarks
@@ -983,7 +983,7 @@ function filelists {
     eval set -- "$P_REMAIN_ARGS"
 
     #------ Computing the values returned from the parser -----
-    if [[ 1 = "$P_HELP" ]]; then
+    if [[ 1 -eq $P_HELP ]]; then
         help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
         help_help
         if [[ $SUB_CMD =~ list-srcfiles ]]; then
@@ -1004,9 +1004,9 @@ function filelists {
 
     # --imgonly and --xmlonly are shortcuts
     #
-    if [[ 1 = "$P_LIST_IMG_ONLY" ]]; then
+    if [[ 1 -eq $P_LIST_IMG_ONLY ]]; then
         export LIST_NODC=1 LIST_NOENT=1 LIST_NOXML=1
-    elif [[ 1 = "$P_LIST_XML_ONLY" ]]; then
+    elif [[ 1 -eq $P_LIST_XML_ONLY ]]; then
         export LIST_NODC=1 LIST_NOENT=1 LIST_NOIMG=1
     fi
 
@@ -1040,7 +1040,7 @@ function show_names {
     eval set -- "$P_REMAIN_ARGS"
 
     #------ Computing the values returned from the parser -----
-    if [[ 1 = "$P_HELP" ]]; then
+    if [[ 1 -eq $P_HELP ]]; then
                 help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
                 [[ "pdf-name" = "$SUB_CMD" ]] && help_cropmarks
                 help_draft
@@ -1081,7 +1081,7 @@ function debugging {
     eval set -- "$P_REMAIN_ARGS"
 
     #------ Computing the values returned from the parser -----
-    if [[ 1 = "$P_HELP" ]]; then
+    if [[ 1 -eq $P_HELP ]]; then
         help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
         help_help
         help_name
@@ -1117,7 +1117,7 @@ function no_opts {
     eval set -- "$P_REMAIN_ARGS"
 
     #------ Computing the values returned from the parser -----
-    if [[ 1 = "$P_HELP" ]]; then
+    if [[ 1 -eq $P_HELP ]]; then
         help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}" "0"
         exit 0
     fi
@@ -1175,7 +1175,7 @@ function help_scmd_head {
 
 $2\n"
 
-[[ 0 != $3 ]] && echo -e "  Command options:"
+[[ 0 -ne $3 ]] && echo -e "  Command options:"
 }
 
 function help_adoconly {

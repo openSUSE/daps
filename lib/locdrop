@@ -24,7 +24,7 @@ function build_locdrop {
     eval set -- "$P_REMAIN_ARGS"
 
     #------ Computing the values returned from the parser -----
-    if [[ 1 = "$P_HELP" ]]; then
+    if [[ 1 -eq $P_HELP ]]; then
         help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
         help_def-file
         help_export-dir
@@ -38,8 +38,9 @@ function build_locdrop {
     fi
 
     if [[ -z "$DEF_FILE" ]]; then
-        [[ 0 != "$VERBOSITY" ]] && ccecho "warn" "Warning: No DEF file was specified"
+        [[ 0 -ne $VERBOSITY ]] && ccecho "warn" "Warning: No DEF file was specified"
     fi
+
     call_make "profile" "$@" || exit_on_error "Profiling failed"
     call_make "$SUB_CMD" "$@"
 }

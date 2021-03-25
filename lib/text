@@ -24,7 +24,7 @@ function build_text {
     eval set -- "$P_REMAIN_ARGS"
 
     #------ Computing the values returned from the parser -----
-    if [[ 1 = "$P_HELP" ]]; then
+    if [[ 1 -eq $P_HELP ]]; then
         help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
         help_ignore-styleroot
         help_help
@@ -38,7 +38,7 @@ function build_text {
     fi
 
     # compatibility
-    [[ "yes" == "$TXT_IGNORE_STYLEROOT" ]] && export TXT_IGNORE_STYLEROOT="1"
+    [[ "yes" = "$TXT_IGNORE_STYLEROOT" ]] && export TXT_IGNORE_STYLEROOT="1"
 
     [[ -n "$P_XSLTPARAM" ]]    && export XSLTPARAM="$XSLTPARAM $P_XSLTPARAM"
 
