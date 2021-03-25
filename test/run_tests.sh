@@ -44,7 +44,7 @@ export _SET_FILES="$_XML_FILES $_MAIN"
 export _NO_SET_FILE="not_in_set.xml"
 
 #export _SET_IMAGES="dia/dia_example.dia eps/eps_example.eps jpg/jpg_example.jpg pdf/pdf_example.pdf png/png_example.png png/png_example2.png svg/svg_example.svg"
-export _SET_IMAGES="dia/dia_example.dia jpg/jpg_example.jpg png/png_example.png png/png_example2.png svg/svg_example.svg"
+export _SET_IMAGES="dia/dia_example.dia ditaa/ditaa_example.ditaa jpg/jpg_example.jpg odg/odg_example.odg png/png_example.png png/png_example2.png svg/svg_example.svg"
 export _NO_SET_IMAGE="png/z_not_included.png"
 export _MULTISRC_IMAGE="${_DOC_DIR}/images/src/svg/png_example.svg"
 
@@ -125,7 +125,7 @@ done
 # SVN dependencies
 
 #_ARGS=$(getopt -o h -l all,builddir,epub,filelists,help,html,images,locdrop,online-docs,package-html,package-pdf,package-src,pdf,profiling,script,text,xsltprocessors: -n "$_ME" -- "$@")
-_ARGS=$(getopt -o h -l all,asciidoc,builddir,debug,epub,filelists,help,html,images,online-docs,package-html,package-pdf,package-src,pdf,profiling,script,text,xsltprocessors: -n "$_ME" -- "$@")
+_ARGS=$(getopt -o h -l all,asciidoc,builddir,debug,epub,filelists,help,html,images,locdrop,online-docs,package-html,package-pdf,package-src,pdf,profiling,script,text,xsltprocessors: -n "$_ME" -- "$@")
 
 [[ 0 -ne $? ]] && exit_on_error "Argument parser error"
 
@@ -140,7 +140,7 @@ while true ; do
     case "$1" in
         --all)
 #           _TESTS=( "${_TESTS[@]}" "lib/001_script" "lib/005_profiling" "lib/007_images" "lib/009_builddir" "lib/020_pdf" "lib/022_html" "lib/023_text" "lib/025_epub" "lib/030_package-src" "lib/033_locdrop" "lib/035_online-docs" "lib/036_package-html" "lib/037_package-pdf" )
-            _TESTS=( "${_TESTS[@]}" "lib/001_script" "lib/005_profiling" "lib/007_images" "lib/009_builddir" "lib/020_pdf" "lib/022_html" "lib/023_text" "lib/025_epub" "lib/030_package-src" "lib/035_online-docs" "lib/036_package-html" "lib/037_package-pdf" "lib/040_asciidoc" )
+            _TESTS=( "${_TESTS[@]}" "lib/001_script" "lib/005_profiling" "lib/007_images" "lib/009_builddir" "lib/010_filelists" "lib/020_pdf" "lib/022_html" "lib/023_text" "lib/025_epub" "lib/030_package-src" "lib/035_online-docs" "lib/036_package-html" "lib/037_package-pdf" "lib/040_asciidoc" )
             shift
             ;;
         --asciidoc)
