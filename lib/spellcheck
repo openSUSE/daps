@@ -30,16 +30,12 @@ function spellcheck {
     eval set -- "$P_REMAIN_ARGS"
 
     # checker was provided on the command line
-    if [[ -n "$P_SPELL_CHECKER" ]]; then
+    if [[ -n "$SPELL_CHECKER" ]]; then
         # check whether the given spellchecker is valid
-        [[ "aspell" = $P_SPELL_CHECKER || "hunspell" = $P_SPELL_CHECKER ]] || \
+        [[ "aspell" = $SPELL_CHECKER || "hunspell" = $SPELL_CHECKER ]] || \
             exit_on_error "Wrong value for --spellchecker. Needs to be \"aspell\" or \"hunspell\""
         # check whether given spellchecker is installed:
-        if [[ $(which  --skip-alias --skip-functions "$P_SPELL_CHECKER" 2>/dev/null) ]]; then
-            SPELL_CHECKER="$P_SPELL_CHECKER"
-        else
-            ccecho "error" "Error: '$P_SPELL_CHECKER' is not installed"
-        fi
+        [[ $(which --skip-alias --skip-functions "$SPELL_CHECKER" 2>/dev/null) ]] || ccecho "error" "Error: '$SPELL_CHECKER' is not installed"
     else
         if [[ -z "$SPELL_CHECKER" ]]; then
             # no spell checker defined in the configs or on the command line
@@ -67,9 +63,7 @@ function spellcheck {
         exit 0
     fi
 
-    [[ -n "$P_SPELL_EXTRA_DICT" ]] && SPELL_EXTRA_DICT="$P_SPELL_EXTRA_DICT"
     [[ -n "$P_FILE" ]] && FILELIST[0]="$P_FILE"
-    [[ 1 = "$P_LIST" ]] && LISTMODE=1
 
     # set FILELIST if rootid was specified
     if [[ -z "$P_ROOTID" && -z "$P_FILE" ]]; then
@@ -79,8 +73,6 @@ function spellcheck {
     elif [[ -n "$P_ROOTID" && -n "$P_FILE" ]]; then
         exit_on_error "Options --file and --rootid exclude one another.\nPlease specify only one of these options"
     fi
-
-    [[ -n "$P_ROOTID" ]] && export ROOTID="$P_ROOTID"
 
     if [[ -z "${FILELIST[0]}" ]]; then ## --file was not specified
         FILELIST=( $(call_make list-srcfiles silent LIST_NODC=1 LIST_NOENT=1 LIST_NOIMG=1 ) )

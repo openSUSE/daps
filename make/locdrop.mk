@@ -34,10 +34,10 @@
 #################################
 
 
-ifndef LOCDROP_EXPORT_DIR
+ifeq "$(strip $(EXPORT_DIR))" ""
   LOCDROP_EXPORT_BOOKDIR := $(RESULT_DIR)/locdrop
 else
-  LOCDROP_EXPORT_BOOKDIR := $(addsuffix /$(DOCNAME),$(LOCDROP_EXPORT_DIR))
+  LOCDROP_EXPORT_BOOKDIR := $(addsuffix /$(DOCNAME),$(EXPORT_DIR))
 endif
 
 #------------------

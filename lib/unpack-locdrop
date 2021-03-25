@@ -113,7 +113,7 @@ function unpack-locdrop {
     which exiftool >/dev/null 2>&1 || NO_EXIFTOOL="1"
 
     if [[ -z $NO_OPTIPNG && -z $NO_EXIFTOOL ]]; then
-        if [[ -d images/src/png && 1 -eq $P_OPTIPNG ]]; then
+        if [[ -d images/src/png && 1 -eq $OPTIPNG ]]; then
             local j=0
             for IMG in images/src/png/*.png; do
                 if [[ -z "$(exiftool -Comment $IMG | grep optipng)" ]]; then

@@ -21,7 +21,7 @@
 ###########################################################################
 function getimages {
     local SHORT_OPTS LONG_OPTS SUB_CMD
-    local COMPACT FILE MOD P_FILE SHOW
+    local COMPACT FILE SHOW
     local -a IMGLIST
 
     SUB_CMD=$1
@@ -51,11 +51,6 @@ function getimages {
     exit 0
     fi
 
-    [[ 1 = "$P_COMPACT" ]]  && COMPACT=1
-    [[ 1 = "$P_MODIFIED" ]] && MOD=1
-    [[ 1 = "$P_SHOW" ]]     && SHOW=1
-    [[ -n "$P_VIEWER" ]]    && IMG_VIEWER="$P_VIEWER"
-
     # set ROOTID - either directly or via $FILE
     if [[ -z "$P_ROOTID" && -z "$P_FILE" ]]; then
         if [[ 0 != $VERBOSITY ]]; then
@@ -65,15 +60,9 @@ function getimages {
         exit_on_error "Options --file (-f) and --rootid exclude one another.\nPlease specify only one of these options"
     fi
 
-    [[ -n "$P_ROOTID" ]]    && export ROOTID="$P_ROOTID"
-
     if [[ -n $P_FILE ]]; then
-        if [[ -f $P_FILE ]]; then
-            ROOTID=$($XSLTPROC --stylesheet "$DAPSROOT/daps-xslt/common/get-rootelement-id.xsl" --file "$P_FILE" "$XSLTPROCESSOR" 2>/dev/null) || exit_on_error "Cannot get a rootid from file $FILE"
-            export ROOTID
-        else
-            exit_on_error "File $P_FILE does not exist"
-        fi
+        ROOTID=$($XSLTPROC --stylesheet "$DAPSROOT/daps-xslt/common/get-rootelement-id.xsl" --file "$P_FILE" "$XSLTPROCESSOR" 2>/dev/null) || exit_on_error "Cannot get a rootid from file $FILE"
+        export ROOTID
     fi
 
     # IMG_VIEWER may also be set via config file:
@@ -83,13 +72,8 @@ function getimages {
         else
             IMG_VIEWER=$(which "$IMG_VIEWER" 2>/dev/null)
             if [[ 0 -lt $? ]]; then # which command failed
-                # Viewer was specified on command-line
-                if [[ $P_VIEWER ]]; then
-                    exit_on_error "Cannot find VIEWER $CMD_IMG_VIEWER"
-                # Viewer was specified via config
-                else
-                    exit_on_error "Cannot find VIEWER $IMG_VIEWER. Please check your config file"
-                fi
+                # Viewer not installed
+                exit_on_error "Cannot find VIEWER $IMG_VIEWER. Please check your coimmand line or config file"
             fi
         fi
     fi
@@ -106,11 +90,11 @@ function getimages {
             echo -e "${IMGLIST[*]}\n"
         else
             for IMAGE in "${IMGLIST[@]}"; do
-                if [[ $MOD ]]; then
-                MODIFIED=$(stat -c %y "$IMAGE" | cut -d '.' -f1 2>/dev/null)
-                echo "${IMAGE} (${MODIFIED})"
+                if [[ 1 = "$MOD" ]]; then
+                    MODIFIED=$(stat -c %y "$IMAGE" | cut -d '.' -f1 2>/dev/null)
+                    echo "${IMAGE} (${MODIFIED})"
                 else
-                echo "${IMAGE}"
+                    echo "${IMAGE}"
                 fi
             done  | column -t
             if [[ $SHOW ]]; then

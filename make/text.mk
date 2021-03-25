@@ -26,7 +26,7 @@ ifeq "$(TARGET)" "text"
 endif
 
 
-ifeq "$(TXT_IGNORE_STYLEROOT)" "yes"
+ifeq "$(TXT_IGNORE_STYLEROOT)" "1"
   STYLETXT := $(DOCBOOK_STYLES)/xhtml/docbook.xsl
 else
   STYLETXT := $(firstword $(wildcard \

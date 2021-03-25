@@ -43,17 +43,9 @@ function stylecheck {
         exit_on_error "Options --file (-f) and --rootid exclude one another.\nPlease specify only one of these options"
     fi
 
-    [[ -n "$P_NAME" ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
-    [[ -n "$P_ROOTID" ]]    && export ROOTID="$P_ROOTID"
-    [[ -n "$P_SHOW" ]]      && export SHOW=1
-
     if [[ -n "$P_FILE" ]]; then
-        if [[ -f $P_FILE ]]; then
-            ROOTID=$($XSLTPROC --stylesheet "$DAPSROOT/daps-xslt/common/get-rootelement-id.xsl" --file "$P_FILE" "$XSLTPROCESSOR" 2>/dev/null) || exit_on_error "Cannot get a rootid from file $FILE"
+        ROOTID=$($XSLTPROC --stylesheet "$DAPSROOT/daps-xslt/common/get-rootelement-id.xsl" --file "$P_FILE" "$XSLTPROCESSOR" 2>/dev/null) || exit_on_error "Cannot get a rootid from file $FILE"
         export ROOTID
-        else
-            exit_on_error "File $P_FILE does not exist"
-        fi
     fi
 
     call_make "$SUB_CMD" "$@"

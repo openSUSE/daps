@@ -272,7 +272,7 @@ images:
       images: $(ONLINE_IMAGES)
 	@ccecho "result" "Online images generated in $(IMG_GENDIR)/color/"
     endif
-    ifeq "$(IMAGES_GRAYSCALE)" "1"
+    ifeq "$(GRAYSCALE)" "1"
       images: $(GRAYSCALE_IMAGES)
 	@ccecho "result" "Images generated in $(IMG_GENDIR)/grayscale/"
     endif

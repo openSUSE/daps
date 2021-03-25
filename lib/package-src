@@ -36,23 +36,8 @@ function package-src {
         exit 0
     fi
 
-    [[ 1 = "$P_IS_LOCDROP" ]] && export IS_LOCDROP=1
-    [[ -n "$P_NAME" ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
-    [[ 1 = "$P_OPTIPNG" ]]    && export OPTIPNG=1
-
-    if [[ -n "$P_DEF_FILE" ]]; then
-        if [[ -f $P_DEF_FILE ]]; then
-            export DEF_FILE="$P_DEF_FILE"
-        else
-            exit_on_error "Cannot find DEF file \"$P_DEF_FILE\""
-        fi
-    else
+    if [[ -z "$DEF_FILE" ]]; then
         [[ 0 != "$VERBOSITY" ]] && ccecho "warn" "Warning: No DEF file was specified"
-    fi
-
-    if [[ -n "$P_SETDATE" ]]; then
-        SETDATE=$(date -d "$P_SETDATE" +"%b %d %Y" 2>/dev/null) || exit_on_error "Wrong value for set-date: must be in a \"date\" compatible format,\ne.g. \"YYYY-MM-DD\"!"
-        export SETDATE
     fi
 
     call_make "$SUB_CMD" "$@"

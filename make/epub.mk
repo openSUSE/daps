@@ -127,8 +127,12 @@ endif
 EPUB_CONTENT_OPF := $(EPUB_TMPDIR)/$(EPUB_CONTENT_FILE)
 
 ifneq "$(strip $(EPUB_CSS))" ""
-  EPUBSTRINGS  += --stringparam "html.stylesheet=$(notdir $(EPUB_CSS))"
-  EPUB_CSSFILE := $(EPUB_OEBPS)/$(notdir $(EPUB_CSS))
+  ifneq "$(strip $(EPUB_CSS))" "none"
+    EPUBSTRINGS  += --stringparam "html.stylesheet=$(notdir $(EPUB_CSS))"
+    EPUB_CSSFILE := $(EPUB_OEBPS)/$(notdir $(EPUB_CSS))
+  else
+    EPUBSTRINGS += --stringparam "html.stylesheet=\"\""
+endif
 endif
 
 #--------------

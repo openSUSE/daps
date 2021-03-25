@@ -37,12 +37,5 @@ function build_man {
         exit 0
     fi
 
-    [[ -n "$P_NOGZIP" ]]     && export GZIP_MAN="no"
-    [[ -n "$P_NOREFCHECK" ]] && export NOREFCHECK="1"
-    [[ -n "$P_ROOTID" ]]     && export ROOTID="$P_ROOTID"
-    [[ -n "$P_SUBDIRS" ]]    && export MAN_SUBDIRS="yes"
-    [[ -n "$P_PARAMS" ]]       && export PARAMS="$P_PARAMS"
-    [[ -n "$P_STRINGPARAMS" ]] && export STRINGPARAMS="$P_STRINGPARAMS"
-
     call_make "$SUB_CMD" "$@"
 }

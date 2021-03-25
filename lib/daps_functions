@@ -42,26 +42,39 @@ function parse_args {
     while true ; do
         case "$1" in
             --check)
-                P_CHECK=1
+                # epub: validating result
+                # also requires a minimum verbosity level of 1
+                #
+                [[ 0 = "$VERBOSITY" ]] && export VERBOSITY=1
+                export RESULTCHECK=1
                 shift
                 ;;
             --clean)
-                P_CLEAN=1
+                # html/webhelp: clean up previous builds
+                export CLEAN_DIR=1
                 shift
                 ;;
             --color)
-                P_COLOR=1
+                # images: only create color images
+                export IMAGES_COLOR=1
                 shift
                 ;;
             --compact)
-                P_COMPACT=1
+                # getimages: one line filelist
+                # no need to export (not passed to make)
+                COMPACT=1
                 shift
                 ;;
             --cropmarks)
-                P_CROPMARKS=1
+                # pdf/package-pdf/show-names: PDF Cropmarks
+                export CROPMARKS=1
                 shift
                 ;;
             --css)
+                # epub/html/package-html/webhelp: Path to custom CSS file
+                # processed differently in respective targets
+                # no direct export here
+                declare P_CSS
                 if [[ $2 != "none" ]]; then
                     sanitize_path "$2" "P_CSS"
                 else
@@ -69,220 +82,301 @@ function parse_args {
                 fi
                 shift 2
                 ;;
-            --draft)
-                P_DRAFT=1
-                shift
-                ;;
             --def-file)
-                P_DEF_FILE=""
-                sanitize_path "$2" "P_DEF_FILE"
+                # locdrop/package-src: include DEF-file
+                declare DEF_FILE
+                sanitize_path "$2" "DEF_FILE"
+                export DEF_FILE
                 shift 2
                 ;;
             --desktopfiles)
-                P_DESKTOPFILES=1
+                # package-html/package-pdf: Create desktop files
+                export DESKTOPFILES=1
                 shift
                 ;;
             --db5todb4)
-                P_DB5TODB4=1
+                # online-docs: convert DB5 to DB5
+                export DB5TODB4=1
                 shift
                 ;;
             --db5todb4nh)
-                P_DB5TODB4NH=1
+                # online docs: convert DB5 to NovDoc
+                export DB5TODB4NH=1
                 shift
                 ;;
             --dbnoconv)
-                P_DBNOCONV=1
+                # online-docs: do not convert to NovDoc
+                export DBNOCONV=1
                 shift
                 ;;
             --documentfiles)
-                P_DOCUMENTFILES=1
+                # package-html/package-pdf: Create document files
+                export DOCUMENTFILES=1
+                shift
+                ;;
+            --draft)
+                # html/pdf/profile-first/show-names/webhelp: draft mode
+                # exported in init_env
+                DRAFT=yes
                 shift
                 ;;
             --epub3)
-                P_EPUB3=1
+                # epub: Create ePub 3
+                export EPUB3=1
                 shift
                 ;;
             --export-dir)
-                P_EXPORT_DIR=""
-                sanitize_path "$2" "P_EXPORT_DIR"
+                # locdrop/online-docs: export directory
+                declare EXPORT_DIR
+                sanitize_path "$2" "EXPORT_DIR"
+                export EXPORT_DIR
                 shift 2
                 ;;
             --extra-dict)
-                P_SPELL_EXTRA_DICT="$2"
+                # spellcheck: additional dictionary
+                # no need to export (not passed to make)
+                SPELL_EXTRA_DICT="$2"
                 shift 2
                 ;;
             --file)
-                P_FILE="$2"
+                # getimages/linkcheck/spellcheck/stylecheck/xmlformat
+                # no need to export (not passed to make)
+                declare P_FILE
+                sanitize_path "$2" "P_FILE"
                 shift 2
                 ;;
             --formatter)
-                P_FORMATTER="$2"
+                # online-docs/package-pdf/pdf/show-names: PDF formatter
+                if [[ xep = "$2" || fop = "$2" ]]; then
+                    export FORMATTER="$2"
+                else
+                    exit_on_error "Wrong parameter for --formatter: must be \"xep\" or \"fop\"!"
+                fi
                 shift 2
                 ;;
             --gen)
-                P_IMAGES_GEN=1
+                # images: no links
+                export IMAGES_GEN=1
                 shift
                 ;;
             --grayscale)
-                P_GRAYSCALE=1
+                # images/pdf/package-pdf/show-names: only grayscale images
+                export GRAYSCALE=1
                 shift
                 ;;
             -h|--help)
+                # basically all targets
+                # no need to export (not passed to make)
                 P_HELP=1
                 shift
                 ;;
             --html5)
-                P_HTML5=1
+                # html/package-html: create html5
+                export HTML5=1
                 shift
                 ;;
             --ignore-styleroot)
-                P_TXT_IGNORE_STYLEROOT=1
+                # text / call_make: force use upstream DB stylesheets
+                export TXT_IGNORE_STYLEROOT=1
                 shift
                 ;;
             --imgonly)
+                # "meta" attribute, will preset other attributes for
+                # list-srcfiles
+                # no need to export (not passed to make)
                 P_LIST_IMG_ONLY=1
                 shift
                 ;;
             --jsp)
-                P_JSP=1
+                # html/package-html/show-names: create JSP rather than HTML
+                export JSP=1
                 shift
                 ;;
             --lang)
+                # spellcheck: Language
+                # no need to export (not passed to make)
                 P_LANG="$2"
                 shift 2
                 ;;
             --lean)
-                P_LEAN="1"
+                # pdf: create PDF with rediced graphics quailty
+                export LEAN="1"
                 shift
                 ;;
             --list)
-                P_LIST=1
+                # spellcheck: dump misspelled to STDOUT
+                # no need to export (not passed to make)
+                LISTMODE=1
                 shift
                 ;;
             --locdrop)
-                P_IS_LOCDROP=1
+                # package-src: include manifest files for translation
+                export IS_LOCDROP=1
                 shift
                 ;;
             --meta)
-                P_META=1
+                # html/pdf: display meta data in draft mode
+                # exported in init_env
+                META=1
                 shift
                 ;;
             --modified)
-                P_MODIFIED=1
+                # getimages: show file modification times
+                # no need to export (not passed to make)
+                MOD=1
                 shift
                 ;;
             --name)
-                P_NAME="$2"
+                # used almost everywhere to set the filename
+                export PDFNAME="$2" BOOK="$2"
                 shift 2
                 ;;
             --nodc)
-                P_LIST_NODC=1
+                # filelists: Do not show DC-file
+                export LIST_NODC=1
                 shift
                 ;;
             --noent)
-                P_LIST_NOENT=1
+                # filelists: Do not show entity files
+                export LIST_NOENT=1
                 shift
                 ;;
             --noepub)
-                P_NOEPUB=1
+                # online-docs: Do not generate ePUB
+                export NOEPUB=1
                 shift
                 ;;
             --nogzip)
-                P_NOGZIP=1
+                # man: do not gzip man pages
+                export GZIP_MAN="no"
                 shift
                 ;;
             --nohtml)
-                P_NOHTML=1
+                # online-docs: Do not generate HTML
+                export NOHTML=1
                 shift
                 ;;
             --noimg)
-                P_LIST_NOIMG=1
+                # filelists: Do not show images
+                export LIST_NOIMG=1
                 shift
                 ;;
             --nopdf)
-                P_NOPDF=1
+                # locdrop/onlinedocs: Do not generate PDF
+                export NOPDF=1
                 shift
                 ;;
             --nosearch)
-                P_NOSEARCH=1
+                export WH_SEARCH="no"
                 shift
                 ;;
             --noset)
-                P_NOSET=1
+                #  online-docs: Single manual only (not complete set)
+                export NOSET=1
                 shift
                 ;;
             --nostatic)
-                P_NOSTATIC=1
+                # html/webhelp: Do not copy images, link them
+                export STATIC_HTML=0
                 shift
                 ;;
             --norefcheck)
-                P_NOREFCHECK=1
+                # used in many targets: do not validate xrefs
+                export NOREFCHECK="1"
                 shift
                 ;;
             --notrans-dir)
-                P_NOTRANS_DIR=""
+                # unpack-locdrop: path to en directory
+                # no need to export (not passed to make)
+                declare P_NOTRANS_DIR
                 sanitize_path "$2" "P_NOTRANS_DIR"
                 shift 2
                 ;;
             --novalid)
-                P_NOVALID=1
+                # bigfile: Do not validate profiled sources
+                export NOVALID=1
                 shift
                 ;;
             --noxml|--noadoc)
-                P_LIST_NOXML=1
+                # filelists: Do not show XML/ADOC files
+                export LIST_NOXML=1
                 shift
                 ;;
             --online)
-                P_IMAGES_ONLINE=1
+                # images: generate online images
+                export IMAGES_ONLINE=1
                 shift
                 ;;
             --optipng)
-                P_OPTIPNG=1
+                # locdrop/online-docs/package-src/unpack-locdrop: Optimize PNGs
+                export OPTIPNG=1
                 shift
                 ;;
             --output-dir)
-                P_OUTPUT_DIR=""
+                # unpack lockdrop: output directory
+                # no need to export (not passed to make)
+                declare P_OUTPUT_DIR=""
                 sanitize_path "$2" "P_OUTPUT_DIR"
                 shift 2
                 ;;
             --pagefiles)
-                P_PAGEFILES=1
+                # package-html/package-pdf: Generate pagefiles
+                export PAGEFILES=1
                 shift
                 ;;
             --param)
+                # various targets: xslt (numeric) parameters
+                # Values are concatenated here
+                # exported in init_env
                 P_PARAMS="$P_PARAMS --param $2"
                 shift 2
                 ;;
             --pretty)
-                P_PRETTY=1
+                # filelists: make outpot human readyble
+                export PRETTY_FILELIST=1
                 shift
                 ;;
             --remarks)
-                P_REMARKS=1
+                # epub/html/pdf/profile-first/show-names/webhelp: draft mode
+                # exported in init_env
+                REMARKS=1
                 shift
                 ;;
             --remove-dm)
+                # unpack-locdrop: Remove Docmanager blocks
+                # no need to export (not passed to make)
                 P_REMOVEDM=1
                 shift
                 ;;
             --rootid)
+                # used almost everywhere: ROOTID
+                # P_ROOTID is needed for
+                # getimages/linkcheck//spellcheck/stylecheck/xmlformat
+                # to distinguish between valkues provided by
+                # config and command line
                 P_ROOTID="$2"
+                export ROOTID="$2"
                 shift 2
                 ;;
             --show)
-                P_SHOW=1
+                # getimages/linkcheck/stylecheck
+                export SHOW=1
                 shift
                 ;;
             --set-date)
-                P_SETDATE="$2"
+                # package-html/package-pdf/package-src: manually set date
+                SETDATE=$(date -d "$2" +"%b %d %Y" 2>/dev/null) || exit_on_error "Wrong value for set-date: must be in a \"date\" compatible format,\ne.g. \"YYYY-MM-DD\"!"
+                export SETDATE
                 shift 2
                 ;;
             --single)
-                P_HTMLSINGLE=1
+                # html/package-html/show-names: create single HTML
+                export HTMLSINGLE=1
                 shift
                 ;;
             --spellchecker)
-                P_SPELL_CHECKER="$2"
+                # spellcheck: aspell or hunspell
+                SPELL_CHECKER="$2"
                 shift 2
                 ;;
             --static)
@@ -290,31 +384,45 @@ function parse_args {
                 shift
                 ;;
             --statdir)
-                P_STATIC_DIR=""
-                sanitize_path "$2" "P_STATIC_DIR"
+                # epub/html/package-html: directory containing js and css
+                declare STATIC_DIR
+                sanitize_path "$2" "STATIC_DIR"
+                export STATIC
                 shift 2
                 ;;
             --stringparam)
+                # various targets: xslt (numeric) parameters
+                # Values are concatenated here
+                # exported in init_env
                 P_STRINGPARAMS="$P_STRINGPARAMS --stringparam $2"
                 shift 2
                 ;;
             --subdirs)
-                P_SUBDIRS=1
+                # mnn: use subdirectories
+                export MAN_SUBDIRS="yes"
                 shift
                 ;;
             --target)
-                P_TARGET="$2"
+                # dapsenv/showvariable: specify subcommand
+                TARGET="$2"
                 shift 2
                 ;;
             --trans-files)
+                # unpack_locdrop
+                # no need to export (not passed to make)
                 P_TRANS_FILES="$2"
                 shift 2
                 ;;
             --viewer)
-                P_VIEWER="$2"
+                # getimages: specify image viewer
+                # no need to export (not passed to make)
+                IMG_VIEWER="$2"
                 shift 2
                 ;;
             --xmlonly|--adoconly)
+                # "meta" attribute, will preset other attributes for
+                # list-srcfiles
+                # no need to export (not passed to make)
                 P_LIST_XML_ONLY=1
                 shift
                 ;;
@@ -333,6 +441,10 @@ function parse_args {
         esac
     done
 
+    # sanity checks:
+    if [[ 1 -eq $HTMLSINGLE && 1 -eq $JSP ]]; then
+        exit_on_error "--single and --jsp are mutually exclusive"
+    fi
     P_REMAIN_ARGS="$*"
 
 }
@@ -446,6 +558,10 @@ function init_env {
         # No terminal
         COLOR=0
     fi
+
+    # export PARAMS and STRINGPARAMS
+    [[ -n "$P_PARAMS" ]]      && export PARAMS="$P_PARAMS"
+    [[ -n "$P_STRINGPARAMS" ]] && export STRINGPARAMS="$P_STRINGPARAMS"
 
     # Unset the strings last, because values for DRAFT or REMARKS
     # may have been altered in-between
@@ -623,7 +739,7 @@ function call_make {
         echo
 
         # Styleroot / Fallback styleroot
-        if [[ $SUB_CMD =~ text && "yes" == "$TXT_IGNORE_STYLEROOT" || 1 = "$P_TXT_IGNORE_STYLEROOT" ]]; then
+        if [[ $SUB_CMD =~ text && "yes" == "$TXT_IGNORE_STYLEROOT" || 1 = "$TXT_IGNORE_STYLEROOT" ]]; then
             printf "%${COLWIDTH}s: %s\n" "STYLEROOT" "$DOCBOOK_STYLES"
         else
             if [[ -n "$STYLEDEVEL" ]]; then
@@ -769,11 +885,6 @@ function build_generic {
         exit 0
     fi
 
-    [[ -n "$P_NAME" ]]         && export PDFNAME="$P_NAME" BOOK="$P_NAME"
-    [[ -n "$P_NOREFCHECK" ]]   && export NOREFCHECK=1
-    [[ -n "$P_ROOTID" ]]       && export ROOTID="$P_ROOTID"
-    [[ -n "$P_STRINGPARAMS" ]] && export STRINGPARAMS="$P_STRINGPARAMS"
-    [[ -n "$P_PARAMS" ]]       && export PARAMS="$P_PARAMS"
     [[ -n "$P_XSLTPARAM" ]]    && export XSLTPARAM="$XSLTPARAM $P_XSLTPARAM"
 
     call_make "$SUB_CMD" "$@"
@@ -813,11 +924,6 @@ function profile_first {
         exit 0
     fi
 
-    [[ 1 = "$P_DRAFT" ]]    && DRAFT="yes"
-    [[ 1 = "$P_REMARKS" ]]  && REMARKS=1
-    [[ -n "$P_NAME" ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
-    [[ -n "$P_ROOTID" ]]    && export ROOTID="$P_ROOTID"
-
     # we do not want to write a logfile this time
     WRITE_LOG=0
     call_make "profile" "$@" || exit_on_error "Profiling failed"
@@ -851,9 +957,6 @@ function comments_remarks {
         echo
         exit 0
     fi
-
-    [[ 1 = "$P_REMARKS" ]]     && REMARKS=1
-    [[ 1 = "$P_NOREFCHECK" ]]  && NOREFCHECK=1
 
     # we do not want to write a logfile this time
     WRITE_LOG=0
@@ -898,12 +1001,6 @@ function filelists {
         echo
         exit 0
     fi
-    [[ 1 = "$P_LIST_NODC" ]]  && export LIST_NODC=1
-    [[ 1 = "$P_LIST_NOENT" ]] && export LIST_NOENT=1
-    [[ 1 = "$P_LIST_NOIMG" ]] && export LIST_NOIMG=1
-    [[ 1 = "$P_LIST_NOXML" ]] && export LIST_NOXML=1
-    [[ 1 = "$P_PRETTY" ]]     && export PRETTY_FILELIST=1
-    [[ -n "$P_ROOTID" ]]    && export ROOTID="$P_ROOTID"
 
     # --imgonly and --xmlonly are shortcuts
     #
@@ -960,30 +1057,6 @@ function show_names {
                 exit 0
     fi
 
-    [[ 1 = "$P_DRAFT" ]]      && DRAFT="yes"
-    [[ 1 = "$P_REMARKS" ]]    && REMARKS=1
-    # usemeta implies draft mode
-    [[ 1 = "$P_META" ]]       && META=1 DRAFT="yes"
-    [[ 1 = "$P_CROPMARKS" ]]  && export CROPMARKS=1
-    [[ 1 = "$P_GRAYSCALE" ]]  && export GRAYSCALE=1
-    [[ -n "$P_ROOTID" ]]      && export ROOTID="$P_ROOTID"
-    [[ -n "$P_NAME" ]]        && export PDFNAME="$P_NAME" BOOK="$P_NAME"
-
-    if [[ 1 = "$P_HTMLSINGLE" && 1 = "$P_JSP" ]]; then
-    exit_on_error "--single and --jsp are mutually exclusive"
-    else
-    [[ 1 = "$P_HTMLSINGLE" ]] && export HTMLSINGLE=1
-    [[ 1 = "$P_JSP" ]]        && export JSP=1
-    fi
-
-    if [[ -n "$P_FORMATTER" ]]; then
-        if [[ xep = "$P_FORMATTER" || fop = "$P_FORMATTER" ]]; then
-            export FORMATTER="$P_FORMATTER"
-        else
-        exit_on_error "Wrong parameter for --formatter: must be \"xep\" or \"fop\"!"
-        fi
-    fi
-
     # we do not want to write a logfile this time
     WRITE_LOG=0
     call_make "$SUB_CMD" "$@"
@@ -1017,10 +1090,6 @@ function debugging {
         echo
         exit 0
     fi
-
-    [[ -n "$P_NAME" ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
-    [[ -n "$P_ROOTID" ]]    && export ROOTID="$P_ROOTID"
-    [[ -n "$P_TARGET" ]]    && export TARGET="$P_TARGET"
 
     call_make "$SUB_CMD" "$@"
 }
@@ -1545,7 +1614,7 @@ function help_single {
                               Default: off
 EOF
 }
-function help_spell-checker {
+function help_spellchecker {
     cat <<EOF
     --spell-checker           Specify the name of the spell checking command,
                               such as 'aspell' or 'hunspell'.

@@ -37,20 +37,12 @@ function bigfile {
         exit 0
     fi
 
-    [[ -n "$P_NAME" ]]         && export PDFNAME="$P_NAME" BOOK="$P_NAME"
-    [[ -n "$P_NOREFCHECK" ]]   && export NOREFCHECK=1
-    [[ -n "$P_ROOTID" ]]       && export ROOTID="$P_ROOTID"
-    [[ -n "$P_STRINGPARAMS" ]] && export STRINGPARAMS="$P_STRINGPARAMS"
-    [[ -n "$P_PARAMS" ]]       && export PARAMS="$P_PARAMS"
     [[ -n "$P_XSLTPARAM" ]]    && export XSLTPARAM="$XSLTPARAM $P_XSLTPARAM"
 
-    # If --novalid was called, a validation check is automatically
-    # performed
+    # If --novalid was called, a validation check on the resulting file
+    # is automatically performed
     # Checking the result requires a minimum verbosity level of 1
-    if [[ 1 = "$P_NOVALID" ]]; then
-        [[ 0 = "$VERBOSITY" ]] && export VERBOSITY=1
-        export NOVALID=1
-    fi
+    [[ 1 = "$NOVALID" &&  0 = "$VERBOSITY" ]] && export VERBOSITY=1
 
     call_make "$SUB_CMD" "$@"
 }

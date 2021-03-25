@@ -15,7 +15,7 @@
 
 # needed by SUSE to publish documents on www.suse.com/documentation
 # when _NOT_ called with --noset creates the following files
-# $OD_EXPORT_DIR/
+# $EXPORT_DIR/
 #   |-set_bigfile.xml
 #   |-$DOCNAME_graphics_png.tar.bz2
 #   |-$DOCNAME
@@ -24,7 +24,7 @@
 #   |   |-book.dist-single-html
 #
 # When called with --noset, or without --export-dir all files are copied
-# to $OD_EXPORT_DIR/$DOCNAME
+# to $EXPORT_DIR/$DOCNAME
 # The bigfile generated with this option has all links pointing to
 # locations outside the specified ROOTID converted to text
 # (same as the bigfile target)
@@ -41,20 +41,20 @@ OD_TMP_BIG := $(TMP_DIR)/$(DOCNAME)_for_conversion.xml
 
 # Final bigfile
 #
-ifndef OD_EXPORT_DIR
-  OD_EXPORT_DIR     := $(RESULT_DIR)/online-docs
-  OD_EXPORT_BOOKDIR := $(OD_EXPORT_DIR)
+ifeq "$(strip $(EXPORT_DIR))" ""
+  EXPORT_DIR     := $(RESULT_DIR)/online-docs
+  OD_EXPORT_BOOKDIR := $(EXPORT_DIR)
 else
-  OD_EXPORT_BOOKDIR := $(addsuffix /$(DOCNAME),$(OD_EXPORT_DIR))
+  OD_EXPORT_BOOKDIR := $(addsuffix /$(DOCNAME),$(EXPORT_DIR))
 endif
 
 ifeq "$(NOSET)" "1"
-  OD_BIGFILE  := $(OD_EXPORT_DIR)/$(DOCNAME)$(LANGSTRING).xml
+  OD_BIGFILE  := $(EXPORT_DIR)/$(DOCNAME)$(LANGSTRING).xml
 else
-  OD_BIGFILE  := $(OD_EXPORT_DIR)/set$(LANGSTRING)_bigfile.xml
+  OD_BIGFILE  := $(EXPORT_DIR)/set$(LANGSTRING)_bigfile.xml
 endif
-OD_GRAPHICS_TMP := $(OD_EXPORT_DIR)/$(DOCNAME)$(LANGSTRING)-online-graphics.tar
-OD_GRAPHICS := $(OD_EXPORT_DIR)/$(DOCNAME)$(LANGSTRING)-online-graphics.tar.bz2
+OD_GRAPHICS_TMP := $(EXPORT_DIR)/$(DOCNAME)$(LANGSTRING)-online-graphics.tar
+OD_GRAPHICS := $(EXPORT_DIR)/$(DOCNAME)$(LANGSTRING)-online-graphics.tar.bz2
 
 .PHONY: online-docs
 online-docs: | $(OD_EXPORT_BOOKDIR)
@@ -89,7 +89,7 @@ online-docs:
     ifneq "$(NOHTML)" "1"
 	cp $(PACKAGE_HTML_RESULT) $(OD_EXPORT_BOOKDIR)
     endif
-	@ccecho "result" "Find the online-docs result at:\n$(OD_EXPORT_DIR)"
+	@ccecho "result" "Find the online-docs result at:\n$(EXPORT_DIR)"
   endif
 
 #	cp $(PACKAGE_HTML_DIR)/$(DOCNAME)$(LANGSTRING)-single-html.tar.bz2 \
@@ -98,7 +98,7 @@ online-docs:
 
 
 #----
-# also creates $(OD_EXPORT_DIR)
+# also creates $(EXPORT_DIR)
 #
 $(OD_EXPORT_BOOKDIR):
 	mkdir -p $@
