@@ -70,15 +70,15 @@
 
   <xsl:template match="d:entry[1]">
     <term>
-      <xsl:apply-templates select="d:para[1]/*"/>
+      <xsl:apply-templates select="d:para[1]/node()"/>
     </term>
     <xsl:text>&#10;</xsl:text>
   </xsl:template>
 
   <xsl:template match="d:entry[2]">
     <listitem>
-      <xsl:copy-of select="*"/>
-      <xsl:copy-of select="../d:entry[position()>=3]/*"/>
+      <xsl:copy-of select="node()"/>
+      <xsl:copy-of select="../d:entry[position()>=3]/node()"/>
     </listitem>
     <xsl:text>&#10;</xsl:text>
   </xsl:template>
