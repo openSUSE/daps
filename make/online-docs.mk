@@ -75,9 +75,9 @@ ifneq "$(NOHTML)" "1"
   online-docs: package-html
 endif
 online-docs:
-  ifdef MISSING
+  ifneq "$(strip $(MISSING_IMG))" ""
 	@ccecho "error" "Fatal error: The following images are missing:"
-	@echo -e "$(subst $(SPACE),\n,$(sort $(MISSING)))"
+	@echo -e "$(subst $(SPACE),\n,$(sort $(MISSING_IMG)))"
 	exit 1
   else
     ifneq "$(NOPDF)" "1"

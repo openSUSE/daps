@@ -166,12 +166,12 @@ DUPLICATES := $(filter \
 		$(shell echo $(basename $(notdir $(SRCALL)) 2>/dev/null) | \
 		tr " " "\n" | sort |uniq -d 2>/dev/null),$(basename $(USED) 2>/dev/null))
 
-DOUBLEIMG := $(sort $(wildcard $(addprefix $(IMG_SRCDIR)/*/,$(addsuffix .*,$(DUPLICATES) ))))
+DOUBLE_IMG := $(sort $(wildcard $(addprefix $(IMG_SRCDIR)/*/,$(addsuffix .*,$(DUPLICATES) ))))
 
 # images referenced in the currently used XML sources that cannot be found in
 # $(IMG_SRCDIR)
 
-MISSING     := $(sort $(filter-out $(notdir $(basename $(SRCALL))), \
+MISSING_IMG := $(sort $(filter-out $(notdir $(basename $(SRCALL))), \
                 $(basename $(USED))))
 
 #------------------------------------------------------------------------
@@ -328,9 +328,9 @@ endif
 #
 .PHONY: list-images-missing
 list-images-missing:
-  ifdef MISSING
+  ifdef MISSING_IMG
 	$(call print_info,warn,The following images are missing:)
-	$(call print_list,$(MISSING))
+	$(call print_list,$(MISSING_IMG))
   else
     ifeq "$(MAKECMDGOALS)" "list-images-missing"
 	$(call print_info,info,All images for document \"$(DOCNAME)\" exist.)
@@ -341,9 +341,9 @@ list-images-missing:
 #
 .PHONY: list-images-multisrc
 list-images-multisrc warn-images:
-  ifdef DOUBLEIMG
+  ifdef DOUBLE_IMG
 	$(call print_info,warn,Image names not unique$(COMMA) multiple sources available for the following images:)
-	$(call print_list,$(DOUBLEIMG))
+	$(call print_list,$(DOUBLE_IMG))
   else
     ifeq "$(MAKECMDGOALS)" "list-images-multisrc"
 	$(call print_info,info,All images for document \"$(DOCNAME)\" have unique names.)

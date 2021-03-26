@@ -413,6 +413,14 @@ function parse_args {
                 P_TRANS_FILES="$2"
                 shift 2
                 ;;
+            --validate-ids)
+                export VALIDATE_IDS=1
+                shift
+                ;;
+            --validate-images)
+                export VALIDATE_IMAGES=1
+                shift
+                ;;
             --viewer)
                 # getimages: specify image viewer
                 # no need to export (not passed to make)
@@ -953,6 +961,8 @@ function comments_remarks {
         help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
         help_norefcheck
         help_remarks
+        [[ "validate" = "$SUB_CMD" ]] && help_validate-ids
+        [[ "validate" = "$SUB_CMD" ]] && help_validate-images
         echo
         exit 0
     fi
@@ -1656,6 +1666,21 @@ function help_target {
                               color-pdf) in order to retrieve correct values
                               for target-specific values.
                               Default: same as daps subcommand
+EOF
+}
+function help_validate-ids {
+    cat <<EOF
+    --validate-ids            Also check IDs to include no other
+                              characters than '[-a-zA-Z0-9].
+                              Default: unset
+EOF
+}
+function help_validate-images {
+    cat <<EOF
+    --validate-images         Also check for missing and duplicated images.
+                              Missing images cause an error, duplicated
+                              imnages a warning only.
+                              Default: unset
 EOF
 }
 function help_viewer {
