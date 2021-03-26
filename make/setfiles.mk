@@ -82,8 +82,11 @@ ifdef ROOTSTRING
   ROOTELEMENT := $(shell $(XMLSTARLET) sel -t -v "//div[@id='$(ROOTID)'][1]/@remap" $(SETFILES_TMP) 2>/dev/null)
   # check whether there is only a single root element (fixes issue #390)
   #
+  ifeq "$(ROOTELEMENT)" ""
+    $(error Fatal error: ROOTID "$(ROOTID)" does not exist!)
+  endif
   ifneq "$(words $(ROOTELEMENT))" "1"
-    $(error Fatal error: ID "$(ROOTID)" has been defined multiple times)
+    $(error Fatal error: ROOTID "$(ROOTID)" has been defined multiple times!)
   endif
   # check if ROOTID is a valid root element
   #
