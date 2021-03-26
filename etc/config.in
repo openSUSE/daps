@@ -225,7 +225,7 @@ COLOR="yes"
 ## Type:        String
 ## Default:     "DC-"
 #
-# Also see PDFNAME
+# Also see OUTPUTNAME
 #
 CONF_PREFIX="DC-"
 
@@ -631,10 +631,8 @@ META="no"
 #
 META_STR="_meta"
 
-
-## Key:         PDFNAME
+# Key:         OUTPUTNAME
 ## --------------------
-## TODO:        Rename variable
 ## Description: Custom name for generated files
 ## Type:        String
 ## Default:     ""
@@ -644,10 +642,16 @@ META_STR="_meta"
 # name.
 # This value is usually set in a book specific DC-file.
 # ATTENTION: Do not specify this value in a global config file if you generate
-#            more than a single book, otherwise previous book builds will always
-#            be overwritten by a new build
+#            more than a single book, otherwise previous book builds will
+#            always be overwritten by a new build
 #
-PDFNAME=""
+OUTPUTNAME=""
+
+## Key:         PDFNAME
+## --------------------
+## Deprecated. Use OUTPUTNAME instead (see there)
+
+
 
 ## Key:         PROFARCH
 ## ---------------------

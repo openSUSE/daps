@@ -228,7 +228,7 @@ function parse_args {
                 ;;
             --name)
                 # used almost everywhere to set the filename
-                export PDFNAME="$2" BOOK="$2"
+                export OUTPUTNAME="$2" BOOK="$2"
                 shift 2
                 ;;
             --nodc)
@@ -442,6 +442,12 @@ function parse_args {
     fi
     P_REMAIN_ARGS="$*"
 
+    # Deprecation warning if PDFNAME is still used (and does not
+    # get overwritten by --name)
+    #
+    if [[ -n "$PDFNAME" && -z "$P_NAME" ]]; then
+        echo -e "Warning: PDFNAME is deprecated. Use OUTPUTNAME instead."
+    fi
 }
 
 ###########################################################################
@@ -734,7 +740,7 @@ function call_make {
         echo
 
         # Styleroot / Fallback styleroot
-        if [[ $SUB_CMD =~ text && "yes" == "$TXT_IGNORE_STYLEROOT" || 1 = "$TXT_IGNORE_STYLEROOT" ]]; then
+        if [[ $SUB_CMD =~ text && "yes" == "$TXT_IGNORE_STYLEROOT" || 1 -eq "$TXT_IGNORE_STYLEROOT" ]]; then
             printf "%${COLWIDTH}s: %s\n" "STYLEROOT" "$DOCBOOK_STYLES"
         else
             if [[ -n "$STYLEDEVEL" ]]; then
