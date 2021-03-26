@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet
- href="urn:x-daps:xslt:profiling:docbook45-profile.xsl" 
+ href="urn:x-daps:xslt:profiling:docbook45-profile.xsl"
  type="text/xml"
  title="Profiling step"?>
 <!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.docbook.org/xml/4.5/docbookx.dtd"
@@ -55,7 +55,7 @@
   <para>
    XIncludes are fully supported and do not cause any problems with
    &dapsacr;. For example, <command>daps</command> commands like
-   <command>checklink</command> or <command>spellcheck</command> also follow XIncludes.
+   <command>linkcheck</command> or <command>spellcheck</command> also follow XIncludes.
   </para>
  </sect1>
  <sect1 id="sec.daps.user.modular.ent.separate">
@@ -82,11 +82,11 @@
   <example id="ex.daps.ent.decl.reference">
    <title>Referencing A Separate Entity File</title>
 <screen>&lt;?xml version="1.0"?&gt;
-&lt;!DOCTYPE chapter PUBLIC [...] 
+&lt;!DOCTYPE chapter PUBLIC [...]
 [
   &lt;!ENTITY % entities SYSTEM "entity-decl.ent"> <co id="co.daps.main.reference.ent"/>
   %entities; <co id="co.daps.main.reference.load"/>
-]&gt; 
+]&gt;
 &lt;chapter&gt;
 &lt;title&gt;Managing User Accounts&lt;/title&gt;
 [...]</screen>
@@ -144,7 +144,7 @@
  <sect1 id="sec.daps.user.modular.profile">
   <title>Profiling&mdash;Support for Document Variants</title>
   &db-profiling-intro;
-  &db-profiling; 
+  &db-profiling;
 
  <sect2 id="sec.daps.user.modular.profile.basics">
    <title>Introduction to DocBook Profiling</title>
@@ -416,7 +416,7 @@
     </tgroup>
    </table>
    <remark>toms 2012-09-25: Maybe describe the use of two or more profiling
-    values in _one_ attribute? Could be useful. 
+    values in _one_ attribute? Could be useful.
     - taroth 2014-10-24: https://trello.com/c/pvdqvCwZ</remark>
   </sect2>
 
@@ -454,13 +454,13 @@
     <title>XML Files: Profiling Attributes</title>
     <para>
      In &dapsacr;, each profiling attribute has a corresponding profiling parameter to be used in the
-     &dc; file, see <xref linkend="sec.daps.user.modular.profile.daps.pp"/>. 
+     &dc; file, see <xref linkend="sec.daps.user.modular.profile.daps.pp"/>.
      The profiling parameters define which profiling attributes
      and values to interpret during generation of output.
     </para>
     <para>The names of the profiling parameters are derived from the profiling
      attributes, but written in uppercase letters and preceded by the prefix
-     <literal>PROF</literal>. 
+     <literal>PROF</literal>.
     </para>
      <table id="tab.daps.profiling" rowsep="1">
      <title>Profiling Attributes (DocBook) and Profiling Parameters (&dapsacr;)</title>
@@ -581,7 +581,7 @@
         <entry colname="2">
          <para>
           Output format to which the element applies (for example, print or
-          &epub;). Only available for DocBook 5.1 or later. 
+          &epub;). Only available for DocBook 5.1 or later.
          </para>
         </entry>
         <entry colname="3"><parameter>PROFOUTPUTFORMAT</parameter>
@@ -710,7 +710,7 @@
     <para>
      To activate generation of profiled output in &dapsacr;, the following
      processing instruction (PI) must be included in the header of the &main;
-     file, before the root element. 
+     file, before the root element.
     </para>
     <note>
      <title>Adjusting the DocBook Version in the PI</title>
@@ -722,14 +722,14 @@
     <example id="ex.daps.user.modular.pi.db4">
      <title>Profiling PI in a DocBook 4.5 File</title>
         <screen>&lt;?xml-stylesheet
-  href="urn:x-daps:xslt:profiling:docbook45-profile.xsl" 
+  href="urn:x-daps:xslt:profiling:docbook45-profile.xsl"
   type="text/xml" ?></screen>
     </example>
-    
+
     <example id="ex.daps.user.modular.pi.db5">
      <title>Profiling PI in a DocBook 5.0 File</title>
      <screen>&lt;?xml-stylesheet
-  href="urn:x-daps:xslt:profiling:docbook50-profile.xsl" 
+  href="urn:x-daps:xslt:profiling:docbook50-profile.xsl"
   type="text/xml" ?></screen>
     </example>
    <para>
@@ -745,7 +745,7 @@
       Although &dapsacr; only checks for the profiling PI in the &main; file, it
       is a good idea to  include the PI in all XML files for any projects that
       need profiling. Otherwise you might forget to move
-      the PI to the respective &main; file in case of restructuring the XML 
+      the PI to the respective &main; file in case of restructuring the XML
       sources. Having the PI in all
       XML files does not hurt: Generation of profiled output is only
       triggered if your &dc; files contain profiling parameters.
@@ -780,8 +780,8 @@
     <example id="ex.daps.xml.pa">
      <title>XML File With Profiling Attributes (DocBook 4.x)</title>
 <screen><?dbsuse-fo font-size="0.70em"?>&lt;?xml version="1.0" encoding="utf-8"?&gt;
-[...] 
- 
+[...]
+
 &lt;chapter id="frog.features"&gt;
  [...]
  &lt;simplelist&gt;
@@ -792,7 +792,7 @@
    &lt;member condition="prof"&gt;Professional Feature 1&lt;/member&gt; <co id="co.daps.xml.profcond.value2"/>
    &lt;member condition="prof"&gt;Professional Feature 2&lt;/member&gt; <xref linkend="co.daps.xml.profcond.value2" xrefstyle="select:label nopage"/>
    &lt;member condition="prof" vendor="oemcompany"&gt;OEM Feature 1&lt;/member&gt; <co id="co.daps.xml.profcond.profvendor"/>
- &lt;/simplelist&gt; 
+ &lt;/simplelist&gt;
  [...]
 &lt;/chapter&gt;</screen>
      <calloutlist>
@@ -835,23 +835,23 @@
       </callout>
      </calloutlist>
     </example>
-     
+
     <example id="ex.daps.main.pi.db4">
      <title>&main; file With PI for Profiling (DocBook 4.5)</title>
 <screen>&lt;?xml version="1.0" encoding="utf-8"?&gt;
-<emphasis role="strong">&lt;?xml-stylesheet  
- href="urn:x-daps:xslt:profiling:docbook45-profile.xsl" 
+<emphasis role="strong">&lt;?xml-stylesheet
+ href="urn:x-daps:xslt:profiling:docbook45-profile.xsl"
  type="text/xml"
- title="Profiling step"?&gt;</emphasis> 
-&lt;!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" 
+ title="Profiling step"?&gt;</emphasis>
+&lt;!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
                          "http://www.docbook.org/xml/4.5/docbookx.dtd"
 [&lt;!ENTITY % entities SYSTEM "entity-decl.ent">
 %entities;
-]&gt;  
+]&gt;
 
 &lt;!--the following article is contained in the file art_frog.xml--&gt;
 
-&lt;article lang="en" id="art.frog"&gt; 
+&lt;article lang="en" id="art.frog"&gt;
  &lt;title&gt;Frog Sound Recordings&lt;/title&gt;
  &lt;subtitle&gt;Product Description&lt;/subtitle&gt;
  [...]
@@ -869,7 +869,7 @@
  href="urn:x-daps:xslt:profiling:docbook50-profile.xsl"
  type="text/xml"
  title="Profiling step"?&gt;</emphasis>
-&lt;!DOCTYPE article 
+&lt;!DOCTYPE article
 [&lt;!ENTITY % entities SYSTEM "entity-decl.ent">
 %entities;
 ]&gt;
@@ -957,7 +957,7 @@ PROFCONDITION="prof" <co id="co.dc.pa.profcond.prof1"/>
     </example>
     <example id="ex.daps.dc.pa.prof.oem">
      <title>&dc; File with Profiling for Professional Edition (OEM Version)</title>
-<screen>## Doc Config File for Frog Sound Recordings 
+<screen>## Doc Config File for Frog Sound Recordings
 ## (Professional Edition, OEM Version)
 
 ## Mandatory Parameters
@@ -1020,22 +1020,22 @@ PROFVENDOR="oemcompany" <co id="co.dc.pa.profvendor.oem"/>
    <title>Separate Entity File with Profiling Attributes (DocBook 5.0)</title>
 <screen><?dbsuse-fo font-size="0.60em"?>&lt;!--the following declarations are contained in the file entity-decl.ent --&gt;
 
-&lt;!ENTITY productname  
+&lt;!ENTITY productname
  <emphasis role="strong">'&lt;phrase cond="basic"&gt;Frog Sound Recordings (Basic)&lt;/phrase&gt;
   &lt;phrase cond="prof"&gt;Frog Sound Recordings (Professional)&lt;/phrase&gt;
   &lt;phrase cond="prof" vendor="oemcompany"&gt;Gecko Sound Recordings (Professional)&lt;/phrase&gt;'&gt;</emphasis>
 
-&lt;!ENTITY productnumber  
+&lt;!ENTITY productnumber
  <emphasis role="strong">'&lt;phrase cond="basic"&gt;1.0&lt;/phrase&gt;
   &lt;phrase cond="prof"&gt;4.2&lt;/phrase&gt;
   &lt;phrase cond="prof" vendor="oemcompany"&gt;4.21&lt;/phrase&gt;'&gt;</emphasis></screen>
   </example>
 
-  <remark>taroth 2012-12-06: open issue - check with fs and toms why/if we 
+  <remark>taroth 2012-12-06: open issue - check with fs and toms why/if we
     need productname/productnumber in setinfo/bookinfo/articleinfo - toms' answer:
     https://github.com/openSUSE/daps/issues/48</remark>
 
- 
+
    <procedure id="pro.daps.modular.productentities">
    <title>Using Product Entities with Profiling in XML Files</title>
    <para> After declaring the entities as shown in <xref
@@ -1047,12 +1047,12 @@ PROFVENDOR="oemcompany" <co id="co.dc.pa.profvendor.oem"/>
      xrefstyle="select:label"/> (DocBook&nbsp;4) or <xref
      linkend="ex.daps.main.pi.db5" xrefstyle="select:label"/>
     (DocBook&nbsp;5).</para>
-    
+
    <step>
     <para>Open the XML file that contains the root element for your respective
      document (<sgmltag>set</sgmltag>, <sgmltag>book</sgmltag>, or
      <sgmltag>article</sgmltag>).
-     <remark>taroth 2012-12-07: toms, fs: if I have a set, do the product* 
+     <remark>taroth 2012-12-07: toms, fs: if I have a set, do the product*
     entities need to be in all *info elements (setinfo, bookinfo, articleinfo)?
     - taroth 2015-04-29: according to toms: yes</remark>
     </para>
@@ -1076,7 +1076,7 @@ PROFVENDOR="oemcompany" <co id="co.dc.pa.profvendor.oem"/>
    <step>
     <para>
      Within the <sgmltag>productname</sgmltag> elements, add the
-     <literal>&amp;productname;</literal> entity. 
+     <literal>&amp;productname;</literal> entity.
     </para>
    </step>
     <step>
@@ -1094,20 +1094,20 @@ PROFVENDOR="oemcompany" <co id="co.dc.pa.profvendor.oem"/>
 <screen><?dbsuse-fo font-size="0.65em"?>
 &lt;?xml version="1.0" encoding="utf-8"?&gt;
 
-<emphasis role="strong">&lt;?xml-stylesheet 
- href="urn:x-daps:xslt:profiling:docbook45-profile.xsl" 
- type="text/xml" 
+<emphasis role="strong">&lt;?xml-stylesheet
+ href="urn:x-daps:xslt:profiling:docbook45-profile.xsl"
+ type="text/xml"
  title="Profiling step"?&gt;</emphasis> <co id="co.daps.main.pi.profiling2"/>
 
-<emphasis role="strong">&lt;!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" 
+<emphasis role="strong">&lt;!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
                          "http://www.docbook.org/xml/4.5/docbookx.dtd"
-[&lt;!ENTITY % entities SYSTEM "entity-decl.ent"> 
-%entities; 
+[&lt;!ENTITY % entities SYSTEM "entity-decl.ent">
+%entities;
  ]&gt;</emphasis> <co id="co.daps.main.reference.ent2"/>
- 
+
 &lt;!--the following article is contained in the file art_frog.xml--&gt;
 
-&lt;article lang="en" id="art.frog"&gt; 
+&lt;article lang="en" id="art.frog"&gt;
  &lt;title&gt;Frog Sound Recordings&lt;/title&gt;
  &lt;subtitle&gt;Product Description&lt;/subtitle&gt;
   &lt;articleinfo&gt; <co id="co.daps.articleinfo"/>
@@ -1115,10 +1115,10 @@ PROFVENDOR="oemcompany" <co id="co.dc.pa.profvendor.oem"/>
    &lt;productnumber&gt;&amp;productnumber;&lt;/productnumber&gt; <co id="co.daps.articleinfo.productnumber"/>
  &lt;/articleinfo&gt;
   &lt;abstract&gt;
-   &lt;para&gt; 
+   &lt;para&gt;
     &amp;productname; &amp;productnumber; is a software for recording, editing, <co id="co.daps.main.product.entities"/>
     and mixing audio data.
-   &lt;/para&gt; 
+   &lt;/para&gt;
   &lt;/abstract&gt;
  [...]
 &lt;/article&gt;</screen>
@@ -1172,7 +1172,7 @@ PROFVENDOR="oemcompany" <co id="co.dc.pa.profvendor.oem"/>
  type="text/xml"
  title="Profiling step"?&gt;</emphasis> <co id="co.daps.main.pi.profiling3"/>
 
-<emphasis role="strong">&lt;!DOCTYPE article 
+<emphasis role="strong">&lt;!DOCTYPE article
 [&lt;!ENTITY % entities SYSTEM "entity-decl.ent">
 %entities;
 ]&gt;</emphasis> <co id="co.daps.main.reference.ent3"/>
@@ -1184,14 +1184,14 @@ PROFVENDOR="oemcompany" <co id="co.dc.pa.profvendor.oem"/>
  &lt;title&gt;Frog Sound Recordings&lt;/title&gt;
  &lt;subtitle&gt;Product Description&lt;/subtitle&gt;
   &lt;info&gt; <co id="co.daps.info"/>
-   &lt;productname&gt;&amp;productname;&lt;/productname&gt; <xref 
+   &lt;productname&gt;&amp;productname;&lt;/productname&gt; <xref
     linkend="co.daps.articleinfo.productname" xrefstyle="select:nopage"/>
    &lt;productnumber&gt;&amp;productnumber;&lt;/productnumber&gt; <xref
     linkend="co.daps.articleinfo.productnumber" xrefstyle="select:nopage"/>
  &lt;/info&gt;
   &lt;abstract&gt;
    &lt;para&gt;
-    &amp;productname; &amp;productnumber; is a software for recording, editing, <xref linkend="co.daps.main.product.entities" 
+    &amp;productname; &amp;productnumber; is a software for recording, editing, <xref linkend="co.daps.main.product.entities"
      xrefstyle="select:nopage"/>
     and mixing audio data.
    &lt;/para&gt;
