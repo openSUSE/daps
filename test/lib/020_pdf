@@ -26,7 +26,7 @@
 # * Is the meta information displayed when using the --meta option?
 # * Is the --name option correctly implemented?
 # * Does the --rootid option work correctly?
-# * Are parameters pass with --xsltparam correctly processed?
+# * Are parameters pass with --param correctly processed?
 
 _PDF_NAME_PATH=""
 _LOGFILE=""
@@ -43,11 +43,11 @@ function oneTimeSetUp() {
     # get the profiling directory
     _PDF_NAME_PATH=$($_DAPSEXEC -d $_DCFILE pdf-name 2>/dev/null)
     if [ $? -ne 0 ]; then
-	exit_on_error " The initial DAPS call to determine the path to the resulting PDF failed. Skipping tests"
+        exit_on_error " The initial DAPS call to determine the path to the resulting PDF failed. Skipping tests"
     fi
     _LOG_DIR=$($_DAPSEXEC -v0 -d $_DCFILE showvariable VARIABLE=LOG_DIR 2>/dev/null)
     if [ $? -ne 0 ]; then
-	exit_on_error " The initial DAPS call to determine the LOG file failed. Skipping tests"
+        exit_on_error " The initial DAPS call to determine the LOG file failed. Skipping tests"
     fi
     _LOGFILE=${_LOG_DIR}/make_pdf.log
 }
@@ -76,11 +76,11 @@ function test_pdf () {
         ' └─ The pdf command itself failed' \
         "$?"
     assertTrue \
-	" └─ The resulting filename (${_PDF_BUILD_PATH}) does not exist" \
-	"[ -s $_PDF_BUILD_PATH ]"
+        " └─ The resulting filename (${_PDF_BUILD_PATH}) does not exist" \
+        "[ -s $_PDF_BUILD_PATH ]"
     assertEquals \
-	' └─ The resulting filename does not match the one retrieved with pdf-name' \
-	"$_PDF_NAME_PATH" "$_PDF_BUILD_PATH"
+        ' └─ The resulting filename does not match the one retrieved with pdf-name' \
+        "$_PDF_NAME_PATH" "$_PDF_BUILD_PATH"
 }
 #--------------------------------
 # * Is the .fo still present after the PDF has been built?
@@ -93,13 +93,13 @@ function test_pdfFO () {
        "$?"
     _FO_FILENAME=$(basename ${_PDF_NAME_PATH} 2>/dev/null)
     if [[ "pdf" == $_PDFCMD ]]; then
-	_FO_FILENAME=${_FO_TMPDIR}/${_FO_FILENAME%-print_en.pdf}-${_FOPROC}-print_en.fo
+        _FO_FILENAME=${_FO_TMPDIR}/${_FO_FILENAME%-print_en.pdf}-${_FOPROC}-print_en.fo
     else
-	_FO_FILENAME=${_FO_TMPDIR}/${_FO_FILENAME%_en.pdf}-${_FOPROC}_en.fo
+        _FO_FILENAME=${_FO_TMPDIR}/${_FO_FILENAME%_en.pdf}-${_FOPROC}_en.fo
     fi
     assertTrue \
-	" └─ The FO file (${_FO_FILENAME}) does not exist anymore after having built the PDF" \
-	"[ -s $_FONAME ]"
+        " └─ The FO file (${_FO_FILENAME}) does not exist anymore after having built the PDF" \
+        "[ -s $_FONAME ]"
 }
 
 #--------------------------------
@@ -116,8 +116,8 @@ function test_pdfStyleroot () {
     $_DAPSEXEC -d $_DCFILE --styleroot=${_DOC_DIR} --fb_styleroot=${_STANDARD_STYLES} --debug pdf >/dev/null 2>&1
     egrep -q -- "--stylesheet /.*/${_STANDARD_STYLES}" $_LOGFILE 2>/dev/null
     assertTrue \
-	" └─ The Fallback Styleroot specified on the command line was not used." \
-	"$?"
+        " └─ The Fallback Styleroot specified on the command line was not used." \
+        "$?"
 
     clean_build_dir fo
 
@@ -127,8 +127,8 @@ function test_pdfStyleroot () {
     $_DAPSEXEC -d $_DCFILE --styleroot=${_DOC_DIR} --debug pdf >/dev/null 2>&1
     grep -q -- "--stylesheet ${_DB_STYLES}" $_LOGFILE 2>/dev/null
     assertTrue \
-	" └─ The automatic DocBook Fallback Styleroot was not used." \
-	"$?"
+        " └─ The automatic DocBook Fallback Styleroot was not used." \
+        "$?"
 
     clean_build_dir fo
 
@@ -137,8 +137,8 @@ function test_pdfStyleroot () {
     $_DAPSEXEC -d $_DCFILE --styleroot ${_STANDARD_STYLES} --debug pdf >/dev/null 2>&1
     egrep -q -- "--stylesheet /.*/${_STANDARD_STYLES}" $_LOGFILE 2>/dev/null
     assertTrue \
-	" └─ The Styleroot specified on the command line was not used." \
-	"$?"
+        " └─ The Styleroot specified on the command line was not used." \
+        "$?"
 }
 
 #--------------------------------
@@ -153,7 +153,7 @@ function test_pdfGrayscaleCropmarks () {
 
     clean_build_dir fo
 
-    # If built with cropmarks, the pagesite in the PDF is larger (than A4) 
+    # If built with cropmarks, the pagesite in the PDF is larger (than A4)
     _PAGE_SIZE_EXPECTED="643.276x889.89"
 
     _PDF_BUILD_PATH=$($_DAPSEXEC -d $_DCFILE --debug pdf --grayscale --cropmarks --formatter=$_FOPROC 2>/dev/null | tail -n 1)
@@ -161,8 +161,8 @@ function test_pdfGrayscaleCropmarks () {
        ' └─ Building the PDF with --grayscale --cropmarks failed' \
        "$?"
     assertTrue \
-	" └─ The resulting file (${_PDF_BUILD_PATH}) does not exist" \
-	"[ -s $_PDF_BUILD_PATH ]"
+        " └─ The resulting file (${_PDF_BUILD_PATH}) does not exist" \
+        "[ -s $_PDF_BUILD_PATH ]"
 
    _PDF_NAME_PATH=$($_DAPSEXEC -v0 -d $_DCFILE pdf-name --grayscale --cropmarks --formatter=$_FOPROC 2>/dev/null)
    assertTrue \
@@ -181,11 +181,11 @@ function test_pdfGrayscaleCropmarks () {
     # Check for grayscale images (just check whether files have been created)
    _IMGDIR=$($_DAPSEXEC -d $_DCFILE showvariable VARIABLE=IMG_GENDIR 2>/dev/null)
     assertTrue \
-	' └─ Getting the image directory name failed' \
-	"$?"
+        ' └─ Getting the image directory name failed' \
+        "$?"
     assertTrue \
-	" └─ No grayscale images have been generated in ${_IMGDIR}/grayscale" \
-	"[ -n \"$(ls -A ${_IMGDIR}/grayscale 2>/dev/null)\" ]"
+        " └─ No grayscale images have been generated in ${_IMGDIR}/grayscale" \
+        "[ -n \"$(ls -A ${_IMGDIR}/grayscale 2>/dev/null)\" ]"
 
     # Check cropmarks (for XEP only)
     [[ fop == $_FOPROC ]] && startSkipping
@@ -193,12 +193,12 @@ function test_pdfGrayscaleCropmarks () {
     egrep -q -- "--param\s+\"crop\.marks=1\"" $_LOGFILE 2>/dev/null
     assertTrue \
        ' └─ Param crop.marks=1 is not specified when generating the FO-file' \
-       "$?"   
+       "$?"
 
     _PAGE_SIZE_BUILD=$(pdfinfo $_PDF_BUILD_PATH 2>/dev/null | awk '/^Page size:/ {print $3 $4 $5}')
     assertEquals \
-	' └─ PDF seems to be build without cropmarks' \
-	"$_PDF_SIZE_EXPECTED" "$_PDF_SIZE_BUILD"
+        ' └─ PDF seems to be build without cropmarks' \
+        "$_PDF_SIZE_EXPECTED" "$_PDF_SIZE_BUILD"
 
     endSkipping
 
@@ -286,12 +286,12 @@ function test_pdfName () {
 
     _PDF_BUILD_PATH=$($_DAPSEXEC -v0 -d $_DCFILE pdf --name $_NAME --formatter=$_FOPROC 2>/dev/null)
     assertTrue \
-	' └─ Building a pdf with --name failed ' \
+        ' └─ Building a pdf with --name failed ' \
        "$?"
 
    _PDF_NAME_PATH=$($_DAPSEXEC -v0 -d $_DCFILE pdf-name --name $_NAME 2>/dev/null)
    assertTrue \
-	' └─  Getting the filename for pdf with --name failed ' \
+        ' └─  Getting the filename for pdf with --name failed ' \
        "$?"
 
    assertEquals \
@@ -313,7 +313,7 @@ function test_pdfName () {
 
 #--------------------------------
 # * Does the --rootid option work correctly?
-# * Are parameters pass with --xsltparam correctly processed?
+# * Are parameters pass with --param correctly processed?
 #
 function test_pdfRootidXsltparam () {
     local _PAGECOUNT _PAGECOUNT_EXPECTED _PDF_FILENAME_EXPECTED
@@ -325,35 +325,35 @@ function test_pdfRootidXsltparam () {
 
     _PDF_FILENAME_EXPECTED=${_ROOTID}_color_en.pdf
 
-    _XSLTPARAM="'--param hyphenate.verbatim=0'"
+    _XSLTPARAM="hyphenate.verbatim=0"
 
     clean_build_dir fo
 
-    _PDF_BUILD_PATH=$($_DAPSEXEC -d $_DCFILE --debug pdf --formatter=$_FOPROC --rootid $_ROOTID --xsltparam="$_XSLTPARAM" 2>/dev/null | tail -n 1)
+    _PDF_BUILD_PATH=$($_DAPSEXEC -d $_DCFILE --debug pdf --formatter=$_FOPROC --rootid $_ROOTID --param "$_XSLTPARAM" --stringparam "foo=bar" --param="baz=0" --stringparam="jhas=78676" 2>/dev/null | tail -n 1)
     assertTrue \
-	' └─ Building a pdf with --rootid and --xsltparam failed ' \
+        ' └─ Building a pdf with --rootid and --param failed ' \
        "$?"
     egrep -q -- "--stringparam\s+\"rootid=$_ROOTID\"" $_LOGFILE 2>/dev/null
     assertTrue \
-	' └─ Stringparam for ROOTID is not correctly specified when generating the FO-file' \
-	"$?"
+        ' └─ Stringparam for ROOTID is not correctly specified when generating the FO-file' \
+        "$?"
 
     _PDF_FILENAME_BUILD=$(basename $_PDF_BUILD_PATH)
     assertEquals \
-	' └─ The resulting PDF filename does not match the ROOTID:' \
-	"$_PDF_FILENAME_EXPECTED" "$_PDF_FILENAME_BUILD"
+        ' └─ The resulting PDF filename does not match the ROOTID:' \
+        "$_PDF_FILENAME_EXPECTED" "$_PDF_FILENAME_BUILD"
 
     # check PDF page count
     _PAGECOUNT=$(pdfinfo $_PDF_BUILD_PATH | grep "Pages:" | sed 's/.*:  *//' 2>/dev/null)
     assertEquals \
-	' └─ PDF has wrong page count:' \
-	"$_PAGECOUNT_EXPECTED" "$_PAGECOUNT"
+        ' └─ PDF has wrong page count:' \
+        "$_PAGECOUNT_EXPECTED" "$_PAGECOUNT"
 
     # check xsltparam
     egrep -q -- "$_XSLTPARAM" $_LOGFILE 2>/dev/null
     assertTrue \
-	' └─ Param for XSLTPARAM is not correctly specified when generating the FO-file' \
-	"$?"
+        ' └─ Param for XSLTPARAM is not correctly specified when generating the FO-file' \
+        "$?"
 }
 
 # source shUnit2 test

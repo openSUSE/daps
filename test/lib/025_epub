@@ -192,17 +192,6 @@ function test_epubCSS () {
         " └─ The resulting ePUB does not include the CSS file specified on the command line ($_CSS_CMDL_NAME)." \
         "$?"
 
-    # Does the EPUB contain no css file with --css=none?
-    #
-
-    clean_build_dir tmp
-
-    _EPUB_BUILD_PATH=$($_DAPSEXEC -d $_DCFILE epub --css=none 2>/dev/null)
-
-    unzip -l $_EPUB_BUILD_PATH 2>/dev/null | grep "\.css" >/dev/null 2>&1
-    assertFalse \
-        " └─ The resulting ePUB includes a CSS file, although --css=none ." \
-        "$?"
 }
 
 

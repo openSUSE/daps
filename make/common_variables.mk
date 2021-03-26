@@ -274,8 +274,8 @@ DIRECTORIES := $(PROFILEDIR) $(TMP_DIR) $(RESULT_DIR) $(IMG_DIRECTORIES)
 # DOCNAME: Filename of the resulting document
 #
 
-ifdef PDFNAME
-  DOCNAME   := $(PDFNAME)
+ifdef OUTPUTNAME
+  DOCNAME   := $(OUTPUTNAME)
 else
   ifdef ROOTID
     DOCNAME := $(ROOTID)

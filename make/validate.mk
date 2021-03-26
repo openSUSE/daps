@@ -11,6 +11,11 @@
 # Use xmllint for DocBook 4 and jing for DocBook 5
 # (xmllint -> DTD, jing Relax NG)
 
+# search for IDS with characters that are not A-Z, a-z, 0-9, or -
+ifeq "$(strip $(VALIDATE_IDS))" "1"
+  FAULTY_IDS = $(shell $(XSLTPROC) --xinclude --stylesheet $(DAPSROOT)/daps-xslt/common/get-all-xmlids.xsl --file $(MAIN) $(XSLTPROCESSOR) | grep -P '[^-a-zA-Z0-9]')
+endif
+
 ifeq "$(suffix $(DOCBOOK5_RNG))" ".rnc"
   JING_FLAGS += -c
 endif
@@ -30,7 +35,7 @@ ifeq "$(NOREFCHECK)" "1"
 endif
 
 .PHONY: validate
-$(PROFILEDIR)/.validate validate: $(PROFILES)
+  $(PROFILEDIR)/.validate validate: $(PROFILES)
   ifeq "$(VERBOSITY)" "2"
 	@ccecho "info" "   Validating..."
   endif
@@ -47,7 +52,24 @@ $(PROFILEDIR)/.validate validate: $(PROFILES)
 	@ccecho "info" "   Successfully validated profiled sources."
     endif
   endif
-
+  ifeq "$(strip $(VALIDATE_IMAGES))" "1"
+    ifneq "$(strip $(DOUBLE_IMG))" ""
+	@ccecho "warn" "Warning: Image names not unique$(COMMA) multiple sources available for the following images::"
+	@echo -e "$(subst $(SPACE),\n,$(sort $(DOUBLE_IMG)))"
+    endif
+    ifneq "$(strip $(MISSING_IMG))" ""
+	@ccecho "error" "Fatal error: The following images are missing:"
+	@echo -e "$(subst $(SPACE),\n,$(sort $(MISSING_IMG)))"
+	@exit 1
+    endif
+  endif
+  ifeq "$(strip $(VALIDATE_IDS))" "1"
+    ifneq "$(strip $(FAULTY_IDS))" ""
+	@ccecho "error" "Fatal error: The following IDs contain unwanted characters:"
+	@echo -e "$(subst $(SPACE),\n,$(sort $(FAULTY_IDS)))"
+	@exit 1
+    endif
+  endif
 #	@echo "checking for unexpected characters: ... "
 #	egrep -n "[^[:alnum:][:punct:][:blank:]]" $(SRCFILES) && \
 #	    echo "Found non-printable characters" || echo "OK"

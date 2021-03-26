@@ -24,7 +24,7 @@ function build_man {
     eval set -- "$P_REMAIN_ARGS"
 
     #------ Computing the values returned from the parser -----
-    if [[ 1 = "$P_HELP" ]]; then
+    if [[ 1 -eq $P_HELP ]]; then
         help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
         help_help
         help_nogzip
@@ -36,13 +36,6 @@ function build_man {
         echo
         exit 0
     fi
-
-    [[ -n "$P_NOGZIP" ]]     && export GZIP_MAN="no"
-    [[ -n "$P_NOREFCHECK" ]] && export NOREFCHECK="1"
-    [[ -n "$P_ROOTID" ]]     && export ROOTID="$P_ROOTID"
-    [[ -n "$P_SUBDIRS" ]]    && export MAN_SUBDIRS="yes"
-    [[ -n "$P_PARAMS" ]]       && export PARAMS="$P_PARAMS"
-    [[ -n "$P_STRINGPARAMS" ]] && export STRINGPARAMS="$P_STRINGPARAMS"
 
     call_make "$SUB_CMD" "$@"
 }

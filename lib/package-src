@@ -24,7 +24,7 @@ function package-src {
     eval set -- "$P_REMAIN_ARGS"
 
     #------ Computing the values returned from the parser -----
-    if [[ 1 = "$P_HELP" ]]; then
+    if [[ 1 -eq $P_HELP ]]; then
         help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
         help_def-file
         help_help
@@ -36,23 +36,9 @@ function package-src {
         exit 0
     fi
 
-    [[ 1 = "$P_IS_LOCDROP" ]] && export IS_LOCDROP=1
-    [[ -n "$P_NAME" ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
-    [[ 1 = "$P_OPTIPNG" ]]    && export OPTIPNG=1
 
-    if [[ -n "$P_DEF_FILE" ]]; then
-        if [[ -f $P_DEF_FILE ]]; then
-            export DEF_FILE="$P_DEF_FILE"
-        else
-            exit_on_error "Cannot find DEF file \"$P_DEF_FILE\""
-        fi
-    else
-        [[ 0 != "$VERBOSITY" ]] && ccecho "warn" "Warning: No DEF file was specified"
-    fi
-
-    if [[ -n "$P_SETDATE" ]]; then
-        SETDATE=$(date -d "$P_SETDATE" +"%b %d %Y" 2>/dev/null) || exit_on_error "Wrong value for set-date: must be in a \"date\" compatible format,\ne.g. \"YYYY-MM-DD\"!"
-        export SETDATE
+    if [[ -z "$DEF_FILE" ]]; then
+        [[ 0 -ne $VERBOSITY ]] && ccecho "warn" "Warning: No DEF file was specified"
     fi
 
     call_make "$SUB_CMD" "$@"

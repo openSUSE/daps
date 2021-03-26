@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet
- href="urn:x-daps:xslt:profiling:docbook45-profile.xsl" 
+ href="urn:x-daps:xslt:profiling:docbook45-profile.xsl"
  type="text/xml"
  title="Profiling step"?>
 <!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.docbook.org/xml/4.5/docbookx.dtd"
@@ -56,18 +56,16 @@
   <para>The options pass on values for XSLT parameters directly to the XSLT processor, which is
   useful to temporarily overwrite style sheet parameters such as margins.
   </para>
-  
+
   <note>
-   <title><parameter>XSLTPARAM</parameter> And <option>--xsltparam</option></title>
-   <para>For compatibility reasons, &dapsacr; still supports the use of
-     the <option>--xsltparam</option> command-line option, but it will be removed in future
-    versions. Use <option>--param "KEY=VALUE"</option> or <option>--stringparam "KEY=VALUE"</option>
-    instead.</para>
-   <para>However, if you want to specify your settings in the &dc; file instead of using the
-    command line options, the respective parameter is still named
-    <parameter>XSLTPARAM</parameter>.</para>
+   <title><parameter>XSLTPARAM</parameter> And <option>--param</option>/<option>--stringparam</option></title>
+   <para>Use <option>--param "KEY=VALUE"</option> or <option>--stringparam "KEY=VALUE"</option>
+    to set XSLT parameters on the command line.</para>
+   <para>However, if you want to specify your settings in the &dc; file
+   instead, the respective parameter is named
+   <parameter>XSLTPARAM</parameter>.</para>
   </note>
-  
+
   <para>
    For larger or more complex modifications, such as adjustments of the
    title page layout, for example, it is advisable to create your own set
@@ -76,7 +74,7 @@
 
   <para>
    For a list of XSLT parameters to modify, refer to one of the following references at
-   <ulink 
+   <ulink
    url="http://docbook.sourceforge.net/release/xsl/current/doc/index.html"/>:
   </para>
 
@@ -154,13 +152,13 @@
    </para>
    <screen>XSLTPARAM="--stringparam&nbsp;<replaceable>PARAM_NAME</replaceable>=<replaceable>VALUE</replaceable> --param&nbsp;<replaceable>PARAM_NAME</replaceable>=<replaceable>VALUE</replaceable>"</screen>
    <para>
-    or in multiple lines:
+    or in multiple lines (using <literal>+=</literal> on subsequent rows):
    </para>
    <screen>XSLTPARAM="--stringparam&nbsp;<replaceable>PARAM_NAME</replaceable>=<replaceable>VALUE</replaceable>"
-XSLTPARAM="$XSLTPARAM --param&nbsp;<replaceable>PARAM_NAME</replaceable>=<replaceable>VALUE</replaceable>"</screen>
+XSLTPARAM+="$XSLTPARAM --param&nbsp;<replaceable>PARAM_NAME</replaceable>=<replaceable>VALUE</replaceable>"</screen>
   </example>
  </sect1>
- 
+
  <sect1 id="sec.daps.user.layout.txt">
   <title>Specifying the Layout for ASCII Text Output</title>
   <para>You can set parameters in &dapsconf-sys; or &dapsconf-user; using the
@@ -173,7 +171,7 @@ XSLTPARAM="$XSLTPARAM --param&nbsp;<replaceable>PARAM_NAME</replaceable>=<replac
    <option>--ignore-styleroot</option> option on the command line: </para>
   <screen>&prompt.user;&dapscmd; -d <replaceable>PATH_TO_DC_FILE</replaceable> text --ignore-styleroot</screen>
  </sect1>
- 
+
  <sect1 id="sec.daps.user.layout.styleheets">
   <title>Customizing the DocBook Stylesheets</title>
   <para>
@@ -184,9 +182,9 @@ XSLTPARAM="$XSLTPARAM --param&nbsp;<replaceable>PARAM_NAME</replaceable>=<replac
   </para>
   <important>
     <para>
-	  The reader should be aware of that some knowledge about XSLT is needed.
-	  Basic customizations like parameter changes can be done by simple adding
-	  a line with:
+          The reader should be aware of that some knowledge about XSLT is needed.
+          Basic customizations like parameter changes can be done by simple adding
+          a line with:
       <screen>&lt;xsl:param name="PARAMETER_NAME" select="VALUE"/></screen>
       The available parameters are format dependent and are listed in the
       <ulink url="http://docbook.sourceforge.net/release/xsl/current/doc/param.html">"XSL Stylesheets Reference Documentation"</ulink>.
@@ -217,7 +215,7 @@ XSLTPARAM="$XSLTPARAM --param&nbsp;<replaceable>PARAM_NAME</replaceable>=<replac
   </example>
 
     Finaly include the <varname>STYLEROOT</varname> variable in your DC files,
-    pointing to the xslt directory. 
+    pointing to the xslt directory.
   </para>
   <note>
     <para>
@@ -275,8 +273,8 @@ XSLTPARAM="$XSLTPARAM --param&nbsp;<replaceable>PARAM_NAME</replaceable>=<replac
    Useful tips and tricks on using DocBook and the DocBook stylesheets
    can be found in <citetitle>The DoCookBook&mdash;Recipes for DocBook
    Developers and Writers</citetitle>, available at
-   <ulink url="http://doccookbook.sourceforge.net/"></ulink> and in 
-   <citetitle>DocBook XSL Stylesheets: Reference Documentation</citetitle> 
+   <ulink url="http://doccookbook.sourceforge.net/"></ulink> and in
+   <citetitle>DocBook XSL Stylesheets: Reference Documentation</citetitle>
    available at <ulink url="http://docbook.sourceforge.net/release/xsl/current/doc/index.html"></ulink>.
   </para>
  </sect1>

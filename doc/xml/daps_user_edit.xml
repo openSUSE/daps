@@ -208,9 +208,9 @@
   </para>
 
   <note>
-   <title><command>checklink</command> follows XIncludes</title>
+   <title><command>linkcheck</command> follows XIncludes</title>
    <para>
-    The <command>checklink</command> command always follows
+    The <command>linkcheck</command> command always follows
     <sgmltag>xi:include</sgmltag> statements, even when using the
     <option>--file</option> option.
    </para>
@@ -220,7 +220,7 @@
    <varlistentry>
     <term>Checking Links in a Documentation Project</term>
     <listitem>
-<screen>&prompt.user;&dapscmd; -d <replaceable>PATH_TO_&dc;_FILE</replaceable> checklink</screen>
+<screen>&prompt.user;&dapscmd; -d <replaceable>PATH_TO_&dc;_FILE</replaceable> linkcheck</screen>
      <para>
       Uses the ROOTID defined in the specified &dc; file as a starting point.
       Checks the <sgmltag>ulink</sgmltag> elements in all files belonging to
@@ -239,13 +239,13 @@
       so, specify the ID of the respective element with the
       <option>--rootid</option> option:
      </para>
-<screen>&prompt.user;&dapscmd; -d <replaceable>PATH_TO_&dc;_FILE</replaceable> checklink --rootid=<replaceable>ID</replaceable>&nbsp;</screen>
+<screen>&prompt.user;&dapscmd; -d <replaceable>PATH_TO_&dc;_FILE</replaceable> linkcheck --rootid=<replaceable>ID</replaceable>&nbsp;</screen>
     </listitem>
    </varlistentry>
    <varlistentry>
     <term>Checking Links in a Single XML File</term>
     <listitem>
-<screen>&prompt.user;&dapscmd; -d <replaceable>PATH_TO_&dc;_FILE</replaceable> checklink --file=<replaceable>PATH_TO_XML_FILE</replaceable>&nbsp;</screen>
+<screen>&prompt.user;&dapscmd; -d <replaceable>PATH_TO_&dc;_FILE</replaceable> linkcheck --file=<replaceable>PATH_TO_XML_FILE</replaceable>&nbsp;</screen>
      <para>
       Checks the <sgmltag>ulink</sgmltag> elements in the specified file. Upon
       completion, &dapsacr; returns an HTML file with a list of all
@@ -257,7 +257,7 @@
   </variablelist>
 
   <figure id="fig.daps.user.edit.chklink">
-   <title>Example Output of <command>daps checklink</command></title>
+   <title>Example Output of <command>daps linkcheck</command></title>
    <mediaobject>
     <imageobject role="fo">
      <imagedata fileref="daps_chklink_report.png" width="90%"/>
@@ -275,7 +275,7 @@
     as an argument for a browser (for example, the command line Web browser
     <command>w3m</command>):
    </para>
-   <screen>&prompt.user;<command>w3m</command> -dump $(&dapscmd; -d <replaceable>PATH_TO_&dc;_FILE</replaceable> checklink)</screen>
+   <screen>&prompt.user;<command>w3m</command> -dump $(&dapscmd; -d <replaceable>PATH_TO_&dc;_FILE</replaceable> linkcheck)</screen>
   </tip>
  </sect1>
  <sect1 id="sec.daps.user.edit.profile">

@@ -30,16 +30,12 @@ function spellcheck {
     eval set -- "$P_REMAIN_ARGS"
 
     # checker was provided on the command line
-    if [[ -n "$P_SPELL_CHECKER" ]]; then
+    if [[ -n "$SPELL_CHECKER" ]]; then
         # check whether the given spellchecker is valid
-        [[ "aspell" = $P_SPELL_CHECKER || "hunspell" = $P_SPELL_CHECKER ]] || \
+        [[ "aspell" = $SPELL_CHECKER || "hunspell" = $SPELL_CHECKER ]] || \
             exit_on_error "Wrong value for --spellchecker. Needs to be \"aspell\" or \"hunspell\""
         # check whether given spellchecker is installed:
-        if [[ $(which  --skip-alias --skip-functions "$P_SPELL_CHECKER" 2>/dev/null) ]]; then
-            SPELL_CHECKER="$P_SPELL_CHECKER"
-        else
-            ccecho "error" "Error: '$P_SPELL_CHECKER' is not installed"
-        fi
+        [[ $(which --skip-alias --skip-functions "$SPELL_CHECKER" 2>/dev/null) ]] || ccecho "error" "Error: '$SPELL_CHECKER' is not installed"
     else
         if [[ -z "$SPELL_CHECKER" ]]; then
             # no spell checker defined in the configs or on the command line
@@ -54,7 +50,7 @@ function spellcheck {
     fi
 
     #------ Computing the values returned from the parser -----
-    if [[ 1 = "$P_HELP" ]]; then
+    if [[ 1 -eq $P_HELP ]]; then
         help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
         help_extra-dict
         help_file
@@ -67,24 +63,20 @@ function spellcheck {
         exit 0
     fi
 
-    [[ -n "$P_SPELL_EXTRA_DICT" ]] && SPELL_EXTRA_DICT="$P_SPELL_EXTRA_DICT"
     [[ -n "$P_FILE" ]] && FILELIST[0]="$P_FILE"
-    [[ 1 = "$P_LIST" ]] && LISTMODE=1
 
     # set FILELIST if rootid was specified
     if [[ -z "$P_ROOTID" && -z "$P_FILE" ]]; then
-        if [[ 0 != $VERBOSITY ]]; then
+        if [[ 0 -ne $VERBOSITY ]]; then
             ccecho "info" "Neither file nor rootid specified, using rootid from DC-file"
         fi
     elif [[ -n "$P_ROOTID" && -n "$P_FILE" ]]; then
         exit_on_error "Options --file and --rootid exclude one another.\nPlease specify only one of these options"
     fi
 
-    [[ -n "$P_ROOTID" ]] && export ROOTID="$P_ROOTID"
-
     if [[ -z "${FILELIST[0]}" ]]; then ## --file was not specified
         FILELIST=( $(call_make list-srcfiles silent LIST_NODC=1 LIST_NOENT=1 LIST_NOIMG=1 ) )
-        if [[ 0 != $? ]]; then
+        if [[ 0 -ne $? ]]; then
             exit_on_error "Failed to get filelist for ROOTID \"$ROOTID\""
         fi
     fi
@@ -152,12 +144,12 @@ function spellcheck {
     esac
 
     # show spellchecker command with --debug
-    [[ 1 = "$DEBUG" ]] && echo "DEBUG: $SPELLCMD"
+    [[ 1 -eq $DEBUG ]] && echo "DEBUG: $SPELLCMD"
 
     # do spellchecking on the list of files
     for FILE in "${FILELIST[@]}"; do
         test -f "$FILE" || ccecho "warn" "File $FILE does not exist"
-        if [[ 1 = "$LISTMODE" ]]; then
+        if [[ 1 -eq $LISTMODE ]]; then
             LISTOUTPUT=$($SPELLCMD $LIST_PARAM < "$FILE" | sort -u 2>/dev/null)
             [[ -n "$LISTOUTPUT" ]] && echo -e "$FILE\n------------------------------\n$LISTOUTPUT\n"
             LISTOUTPUT=""

@@ -34,10 +34,10 @@
 #################################
 
 
-ifndef LOCDROP_EXPORT_DIR
+ifeq "$(strip $(EXPORT_DIR))" ""
   LOCDROP_EXPORT_BOOKDIR := $(RESULT_DIR)/locdrop
 else
-  LOCDROP_EXPORT_BOOKDIR := $(addsuffix /$(DOCNAME),$(LOCDROP_EXPORT_DIR))
+  LOCDROP_EXPORT_BOOKDIR := $(addsuffix /$(DOCNAME),$(EXPORT_DIR))
 endif
 
 #------------------
@@ -161,9 +161,9 @@ locdrop: $(SRCFILES) $(MANIFEST_TRANS) $(MANIFEST_NOTRANS) $(USED_ALL) $(PROFILE
   ifndef DOCCONF
 	$(error $(shell ccecho "error" "Fatal error: locdrop is only supported when using a DC-file"))
   endif
-  ifneq "$(strip $(MISSING))" ""
+  ifneq "$(strip $(MISSING_IMG))" ""
 	@ccecho "error" "Fatal error: The following images are missing:"
-	@echo -e "$(subst $(SPACE),\n,$(sort $(MISSING)))"
+	@echo -e "$(subst $(SPACE),\n,$(sort $(MISSING_IMG)))"
 	$(error )
   endif
   ifneq "$(strip $(NO_TRANS_BOOK))" ""

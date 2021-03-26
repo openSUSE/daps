@@ -44,9 +44,9 @@ ifdef IS_LOCDROP
   package-src: MFT_NOTRANS := $(wildcard $(addprefix $(DOC_DIR)/,$(notdir $(MANIFEST_NOTRANS))))
 endif
 package-src: $(PROFILES) $(PROFILEDIR)/.validate
-  ifdef MISSING
+  ifneq "$(strip $(MISSING_IMG))" ""
 	@ccecho "error" "Fatal error: The following images are missing:"
-	@echo -e "$(subst $(SPACE),\n,$(sort $(MISSING)))"
+	@echo -e "$(subst $(SPACE),\n,$(sort $(MISSING_IMG)))"
 	exit 1
   else
     ifeq "$(strip $(SRC_FORMAT))" "adoc"
@@ -85,9 +85,9 @@ ifeq "$(PAGEFILES)" "1"
   package-pdf: $(PAGEFILES_RESULT)
 endif
 package-pdf: $(PDF_RESULT)
-  ifdef MISSING
+  ifneq "$(strip $(MISSING_IMG))" ""
 	@ccecho "error" "Fatal error: The following images are missing:"
-	@echo -e "$(subst $(SPACE),\n,$(sort $(MISSING)))"
+	@echo -e "$(subst $(SPACE),\n,$(sort $(MISSING_IMG)))"
 	exit 1
   else
 	cp $(PDF_RESULT) $(PACKAGE_PDF_RESULT)
@@ -112,9 +112,9 @@ ifeq "$(PAGEFILES)" "1"
   package-html: $(PAGEFILES_RESULT)
 endif
 package-html: html
-  ifdef MISSING
+  ifneq "$(strip $(MISSING_IMG))" ""
 	@ccecho "error" "Fatal error: The following images are missing:"
-	@echo -e "$(subst $(SPACE),\n,$(sort $(MISSING)))"
+	@echo -e "$(subst $(SPACE),\n,$(sort $(MISSING_IMG)))"
 	exit 1
   else
 	BZIP2="--best" tar cfhj $(PACKAGE_HTML_RESULT) -C $(dir $(HTML_DIR)) $(notdir $(HTML_DIR:%/=%))
@@ -130,9 +130,9 @@ package-html: html
 dist-webhelp: | $(PACK_DIR)
 dist-webhelp: TARBALL := $(PACK_DIR)/$(DOCNAME)$(LANGSTRING)-webhelp.tar.bz2
 dist-webhelp: webhelp
-  ifdef MISSING
+  ifneq "$(strip $(MISSING_IMG))" ""
 	@ccecho "error" "Fatal error: The following images are missing:"
-	@echo -e "$(subst $(SPACE),\n,$(sort $(MISSING)))"
+	@echo -e "$(subst $(SPACE),\n,$(sort $(MISSING_IMG)))"
 	exit 1
   else
 	BZIP2="--best" tar cfhj $(TARBALL) --exclude-vcs \

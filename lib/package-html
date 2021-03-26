@@ -24,7 +24,7 @@ function package-html {
     eval set -- "$P_REMAIN_ARGS"
 
     #------ Computing the values returned from the parser -----
-    if [[ 1 = "$P_HELP" ]]; then
+    if [[ 1 -eq $P_HELP ]]; then
         help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
         help_css
         help_desktopfiles
@@ -46,34 +46,12 @@ function package-html {
     fi
 
 
-    [[ 1 = "$P_DESKTOPFILES" ]]  && export export DESKTOPFILES=1
-    [[ 1 = "$P_DOCUMENTFILES" ]] && export export DOCUMENTFILES=1
-    [[ 1 = "$P_PAGEFILES" ]]     && export export PAGEFILES=1
-    [[ 1 = "$P_HTML5" ]]         && export HTML5=1
     [[ -n "$P_CSS" ]]          && export HTML_CSS="$P_CSS"
-    [[ -n "$P_NAME" ]]         && export PDFNAME="$P_NAME" BOOK="$P_NAME"
-    [[ -n "$P_ROOTID" ]]       && export ROOTID="$P_ROOTID"
-    [[ -n "$P_STATIC_DIR" ]]   && export STATIC_DIR="$P_STATIC_DIR"
-    [[ -n "$P_PARAMS" ]]       && export PARAMS="$P_PARAMS"
-    [[ -n "$P_STRINGPARAMS" ]] && export STRINGPARAMS="$P_STRINGPARAMS"
-    [[ -n "$P_XSLTPARAM" ]]    && export XSLTPARAM="$XSLTPARAM $P_XSLTPARAM"
 
     # We always want to start with a clean HTML result directory for
     # package-html
     #
     [[ "package-html" = "$SUB_CMD" ]] && export CLEAN_DIR=1
-
-    if [[ 1 = "$P_HTMLSINGLE" && 1 = "$P_JSP" ]]; then
-    exit_on_error "--single and --jsp are mutually exclusive"
-    else
-    [[ 1 = "$P_HTMLSINGLE" ]] && export HTMLSINGLE=1
-    [[ 1 = "$P_JSP" ]]        && export JSP=1
-    fi
-
-    if [[ -n "$P_SETDATE" ]]; then
-        SETDATE=$(date -d "$P_SETDATE" +"%b %d %Y" 2>/dev/null) || exit_on_error "Wrong value for set-date: must be in a \"date\" compatible format,\ne.g. \"YYYY-MM-DD\"!"
-        export SETDATE
-    fi
 
     call_make "$SUB_CMD" "$@"
 }
