@@ -43,7 +43,8 @@ ADOC_OVERRIDABLE_ATTRIBUTES := --attribute="idprefix=id-@" \
 # DAPS produce correct links.
 
 ADOC_DEFAULT_ATTRIBUTES := --attribute=data-uri! \
-			   --attribute=imagesdir!
+			   --attribute=imagesdir! \
+			   --attribute=attribute-missing=warn
 
 # If ASCIICoc attrributes are specified with the DAPS command line or
 # via the DC file, the asciidoc attribute "daps-adoc-attributes"
