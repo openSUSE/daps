@@ -172,17 +172,90 @@
     </xsl:if>
   </xsl:template>
 
-  <xsl:template match="d:formalpara[d:para/d:screen]">
+
+  <!--
+  A correctly-formatted AsciiDoc example with a screen would look like this
+  (be aware that the − characters are minuses, not normal hyphens, do not
+  copy the examples!):
+
+      .Title of example 1 (correct)
+      ====
+      −−−−
+      command -option='value'
+      −−−−
+      ====
+
+  => <example><title>Title...</title><screen>command...</screen></example>
+
+
+
+  However, authors are creative and came up with the following variants as well:
+
+      .Title of example 2 (bad)
+      −−−−
+      command -option='value'
+      −−−−
+
+  => <formalpara><title>Title...</title><screen>command...</screen></formalpara>
+
+
+      ====
+      .Title of example 3 (bad)
+      −−−−
+      command -option='value'
+      −−−−
+      ====
+
+  => <informalexample><formalpara><title>Title...</title><screen>command...</screen></formalpara></informalexample>
+
+
+  While the syntax of example (2) does not support more elements before/after
+  the screen, example (3) unfortunately does. For example, there could be
+  multiple formalparas that are generated within the `====` block of
+  example (3). This would mean, we may need to apply both the rule for
+  example (3) and the rule for example (2) successively.
+
+  -->
+
+  <xsl:template match="d:formalpara[d:para/d:screen|
+                                    d:para/d:literallayout[@class='monospaced']]">
     <xsl:element name="example" namespace="&db5ns;">
-      <xsl:apply-templates select="@*|d:title|d:para/*"/>
+      <xsl:apply-templates select="d:title"/>
+      <!-- The following apply-templates is not relevant for any of the cases
+      we know, it is meant as a defensive measure against unknown cases. The
+      output of the templates is unlikely to correctly order para content and
+      the screen but at least we get it all into the output document. -->
+      <xsl:apply-templates select="d:para" mode="exclude-verbatim"/>
+      <xsl:apply-templates select="d:para/d:screen|
+                                   d:para/d:literallayout[@class='monospaced']"/>
     </xsl:element>
   </xsl:template>
 
-  <xsl:template match="d:informalexample[d:formalpara[d:para/d:screen]]">
+  <xsl:template match="d:informalexample[d:*[1][self::d:formalpara]
+                                         [d:para/d:screen|
+                                          d:para/d:literallayout[@class='monospaced']]]">
     <xsl:element name="example" namespace="&db5ns;">
-      <xsl:apply-templates select="@*|d:formalpara/d:title|d:formalpara/d:para/*"/>
-      <xsl:apply-templates select="*[not(self::d:formalpara)]"/>
+      <xsl:apply-templates select="@*"/>
+      <xsl:apply-templates select="d:formalpara[1]/d:title"/>
+      <!-- The following apply-templates is not relevant for any of the cases
+      we know, it is meant as a defensive measure against unknown cases. The
+      output of the templates is unlikely to correctly order para content and
+      the screen but at least we get it all into the output document. -->
+      <xsl:apply-templates select="d:formalpara[1]/d:para" mode="exclude-verbatim"/>
+      <xsl:apply-templates select="d:formalpara[1]/d:para/d:screen|
+                                   d:formalpara[1]/d:para/d:literallayout[@class='monospaced']"/>
+      <xsl:apply-templates select="d:*[position() > 1]|node()[not(*)]"/>
     </xsl:element>
+  </xsl:template>
+
+  <xsl:template match="d:para" mode="exclude-verbatim">
+    <xsl:if test="*[not(self::d:screen|self::d:literallayout[@class='monospaced'])] or
+                  text()[normalize-space(.) != '']">
+      <xsl:copy>
+        <xsl:apply-templates select="@*|node()[not(self::d:screen|
+                                                   self::d:literallayout[@class='monospaced'])]"/>
+      </xsl:copy>
+    </xsl:if>
   </xsl:template>
 
 </xsl:stylesheet>
