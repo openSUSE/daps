@@ -115,8 +115,7 @@ endif
 
 # Entity files
 #
-ENTITIES_DOC := $(addprefix $(DOC_DIR)/xml/,\
-	      $(shell $(LIBEXEC_DIR)/getentityname.py $(DOCFILES) 2>/dev/null))
+ENTITIES_DOC := $(shell $(LIBEXEC_DIR)/getentityname.py $(DOCFILES) 2>/dev/null)
 
 
 # files xi:included with parse="text"
