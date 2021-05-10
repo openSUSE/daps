@@ -33,17 +33,17 @@
 #
 # * comments on the same line will be cut
 # * comment characters (#) in values are not supported !!!
-#   ** the value will be cut at the first occurence of #
+#   ** the value will be cut at the first occurrence of #
 #   ** \\\# is supported and will be transferred to \#
 #
 # Concatenating values:
 #
 # It is possible to add additional VALUES to an already existing
-# KEY with the "+=" notation. This is e.g. useful to increase
+# KEY with the "+=" notation. This is e. g. useful to increase
 # readability when VALUE is rather log:
 #
 # XSLTPARAM = '--stringparam "foo=bar"'
-# XSLTPARAM += '--strinparam "baz=foo"
+# XSLTPARAM += '--stringparam "baz=foo"
 #
 # The same rules as for regular KEY/VALUE pairs apply
 #
@@ -54,10 +54,10 @@
 #
 # Override any setting below in
 # $HOME/.config/daps/dapsrc (also see section "Syntax" above)
-# or on the commandline
+# or on the command line
 #------------------------------------------------------------
 #
-# The environment is set up using the following hierachy
+# The environment is set up using the following hierarchy
 # (command line always wins)
 #
 # 1. Command line
@@ -67,16 +67,16 @@
 
 ## Key: ADOC_FAILURE_LEVEL
 ## -----------------------
-## Description: Asciidoctor error level on which DAPS will exit
+## Description: AsciiDoctor error level on which DAPS will exit
 ##              when processing adoc files
 ## Type:        String
 ## VALUE:       FATAL|ERROR|WARN|INFO (empty value not allowed)
 ## Default:     WARN
 #
-# By default, asciidoctor only returns != 0 on FATAL errors. However, when
+# By default, AsciiDoctor only returns != 0 on FATAL errors. However, when
 # converting to DocBook, errors of the level WARN usually prevent from
 # generating valid DocBook. Therefore DAPS sets the failure level to WARN and
-# therefore exits on asciidictor error levels FATAL, ERROR, and WARN.
+# therefore exits on AsciiDoctor error levels FATAL, ERROR, and WARN.
 #
 # It is recommended to keep the default. If required, override it in a DC-file
 #
@@ -84,13 +84,13 @@ ADOC_FAILURE_LEVEL="WARN"
 
 ## Key: ADOC_IMG_DIR
 ## --------------------
-## Description: Directory hosting images for the ASCIIDOC documents
+## Description: Directory hosting images for the AsciiDoc documents
 ## Type:        absolute path
 ## Default:     ""
 #
 # If set, DAPS will automatically generate the image structure
 # required for XML processing. The directory needs to host all
-# images on a flat level; subdirectoriues will be ignored
+# images on a flat level; subdirectories will be ignored
 #
 # Set this value in a DC-file or on the command-line with
 # --adocimgdir
@@ -99,13 +99,13 @@ ADOC_IMG_DIR=""
 
 ## Key: ADOC_POST
 ## --------------------
-## Description: Do postprocessing on asciidoctor-generated XML?
+## Description: Do post-processing on AsciiDoctor-generated XML?
 ## Type:        yesno
 ## Default:     "no"
 #
 # If set to "yes", the DocBook XML asciidoctor produces
 # will be processed again by a stylesheet defined with ADOC_POST_STYLE
-# Only valid for ASCIIDOC sources
+# Only valid for AsciiDoc sources
 #
 # See also: ADOC_POST_STYLE
 #
@@ -115,8 +115,8 @@ ADOC_POST="no"
 
 ## Key: ADOC_POST_STYLE
 ## --------------------
-## Description: Path to the stylesheet for postprocessing the DocBook
-## XML ascidoctor produces
+## Description: Path to the stylesheet for post-processing the DocBook
+## XML AsciiDoctor produces
 ## Type:        path to stylesheet
 ## Default:     "@pkgdatadir@/daps-xslt/asciidoc/postprocess.xsl"
 #
@@ -144,7 +144,7 @@ ADOC_POST_STYLE="@pkgdatadir@/daps-xslt/asciidoc/postprocess.xsl"
 # If set to "yes", the DocBook XML asciidoctor produces
 # will be processed again by a stylesheet defined with ADOC_SET_STYLE
 # and turned into a DocBook set. This requires an AsciiDoc multipart book.
-# Only valid for ASCIIDOC sources
+# Only valid for AsciiDoc sources
 #
 # See also: ADOC_SET_STYLE
 #
@@ -153,7 +153,7 @@ ADOC_SET="no"
 
 ## Key: ADOC_SET_STYLE
 ## --------------------
-## Description: Path to the stylesheet that creates a DcoBook set from
+## Description: Path to the stylesheet that creates a DocBook set from
 ## an AsciiDoc multipart book
 ## Type:        path to stylesheet
 ## Default:     "@pkgdatadir@/daps-xslt/asciidoc/setify.xsl"
@@ -170,7 +170,7 @@ ADOC_SET_STYLE="@pkgdatadir@/daps-xslt/asciidoc/setify.xsl"
 ## Key: ADOC_TYPE
 ## --------------------
 ## Description: Document type that will be generated when processing
-##              an ASCIIDOC document
+##              an AsciiDoc document
 ##              adoc to DocBook5
 ## Type:        String 
 ## Default:     article
@@ -275,7 +275,7 @@ DIA_OPTIONS="-t cairo-svg"
 
 ## Key: DOCBOOK4_STYLE_URI
 ## ------------------
-## Description: URI to DocBook 4 stlysheets
+## Description: URI to DocBook 4 stylesheets
 ## Type:        URI
 ## Default:     "http://docbook.sourceforge.net/release/xsl/current/"
 #
@@ -294,7 +294,7 @@ DOCBOOK4_STYLE_URI="http://docbook.sourceforge.net/release/xsl/current/"
 
 ## Key: DOCBOOK5_STYLE_URI
 ## ------------------
-## Description: URI to DocBook 5 stlysheets
+## Description: URI to DocBook 5 stylesheets
 ## Type:        URI
 ## Default:     "http://docbook.sourceforge.net/release/xsl-ns/current/"
 #
@@ -354,11 +354,11 @@ DRAFT_STR="_draft"
 
 ## Key:         EPUB_CHECK
 ## ------------------------
-## Description: Check generated ePUB file with epubcheck
+## Description: Check generated EPUB file with epubcheck
 ## Type:        yesno
 ## Default:     "no"
 #
-# Useful to find errors within an epub file when devolping stylesheets
+# Useful to find errors within an EPUB file when developing stylesheets
 #
 EPUBCHECK="no"
 
@@ -379,11 +379,11 @@ EPUB_CSS=""
 # When having specified custom stylesheets with STYLEROOT, the fallback
 # for styles not specified in the custom STYLEROOT are the DocBook stylesheets
 # Specify an alternative fallback with this option. Useful if you have a
-# fork of e.g. your custom fo stylesheets. When setting STYLEROOT to this
-# for directory that only has fo styles, html versions of that document would
+# fork of e.g. your custom FO stylesheets. When setting STYLEROOT to this
+# for directory that only has FO styles, HTML versions of that document would
 # be build with the DocBook stylesheets. Setting FALLBACK_STYLEROOT to the
 # directory containing your original custom stylesheets (which also have
-# html stylesheets) will create html versions with your custom styles. The
+# HTML stylesheets) will create HTML versions with your custom styles. The
 # DocBook stylesheets remain as a last fallback resort.
 #
 # This option is ignored when not specifying STYLEROOT at the same time.
@@ -393,7 +393,7 @@ FALLBACK_STYLEROOT=""
 
 ## Key:         FOP_CONFIG_FILE
 ## -----------------------
-## Description: Config file for the FOP pdf formatter
+## Description: Configuration file for the FOP PDF formatter
 ## Type:        Path
 ## Default:     ""
 
@@ -407,7 +407,7 @@ FOP_CONFIG_FILE=""
 
 ## Key:         FOP_CMD_OPTIONS
 ## -----------------------
-## Description: Command line options for the FOP pdf formatter
+## Description: Command line options for the FOP PDF formatter
 ## Type:        String
 ## Default:     ""
 #
@@ -442,7 +442,7 @@ FOP_JAVA_OPTIONS=""
 
 ## Key:         FOP_WRAPPER
 ## -----------------------
-## Description: Wrapper script for the FOP pdf formatter
+## Description: Wrapper script for the FOP PDF formatter
 ## Type:        PATH to script
 ## Default:     "@pkgdatadir@/libexec/daps-fop""
 #
@@ -570,12 +570,12 @@ INCLUDE_MANIFEST=""
 
 ## Key:         INK_OPTIONS
 ## ------------------------
-## Description: Command line options for inkscape >= 1.0 to convert SVG to PNG
+## Description: Command line options for Inkscape >= 1.0 to convert SVG to PNG
 ## Type:        String
 ## Default:     ""
 #
 # Do not change unless you really know what you do.
-# For inscape >= 1.0 only, do not use the old command line switches!
+# For Inkscape >= 1.0 only, do not use the old command line switches!
 #
 INK_OPTIONS=""
 
@@ -789,7 +789,7 @@ SPELL_CHECKER="aspell"
 #      hunspell:
 #        An extra dictionary for hunspell needs to reside in
 #        hunspell's search path (check with hunspell -D) and needs
-#        to be specified with the file's basename only:
+#        to be specified with the file's base name only:
 #        Example: /usr/share/hunspell/en_US-suse-doc.dic => en_US-suse-doc
 #        If you specify a non-existing dictionary or if it
 #        cannot be found by hunspell, it will silently be ignored
@@ -810,7 +810,7 @@ SPELL_EXTRA_DICT=""
 #          It uses the same format as the
 #          LANG environmental variable: It consists of  the two letter ISO 639
 #          language code (e.g. 'en' for English) and an optional two letter
-#          ISO 3166 country code after an underscore (e.g. en_GB for Britsh
+#          ISO 3166 country code after an underscore (e.g. en_GB for British
 #          English). Make sure the respective dictionary for aspell is installed.
 #          By default, DAPS tries to get the language from the "lang" attribute
 #          of the MAIN file.
@@ -858,12 +858,12 @@ STATIC_DIR=""
 
 ## Key:      STYLEDEVEL
 ## -------------------
-## Description: Custom Stylesheet directory for development purposes.
+## Description: Custom stylesheets directory for development purposes.
 ## Type:        Path to directory (without a trailing slash)
 ## Default:     ""
 #
 #
-# By default, daps uses the DocBook Stylesheets to create output. If you are
+# By default, daps uses the DocBook stylesheets to create output. If you are
 # developing your own set of stylesheets, you may want to set STYLEDEVEL in
 # ~/.config/daps/dapsrc. If set STYLEDEVEL _always_ takes precedence over
 # STYLEROOT!
@@ -877,11 +877,11 @@ STYLEDEVEL=""
 
 ## Key:      STYLEROOT
 ## -------------------
-## Description: Custom Stylesheet directory.
+## Description: Custom stylesheets directory.
 ## Type:        Path to directory (without a trailing slash)
 ## Default:     ""
 #
-# By default, daps uses the DocBook Stylesheets to create output. If you have
+# By default, daps uses the DocBook stylesheets to create output. If you have
 # your own set of stylesheets, specify the absolute path to the stylesheet
 # directory here. The DocBook stylesheets will be used as a fallback in case
 # styles are not defined for all output formats.
@@ -904,7 +904,7 @@ STYLEROOT=""
 # "yes" to ignore the STYLEROOT and to use the original DocBook
 # stylesheets instead.
 #
-# NOTE: This will aslo work if STYLEROOT points to the original
+# NOTE: This will also work if STYLEROOT points to the original
 #       DocBook stylesheets.
 #
 # See also: TXT_PARAMS
@@ -914,7 +914,7 @@ TXT_IGNORE_STYLEROOT="no"
 
 ## Key:         TXT_PARAMS
 ## -------------------
-## Description: XSL paramters for text file generation
+## Description: XSL parameters for text file generation
 ## Type:        string
 ## Default:     '--param="generate.permalinks=0" --param="section.autolabel=1" --param="section.label.includes.component.label=2"'
 #
@@ -923,7 +923,7 @@ TXT_IGNORE_STYLEROOT="no"
 # displayed in the .txt file. This configuration option can be used to set
 # custom XSL parameters - the HTML stylesheets are not necessarily
 # configured in a way that is suitable for text output.
-# The default value for TXT_PARAMS turns on labelling and makes sure
+# The default value for TXT_PARAMS turns on labeling and makes sure
 # admonitions have a text label. Other parameters turn off stuff that is
 # of no use in text output.
 # For a reference of all HTML parameters refer to
@@ -956,7 +956,7 @@ VALID_ROOTELEMENTS="appendix article bibliography book chapter colophon dedicati
 
 ## Key:         WH_SEARCH
 ## --------------------
-## Description: Enable/Disbale webhelp search feature
+## Description: Enable/disable webhelp search feature
 ## Type:        yesno
 ## Default:     yes
 #
@@ -965,7 +965,7 @@ WH_SEARCH="yes"
 
 ## Key:         XEP_CONFIG_FILE
 ## -----------------------
-## Description: Config file for the XEP pdf formatter
+## Description: Configuration file for the XEP PDF formatter
 ## Type:        Path
 ## Default:     "@sysconfdir@/daps/xep/xep-daps.xml"
 #
@@ -986,7 +986,7 @@ XEP_CONFIG_FILE="@sysconfdir@/daps/xep/xep-daps.xml"
 
 ## Key:         XEP_CMD_OPTIONS
 ## -----------------------
-## Description: Command line options for the XEP pdf formatter
+## Description: Command line options for the XEP PDF formatter
 ## Type:        String
 ## Default:     ""
 #
@@ -1021,7 +1021,7 @@ XEP_JAVA_OPTIONS=""
 
 ## Key:         XEP_WRAPPER
 ## -----------------------
-## Description: Wrapper script for the XEP pdf formatter
+## Description: Wrapper script for the XEP PDF formatter
 ## Type:        PATH to script
 ## Default:     "@pkgdatadir@/libexec/daps-xep"
 #
@@ -1054,7 +1054,7 @@ XML_MAIN_CATALOG="/etc/xml/catalog"
 ## Type:        PATH to file
 ## Default:     ""
 #
-# Path to one or more (space-sperated) XML catalogs to be queried before
+# Path to one or more (space-separated) XML catalogs to be queried before
 # XML_MAIN_CATALOG.
 #
 XML_USER_CATALOGS=""
@@ -1065,7 +1065,7 @@ XML_USER_CATALOGS=""
 ## Type:        PATH to file
 ## Default:     "@sysconfdir@/daps/docbook-xmlformat.conf"
 #
-# xmlformat prettyfies your XML sources (daps xmlformat)
+# xmlformat prettifies your XML sources (daps xmlformat)
 # This is not only useful for readability, but also ensures consistent
 # diffs even when using different editors. DAPS provides a config file
 # tailor made for DocBook (the default setting). If you prefer to use your
@@ -1085,7 +1085,7 @@ XMLFORMAT_CONFIG_FILE="@sysconfdir@/daps/docbook-xmlformat.conf"
 # to touch the stylesheet files directly. You may overwrite parameters
 # by specifying "--stringparam <PARAM_NAME> <NEW_VALUE>"
 # Example:
-# Set the pagesize for PDFs to 200x100 mm
+# Set the page size for PDFs to 200x100 mm
 # XSLTPARAM="--stringparam page.height 200mm --stringparam page.width 100mm"
 #
 # Can also be placed in an DC-file if being a per-book setting
@@ -1094,11 +1094,11 @@ XSLTPARAM=""
 
 ## Key: XSLTPROCESSOR
 ## --------------------
-## Description: Patzh to XSLT processor.
+## Description: Path to XSLT processor.
 ## Type:        Path to executable
 ## Default:     "/usr/bin/xsltproc"
 #
-# Define which XSLT processor to use.  Currently supported are "xsltproc" and
-# "saxon". Saxon needs to be saxon6, saxon 8 and 9 are not supported.
+# Define which XSLT processor to use. Currently supports "xsltproc" and
+# "saxon". Saxon needs to be Saxon 6, Saxon 8 and 9 are not supported.
 #
 XSLTPROCESSOR="/usr/bin/xsltproc"

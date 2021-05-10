@@ -87,7 +87,7 @@ PROJECT_ROOT/ <1>
 
 <1> The project's root directory (working directory) for the respective documentation project.
 <2> One or more Doc Config files (DC files) defining your deliverables. Each DC file represents one book, article, or man page.
-<3> The directory containing all {adoc} source files. It nust be named `adoc/`. {adoc} files in subdirectories are ignored.
+<3> The directory containing all {adoc} source files. It must be named `adoc/`. {adoc} files in subdirectories are ignored.
 <4> The MAIN file of the documentation project. It may be the only file, but may also include other {adoc} files via the `include` directive.
 <5> The Directory containing image files. Place all images in this directory. Subdirectories are ignored. Either specify the path to this directory in the DC-file with `ADOC_IMG_DIR` (recommended) or on the command line with `--adocimgdir`.
 
@@ -278,7 +278,7 @@ Because of that you may receive two different kind of errors when processing {ad
 The conversion to DocBook XML is done by ``asciidoctor`.
 In case there are syntax or structural errors in the {adoc} sources, you will
 get an appropriate error or warning message.
-It usually contains the number of the line where the error occured.
+It usually contains the number of the line where the error occurred.
 These errors need to be fixed before any further processing can be done, DAPS
 will only proceed in case `asciidoctor` no longer produces errors or warnings.
 
@@ -320,7 +320,7 @@ cross references) by converting the {adoc} sources into a DocBook set.
 * The master book must only contain parts and no additional content outside
   these parts.
 * Each part needs to begin with a unique custom ID (`pass:[[[UNIQUE_ID]]]`)  
-* You need to be extra careful not to mess up the headline hierachy
+* You need to be extra careful not to mess up the headline hierarchy
   throughout the master book. If you are using prefix, appendix,
   glossary, etc. make sure you apply the special rules for parts regarding the
   headline levels (refer to the

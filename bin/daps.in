@@ -242,13 +242,13 @@ PATHLIST=(
   [DAPSROOT]="DAPS root directory"
   [DOCCONF]="DC-file"
   [DOCCONF_DEFAULT]="default DC-file"
-  [EPUB_CSS]="CSS file for ePUB"
+  [EPUB_CSS]="CSS file for EPUB"
   [FOP_CONFIG_FILE]="FOP configuration file"
   [FOP_WRAPPER]="FOP wrapper script"
   [HTML_CSS]="CSS file for HTML"
   [JING_WRAPPER]="Jing wrapper script"
   [MAIN]="MAIN-file"
-  [STATIC_DIR]="HTML ressource directory"
+  [STATIC_DIR]="HTML resource directory"
   [STYLEDEVEL]="development directory for stylesheets"
   [STYLEROOT]="stylesheet directory"
   [XEP_CONFIG_FILE]="XEP configuration file"
@@ -308,7 +308,7 @@ JOBS=$(egrep -s -m1 "cpu cores\s*:" /proc/cpuinfo 2>/dev/null | sed 's/cpu cores
 #
 # The subcommands can be executed using:
 #   ${SUBCOMMANDS[$SUBCMD]} $SUBCMD ${SCMD_ARGS[@]}
-# Using such an array rather than a function to call the subcommands has got
+# Using such an array rather than a function to call the subcommands has
 # the advantage that we can very easily check whether a subcommand is valid
 # or not by just testing if ${SUBCOMMANDS[$SUBCMD]} is set
 
@@ -503,7 +503,7 @@ Global Options:
                             structure required by for DocBook projects
                             (see DAPS manual).
                             Default: unset
-                            Only works with ASCIIDOC sources and is ignored
+                            Only works with AsciiDoc sources and is ignored
                             otherwise.
   --adocset                 If specified, DAPS tries to convert the AsciiDoc
                             document into a set. Requires an AsciiDoc document
@@ -568,7 +568,7 @@ Global Options:
                             Note: To validate with a local schema, specify an
                                   absolute path with a "file://" prefix
                                   (e.g. "file:///foo/schema.rnc").
-  --styleroot=DIR           By default, daps uses the DocBook Stylesheets to
+  --styleroot=DIR           By default, daps uses the DocBook stylesheets to
                             create output. If you have your own set of
                             stylesheets, specify the absolute path to the
                             stylesheet directory here. The DocBook stylesheets
@@ -580,7 +580,7 @@ Global Options:
   --verbosity=3, -v3, -vvv  Verbosity Level 3 (print all commands, very
                             verbose)
   --version                 Print version number
-  --xsltprocessor=PROCESSOR Specify an xslt processor that is used to transorm
+  --xsltprocessor=PROCESSOR Specify an XSLT processor that is used to transform
                             the XML files. Currently supported are "xsltproc"
                             and "saxon" (version 6).
                             Default: xsltproc
@@ -595,7 +595,7 @@ Subcommands:
     mobi                      Amazon Kindle eBook
     pdf                       PDF book (color, grayscale, printable)
     text                      ASCII book
-    webhelp                   HTML book with collapsable TOC and search
+    webhelp                   HTML book with collapsible TOC and search
 
 
   File lists:
@@ -642,7 +642,7 @@ Subcommands:
   Other Commands:
     getimages                 List or display images from a profiled DocBook
                               XML file.
-    linkcheck                 Linkchecker for links from <ulink> tags
+    linkcheck                 Link checker for links from <ulink> tags
     optipng                   Optimize (size) source PNGs.
     profile                   Profile XML sources.
     spellcheck                Spellchecks the file specified with --file or the
@@ -1265,7 +1265,7 @@ esac
 # ----------------------------------------------------------------------------
 # Setting up the environment for the complete mechanics
 #
-# The environment is set up using the following hierachy
+# The environment is set up using the following hierarchy
 # (1 == always wins)
 #
 # 1. Command line
@@ -1662,7 +1662,7 @@ fi
 
 # remove the file:// or file: (Debian, Tumbleweed) string from the styles
 # use ##*file:// rather than #file:// because sometimes xmlcatalog also outputs
-# warnings to stdout which we would like to ignore. Fortunately the file:// url
+# warnings to stdout which we would like to ignore. Fortunately, the file:// URL
 # is always the last string
 #
 # Is there a better way to do this with shell built-ins?
@@ -1720,7 +1720,7 @@ if [[ "adoc" = "$SRC_FORMAT" ]]; then
         # path was not provided on cmdl
         if [[ -n $ADOC_IMG_DIR ]]; then
             # path was provided by config
-            # if not absolue, prepend DOC_DIR
+            # if not absolute, prepend DOC_DIR
             [[ ! "/" == ${ADOC_IMG_DIR:1} ]] && ADOC_IMG_DIR="$DOC_DIR/$ADOC_IMG_DIR"
             #  error out if $DOC_DIR/$ADOC_IMG_DIR does not exist
             [[ ! -d $ADOC_IMG_DIR ]] && exit_on_error "AsciiDoc image directory $ADOC_IMG_DIR does not exist"
@@ -1740,7 +1740,7 @@ fi
 #
 [[ -f $LIB_DIR/$SUBCMD ]] && source "$LIB_DIR/$SUBCMD"
 
-# By default we want to write a logfile, can be overwritten by
+# By default we want to write a log file, can be overwritten by
 # subcommand function
 #
 WRITE_LOG=1
