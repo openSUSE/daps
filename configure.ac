@@ -10,7 +10,7 @@ dnl Thomas Schraitle  <toms at opensuse dot org>
 dnl
 
 m4_define(daps_version_major, 3)
-m4_define(daps_version_minor, 0)
+m4_define(daps_version_minor, 1)
 m4_define(daps_version_micro, [0])
 # API version
 m4_define([daps_api_version],[daps_version_major])
@@ -18,7 +18,7 @@ m4_define([daps_api_version],[daps_version_major])
 m4_define([daps_version], [daps_version_major.daps_version_minor.daps_version_micro])
 
 AC_PREREQ([2.68])
-AC_INIT([DAPS], [daps_version], [https://github.com/openSUSE/daps], [daps], [http://opensuse.github.io/daps])
+AC_INIT([DAPS], [daps_version], [https://github.com/openSUSE/daps], [daps], [https://opensuse.github.io/daps])
 AC_CONFIG_MACRO_DIR([m4])
 
 DAPS_VERSION_MAJOR=daps_version_major
