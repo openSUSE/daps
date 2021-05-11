@@ -245,8 +245,8 @@ html, body {
 
 .toc-icon, .find-icon, .book-icon, .prev-icon, .next-icon, .overview-icon,
 .back-icon, #_find-button, .bubble-corner:before, .bubble-closer,
-.single-contents-icon, #_print-button:before, #_share-fb:before,
-#_share-gp:before, #_share-tw:before, #_share-mail:before,
+.single-contents-icon, ._print-button:before, ._share-fb:before,
+._share-in:before, ._share-tw:before, ._share-mail:before,
 .arch-arrow-start:after, .arch-arrow-end, .ulink:after {
     background-image: url(../images/icons.png);
     background-repeat: no-repeat;
@@ -780,7 +780,7 @@ a:active > .find-icon {
 
 .arrow {
     position: absolute;
-    right: -0px;
+    right: 0;
     top: 0;
     display: block;
     width: 30px;
@@ -986,7 +986,7 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
     padding: 10px 20px 0;
 }
 
-#_bottom-navigation {
+._bottom-navigation {
     border-top: 1px solid #999;
 }
 
@@ -1055,8 +1055,8 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
     font-weight: 600;
 }
 
-#_share-fb:before, #_share-gp:before, #_share-tw:before, #_share-mail:before,
-#_print-button:before {
+._share-fb:before, ._share-in:before, ._share-tw:before, ._share-mail:before,
+._print-button:before {
     content: " ";
     line-height: 22px;
     font-size: 14px;
@@ -1072,27 +1072,27 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
     overflow: hidden;
 }
 
-#_share-fb:before {
+._share-fb:before {
     background-color: #3B5998;
     background-position: -271px -88px;
 }
 
-#_share-gp:before {
-    background-color: #D54433;
+._share-in:before {
+    background-color: #0073B1;
     background-position: -289px -88px;
 }
 
-#_share-tw:before {
+._share-tw:before {
     background-color: #00BBF5;
     background-position: -307px -88px;
 }
 
-#_share-mail:before {
+._share-mail:before {
     background-color: #666;
     background-position: -235px -88px;
 }
 
-#_print-button:before {
+._print-button:before {
     background-color: #666;
     background-position: -253px -88px;
 }
@@ -1110,7 +1110,7 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
     border-bottom: 1px solid rgba(20,20,20,0.5);
 }
 
-#_share-print {
+._share-print {
     margin: 20px 0 0 0;
     padding: 20px 0 0 0;
     border-top: 1px solid #999;
@@ -1205,22 +1205,25 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
     padding: 0 20px;
 }
 
-
-/* We need to scroll ~30 pixels up, such that the headline won't be hidden by the fixed header. */
-/* [attribute] selector works in IE 7+. Firefox, Opera and Webkit-based browsers had it far earlier. */
-.documentation a[id] {
-    position: relative;
-    top: -33px;
-    display: block;
-    width: 0;
-    height: 0;
+:target::before {
+  content: '';
+  display: block;
+  margin-top: -33px;
+  height: 33px;
+  width: 1px;
 }
 
-[id]:target > span, .admonition[id]:target > h6 {
+/* unfortunately we need these super-specific selectors to avoid highlighting <phrase/> etc. headlines */
+:target > .titlepage:nth-child(1) h1 > span,
+:target > .titlepage:nth-child(1) h2 > span,
+:target > .titlepage:nth-child(1) h3 > span,
+:target > .titlepage:nth-child(1) h4 > span,
+:target > .titlepage:nth-child(1) h5 > span,
+:target > .titlepage:nth-child(1) h6 > span,
+:target > span,
+:target > div:nth-child(1) > h6 > span,
+.admonition:target > h6 {
     background-color: rgba(255,255,0,0.3);
-    /* Clean the below up in Q3 2013 or so... */
-    -webkit-transition: background-color 0.2s ease-out 0.3s;
-    -moz-transition: background-color 0.2s ease-out 0.3s;
     transition: background-color 0.2s ease-out 0.3s;
 }
 
@@ -1364,9 +1367,8 @@ h6.version-info {
 .sect5 .title, .single .sect5 .title {
     font-size: 16px;
     padding: 53px 0 0;
-    margin: 0 0 -33px;
+    margin: 0 0;
     position: relative;
-    top: -33px;
     z-index: 1;
     text-align: left;
 }
@@ -1834,32 +1836,74 @@ code, .literal, .replaceable, .package {
     color: #900;
 }
 
- /* This elements exists solely to avoid the scrollbar overlaying the rounded
-    corners and the padding becoming inconsistent. */
 .verbatim-wrap {
-    padding: 10px;
-    background-color: #EFEFF0;
-    border-radius: 5px;
     margin: 5px 0;
-    border: 1px solid #999;
+    padding: 0;
+    background-color: #999;
+    border-radius: 5px;
+    text-align: right;
+    transition: background-color .3s linear;
 }
 
 .example .verbatim-wrap {
     margin: 10px 0 24px;
 }
 
-.screen, .programlisting, .computeroutput, .userinput, .synopsis {
-    font: normal 13px 'DejaVu Sans Mono', 'DejaVuSansMono', 'Menlo', 'Andale Mono', monospace;
+.verbatim-wrap > div, .verbatim-wrap > pre {
+    background-color: #EFEFF0;
+    border-radius: 5px;
+    border: 1px solid #999;
+    position: relative;
     color: #333;
+    display: block;
+    font: normal 13px 'DejaVu Sans Mono', 'DejaVuSansMono', 'Menlo', 'Andale Mono', monospace;
     line-height: 125%;
+    overflow-y: hidden;
+    overflow: auto;
+    padding: 10px;
+    text-align: left;
+    transition: border-color .3s linear, background-color .3s linear;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: left;
 }
 
-.verbatim-wrap > div, .verbatim-wrap pre {
-    display: block;
-    width: 100%;
-    overflow: auto;
-    overflow-y: hidden;
+.verbatim-wrap > .clip-button {
+    display: inline-block;
+    background-color: transparent;
     text-align: left;
+    border: none;
+    height: 16px;
+    margin: 5px;
+    padding: 0 0 0 20px;
+    overflow: hidden;
+    color: #FFF;
+    outline: none;
+    font-family: 'Open Sans', Helvetica, FreeSans, sans-serif;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-image: url('../images/clipboard.svg');
+    background-repeat: no-repeat;
+    background-position: left top;
+    line-height: 16px;
+    box-sizing: border-box;
+    text-transform: uppercase;
+    font-size: 12px;
+
+}
+
+.verbatim-wrap > .clip-button:hover, .verbatim-wrap > .clip-button:focus {
+    text-decoration: underline;
+}
+
+.verbatim-wrap.copy-success > pre, .verbatim-wrap.copy-success > div {
+    border-color: #3465A4;
+    background-color: #F7FAF6;
+}
+
+.verbatim-wrap.copy-success {
+    background-color: #3465A4;
 }
 
 .verbatim-wrap code, .verbatim-wrap .replaceable, .verbatim-wrap .literal,
@@ -1927,7 +1971,7 @@ code, .literal, .replaceable, .package {
     float: right;
 }
 
-.variablelist, .toc {
+div.variablelist, .toc {
     margin: 24px 0;
 }
 
@@ -1938,10 +1982,8 @@ code, .literal, .replaceable, .package {
 .variablelist dt, .glossary dt {
     font-weight: 600;
     color: #000;
-    padding-top: 33px;
-    margin: 0 0 -33px;
+    margin: 0;
     position: relative;
-    top: -33px;
     z-index: 1;
 }
 
@@ -1984,11 +2026,10 @@ div.figure {
     max-width: 100%;
     min-height: 60px;
     text-align: center;
-    margin: 24px 0 -9px;
+    margin: 24px 0 0;
     overflow: hidden;
     position: relative;
-    padding-top: 33px;
-    top: -33px;
+    padding-top: 0;
 }
 
 .figure-contents > .mediaobject {
@@ -2035,9 +2076,11 @@ div.figure {
     display: block;
     color: #999;
     margin: 17px 0 24px;
-    padding: 1px;
-    border: 1px solid #EFEFF0;
+    padding: 12px 10px;
+    border: 1px solid #999;
+    background-color: #FFF;
     width: auto;
+    box-sizing: border-box;
 }
 
 .inlinemediaobject img {
@@ -2066,7 +2109,7 @@ a:hover code, a:focus code, a:active code,
 a:hover .replaceable, a:focus .replaceable, a:active .replaceable,
 a:hover .literal, a:focus .literal, a:active .literal,
 a:hover .package, a:focus .package, a:active .package {
-    border-color: #439239;
+    border-color: #3465A4;
 }
 
 
@@ -2089,13 +2132,12 @@ a:hover .package, a:focus .package, a:active .package {
 .table-title, .example-title, .procedure-title,
 .variablelist-title, .itemizedlist-title {
     position: relative;
-    top: -33px;
-    padding-top: 33px;
+    padding-top: 0;
     z-index: 1;
 }
 
 .example-title, .procedure-title, .orderedlist-title {
-    margin: 24px 0 -33px;
+    margin: 24px 0 0;
 }
 
 .qandadiv-title {
@@ -2103,15 +2145,15 @@ a:hover .package, a:focus .package, a:active .package {
 }
 
 .itemizedlist-title {
-    margin: 24px 0 -41px;
+    margin: 24px 0 0;
 }
 
 .table-title {
-    margin: 24px 0 -23px;
+    margin: 24px 0 10px;
 }
 
 .variablelist-title {
-    margin: 24px 0 -50px;
+    margin: 24px 0 10px;
 }
 
 .qandaentry {
@@ -2122,7 +2164,6 @@ a:hover .package, a:focus .package, a:active .package {
 
 .free-id {
     position: relative;
-    top: -33px;
     left: -1px;
     width: 0.01px;
     height: 0.01px;
@@ -2521,7 +2562,7 @@ p.ds-message {
     }
 
     #_fixed-header-wrap, #_toolbar-wrap, #_pickers, #_inward, #_footer-wrap,
-    #_bottom-navigation, #_share-print {
+    ._bottom-navigation, ._share-print {
         display: none;
     }
 
@@ -2529,7 +2570,7 @@ p.ds-message {
         display: none;
     }
 
-    #_share-print {
+    ._share-print {
         visibility: hidden;
     }
 
@@ -2662,7 +2703,7 @@ p.ds-message {
 }
 
 @media only screen and (max-width: 600px) {
-    #_share-print strong {
+    ._share-print strong {
         display: block;
         float: right;
         padding: 0 0 5px;
@@ -2926,7 +2967,7 @@ p.ds-message {
         display: none;
     }
 
-    #_share-print, .share {
+    ._share-print, .share {
         float: none;
     }
 
@@ -2953,17 +2994,17 @@ p.ds-message {
         width: calc(50% - 22px);
     }
 
-    #_share-fb, #_share-tw {
+    ._share-fb, ._share-tw {
         clear: both;
     }
 
-    #_share-fb:before, #_share-gp:before, #_share-tw:before, #_share-mail:before {
+    ._share-fb:before, ._share-in:before, ._share-tw:before, ._share-mail:before {
         border-radius: 2px;
         border-width: 1px;
         margin-left: 0;
     }
 
-    .offline #_share-print {
+    .offline ._share-print {
         /* Ugly trick -- the JS would otherwise override my display: none */
         height: 0;
         padding: 0;
@@ -3042,6 +3083,12 @@ p.ds-message {
         border-right: none;
         border-radius: 0;
         margin-right: -10px;
+    }
+
+    .verbatim-wrap > pre, .verbatim-wrap > div {
+        border-left: none;
+        border-right: none;
+        border-radius: 0;
     }
 
     .example-contents > .verbatim-wrap, .admonition > .verbatim-wrap,
