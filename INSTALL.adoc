@@ -2,74 +2,67 @@
 
 :numbered:
 
-== Tested Distributions
+
+[#distro-compatibility]
+== Distribution compatibility
 
 DAPS has been tested on the following Linux distributions. It should also run
 on any other distribution, feedback is welcome.
 
+* openSUSE Leap 15.x and openSUSE Tumbleweed
+* SUSE Linux Enterprise 12 and 15 (including service packs)
+
 * Debian Jessie (8.5.0)
 * Fedora 23
 * Linux Mint 18.1
-* openSUSE 13.* and Leap 42.*
-* SUSE Linux Enterprise 12 (incl. service packs)
 * Ubuntu 16.04
 
-== Pre-build Packages
 
-Pre-build packages are available for openSUSE and Ubuntu from the following
-repositories:
+[#install-package]
+== Installing DAPS using a system package
+
+Pre-built packages are available for openSUSE from the following repositories:
 
 SUSE::
-	http://download.opensuse.org/repositories/Documentation:Tools/ +
-	Browse to this URl and choose you SUSE version to get the complete
-	repository URl and add it with the `zypper ar` command, for example:
-	`zypper ar -f http://download.opensuse.org/repositories/Documentation:Tools/openSUSE_Leap_42.2 Documentation:Tools`
-	To be able to use the complete functionality of DAPS, make sure to
-	also install all recommended packages (`zypper in --recommends --from Documentation:Tools daps`) +
+  http://download.opensuse.org/repositories/Documentation:Tools/ +
+  Browse to this URL and choose you SUSE version to get the complete
+  repository URl and add it with the `zypper ar` command, for example:
+  `zypper ar -f http://download.opensuse.org/repositories/Documentation:Tools/openSUSE_Leap_42.2 Documentation:Tools`
+  To be able to use the complete functionality of DAPS, make sure to
+  also install all recommended packages (`zypper in --recommends --from Documentation:Tools daps`) +
         +
-	Packages for daily builds are available from
-	http://download.opensuse.org/repositories/Documentation:Tools:Auto/
-        Note that they have not yet been tested and may contain bugs. 
+  Packages for daily builds are available from
+  https://download.opensuse.org/repositories/Documentation:Tools:Auto/
+  Note that these builds are not thoroughly tested and may contain bugs.
 
-////	 
-Ubuntu::
-	https://launchpad.net/~sascha-manns-h/+archive/ubuntu/daps/ +
-	 (follow the instructions on this page for adding the PPA)
-////
 Debian, Fedora, Ubuntu::
-	Not available, yet. Help is appreciated.
+  Not available, yet. Help is appreciated.
 
 The package is named +daps+. Additional packages needed by DAPS will
 automatically be installed.
 
 
-== Installing DAPS
-
-
-DAPS can be installed either from a downloaded release or from the GitHub
-checkout. (Alternatively you may use the latest development version
-by using a repository clone directly without installing--see
-<<anchor-2>>. However, this is not recommended for production use).
-
-[[anchor-1]]
-=== Prerequisites
+[#dependency]
+== Package dependencies and prerequisites
 
 DAPS only runs on Linux and is not compatible with other operating systems.
 DAPS requires a few programs to be installed on your system. To use the full
 feature set of DAPS, make sure to also install the optional packages. If
-unsure, which DAPS' features are supported with your current installation,
-just run `./configure --sysconfdir=/etc` in the DAPS checkout directory. It
+unsure, which of DAPS's features are supported with your current installation,
+run `./configure --sysconfdir=/etc` in the DAPS Git clone directory. This
 will output detailed information about the support status on your system.
 
 .*Required packages*
 [options="header"]
 |====
-|SUSE                     |Debian/Ubuntu               |Fedora                  
+|SUSE                     |Debian/Ubuntu               |Fedora
 |automake                 |autotools-dev               |automake
 |dia                      |dia                         |dia
 |docbook_4                |docbook                     |docbook-dtds
+|docbook_5                |docbook5-xml                |docbook5-schemas
 |--                       |docbook-xml                 |--
 |docbook-xsl-stylesheets^1^ |docbook-xsl^*^            |docbook-style-xsl^1^
+|docbook5-xsl-stylesheets |docbook-xsl-ns              |docbook5-style-xsl
 |ImageMagick              |imagemagick                 |ImageMagick
 |ghostscript              |ghostscript                 |ghostscript
 |inkscape                 |inkscape                    |inkscape
@@ -77,6 +70,7 @@ will output detailed information about the support status on your system.
 |--                       |libxml-commons-external-java|--
 |--                       |libxmlgraphics-commons-java |--
 |libxslt-tools            |--                          |libxslt
+|jing                     |jing                        |jing
 |make                     |make                        |make
 |poppler-tools            |poppler-utils               |poppler-utils
 |python-xml               |python3-libxml2             |python3-libxml2
@@ -91,37 +85,29 @@ will output detailed information about the support status on your system.
 |zip                      |zip                         |zip
 |====
 
- ^1^: minimum version: 1.7.8
- ^2^: minimum version: 0.96, 1.x or better is recommended
-
-
-.*Required Packages for DocBook 5 Support*
-[options="header"]
-|====
-|SUSE                    |Debian/Ubuntu           |Fedora                   
-|docbook_5               |docbook5-xml            |docbook5-schemas
-|docbook5-xsl-stylesheets|docbook-xsl-ns          |docbook5-style-xsl
-|jing                    |jing                    |jing
-|====
+^1^: minimum version: 1.7.8
+^2^: minimum version: 0.96, 1.x or better is recommended
 
 .*Required Packages for AsciiDoc Support*
 [options="header"]
 |====
-|SUSE                       |Debian/Ubuntu           |Fedora                   
-|rubygem(asciidoctor) ^3^   |asciidoctor             |asciidoctor
+|SUSE                       |Debian/Ubuntu           |Fedora
+|rubygem(asciidoctor)^3^    |asciidoctor             |asciidoctor
 |====
+
 ^3^: The exact package name depends on the Ruby version installed on your system.
-Using ths capability string with `zypper install` ensures the correct package is 
+Using this capability string with `zypper install` ensures the correct package is
 installed.
 
 .*Optional packages*
 [options="header"]
 |====
-|SUSE                    |Debian/Ubuntu           |Fedora                   
+|SUSE                    |Debian/Ubuntu           |Fedora
 |aspell                  |aspell                  |aspell
+|ditaa                   |ditaa                   |ditaa
 |epubcheck               |epubcheck               |?
 |exiftool                |libimage-exiftool-perl  |perl-Image-ExifTool
-|libreoffice-draw        |libreoffice-draw        |libreoffice-draw
+|libreoffice-draw        |libreoffice-draw        |libreoffice-draw
 |optipng                 |optipng                 |optipng
 |perl-checkbot           |checkbot                |?
 |remake                  |remake                  |n/a^4^
@@ -130,52 +116,57 @@ installed.
 |xmlformat               |xmlformat-perl          |?
 |====
 
-^4^ The existing remake package on Fedora is a different software.
+^4^ The `remake` package on Fedora is a different software.
 
-In case you want to install the optional packages at a later point in time,
+To install optional packages at a later point in time,
 run `daps-check-deps` to check for already installed and missing dependencies.
 
-=== Installation
+
+[#install-source]
+== Installing DAPS from the source
+
+DAPS can be installed from a downloaded release TAR or from a local Git clone.
 
 1. Download the https://github.com/openSUSE/daps/releases/latest[latest DAPS version]
 archive and unpack it _or_, alternatively clone the main branch from GitHub: +
-   `git clone https://github.com/openSUSE/daps.git -b main --single-branch` 
+   `git clone https://github.com/openSUSE/daps.git -b main --single-branch`
 2. Change into the daps directory
 3. Run `./configure --sysconfdir=/etc` +
    Carefully check the configuration summary. Run `./configure --help` for
    more information on how to change installation paths. If you need to change
    something, re-run the configure command again afterwards.
-4. Run `make`   
+4. Run `make`
 5. Run `sudo make install`
-6. Run `daps --help` for a brief introduction in DAPS
+6. Run `daps --help` for a brief introduction to DAPS
 
-[[anchor-2]]
-== Running DAPS from a GitHub Checkout
 
-In case you do not want to install DAPS or always would like to use the latest
-development version, you can run DAPS directly from the GitHub checkout.
+[#run-from-git]
+== Running DAPS from a local Git clone
 
-1. Make sure the prerequisites listed in <<anchor-1>> are fullfilled.
+If you do not want to install DAPS or always want to use the latest
+development version, you can run DAPS directly from a local Git clone.
+
+1. Make sure the prerequisites listed in <<anchor-1>> are fulfilled.
 2. Check out DAPS. Either choose the latest stable version (safe) or the
    development version (may not work)
    Checking out the latest release::
-	`git clone https://github.com/openSUSE/daps.git -b main --single-branch`
+     `git clone https://github.com/openSUSE/daps.git -b main --single-branch`
    Checking out the latest development version::
-	 `git clone https://github.com/openSUSE/daps.git`
-3. (Skip this step for SUSE). Go to the checkout dicrectory and enter the
+     `git clone https://github.com/openSUSE/daps.git`
+3. (Skip this step for SUSE). Go to the checkout directory and run the
    following command according to your distribution:
    Debian/Ubuntu::
-	`./configure --sysconfdir=/etc` +
-	`make debian`
-   Fedora/RedHat::
-   	`./configure --sysconfdir=/etc` +
-	`make redhat`
+     `./configure --sysconfdir=/etc` +
+     `make debian`
+   Fedora/Red Hat::
+     `./configure --sysconfdir=/etc` +
+     `make redhat`
    SUSE::
-	_Do nothing_
+     _Do nothing_
 4. Test DAPS by building the DAPS user manual: +
    `cd <path_to_checkout>/daps/doc` +
    `../bin/daps --dapsroot .. -d DC-daps-user pdf`
 
-To run DAPS from the checkout directory, enter the following command: +
+To run DAPS from the checkout directory, use the following command: +
 `<path_to_checkout>/bin/daps --dapsroot=<path_to_checkout>
 [options] <subcommand> [options]`
