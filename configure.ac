@@ -186,9 +186,6 @@ AC_PATH_PROG([DIA], [dia], [0])
 dnl exiftool
 AC_PATH_PROG([EXIFTOOL], [exiftool], [0])
 
-dnl ghostscript
-AC_PATH_PROG([GS], [gs], [0])
-
 dnl inkscape
 AC_PATH_PROG([INKSCAPE], [inkscape], [0])
 
@@ -564,19 +561,6 @@ if test 0 = "$REMAKE"; then
   AC_MSG_RESULT([Enhanced debugging               |    no   | install remake])
 else
   AC_MSG_RESULT([Enhanced debugging               |   yes   |])
-fi
-
-
-AC_MSG_RESULT([
-Experimental features
----------------------
-Feature                          | Enabled | Action to enable
-..............................................................................])
-dnl PDF/EPS images support(ghostscript (gs))
-if test 0 = "$GS"; then
-  AC_MSG_RESULT([Support for .pdf and .eps images |    no   | install ghostscript])
-else
-  AC_MSG_RESULT([Support for .pdf and .eps images |   yes   |])
 fi
 
 dnl Evil magic
