@@ -94,21 +94,6 @@ function parse_args {
                 export DESKTOPFILES=1
                 shift
                 ;;
-            --db5todb4)
-                # online-docs: convert DB5 to DB5
-                export DB5TODB4=1
-                shift
-                ;;
-            --db5todb4nh)
-                # online docs: convert DB5 to NovDoc
-                export DB5TODB4NH=1
-                shift
-                ;;
-            --dbnoconv)
-                # online-docs: do not convert to NovDoc
-                export DBNOCONV=1
-                shift
-                ;;
             --documentfiles)
                 # package-html/package-pdf: Create document files
                 export DOCUMENTFILES=1
@@ -126,7 +111,7 @@ function parse_args {
                 shift
                 ;;
             --export-dir)
-                # locdrop/online-docs: export directory
+                # locdrop: export directory
                 declare EXPORT_DIR
                 sanitize_path "$2" "EXPORT_DIR"
                 export EXPORT_DIR
@@ -146,7 +131,7 @@ function parse_args {
                 shift 2
                 ;;
             --formatter)
-                # online-docs/package-pdf/pdf/show-names: PDF formatter
+                # package-pdf/pdf/show-names: PDF formatter
                 if [[ xep = "$2" || fop = "$2" ]]; then
                     export FORMATTER="$2"
                 else
@@ -236,19 +221,9 @@ function parse_args {
                 export LIST_NOENT=1
                 shift
                 ;;
-            --noepub)
-                # online-docs: Do not generate ePUB
-                export NOEPUB=1
-                shift
-                ;;
             --nogzip)
                 # man: do not gzip man pages
                 export GZIP_MAN="no"
-                shift
-                ;;
-            --nohtml)
-                # online-docs: Do not generate HTML
-                export NOHTML=1
                 shift
                 ;;
             --noimg)
@@ -257,17 +232,12 @@ function parse_args {
                 shift
                 ;;
             --nopdf)
-                # locdrop/onlinedocs: Do not generate PDF
+                # locdrop: Do not generate PDF
                 export NOPDF=1
                 shift
                 ;;
             --nosearch)
                 export WH_SEARCH="no"
-                shift
-                ;;
-            --noset)
-                #  online-docs: Single manual only (not complete set)
-                export NOSET=1
                 shift
                 ;;
             --nostatic)
@@ -303,7 +273,7 @@ function parse_args {
                 shift
                 ;;
             --optipng)
-                # locdrop/online-docs/package-src/unpack-locdrop: Optimize PNGs
+                # locdrop/package-src/unpack-locdrop: Optimize PNGs
                 export OPTIPNG=1
                 shift
                 ;;
@@ -1234,29 +1204,6 @@ function help_css_epub {
                               Default: unset
 EOF
 }
-function help_dbnoconv {
-    cat <<EOF
-    --dbnoconv                Do not convert to NovDoc, but rather keep
-                              the source format.
-                              Default: Conversion to NovDoc
-EOF
-}
-function help_db5todb4 {
-    cat <<EOF
-    --db5todb4                Create XML bigfile in DoBook 4 format. This
-                              option only applies if the sources are in
-                              DocBook5 format.
-                              Default: Conversion to NovDoc
-EOF
-}
-function help_db5todb4nh {
-    cat <<EOF
-    --db5todb4nh              Create XML bigfile in DocBook 4 format without
-                              a DOCTYPE header. This option only applies if
-                              the sources are in DocBook5 format.
-                              Default: Conversion to NovDoc
-EOF
-}
 function help_def-file {
     cat <<EOF
     --def-file=FILE           Specify a DEF-* file containing build
@@ -1292,7 +1239,7 @@ function help_export-dir {
     --export-dir=DIRECTORY    Specify a directory where to copy the results
                               of the $TARGET command. The directory will be
                               created if it does not exist.
-                              Default: <BUILD_DIRECTORY>/online-docs
+                              Default: <BUILD_DIRECTORY>/locdrop
 EOF
 }
 function help_extra-dict {
@@ -1436,23 +1383,11 @@ function help_noent {
                               Default: unset
 EOF
 }
-function help_noepub {
-    cat <<EOF
-    --noepub                  Deactivates creating the ePUB output
-                              Default: ePUB output is created.
-EOF
-}
 function help_nogzip {
     cat <<EOF
     --nogzip                  If specified, man pages will not be compressed
                               with gzip.
                               Default: unset
-EOF
-}
-function help_nohtml {
-    cat <<EOF
-    --nohtml                  Deactivates creating the package-html tarball.
-                              Default: Package-html tarball iscreated.
 EOF
 }
 function help_noimg {
@@ -1492,15 +1427,6 @@ function help_nosearch {
     --nosearch                Deactivates creating the search tab in webhtml
                               builds.
                               Default: enabled
-EOF
-}
-function help_noset {
-    cat <<EOF
-    --noset                   Creates a bigfile for the given book (specified
-                              by the rootid) rather than the complete set.
-                              Links in the bigfile that point to external
-                              targets, are replaced by text-only pointers.
-                              Default: off
 EOF
 }
 function help_nostatic {

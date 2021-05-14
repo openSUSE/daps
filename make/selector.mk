@@ -76,7 +76,6 @@ ifeq "$(MAKECMDGOALS)" "$(filter $(MAKECMDGOALS),$(DEBUGGINGTARGETS))"
   include $(DAPSROOT)/make/pdf.mk
   include $(DAPSROOT)/make/epub.mk
   include $(DAPSROOT)/make/print_results.mk
-  include $(DAPSROOT)/make/online-docs.mk
   include $(DAPSROOT)/make/debug.mk
 endif
 
@@ -185,17 +184,6 @@ ifeq "$(MAKECMDGOALS)" "dist-webhelp"
   include $(DAPSROOT)/make/images.mk
   include $(DAPSROOT)/make/webhelp.mk
   include $(DAPSROOT)/make/packaging.mk
-endif
-ifeq "$(MAKECMDGOALS)" "online-docs"
-  include $(DAPSROOT)/make/setfiles.mk
-  include $(DAPSROOT)/make/profiling.mk
-  include $(DAPSROOT)/make/validate.mk
-  include $(DAPSROOT)/make/images.mk
-  include $(DAPSROOT)/make/packaging.mk
-  include $(DAPSROOT)/make/online-docs.mk
-  include $(DAPSROOT)/make/html.mk
-  include $(DAPSROOT)/make/pdf.mk
-  include $(DAPSROOT)/make/epub.mk
 endif
 ifeq "$(MAKECMDGOALS)" "package-src"
   ifeq "$(strip $(SRC_FORMAT))" "adoc"

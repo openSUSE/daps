@@ -43,7 +43,7 @@ ifeq "$(TARGET)" "$(filter $(TARGET),package-pdf package-pdf-dir-name showvariab
   DOCUMENTFILES_RESULT := $(PACKAGE_PDF_DIR)/$(DOCNAME)$(LANGSTRING).document
   PAGEFILES_RESULT     := $(PACKAGE_PDF_DIR)/$(DOCNAME)$(LANGSTRING).page
 endif
-ifeq "$(TARGET)" "$(filter $(TARGET),package-html package-html-dir-name online-docs showvariable)"
+ifeq "$(TARGET)" "$(filter $(TARGET),package-html package-html-dir-name showvariable)"
   PACKAGE_HTML_DIR     := $(PACK_DIR)/html
   ifeq "$(HTMLSINGLE)" "1"
     PACKAGE_HTML_RESULT := $(PACKAGE_HTML_DIR)/$(DOCNAME)$(LANGSTRING)-single-html.tar.bz2
