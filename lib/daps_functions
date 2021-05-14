@@ -187,11 +187,6 @@ function parse_args {
                 P_LIST_IMG_ONLY=1
                 shift
                 ;;
-            --jsp)
-                # html/package-html/show-names: create JSP rather than HTML
-                export JSP=1
-                shift
-                ;;
             --lang)
                 # spellcheck: Language
                 # no need to export (not passed to make)
@@ -444,10 +439,6 @@ function parse_args {
         esac
     done
 
-    # sanity checks:
-    if [[ 1 -eq $HTMLSINGLE && 1 -eq $JSP ]]; then
-        exit_on_error "--single and --jsp are mutually exclusive"
-    fi
     P_REMAIN_ARGS="$*"
 
     # Deprecation warning if PDFNAME is still used (and does not
@@ -1043,7 +1034,7 @@ function show_names {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="cropmarks,draft,formatter:,grayscale,help,jsp,meta,name:,remarks,rootid:,single"
+    LONG_OPTS="cropmarks,draft,formatter:,grayscale,help,meta,name:,remarks,rootid:,single"
 
     parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -1056,7 +1047,6 @@ function show_names {
                 [[ "pdf-name" = "$SUB_CMD" ]] && help_formatter
                 [[ "pdf-name" = "$SUB_CMD" ]] && help_grayscale_pdf
                 help_help
-                [[ "jsp-dir-name" =  "$SUB_CMD" ]] && help_jsp
                 help_meta
                 help_name
                 help_remarks
@@ -1372,14 +1362,6 @@ function help_imgonly {
                               Shortcut for --nodc --noent --noxml|--noadoc.
 EOF
 }
-function help_jsp {
-    cat <<EOF
-    --jsp                     Creates JSP output. Requires custom stylesheets
-                              (not available with the standard DocBook
-                              stylesheets).
-                              Default: off
-EOF
-}
 function help_lang {
     cat <<EOF
     --lang                    Specify a language to use for spellchecking.
@@ -1662,9 +1644,9 @@ EOF
 }
 function help_target {
     cat <<EOF
-    --target=TARGET           Specify a potential target (such as jsp or
-                              color-pdf) in order to retrieve correct values
-                              for target-specific values.
+    --target=TARGET           Specify a potential target (such as pdf)
+                              to retrieve correct values for target-specific
+                              values.
                               Default: same as daps subcommand
 EOF
 }

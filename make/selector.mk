@@ -18,8 +18,8 @@ endif
 #
 # Using TARGET instead of MAKECMDGOALS in all makefiles (except this one of
 # course) allows us to overwrite the real target for debugging and thus
-# get e.g. JSP specific values (rather than HTML) for the targets showvariable
-# and daspenv
+# get specific other values (rather than those for HTML) for the targets
+# showvariable and daspenv
 #
 ifndef TARGET
   TARGET := $(firstword $(MAKECMDGOALS))

@@ -7,18 +7,18 @@
 #
 ###########################################################################
 #
-# BUILD HTML and JSP
+# BUILD HTML
 #
 # Subcommands: html
 #
 ###########################################################################
-function build_html_jsp {
+function build_html {
     local SHORT_OPTS LONG_OPTS SUB_CMD
     SUB_CMD=$1
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="clean,css:,draft,help,html5,jsp,name:,norefcheck,nostatic,meta,param:,remarks,rootid:,single,statdir:,static,stringparam:,xsltparam:"
+    LONG_OPTS="clean,css:,draft,help,html5,name:,norefcheck,nostatic,meta,param:,remarks,rootid:,single,statdir:,static,stringparam:,xsltparam:"
 
     parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -31,7 +31,6 @@ function build_html_jsp {
         help_draft
         help_help
         help_html5
-        help_jsp
         help_meta
         help_name
         help_norefcheck

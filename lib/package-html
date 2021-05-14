@@ -18,7 +18,7 @@ function package-html {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="css:,desktopfiles,documentfiles,help,html5,jsp,name:,pagefiles,param:,rootid:,set-date:,single,statdir:,stringparam:,xsltparam:"
+    LONG_OPTS="css:,desktopfiles,documentfiles,help,html5,name:,pagefiles,param:,rootid:,set-date:,single,statdir:,stringparam:,xsltparam:"
 
     parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -31,7 +31,6 @@ function package-html {
         help_documentfiles
         help_help
         help_html5
-        help_jsp
         help_name
         help_pagefiles
         help_param

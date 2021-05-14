@@ -402,7 +402,7 @@ ifeq "$(DOCBOOK_VERSION)" "4"
 endif
 
 #-----
-# graphics for html, webhelp and jsp
+# graphics for html and webhelp
 #
 # By default graphics for the builds mentioned above are linked into the
 # result directory. However, when prodicing the --static option they are copied

@@ -17,11 +17,6 @@
 # include $(DAPSROOT)/make/meta.mk
 #
 
-# The code to generate HTML (not single HTML) and JSP is exactly the same,
-# the only differences are:
-# - the stylesheets
-# - the result file
-# Therefore we are making heavy use of conditionals ...
 # HTML_DIR is already set in common_variables.mk
 #
 
@@ -29,31 +24,23 @@
 # Stylesheets
 #
 
-ifeq "$(JSP)" "1"
-  # JSP
-  STYLEHTML       := $(firstword $(wildcard \
-			$(addsuffix /jsp/chunk.xsl,$(STYLE_ROOTDIRS))))
-  HTML_SUFFIX     := jsp
-  RESULT_NAME     := JSP
+# HTML / HTMLSINGLE
+HTML_SUFFIX     := html
+ifeq "$(HTML5)" "1"
+  H_DIR := /xhtml5
 else
-  # HTML / HTMLSINGLE
-  HTML_SUFFIX     := html
-  ifeq "$(HTML5)" "1"
-    H_DIR := /xhtml5
-  else
-    H_DIR := /xhtml
-  endif
-  ifeq "$(HTMLSINGLE)" "1"
-    # Single HTML
-    STYLEHTML   := $(firstword $(wildcard \
-			$(addsuffix $(H_DIR)/docbook.xsl,$(STYLE_ROOTDIRS))))
-    RESULT_NAME := Single HTML
-  else
-    # Chunked HTML
-    STYLEHTML   := $(firstword $(wildcard \
-			$(addsuffix $(H_DIR)/chunk.xsl,$(STYLE_ROOTDIRS))))
-    RESULT_NAME := HTML
-  endif
+  H_DIR := /xhtml
+endif
+ifeq "$(HTMLSINGLE)" "1"
+  # Single HTML
+  STYLEHTML   := $(firstword $(wildcard \
+		$(addsuffix $(H_DIR)/docbook.xsl,$(STYLE_ROOTDIRS))))
+  RESULT_NAME := Single HTML
+else
+  # Chunked HTML
+  STYLEHTML   := $(firstword $(wildcard \
+		$(addsuffix $(H_DIR)/chunk.xsl,$(STYLE_ROOTDIRS))))
+  RESULT_NAME := HTML
 endif
 
 #
@@ -256,7 +243,7 @@ copy_inline_images_html: $(ONLINE_IMAGES)
 
 
 #---------------
-# Generate HTML or JSP from profiled xml
+# Generate HTML from profiled xml
 #
 # XSLTPARAM is a variable that can be set via wrapper script in order to
 # temporarily overwrite styleseet settings such as margins
@@ -283,13 +270,11 @@ $(HTML_RESULT): $(PROFILES) $(PROFILEDIR)/.validate $(DOCFILES)
 	  $(XSLTPARAM) $(PARAMS) $(STRINGPARAMS) \
           --xinclude --stylesheet $(STYLEHTML) \
 	  --file $(PROFILED_MAIN) $(XSLTPROCESSOR) $(DEVNULL) $(ERR_DEVNULL)
-    ifneq "$(JSP)" "1"
-      ifdef ROOTID
+    ifdef ROOTID
 	if [ ! -e $@ ]; then \
 	  (cd $(HTML_DIR) && ln -sf $(ROOTID).$(HTML_SUFFIX) $@) \
 	elif [ ! -e $(HTML_DIR)/$(ROOTID).$(HTML_SUFFIX) ]; then \
 	  (cd $(HTML_DIR) && ln -sf $(notdir $@) $(ROOTID).$(HTML_SUFFIX)); \
         fi;
-      endif
     endif
   endif

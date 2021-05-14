@@ -70,7 +70,7 @@ EPUB_CSS          = $(EPUB_CSS)\n\
 STYLEEPUB         = $(STYLEEPUB)\n\
 STYLEEPUB_BIGFILE = $(STYLEEPUB_BIGFILE)\n\
 \n\
-HTML / SINGLE-HTML / JSP\n\
+HTML / SINGLE-HTML\n\
 ------------------------\n\
 HTML_DIR  = $(HTML_DIR)\n\
 HTML_CSS  = $(HTML_CSS)\n\
