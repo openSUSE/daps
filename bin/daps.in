@@ -378,7 +378,7 @@ SUBCOMMANDS[list-srcfiles-unused]="filelists"
 HELP_SUBCOMMAND[list-srcfiles-unused]="Print a list of all source XML files from the xml directory\n and images from images/src/ _not_ used in the document referenced by the DC- or MAIN-file."
 
 SUBCOMMANDS[locdrop]="build_locdrop"
-HELP_SUBCOMMAND[locdrop]="Create all tar archives required to distribute a complete set for translation.\nRequires SVN hosting of the sources - files that need to be translated\nhave to be marked with the property doc:trans=yes."
+HELP_SUBCOMMAND[locdrop]="Create all tar archives required to distribute a complete set for translation.\nRequires DocBook 5 document with <info><dm:docmanager><dm:translation>yes</dm:translation></dm:docmanager></info> element."
 
 SUBCOMMANDS[man]="build_man"
 HELP_SUBCOMMAND[man]="Build one or more man pages from suitable XML sources. All <refentry> parts\nfrom the source file(s) will be transformed to man pages."
@@ -738,7 +738,7 @@ function sanitize_path {
     fi
 
     # ignore values that need to be set by configure
-    # (makes it possible to directly use a SVN checkout)
+    # (makes it possible to directly use a Git clone)
     [[ $MYPATH =~ @[a-zA-Z]*@ ]] && return
 
     # 1. Remove trailing Slash
@@ -1548,7 +1548,7 @@ fi
 #
 # Next, check if XML_DEVEL_CATALOG is set. If so, add it to XML_CATALOG_FILES
 # (in first place). XML_DEVEL_CATALOG is automatically set by this script when
-# working from an SVN checkout
+# working from a Git clone
 #
 if [[ -n "$XML_CATALOG_FILES" ]]; then
     if [[ $XML_CATALOG_FILES != $XML_MAIN_CATALOG ]]; then

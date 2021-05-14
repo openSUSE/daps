@@ -206,21 +206,6 @@ function test_htmlRemarksDraftMeta () {
    assertTrue \
        ' └─ String "_remarks" does not appear in the HTML-dir-name' \
        "$?"
-
-   # checking META
-   #
-   #
-   # fs 2015-04-16: Commenting since this is SVN dependent and we no longer
-   # use SVN
-
-#   egrep -q -- "--param\s+\"use\.meta=1\"" $_LOGFILE 2>/dev/null
-#   assertTrue \
-#       ' └─ Param for META is not correctly specified.' \
-#       "$?"
-#   expr "$_HTMLDIR_NAME_PATH" : '.*\(_meta\)' >/dev/null 2>&1
-#   assertTrue \
-#       ' └─ String "_meta" does not appear in the HTML-dir-name' \
-#       "$?"
 }
 
 #--------------------------------

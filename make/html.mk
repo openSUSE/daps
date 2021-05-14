@@ -14,7 +14,6 @@
 # include $(DAPSROOT)/make/profiling.mk
 # include $(DAPSROOT)/make/validate.mk
 # include $(DAPSROOT)/make/images.mk
-# include $(DAPSROOT)/make/meta.mk
 #
 
 # HTML_DIR is already set in common_variables.mk

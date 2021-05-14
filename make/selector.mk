@@ -68,7 +68,6 @@ ifeq "$(MAKECMDGOALS)" "$(filter $(MAKECMDGOALS),$(DEBUGGINGTARGETS))"
   include $(DAPSROOT)/make/misc.mk
   include $(DAPSROOT)/make/images.mk
   include $(DAPSROOT)/make/filelist.mk
-  include $(DAPSROOT)/make/meta.mk
   include $(DAPSROOT)/make/packaging.mk
   include $(DAPSROOT)/make/html.mk
   include $(DAPSROOT)/make/text.mk
@@ -119,7 +118,6 @@ ifeq "$(MAKECMDGOALS)" "$(filter $(MAKECMDGOALS),$(HTMLTARGETS))"
   include $(DAPSROOT)/make/profiling.mk
   include $(DAPSROOT)/make/validate.mk
   include $(DAPSROOT)/make/images.mk
-  include $(DAPSROOT)/make/meta.mk
   include $(DAPSROOT)/make/html.mk
 endif
 
@@ -229,7 +227,6 @@ ifeq "$(MAKECMDGOALS)" "pdf"
   include $(DAPSROOT)/make/profiling.mk
   include $(DAPSROOT)/make/validate.mk
   include $(DAPSROOT)/make/images.mk
-  include $(DAPSROOT)/make/meta.mk
   include $(DAPSROOT)/make/pdf.mk
 endif
 

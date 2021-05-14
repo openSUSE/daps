@@ -383,25 +383,6 @@ ifneq "$(strip $(XMLLANG))" ""
 endif
 
 #-----
-# Check for SVN for DocBook 4 documents
-# DAPS supports reading meta information such as doc:trans from 
-# SVN(-properties), to determine whether a file will be translated or to
-# get information displayed with --meta
-# (needed for target locdrop and --meta switch in HTML/PDF builds)
-# If MAIN is not under SVN control, USESVN will be undef
-#
-# NOTE:
-# For DocBook 5 documents, meta information can be set directly within the
-# document with "docmanager (https://github.com/openSUSE/docmanager). Since this
-# is the preferred solution, DAPS only supports the SVN properties for
-# DocBook 4 documents and assumes inline meta information for DocBook 5
-# documents
-
-ifeq "$(DOCBOOK_VERSION)" "4"
-  USESVN := $(shell svn info $(MAIN) 2>/dev/null)
-endif
-
-#-----
 # graphics for html and webhelp
 #
 # By default graphics for the builds mentioned above are linked into the

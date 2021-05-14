@@ -243,22 +243,6 @@ function test_pdfRemarksDraftMeta () {
        ' └─ String "_draft" does not appear in the PDF filename' \
        "$?"
 
-   # checking META
-   #
-   # fs 2015-04-16: Commenting since this is SVN dependent and we no longer
-   # use SVN
-
-
-#   egrep -q -- "--param\s+\"use\.meta=1\"" $_LOGFILE 2>/dev/null
-#   assertTrue \
-#       ' └─ Param for META is not correctly specified when generating the FO-file' \
-#       "$?"
-#   expr "$_PDF_BUILD_PATH" : '.*\(_meta\)' >/dev/null 2>&1
-#   assertTrue \
-#       ' └─ String "_meta" does not appear in the PDF filename' \
-#       "$?"
-
-
    # checking REMARKS
    # --param "show.comments=1" needs to occur once for each XML file on
    # profiling and another time when creating the fo-file
