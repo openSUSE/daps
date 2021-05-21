@@ -39,7 +39,7 @@ endif
 # well-formdness and not for validity (a DocBook5 validity check would
 # require jing)
 
-CHECK_WELLFORMED := $(shell $(LIBEXEC_DIR)/daps-xmlwellformed --xinclude $(MAIN) 2>&1)
+CHECK_WELLFORMED := $(shell PYTHONWARNINGS="ignore" $(LIBEXEC_DIR)/daps-xmlwellformed --xinclude $(MAIN) 2>&1 )
 
 ifdef CHECK_WELLFORMED
   $(error Fatal error:$(\n)$(CHECK_WELLFORMED))
