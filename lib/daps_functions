@@ -900,20 +900,18 @@ function profile_first {
 
 ###########################################################################
 #
-#  REMARKS
+#  VALIDATION
 #
-#  Subcommands validate and profiledir behave differently when
-#  comments or remarks are enabled
+#  Subcommand: validate
 #
 ###########################################################################
-function comments_remarks {
+function validate {
     local SHORT_OPTS LONG_OPTS SUB_CMD
     SUB_CMD=$1
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="help,norefcheck,remarks"
-    [[ "validate" = "$SUB_CMD" ]] && LONG_OPTS="${LONG_OPTS},validate-ids,validate-images"
+    LONG_OPTS="help,norefcheck,remarks,validate-ids,validate-images"
 
     parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -923,8 +921,8 @@ function comments_remarks {
         help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
         help_norefcheck
         help_remarks
-        [[ "validate" = "$SUB_CMD" ]] && help_validate-ids
-        [[ "validate" = "$SUB_CMD" ]] && help_validate-images
+        help_validate-ids
+        help_validate-images
         echo
         exit 0
     fi
