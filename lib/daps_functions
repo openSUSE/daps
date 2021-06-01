@@ -913,6 +913,7 @@ function comments_remarks {
 
     SHORT_OPTS="h"
     LONG_OPTS="help,norefcheck,remarks"
+    [[ "validate" = "$SUB_CMD" ]] && LONG_OPTS="${LONG_OPTS},validate-ids,validate-images"
 
     parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
