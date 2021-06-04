@@ -16,12 +16,37 @@ function exit_on_error {
     exit 1;
 }
 
-# set to default if empty
-#XMLFORMAT_CONFIG_FILE="@sysconfdir@/daps/docbook-xmlformat.conf"
+# Binary filename can either be xmlformat, xmlformat.rb, or xmlformat.pl ;-((
+# take the first one that exists
 #
+for _BINARY in xmlformat xmlformat.pl xmlformat.rb; do
+    XMLFORMAT_CMD="$(which --skip-alias --skip-functions "$_BINARY" 2>/dev/null)" && break
+done
 
-XMLFORMAT_CONFIG_FILE=${XMLFORMAT_CONFIG_FILE:-"@sysconfdir@/daps/docbook-xmlformat.conf"}
+_XMLF_VERSION=$($XMLFORMAT_CMD --version 2>/dev/null | head -n1 | cut -d' ' -f2)
 
+# Whenever xmlformat encounters an unknown attribute/value pair, it will error
+# out. To avoid these issues, switch out config files depending on the
+# xmlformat version.
+
+# The versionless xmlformat config file is currently a symlink to the variant
+# for xmlformat 1.04. This provides backward compatibility with the behavior
+# of DAPS 3.1.2 and below. If necessary, we can change that symlink in the
+# future.
+
+# Check if we're at least on xmlformat v1.9.
+if [[ $(echo -e "$_XMLF_VERSION\n1.9" | sort -b --version-sort | head -n1) == '1.9' ]]; then
+    _XMLF_DEFAULT_CONFIG="@sysconfdir@/daps/docbook-xmlformat-1.9.conf"
+# We don't know any versions in between v1.04 and v1.9. We also don't know any
+# versions older than v1.04.
+else
+    _XMLF_DEFAULT_CONFIG="@sysconfdir@/daps/docbook-xmlformat-1.04.conf"
+fi
+
+
+# Set to version-specific default if empty/@default@
+[[ "$XMLFORMAT_CONFIG_FILE" == '@default@' ]] && XMLFORMAT_CONFIG_FILE="$_XMLF_DEFAULT_CONFIG"
+XMLFORMAT_CONFIG_FILE=${XMLFORMAT_CONFIG_FILE:-"$_XMLF_DEFAULT_CONFIG"}
 
 # when using a Git checkout, @sysconfdir@ has not been
 # replaced
@@ -46,14 +71,8 @@ if [[ "${@#-v}" = "$@" || "${@#--verbose}" = "$@" ]]; then
     >&2 echo "Using config file '$XMLFORMAT_CONFIG_FILE'"
 fi
 
-[[ -e $XMLFORMAT_CONFIG_FILE ]] || exit_on_error "Could not find config file '$XMLFORMAT_CONFIG_FILE'\n"
-
-# Binary filename can either be xmlformat, xmlformat.rb, or xmlformat.pl ;-((
-# take the first one that exists
-#
-for _BINARY in xmlformat xmlformat.pl xmlformat.rb; do
-    XMLFORMAT_CMD="$(which  --skip-alias --skip-functions "$_BINARY" 2>/dev/null)" && break
-done
+#check if default is missing too
+[[ -e "$XMLFORMAT_CONFIG_FILE" ]] || exit_on_error "Could not find config file '$XMLFORMAT_CONFIG_FILE'\n"
 
 [[ -z "$XMLFORMAT_CMD" ]] && exit_on_error "The xmlformat script is missing. Please install the respective package!"
 

@@ -1059,17 +1059,19 @@ XML_USER_CATALOGS=""
 ## --------------------
 ## Description: Path to config file for xmlformat
 ## Type:        PATH to file
-## Default:     "@sysconfdir@/daps/docbook-xmlformat.conf"
+## Default:     "@default@"
 #
-# xmlformat prettifies your XML sources (daps xmlformat)
-# This is not only useful for readability, but also ensures consistent
-# diffs even when using different editors. DAPS provides a config file
-# tailor made for DocBook (the default setting). If you prefer to use your
-# own config file, provide an absolute path to that file here.
+# xmlformat can prettify XML sources (daps xmlformat).
+# This is ensures readability and consistent diffs even when using different
+# editors. DAPS provides configuration files for DocBook (the default setting)
+# for different versions of xmlformat. By default, DAPS chooses an
+# appropriate file from @sysconfdir@/daps/docbook-xmlformat-*.conf depending on
+# the installed version of xmlformat. To use an own configuration file,
+# provide an absolute path to that file here.
 #
-# Can also be placed in an DC-file if being a per-book setting
+# Can also be placed into a DC-file if used as a per-book setting
 #
-XMLFORMAT_CONFIG_FILE="@sysconfdir@/daps/docbook-xmlformat.conf"
+XMLFORMAT_CONFIG_FILE="@default@"
 
 ## Key: XSLTPARAM
 ## --------------------
@@ -1084,7 +1086,7 @@ XMLFORMAT_CONFIG_FILE="@sysconfdir@/daps/docbook-xmlformat.conf"
 # Set the page size for PDFs to 200x100 mm
 # XSLTPARAM="--stringparam page.height 200mm --stringparam page.width 100mm"
 #
-# Can also be placed in an DC-file if being a per-book setting
+# Can also be placed in a DC-file if used as a per-book setting
 #
 XSLTPARAM=""
 

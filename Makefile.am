@@ -7,7 +7,7 @@
 # Generate catalogs and install daps
 #
 #
-# TODO: 
+# TODO:
 # Stylesheets for building xhtml need to be packaged in src tar
 
 #------------------------
@@ -152,8 +152,8 @@ dist_hyphen_DATA      = $(wildcard etc/xep/hyphen/*.tex) \
 dist_bashcompletion_DATA = bash_completion/daps
 
 # DATA
-if !CATALOG_EDIT		
-dist_catalog_DATA   = $(DAPS_CATALOG)		
+if !CATALOG_EDIT
+dist_catalog_DATA   = $(DAPS_CATALOG)
 endif
 dist_dapslib_DATA       = $(wildcard lib/*)
 dist_emacssite_DATA     = misc/docbook_macros.el
@@ -209,7 +209,7 @@ INSTALLDIRS = $(DESTDIR)$(docdir)/html $(DESTDIR)$(pkgdatadir) \
 	$(DESTDIR)$(templatedir)
 
 
-install-data-local: $(INSTALLDIRS) autobuild/daps-autobuild 
+install-data-local: $(INSTALLDIRS) autobuild/daps-autobuild
 install-data-local: TMP_CATALOG := $(shell mktemp -q $(BUILD_ROOT)/daps_catalog.XXXXX)
 install-data-local:
 	for BOOK in $(MANUALS); do \
