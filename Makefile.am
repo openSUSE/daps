@@ -143,6 +143,8 @@ dist_dapslibexec_SCRIPTS = $(filter-out $(wildcard libexec/daps-jing.*),$(wildca
 
 # CONFIG files
 dist_dapsconf_DATA    = etc/config etc/docbook-xmlformat.conf \
+			etc/docbook-xmlformat-1.04.conf \
+			etc/docbook-xmlformat-1.9.conf \
 			etc/CatalogManager.properties
 dist_fopconf_DATA     = etc/fop/fop-daps.xml
 dist_xepconf_DATA     = etc/xep/xep-daps.xml
