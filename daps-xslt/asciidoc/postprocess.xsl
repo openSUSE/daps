@@ -131,12 +131,13 @@
     </xsl:element>
   </xsl:template>
 
-  <xsl:template match="d:article/d:info/d:title"/>
-  <xsl:template match="d:article[d:info/d:title]">
+  <xsl:template match="d:article/d:info/d:title|d:article/d:info/d:subtitle"/>
+  <xsl:template match="d:article[d:info/d:title|d:info/d:subtitle]">
     <xsl:element name="{local-name(.)}" namespace="&db5ns;">
       <xsl:apply-templates select="@*"/>
-      <xsl:apply-templates select="d:info/d:title" mode="copy-element"/>
-      <xsl:apply-templates select="node()"/>
+      <xsl:apply-templates select="(d:title|d:info/d:title)[1]" mode="copy-element"/>
+      <xsl:apply-templates select="(d:subtitle|d:info/d:subtitle)[1]" mode="copy-element"/>
+      <xsl:apply-templates select="node()[not(self::d:title or self::d:subtitle)]"/>
     </xsl:element>
   </xsl:template>
 
