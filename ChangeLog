@@ -1,4 +1,31 @@
 -------------------------------------------------------------------
+Thu Jun 10 10:00:00 UTC 2021 - sknorr@suse.de
+
+Stable release DAPS 3.2.0:
+
+* New features:
+  - Added config file compatible with xmlformat 1.9 (from
+    github.com/someth2say/xmlformat)
+  - Added DocBook table validation script (must be run manually
+    currently)
+
+* Bug fixes:
+  - Properly enabled `--validate-ids` and `--validate-images`
+    validation options
+  - For consistency/compatibility, output PDFNAME deprecation
+    message to stderr
+  - In AsciiDoc postprocess stylesheet, fixed handling of
+    subtitles
+  - Removed remaining references to Ghostscript (#614)
+
+* Removed features:
+  - Remove `html --jsp` target that was unused for years (#609)
+  - Removed the `online-docs` target and associated DocBook 5-to-4
+    conversion stylesheets (#610)
+  - Removed code to query SVN properties that was unused for years
+    (#611)
+
+-------------------------------------------------------------------
 Fri May 21 15:00:00 UTC 2021 - sknorr@suse.de
 
 Stable release DAPS 3.1.2:
