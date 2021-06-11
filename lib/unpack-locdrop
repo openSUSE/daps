@@ -217,11 +217,11 @@ function unpack-locdrop {
     echo "Getting entities"
     ENTITIES="$("${LIBEXEC_DIR}/getentityname.py" ${P_NOTRANS_DIR}/xml/*.xml)"
     for ENT in $ENTITIES; do
-        if [[ -f ${P_NOTRANS_DIR}/xml/$ENT ]]; then
+        if [[ -f $ENT ]]; then
             [[ 1 -eq $DEBUG ]] && echo "Linking ${P_NOTRANS_DIR}/xml/$ENT"
-            (cd xml && ln -sf "$(realpath --relative-to="." "${P_NOTRANS_DIR}/xml/$ENT")")
+            (cd xml && ln -sf "$(realpath --relative-to="." "$ENT")")
         else
-            ccecho "warn" "Cannot find entity file: ${P_NOTRANS_DIR}/xml/$ENT"
+            ccecho "warn" "Cannot find entity file: $ENT"
         fi
     done
 
