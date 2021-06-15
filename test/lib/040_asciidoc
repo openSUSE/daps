@@ -25,7 +25,7 @@ function oneTimeSetUp() {
     # get the profiling directory
     _ADOC_NAME_PATH=$($_DAPSEXEC -d $_DCFILE profile 2>/dev/null)
     if [ $? -ne 0 ]; then
-        exit_on_error " The initial DAPS call to process ASCIIDOC failed. Skipping tests"
+        exit_on_error " The initial DAPS call to process AsciiDoc failed. Skipping tests"
     fi
 }
 
@@ -101,7 +101,7 @@ function test_adoc_advanced() {
         "$?"
     egrep -q -- "/daps-xslt/asciidoc/postprocess.xsl" $_LOGFILE 2>/dev/null
     assertTrue \
-        " └─ The stylesheet for postprocessing the ASCIIDOC XML was not used." \
+        " └─ The stylesheet for postprocessing the AsciiDoctor-generated XML was not used." \
         "$?"
 
     #
@@ -109,7 +109,7 @@ function test_adoc_advanced() {
     #
     _TYPE_GET=$(xmlstarlet sel -t -v "local-name(/*)" ${_DOC_DIR}/build/.profiled/noprofile/${_XMLFILENAME}.xml 2>/dev/null)
     assertEquals \
-        " └─  Type was not changed to $_TYPE_EXPECT during postprocessing." \
+        " └─ Type was not changed to $_TYPE_EXPECT during postprocessing." \
         "$_TYPE_EXPECT" "$_TYPE_GET"
 
     #

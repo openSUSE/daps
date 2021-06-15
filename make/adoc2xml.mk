@@ -153,7 +153,7 @@ FORCE:
 #all: $(MAIN)
 $(MAIN): FORCE $(ADOC_SRCFILES) | $(ADOC_DIR)
   ifeq "$(VERBOSITY)" "2"
-	@ccecho "info"  "   Creating XML from ASCIIDOC..."
+	@ccecho "info"  "   Creating XML from AsciiDoc..."
   endif
   ifeq "$(ADOC_SET)" "yes"
 	  (set -o pipefail; $(ASCIIDOC) \

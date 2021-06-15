@@ -14,7 +14,7 @@
 
 #
 # Set $(PROFILES) and the profiling stylesheets.
-# ASCIIDOC:
+# AsciiDoc:
 #
 # If ADOC_POST is set to yes, we use ADOC_POST_STYLE, otherwise a noprofile
 # stylesheet

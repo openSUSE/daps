@@ -1452,7 +1452,7 @@ fi
 [[ -z $SRC_FORMAT ]] && SRC_FORMAT=${MAIN##*.}
 
 # Validate SRC_FORMAT - needs to be xml or adoc
-[[ "adoc" = "$SRC_FORMAT" || "xml" = "$SRC_FORMAT" ]] || exit_on_error "$MAIN is an unsupported file type (.$SRC_FORMAT)\nmust be ASCIIDOC (.adoc) or DocBook (.xml)"
+[[ "adoc" = "$SRC_FORMAT" || "xml" = "$SRC_FORMAT" ]] || exit_on_error "$MAIN is an unsupported file type (.$SRC_FORMAT)\nmust be AsciiDoc (.adoc) or DocBook (.xml)"
 
 # Check whether "${DOC_DIR}/${SRC_FORMAT}" exists
 [[ -d "${DOC_DIR}/${SRC_FORMAT}" ]] || exit_on_error "Source files must reside in  \"${DOC_DIR}/${SRC_FORMAT}/\".\n This directory does not exist."
@@ -1480,8 +1480,8 @@ else
     MAIN="$MAIN_CMDL"
 fi
 
-# FOP/XEP/ASCIIDOC CONFIG and WRAPPER / JING WRAPPER
-# when using a Git checkout, @sysconfdir@ and @pkgdatadir have not been
+# FOP/XEP/ASCIIDOC CONFIG AND WRAPPER / JING WRAPPER
+# when using a Git checkout, @sysconfdir@ and @pkgdatadir@ have not been
 # replaced
 #
 # ${string/#substring/replacement}
@@ -1699,7 +1699,7 @@ SETFILES_TMP=$(mktemp -q --tmpdir daps_setfiles.XXXXXXXX 2>/dev/null) || exit_on
 export SETFILES_TMP
 
 #-------------------------------------------------------------------
-# Create XML from ASCIIDOC
+# Create XML from AsciiDoc
 #
 if [[ "adoc" = "$SRC_FORMAT" ]]; then
     ADOC_MAIN="$MAIN"
@@ -1723,7 +1723,7 @@ if [[ "adoc" = "$SRC_FORMAT" ]]; then
     [[ 1 -eq $FORCE_REBUILD ]] && MOPTS="--always-make"
     [[ 2 -gt $VERBOSITY ]] && MOPTS="$MOPTS --silent"
 
-    make $MOPTS -f $DAPSROOT/make/adoc2xml.mk  || exit_on_error "\nConverting the ASCIIDOC sources to XML caused a fatal error.\nCheck the $(basename ${ASCIIDOC}) message above for details."
+    make $MOPTS -f $DAPSROOT/make/adoc2xml.mk  || exit_on_error "\nConverting the AsciiDoc sources to XML caused a fatal error.\nCheck the $(basename ${ASCIIDOC}) message above for details."
 fi
 #-------------------------------------------------------------------
 # Finally, run the Subcommands
