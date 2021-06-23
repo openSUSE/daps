@@ -467,7 +467,7 @@ HELP_SUBCOMMAND[xmlformat]="Prettify XML sources using the xmlformat program.\n 
 # ----------------------------------------------------------------------------
 # FUNCTIONS
 #
-# We need to declare a few basic funtions first because they are needed
+# We need to declare a few basic functions first because they are needed
 # immediately. All other functions can be found at
 # $DAPSROOT/lib/daps-functions
 # ---------
@@ -1581,7 +1581,7 @@ if [[ "adoc" = "$SRC_FORMAT" ]]; then
     ADOC_BACKEND=docbook5
     ASCIIDOC=$(which asciidoctor 2>/dev/null)
     if [[ 1 -eq $? ]]; then
-        exit_on_error "asciidoctor is not installed, you cannot parse ASCIIDoc sources."
+        exit_on_error "AsciiDoctor is not installed, you cannot parse AsciiDoc sources."
     fi
 else
     DOCBOOK_VERSION=$($XSLTPROC --stylesheet "${DAPSROOT}/daps-xslt/common/get-docbook-version.xsl" --file "$MAIN" "$XSLTPROCESSOR") || exit_on_error "Could not get DocBook version. Maybe $MAIN is not well-formed?"
