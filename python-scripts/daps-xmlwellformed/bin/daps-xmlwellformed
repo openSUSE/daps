@@ -237,8 +237,9 @@ def main(cliargs=None):
         endresult += result
 
     if args.stats:
-        msg = ("--- Successful Files={successes}, "
-               "Failed files={failures} ---").format(**locals())
+        msg = (f"--- Successful Files={successes}, "
+               f"Failed files={failures} ---"
+               )
         print(msg, file=sys.stderr)
 
     return endresult
