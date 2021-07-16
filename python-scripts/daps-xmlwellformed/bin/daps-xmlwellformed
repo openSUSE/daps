@@ -30,7 +30,10 @@ HERE = os.path.dirname(__file__)
 BASE = os.path.basename(__file__)
 XINCLUDE_XSLT = os.path.join(HERE, "%s-xinclude.xsl" % BASE)
 SUSE_NS = "urn:x-suse:ns:python"
-ENTITY_NOT_FOUND = re.compile(r"[Ee]ntity\s+'([\w_-]+)'\s+not defined")
+ENTITY_NOT_FOUND = re.compile(
+    r"FATAL:PARSER:ERR_UNDECLARED_ENTITY:\s"
+    r"[Ee]ntity\s+'([\w_-]+)'\s+not defined"
+)
 
 
 if etree.LXML_VERSION < (3, 4, 0):
@@ -46,12 +49,29 @@ if not os.path.exists(XINCLUDE_XSLT):
 class ExitCode(enum.IntEnum):
     """
     """
-    entities, xinclude = range(10, 30, 10)
+    ok, syntax, entities, xinclude, file_not_found = range(0, 50, 10)
     unknown = 100
 
 
 def is_entity_error(msg: str) -> bool:
+    """
+    Checks for undefined entity
+    """
     return bool(ENTITY_NOT_FOUND.search(msg))
+
+
+def is_syntax_error(msg: str) -> bool:
+    """
+    Checks for common XML syntax errors
+    """
+    possible_errors = (
+        "FATAL:PARSER:ERR_NAME_REQUIRED",
+        # "FATAL:PARSER:ERR_UNDECLARED_ENTITY",
+        "FATAL:PARSER:ERR_NAME_REQUIRED",
+        "FATAL:PARSER:ERR_TAG_NAME_MISMATCH",
+    )
+    return any(errormsg in msg for errormsg in possible_errors)
+
 # ------------------------------------------------------------
 # Extension Functions in a SUSE namespace
 
@@ -115,38 +135,54 @@ def process_xinclude(tree) -> list:
     #    second level
     # 2. we need to handle cases where the file cannot be found
     xitransform = etree.XSLT(etree.parse(XINCLUDE_XSLT))
-    problems = []
+    # problems = []
     try:
-        result = xitransform(tree)
+        xitransform(tree)
         for entry in xitransform.error_log:
-            msg = entry.message
-            if msg.startswith("INFO"):
-                continue
-
-            # If there is an unresolved/undefined entity,
-            # warn about it:
-            if is_entity_error(msg):
-                problems.append(msg)
-                warnings.warn_explicit(msg,
-                                       category=Warning,
-                                       filename=entry.filename,
-                                       lineno=entry.line,
-                                       )
-            # Anything related to unresolved <xi:include/> elements:
-            if msg.startswith("WARN"):
-                problems.append(msg)
-                warnings.warn_explicit(msg[6:],
-                                       category=Warning,
-                                       filename=entry.filename,
-                                       lineno=entry.line,
-                                       )
+            yield entry
 
     except etree.XSLTApplyError as err:
         # We search for "Cannot resolve URI <FILENAME>"
         uri = err.args[0].split("URI ")[-1]
-        problems.append(uri)
+        # problems.append(uri)
+        yield err
 
-    return problems
+    # yield
+
+
+def process_transform_output(entries) -> int:
+    """
+    """
+    all_warnings = []
+    for entry in entries:
+        msg = entry.message
+        if msg.startswith("INFO"):
+            continue
+
+        # If there is an unresolved/undefined entity,
+        # warn about it:
+        if is_entity_error(msg):
+            warnings.warn_explicit(msg,
+                                   category=Warning,
+                                   filename=entry.filename,
+                                   lineno=entry.line,
+                                   )
+            all_warnings.append(ExitCode.entities)
+
+        # Anything related to unresolved <xi:include/> elements:
+        if msg.startswith("WARN"):
+            warnings.warn_explicit(msg[6:],
+                                   category=Warning,
+                                   filename=entry.filename,
+                                   lineno=entry.line,
+                                   )
+            all_warnings.append(ExitCode.xinclude)
+        else:
+            print("Good")
+
+    result = set(all_warnings)
+
+    return result.pop() if len(result) == 1 else ExitCode.ok
 
 
 def print_error_log(error):
@@ -155,10 +191,11 @@ def print_error_log(error):
     :param error: error exception traceback
     """
     print("ERROR: %s" % error, file=sys.stderr)
-    print(textwrap.indent(str(error.error_log),
-                          prefix="       "),
-          file=sys.stderr
-          )
+    if hasattr(error, 'error_log'):
+        print(textwrap.indent(str(error.error_log),
+                              prefix="       "),
+              file=sys.stderr
+              )
 
 
 def check_wellformedness(xmlfile,
@@ -178,27 +215,35 @@ def check_wellformedness(xmlfile,
     xmlparser = etree.XMLParser(collect_ids=False)
     try:
         tree = etree.parse(xmlfile, parser=xmlparser)
-        if xinclude:
-            r = process_xinclude(tree)
-            # if r and warnings_as_errors:
-            #     raise ValueError()
-        return 0
 
-    # except ValueError:
-    #
-    # return ExitCode.unknown
+        # The script only continues if there are no parser errors
+        # (including undeclared entities)
+        result = 0
+        if xinclude:
+            result = process_transform_output(process_xinclude(tree))
+        return result
+
+    except OSError as err:
+        print_error_log(err)
+        return ExitCode.file_not_found.value
 
     except etree.XMLSyntaxError as err:
         print_error_log(err)
-        #for item in ("args", "code", "error_log", "filename", "lineno",
+        # for item in ("args", "code", "error_log", "filename", "lineno",
+        #             "msg", "offset", "position",
+        #             "print_file_and_line",
+        #             "text", "with_traceback",
+        #             ):
+        #    print(f"  {item} => {getattr(err, item)}")
         if is_entity_error(err.msg):
-            return ExitCode.entities
+            return ExitCode.entities.value
+        # elif is_syntax_error(err.msg):
         else:
-            return ExitCode.unknown
+            return ExitCode.syntax.value
 
     except etree.XIncludeError as err:
         print_error_log(err)
-        return ExitCode.xinclude
+        return ExitCode.xinclude.value
 
 
 def parse_cli(args=None) -> argparse.Namespace:
@@ -262,6 +307,7 @@ def main(cliargs=None):
                                       args.warnings_as_errors,
                                       args.xinclude
                                       )
+        # print("+++++", result)
         if result and args.warnings_as_errors:
             break
         if result:
