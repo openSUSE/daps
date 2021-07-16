@@ -23,7 +23,9 @@ import warnings
 
 from lxml import etree
 
-HERE = os.path.dirname(os.path.realpath(__file__))
+
+__file__ = os.path.realpath(__file__)
+HERE = os.path.dirname(__file__)
 BASE = os.path.basename(__file__)
 XINCLUDE_XSLT = os.path.join(HERE, "%s-xinclude.xsl" % BASE)
 SUSE_NS = "urn:x-suse:ns:python"
