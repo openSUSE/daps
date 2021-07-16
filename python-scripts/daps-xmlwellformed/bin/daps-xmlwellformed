@@ -214,15 +214,22 @@ def parse_cli(args=None) -> argparse.Namespace:
     return args
 
 
-if __name__ == "__main__":
+def main(cliargs=None):
+    """Entry point for the application script
+
+    :param list cliargs: Arguments to parse or None (=use :class:`sys.argv`)
+    :return: error code; 0 => everything was succesfull, !=0 => error
+    :rtype: int
+    """
     args = parse_cli()
-    endresult=0
-    failures=0
-    successes=0
+    endresult = 0
+    failures = 0
+    successes = 0
     for xmlfile in args.xmlfiles:
         result = check_wellformedness(xmlfile,
-                                  args.warnings_as_errors,
-                                  args.xinclude)
+                                      args.warnings_as_errors,
+                                      args.xinclude
+                                      )
         if result:
             failures += 1
         else:
@@ -233,4 +240,8 @@ if __name__ == "__main__":
                "Failed files={failures} ---").format(**locals())
         print(msg, file=sys.stderr)
 
-    sys.exit(endresult)
+    return endresult
+
+
+if __name__ == "__main__":
+    sys.exit(main())
