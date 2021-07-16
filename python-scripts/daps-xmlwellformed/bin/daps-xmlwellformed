@@ -15,6 +15,7 @@ __author__ = "Thomas Schraitle"
 __version__ = "0.2.1"
 
 import argparse
+import enum
 import os
 import re
 import sys
@@ -29,7 +30,7 @@ HERE = os.path.dirname(__file__)
 BASE = os.path.basename(__file__)
 XINCLUDE_XSLT = os.path.join(HERE, "%s-xinclude.xsl" % BASE)
 SUSE_NS = "urn:x-suse:ns:python"
-ENTITY_NOT_FOUND = re.compile(r'Entity\s+(.*)\s+not defined')
+ENTITY_NOT_FOUND = re.compile(r"[Ee]ntity\s+'([\w_-]+)'\s+not defined")
 
 
 if etree.LXML_VERSION < (3, 4, 0):
@@ -41,6 +42,16 @@ if not os.path.exists(XINCLUDE_XSLT):
     print("ERROR: Missing file %s" % XINCLUDE_XSLT, file=sys.stderr)
     sys.exit(125)
 
+
+class ExitCode(enum.IntEnum):
+    """
+    """
+    entities, xinclude = range(10, 30, 10)
+    unknown = 100
+
+
+def is_entity_error(msg: str) -> bool:
+    return bool(ENTITY_NOT_FOUND.search(msg))
 # ------------------------------------------------------------
 # Extension Functions in a SUSE namespace
 
@@ -114,7 +125,7 @@ def process_xinclude(tree) -> list:
 
             # If there is an unresolved/undefined entity,
             # warn about it:
-            if ENTITY_NOT_FOUND.match(msg):
+            if is_entity_error(msg):
                 problems.append(msg)
                 warnings.warn_explicit(msg,
                                        category=Warning,
@@ -138,6 +149,18 @@ def process_xinclude(tree) -> list:
     return problems
 
 
+def print_error_log(error):
+    """Prints error informations
+
+    :param error: error exception traceback
+    """
+    print("ERROR: %s" % error, file=sys.stderr)
+    print(textwrap.indent(str(error.error_log),
+                          prefix="       "),
+          file=sys.stderr
+          )
+
+
 def check_wellformedness(xmlfile,
                          warnings_as_errors=False,
                          xinclude=True) -> int:
@@ -157,18 +180,25 @@ def check_wellformedness(xmlfile,
         tree = etree.parse(xmlfile, parser=xmlparser)
         if xinclude:
             r = process_xinclude(tree)
-            if r and warnings_as_errors:
-                raise ValueError()
+            # if r and warnings_as_errors:
+            #     raise ValueError()
         return 0
 
-    except ValueError as err:
-        # print("ERROR", file=sys.stderr)
-        return 20
+    # except ValueError:
+    #
+    # return ExitCode.unknown
 
-    except (etree.XMLSyntaxError, etree.XIncludeError) as err:
-        print("ERROR: %s" % err, file=sys.stderr)
-        print(textwrap.indent(str(err.error_log), prefix="       "), file=sys.stderr)
-        return 10
+    except etree.XMLSyntaxError as err:
+        print_error_log(err)
+        #for item in ("args", "code", "error_log", "filename", "lineno",
+        if is_entity_error(err.msg):
+            return ExitCode.entities
+        else:
+            return ExitCode.unknown
+
+    except etree.XIncludeError as err:
+        print_error_log(err)
+        return ExitCode.xinclude
 
 
 def parse_cli(args=None) -> argparse.Namespace:
@@ -221,15 +251,19 @@ def main(cliargs=None):
     :return: error code; 0 => everything was succesfull, !=0 => error
     :rtype: int
     """
-    args = parse_cli()
     endresult = 0
     failures = 0
     successes = 0
+
+    args = parse_cli()
+
     for xmlfile in args.xmlfiles:
         result = check_wellformedness(xmlfile,
                                       args.warnings_as_errors,
                                       args.xinclude
                                       )
+        if result and args.warnings_as_errors:
+            break
         if result:
             failures += 1
         else:
