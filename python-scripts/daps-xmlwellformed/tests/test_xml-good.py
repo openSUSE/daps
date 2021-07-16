@@ -13,9 +13,15 @@ DATADIR = THISDIR / "data"
 GOODDIR = DATADIR / "good"
 
 
-def test_check_wellformedness_without_ents_and_without_xi():
+@pytest.mark.parametrize("xmlfile", [
+    "test-wents-wxi.xml",
+    "test-defined-entity.xml",
+    "test-external-entity.xml",
+    "test-defined-entity-with-xinclude.xml",
+])
+def test_check_wellformedness(xmlfile):
     # Given
-    xmlfile = str(GOODDIR / "test-wents-wxi.xml")
+    xmlfile = str(GOODDIR / xmlfile)
 
     # When
     result = dxwf.check_wellformedness(xmlfile)
