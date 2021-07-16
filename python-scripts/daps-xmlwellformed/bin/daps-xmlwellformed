@@ -1,0 +1,234 @@
+#!/usr/bin/env python3
+#
+# This script is needed as xmllint cannot ignore double IDs
+# lxml
+#
+#
+"""Performs a well-formedness check on XML.
+
+ * Does XInclude processing before any checks;
+ * Warns about files which cannot be found
+ * Ignores non-unique IDs (attributes xml:id or id)
+"""
+
+__author__ = "Thomas Schraitle"
+__version__ = "0.2.0"
+
+import argparse
+import os
+import re
+import sys
+import textwrap
+import warnings
+
+from lxml import etree
+
+HERE = os.path.dirname(os.path.realpath(__file__))
+BASE = os.path.basename(__file__)
+XINCLUDE_XSLT = os.path.join(HERE, "%s-xinclude.xsl" % BASE)
+SUSE_NS = "urn:x-suse:ns:python"
+ENTITY_NOT_FOUND = re.compile(r'Entity\s+(.*)\s+not defined')
+
+
+if etree.LXML_VERSION < (3, 4, 0):
+    print("ERROR: I need a minimum version of 3.4.0 of lxml.",
+          file=sys.stderr)
+    sys.exit(10)
+
+if not os.path.exists(XINCLUDE_XSLT):
+    print("ERROR: Missing file %s" % XINCLUDE_XSLT, file=sys.stderr)
+    sys.exit(125)
+
+# ------------------------------------------------------------
+# Extension Functions in a SUSE namespace
+
+def exists(context, f) -> bool:
+    """Test whether a path exists.  Returns False for
+       broken symbolic links
+
+        :param context:
+        :param list f: list of path name (however, we
+                       are only interested in the first
+                       item
+        :return: True=Path exists, False otherwise
+        :rtype: bool
+    """
+    f = f[0]
+    d = context.context_node.getroottree().docinfo.URL
+    d = os.path.dirname(d)
+    return os.path.exists(os.path.join(d, f))
+
+
+def abspath(context, f) -> str:
+    """Return the absolute path of the context node
+
+        :param context:
+        :param list f: list of path name (however, we
+                       are only interested in the first
+                       item
+        :return: absolute path
+        :rtype: str
+    """
+    f = f[0]
+    d = context.context_node.getroottree().docinfo.URL
+    d = os.path.dirname(d)
+    return os.path.abspath(os.path.join(d, f))
+
+
+# ------------------------------------------------------------
+#
+
+def process_xinclude(tree) -> list:
+    """Process the tree with a XSLT stylesheet which
+       resolves any XIncludes. Prints
+
+    :param tree: the ElementTree
+    """
+    # This notation is needed for lxml <v4:
+    ns = etree.FunctionNamespace(SUSE_NS)
+    ns['exists'] = exists
+    ns['abspath'] = abspath
+
+    # tree.xinclude()
+    # HACK for lxml < v4.2.1:
+    # This test is needed to perform XInclude resolution on
+    # second and third levels:
+    # if list(tree.iter("{http://www.w3.org/2001/XInclude}include")):
+    #    tree.xinclude()
+
+    # Let's use XSLT to handle XIncludes manually; this is needed
+    # for two reasons:
+    # 1. lxml seems to have a bug when resolving XIncludes on the
+    #    second level
+    # 2. we need to handle cases where the file cannot be found
+    xitransform = etree.XSLT(etree.parse(XINCLUDE_XSLT))
+    problems = []
+    try:
+        result = xitransform(tree)
+        for entry in xitransform.error_log:
+            msg = entry.message
+            if msg.startswith("INFO"):
+                continue
+
+            # If there is an unresolved/undefined entity,
+            # warn about it:
+            if ENTITY_NOT_FOUND.match(msg):
+                problems.append(msg)
+                warnings.warn_explicit(msg,
+                                       category=Warning,
+                                       filename=entry.filename,
+                                       lineno=entry.line,
+                                       )
+            # Anything related to unresolved <xi:include/> elements:
+            if msg.startswith("WARN"):
+                problems.append(msg)
+                warnings.warn_explicit(msg[6:],
+                                       category=Warning,
+                                       filename=entry.filename,
+                                       lineno=entry.line,
+                                       )
+
+    except etree.XSLTApplyError as err:
+        # We search for "Cannot resolve URI <FILENAME>"
+        uri = err.args[0].split("URI ")[-1]
+        problems.append(uri)
+
+    return problems
+
+
+def check_wellformedness(xmlfile,
+                         warnings_as_errors=False,
+                         xinclude=True) -> int:
+    """Checks a file for well-formedness
+
+    This only works with lxml >= 3.4.0 (because of collect_ids option)
+
+    :param str xmlfile: filename to XML file
+    :param bool xinclude: do xinclude processing (default: True) or not
+    :return: 0 (everything ok) or != 0 (some problem)
+    :rtype: int
+    """
+    # We don't want to collect all IDs to avoid problems when
+    # IDs are non-unique:
+    xmlparser = etree.XMLParser(collect_ids=False)
+    try:
+        tree = etree.parse(xmlfile, parser=xmlparser)
+        if xinclude:
+            r = process_xinclude(tree)
+            if r and warnings_as_errors:
+                raise ValueError()
+        return 0
+
+    except ValueError as err:
+        # print("ERROR", file=sys.stderr)
+        return 20
+
+    except (etree.XMLSyntaxError, etree.XIncludeError) as err:
+        print("ERROR: %s" % err, file=sys.stderr)
+        print(textwrap.indent(str(err.error_log), prefix="       "), file=sys.stderr)
+        return 10
+
+
+def parse_cli(args=None) -> argparse.Namespace:
+    """Parse CLI arguments
+
+    :param list args: Use the list or sys.args
+    :return: parsed arguments
+    :rtype: :class:`argparse.Namespace`
+    """
+    parser = argparse.ArgumentParser(description=__doc__.split("\n", 1)[0],
+                                     epilog=__doc__.split("\n", 1)[-1],
+                                     )
+    parser.add_argument("--version",
+                        action="version",
+                        version="%(prog)s {}".format(__version__),
+                        )
+    parser.add_argument("--xinclude",
+                        action="store_true",
+                        default=False,
+                        help="Do XInclude processing"
+                        )
+    parser.add_argument("-W", "--warnings-as-errors",
+                        action="store_true",
+                        default=False,
+                        help=("Flag to set the behavior when "
+                              "referenced files with XIncludes cannot "
+                              "be found; "
+                              "(default: %(default)s)")
+                        )
+    parser.add_argument("-S", "--stats",
+                        action="store_true",
+                        default=False,
+                        help=("Print statistic about successful/"
+                              "failed files"
+                              )
+                        )
+    parser.add_argument("xmlfiles",
+                        nargs="+",
+                        help="XML file(s) to check for well-formedness"
+                        )
+    args = parser.parse_args(args)
+    # print(args, file=sys.stderr)
+    return args
+
+
+if __name__ == "__main__":
+    args = parse_cli()
+    endresult=0
+    failures=0
+    successes=0
+    for xmlfile in args.xmlfiles:
+        result = check_wellformedness(xmlfile,
+                                  args.warnings_as_errors,
+                                  args.xinclude)
+        if result:
+            failures += 1
+        else:
+            successes += 1
+        endresult += result
+    if args.stats:
+        msg = ("--- Successful Files={successes}, "
+               "Failed files={failures} ---").format(**locals())
+        print(msg, file=sys.stderr)
+
+    sys.exit(endresult)
