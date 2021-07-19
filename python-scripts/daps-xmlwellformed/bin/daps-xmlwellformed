@@ -49,7 +49,7 @@ if not os.path.exists(XINCLUDE_XSLT):
 class ExitCode(enum.IntEnum):
     """
     """
-    ok, syntax, entities, xinclude, file_not_found = range(0, 50, 10)
+    ok, syntax, entities, xinclude, multiple, file_not_found = range(0, 60, 10)
     unknown = 100
 
 
@@ -74,6 +74,7 @@ def is_syntax_error(msg: str) -> bool:
 
 # ------------------------------------------------------------
 # Extension Functions in a SUSE namespace
+#
 
 def exists(context, f) -> bool:
     """Test whether a path exists.  Returns False for
@@ -111,10 +112,11 @@ def abspath(context, f) -> str:
 # ------------------------------------------------------------
 #
 
-def process_xinclude(tree) -> list:
+def process_xinclude(xmlfile, tree) -> list:
     """Process the tree with a XSLT stylesheet which
        resolves any XIncludes. Prints
 
+    :param xmlfile: path to the XML file
     :param tree: the ElementTree
     """
     # This notation is needed for lxml <v4:
@@ -136,24 +138,29 @@ def process_xinclude(tree) -> list:
     # 2. we need to handle cases where the file cannot be found
     xitransform = etree.XSLT(etree.parse(XINCLUDE_XSLT))
     # problems = []
-    try:
-        xitransform(tree)
-        for entry in xitransform.error_log:
-            yield entry
 
-    except etree.XSLTApplyError as err:
-        # We search for "Cannot resolve URI <FILENAME>"
-        uri = err.args[0].split("URI ")[-1]
-        # problems.append(uri)
-        yield err
+    xitransform(tree)
+    for entry in xitransform.error_log:
+        msg = entry.message
+        if msg.startswith("INFO"):
+            continue
+        # If there is an unresolved/undefined entity,
+        # warn about it:
+        if is_entity_error(msg):
+            # problems.append((xmlfile, msg, ExitCode.entities))
+            yield (xmlfile, msg, ExitCode.entities)
 
-    # yield
+        # Anything related to unresolved <xi:include/> elements:
+        if msg.startswith("WARN"):
+            # problems.append((xmlfile, msg[6:], ExitCode.xinclude))
+            yield (xmlfile, msg[6:], ExitCode.xinclude)
+
+    yield from []
+    # return problems
 
 
 def process_transform_output(entries) -> int:
     """
-    """
-    all_warnings = []
     for entry in entries:
         msg = entry.message
         if msg.startswith("INFO"):
@@ -177,25 +184,45 @@ def process_transform_output(entries) -> int:
                                    lineno=entry.line,
                                    )
             all_warnings.append(ExitCode.xinclude)
-        else:
-            print("Good")
+        # else:
+        #    print("Good")
 
     result = set(all_warnings)
 
     return result.pop() if len(result) == 1 else ExitCode.ok
+    """
+    #
+
+    exit = set()
+    for entry in entries:
+        # entry consists of a tuple:
+        # (xmlfile, message, errorcode)
+        print_error_log(*entry[0:2])
+
+        # Save our error code
+        exit.add(entry[2])
+    if len(exit) == 1:
+        return exit.pop()
+    elif len(exit) > 1:
+        return ExitCode.multiple
+    else:
+        return ExitCode.ok
 
 
-def print_error_log(error):
+def print_error_log(xmlfile, error, errtype="ERROR"):
     """Prints error informations
 
     :param error: error exception traceback
     """
-    print("ERROR: %s" % error, file=sys.stderr)
-    if hasattr(error, 'error_log'):
-        print(textwrap.indent(str(error.error_log),
-                              prefix="       "),
-              file=sys.stderr
-              )
+    indent = "    "
+    template = "{xmlfile}:\n{msg}"
+
+    msg = f"{errtype}:{str(error)}"
+    msg = textwrap.indent(text=msg, prefix=indent)
+    msg = template.format(xmlfile=xmlfile,
+                          msg=msg,
+                          )
+    print(msg, file=sys.stderr)
 
 
 def check_wellformedness(xmlfile,
@@ -218,17 +245,17 @@ def check_wellformedness(xmlfile,
 
         # The script only continues if there are no parser errors
         # (including undeclared entities)
-        result = 0
+        result = ExitCode.ok
         if xinclude:
-            result = process_transform_output(process_xinclude(tree))
-        return result
+            result = process_transform_output(process_xinclude(xmlfile, tree))
+        return int(result)
 
     except OSError as err:
-        print_error_log(err)
+        print_error_log(xmlfile, err)
         return ExitCode.file_not_found.value
 
     except etree.XMLSyntaxError as err:
-        print_error_log(err)
+        print_error_log(xmlfile, err)
         # for item in ("args", "code", "error_log", "filename", "lineno",
         #             "msg", "offset", "position",
         #             "print_file_and_line",
@@ -242,8 +269,11 @@ def check_wellformedness(xmlfile,
             return ExitCode.syntax.value
 
     except etree.XIncludeError as err:
-        print_error_log(err)
+        print_error_log(xmlfile, err)
         return ExitCode.xinclude.value
+
+    except etree.XSLTApplyError as err:
+        print("XSLTApplyError", err)
 
 
 def parse_cli(args=None) -> argparse.Namespace:
@@ -289,14 +319,14 @@ def parse_cli(args=None) -> argparse.Namespace:
     return args
 
 
-def main(cliargs=None):
+def main(cliargs=None) -> int:
     """Entry point for the application script
 
     :param list cliargs: Arguments to parse or None (=use :class:`sys.argv`)
     :return: error code; 0 => everything was succesfull, !=0 => error
     :rtype: int
     """
-    endresult = 0
+    endresult = ExitCode.ok
     failures = 0
     successes = 0
 
@@ -304,8 +334,8 @@ def main(cliargs=None):
 
     for xmlfile in args.xmlfiles:
         result = check_wellformedness(xmlfile,
-                                      args.warnings_as_errors,
-                                      args.xinclude
+                                      # args.warnings_as_errors,
+                                      xinclude=args.xinclude
                                       )
         # print("+++++", result)
         if result and args.warnings_as_errors:
@@ -322,7 +352,7 @@ def main(cliargs=None):
                )
         print(msg, file=sys.stderr)
 
-    return endresult
+    return int(endresult)
 
 
 if __name__ == "__main__":
