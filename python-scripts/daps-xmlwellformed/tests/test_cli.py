@@ -38,14 +38,13 @@ def test_invalid(capsys):
     assert capsys.readouterr()
 
 
-@pytest.mark.skip
 def test_version(capsys):
     # given
     # n/a
 
     # when
     with pytest.raises(SystemExit):
-        dxwf.main(["prog", "--version"])
+        dxwf.main(["--version"])
     captured = capsys.readouterr()
 
     # then
