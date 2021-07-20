@@ -36,12 +36,12 @@ ENTITY_NOT_FOUND = re.compile(
 )
 
 
-if etree.LXML_VERSION < (3, 4, 0):
+if etree.LXML_VERSION < (3, 4, 0):  # pragma: no cover
     print("ERROR: I need a minimum version of 3.4.0 of lxml.",
           file=sys.stderr)
     sys.exit(10)
 
-if not os.path.exists(XINCLUDE_XSLT):
+if not os.path.exists(XINCLUDE_XSLT):  # pragma: no cover
     print("ERROR: Missing file %s" % XINCLUDE_XSLT, file=sys.stderr)
     sys.exit(125)
 
