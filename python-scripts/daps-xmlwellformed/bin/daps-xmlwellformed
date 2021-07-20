@@ -330,7 +330,7 @@ def main(cliargs=None) -> int:
     failures = 0
     successes = 0
 
-    args = parse_cli()
+    args = parse_cli(cliargs)
 
     for xmlfile in args.xmlfiles:
         result = check_wellformedness(xmlfile,
