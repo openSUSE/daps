@@ -50,7 +50,7 @@ class ExitCode(enum.IntEnum):
     """
     """
     ok, syntax, entities, xinclude, multiple, file_not_found = range(0, 60, 10)
-    unknown = 100
+    unknown = 200
 
 
 def is_entity_error(msg: str) -> bool:
@@ -60,17 +60,18 @@ def is_entity_error(msg: str) -> bool:
     return bool(ENTITY_NOT_FOUND.search(msg))
 
 
-def is_syntax_error(msg: str) -> bool:
-    """
-    Checks for common XML syntax errors
-    """
-    possible_errors = (
-        "FATAL:PARSER:ERR_NAME_REQUIRED",
-        # "FATAL:PARSER:ERR_UNDECLARED_ENTITY",
-        "FATAL:PARSER:ERR_NAME_REQUIRED",
-        "FATAL:PARSER:ERR_TAG_NAME_MISMATCH",
-    )
-    return any(errormsg in msg for errormsg in possible_errors)
+
+#def is_syntax_error(msg: str) -> bool:
+#    """
+#    Checks for common XML syntax errors
+#    """
+#    possible_errors = (
+#        "FATAL:PARSER:ERR_NAME_REQUIRED",
+#        # "FATAL:PARSER:ERR_UNDECLARED_ENTITY",
+#        "FATAL:PARSER:ERR_NAME_REQUIRED",
+#        "FATAL:PARSER:ERR_TAG_NAME_MISMATCH",
+#    )
+#    return any(errormsg in msg for errormsg in possible_errors)
 
 # ------------------------------------------------------------
 # Extension Functions in a SUSE namespace
@@ -203,6 +204,7 @@ def process_transform_output(entries) -> int:
         exit.add(entry[2])
     if len(exit) == 1:
         return exit.pop()
+    # TODO: not sure if entity & xinclude apply
     elif len(exit) > 1:
         return ExitCode.multiple
     else:
@@ -273,7 +275,8 @@ def check_wellformedness(xmlfile,
         return ExitCode.xinclude.value
 
     except etree.XSLTApplyError as err:
-        print("XSLTApplyError", err)
+        print_error_log(xmlfile, err)
+        return ExitCode.xinclude
 
 
 def parse_cli(args=None) -> argparse.Namespace:
@@ -315,7 +318,6 @@ def parse_cli(args=None) -> argparse.Namespace:
                         help="XML file(s) to check for well-formedness"
                         )
     args = parser.parse_args(args)
-    # print(args, file=sys.stderr)
     return args
 
 
@@ -337,7 +339,6 @@ def main(cliargs=None) -> int:
                                       # args.warnings_as_errors,
                                       xinclude=args.xinclude
                                       )
-        # print("+++++", result)
         if result and args.warnings_as_errors:
             break
         if result:

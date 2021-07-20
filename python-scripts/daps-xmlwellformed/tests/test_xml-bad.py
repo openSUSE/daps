@@ -49,7 +49,7 @@ def test_unknown_entity_stderr(capsys):
     captured = capsys.readouterr()
 
     # Then
-    assert result != 0
+    assert result == dxwf.ExitCode.syntax
     assert xmlfile in captured.err
     # assert "Entity 'unknown' not defined" in captured.err
     assert re.search(r"[eE]ntity\s'([a-zA-Z\d]+)'\snot\sdefined",
@@ -84,15 +84,18 @@ def test_file_not_found():
     assert result == dxwf.ExitCode.file_not_found
 
 
-@pytest.mark.parametrize("xmlfile", [
-    "test-xinclude-file-not-found.xml",
+@pytest.mark.parametrize("xmlfile,errormsg", [
+    ("test-xinclude-file-not-found.xml", "File not found"),
+    ("test-xinclude-undeclared-entity.xml", "Cannot resolve URI"),
 ])
-def test_xinclude_errors(xmlfile):
+def test_xinclude_errors(xmlfile, errormsg, capsys):
     # Given
     xmlfile = str(BADDIR / xmlfile)
 
     # When
-    result = dxwf.check_wellformedness(xmlfile)
+    result = dxwf.check_wellformedness(xmlfile, xinclude=True)
+    captured = capsys.readouterr()
 
     # Then
+    assert errormsg in captured.err
     assert result == dxwf.ExitCode.xinclude
