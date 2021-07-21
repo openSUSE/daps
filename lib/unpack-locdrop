@@ -155,7 +155,7 @@ function unpack-locdrop {
 
     # Copy remaining DC-files
     #
-    echo "Copying DCfiles"
+    echo "Copying DC files"
     for DC in $DCFILE_LIST; do
         if [[ -f ${P_NOTRANS_DIR}/$DC ]]; then
             [[ 1 -eq $DEBUG ]] && echo "Copying ${P_NOTRANS_DIR}/$DATA"
@@ -245,25 +245,25 @@ EOF
 function help_notrans-dir {
     cat <<EOF
     --notrans-dir=DIRECTORY   Relative or absolute path to the directory
-                              containing the untranslated sources. Links
-                              pointing to this directory are created for all
-                              files listed in manifest_notrans.txt.
-                              Optional. If not specified, the dirname of the
-                              DC-file is used.
-                              Default: DC-file directory
+                              containing the original (untranslated) sources.
+                              Links pointing to this directory are created for
+                              all files listed in manifest_notrans.txt.
+                              Optional. If not specified, the dir name of the
+                              DC file is used.
+                              Default: DC file directory
 EOF
 }
 function help_remove-dm {
     cat <<EOF
-    --remove-dm               When used, an existing <dm:docmanager> block
-                              will be removed from the translated files.
+    --remove-dm               Removes <dm:docmanager> blocks from the
+                              translated files.
                               Default: unset
 EOF
 }
 function help_trans-files {
     cat <<EOF
     --trans-files="<LIST>"    Specify one or more tarballs with translated
-                              files (space-separeted) for a single
+                              files (space-separated) for a single
                               language.
                               Default: unset
 EOF
