@@ -1,4 +1,5 @@
 from pathlib import Path
+import logging
 import re
 import sys
 
@@ -25,36 +26,45 @@ def test_syntax_error():
     assert result != 0
 
 
-def test_syntax_error_stderr(capsys):
+def test_syntax_error_stderr(caplog):
     # Given
     xmlfile = "test-syntax-err-tag-name-mismatch.xml"
+    messages = (
+        ("Opening and ending tag mismatch: title line 7 and article",),
+        # These error messages are different between different lxml versions:
+        ("EndTag: '</' not found",  # lxml >=4.5.2
+         "Premature end of data in tag article line 5", # lxml >=4.4.3
+         ),
+    )
     file = str(BADDIR / xmlfile)
 
     # When
-    dxwf.check_wellformedness(file)
-    captured = capsys.readouterr()
+    with caplog.at_level(logging.ERROR):
+        dxwf.check_wellformedness(file)
 
     # Then
-    assert xmlfile in captured.err
-    assert "ERROR" in captured.err
+    assert len(caplog.records) == len(messages)
+    for record, msg in zip(caplog.records, messages):
+        assert record.msg in msg
 
 
-def test_unknown_entity_stderr(capsys):
+def test_unknown_entity_stderr(caplog):
     # Given
     xmlfile = "test-syntax-err-undeclared-entity.xml"
+    messages = (
+        "Entity 'unknown' not defined",
+    )
     file = str(BADDIR / xmlfile)
 
     # When
-    result = dxwf.check_wellformedness(file)
-    captured = capsys.readouterr()
+    with caplog.at_level(logging.ERROR):
+        result = dxwf.check_wellformedness(file)
 
     # Then
     assert result == dxwf.ExitCode.syntax
-    assert xmlfile in captured.err
-    # assert "Entity 'unknown' not defined" in captured.err
-    assert re.search(r"[eE]ntity\s'([a-zA-Z\d]+)'\snot\sdefined",
-                     captured.err,
-                     )
+    assert len(caplog.records) == len(messages)
+    for record, msg in zip(caplog.records, messages):
+        assert record.msg == msg
 
 
 @pytest.mark.parametrize("xmlfile", [
@@ -84,18 +94,25 @@ def test_file_not_found():
     assert result == dxwf.ExitCode.file_not_found
 
 
-@pytest.mark.parametrize("xmlfile,errormsg", [
-    ("test-xinclude-file-not-found.xml", "File not found"),
-    ("test-xinclude-undeclared-entity.xml", "Cannot resolve URI"),
+@pytest.mark.parametrize("xmlfile,messages", [
+    ("test-xinclude-file-not-found.xml",
+     (r"could not load (.*)tests/data/bad/file-not-found.xml, and no fallback was found",
+      )
+     ),
+    ("test-xinclude-undeclared-entity.xml",
+     ("Entity 'unknown' not defined",
+      r"could not load (.*)tests/data/bad/test-syntax-err-undeclared-entity.xml, and no fallback was found",
+      )
+     ),
 ])
-def test_xinclude_errors(xmlfile, errormsg, capsys):
+def test_xinclude_errors(xmlfile, messages, caplog):
     # Given
     xmlfile = str(BADDIR / xmlfile)
 
     # When
-    result = dxwf.check_wellformedness(xmlfile, xinclude=True)
-    captured = capsys.readouterr()
+    with caplog.at_level(logging.ERROR):
+        result = dxwf.check_wellformedness(xmlfile, xinclude=True)
 
-    # Then
-    assert errormsg in captured.err
-    assert result == dxwf.ExitCode.xinclude
+    assert len(caplog.records) == len(messages)
+    for record, pattern in zip(caplog.records, messages):
+        assert re.search(pattern, record.msg)

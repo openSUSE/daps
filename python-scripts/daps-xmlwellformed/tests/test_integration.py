@@ -1,4 +1,5 @@
 from pathlib import Path
+import logging
 import re
 import sys
 
@@ -23,7 +24,7 @@ def test_main_single_unknown():
     result = dxwf.main(["--xinclude", file])
 
     # Then
-    assert result != 0
+    assert result == dxwf.ExitCode.file_not_found
 
 
 def test_main_two():
@@ -39,7 +40,7 @@ def test_main_two():
     assert result != 0
 
 
-def test_main_one_good_one_bad(capsys):
+def test_main_one_good_one_bad(caplog):
     # Given
     xmlfiles = [
         # the good
@@ -47,14 +48,19 @@ def test_main_one_good_one_bad(capsys):
         # the bad
         "test-syntax-comments.xml",
     ]
+    messages = (
+        "Comment not terminated",
+        "Start tag expected, '<' not found",
+    )
     dirs = [GOODDIR, BADDIR]
     files = [str(d / f) for d, f in zip(dirs, xmlfiles)]
 
     # When
-    result = dxwf.main(["--xinclude", *files])
-    captured = capsys.readouterr()
+    with caplog.at_level(logging.ERROR):
+        result = dxwf.main(["--xinclude", *files])
 
     # Then
     assert result != 0
-    assert xmlfiles[0] not in captured.err
-    assert xmlfiles[1] in captured.err
+    assert len(caplog.records) == len(messages)
+    for record, msg in zip(caplog.records, messages):
+        assert record.msg == msg
