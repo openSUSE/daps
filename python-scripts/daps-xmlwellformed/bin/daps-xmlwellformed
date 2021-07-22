@@ -25,14 +25,30 @@ import sys
 from lxml import etree
 
 
+ROOTLOGGER = "lxmlerrors"
+# Hint: file keyword needs to be filled with extra keyword on the
+# logger methods .critical, .debug(), .error(), .fatal(), and .warn().
+# For example:
+#   log.error("...", extra=dict(file="foo.xml", ))
+# Basically everything can be used what is in ERROR_PATTERN
+FORMAT = "%(file)s:\n    %(levelname)s:%(message)s (line %(line)s column %(col)s)"
+
+logger = logging.getLogger(ROOTLOGGER)
+ch = logging.StreamHandler()
+ch.setLevel(logging.ERROR)
+ch.setFormatter(logging.Formatter(FORMAT))
+logger.addHandler(ch)
+
+if etree.LXML_VERSION < (4, 4, 2):
+    logger.fatal("Need a minimum version of 4.4.2 of lxml, got %s",
+                 ".".join([str(e) for e in etree.LXML_VERSION]),
+                 extra=dict(file=__file__,
+                            line="", col=""))
+    sys.exit(10)
+
+
 __file__ = os.path.realpath(__file__)
-HERE = os.path.dirname(__file__)
-BASE = os.path.basename(__file__)
-SUSE_NS = "urn:x-suse:ns:python"
-ENTITY_NOT_FOUND = re.compile(
-    r"FATAL:PARSER:ERR_UNDECLARED_ENTITY:\s"
-    r"[Ee]ntity\s+'([\w_-]+)'\s+not defined"
-)
+
 
 # Format of libxml error messages:
 #   foo.xml:3:16:FATAL:PARSER:ERR_UNDECLARED_ENTITY:
@@ -48,26 +64,7 @@ ERROR_PATTERN = re.compile(
     r"(?P<message>.*)$"
 )
 
-ROOTLOGGER = "lxmlerrors"
-# Hint: file keyword needs to be filled with extra keyword on the
-# logger methods .critical, .debug(), .error(), .fatal(), and .warn().
-# For example:
-#   log.error("...", extra=dict(file="foo.xml", ))
-# Basically everything can be used what is in ERROR_PATTERN
-FORMAT = "%(file)s:\n    %(levelname)s:%(message)s (line %(line)s column %(col)s)"
 
-logger = logging.getLogger(ROOTLOGGER)
-ch = logging.StreamHandler()
-ch.setLevel(logging.ERROR)
-ch.setFormatter(logging.Formatter(FORMAT))
-logger.addHandler(ch)
-
-
-if etree.LXML_VERSION < (4, 4, 2):  # pragma: no cover
-    logger.fatal("Need a minimum version of 4.4.2 of lxml, got %s",
-                 etree.LXML_VERSION,
-                 extra=dict(file=__file__))
-    sys.exit(10)
 
 class ExitCode(enum.IntEnum):
     """Our return codes
@@ -139,7 +136,7 @@ def check_wellformedness(xmlfile: str, xinclude: bool = True) -> int:
 
     except OSError as err:
         # FATAL:PARSER:ERR_UNDECLARED_ENTITY:
-        # Write
+        # Write artificial error message to our log stream:
         log_stream.write(f"{xmlfile}:0:0:FATAL:PARSER:FILE_NOT_FOUND:File does not exist\n")
         result = ExitCode.file_not_found.value
 
