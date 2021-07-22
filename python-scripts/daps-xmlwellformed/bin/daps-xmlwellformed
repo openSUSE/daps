@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
 #
-# This script is needed as xmllint cannot ignore double IDs
-# lxml
-#
-#
 """Performs a well-formedness check on XML.
 
- * Does XInclude processing before any checks;
- * Warns about files which cannot be found
+This script is needed as xmllint cannot ignore double IDs.
+It performs:
+
+ * Does XInclude processing if requested (option --xinclude)
  * Ignores non-unique IDs (attributes xml:id or id)
+ * Output errors about undeclared entities
 """
 
 __author__ = "Thomas Schraitle"
@@ -18,7 +17,6 @@ import argparse
 import enum
 import logging
 from io import StringIO
-import os
 import re
 import sys
 
@@ -47,9 +45,6 @@ if etree.LXML_VERSION < (4, 4, 2):
     sys.exit(10)
 
 
-__file__ = os.path.realpath(__file__)
-
-
 # Format of libxml error messages:
 #   foo.xml:3:16:FATAL:PARSER:ERR_UNDECLARED_ENTITY:
 # This regex was tested against XML files with ":"
@@ -63,7 +58,6 @@ ERROR_PATTERN = re.compile(
     r":\s*"
     r"(?P<message>.*)$"
 )
-
 
 
 class ExitCode(enum.IntEnum):
