@@ -1,172 +1,156 @@
 #!/usr/bin/env python3
 #
-# This script is needed as xmllint cannot ignore double IDs
-# lxml
-#
-#
 """Performs a well-formedness check on XML.
 
- * Does XInclude processing before any checks;
- * Warns about files which cannot be found
+This script is needed as xmllint cannot ignore duplicated IDs.
+This tool:
+
+ * Processes XIncludes (if requested using the option --xinclude)
  * Ignores non-unique IDs (attributes xml:id or id)
+ * Outputs errors about undeclared entities
 """
 
 __author__ = "Thomas Schraitle"
-__version__ = "0.2.0"
+__version__ = "0.3.1"
 
 import argparse
-import os
+import enum
+import logging
+from io import StringIO
 import re
 import sys
-import textwrap
-import warnings
 
 from lxml import etree
 
-HERE = os.path.dirname(os.path.realpath(__file__))
-BASE = os.path.basename(__file__)
-XINCLUDE_XSLT = os.path.join(HERE, "%s-xinclude.xsl" % BASE)
-SUSE_NS = "urn:x-suse:ns:python"
-ENTITY_NOT_FOUND = re.compile(r'Entity\s+(.*)\s+not defined')
 
+ROOTLOGGER = "lxmlerrors"
+# Hint: file keyword needs to be filled with extra keyword on the
+# logger methods .critical, .debug(), .error(), .fatal(), and .warn().
+# For example:
+#   log.error("...", extra=dict(file="foo.xml", ))
+# Basically everything can be used what is in ERROR_PATTERN
+FORMAT = "%(file)s:\n    %(levelname)s:%(message)s (line %(line)s column %(col)s)"
 
-if etree.LXML_VERSION < (3, 4, 0):
-    print("ERROR: I need a minimum version of 3.4.0 of lxml.",
-          file=sys.stderr)
+logger = logging.getLogger(ROOTLOGGER)
+ch = logging.StreamHandler()
+ch.setLevel(logging.ERROR)
+ch.setFormatter(logging.Formatter(FORMAT))
+logger.addHandler(ch)
+
+if etree.LXML_VERSION < (4, 4, 2):
+    logger.fatal("Need a minimum version of 4.4.2 of lxml, got %s",
+                 ".".join([str(e) for e in etree.LXML_VERSION]),
+                 extra=dict(file=__file__,
+                            line="", col=""))
     sys.exit(10)
 
-if not os.path.exists(XINCLUDE_XSLT):
-    print("ERROR: Missing file %s" % XINCLUDE_XSLT, file=sys.stderr)
-    sys.exit(125)
 
-# ------------------------------------------------------------
-# Extension Functions in a SUSE namespace
+# Format of libxml error messages:
+#   foo.xml:3:16:FATAL:PARSER:ERR_UNDECLARED_ENTITY:
+# This regex was tested against XML files with ":"
+ERROR_PATTERN = re.compile(
+    r"(?P<file>.*)"
+    r":(?P<line>\d+)"
+    r":(?P<col>\d+)"
+    r":(?P<level>[A-Z]+)"
+    r":(?P<origin>[A-Z]+)"
+    r":(?P<domain>[A-Z_]+)"
+    r":\s*"
+    r"(?P<message>.*)$"
+)
 
-def exists(context, f) -> bool:
-    """Test whether a path exists.  Returns False for
-       broken symbolic links
 
-        :param context:
-        :param list f: list of path name (however, we
-                       are only interested in the first
-                       item
-        :return: True=Path exists, False otherwise
-        :rtype: bool
+class ExitCode(enum.IntEnum):
+    """Our return codes
     """
-    f = f[0]
-    d = context.context_node.getroottree().docinfo.URL
-    d = os.path.dirname(d)
-    return os.path.exists(os.path.join(d, f))
+    ok, syntax, entities, xinclude, multiple, file_not_found = range(0, 60, 10)
+    unknown = 200
 
 
-def abspath(context, f) -> str:
-    """Return the absolute path of the context node
-
-        :param context:
-        :param list f: list of path name (however, we
-                       are only interested in the first
-                       item
-        :return: absolute path
-        :rtype: str
+def extract_log(stream):
+    """Extract log record from stream
     """
-    f = f[0]
-    d = context.context_node.getroottree().docinfo.URL
-    d = os.path.dirname(d)
-    return os.path.abspath(os.path.join(d, f))
+    for line in stream.getvalue().split("\n"):
+        if not line:
+            continue
+        match = ERROR_PATTERN.search(line)
+        yield match.groupdict()
 
 
-# ------------------------------------------------------------
-#
+def print_error_msg(stream) -> int:
+    """Print log line from stream
 
-def process_xinclude(tree) -> list:
-    """Process the tree with a XSLT stylesheet which
-       resolves any XIncludes. Prints
-
-    :param tree: the ElementTree
+    :param stream: the stream we want to extract the messages from
+    :return: the number of found entries (=error message lines)
     """
-    # This notation is needed for lxml <v4:
-    ns = etree.FunctionNamespace(SUSE_NS)
-    ns['exists'] = exists
-    ns['abspath'] = abspath
+    error_map = {
+        "FATAL": logging.FATAL,  # etree.ErrorLevels.FATAL
+        "ERROR": logging.ERROR,  # etree.ErrorLevels.ERROR
+        "WARNING": logging.WARNING,  # etree.ErrorLevels.WARNING
+    }
+    idx = 0
+    for entry in extract_log(stream):
+        level = error_map.get(entry["level"], logging.ERROR)
+        msg = entry.pop("message")
+        logger.log(level, msg, extra=entry)
+        idx += 1
 
-    # tree.xinclude()
-    # HACK for lxml < v4.2.1:
-    # This test is needed to perform XInclude resolution on
-    # second and third levels:
-    # if list(tree.iter("{http://www.w3.org/2001/XInclude}include")):
-    #    tree.xinclude()
-
-    # Let's use XSLT to handle XIncludes manually; this is needed
-    # for two reasons:
-    # 1. lxml seems to have a bug when resolving XIncludes on the
-    #    second level
-    # 2. we need to handle cases where the file cannot be found
-    xitransform = etree.XSLT(etree.parse(XINCLUDE_XSLT))
-    problems = []
-    try:
-        result = xitransform(tree)
-        for entry in xitransform.error_log:
-            msg = entry.message
-            if msg.startswith("INFO"):
-                continue
-
-            # If there is an unresolved/undefined entity,
-            # warn about it:
-            if ENTITY_NOT_FOUND.match(msg):
-                problems.append(msg)
-                warnings.warn_explicit(msg,
-                                       category=Warning,
-                                       filename=entry.filename,
-                                       lineno=entry.line,
-                                       )
-            # Anything related to unresolved <xi:include/> elements:
-            if msg.startswith("WARN"):
-                problems.append(msg)
-                warnings.warn_explicit(msg[6:],
-                                       category=Warning,
-                                       filename=entry.filename,
-                                       lineno=entry.line,
-                                       )
-
-    except etree.XSLTApplyError as err:
-        # We search for "Cannot resolve URI <FILENAME>"
-        uri = err.args[0].split("URI ")[-1]
-        problems.append(uri)
-
-    return problems
+    return idx
 
 
-def check_wellformedness(xmlfile,
-                         warnings_as_errors=False,
-                         xinclude=True) -> int:
+def check_wellformedness(xmlfile: str, xinclude: bool = True) -> int:
     """Checks a file for well-formedness
 
     This only works with lxml >= 3.4.0 (because of collect_ids option)
 
-    :param str xmlfile: filename to XML file
-    :param bool xinclude: do xinclude processing (default: True) or not
+    :param xmlfile: filename to XML file
+    :param xinclude: do xinclude processing (default: True) or not
     :return: 0 (everything ok) or != 0 (some problem)
     :rtype: int
     """
     # We don't want to collect all IDs to avoid problems when
     # IDs are non-unique:
+    result = ExitCode.ok
+
+    log_stream = StringIO()
+    log = logging.getLogger(ROOTLOGGER).getChild("wellformedness")
+    log.propagate = False
+    ch = logging.StreamHandler(log_stream)
+    ch.setLevel(logging.WARNING)
+    log.addHandler(ch)
+    #
+    etree.use_global_python_log(etree.PyErrorLog(xmlfile, log))
     xmlparser = etree.XMLParser(collect_ids=False)
+
     try:
         tree = etree.parse(xmlfile, parser=xmlparser)
+
         if xinclude:
-            r = process_xinclude(tree)
-            if r and warnings_as_errors:
-                raise ValueError()
-        return 0
+            tree.xinclude()
 
-    except ValueError as err:
-        # print("ERROR", file=sys.stderr)
-        return 20
+    except OSError as err:
+        # FATAL:PARSER:ERR_UNDECLARED_ENTITY:
+        # Write artificial error message to our log stream:
+        log_stream.write(f"{xmlfile}:0:0:FATAL:PARSER:FILE_NOT_FOUND:File does not exist\n")
+        result = ExitCode.file_not_found.value
 
-    except (etree.XMLSyntaxError, etree.XIncludeError) as err:
-        print("ERROR: %s" % err, file=sys.stderr)
-        print(textwrap.indent(str(err.error_log), prefix="       "), file=sys.stderr)
-        return 10
+    except etree.XMLSyntaxError as err:
+        result = ExitCode.syntax.value
+
+    except etree.XIncludeError as err:
+        result = ExitCode.xinclude.value
+
+    idx = print_error_msg(log_stream)
+
+    # HACK:
+    # For some unknown reason, when parsing MAIN.SLEDS.xml with an unknown
+    # entity, it doesn't raise XIncludeError or XMLSyntaxError exceptions. :-(
+    #
+    # If the return code hasn't changed but there are error messages,
+    # make sure to return some error code:
+    if idx and result == ExitCode.ok:
+        result = ExitCode.multiple
+    return result
 
 
 def parse_cli(args=None) -> argparse.Namespace:
@@ -208,27 +192,42 @@ def parse_cli(args=None) -> argparse.Namespace:
                         help="XML file(s) to check for well-formedness"
                         )
     args = parser.parse_args(args)
-    # print(args, file=sys.stderr)
     return args
 
 
-if __name__ == "__main__":
-    args = parse_cli()
-    endresult=0
-    failures=0
-    successes=0
+def main(cliargs=None) -> int:
+    """Entry point for the application script
+
+    :param list cliargs: Arguments to parse or None (=use :class:`sys.argv`)
+    :return: error code; 0 => everything was successful, !=0 => error
+    :rtype: int
+    """
+    endresult = ExitCode.ok
+    failures = 0
+    successes = 0
+
+    args = parse_cli(cliargs)
+
     for xmlfile in args.xmlfiles:
         result = check_wellformedness(xmlfile,
-                                  args.warnings_as_errors,
-                                  args.xinclude)
+                                      xinclude=args.xinclude
+                                      )
+        if result and args.warnings_as_errors:
+            break
         if result:
             failures += 1
         else:
             successes += 1
         endresult += result
+
     if args.stats:
-        msg = ("--- Successful Files={successes}, "
-               "Failed files={failures} ---").format(**locals())
+        msg = (f"--- Successful Files={successes}, "
+               f"Failed files={failures} ---"
+               )
         print(msg, file=sys.stderr)
 
-    sys.exit(endresult)
+    return int(endresult)
+
+
+if __name__ == "__main__":
+    sys.exit(main())
