@@ -68,6 +68,7 @@ VARLIST=(
     SPELL_SKIP_TAGS
     BUILD_DIR
     CB_OPTIONS
+    CHECK_WELLFORMED
     COLOR
     COMMENTS
     COMMENT_STR
@@ -1725,6 +1726,21 @@ if [[ "adoc" = "$SRC_FORMAT" ]]; then
 
     make $MOPTS -f $DAPSROOT/make/adoc2xml.mk  || exit_on_error "\nConverting the AsciiDoc sources to XML caused a fatal error.\nCheck the $(basename ${ASCIIDOC}) message above for details."
 fi
+
+#-------------------------------------------------------------------
+# Check whether the document is _well-formed_ (but not whether they
+# it is valid). If it is not, exit and display an error message.
+# Works for both DocBook 4 and DocBook 5, as we are only checking for
+# well-formedness and not for validity (a DocBook 5 validity check would
+# require jing).
+
+CHECK_WELLFORMED=$(PYTHONWARNINGS="ignore" ${LIBEXEC_DIR}/daps-xmlwellformed --xinclude ${MAIN} 2>&1)
+
+if [[ 0 -ne $? ]]; then
+    ccecho "error" "Fatal error:\n$CHECK_WELLFORMED"
+    exit 1
+fi
+
 #-------------------------------------------------------------------
 # Finally, run the Subcommands
 #

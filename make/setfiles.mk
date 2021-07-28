@@ -32,19 +32,6 @@ endif
 # That stylesheet only takes a few miliseconds to execute, so we can afford to
 # run it multiple times (SRCFILES, USED, projectfiles).
 
-
-# Check whether the documents are _well-formed_ (not if valid) - if not,
-# exit and display the error message
-# Works for both, DocBook4 and DocBook5 since we are only checking for
-# well-formdness and not for validity (a DocBook5 validity check would
-# require jing)
-
-CHECK_WELLFORMED := $(shell PYTHONWARNINGS="ignore" $(LIBEXEC_DIR)/daps-xmlwellformed --xinclude $(MAIN) 2>&1 )
-
-ifdef CHECK_WELLFORMED
-  $(error Fatal error:$(\n)$(CHECK_WELLFORMED))
-endif
-
 ifeq "$(strip $(SRC_FORMAT))" "xml"
   XML_SRC_PATH := $(DOC_DIR)/xml/
 endif
