@@ -463,7 +463,7 @@ function init_env {
         if [[ 0 -eq $TEST_ROOTID_RESULT  && "yes" != "$EXISTS_ROOTID" ]]; then
             exit_on_error "Fatal: ROOTID \"$ROOTID\" does not exist."
         elif [[ 0 -ne $TEST_ROOTID_RESULT && 0 -ne $VERBOSITY ]]; then
-            ccecho "warn" "Warning: Was not able to determine if ROOTID exists."
+            ccecho "warn" "Warning: Could not determine whether ROOTID \"$ROOTID\" exists."
         fi
     fi
 
