@@ -35,6 +35,10 @@ ifeq "$(strip $(VALIDATE_IMAGES))" "1"
                 $(basename $(_IMG_USED))))
 endif
 
+ifeq "$(strip $(VALIDATE_TABLES))" "1"
+  FAULTY_TABLES := $(shell $(LIBEXEC_DIR)/validate-tables.py $(SRCFILES) 2>&1 | sed -r -e 's,^/([^/: ]+/)*,,' -e 's,.http://docbook.org/ns/docbook.,,' | sed -rn '/^- / !p' | tr "\n" "@")
+endif
+
 ifeq "$(suffix $(DOCBOOK5_RNG))" ".rnc"
   JING_FLAGS += -c
 endif
@@ -86,6 +90,13 @@ endif
     ifneq "$(strip $(FAULTY_IDS))" ""
 	@ccecho "error" "Fatal error: The following IDs contain unwanted characters:"
 	@echo -e "$(subst $(SPACE),\n,$(sort $(FAULTY_IDS)))"
+	@exit 1
+    endif
+  endif
+  ifeq "$(strip $(VALIDATE_TABLES))" "1"
+    ifneq "$(strip $(FAULTY_TABLES))" ""
+	@ccecho "warn" "Fatal error: The following tables contain errors:"
+	@echo -e "$(subst @,\n,$(FAULTY_TABLES))"
 	@exit 1
     endif
   endif
