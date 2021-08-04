@@ -83,15 +83,9 @@ ifneq "$(VERBOSITY)" "$(filter $(VERBOSITY),2 3)"
 endif
 
 #--------------------------------------------------
-# DIRECTORIES
+# Build DIRECTORIES
 #
 
-IMG_GENDIR         := $(BUILD_DIR)/.images
-ifneq "$(strip $(ADOC_IMG_DIR))" ""
-  IMG_SRCDIR := $(BUILD_DIR)/.adoc_images/src
-else
-  IMG_SRCDIR         := $(DOC_DIR)/images/src
-endif
 RESULT_DIR         := $(BUILD_DIR)/$(BOOK)
 TMP_DIR            := $(BUILD_DIR)/.tmp
 PACK_DIR           := $(RESULT_DIR)/package
@@ -257,16 +251,34 @@ DAPSSTRINGS := --stringparam "converter.name=$(MY_NAME)" \
 #-------
 # Image Directories
 #
-IMG_DIRECTORIES := $(IMG_GENDIR)/gen/png $(IMG_GENDIR)/gen/pdf \
+IMG_GENDIR         := $(BUILD_DIR)/.images
+ifneq "$(strip $(ADOC_IMG_DIR))" ""
+  IMG_SRCDIR := $(BUILD_DIR)/.adoc_images/src
+else
+  IMG_SRCDIR         := $(DOC_DIR)/images/src
+endif
+
+IMG_GEN_DIRECTORIES := $(IMG_GENDIR)/gen/png \
                    $(IMG_GENDIR)/gen/svg \
                    $(IMG_GENDIR)/color $(IMG_GENDIR)/grayscale
+
+# generate lists of all existing images
+# Image formats: dia ditaa jpg odg png svg
+#
+SRCDIA      := $(wildcard $(IMG_SRCDIR)/dia/*.dia)
+SRCDITAA    := $(wildcard $(IMG_SRCDIR)/ditaa/*.ditaa)
+SRCJPG      := $(wildcard $(IMG_SRCDIR)/jpg/*.jpg)
+SRCODG      := $(wildcard $(IMG_SRCDIR)/odg/*.odg)
+SRCPNG      := $(wildcard $(IMG_SRCDIR)/png/*.png)
+SRCSVG      := $(wildcard $(IMG_SRCDIR)/svg/*.svg)
+SRC_IMG_ALL := $(SRCDIA) $(SRCDITAA) $(SRCJPG) $(SRCODG) $(SRCPNG) $(SRCSVG)
 
 #-------
 # List of all required directories
 #
 # If the following directories are not be present we have to create them
 #
-DIRECTORIES := $(PROFILEDIR) $(TMP_DIR) $(RESULT_DIR) $(IMG_DIRECTORIES)
+DIRECTORIES := $(PROFILEDIR) $(TMP_DIR) $(RESULT_DIR) $(IMG_GEN_DIRECTORIES)
 
 #--------------------------------------------------
 # FILENAMES
