@@ -16,6 +16,25 @@ ifeq "$(strip $(VALIDATE_IDS))" "1"
   FAULTY_IDS = $(shell $(XSLTPROC) --xinclude --stylesheet $(DAPSROOT)/daps-xslt/common/get-all-xmlids.xsl --file $(MAIN) $(XSLTPROCESSOR) | grep -P '[^-a-zA-Z0-9]')
 endif
 
+# search for missing and duplicated images. Similar code as in images.mk, but
+# here we want to look at all images of the set, not only the ones used in the
+# current document [also see https://github.com/openSUSE/daps/issues/627]
+
+ifeq "$(strip $(VALIDATE_IMAGES))" "1"
+  _IMG_USED := $(sort $(shell $(XSLTPROC) --stringparam "filetype=img" \
+	  --file $(SETFILES_TMP) --stylesheet \
+		$(DAPSROOT)/daps-xslt/common/extract-files-and-images.xsl \
+		$(XSLTPROCESSOR) 2>/dev/null))
+  _IMG_DUPES := $(sort $(wildcard $(addprefix $(IMG_SRCDIR)/*/,$(addsuffix .*, \
+		  $(filter \
+		  $(shell echo $(basename $(notdir $(SRC_IMG_ALL)) 2>/dev/null) | \
+		  tr " " "\n" | sort |uniq -d 2>/dev/null),$(basename $(_IMG_USED)  \
+		  2>/dev/null)) \
+		))))
+  _IMG_MISS := $(sort $(filter-out $(notdir $(basename $(SRC_IMG_ALL))), \
+                $(basename $(_IMG_USED))))
+endif
+
 ifeq "$(suffix $(DOCBOOK5_RNG))" ".rnc"
   JING_FLAGS += -c
 endif
@@ -53,13 +72,13 @@ endif
     endif
   endif
   ifeq "$(strip $(VALIDATE_IMAGES))" "1"
-    ifneq "$(strip $(DOUBLE_IMG))" ""
-	@ccecho "warn" "Warning: Image names not unique$(COMMA) multiple sources available for the following images::"
-	@echo -e "$(subst $(SPACE),\n,$(sort $(DOUBLE_IMG)))"
+    ifneq "$(strip $(_IMG_DUPES))" ""
+	@ccecho "warn" "Warning: Image names not unique$(COMMA) multiple sources available for the following images:"
+	@echo -e "$(subst $(SPACE),\n,$(sort $(_IMG_DUPES)))"
     endif
-    ifneq "$(strip $(MISSING_IMG))" ""
+    ifneq "$(strip $(_IMG_MISS))" ""
 	@ccecho "error" "Fatal error: The following images are missing:"
-	@echo -e "$(subst $(SPACE),\n,$(sort $(MISSING_IMG)))"
+	@echo -e "$(subst $(SPACE),\n,$(sort $(_IMG_MISS)))"
 	@exit 1
     endif
   endif

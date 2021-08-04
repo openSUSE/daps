@@ -252,7 +252,6 @@ endif
 ifeq "$(MAKECMDGOALS)" "validate"
   include $(DAPSROOT)/make/setfiles.mk
   include $(DAPSROOT)/make/profiling.mk
-  include $(DAPSROOT)/make/images.mk
   include $(DAPSROOT)/make/validate.mk
 endif
 
