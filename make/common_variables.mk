@@ -427,10 +427,10 @@ MANIFEST_NOTRANS := $(LOCDROP_TMP_DIR)/$(DOCNAME)_manifest_notrans.txt
 #
 
 define print_list
-  @if [[ -t 1 || 1 = "$(strip $(PRETTY_FILELIST))" ]]; then \
-    echo -e "$(subst $(SPACE),\n,$(sort $1))"; \
+  @if [[ -t 0 || 1 = "$(strip $(PRETTY_FILELIST))" ]]; then \
+    echo -e "$(subst $(SPACE),\n,$(sort $(1)))"; \
   else \
-    echo $(sort $1); \
+    echo $(sort $(1)); \
   fi
 endef
 
@@ -440,7 +440,7 @@ endef
 #
 
 define print_info
-  @if [[ -t 1 ]]; then \
-    ccecho "$1" "$2"; \
+  @if [[ -t 0 ]]; then \
+    ccecho "$(1)" "$(2)"; \
   fi
 endef

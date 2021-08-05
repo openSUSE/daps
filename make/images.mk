@@ -328,7 +328,7 @@ list-images-missing:
 # List images with non-unique names
 #
 .PHONY: list-images-multisrc
-list-images-multisrc warn-images:
+list-images-multisrc:
   ifdef DOUBLE_IMG
 	$(call print_info,warn,Image names not unique$(COMMA) multiple sources available for the following images:)
 	$(call print_list,$(DOUBLE_IMG))
