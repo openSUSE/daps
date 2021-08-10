@@ -1,6 +1,6 @@
 # -*-Shell-script-*-
 #
-# Copyright (C) 2012-2020 SUSE Software Solutions Germany GmbH
+# Copyright (C) 2012-2021 SUSE Software Solutions Germany GmbH
 #
 # Author:
 # Frank Sundermeyer <fsundermeyer at opensuse dot org>
@@ -257,6 +257,10 @@ function parse_args {
                 sanitize_path "$2" "P_NOTRANS_DIR"
                 shift 2
                 ;;
+            --not-validate-tables)
+                export NOT_VALIDATE_TABLES=1
+                shift
+                ;;
             --novalid)
                 # bigfile: Do not validate profiled sources
                 export NOVALID=1
@@ -384,10 +388,6 @@ function parse_args {
                 ;;
             --validate-images)
                 export VALIDATE_IMAGES=1
-                shift
-                ;;
-            --validate-tables)
-                export VALIDATE_TABLES=1
                 shift
                 ;;
             --viewer)
@@ -918,7 +918,7 @@ function validate {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="help,norefcheck,remarks,validate-ids,validate-images,validate-tables"
+    LONG_OPTS="help,norefcheck,not-validate-tables,remarks,validate-ids,validate-images"
 
     parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -927,10 +927,10 @@ function validate {
     if [[ 1 -eq $P_HELP ]]; then
         help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
         help_norefcheck
+        help_not-validate-tables
         help_remarks
         help_validate-ids
         help_validate-images
-        help_validate-tables
         echo
         exit 0
     fi
@@ -1446,6 +1446,13 @@ function help_nostatic {
                               with CSS and Javascript.
 EOF
 }
+function help_not-validate-tables {
+    cat <<EOF
+    --not-validate-tables     Disable checking for tables that contain
+                              structural errors (e.g. missing cells).
+                              Default: unset (table check is performed)
+EOF
+}
 function help_novalid {
     cat <<EOF
     --novalid                 Do not perform a validation check on the
@@ -1595,14 +1602,6 @@ function help_validate-images {
     --validate-images         Also check for missing and duplicated images.
                               Missing images cause an error, duplicated
                               imnages a warning only.
-                              Default: unset
-EOF
-}
-function help_validate-tables {
-    cat <<EOF
-    --validate-tables         Also check for tables that contain structural
-                              errors (e.g. missing cells). Issues a
-                              non-fatal warning.
                               Default: unset
 EOF
 }

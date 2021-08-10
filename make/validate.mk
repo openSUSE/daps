@@ -35,7 +35,7 @@ ifeq "$(strip $(VALIDATE_IMAGES))" "1"
                 $(basename $(_IMG_USED))))
 endif
 
-ifeq "$(strip $(VALIDATE_TABLES))" "1"
+ifneq "$(strip $(VALIDATE_TABLES))" "1"
   FAULTY_TABLES := $(shell $(LIBEXEC_DIR)/validate-tables.py $(SRCFILES) 2>&1 | sed -r -e 's,^/([^/: ]+/)*,,' -e 's,.http://docbook.org/ns/docbook.,,' | sed -rn '/^- / !p' | tr "\n" "@")
 endif
 
@@ -58,9 +58,32 @@ ifeq "$(NOREFCHECK)" "1"
 endif
 
 .PHONY: validate
-  $(PROFILEDIR)/.validate validate: $(PROFILES)
+ifneq "$(strip $(_IMG_MISS)$(FAULTY_IDS)$(FAULTY_TABLES))" ""
+  $(PROFILEDIR)/.validate validate: VAL_ERR = 1
+endif
+$(PROFILEDIR)/.validate validate: $(PROFILES)
   ifeq "$(VERBOSITY)" "2"
 	@ccecho "info" "   Validating..."
+  endif
+  ifneq "$(strip $(_IMG_DUPES))" ""
+	@ccecho "warn" "Warning: Image names not unique$(COMMA) multiple sources available for the following images:"
+	@echo -e "$(subst $(SPACE),\n,$(sort $(_IMG_DUPES)))"
+	@echo "--------------------------------"
+  endif
+  ifneq "$(strip $(_IMG_MISS))" ""
+	@ccecho "error" "Fatal error: The following images are missing:"
+	@echo -e "$(subst $(SPACE),\n,$(sort $(_IMG_MISS)))"
+	@echo "--------------------------------"
+  endif
+  ifneq "$(strip $(FAULTY_IDS))" ""
+	@ccecho "error" "Fatal error: The following IDs contain unwanted characters:"
+	@echo -e "$(subst $(SPACE),\n,$(sort $(FAULTY_IDS)))"
+	@echo "--------------------------------"
+  endif
+  ifneq "$(strip $(FAULTY_TABLES))" ""
+	@ccecho "error" "Fatal error: The following tables contain errors:"
+	@echo -e "$(subst @,\n,$(FAULTY_TABLES))"
+	@echo "--------------------------------"
   endif
   ifeq "$(DOCBOOK_VERSION)" "4"
 	xmllint --noent --postvalid --noout --xinclude $(PROFILED_MAIN)
@@ -75,31 +98,11 @@ endif
 	@ccecho "info" "   Successfully validated profiled sources."
     endif
   endif
-  ifeq "$(strip $(VALIDATE_IMAGES))" "1"
-    ifneq "$(strip $(_IMG_DUPES))" ""
-	@ccecho "warn" "Warning: Image names not unique$(COMMA) multiple sources available for the following images:"
-	@echo -e "$(subst $(SPACE),\n,$(sort $(_IMG_DUPES)))"
-    endif
-    ifneq "$(strip $(_IMG_MISS))" ""
-	@ccecho "error" "Fatal error: The following images are missing:"
-	@echo -e "$(subst $(SPACE),\n,$(sort $(_IMG_MISS)))"
+  ifeq "$(VAL_ERR)" "1"
 	@exit 1
-    endif
   endif
-  ifeq "$(strip $(VALIDATE_IDS))" "1"
-    ifneq "$(strip $(FAULTY_IDS))" ""
-	@ccecho "error" "Fatal error: The following IDs contain unwanted characters:"
-	@echo -e "$(subst $(SPACE),\n,$(sort $(FAULTY_IDS)))"
-	@exit 1
-    endif
-  endif
-  ifeq "$(strip $(VALIDATE_TABLES))" "1"
-    ifneq "$(strip $(FAULTY_TABLES))" ""
-	@ccecho "warn" "Fatal error: The following tables contain errors:"
-	@echo -e "$(subst @,\n,$(FAULTY_TABLES))"
-	@exit 1
-    endif
-  endif
+
+
 #	@echo "checking for unexpected characters: ... "
 #	egrep -n "[^[:alnum:][:punct:][:blank:]]" $(SRCFILES) && \
 #	    echo "Found non-printable characters" || echo "OK"
