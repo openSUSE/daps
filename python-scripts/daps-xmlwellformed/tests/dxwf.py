@@ -1,0 +1,1 @@
+../bin/daps-xmlwellformed
