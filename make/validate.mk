@@ -35,7 +35,7 @@ ifeq "$(strip $(VALIDATE_IMAGES))" "1"
                 $(basename $(_IMG_USED))))
 endif
 
-ifneq "$(strip $(VALIDATE_TABLES))" "1"
+ifneq "$(strip $(NOT_VALIDATE_TABLES))" "1"
   FAULTY_TABLES := $(shell $(LIBEXEC_DIR)/validate-tables.py $(SRCFILES) 2>&1 | sed -r -e 's,^/([^/: ]+/)*,,' -e 's,.http://docbook.org/ns/docbook.,,' | sed -rn '/^- / !p' | tr "\n" "@")
 endif
 
