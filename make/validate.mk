@@ -36,7 +36,7 @@ ifeq "$(strip $(VALIDATE_IMAGES))" "1"
 endif
 
 ifneq "$(strip $(NOT_VALIDATE_TABLES))" "1"
-  FAULTY_TABLES := $(shell $(LIBEXEC_DIR)/validate-tables.py $(SRCFILES) 2>&1 | sed -r -e 's,^/([^/: ]+/)*,,' -e 's,.http://docbook.org/ns/docbook.,,' | sed -rn '/^- / !p' | tr "\n" "@")
+  FAULTY_TABLES := $(shell $(LIBEXEC_DIR)/validate-tables.py $(PROFILED_MAIN) 2>&1 | sed -r -e 's,^/([^/: ]+/)*,,' -e 's,.http://docbook.org/ns/docbook.,,' | sed -rn '/^- / !p' | tr "\n" "@")
 endif
 
 ifeq "$(suffix $(DOCBOOK5_RNG))" ".rnc"
