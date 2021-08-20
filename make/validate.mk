@@ -65,14 +65,14 @@ $(PROFILEDIR)/.validate validate: $(PROFILES)
   ifeq "$(VERBOSITY)" "2"
 	@ccecho "info" "   Validating..."
   endif
-  ifneq "$(strip $(_IMG_DUPES))" ""
-	@ccecho "warn" "Warning: Image names not unique$(COMMA) multiple sources available for the following images:"
-	@echo -e "$(subst $(SPACE),\n,$(sort $(_IMG_DUPES)))"
-	@echo "--------------------------------"
+  ifeq "$(DOCBOOK_VERSION)" "4"
+	xmllint --noent --postvalid --noout --xinclude $(PROFILED_MAIN)
+  else
+	$(JING_WRAPPER) $(JING_FLAGS) $(DOCBOOK5_RNG) $(PROFILED_MAIN)
   endif
-  ifneq "$(strip $(_IMG_MISS))" ""
-	@ccecho "error" "Fatal error: The following images are missing:"
-	@echo -e "$(subst $(SPACE),\n,$(sort $(_IMG_MISS)))"
+  ifneq "$(strip $(FAULTY_TABLES))" ""
+	@ccecho "error" "Fatal error: The following tables contain errors:"
+	@echo -e "$(subst @,\n,$(FAULTY_TABLES))"
 	@echo "--------------------------------"
   endif
   ifneq "$(strip $(FAULTY_IDS))" ""
@@ -80,26 +80,25 @@ $(PROFILEDIR)/.validate validate: $(PROFILES)
 	@echo -e "$(subst $(SPACE),\n,$(sort $(FAULTY_IDS)))"
 	@echo "--------------------------------"
   endif
-  ifneq "$(strip $(FAULTY_TABLES))" ""
-	@ccecho "error" "Fatal error: The following tables contain errors:"
-	@echo -e "$(subst @,\n,$(FAULTY_TABLES))"
+  ifneq "$(strip $(_IMG_MISS))" ""
+	@ccecho "error" "Fatal error: The following images are missing:"
+	@echo -e "$(subst $(SPACE),\n,$(sort $(_IMG_MISS)))"
 	@echo "--------------------------------"
   endif
-  ifeq "$(DOCBOOK_VERSION)" "4"
-	xmllint --noent --postvalid --noout --xinclude $(PROFILED_MAIN)
-  else
-	$(JING_WRAPPER) $(JING_FLAGS) $(DOCBOOK5_RNG) $(PROFILED_MAIN)
-  endif
-	touch $(PROFILEDIR)/.validate
-  ifeq "$(TARGET)" "validate"
-	@ccecho "result" "All files are valid.";
-  else
-    ifeq ($(VERBOSITY),2)
-	@ccecho "info" "   Successfully validated profiled sources."
-    endif
+  ifneq "$(strip $(_IMG_DUPES))" ""
+	@ccecho "warn" "Warning: Image names not unique$(COMMA) multiple sources available for the following images:"
+	@echo -e "$(subst $(SPACE),\n,$(sort $(_IMG_DUPES)))"
+	@echo "--------------------------------"
   endif
   ifeq "$(VAL_ERR)" "1"
 	@exit 1
+  endif
+	touch $(PROFILEDIR)/.validate
+  ifeq "$(TARGET)" "validate"
+	@ccecho "result" "Document is valid."
+  endif
+  ifeq ($(VERBOSITY),2)
+	@ccecho "info" "   Successfully validated profiled sources."
   endif
 
 
