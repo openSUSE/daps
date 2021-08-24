@@ -48,9 +48,9 @@ endif
 # a regular build afterwards, $(PROFILEDIR)/.validate will not be renewed
 # and thus a check on xrefs will not be performed. Therefore we declare
 # $(PROFILEDIR)/.validate as intermediate for "noref" checks, to make sure
-# it is rebuild on a regular check, even if the prerequisites do not have
-# been updated. The downside is that a noref check will always be performed,
-# even when the profiled files have not been updated.
+# it is rebuilt during regular validate runs even if the prerequisites have not
+# been updated. The downside is that a noref check will be performed in
+# absolutely every case.
 #
 ifeq "$(NOREFCHECK)" "1"
   JING_FLAGS += -i
