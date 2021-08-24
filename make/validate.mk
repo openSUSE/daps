@@ -57,19 +57,27 @@ ifeq "$(NOREFCHECK)" "1"
   .INTERMEDIATE: $(PROFILEDIR)/.validate
 endif
 
+XML_VALID = 0
+
 .PHONY: validate
 ifneq "$(strip $(_IMG_MISS)$(FAULTY_IDS)$(FAULTY_TABLES))" ""
   $(PROFILEDIR)/.validate validate: VAL_ERR = 1
 endif
 $(PROFILEDIR)/.validate validate: $(PROFILES)
+	echo 0 > $(PROFILEDIR)/.xml_valid
   ifeq "$(VERBOSITY)" "2"
 	@ccecho "info" "   Validating..."
   endif
   ifeq "$(DOCBOOK_VERSION)" "4"
-	xmllint --noent --postvalid --noout --xinclude $(PROFILED_MAIN)
+	-xmllint --noent --postvalid --noout --xinclude $(PROFILED_MAIN) || echo "$$?" > $(PROFILEDIR)/.xml_valid
   else
-	$(JING_WRAPPER) $(JING_FLAGS) $(DOCBOOK5_RNG) $(PROFILED_MAIN)
+	-$(JING_WRAPPER) $(JING_FLAGS) $(DOCBOOK5_RNG) $(PROFILED_MAIN) || echo "$$?" > $(PROFILEDIR)/.xml_valid
   endif
+	$(eval XML_VALID = $(shell cat $(PROFILEDIR)/.xml_valid))
+  ifeq "$(XML_VALID)" "0"
+	@echo "All files are valid XML."
+  endif
+	@echo "--------------------------------"
   ifneq "$(strip $(FAULTY_TABLES))" ""
 	@ccecho "error" "Fatal error: The following tables contain errors:"
 	@echo -e "$(subst @,\n,$(FAULTY_TABLES))"
@@ -89,6 +97,9 @@ $(PROFILEDIR)/.validate validate: $(PROFILES)
 	@ccecho "warn" "Warning: Image names not unique$(COMMA) multiple sources available for the following images:"
 	@echo -e "$(subst $(SPACE),\n,$(sort $(_IMG_DUPES)))"
 	@echo "--------------------------------"
+  endif
+  ifneq "$(XML_VALID)" "0"
+	@exit 1
   endif
   ifeq "$(VAL_ERR)" "1"
 	@exit 1
