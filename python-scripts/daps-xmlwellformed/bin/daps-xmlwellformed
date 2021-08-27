@@ -2,12 +2,12 @@
 #
 """Performs a well-formedness check on XML.
 
-This script is needed as xmllint cannot ignore double IDs.
-It performs:
+This script is needed as xmllint cannot ignore duplicated IDs.
+This tool:
 
- * Does XInclude processing if requested (option --xinclude)
+ * Processes XIncludes (if requested using the option --xinclude)
  * Ignores non-unique IDs (attributes xml:id or id)
- * Output errors about undeclared entities
+ * Outputs errors about undeclared entities
 """
 
 __author__ = "Thomas Schraitle"
@@ -199,7 +199,7 @@ def main(cliargs=None) -> int:
     """Entry point for the application script
 
     :param list cliargs: Arguments to parse or None (=use :class:`sys.argv`)
-    :return: error code; 0 => everything was succesfull, !=0 => error
+    :return: error code; 0 => everything was successful, !=0 => error
     :rtype: int
     """
     endresult = ExitCode.ok
