@@ -1,6 +1,10 @@
-name: Test
+---
+name: getentityname
 
-on: [push]
+on:
+  push:
+      paths:
+          - "python-scripts/getentityname/**"
 
 jobs:
   test:
@@ -44,6 +48,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
+          cd python-scripts/getentityname/
           python -m pip install -r devel-requirements.txt
 
       - name: List preinstalled packages
@@ -52,4 +57,5 @@ jobs:
 
       - name: Call test suite for ${{ matrix.python-version }}
         run: |
-          pytest -v
+           cd python-scripts/getentityname/
+           pytest -v
