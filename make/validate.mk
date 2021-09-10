@@ -1,4 +1,4 @@
-# Copyright (C) 2012-2020 SUSE Software Solutions Germany GmbH
+# Copyright (C) 2012-2021 SUSE Software Solutions Germany GmbH
 #
 # Author:
 # Frank Sundermeyer <fsundermeyer at opensuse dot org>
@@ -10,34 +10,6 @@
 #
 # Use xmllint for DocBook 4 and jing for DocBook 5
 # (xmllint -> DTD, jing Relax NG)
-
-# search for IDS with characters that are not A-Z, a-z, 0-9, or -
-ifeq "$(strip $(VALIDATE_IDS))" "1"
-  FAULTY_IDS = $(shell $(XSLTPROC) --xinclude --stylesheet $(DAPSROOT)/daps-xslt/common/get-all-xmlids.xsl --file $(MAIN) $(XSLTPROCESSOR) | grep -P '[^-a-zA-Z0-9]')
-endif
-
-# search for missing and duplicated images. Similar code as in images.mk, but
-# here we want to look at all images of the set, not only the ones used in the
-# current document [also see https://github.com/openSUSE/daps/issues/627]
-
-ifeq "$(strip $(VALIDATE_IMAGES))" "1"
-  _IMG_USED := $(sort $(shell $(XSLTPROC) --stringparam "filetype=img" \
-	  --file $(SETFILES_TMP) --stylesheet \
-		$(DAPSROOT)/daps-xslt/common/extract-files-and-images.xsl \
-		$(XSLTPROCESSOR) 2>/dev/null))
-  _IMG_DUPES := $(sort $(wildcard $(addprefix $(IMG_SRCDIR)/*/,$(addsuffix .*, \
-		  $(filter \
-		  $(shell echo $(basename $(notdir $(SRC_IMG_ALL)) 2>/dev/null) | \
-		  tr " " "\n" | sort |uniq -d 2>/dev/null),$(basename $(_IMG_USED)  \
-		  2>/dev/null)) \
-		))))
-  _IMG_MISS := $(sort $(filter-out $(notdir $(basename $(SRC_IMG_ALL))), \
-                $(basename $(_IMG_USED))))
-endif
-
-ifneq "$(strip $(NOT_VALIDATE_TABLES))" "1"
-  FAULTY_TABLES := $(shell $(LIBEXEC_DIR)/validate-tables.py $(PROFILED_MAIN) 2>&1 | sed -r -e 's,^/([^/: ]+/)*,,' -e 's,.http://docbook.org/ns/docbook.,,' | sed -rn '/^- / !p' | tr "\n" "@")
-endif
 
 ifeq "$(suffix $(DOCBOOK5_RNG))" ".rnc"
   JING_FLAGS += -c
@@ -57,53 +29,74 @@ ifeq "$(NOREFCHECK)" "1"
   .INTERMEDIATE: $(PROFILEDIR)/.validate
 endif
 
-XML_VALID = 0
+#
+# Search for missing images., This can be done outside the target, since
+# it does not require profiled sources
+#
+ifeq "$(strip $(VALIDATE_IMAGES))" "1"
+  _IMG_USED := $(sort $(shell $(XSLTPROC) --stringparam "filetype=img" \
+	  --file $(SETFILES_TMP) --stylesheet \
+		$(DAPSROOT)/daps-xslt/common/extract-files-and-images.xsl \
+		$(XSLTPROCESSOR) 2>/dev/null))
+  _IMG_DUPES := $(sort $(wildcard $(addprefix $(IMG_SRCDIR)/*/,$(addsuffix .*, \
+		  $(filter \
+		  $(shell echo $(basename $(notdir $(SRC_IMG_ALL)) 2>/dev/null) | \
+		  tr " " "\n" | sort |uniq -d 2>/dev/null),$(basename $(_IMG_USED)  \
+		  2>/dev/null)) \
+		))))
+  _IMG_MISS := $(sort $(filter-out $(notdir $(basename $(SRC_IMG_ALL))), \
+                $(basename $(_IMG_USED))))
+endif
+
+#
+# Using $(eval ...) to capture the command output
+#
 
 .PHONY: validate
-ifneq "$(strip $(_IMG_MISS)$(FAULTY_IDS)$(FAULTY_TABLES))" ""
-  $(PROFILEDIR)/.validate validate: VAL_ERR = 1
-endif
 $(PROFILEDIR)/.validate validate: $(PROFILES)
-	echo 0 > $(PROFILEDIR)/.xml_valid
   ifeq "$(VERBOSITY)" "2"
 	@ccecho "info" "   Validating..."
   endif
   ifeq "$(DOCBOOK_VERSION)" "4"
-	-xmllint --noent --postvalid --noout --xinclude $(PROFILED_MAIN) || echo "$$?" > $(PROFILEDIR)/.xml_valid
+	$(eval FAULTY_XML=$(shell xmllint --noent --postvalid --noout --xinclude $(PROFILED_MAIN) 2>&1 ))
   else
-	-$(JING_WRAPPER) $(JING_FLAGS) $(DOCBOOK5_RNG) $(PROFILED_MAIN) || echo "$$?" > $(PROFILEDIR)/.xml_valid
+	$(eval FAULTY_XML=$(shell $(JING_WRAPPER) $(JING_FLAGS) $(DOCBOOK5_RNG) $(PROFILED_MAIN) 2>&1))
   endif
-	$(eval XML_VALID = $(shell cat $(PROFILEDIR)/.xml_valid))
-  ifeq "$(XML_VALID)" "0"
-	@echo "All files are valid XML."
+  ifneq "$(strip $(NOT_VALIDATE_TABLES))" "1"
+	$(eval FAULTY_TABLES=$(shell $(LIBEXEC_DIR)/validate-tables.py $(PROFILED_MAIN) 2>&1 | sed -r -e 's,^/([^/: ]+/)*,,' -e 's,.http://docbook.org/ns/docbook.,,' | sed -rn '/^- / !p'))
   endif
-	@echo "--------------------------------"
-  ifneq "$(strip $(FAULTY_TABLES))" ""
-	@ccecho "error" "Fatal error: The following tables contain errors:"
-	@echo -e "$(subst @,\n,$(FAULTY_TABLES))"
-	@echo "--------------------------------"
+  ifeq "$(strip $(VALIDATE_IDS))" "1"
+	$(eval FAULTY_IDS=$(shell $(XSLTPROC) --xinclude --stylesheet $(DAPSROOT)/daps-xslt/common/get-all-xmlids.xsl --file $(PROFILED_MAIN) $(XSLTPROCESSOR) | grep -P '[^-a-zA-Z0-9]'))
   endif
-  ifneq "$(strip $(FAULTY_IDS))" ""
-	@ccecho "error" "Fatal error: The following IDs contain unwanted characters:"
-	@echo -e "$(subst $(SPACE),\n,$(sort $(FAULTY_IDS)))"
-	@echo "--------------------------------"
-  endif
-  ifneq "$(strip $(_IMG_MISS))" ""
-	@ccecho "error" "Fatal error: The following images are missing:"
-	@echo -e "$(subst $(SPACE),\n,$(sort $(_IMG_MISS)))"
-	@echo "--------------------------------"
-  endif
-  ifneq "$(strip $(_IMG_DUPES))" ""
-	@ccecho "warn" "Warning: Image names not unique$(COMMA) multiple sources available for the following images:"
-	@echo -e "$(subst $(SPACE),\n,$(sort $(_IMG_DUPES)))"
-	@echo "--------------------------------"
-  endif
-  ifneq "$(XML_VALID)" "0"
-	@exit 1
-  endif
-  ifeq "$(VAL_ERR)" "1"
-	@exit 1
-  endif
+	if [[ -n "$(FAULTY_XML)" ]]; then \
+	  ccecho "error" "Fatal error: The document contains XML errors:"; \
+	  echo -e "$(FAULTY_XML)"; \
+	  echo "--------------------------------"; \
+	fi
+	if [[ -n "$(FAULTY_TABLES)" ]]; then \
+	  ccecho "error" "Fatal error: The following tables contain errors:"; \
+	  echo -e "$(FAULTY_TABLES)"; \
+	  echo "--------------------------------"; \
+	fi
+	if [[ -n "$(FAULTY_IDS)" ]]; then \
+	  ccecho "error" "The following IDs contain unwanted characters:"; \
+	  echo -e "$(subst $(SPACE),\n,$(sort $(FAULTY_IDS)))"; \
+	  echo "--------------------------------"; \
+	fi
+	if [[ -n "$(_IMG_MISS)" ]]; then \
+	  ccecho "error" "Fatal error: The following images are missing:"; \
+	  echo -e "$(subst $(SPACE),\n,$(sort $(_IMG_MISS)))"; \
+	  echo "--------------------------------"; \
+	fi
+	if [[ -n "$(_IMG_DUPES)" ]]; then \
+	  ccecho "warn" "Warning: Image names not unique$(COMMA) multiple sources available for the following images:"; \
+	  echo -e "$(subst $(SPACE),\n,$(sort $(_IMG_DUPES)))"; \
+	  echo "--------------------------------"; \
+	fi
+	if [[ -n "$(strip $(FAULTY_XML)$(FAULTY_TABLES)$(FAULTY_IDS)$(_IMG_MISS))" ]]; then \
+	  ccecho "error" "Document does not validate!"; \
+	  exit 1; \
+	fi
 	touch $(PROFILEDIR)/.validate
   ifeq "$(TARGET)" "validate"
 	@ccecho "result" "Document is valid."
@@ -111,8 +104,3 @@ $(PROFILEDIR)/.validate validate: $(PROFILES)
   ifeq ($(VERBOSITY),2)
 	@ccecho "info" "   Successfully validated profiled sources."
   endif
-
-
-#	@echo "checking for unexpected characters: ... "
-#	egrep -n "[^[:alnum:][:punct:][:blank:]]" $(SRCFILES) && \
-#	    echo "Found non-printable characters" || echo "OK"
