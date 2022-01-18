@@ -385,9 +385,15 @@ endif
 # For use in filenames we keep the capitalization as is (LANGSTRING), for
 # use in stylessheets we convert it to all lowercase (the same way the Docbook
 # Stylesheets do)
-#
+# If we have an assembly, look into the assembly file
 
-XMLLANG ?= $(shell $(XSLTPROC) --stylesheet $(STYLELANG) --file $(MAIN) $(XSLTPROCESSOR) | tr - _ 2>/dev/null)
+ifeq "$(strip $(ASSEMBLY))" "yes"
+  LANG_MAIN := $(ASSEMBLY_MAIN)
+else
+  LANG_MAIN := $(MAIN)
+endif
+
+XMLLANG ?= $(shell $(XSLTPROC) --stylesheet $(STYLELANG) --file $(LANG_MAIN) $(XSLTPROCESSOR) | tr - _ 2>/dev/null)
 
 ifneq "$(strip $(XMLLANG))" ""
   LL ?= $(shell tr '[:upper:]' '[:lower:]' <<< $(XMLLANG) 2>/dev/null)

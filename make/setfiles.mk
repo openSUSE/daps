@@ -36,7 +36,10 @@ ifeq "$(strip $(SRC_FORMAT))" "xml"
   XML_SRC_PATH := $(DOC_DIR)/xml/
 endif
 ifeq "$(strip $(SRC_FORMAT))" "adoc"
-  XML_SRC_PATH := $(ADOC_DIR)/
+  XML_SRC_PATH := $(ADOC_RESULTDIR)/
+endif
+ifeq "$(strip $(ASSEMBLY))" "yes"
+  XML_SRC_PATH := $(ASSEMBLY_RESULTDIR)/
 endif
 
 SETFILES := $(shell $(XSLTPROC) $(PROFSTRINGS) \

@@ -62,6 +62,9 @@ VARLIST=(
     ADOC_SET
     ADOC_TYPE
     ASCIIDOC
+    ASSEMBLY
+    ASSEMBLY_DIR
+    ASSEMBLY_MAIN
     SPELL_CHECKER
     SPELL_EXTRA_DICT
     SPELL_LANG
@@ -1458,13 +1461,20 @@ fi
 # Validate SRC_FORMAT - needs to be xml or adoc
 [[ "adoc" = "$SRC_FORMAT" || "xml" = "$SRC_FORMAT" ]] || exit_on_error "$MAIN is an unsupported file type (.$SRC_FORMAT)\nmust be AsciiDoc (.adoc) or DocBook (.xml)"
 
-# Check whether "${DOC_DIR}/${SRC_FORMAT}" exists
-[[ -d "${DOC_DIR}/${SRC_FORMAT}" ]] || exit_on_error "Source files must reside in  \"${DOC_DIR}/${SRC_FORMAT}/\".\n This directory does not exist."
+# Check whether "${DOC_DIR}/${SRC_FORMAT}" or "${DOC_DIR}/$ASSEMBLY_DIR" exists
+if [[ "yes" == "$ASSEMBLY" ]]; then
+    [[ -d "${DOC_DIR}/${ASSEMBLY_DIR}" ]] || exit_on_error "ASSEMBLY_DIR points to a non existing directory"
+else
+    [[ -d "${DOC_DIR}/${SRC_FORMAT}" ]] || exit_on_error "Source files must reside in  \"${DOC_DIR}/${SRC_FORMAT}/\".\n This directory does not exist."
+fi
 
 # Set MAIN if necessary
 if [[ -z "$MAIN_CMDL" ]]; then
+    # assembly without an absolute path
+    if [[ "yes" == "$ASSEMBLY" && -n "$ASSEMBLY_DIR" && ! "$MAIN" =~ ^/ ]]; then
+        MAIN="${DOC_DIR}/${ASSEMBLY_DIR}/$MAIN"
     # MAIN was provided without any path
-    if [[ -e "${DOC_DIR}/${SRC_FORMAT}/$MAIN" ]]; then
+    elif [[ -e "${DOC_DIR}/${SRC_FORMAT}/$MAIN" ]]; then
         MAIN="${DOC_DIR}/${SRC_FORMAT}/$MAIN"
     # MAIN was provided with a relative path
     elif [[ -e "${DOC_DIR}/$MAIN" ]]; then
@@ -1707,8 +1717,8 @@ export SETFILES_TMP
 #
 if [[ "adoc" = "$SRC_FORMAT" ]]; then
     ADOC_MAIN="$MAIN"
-    ADOC_DIR="${BUILD_DIR}/.adoc"
-    MAIN="${ADOC_DIR}/${BOOK}.xml"
+    ADOC_RESULTDIR="${BUILD_DIR}/.adoc"
+    MAIN="${ADOC_RESULTDIR}/${BOOK}.xml"
 
     # make the path for ADOC_IMG_DIR absolute if a relative path was
     # provided by config file
@@ -1723,12 +1733,34 @@ if [[ "adoc" = "$SRC_FORMAT" ]]; then
             [[ ! -d $ADOC_IMG_DIR ]] && exit_on_error "AsciiDoc image directory $ADOC_IMG_DIR does not exist"
         fi
     fi
-    export ADOC_IMG_DIR ADOC_MAIN ADOC_DIR MAIN
+    export ADOC_IMG_DIR ADOC_MAIN ADOC_RESULTDIR MAIN
+    # we always want to create a fresh bigfile
     [[ 1 -eq $FORCE_REBUILD ]] && MOPTS="--always-make"
     [[ 2 -gt $VERBOSITY ]] && MOPTS="$MOPTS --silent"
 
     make $MOPTS -f $DAPSROOT/make/adoc2xml.mk  || exit_on_error "\nConverting the AsciiDoc sources to XML caused a fatal error.\nCheck the $(basename ${ASCIIDOC}) message above for details."
 fi
+
+#-------------------------------------------------------------------
+# Create an XML bigfile from an assembly
+#
+if [[ "yes" == "$ASSEMBLY" ]]; then
+
+    ASSEMBLY_MAIN="$MAIN"
+    ASSEMBLY_RESULTDIR="${BUILD_DIR}/.assembly"
+    MAIN="${ASSEMBLY_RESULTDIR}/${BOOK}.xml"
+
+    export ASSEMBLY_MAIN ASSEMBLY_RESULTDIR MAIN
+
+    # Since we do not have a list of files used from the assembly, we always
+    # need to rebuild.
+    MOPTS="--always-make"
+    [[ 2 -gt $VERBOSITY ]] && MOPTS="$MOPTS --silent"
+
+    make $MOPTS -f $DAPSROOT/make/assembly2db.mk  || exit_on_error "\nConverting the assembly to DocBook caused a fatal error."
+fi
+
+
 
 #-------------------------------------------------------------------
 # Check whether the document is _well-formed_ (but not whether they

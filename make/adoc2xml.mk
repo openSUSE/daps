@@ -131,17 +131,7 @@ ifneq "$(strip $(ADOC_IMG_DIR))" ""
   all: $(NEW_IMAGES)
 endif
 
-#
-# Since asciidoctor only refuses to write a file on FATAL errors
-# (but we already exit on ERROR and WARN), we always need to rebuild
-# MAIN. According to https://stackoverflow.com/questions/7643838/how-to-force-make-to-always-rebuild-a-file
-# this should do the trick
-#
 
-.PHONY: FORCE
-FORCE:
-
-#
 # If ADOC_SET is set to 1 (and we are to create a set from an AsciiDoc
 # multipart book), pipe the asciidoctor output to an xsltproc call
 # runinng the "setify" stylesheet, otherwise let asciidoctor create
@@ -151,7 +141,7 @@ FORCE:
 # returns != 0
 
 #all: $(MAIN)
-$(MAIN): FORCE $(ADOC_SRCFILES) | $(ADOC_DIR)
+$(MAIN): $(ADOC_SRCFILES) | $(ADOC_RESULTDIR)
   ifeq "$(VERBOSITY)" "2"
 	@ccecho "info"  "   Creating XML from AsciiDoc..."
   endif
@@ -194,5 +184,5 @@ $(PNG_DIR)/%.png: $(ADOC_IMG_DIR)/%.png | $(PNG_DIR)
 $(SVG_DIR)/%.svg: $(ADOC_IMG_DIR)/%.svg | $(SVG_DIR)
 	(cd $(@D); ln -sf $<)
 
-$(ADOC_DIR) $(NEW_IMAGES_DIRS):
+$(ADOC_RESULTDIR) $(NEW_IMAGES_DIRS):
 	@mkdir -p $@

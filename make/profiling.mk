@@ -24,33 +24,43 @@
 # If PROFILE_URN is set, we resolve it, otherwise we use a nonprofiling
 # stylesheet 
 
+#
+# PROFILE URN won't work with assemblies (because such a PO is not generated)
+# Assuming that we do not have profiling for a very first Assembly attempt
+#  NEEDS TO BE FIXED, also see https://github.com/openSUSE/daps/issues/529
+#
+
 ifeq "$(strip $(SRC_FORMAT))" "adoc"
-  PROFILES := $(subst $(ADOC_DIR)/,$(PROFILEDIR)/,$(MAIN))
+  PROFILES := $(subst $(ADOC_RESULTDIR)/,$(PROFILEDIR)/,$(MAIN))
   ifeq "$(strip $(ADOC_POST))" "yes"
     PROFILE_STYLESHEET := $(ADOC_POST_STYLE)
   endif
-else 
-  PROFILES := $(sort $(subst $(DOC_DIR)/xml/,$(PROFILEDIR)/,$(SRCFILES)))
-  ifdef PROFILE_URN
-    # Resolve profile urn because saxon does not accept urns
-    ifeq "$(shell expr substr $(PROFILE_URN) 1 4 2>/dev/null)" "urn:"
-      PROFILE_STYLESHEET := $(shell $(DAPSROOT)/libexec/xml_cat_resolver $(PROFILE_URN) 2>/dev/null)
-    else
-      PROFILE_STYLESHEET := $(PROFILE_URN)
-    endif
-    #
-    # depending on the distribution, xmlcatalog returns file://... or file:... 
-    # make sure both cases are matched
-    #
-    PROFILE_STYLESHEET := $(patsubst //%,%,$(subst file:%,%,$(PROFILE_STYLESHEET)))
-    ifeq "$(strip $(PROFILE_STYLESHEET))" ""
-      $(error $(shell ccecho "error" "Could not resolve URN \"$(PROFILE_URN)\" with xmlcatalog via catalog file \"$(XML_MAIN_CATALOG)\""))
+endif
+ifeq "$(strip $(SRC_FORMAT))" "xml"
+  ifeq "$(strip $(ASSEMBLY))" "yes"
+    PROFILES := $(subst $(ASSEMBLY_RESULTDIR)/,$(PROFILEDIR)/,$(MAIN))
+  else
+    PROFILES := $(sort $(subst $(DOC_DIR)/xml/,$(PROFILEDIR)/,$(SRCFILES)))
+    ifdef PROFILE_URN
+      # Resolve profile urn because saxon does not accept urns
+      ifeq "$(shell expr substr $(PROFILE_URN) 1 4 2>/dev/null)" "urn:"
+        PROFILE_STYLESHEET := $(shell $(DAPSROOT)/libexec/xml_cat_resolver $(PROFILE_URN) 2>/dev/null)
+      else
+        PROFILE_STYLESHEET := $(PROFILE_URN)
+      endif
+      #
+      # depending on the distribution, xmlcatalog returns file://... or file:... 
+      # make sure both cases are matched
+      #
+      PROFILE_STYLESHEET := $(patsubst //%,%,$(subst file:%,%,$(PROFILE_STYLESHEET)))
+      ifeq "$(strip $(PROFILE_STYLESHEET))" ""
+        $(error $(shell ccecho "error" "Could not resolve URN \"$(PROFILE_URN)\" with xmlcatalog via catalog file \"$(XML_MAIN_CATALOG)\""))
+      endif
     endif
   endif
 endif
-
 #
-# If not profiling stylesheet has been set by now, we need to use a
+# If no profiling stylesheet has been set by now, we need to use a
 # noprofiling stylesheet
 #
 ifeq "$(strip $(PROFILE_STYLESHEET))" ""
@@ -108,9 +118,14 @@ profile: $(PROFILES)
 # entities are already resolved
 #
 ifeq "$(strip $(SRC_FORMAT))" "xml"
-  $(PROFILEDIR)/%.xml: $(DOC_DIR)/xml/%.xml $(ENTITIES_DOC) $(DOCCONF) | $(PROFILEDIR)
-else
-  $(PROFILEDIR)/%.xml: $(ADOC_DIR)/%.xml $(ENTITIES_DOC) $(DOCCONF) | $(PROFILEDIR)
+  ifeq "$(strip $(ASSEMBLY))" "yes"
+    $(PROFILEDIR)/%.xml: $(ASSEMBLY_RESULTDIR)/%.xml $(ENTITIES_DOC) $(DOCCONF) | $(PROFILEDIR)
+  else
+    $(PROFILEDIR)/%.xml: $(DOC_DIR)/xml/%.xml $(ENTITIES_DOC) $(DOCCONF) | $(PROFILEDIR)
+  endif
+endif
+ifeq "$(strip $(SRC_FORMAT))" "adoc"
+  $(PROFILEDIR)/%.xml: $(ADOC_RESULTDIR)/%.xml $(ENTITIES_DOC) $(DOCCONF) | $(PROFILEDIR)
 endif
     ifeq "$(VERBOSITY)" "2"
 	@(tput el1; echo -en "\r   Profiling $<")
@@ -118,7 +133,6 @@ endif
 	$(XSLTPROC) --output $@ $(PROFSTRINGS) $(HROOTSTRING) \
 	  --stringparam "filename=$(notdir $<)" \
 	  --stylesheet $(PROFILE_STYLESHEET) --file $< $(XSLTPROCESSOR)
-
 
 # Files included with xi:include parse="text" $(TEXTFILES) are linked into
 # the profile directory. the profiling stylesheets rewrites all paths to
