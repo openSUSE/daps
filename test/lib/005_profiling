@@ -42,7 +42,7 @@ function oneTimeSetUp() {
     # get the profiling directory
     _PROFILEDIR=$($_DAPSEXEC --main $_MAIN_PROFILING showvariable VARIABLE=PROFILEDIR 2>/dev/null)
     if [ $? -ne 0 ]; then
-	exit_on_error " The initial DAPS call to determine the profiling directory failed. Skipping profiling tests"
+        exit_on_error " The initial DAPS call to determine the profiling directory failed. Skipping profiling tests"
     fi
 }
 
@@ -149,13 +149,16 @@ function test_profilingUpdateXML() {
     assertNotEquals \
         ' └─ $MAIN has not been updated by profiling although it had changed' \
         "$_OLDDATE_MAIN" "$_NEWDATE_MAIN"
-    for _FILE in $_PROF_SET_FILES; do
-        if [[ $_FILE == $(basename $_MAIN_PROFILING) ]]; then continue; fi
-        _NEWDATE_FILES=$(expr $_NEWDATE_FILES + $(stat -c %Y ${_PROFILEDIR}/$_FILE 2>/dev/null))
-    done
-    assertEquals \
-        ' └─  Files have been updated although they did not change' \
-        "$_OLDDATE_FILES" "$_NEWDATE_FILES"
+
+# No longer needed with rebuilds being done by default
+
+#    for _FILE in $_PROF_SET_FILES; do
+#        if [[ $_FILE == $(basename $_MAIN_PROFILING) ]]; then continue; fi
+#        _NEWDATE_FILES=$(expr $_NEWDATE_FILES + $(stat -c %Y ${_PROFILEDIR}/$_FILE 2>/dev/null))
+#    done
+#    assertEquals \
+#        ' └─  Files have been updated although they did not change' \
+#        "$_OLDDATE_FILES" "$_NEWDATE_FILES"
 }
 
 #--------------------------------
@@ -165,7 +168,7 @@ function test_profilingUpdateEntities() {
     local _FILE
     declare -A _OLD_FILEDATES _NEW_FILEDATES
     for _FILE in $_PROF_SET_FILES; do
-	_OLD_FILEDATES[$_FILE]=$(stat -c %Y ${_PROFILEDIR}/$_FILE 2>/dev/null)
+        _OLD_FILEDATES[$_FILE]=$(stat -c %Y ${_PROFILEDIR}/$_FILE 2>/dev/null)
     done
     sleep 1
     # update Entity declaration files
@@ -173,9 +176,9 @@ function test_profilingUpdateEntities() {
     # rerun profiling
     $_DAPSEXEC -v0 --main $_MAIN_PROFILING profile >/dev/null
     for _FILE in $_PROF_SET_FILES; do
-	_NEW_FILEDATES[$_FILE]=$(stat -c %Y ${_PROFILEDIR}/$_FILE 2>/dev/null)
-	assertNotEquals \
-	    " └─  File $_FILE has not been updated although the entities changed:" \
+        _NEW_FILEDATES[$_FILE]=$(stat -c %Y ${_PROFILEDIR}/$_FILE 2>/dev/null)
+        assertNotEquals \
+            " └─  File $_FILE has not been updated although the entities changed:" \
         "${_OLD_FILEDATES[$_FILE]}" "${_NEW_FILEDATES[$_FILE]}"
     done
 }
