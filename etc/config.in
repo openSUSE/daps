@@ -186,6 +186,22 @@ ADOC_SET_STYLE="@pkgdatadir@/daps-xslt/asciidoc/setify.xsl"
 #
 ADOC_TYPE="article"
 
+## Key:         ALWAYS_REBUILD
+## ----------------------
+## Description: Always rebuild all files even when up-to-date versions exist
+## Type:        yesno
+## Default:     "yes"
+#
+# DAPS uses GNU make to generate all files. make keeps track of files and
+# dependencies and only rebuilds files if necessary (when their dependencies
+# have changed). This saves time, especially wit large projects that have a
+# lot of images.
+# If consecutive builds take a very long time, try setting this to "no"
+# (preferrably in the DC-file or in ~/.config/daps/dapsrc)
+# A "no" can be overwritten with --force on the command line at any time.
+#
+ALWAYS_REBUILD="yes"
+
 ## Key:         BUILD_DIR
 ## ----------------------
 ## Description: Build directory where all daps generated files will go

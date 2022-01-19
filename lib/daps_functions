@@ -642,8 +642,8 @@ function call_make {
         MAKE_OPTIONS="$MAKE_OPTIONS -j1"
     fi
 
-    # Is --force set to force a rebuild?
-    [[ 1 -eq $FORCE_REBUILD ]] &&  MAKE_OPTIONS="$MAKE_OPTIONS --always-make"
+    # Is --force or ALWAYS_REMAKE set to force a rebuild?
+    [[ 1 -eq $FORCE_REBUILD || "yes" == "$ALWAY_MAKE" ]] &&  MAKE_OPTIONS="$MAKE_OPTIONS --always-make"
 
     MAKE_CMD="$MAKE_BIN $MAKE_OPTIONS $SUB_CMD $*"
 
