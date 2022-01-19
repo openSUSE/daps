@@ -1463,7 +1463,7 @@ fi
 
 # Check whether "${DOC_DIR}/${SRC_FORMAT}" or "${DOC_DIR}/$ASSEMBLY_DIR" exists
 if [[ "yes" == "$ASSEMBLY" ]]; then
-    [[ -d "${DOC_DIR}/${ASSEMBLY_DIR}" ]] || exit_on_error "ASSEMBLY_DIR points to a non existing directory"
+    [[ -d "${DOC_DIR}/${ASSEMBLY_DIR}" ]] || exit_on_error "ASSEMBLY_DIR points to a non-existing directory"
 else
     [[ -d "${DOC_DIR}/${SRC_FORMAT}" ]] || exit_on_error "Source files must reside in  \"${DOC_DIR}/${SRC_FORMAT}/\".\n This directory does not exist."
 fi
