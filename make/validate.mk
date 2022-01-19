@@ -60,7 +60,7 @@ $(PROFILEDIR)/.validate validate: $(PROFILES)
   ifeq "$(DOCBOOK_VERSION)" "4"
 	$(eval FAULTY_XML=$(shell xmllint --noent --postvalid --noout --xinclude $(PROFILED_MAIN) 2>&1 ))
   else
-	$(eval FAULTY_XML=$(shell $(JING_WRAPPER) $(JING_FLAGS) $(DOCBOOK5_RNG) $(PROFILED_MAIN) 2>&1))
+	$(eval FAULTY_XML=$(shell unset VERBOSE && $(JING_WRAPPER) $(JING_FLAGS) $(DOCBOOK5_RNG) $(PROFILED_MAIN) 2>&1))
   endif
   ifneq "$(strip $(NOT_VALIDATE_TABLES))" "1"
 	$(eval FAULTY_TABLES=$(shell $(LIBEXEC_DIR)/validate-tables.py $(PROFILED_MAIN) 2>&1 | sed -r -e 's,^/([^/: ]+/)*,,' -e 's,.http://docbook.org/ns/docbook.,,' | sed -rn '/^- / !p'))
