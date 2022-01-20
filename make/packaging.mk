@@ -37,11 +37,11 @@ ifeq "$(OPTIPNG)" "1"
   package-src: optipng
 endif
 ifdef DEF_FILE
-  package-src: DC_FILES := $(addprefix $(DOC_DIR)/,$(shell awk '/^[ \t]*#/ {next};NF {printf "DC-%s ", $$2}' $(DEF_FILE) 2>/dev/null))
+  package-src: DC_FILES := $(addprefix $(PRJ_DIR)/,$(shell awk '/^[ \t]*#/ {next};NF {printf "DC-%s ", $$2}' $(DEF_FILE) 2>/dev/null))
 endif
 ifdef IS_LOCDROP
-  package-src: MFT_TRANS := $(wildcard $(addprefix $(DOC_DIR)/,$(notdir $(MANIFEST_TRANS))))
-  package-src: MFT_NOTRANS := $(wildcard $(addprefix $(DOC_DIR)/,$(notdir $(MANIFEST_NOTRANS))))
+  package-src: MFT_TRANS := $(wildcard $(addprefix $(PRJ_DIR)/,$(notdir $(MANIFEST_TRANS))))
+  package-src: MFT_NOTRANS := $(wildcard $(addprefix $(PRJ_DIR)/,$(notdir $(MANIFEST_NOTRANS))))
 endif
 package-src: $(PROFILES) $(PROFILEDIR)/.validate
   ifneq "$(strip $(MISSING_IMG))" ""
@@ -51,20 +51,20 @@ package-src: $(PROFILES) $(PROFILEDIR)/.validate
   else
     ifeq "$(strip $(SRC_FORMAT))" "adoc"
 	tar chf $(PACKAGE_SRC_TARBALL) --absolute-names \
-	  --transform=s%$(DOC_DIR)/%% $(ADOC_SRCFILES)
+	  --transform=s%$(PRJ_DIR)/%% $(ADOC_SRCFILES)
     else
 	tar chf $(PACKAGE_SRC_TARBALL) --absolute-names \
 	  --transform=s%$(PROFILEDIR)%xml% $(PROFILES)
     endif
 	tar rfh $(PACKAGE_SRC_TARBALL) --absolute-names \
-	  --transform=s%$(DOC_DIR)/%% $(USED_ALL) $(DOCCONF)
+	  --transform=s%$(PRJ_DIR)/%% $(USED_ALL) $(DOCCONF)
     ifdef DEF_FILE
 	tar rfh $(PACKAGE_SRC_TARBALL) --absolute-names \
-	  --transform=s%$(DOC_DIR)/%% $(DC_FILES)
+	  --transform=s%$(PRJ_DIR)/%% $(DC_FILES)
     endif
     ifdef IS_LOCDROP
 	tar rfh $(PACKAGE_SRC_TARBALL) --absolute-names \
-	  --transform=s%$(DOC_DIR)/%% $(MFT_TRANS) $(MFT_NOTRANS)
+	  --transform=s%$(PRJ_DIR)/%% $(MFT_TRANS) $(MFT_NOTRANS)
     endif
 	bzip2 -9f $(PACKAGE_SRC_TARBALL)
 	@ccecho "result" "Find the sources at:\n$(PACKAGE_SRC_RESULT)"

@@ -22,7 +22,7 @@ endif
 ifndef BUILD_DIR
   $(error $(shell ccecho "error" "Fatal error: No path to build directory set"))
 endif
-ifndef DOC_DIR
+ifndef PRJ_DIR
   $(error $(shell ccecho "error" "Fatal error: No path to working directory set"))
 endif
 ifndef ADOC_MAIN
@@ -96,8 +96,8 @@ endif
 # If grep fails, we at least have ADOC_MAIN
 #
 ADOC_SRCFILES := $(ADOC_MAIN) $(wildcard $(addprefix \
- $(DOC_DIR)/adoc/,$(shell egrep '^include::' $(ADOC_MAIN) 2>/dev/null | sed 's/.*::\([^\[]*\).*/\1/g' 2>/dev/null)))
-#ADOC_SRCFILES := $(wildcard $(DOC_DIR)/adoc/*.adoc)
+ $(PRJ_DIR)/adoc/,$(shell egrep '^include::' $(ADOC_MAIN) 2>/dev/null | sed 's/.*::\([^\[]*\).*/\1/g' 2>/dev/null)))
+#ADOC_SRCFILES := $(wildcard $(PRJ_DIR)/adoc/*.adoc)
 
 #
 # ADOC sources usually have images in a single directory. If ADOC_IMG_DIR

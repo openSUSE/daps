@@ -174,7 +174,7 @@ function test_locdropFiles () {
     #
     clean_build_dir results
 
-    $_DAPSEXEC -v0 -d $_DCFILE locdrop --def-file=${_DOC_DIR}/DEF-booktest >/dev/null 2>&1
+    $_DAPSEXEC -v0 -d $_DCFILE locdrop --def-file=${_PRJ_DIR}/DEF-booktest >/dev/null 2>&1
 
     # clean tmp and unpack new archive
     [[ -d "${_LOCDROP_TEMPDIR}" ]] && rm -rf "${_LOCDROP_TEMPDIR}" && mkdir -p "${_LOCDROP_TEMPDIR}"

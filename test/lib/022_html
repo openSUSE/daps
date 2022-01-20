@@ -254,7 +254,7 @@ function test_htmlCSS_HTML5 () {
     local _CSS_BUILD _CSS_FILE _CSS_PATH
 
     _CSS_FILE="test.css"
-    _CSS_PATH="${_DOC_DIR}/xml/${_CSS_FILE}"
+    _CSS_PATH="${_PRJ_DIR}/xml/${_CSS_FILE}"
     _CSS_BUILD="${_HTMLDIR_NAME_PATH}/static/css/${_CSS_FILE}"
 
     clean_build_dir profiles
@@ -292,7 +292,7 @@ function test_htmlStatic () {
     local _MISSING _STYLEIMAGES
 
     _CSS_FILE="test.css"
-    _CSS_PATH="${_DOC_DIR}/xml/${_CSS_FILE}"
+    _CSS_PATH="${_PRJ_DIR}/xml/${_CSS_FILE}"
     _CSS_BUILD="${_HTMLDIR_NAME_PATH}/static/css/${_CSS_FILE}"
 
     clean_build_dir results
@@ -459,7 +459,7 @@ function test_htmlStylerootStatdir () {
     # Testing Fallback Styleroot by specifying a wrong Styleroot dir
     #
 
-    $_DAPSEXEC -d $_DCFILE --styleroot=${_DOC_DIR} --fb_styleroot=${_STANDARD_STYLES} --debug html >/dev/null 2>&1
+    $_DAPSEXEC -d $_DCFILE --styleroot=${_PRJ_DIR} --fb_styleroot=${_STANDARD_STYLES} --debug html >/dev/null 2>&1
     egrep -q -- "--stylesheet /.*/${_STANDARD_STYLES}" $_LOGFILE 2>/dev/null
     assertTrue \
         " └─ The Fallback Styleroot specified on the command line was not used." \
@@ -470,7 +470,7 @@ function test_htmlStylerootStatdir () {
     # Testing automatic Fallback to _DB_STYLES by specifying a wrong
     # Styleroot dir with no Fallback
     #
-    $_DAPSEXEC -d $_DCFILE --styleroot=${_DOC_DIR} --debug html >/dev/null 2>&1
+    $_DAPSEXEC -d $_DCFILE --styleroot=${_PRJ_DIR} --debug html >/dev/null 2>&1
     grep -q -- "--stylesheet ${_DB_STYLES}" $_LOGFILE 2>/dev/null
     assertTrue \
         " └─ The automatic DocBook Fallback Styleroot was not used." \

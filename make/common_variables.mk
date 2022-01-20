@@ -29,7 +29,7 @@ endif
 ifndef BUILD_DIR
   $(error $(shell ccecho "error" "Fatal error: No path to build directory set"))
 endif
-ifndef DOC_DIR
+ifndef PRJ_DIR
   $(error $(shell ccecho "error" "Fatal error: No path to working directory set"))
 endif
 ifndef MAIN
@@ -255,7 +255,7 @@ IMG_GENDIR         := $(BUILD_DIR)/.images
 ifneq "$(strip $(ADOC_IMG_DIR))" ""
   IMG_SRCDIR := $(BUILD_DIR)/.adoc_images/src
 else
-  IMG_SRCDIR         := $(DOC_DIR)/images/src
+  IMG_SRCDIR         := $(PRJ_DIR)/images/src
 endif
 
 IMG_GEN_DIRECTORIES := $(IMG_GENDIR)/gen/png \

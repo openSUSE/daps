@@ -686,7 +686,7 @@ function call_make {
         echo
 
         # Directories
-        for V in DOC_DIR BUILD_DIR DAPSROOT DOCCONF BOOK; do
+        for V in PRJ_DIR BUILD_DIR DAPSROOT DOCCONF BOOK; do
             printf "%${COLWIDTH}s: %s\n" "$V" "${!V}"
         done
 
@@ -1105,7 +1105,7 @@ function no_opts {
         # one of the directories that get removed
         #
         CURR_DIR=$(pwd 2>/dev/null)
-        cd $DOC_DIR > /dev/null
+        cd $PRJ_DIR > /dev/null
         call_make "$SUB_CMD" "$@"
         [[ -d $CURR_DIR ]] && cd $CURR_DIR
     else
@@ -1130,7 +1130,7 @@ function wrong_parameter {
 
 # needed by docmanager
 function showenv {
-    echo "DOC_DIR=$DOC_DIR;DOCCONF=$DOCCONF"
+    echo "PRJ_DIR=$PRJ_DIR;DOCCONF=$DOCCONF"
     exit 0
 }
 

@@ -38,11 +38,11 @@ VERBOSITY = $(VERBOSITY)\n\
 Files & Directories\n\
 --------------------\n\
 BUILD_DIR          = $(BUILD_DIR)\n\
-DOC_DIR            = $(DOC_DIR)\n\
 IMG_GENDIR         = $(IMG_GENDIR)\n\
 IMG_SRCDIR         = $(IMG_SRCDIR)\n\
 MAIN               = $(MAIN)\n\
 PACK_DIR           = $(PACK_DIR)\n\
+PRJ_DIR            = $(PRJ_DIR)\n\
 RESULT_DIR         = $(RESULT_DIR)\n\
 TMP_DIR            = $(TMP_DIR)\n\
 \n\

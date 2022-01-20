@@ -113,7 +113,7 @@ function test_pdfStyleroot () {
     # Testing Fallback Styleroot by specifying a wrong Styleroot dir
     #
 
-    $_DAPSEXEC -d $_DCFILE --styleroot=${_DOC_DIR} --fb_styleroot=${_STANDARD_STYLES} --debug pdf >/dev/null 2>&1
+    $_DAPSEXEC -d $_DCFILE --styleroot=${_PRJ_DIR} --fb_styleroot=${_STANDARD_STYLES} --debug pdf >/dev/null 2>&1
     egrep -q -- "--stylesheet /.*/${_STANDARD_STYLES}" $_LOGFILE 2>/dev/null
     assertTrue \
         " └─ The Fallback Styleroot specified on the command line was not used." \
@@ -124,7 +124,7 @@ function test_pdfStyleroot () {
     # Testing automatic Fallback to _DB_STYLES by specifying a wrong
     # Styleroot dir with no Fallback
     #
-    $_DAPSEXEC -d $_DCFILE --styleroot=${_DOC_DIR} --debug pdf >/dev/null 2>&1
+    $_DAPSEXEC -d $_DCFILE --styleroot=${_PRJ_DIR} --debug pdf >/dev/null 2>&1
     grep -q -- "--stylesheet ${_DB_STYLES}" $_LOGFILE 2>/dev/null
     assertTrue \
         " └─ The automatic DocBook Fallback Styleroot was not used." \

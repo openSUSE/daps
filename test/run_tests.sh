@@ -23,20 +23,20 @@ _DAPSCMD="${_DAPSROOT}/bin/daps --dapsroot=${_DAPSROOT}"
 declare -a _XSLT_PROCESSORS
 
 # XML sources
-export _DOC_DIR="documents"
-export _DCFILE="${_DOC_DIR}/DC-booktest_docbook"
+export _PRJ_DIR="documents"
+export _DCFILE="${_PRJ_DIR}/DC-booktest_docbook"
 export _MAIN="book.xml"
-export _MAINPATH="${_DOC_DIR}/xml/$_MAIN"
+export _MAINPATH="${_PRJ_DIR}/xml/$_MAIN"
 export _MAIN_NOPROF="book_noprofile.xml"
-export _MAINPATH_NOPROF="${_DOC_DIR}/xml/$_MAIN_NOPROF"
+export _MAINPATH_NOPROF="${_PRJ_DIR}/xml/$_MAIN_NOPROF"
 export _BOOKNAME=$(basename $_DCFILE)
 export _BOOKNAME="${_BOOKNAME#DC-*}"
 
 # Stylesheet directories
 export _DB_STYLES="/usr/share/xml/docbook/stylesheet/nwalsh/current"
-export _STANDARD_STYLES="${_DOC_DIR}/styles/standard"
-export _STATIC_STYLES="${_DOC_DIR}/styles/statdir"
-export _ALT_STATIC_STYLES="${_DOC_DIR}/styles/alt_statdir/"
+export _STANDARD_STYLES="${_PRJ_DIR}/styles/standard"
+export _STATIC_STYLES="${_PRJ_DIR}/styles/statdir"
+export _ALT_STATIC_STYLES="${_PRJ_DIR}/styles/alt_statdir/"
 
 # arrays cannot be exported in bash (yet) ;-((
 export _XML_FILES="appendix.xml part_blocks.xml part_inlines.xml part_profiling.xml"
@@ -46,7 +46,7 @@ export _NO_SET_FILE="not_in_set.xml"
 #export _SET_IMAGES="dia/dia_example.dia eps/eps_example.eps jpg/jpg_example.jpg pdf/pdf_example.pdf png/png_example.png png/png_example2.png svg/svg_example.svg"
 export _SET_IMAGES="dia/dia_example.dia ditaa/ditaa_example.ditaa jpg/jpg_example.jpg odg/odg_example.odg png/png_example.png png/png_example2.png svg/svg_example.svg"
 export _NO_SET_IMAGE="png/z_not_included.png"
-export _MULTISRC_IMAGE="${_DOC_DIR}/images/src/svg/png_example.svg"
+export _MULTISRC_IMAGE="${_PRJ_DIR}/images/src/svg/png_example.svg"
 
 
 export _SET_ID="dblayouttest"
@@ -84,7 +84,7 @@ declare -a _FO_PROCS=( "fop" "xep" )
 function exit_on_error () {
     echo -e "ERROR: ${1}" >&2
     if [[ 1 -ne $_DEBUG ]]; then
-        rm -rf "${_DOC_DIR}/build"
+        rm -rf "${_PRJ_DIR}/build"
     fi
     rm -rf "$_TEMPDIR"
     [[ -f $_MULTISRC_IMAGE ]] && rm -f $_MULTISRC_IMAGE
@@ -327,7 +327,7 @@ echo "Tests Total:   $_TOTAL"
 echo "Tests Passed:  $_PASSED"
 echo "Tests Skipped: $_SKIPPED"
 echo "Tests Failed:  $_FAILED"
-rm -rf "${_DOC_DIR}/build" "$_TEMPDIR"
+rm -rf "${_PRJ_DIR}/build" "$_TEMPDIR"
 if [ 0 -ne $_FAILED ]; then
     exit 1
 fi

@@ -69,13 +69,13 @@ define db5_get_trans
   done 2>/dev/null
 endef
 
-TO_TRANS_FILES := $(subst $(DOC_DIR)/xml,$(PROFILEDIR),$(shell $(db5_get_trans)))
+TO_TRANS_FILES := $(subst $(PRJ_DIR)/xml,$(PROFILEDIR),$(shell $(db5_get_trans)))
 
 TO_TRANS_TAR := $(LOCDROP_EXPORT_BOOKDIR)/translation-$(DOCNAME)$(LANGSTRING).tar
 
 # XML Files that do not get translated
 #
-NO_TRANS_FILES := $(filter-out $(TO_TRANS_FILES),$(subst $(DOC_DIR)/xml,$(PROFILEDIR),$(SRCFILES)))
+NO_TRANS_FILES := $(filter-out $(TO_TRANS_FILES),$(subst $(PRJ_DIR)/xml,$(PROFILEDIR),$(SRCFILES)))
 ifneq "$(strip $(NO_TRANS_FILES))" ""
   NO_TRANS_TAR   := $(LOCDROP_EXPORT_BOOKDIR)/setfiles-$(DOCNAME)$(LANGSTRING).tar
 endif
@@ -85,7 +85,7 @@ endif
 # for translation. If this list is not empty, a warning will be issued
 # during locdrop processing
 #
-NO_TRANS_BOOK := $(filter-out $(subst $(PROFILEDIR)/,,$(TO_TRANS_FILES)),$(subst $(DOC_DIR)/xml/,,$(DOCFILES)))
+NO_TRANS_BOOK := $(filter-out $(subst $(PROFILEDIR)/,,$(TO_TRANS_FILES)),$(subst $(PRJ_DIR)/xml/,,$(DOCFILES)))
 ifneq "$(strip $(NO_TRANS_BOOK))" ""
   NO_TRANS_BOOK := $(subst $(SPACE),\n,$(NO_TRANS_BOOK))
 endif
@@ -141,7 +141,7 @@ endif
 
 .PHONY: locdrop
 ifneq "$(strip $(DEF_FILE))" ""
-  locdrop: DC_FILES := $(addprefix $(DOC_DIR)/,$(shell awk '/^[ \t]*#/ {next};NF {printf "DC-%s ", $$2}' $(DEF_FILE) 2>/dev/null))
+  locdrop: DC_FILES := $(addprefix $(PRJ_DIR)/,$(shell awk '/^[ \t]*#/ {next};NF {printf "DC-%s ", $$2}' $(DEF_FILE) 2>/dev/null))
 endif
 locdrop: | $(LOCDROP_EXPORT_BOOKDIR) $(LOCDROP_TMP_DIR)
 ifeq "$(OPTIPNG)" "1"
@@ -172,7 +172,7 @@ locdrop: $(SRCFILES) $(MANIFEST_TRANS) $(MANIFEST_NOTRANS) $(USED_ALL) $(PROFILE
 	  --transform=s%$(LOCDROP_TMP_DIR)/%% $(MANIFEST_TRANS)
         # tarball with files not being translated
         # contains at least the DC file
-	tar chf $(NO_TRANS_TAR) --absolute-names --transform=s%$(DOC_DIR)/%% \
+	tar chf $(NO_TRANS_TAR) --absolute-names --transform=s%$(PRJ_DIR)/%% \
 	  $(DOCCONF)
 	tar rhf $(NO_TRANS_TAR) --absolute-names \
 	  --transform=s%$(LOCDROP_TMP_DIR)/%% $(MANIFEST_NOTRANS)
@@ -181,18 +181,18 @@ locdrop: $(SRCFILES) $(MANIFEST_TRANS) $(MANIFEST_NOTRANS) $(USED_ALL) $(PROFILE
 	  --transform=s%$(PROFILEDIR)/%xml/% $(NO_TRANS_FILES)
     endif
     ifneq "$(strip $(DEF_FILE))" ""
-	tar rhf $(NO_TRANS_TAR) --absolute-names --transform=s%$(DOC_DIR)/%% \
+	tar rhf $(NO_TRANS_TAR) --absolute-names --transform=s%$(PRJ_DIR)/%% \
 	  $(DEF_FILE) $(DC_FILES)
     endif
     ifneq "$(strip $(TO_TRANS_IMGS))" ""
         # graphics tarball "translated graphics"
 	BZIP2=--best tar cfhj $(TO_TRANS_IMG_TAR) \
-	  --absolute-names --transform=s%$(DOC_DIR)/%% $(TO_TRANS_IMGS)
+	  --absolute-names --transform=s%$(PRJ_DIR)/%% $(TO_TRANS_IMGS)
     endif
     ifneq "$(strip $(NO_TRANS_IMGS))" ""
         # graphics tarball "translated graphics"
 	BZIP2=--best tar cfhj $(NO_TRANS_IMG_TAR) \
-	  --absolute-names --transform=s%$(DOC_DIR)/%% $(NO_TRANS_IMGS)
+	  --absolute-names --transform=s%$(PRJ_DIR)/%% $(NO_TRANS_IMGS)
     endif
     ifneq "$(NOPDF)" "1"
 	cp $(PDF_RESULT) $(LOCDROP_EXPORT_BOOKDIR)
@@ -205,14 +205,14 @@ locdrop: $(SRCFILES) $(MANIFEST_TRANS) $(MANIFEST_NOTRANS) $(USED_ALL) $(PROFILE
 # create manifest files
 #
 $(MANIFEST_TRANS): | $(LOCDROP_TMP_DIR)
-	@echo -e "$(subst $(DOC_DIR)/,,$(DOCCONF))" > $@
+	@echo -e "$(subst $(PRJ_DIR)/,,$(DOCCONF))" > $@
   ifdef TO_TRANS_FILES
 	@echo -e "$(subst $(SPACE),\n,$(sort $(subst \
 	   $(PROFILEDIR),xml,$(TO_TRANS_FILES))))" >> $@
   endif
   ifdef TO_TRANS_IMGS
 	@echo -e "$(subst $(SPACE),\n,$(sort $(subst \
-	   $(DOC_DIR)/,,$(TO_TRANS_IMGS))))" >> $@
+	   $(PRJ_DIR)/,,$(TO_TRANS_IMGS))))" >> $@
   endif
 
 
@@ -222,11 +222,11 @@ $(MANIFEST_NOTRANS): | $(LOCDROP_TMP_DIR)
 	@echo -e "$(subst $(SPACE),\n,$(sort $(subst $(PROFILEDIR),xml,$(NO_TRANS_FILES))))" >> $@
   endif
   ifdef DEF_FILE
-	@echo -e "$(subst $(SPACE),\n,$(sort $(subst $(DOC_DIR)/,,$(DC_FILES))))" >> $@
+	@echo -e "$(subst $(SPACE),\n,$(sort $(subst $(PRJ_DIR)/,,$(DC_FILES))))" >> $@
   endif
   ifdef NO_TRANS_IMGS
 	@echo -e "$(subst $(SPACE),\n,$(sort $(subst \
-	   $(DOC_DIR)/,,$(NO_TRANS_IMGS))))" >> $@
+	   $(PRJ_DIR)/,,$(NO_TRANS_IMGS))))" >> $@
   endif
 
 #----

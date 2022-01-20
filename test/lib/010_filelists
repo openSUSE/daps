@@ -17,7 +17,7 @@
 #
 
 _DAPSROOT_ABS=""
-_DOC_DIR_ABS=""
+_PRJ_DIR_ABS=""
 
 source lib/common_functions
 
@@ -27,7 +27,7 @@ function oneTimeSetUp () {
     # Clean up the build directory
     clean_build_dir all
     _DAPSROOT_ABS=$(readlink -e $_DAPSROOT 2>/dev/null)
-    _DOC_DIR_ABS="${_DAPSROOT_ABS}/test/${_DOC_DIR}"
+    _PRJ_DIR_ABS="${_DAPSROOT_ABS}/test/${_PRJ_DIR}"
 }
 
 # Post
@@ -53,7 +53,7 @@ function test_filelistsListfile () {
     local _FILE_NAME_BUILD _FILE_NAME_EXPECTED _FILES_DIFF _ROOTID
 
     _ROOTID="appendix"
-    _FILE_NAME_EXPECTED="${_DOC_DIR_ABS}/xml/appendix.xml"
+    _FILE_NAME_EXPECTED="${_PRJ_DIR_ABS}/xml/appendix.xml"
 
     _FILE_NAME_BUILD=$($_DAPSEXEC -v0 -d $_DCFILE list-file --rootid $_ROOTID 2>/dev/null)
     assertTrue \
@@ -76,15 +76,15 @@ function test_filelistsSRCfiles () {
     declare -a _FILE_NAMES_EXPECTED
 
     for _FILE in $_SET_FILES; do
-	_FILE_NAMES_EXPECTED=( ${_FILE_NAMES_EXPECTED[@]} "${_DOC_DIR_ABS}/xml/$_FILE" )
+	_FILE_NAMES_EXPECTED=( ${_FILE_NAMES_EXPECTED[@]} "${_PRJ_DIR_ABS}/xml/$_FILE" )
     done
     for _FILE in $_SET_IMAGES; do
-	_FILE_NAMES_EXPECTED=( ${_FILE_NAMES_EXPECTED[@]} "${_DOC_DIR_ABS}/images/src/$_FILE" )
+	_FILE_NAMES_EXPECTED=( ${_FILE_NAMES_EXPECTED[@]} "${_PRJ_DIR_ABS}/images/src/$_FILE" )
     done
     _DC=$(basename "$_DCFILE")
-    _FILE_NAMES_EXPECTED=( ${_FILE_NAMES_EXPECTED[@]} "${_DOC_DIR_ABS}/$_DC" )
+    _FILE_NAMES_EXPECTED=( ${_FILE_NAMES_EXPECTED[@]} "${_PRJ_DIR_ABS}/$_DC" )
     _ENTITY_FILE="entity-decl.ent"
-    _FILE_NAMES_EXPECTED=( ${_FILE_NAMES_EXPECTED[@]} "${_DOC_DIR_ABS}/xml/$_ENTITY_FILE" )
+    _FILE_NAMES_EXPECTED=( ${_FILE_NAMES_EXPECTED[@]} "${_PRJ_DIR_ABS}/xml/$_ENTITY_FILE" )
     _FILE_NAMES_BUILD=( $($_DAPSEXEC -v0 -d $_DCFILE list-srcfiles) )
     assertTrue \
         ' └─ The list-srcfiles command itself failed.' \
@@ -256,7 +256,7 @@ function test_filelistsImagesMissing () {
     local _MISSING_IMG _MISSING_IMG_BUILD _MISSING_IMG_MAIN
 
     _MISSING_IMG="missing_image_file"
-    _MISSING_IMG_MAIN="${_DOC_DIR}/xml/$_NO_SET_FILE"
+    _MISSING_IMG_MAIN="${_PRJ_DIR}/xml/$_NO_SET_FILE"
 
     _MISSING_IMG_BUILD=$($_DAPSEXEC -v0 --main $_MISSING_IMG_MAIN list-images-missing 2>/dev/null)
      assertTrue \
