@@ -25,6 +25,9 @@ endif
 ifndef PRJ_DIR
   $(error $(shell ccecho "error" "Fatal error: No path to working directory set"))
 endif
+ifndef SRC_DIR
+  $(error $(shell ccecho "error" "Fatal error: No path to doc source files set"))
+endif
 ifndef ADOC_MAIN
   $(error $(shell ccecho "error" "Fatal error: No MAIN file set"))
 endif
@@ -96,8 +99,8 @@ endif
 # If grep fails, we at least have ADOC_MAIN
 #
 ADOC_SRCFILES := $(ADOC_MAIN) $(wildcard $(addprefix \
- $(DOC_DIR)/adoc/,$(shell grep -E '^include::' $(ADOC_MAIN) 2>/dev/null | sed 's/.*::\([^\[]*\).*/\1/g' 2>/dev/null)))
-#ADOC_SRCFILES := $(wildcard $(DOC_DIR)/adoc/*.adoc)
+ $(SRC_DIR)/,$(shell grep -E '^include::' $(ADOC_MAIN) 2>/dev/null | sed 's/.*::\([^\[]*\).*/\1/g' 2>/dev/null)))
+#ADOC_SRCFILES := $(wildcard $(PRJ_DIR)/adoc/*.adoc)
 
 #
 # ADOC sources usually have images in a single directory. If ADOC_IMG_DIR
@@ -180,7 +183,7 @@ $(EPS_DIR)/%.eps: $(ADOC_IMG_DIR)/%.eps | $(EPS_DIR)
 	(cd $(@D); ln -sf $<)
 
 $(JPG_DIR)/%.jpg: $(ADOC_IMG_DIR)/%.jpg | $(JPG_DIR)
-	(cd $(@D); ln -sf $<)
+set	(cd $(@D); ln -sf $<)
 
 $(ODG_DIR)/%.odg: $(ADOC_IMG_DIR)/%.odg | $(ODG_DIR)
 	(cd $(@D); ln -sf $<)
