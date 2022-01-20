@@ -44,6 +44,7 @@ MAIN               = $(MAIN)\n\
 PACK_DIR           = $(PACK_DIR)\n\
 PRJ_DIR            = $(PRJ_DIR)\n\
 RESULT_DIR         = $(RESULT_DIR)\n\
+SRC_DIR            = $(SRC_DIR)\n\
 TMP_DIR            = $(TMP_DIR)\n\
 \n\
 Document specifics\n\

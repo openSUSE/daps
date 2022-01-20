@@ -175,6 +175,7 @@ VARLIST=(
     ROOTID
     SETDATE
     SHOW
+    SRC_DIR
     SRC_FORMAT
     STATIC_DIR
     STATIC_HTML
@@ -257,6 +258,7 @@ PATHLIST=(
   [HTML_CSS]="CSS file for HTML"
   [JING_WRAPPER]="Jing wrapper script"
   [MAIN]="MAIN-file"
+  [SRC_DIR]="directory for the adoc or xml source files"
   [STATIC_DIR]="HTML resource directory"
   [STYLEDEVEL]="development directory for stylesheets"
   [STYLEROOT]="stylesheet directory"
@@ -1458,31 +1460,50 @@ fi
 # Check if a MAIN has been set
 [[ -z "$MAIN" && -z "$MAIN_CMDL" ]] &&  exit_on_error "Fatal: No MAIN file has been set. Please specify one via command line or config file"
 
-# get the source format (XML/ADOC) from MAIN
+# get the source format (XML/ADOC) from MAIN if not set, yet
 [[ -z $SRC_FORMAT ]] && SRC_FORMAT=${MAIN##*.}
 
 # Validate SRC_FORMAT - needs to be xml or adoc
 [[ "adoc" = "$SRC_FORMAT" || "xml" = "$SRC_FORMAT" ]] || exit_on_error "$MAIN is an unsupported file type (.$SRC_FORMAT)\nmust be AsciiDoc (.adoc) or DocBook (.xml)"
 
-# Check whether "${PRJ_DIR}/${SRC_FORMAT}" exists
-[[ -d "${PRJ_DIR}/${SRC_FORMAT}" ]] || exit_on_error "Source files must reside in  \"${PRJ_DIR}/${SRC_FORMAT}/\".\n This directory does not exist."
+# Set SRC_DIR if necessary
+if [[ -z $SRC_DIR ]]; then
+    # SRC_DIR has not been set by config file, set xml or adoc as default
+    if [[ -d "${PRJ_DIR}/${SRC_FORMAT}" ]]; then
+	SRC_DIR="${PRJ_DIR}/${SRC_FORMAT}"
+    else
+	exit_on_error "Cannot find a directory holding the sources. Either specify a directory\nin the config or DC-file with SRC_DIR or provide the sources in the default\ndirectories: \"xml/\" for DocBook or \"adoc/\" for ASCIIDoc."
+    fi
+else
+    # SRC_DIR was set by config file
+    #
+    # no absolute paths allowed
+    if [[ "$SRC_DIR" =~ ^/ ]]; then
+	exit_on_error "SRC_DIR was specified with an absolute path. Please use a path relative to the project directory."
+    # no path outside of PRJ_DIR allowed
+    elif [[ "$SRC_DIR" =~ ^\.\./ ]]; then
+	exit_on_error "The SRC_DIR does not reside in the project directory ($PRJ_DIR), this is not supported."
+    elif [[ ! -d "${PRJ_DIR}/${SRC_DIR}" ]]; then
+	exit_on_error "SRC_DIR points to a non-existing directory (${PRJ_DIR}/${SRC_DIR})."
+    else
+	SRC_DIR="${PRJ_DIR}/${SRC_DIR}"
+    fi
+fi
 
 # Set MAIN if necessary
 if [[ -z "$MAIN_CMDL" ]]; then
     # MAIN was provided without any path
-    if [[ -e "${PRJ_DIR}/${SRC_FORMAT}/$MAIN" ]]; then
-        MAIN="${PRJ_DIR}/${SRC_FORMAT}/$MAIN"
+    if [[ -e "${SRC_DIR}/$MAIN" ]]; then
+        MAIN="${SRC_DIR}/$MAIN"
     # MAIN was provided with a relative path
     elif [[ -e "${PRJ_DIR}/$MAIN" ]]; then
         MAIN="${PRJ_DIR}/$MAIN"
     # MAIN was provided with an absolute path
     elif [[ "$MAIN" =~ ^/ ]]; then
-        # if path to $MAIN does not match PRJ_DIR/SRC_FORMAT DC file and MAIN
-        # are in different directories, this should not happen
-        #
-        # In case both match, we can use MAIN as is
-        #
-        [[ $(dirname $MAIN) = "${PRJ_DIR}/${SRC_FORMAT}" ]] || exit_on_error "MAIN and DC-file reside in different base directories, this is not supported:\n\tMAIN: $MAIN\n\tDC-file: $DOCCONF"
+	exit_on_error "MAIN was specified with an absolute path. Please use a path relative to the project directory."	
+    # no path outside of PRJ_DIR allowed
+    elif [[ "$MAIN" =~ ^\.\./ ]]; then
+        exit_on_error "MAIN does not reside in the project directory ($PRJ_DIR), this is not supported."
     else
         exit_on_error "$MAIN does not exist or does not reside in $PRJ_DIR, please check your config"
     fi

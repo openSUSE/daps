@@ -32,6 +32,9 @@ endif
 ifndef PRJ_DIR
   $(error $(shell ccecho "error" "Fatal error: No path to working directory set"))
 endif
+ifndef SRC_DIR
+  $(error $(shell ccecho "error" "Fatal error: No path to doc source files set"))
+endif
 ifndef MAIN
   $(error $(shell ccecho "error" "Fatal error: No MAIN file set"))
 endif

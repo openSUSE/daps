@@ -85,7 +85,7 @@ endif
 # for translation. If this list is not empty, a warning will be issued
 # during locdrop processing
 #
-NO_TRANS_BOOK := $(filter-out $(subst $(PROFILEDIR)/,,$(TO_TRANS_FILES)),$(subst $(PRJ_DIR)/xml/,,$(DOCFILES)))
+NO_TRANS_BOOK := $(filter-out $(subst $(PROFILEDIR)/,,$(TO_TRANS_FILES)),$(subst $(SRC_DIR)/,,$(DOCFILES)))
 ifneq "$(strip $(NO_TRANS_BOOK))" ""
   NO_TRANS_BOOK := $(subst $(SPACE),\n,$(NO_TRANS_BOOK))
 endif
