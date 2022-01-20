@@ -22,7 +22,7 @@ endif
 ifndef BUILD_DIR
   $(error $(shell ccecho "error" "Fatal error: No path to build directory set"))
 endif
-ifndef DOC_DIR
+ifndef PRJ_DIR
   $(error $(shell ccecho "error" "Fatal error: No path to working directory set"))
 endif
 ifndef ADOC_MAIN

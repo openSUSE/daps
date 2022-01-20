@@ -75,7 +75,7 @@
    <title>Directory Structure</title>
    <para>
     For &dapsacr; to work out of the box, it requires a certain organization
-    of your DocBook XML files and images within your documentation directory. For
+    of your DocBook XML files and images within your project directory. For
     details, refer to <xref linkend="sec.daps.quick.basics.dirstruct"/>. You
     can generate the necessary structure with the &dapsacr; initialization
     script, <command>daps-init</command>. For instructions on how to make
@@ -145,19 +145,19 @@
   include it multiple times (callout IDs!)-->
    <para>
    &dapsacr; requires your XML files and images to be
-   organized in a specific structure within your documentation directory.
+   organized in a specific structure within your project directory.
     <xref linkend="ex.daps.quick.dir.doc"/> shows the required structure
     including the key files for a &dapsacr; documentation project. You can
-    also create multiple documentation directories for individual
+    also create multiple project directories for individual
     documentation projects, but they all need the substructure outlined
     below.
    </para>
    <example id="ex.daps.quick.dir.doc">
     <title>Directory Structure</title>
-    <screen><replaceable>YOUR_DOC_DIR/</replaceable><co id="co.quick.docdir.base"/>
-  |--&dc;*<co id="co.quick.docdir.dc"/>
+    <screen><replaceable>YOUR_PRJ_DIR/</replaceable><co id="co.quick.prjdir.base"/>
+  |--&dc;*<co id="co.quick.prjdir.dc"/>
      |--images/
-     |   |--src/<co id="co.quick.docdir.img.src"/>
+     |   |--src/<co id="co.quick.prjdir.img.src"/>
      |      |--dia/
      |      |--eps/
      |      |--fig/
@@ -165,25 +165,25 @@
      |      |--pdf/
      |      |--png/
      |      |--svg/
-     |--xml/<co id="co.quick.docdir.xml"/>
-         |--MAIN*.xml<co id="co.quick.docdir.main"/>
+     |--xml/<co id="co.quick.prjdir.xml"/>
+         |--MAIN*.xml<co id="co.quick.prjdir.main"/>
          |--*.xml</screen>
    </example>
    <calloutlist>
-    <callout arearefs="co.quick.docdir.base">
+    <callout arearefs="co.quick.prjdir.base">
      <para>
       <quote>Working directory</quote> for the respective documentation
       project (in the following also called <literal>project
-       directory</literal> or <literal>documentation directory</literal>).
+       directory</literal>).
      </para>
     </callout>
-    <callout arearefs="co.quick.docdir.dc">
+    <callout arearefs="co.quick.prjdir.dc">
      <para>
        &dclong; file (or files) defining the documentation project (books, articles).
 <!--For more information,
       refer to <xref linkend="sec.daps.user.oview.docproject"/>.--></para>
     </callout>
-    <callout arearefs="co.quick.docdir.img.src">
+    <callout arearefs="co.quick.prjdir.img.src">
      <para>
       Top-level directory for any original images that you want to use in
       the documentation project. This directory contains subdirectories for images in
@@ -193,7 +193,7 @@
       <xref linkend="sec.daps.quick.imgs.refer"/>.
      </para>
     </callout>
-    <callout arearefs="co.quick.docdir.xml">
+    <callout arearefs="co.quick.prjdir.xml">
      <para>
       Directory holding the XML &main; file and all other XML files for the
       documentation project. If you declare entities in one or more external
@@ -201,7 +201,7 @@
       entity declaration files here, too.
      </para>
     </callout>
-    <callout arearefs="co.quick.docdir.main">
+    <callout arearefs="co.quick.prjdir.main">
      <para>
       The &main; file of the documentation project. It contains the
       <quote>starting point</quote> (the highest-level object) of your
@@ -245,7 +245,7 @@
     <step>
     <para>To create a working environment for
      &dapsacr; , including an example document, enter the following: </para>
-    <screen>&prompt.user;<command>daps-init --docdir&nbsp;<replaceable>PATH_TO_DOC_DIR</replaceable></command></screen>
+    <screen>&prompt.user;<command>daps-init --docdir&nbsp;<replaceable>PATH_TO_PRJ_DIR</replaceable></command></screen>
     <para>
       Specifying the project directory with <option>--docdir</option> is
       mandatory. If the directory does not exist, &dapsacr; prompts you to
@@ -254,7 +254,7 @@
      <para>If you want to modify the file name and the title for the document,
       use the options <option>--name</option> and <option>--title</option>:
      </para>
-     <screen>&prompt.user;<command>daps-init --docdir&nbsp;<replaceable>PATH_TO_DOC_DIR</replaceable> \
+     <screen>&prompt.user;<command>daps-init --docdir&nbsp;<replaceable>PATH_TO_PRJ_DIR</replaceable> \
     --name&nbsp;"my_document" \
     --title&nbsp;"Example Documentation"</command></screen>
     </step>
@@ -262,7 +262,7 @@
     <para>If you want to create an example book file in addition to the article,
      enter the following:</para>
     <screen>&prompt.user;<command>daps-init
-     --docdir&nbsp;<replaceable>PATH_TO_DOC_DIR</replaceable>&nbsp;--rootelement book</command></screen></step>
+     --docdir&nbsp;<replaceable>PATH_TO_PRJ_DIR</replaceable>&nbsp;--rootelement book</command></screen></step>
    <step>
     <para>
      To see what the output of the XML example file looks like, follow the
@@ -426,7 +426,7 @@
    </para>
  &daps-output-cmd-basics;
   <para>
-    If your current directory is not the documentation directory where the
+    If your current directory is not the project directory where the
     &dc; file is located, also specify the (absolute or relative) path to
     the &dc; file. For example:
    </para>

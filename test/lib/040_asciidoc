@@ -9,7 +9,7 @@
 #
 
 _ADOC_NAME_PATH=""
-_DCFILE=${_DOC_DIR}/DC-adoc_test
+_DCFILE=${_PRJ_DIR}/DC-adoc_test
 _LOGFILE=""
 _SCHEMA="file:///usr/share/xml/docbook/schema/rng/5.1/docbookxi.rng"
 
@@ -53,17 +53,17 @@ function test_adoc_basic() {
         ' └─ Determining the XML filename failed' \
         "$?"
     assertTrue \
-        " └─ The result of the adoc to xml conversion (${_DOC_DIR}/build/.adoc/${_XMLFILENAME}.xml) does not exist." \
-        "[ -f ${_DOC_DIR}/build/.adoc/${_XMLFILENAME}.xml ]"
+        " └─ The result of the adoc to xml conversion (${_PRJ_DIR}/build/.adoc/${_XMLFILENAME}.xml) does not exist." \
+        "[ -f ${_PRJ_DIR}/build/.adoc/${_XMLFILENAME}.xml ]"
     assertTrue \
-        " └─ The profiled XML ${_DOC_DIR}/build/.profiled/noprofile/${_XMLFILENAME}.xml does not exist." \
-        "[ -f ${_DOC_DIR}/build/.profiled/noprofile/${_XMLFILENAME}.xml ]"
+        " └─ The profiled XML ${_PRJ_DIR}/build/.profiled/noprofile/${_XMLFILENAME}.xml does not exist." \
+        "[ -f ${_PRJ_DIR}/build/.profiled/noprofile/${_XMLFILENAME}.xml ]"
     #
     # Validating resulting XML
     #
     $_DAPSEXEC -v0 -d $_DCFILE --schema $_SCHEMA validate >/dev/null 2>&1
     assertTrue \
-        " └─ The profiled XML ${_DOC_DIR}/build/.profiled/noprofile/${_XMLFILENAME}.xml does not validate." \
+        " └─ The profiled XML ${_PRJ_DIR}/build/.profiled/noprofile/${_XMLFILENAME}.xml does not validate." \
         "$?"
 
 }
@@ -73,7 +73,7 @@ function test_adoc_advanced() {
 
     clean_build_dir all
 
-    _DCFILE=${_DOC_DIR}/DC-adoc_advanced_test
+    _DCFILE=${_PRJ_DIR}/DC-adoc_advanced_test
     _TYPE_EXPECT=book
 
     _XMLFILENAME=$($_DAPSEXEC -v0 -d $_DCFILE showvariable VARIABLE=BOOK 2>/dev/null)
@@ -107,7 +107,7 @@ function test_adoc_advanced() {
     #
     # Check whther the root element is $_TYPE_EXPECT
     #
-    _TYPE_GET=$(xmlstarlet sel -t -v "local-name(/*)" ${_DOC_DIR}/build/.profiled/noprofile/${_XMLFILENAME}.xml 2>/dev/null)
+    _TYPE_GET=$(xmlstarlet sel -t -v "local-name(/*)" ${_PRJ_DIR}/build/.profiled/noprofile/${_XMLFILENAME}.xml 2>/dev/null)
     assertEquals \
         " └─ Type was not changed to $_TYPE_EXPECT during postprocessing." \
         "$_TYPE_EXPECT" "$_TYPE_GET"
@@ -118,7 +118,7 @@ function test_adoc_advanced() {
     #
     $_DAPSEXEC -v0 -d $_DCFILE --schema $_SCHEMA validate >/dev/null 2>&1
     assertTrue \
-        " └─ The post-processed XML ${_DOC_DIR}/build/.profiled/noprofile/${_XMLFILENAME}.xml does not validate." \
+        " └─ The post-processed XML ${_PRJ_DIR}/build/.profiled/noprofile/${_XMLFILENAME}.xml does not validate." \
         "$?"
 }
 

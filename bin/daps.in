@@ -81,7 +81,6 @@ VARLIST=(
     DBNOCONV
     DEBUG
     DISTVER
-    DOC_DIR
     DAPS_CONFIG_FILE
     DAPSROOT
     DAPSROOT_DEFAULT
@@ -153,6 +152,7 @@ VARLIST=(
     OUTPUTNAME
     PAGEFILES
     PARAMS
+    PRJ_DIR
     PROFARCH
     PROFAUDIENCE
     PROFCONDITION
@@ -223,7 +223,6 @@ UNSETLIST=(
     COLOR_CMDL
     CONFIG
     DC_PATH_EXISTS
-    DOC_DIR_CMDL
     DOCBOOK5_RNG_URI_CMDL
     DOCCONF_CMDL
     DOCCONF_NAME
@@ -821,7 +820,7 @@ function check_pathlist {
 #
 function autoset_docconf {
     # if there is only one DOCCONF file in the current directory, use it
-    # and also set DOC_DIR
+    # and also set PRJ_DIR
     #
     local DC_FILENAME DC_PARENT DC_REAL_PATH DC_REAL_DIR
     declare -a DC_COUNT
@@ -830,9 +829,9 @@ function autoset_docconf {
         # There is only one DOCCONF file
         #
         # two possibilities:
-        # 1. We are already in DOC_DIR
+        # 1. We are already in PRJ_DIR
         # 2. We are in the documents build result directory
-        # (DOC_DIR/build/<name>), where daps creates a link to the
+        # (PRJ_DIR/build/<name>), where daps creates a link to the
         # real ENV file
         if [[ -h ${DC_COUNT[0]} ]]; then
             # DOCCONF is a link
@@ -850,16 +849,16 @@ function autoset_docconf {
                 # real path (with links "resolved")
                 DOCCONF_CMDL="$DC_REAL_PATH"
             else
-                # we are in DOC_DIR
+                # we are in PRJ_DIR
                 # preserve links
                 DOCCONF_CMDL="${PWD}/${DC_COUNT[0]}"
             fi
         else
-            # no link, we are in DOC_DIR
+            # no link, we are in PRJ_DIR
             sanitize_path "${DC_COUNT[0]}" "DOCCONF_CMDL"
         fi
-        # set DOC_DIR
-        DOC_DIR=$(dirname "$DOCCONF_CMDL")
+        # set PRJ_DIR
+        PRJ_DIR=$(dirname "$DOCCONF_CMDL")
         if [[ 2 -le $VERBOSITY ]]; then
             echo "Using automatically detected DOCCONF $DOCCONF_CMDL"
         fi
@@ -1259,9 +1258,9 @@ case "${SCMD_ARGS[@]}" in
     "-h"|"-h "*|*" -h "*|*" -h"|"--help"|"--help "*|*" --help "*|*" --help")
         declare -a SCMD_ARGS=( "-h" )
         ;;
-    *DOCCONF*|*DAPSROOT*|*DOC_DIR*|*MAIN*)
+    *DOCCONF*|*DAPSROOT*|*PRJ_DIR*|*MAIN*)
         if [[ showvariable != $SUBCMD ]]; then
-            exit_on_error "Please specify DOC_DIR, DOCCONF, MAIN, or DAPSROOT via command line options"
+            exit_on_error "Please specify PRJ_DIR, DOCCONF, MAIN, or DAPSROOT via command line options"
         fi
 esac
 
@@ -1390,7 +1389,7 @@ fi
 #esac
 
 #-------------------------------------
-# Parse DOCCONF and set up MAIN, DOC_DIR
+# Parse DOCCONF and set up MAIN, PRJ_DIR
 #
 # Three possibilities:
 # 1. MAIN was set on the command line or via user config
@@ -1412,7 +1411,7 @@ if [[ -z "$DOCCONF_CMDL" && -z "$MAIN_CMDL" ]]; then
     # check if a default value was specified in the user/system config file
         if [[ -e $DOCCONF_DEFAULT ]]; then
             sanitize_path "$DOCCONF_DEFAULT" "DOCCONF_CMDL"
-            DOC_DIR=$(dirname "$DOCCONF_CMDL")
+            PRJ_DIR=$(dirname "$DOCCONF_CMDL")
             if [[ 2 -le $VERBOSITY ]]; then
                 echo "Using DOCCONF $DOCCONF_DEFAULT from config files"
             fi
@@ -1433,24 +1432,24 @@ elif [[ -n "$MAIN_CMDL" ]]; then
 
     # get the source format (XML/ADOC) from MAIN
     SRC_FORMAT=${MAIN_CMDL##*.}
-    # Set a DOC_DIR
-    DOC_DIR=$(readlink -en "$(dirname "$MAIN_CMDL")")
-    DOC_DIR=${DOC_DIR%*/$SRC_FORMAT}
+    # Set a PRJ_DIR
+    PRJ_DIR=$(readlink -en "$(dirname "$MAIN_CMDL")")
+    PRJ_DIR=${PRJ_DIR%*/$SRC_FORMAT}
 elif [[ -n "$DOCCONF_CMDL" ]]; then
     # check if DOCCONF is a regular file
     if [[ -e $DOCCONF_CMDL ]]; then
         sanitize_path "$DOCCONF_CMDL" "DOCCONF_CMDL"
-        DOC_DIR=$(dirname "$DOCCONF_CMDL")
+        PRJ_DIR=$(dirname "$DOCCONF_CMDL")
     else
         exit_on_error "The file \"$DOCCONF\" you specified with --docconf is not a valid file"
     fi
 fi
 
 #
-# Checking MAIN_CMDL, DOCCONF_CMDL, DOC_DIR and DAPSROOT
+# Checking MAIN_CMDL, DOCCONF_CMDL, PRJ_DIR and DAPSROOT
 #
 [[ -z "$DOCCONF_CMDL" && -z "$MAIN_CMDL" ]] && exit_on_error "Fatal: Neither \$DOCCONF nor $MAIN are set. This should not have happened. Please report a bug."
-[[ -z "$DOC_DIR" ]] && exit_on_error "Fatal: \$DOC_DIR is not set. This should not have happened. Please report a bug."
+[[ -z "$PRJ_DIR" ]] && exit_on_error "Fatal: \$PRJ_DIR is not set. This should not have happened. Please report a bug."
 [[ -z "$DAPSROOT" ]] && exit_on_error "Fatal: \$DAPSROOT is not set. This should not have happened. Please report a bug."
 
 # FINALLY! Parse the DOCCONF file, recover the command line values
@@ -1465,27 +1464,27 @@ fi
 # Validate SRC_FORMAT - needs to be xml or adoc
 [[ "adoc" = "$SRC_FORMAT" || "xml" = "$SRC_FORMAT" ]] || exit_on_error "$MAIN is an unsupported file type (.$SRC_FORMAT)\nmust be AsciiDoc (.adoc) or DocBook (.xml)"
 
-# Check whether "${DOC_DIR}/${SRC_FORMAT}" exists
-[[ -d "${DOC_DIR}/${SRC_FORMAT}" ]] || exit_on_error "Source files must reside in  \"${DOC_DIR}/${SRC_FORMAT}/\".\n This directory does not exist."
+# Check whether "${PRJ_DIR}/${SRC_FORMAT}" exists
+[[ -d "${PRJ_DIR}/${SRC_FORMAT}" ]] || exit_on_error "Source files must reside in  \"${PRJ_DIR}/${SRC_FORMAT}/\".\n This directory does not exist."
 
 # Set MAIN if necessary
 if [[ -z "$MAIN_CMDL" ]]; then
     # MAIN was provided without any path
-    if [[ -e "${DOC_DIR}/${SRC_FORMAT}/$MAIN" ]]; then
-        MAIN="${DOC_DIR}/${SRC_FORMAT}/$MAIN"
+    if [[ -e "${PRJ_DIR}/${SRC_FORMAT}/$MAIN" ]]; then
+        MAIN="${PRJ_DIR}/${SRC_FORMAT}/$MAIN"
     # MAIN was provided with a relative path
-    elif [[ -e "${DOC_DIR}/$MAIN" ]]; then
-        MAIN="${DOC_DIR}/$MAIN"
+    elif [[ -e "${PRJ_DIR}/$MAIN" ]]; then
+        MAIN="${PRJ_DIR}/$MAIN"
     # MAIN was provided with an absolute path
     elif [[ "$MAIN" =~ ^/ ]]; then
-        # if path to $MAIN does not match DOC_DIR/SRC_FORMAT DC file and MAIN
+        # if path to $MAIN does not match PRJ_DIR/SRC_FORMAT DC file and MAIN
         # are in different directories, this should not happen
         #
         # In case both match, we can use MAIN as is
         #
-        [[ $(dirname $MAIN) = "${DOC_DIR}/${SRC_FORMAT}" ]] || exit_on_error "MAIN and DC-file reside in different base directories, this is not supported:\n\tMAIN: $MAIN\n\tDC-file: $DOCCONF"
+        [[ $(dirname $MAIN) = "${PRJ_DIR}/${SRC_FORMAT}" ]] || exit_on_error "MAIN and DC-file reside in different base directories, this is not supported:\n\tMAIN: $MAIN\n\tDC-file: $DOCCONF"
     else
-        exit_on_error "$MAIN does not exist or does not reside in $DOC_DIR, please check your config"
+        exit_on_error "$MAIN does not exist or does not reside in $PRJ_DIR, please check your config"
     fi
 else
     MAIN="$MAIN_CMDL"
@@ -1517,7 +1516,7 @@ XMLFORMAT_CONFIG_FILE=${XMLFORMAT_CONFIG_FILE/#@sysconfdir\@\/daps/${DAPSROOT}/e
 # check all paths
 #
 recover_cmdl_values
-check_pathlist "$DOC_DIR"
+check_pathlist "$PRJ_DIR"
 
 #----------
 # Values that need to be exported and are not set in the config
@@ -1577,7 +1576,7 @@ export XML_CATALOG_FILES
 
 #----------------------------------
 # default BUILD_DIR if not specified elsewhere
-[[ -z "$BUILD_DIR" ]] && BUILD_DIR=${DOC_DIR}/build
+[[ -z "$BUILD_DIR" ]] && BUILD_DIR=${PRJ_DIR}/build
 
 #----------------------------------
 # DocBook Stylesheet and Schema locations (from system or user config file)
@@ -1722,9 +1721,9 @@ if [[ "adoc" = "$SRC_FORMAT" ]]; then
         # path was not provided on cmdl
         if [[ -n $ADOC_IMG_DIR ]]; then
             # path was provided by config
-            # if not absolute, prepend DOC_DIR
-            [[ ! "/" == ${ADOC_IMG_DIR:1} ]] && ADOC_IMG_DIR="$DOC_DIR/$ADOC_IMG_DIR"
-            #  error out if $DOC_DIR/$ADOC_IMG_DIR does not exist
+            # if not absolute, prepend PRJ_DIR
+            [[ ! "/" == ${ADOC_IMG_DIR:1} ]] && ADOC_IMG_DIR="$PRJ_DIR/$ADOC_IMG_DIR"
+            #  error out if $PRJ_DIR/$ADOC_IMG_DIR does not exist
             [[ ! -d $ADOC_IMG_DIR ]] && exit_on_error "AsciiDoc image directory $ADOC_IMG_DIR does not exist"
         fi
     fi

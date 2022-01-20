@@ -27,7 +27,7 @@ UNUSED_IMAGES := $(shell tar cP --exclude-vcs \
 		    $(IMG_SRCDIR) 2>/dev/null | tar tP 2>/dev/null |\
 		    sed '/\/$$/d' 2>/dev/null | tr '\n' ' ' 2>/dev/null)
 UNUSED_XML    := $(shell tar cP --exclude-vcs \
-		    $(DOC_DIR)/xml  2>/dev/null | tar tP 2>/dev/null |\
+		    $(PRJ_DIR)/xml  2>/dev/null | tar tP 2>/dev/null |\
 		    sed '/\/$$/d' 2>/dev/null | tr '\n' ' ' 2>/dev/null)
 UNUSED_FILES := $(filter-out $(USED_FILES), $(UNUSED_IMAGES) $(UNUSED_XML))
 
