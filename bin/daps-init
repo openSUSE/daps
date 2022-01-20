@@ -20,10 +20,10 @@ function exit_on_error {
 
 function usage {
     cat <<EOF_helptext
-$ME --docdir <PATH TO DIRECTORY> [OPTIONS]
+$ME --projet-dir <PATH TO DIRECTORY> [OPTIONS]
 
 Create a working environment for DAPS with an example DocBook document.
-Specifying the project directory with --docdir is mandatory, all other
+Specifying the project directory with --project-dir is mandatory, all other
 options are optional.
 Specifying a name for the document with "--name" is recommended--it will
 be used in filenames. Setting the title of the document with "--title"
@@ -31,7 +31,7 @@ is also recommended.
 
 Options:
 
-  --docdir=<DIR>
+  --project-dir=<DIR>
     Path to the project directory under which the DAPS environment will be
     set up. If the directory does not exists, it will be created. Mandatory.
 
@@ -97,7 +97,7 @@ done
 #----------------
 # Parse the command line arguments
 
-ARGS=$(getopt -o 45d:hn:r:t: -l date:,dapsroot:,docbook4,docbook5,docdir:,help,name:,productname:,productnumber:,rootelement:,title: -n "$ME" -- "$@")
+ARGS=$(getopt -o 45d:hn:p:r:t: -l date:,dapsroot:,docbook4,docbook5,docdir:,help,name:,productname:,productnumber:,project-dir:,rootelement:,title: -n "$ME" -- "$@")
 
 eval set -- "$ARGS"
 
@@ -120,8 +120,8 @@ while true ; do
             fi
             shift 2
             ;;
-        --docdir|-d)
-            DOC_DIR="$2"
+        --project-dir|--docdir|-p|-d)
+            PRJ_DIR="$2"
             shift 2
             ;;
         --docbook4|-4)
@@ -183,11 +183,11 @@ while true ; do
     esac
 done
 
-if [[ -z "$DOC_DIR" ]]; then
+if [[ -z "$PRJ_DIR" ]]; then
   exit_on_error "Please specify a directory with --docdir"
 else
   #  strip trailing slash
-  DOC_DIR=${DOC_DIR%/}
+  PRJ_DIR=${PRJ_DIR%/}
 fi
 
 if [[ -n $PRODUCTNUMBER && -z $PRODUCTNAME ]]; then
@@ -209,9 +209,9 @@ TEMPLATE_DIR="${DAPSROOT}/init_templates"
 
 DC_TEMPLATE="${TEMPLATE_DIR}/DC-file.template"
 MAIN_TEMPLATE="${TEMPLATE_DIR}/MAIN.db${DOCBOOKVERSION}-$ROOTELEMENT.template"
-DC_FILE="${DOC_DIR}/DC-${NAME}"
-MAIN="${DOC_DIR}/xml/MAIN-${NAME}.xml"
-IMG_DIR="${DOC_DIR}/images/src"
+DC_FILE="${PRJ_DIR}/DC-${NAME}"
+MAIN="${PRJ_DIR}/xml/MAIN-${NAME}.xml"
+IMG_DIR="${PRJ_DIR}/images/src"
 
 
 #----------------
@@ -219,20 +219,20 @@ IMG_DIR="${DOC_DIR}/images/src"
 #
 
 CONT=""
-if [[ ! -d $DOC_DIR ]]; then
+if [[ ! -d $PRJ_DIR ]]; then
     while [[ ! $CONT =~ ^[NnYy]$ ]] ; do
-        read -e -t 20 -i y -p "$DOC_DIR does not exist. Create it? [y/n] " CONT
+        read -e -t 20 -i y -p "$PRJ_DIR does not exist. Create it? [y/n] " CONT
         [[ $? -gt 128 ]] && CONT="y" # timeout reached
     done
     if [[ $CONT =~ ^[Yy]$ ]]; then
-        mkdir -p "$DOC_DIR" || exit_on_error "Cannot create $DOC_DIR"
+        mkdir -p "$PRJ_DIR" || exit_on_error "Cannot create $PRJ_DIR"
     else
         exit_on_error "Aborted by user"
     fi
 fi
 
-# Create needed subdirs in DOC_DIR
-mkdir -p "${DOC_DIR}"/images/src/{dia,jpg,png,svg,eps,pdf} "${DOC_DIR}/xml" || exit_on_error "Cannot create needed subdirectories in $DOC_DIR"
+# Create needed subdirs in PRJ_DIR
+mkdir -p "${PRJ_DIR}"/images/src/{dia,jpg,png,svg,eps,pdf} "${PRJ_DIR}/xml" || exit_on_error "Cannot create needed subdirectories in $PRJ_DIR"
 
 #----------------
 # copy the templates
@@ -276,7 +276,7 @@ fi
 
 #----------------
 #
-ccecho "result" "Successfully created a DAPS Project at ${DOC_DIR}"
+ccecho "result" "Successfully created a DAPS Project at ${PRJ_DIR}"
 echo "To build a PDF or HTML version of the example document, run:
   daps -d $DC_FILE pdf
 or

@@ -111,7 +111,7 @@ function test_epubStyleroot () {
     # Testing Fallback Styleroot by specifying a wrong Styleroot dir
     #
 
-    $_DAPSEXEC -d $_DCFILE --styleroot=${_DOC_DIR} --fb_styleroot=${_STANDARD_STYLES} --debug epub >/dev/null 2>&1
+    $_DAPSEXEC -d $_DCFILE --styleroot=${_PRJ_DIR} --fb_styleroot=${_STANDARD_STYLES} --debug epub >/dev/null 2>&1
     grep -E -q -- "--stylesheet /.*/${_STANDARD_STYLES}" $_LOGFILE 2>/dev/null
     assertTrue \
         " └─ The Fallback Styleroot specified on the command line was not used." \
@@ -122,7 +122,7 @@ function test_epubStyleroot () {
     # Testing automatic Fallback to _DB_STYLES by specifying a wrong
     # Styleroot dir with no Fallback
     #
-    $_DAPSEXEC -d $_DCFILE --styleroot=${_DOC_DIR} --debug epub >/dev/null 2>&1
+    $_DAPSEXEC -d $_DCFILE --styleroot=${_PRJ_DIR} --debug epub >/dev/null 2>&1
     grep -q -- "--stylesheet ${_DB_STYLES}" $_LOGFILE 2>/dev/null
     assertTrue \
         " └─ The automatic DocBook Fallback Styleroot was not used." \
@@ -149,7 +149,7 @@ function test_epubCSS () {
     local _EPUB_BUILD_PATH
 
     _CSS_CMDL_NAME="test.css"
-    _CSS_CMDL_PATH="${_DOC_DIR}/xml/${_CSS_CMDL_NAME}"
+    _CSS_CMDL_PATH="${_PRJ_DIR}/xml/${_CSS_CMDL_NAME}"
     _CSS_DC_NAME="susebooks.css" # from $_DCFILE
     _CSS_STYLE_NAME="style.css"
 

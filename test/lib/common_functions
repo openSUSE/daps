@@ -18,34 +18,34 @@ function usage () {
 # --------
 # Clean up the build directory
 # Arguments:
-#  all:      completely removes the build directory (${_DOC_DIR}/build)
-#  fo:       remove FO files (${_DOC_DIR}/build/.tmp/*.fo)
-#  images:   remove the images directory (${_DOC_DIR}/build/.images)
-#  profiles: remove profiling directories (${_DOC_DIR}/build/.profiled)
-#  results:  remove build results (${_DOC_DIR}/build/$_BOOKNAME)
-#  tmp:      remove temp directory (${_DOC_DIR}/build/.tmp)
+#  all:      completely removes the build directory (${_PRJ_DIR}/build)
+#  fo:       remove FO files (${_PRJ_DIR}/build/.tmp/*.fo)
+#  images:   remove the images directory (${_PRJ_DIR}/build/.images)
+#  profiles: remove profiling directories (${_PRJ_DIR}/build/.profiled)
+#  results:  remove build results (${_PRJ_DIR}/build/$_BOOKNAME)
+#  tmp:      remove temp directory (${_PRJ_DIR}/build/.tmp)
 #
 function clean_build_dir () {
-    [[ -d "${_DOC_DIR}" ]] || (echo "Attempting to delete an empty directory" && exit 1)
+    [[ -d "${_PRJ_DIR}" ]] || (echo "Attempting to delete an empty directory" && exit 1)
     [[ -z $1 ]] && (echo "You must specify a parameter for the clean buildir function" && exit 1)
     case $1 in
         all)
-            rm -rf "${_DOC_DIR}/build"
+            rm -rf "${_PRJ_DIR}/build"
             ;;
         fo)
-            rm -f "${_DOC_DIR}/build/.tmp/"*.fo
+            rm -f "${_PRJ_DIR}/build/.tmp/"*.fo
             ;;
         images)
-            rm -rf "${_DOC_DIR}/build/.images"
+            rm -rf "${_PRJ_DIR}/build/.images"
             ;;
         profiles)
-            rm -rf "${_DOC_DIR}/build/.profiled"
+            rm -rf "${_PRJ_DIR}/build/.profiled"
             ;;
         results)
-            rm -rf "${_DOC_DIR}/build/$_BOOKNAME"
+            rm -rf "${_PRJ_DIR}/build/$_BOOKNAME"
             ;;
         tmp)
-            rm -rf "${_DOC_DIR}/build/.tmp"
+            rm -rf "${_PRJ_DIR}/build/.tmp"
             ;;
         *)
             exit_on_error "Wrong parameter for function cleandir"

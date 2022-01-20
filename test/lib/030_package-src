@@ -121,7 +121,7 @@ function test_packagesrcFilelist () {
 
     # DC file via DEF file
     #
-    _SRC_BUILD_PATH=$($_DAPSEXEC -v0 -d $_DCFILE package-src --def-file=${_DOC_DIR}/DEF-booktest 2>/dev/null)
+    _SRC_BUILD_PATH=$($_DAPSEXEC -v0 -d $_DCFILE package-src --def-file=${_PRJ_DIR}/DEF-booktest 2>/dev/null)
 
     # clean tmp and unpack new archive
     rm -rf "${_SRC_TEMPDIR}" && mkdir -p "${_SRC_TEMPDIR}"

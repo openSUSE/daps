@@ -18,7 +18,7 @@
 
 
 # Overview
-# DAPS uses images in $DOC_DIR/images/src/<FORMAT>/
+# DAPS uses images in $PRJ_DIR/images/src/<FORMAT>/
 # Supported image formats are .dia, .ditaa, .odg, .png, and .svg
 # - When creating HTML manuals all formats are converted to PNG
 # - When creating PDF manuals all formats are converted to
@@ -46,7 +46,7 @@
 # upstream 0.11 has SVG support (--svg)
 #
 #
-# $DOC_DIR/images/src/<FORMAT>/ is _never_ used for manual creation, the
+# $PRJ_DIR/images/src/<FORMAT>/ is _never_ used for manual creation, the
 # images are rather created or linked into $IMG_GENDIR/color/ (color images)
 # or into $IMG_GENDIR/grayscale/ (grayscale). If image creation/conversion
 # requires generating intermediate files, these files are created in

@@ -33,7 +33,7 @@ endif
 # run it multiple times (SRCFILES, USED, projectfiles).
 
 ifeq "$(strip $(SRC_FORMAT))" "xml"
-  XML_SRC_PATH := $(DOC_DIR)/xml/
+  XML_SRC_PATH := $(PRJ_DIR)/xml/
 endif
 ifeq "$(strip $(SRC_FORMAT))" "adoc"
   XML_SRC_PATH := $(ADOC_DIR)/
