@@ -32,16 +32,9 @@ endif
 # That stylesheet only takes a few miliseconds to execute, so we can afford to
 # run it multiple times (SRCFILES, USED, projectfiles).
 
-ifeq "$(strip $(SRC_FORMAT))" "xml"
-  XML_SRC_PATH := $(PRJ_DIR)/xml/
-endif
-ifeq "$(strip $(SRC_FORMAT))" "adoc"
-  XML_SRC_PATH := $(ADOC_DIR)/
-endif
-
 SETFILES := $(shell $(XSLTPROC) $(PROFSTRINGS) \
 	      --output $(SETFILES_TMP) \
-	      --stringparam "xml.src.path=$(XML_SRC_PATH)" \
+	      --stringparam "xml.src.path=$(SRC_DIR)/" \
 	      --stringparam "mainfile=$(notdir $(MAIN))" \
 	      --stylesheet $(DAPSROOT)/daps-xslt/common/get-all-used-files.xsl \
 	      --file $(MAIN) $(XSLTPROCESSOR) && echo 1)
@@ -110,7 +103,7 @@ ENTITIES_DOC := $(shell $(LIBEXEC_DIR)/getentityname.py $(DOCFILES) 2>/dev/null)
 # SRCFILES and DOCFILES only include regular XML files. To also support
 # xi:includes of text files via parse="text", extract-files-and-images.xsl
 # also returns a list of files included that way. The paths returned are
-# relative to the xml/ directory
+# relative to the SRC_DIR directory
 #
 # These files need to be copied to the profiling directory
 # (see profiling.mk

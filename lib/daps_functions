@@ -686,7 +686,7 @@ function call_make {
         echo
 
         # Directories
-        for V in PRJ_DIR BUILD_DIR DAPSROOT DOCCONF BOOK; do
+        for V in BOOK BUILD_DIR DAPSROOT DOCCONF PRJ_DIR SRC_DIR; do
             printf "%${COLWIDTH}s: %s\n" "$V" "${!V}"
         done
 

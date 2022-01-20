@@ -823,6 +823,37 @@ SPELL_LANG=""
 #
 SPELL_SKIP_TAGS="author command email envar filename firstname guimenu keycap literal option package remark replaceable screen surname systemitem tag ulink varname xref"
 
+## Key:         SRC_DIR
+## ----------------------
+## Description: Path to the directory that holds the doc source files.
+## Type:        Relative path to directory (without a trailing slash),
+##              path needs to be relative to the project directory ($PRJ_DIR)
+## Default:     Depends on the format of the MAIN file; if it is an XML file
+##              (incl. an assembly) it will default to "$PRJ_DIR/xml", for
+##              ASCIIDoc to "$PRJ_DIR/adoc"
+#
+# If changed, allows to have several source subdirectories in your project
+# directory, so you ca better organize your files. In such a case this value
+# is supposed to be set in the doc-config files (DC-files).
+# Example directory structure:
+#
+# $PRJ_DIR/
+#  |- book1/
+#      |- xml/
+#          |- MAIN-book1.xml
+#          |- ...
+#  |- book2/
+#      | -xml/
+#          |- MAIN-book2.xml
+#          |- ...
+#  |- DC-book1
+#  |- DC-book2
+#
+#  DC-book1 would contain SRC_DIR="book1/xml"
+#  DC-book2 would contain SRC_DIR="book2/xml"
+#
+SRC_DIR=""
+
 ## Key:      STATIC_DIR
 ## -------------------
 ## Description: Custom static/ directory containing CSS and JS files

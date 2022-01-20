@@ -30,7 +30,7 @@ ifeq "$(strip $(SRC_FORMAT))" "adoc"
     PROFILE_STYLESHEET := $(ADOC_POST_STYLE)
   endif
 else 
-  PROFILES := $(sort $(subst $(PRJ_DIR)/xml/,$(PROFILEDIR)/,$(SRCFILES)))
+  PROFILES := $(sort $(subst $(SRC_DIR)/,$(PROFILEDIR)/,$(SRCFILES)))
   ifdef PROFILE_URN
     # Resolve profile urn because saxon does not accept urns
     ifeq "$(shell expr substr $(PROFILE_URN) 1 4 2>/dev/null)" "urn:"
@@ -101,7 +101,7 @@ profile: $(PROFILES)
 # entities are already resolved
 #
 ifeq "$(strip $(SRC_FORMAT))" "xml"
-  $(PROFILEDIR)/%.xml: $(PRJ_DIR)/xml/%.xml $(ENTITIES_DOC) $(DOCCONF) | $(PROFILEDIR)
+  $(PROFILEDIR)/%.xml: $(SRC_DIR)/%.xml $(ENTITIES_DOC) $(DOCCONF) | $(PROFILEDIR)
 else
   $(PROFILEDIR)/%.xml: $(ADOC_DIR)/%.xml $(ENTITIES_DOC) $(DOCCONF) | $(PROFILEDIR)
 endif
@@ -128,7 +128,7 @@ ifdef TEXTFILES
 	for TF in $(TEXTFILES); do \
 	  TF=$${TF#file://*}; \
 	  if [[ "$${TF:0:1}" != "/" ]]; then \
-	    TF="$(PRJ_DIR)/xml/$$TF"; \
+	    TF="$(SRC_DIR)/$$TF"; \
 	    (cd $(PROFILEDIR) && ln -sf $$(realpath --relative-to="$(PROFILEDIR)" $$TF)); \
 	  else \
 	    (cd $(PROFILEDIR) && ln -sf $$TF); \
