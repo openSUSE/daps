@@ -1,12 +1,12 @@
 <!--<!DOCTYPE configuration SYSTEM "config.dtd">-->
-<!-- 
-     this file contains templates which allow an user easy 
-     configuration of Fop. Actually normally you don't need this configuration 
+<!--
+     this file contains templates which allow an user easy
+     configuration of Fop. Actually normally you don't need this configuration
      file, but if you need to change configuration, you should
-     always use this file and *not* config.xml. 
+     always use this file and *not* config.xml.
      Usage:
      java org.apache.fop.apps.Fop -c userconfig.xml -fo fo-file -pdf pdf-file
-     
+
      See also:
      http://xmlgraphics.apache.org/fop/1.0/configuration.html
 -->
@@ -18,7 +18,72 @@
      <directory recursive="true">/usr/share/fonts/</directory>
 
      <!-- automatically detect operating system installed fonts -->
-     <auto-detect/>  
+     <auto-detect/>
+     <!--
+        Registering the font Poppins manually, since the FOP Auto-Detect mechanism doesn't work
+        for Poppins. Once it is updated from upstream this following block can be removed.
+        https://issues.apache.org/jira/browse/FOP-3045
+     -->
+     <font kerning="yes" embed-url="/usr/share/fonts/Poppins-Regular.ttf" simulate-style="false" embedding-mode="subset">
+      <font-triplet name="Poppins" style="normal" weight="normal" />
+     </font>
+     <font kerning="yes" embed-url="/usr/share/fonts/Poppins-Italic.ttf" simulate-style="false" embedding-mode="subset">
+      <font-triplet name="Poppins" style="italic" weight="normal" />
+     </font>
+     <font kerning="yes" embed-url="/usr/share/fonts/Poppins-Thin.ttf" simulate-style="false" embedding-mode="subset">
+      <font-triplet name="Poppins" style="normal" weight="100" />
+     </font>
+     <font kerning="yes" embed-url="/usr/share/fonts/Poppins-ThinItalic.ttf" simulate-style="false" embedding-mode="subset">
+      <font-triplet name="Poppins" style="italic" weight="100" />
+     </font>
+     <font kerning="yes" embed-url="/usr/share/fonts/Poppins-ExtraLight.ttf" simulate-style="false" embedding-mode="subset">
+      <font-triplet name="Poppins" style="normal" weight="200" />
+     </font>
+     <font kerning="yes" embed-url="/usr/share/fonts/Poppins-ExtraLightItalic.ttf" simulate-style="false" embedding-mode="subset">
+      <font-triplet name="Poppins" style="italic" weight="200" />
+     </font>
+     <font kerning="yes" embed-url="/usr/share/fonts/Poppins-Light.ttf" simulate-style="false" embedding-mode="subset">
+      <font-triplet name="Poppins" style="normal" weight="300" />
+     </font>
+     <font kerning="yes" embed-url="/usr/share/fonts/Poppins-LightItalic.ttf" simulate-style="false" embedding-mode="subset">
+      <font-triplet name="Poppins" style="italic" weight="300" />
+     </font>
+     <font kerning="yes" embed-url="/usr/share/fonts/Poppins-Regular.ttf" simulate-style="false" embedding-mode="subset">
+      <font-triplet name="Poppins" style="normal" weight="400" />
+     </font>
+     <font kerning="yes" embed-url="/usr/share/fonts/Poppins-Italic.ttf" simulate-style="false" embedding-mode="subset">
+      <font-triplet name="Poppins" style="italic" weight="400" />
+     </font>
+     <font kerning="yes" embed-url="/usr/share/fonts/Poppins-Medium.ttf" simulate-style="false" embedding-mode="subset">
+      <font-triplet name="Poppins" style="normal" weight="500" />
+     </font>
+     <font kerning="yes" embed-url="/usr/share/fonts/Poppins-MediumItalic.ttf" simulate-style="false" embedding-mode="subset">
+      <font-triplet name="Poppins" style="italic" weight="500" />
+     </font>
+     <font kerning="yes" embed-url="/usr/share/fonts/Poppins-SemiBold.ttf" simulate-style="false" embedding-mode="subset">
+      <font-triplet name="Poppins" style="normal" weight="600" />
+     </font>
+     <font kerning="yes" embed-url="/usr/share/fonts/Poppins-SemiBoldItalic.ttf" simulate-style="false" embedding-mode="subset">
+      <font-triplet name="Poppins" style="italic" weight="600" />
+     </font>
+     <font kerning="yes" embed-url="/usr/share/fonts/Poppins-Bold.ttf" simulate-style="false" embedding-mode="subset">
+      <font-triplet name="Poppins" style="normal" weight="700" />
+     </font>
+     <font kerning="yes" embed-url="/usr/share/fonts/Poppins-BoldItalic.ttf" simulate-style="false" embedding-mode="subset">
+      <font-triplet name="Poppins" style="italic" weight="700" />
+     </font>
+     <font kerning="yes" embed-url="/usr/share/fonts/Poppins-ExtraBold.ttf" simulate-style="false" embedding-mode="subset">
+      <font-triplet name="Poppins" style="normal" weight="800" />
+     </font>
+     <font kerning="yes" embed-url="/usr/share/fonts/Poppins-ExtraBoldItalic.ttf" simulate-style="false" embedding-mode="subset">
+      <font-triplet name="Poppins" style="italic" weight="800" />
+     </font>
+     <font kerning="yes" embed-url="/usr/share/fonts/Poppins-Black.ttf" simulate-style="false" embedding-mode="subset">
+      <font-triplet name="Poppins" style="normal" weight="900" />
+     </font>
+     <font kerning="yes" embed-url="/usr/share/fonts/Poppins-BlackItalic.ttf" simulate-style="false" embedding-mode="subset">
+      <font-triplet name="Poppins" style="italic" weight="900" />
+     </font>
    </fonts>
   </renderer>
  </renderers>
