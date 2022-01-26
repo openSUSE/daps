@@ -14,7 +14,7 @@
 AUTOMAKE_OPTIONS = 1.10 foreign dist-bzip2 no-dist-gzip no-installinfo \
 			-Wall -Werror -Wno-portability
 ACLOCAL_AMFLAGS = -I m4
-SUBDIRS = 
+SUBDIRS =
 
 # additional files to add to the tarball
 EXTRA_DIST := COPYING-2.0 COPYING-3.0 packaging/daps.spec
@@ -233,13 +233,6 @@ if CATALOG_EDIT
 	chmod --reference=$(root_catalog) $(TMP_CATALOG)
 	mv $(TMP_CATALOG) $(root_catalog)
 endif
-
-# Ugly Hack to prevent *.xsl files in libexec from being executable
-# a proper fix would be to move these files to daps-xslt
-#
-install-exec-hook:
-	chmod 644 $(DESTDIR)$(dapslibexecdir)/*.xsl
-
 
 #---------------------------Local UNINSTALL-----------------------------------
 if CATALOG_EDIT
