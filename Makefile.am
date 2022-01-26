@@ -234,12 +234,6 @@ if CATALOG_EDIT
 	mv $(TMP_CATALOG) $(root_catalog)
 endif
 
-# Ugly Hack to prevent *.xsl files in libexec from being executable
-# a proper fix would be to move these files to daps-xslt
-#
-install-exec-hook:
-	chmod 644 $(DESTDIR)$(dapslibexecdir)/*.xsl
-
 
 #---------------------------Local UNINSTALL-----------------------------------
 if CATALOG_EDIT
