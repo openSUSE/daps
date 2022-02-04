@@ -18,7 +18,7 @@ function build_pdfs {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="cropmarks,draft,formatter:,help,grayscale,lean,meta,name:,norefcheck,param:,remarks,rootid:,stringparam:,xsltparam:"
+    LONG_OPTS="cropmarks,draft,formatter:,help,grayscale,lean,meta,name:,norefcheck,not-validate-tables,param:,remarks,rootid:,stringparam:,xsltparam:"
 
     parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -34,6 +34,7 @@ function build_pdfs {
         help_lean
         help_meta
         help_name
+        help_not-validate-tables
         help_norefcheck
         help_param
         help_remarks

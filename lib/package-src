@@ -18,7 +18,7 @@ function package-src {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="def-file:,help,locdrop,name:,optipng,set-date:"
+    LONG_OPTS="def-file:,help,locdrop,name:,not-validate-tables,optipng,set-date:"
 
     parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -30,6 +30,7 @@ function package-src {
         help_help
         help_locdrop
         help_name
+        help_not-validate-tables
         help_optipng
         help_set-date
         echo
