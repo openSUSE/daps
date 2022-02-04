@@ -18,7 +18,7 @@ function webhelp {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="clean,css:,draft,help,name:,norefcheck,nosearch,nostatic,param:,remarks,rootid:,static,stringparam:,xsltparam:"
+    LONG_OPTS="clean,css:,draft,help,name:,norefcheck,nosearch,nostatic,not-validate-tables,param:,remarks,rootid:,static,stringparam:,xsltparam:"
 
     parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -31,6 +31,7 @@ function webhelp {
         help_draft
         help_help
         help_name
+        help_not-validate-tables
         help_norefcheck
         help_nosearch
         help_nostatic
