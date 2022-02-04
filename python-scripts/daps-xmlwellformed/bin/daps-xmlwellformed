@@ -29,7 +29,7 @@ ROOTLOGGER = "lxmlerrors"
 # For example:
 #   log.error("...", extra=dict(file="foo.xml", ))
 # Basically everything can be used what is in ERROR_PATTERN
-FORMAT = "%(file)s:\n    %(levelname)s:%(message)s (line %(line)s column %(col)s)"
+FORMAT = "%(file)s:\n    %(levelname)s: %(message)s (line %(line)s column %(col)s)"
 
 logger = logging.getLogger(ROOTLOGGER)
 ch = logging.StreamHandler()
