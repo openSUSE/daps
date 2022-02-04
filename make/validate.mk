@@ -63,7 +63,7 @@ $(PROFILEDIR)/.validate validate: $(PROFILES)
 	$(eval FAULTY_XML=$(shell unset VERBOSE && $(JING_WRAPPER) $(JING_FLAGS) $(DOCBOOK5_RNG) $(PROFILED_MAIN) 2>&1))
   endif
   ifneq "$(strip $(NOT_VALIDATE_TABLES))" "1"
-	$(eval FAULTY_TABLES=$(shell $(LIBEXEC_DIR)/validate-tables.py $(PROFILED_MAIN) 2>&1 | sed -r -e 's,^/([^/: ]+/)*,,' -e 's,.http://docbook.org/ns/docbook.,,' | sed -rn '/^- / !p'))
+	$(eval FAULTY_TABLES=$(shell $(LIBEXEC_DIR)/validate-tables.py $(PROFILED_MAIN) 2>&1 | sed -r -e 's,^/([^/: ]+/)*,,' -e 's,.http://docbook.org/ns/docbook.,,' | sed -rn '/^- / !p' | awk -v ORS='\\n' '1'))
   endif
   ifeq "$(strip $(VALIDATE_IDS))" "1"
 	$(eval FAULTY_IDS=$(shell $(XSLTPROC) --xinclude --stylesheet $(DAPSROOT)/daps-xslt/common/get-all-xmlids.xsl --file $(PROFILED_MAIN) $(XSLTPROCESSOR) | grep -P '[^-a-zA-Z0-9]'))
