@@ -49,7 +49,10 @@ ifeq "$(strip $(VALIDATE_IMAGES))" "1"
 endif
 
 #
-# Using $(eval ...) to capture the command output
+# * Using $(eval ...) to capture the command output
+# * The final `awk` command in FAULTY_TABLES replaces `\n` with `\\n` -- this
+#   allows proper output of the table validation results which need newlines.
+#   cf. https://stackoverflow.com/questions/38672680
 #
 
 .PHONY: validate
