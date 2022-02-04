@@ -84,7 +84,7 @@ FOSTRINGS := --param "show.comments=$(REMARKS)" \
              --stringparam "styleroot=$(dir $(STYLEIMG))"
 
 #----------
-# Settings depending on --grayscale and --cropmarks
+# Settings depending on --grayscale
 #
 # PDF_RESULT is set in filenames.mk
 
@@ -98,12 +98,6 @@ else
   FOSTRINGS  += --param "format.print=0" \
 	        --stringparam "img.src.path=$(IMG_GENDIR)/color/"
   FOFILE     := $(FOFILE)_color
-endif
-
-# cropmarks are currently only supported by XEP
-ifeq "$(CROPMARKS)" "1"
-  FOSTRINGS  += --param "use.xep.cropmarks=1" --param "crop.marks=1" 
-  FOFILE     := $(FOFILE)_crop
 endif
 
 FOFILE := $(FOFILE)$(LANGSTRING).fo

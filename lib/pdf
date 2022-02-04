@@ -18,7 +18,7 @@ function build_pdfs {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="cropmarks,draft,formatter:,help,grayscale,lean,meta,name:,norefcheck,not-validate-tables,param:,remarks,rootid:,stringparam:,xsltparam:"
+    LONG_OPTS="draft,formatter:,help,grayscale,lean,meta,name:,norefcheck,not-validate-tables,param:,remarks,rootid:,stringparam:,xsltparam:"
 
     parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -26,7 +26,6 @@ function build_pdfs {
     #------ Computing the values returned from the parser -----
     if [[ 1 -eq $P_HELP ]]; then
         help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
-        help_cropmarks
         help_draft
         help_formatter
         help_grayscale_pdf

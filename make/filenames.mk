@@ -71,13 +71,6 @@ else
   PDF_RESULT := $(PDF_RESULT)_color
 endif
 
-# cropmarks are currently only supported by XEP
-ifeq "$(CROPMARKS)" "1"
-  ifeq "$(FORMATTER)" "xep"
-    PDF_RESULT := $(PDF_RESULT)_crop
-  endif
-endif
-
 # if --lean is specified, create an additional lean PDF
 ifeq "$(LEAN)" "1"
   LEAN_PDF_RESULT := $(PDF_RESULT)_lean.pdf

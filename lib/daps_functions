@@ -65,11 +65,6 @@ function parse_args {
                 COMPACT=1
                 shift
                 ;;
-            --cropmarks)
-                # pdf/package-pdf/show-names: PDF Cropmarks
-                export CROPMARKS=1
-                shift
-                ;;
             --css)
                 # epub/html/package-html/webhelp: Path to custom CSS file
                 # processed differently in respective targets
@@ -1011,7 +1006,7 @@ function show_names {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="cropmarks,draft,formatter:,grayscale,help,meta,name:,remarks,rootid:,single"
+    LONG_OPTS="draft,formatter:,grayscale,help,meta,name:,remarks,rootid:,single"
 
     parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -1019,7 +1014,6 @@ function show_names {
     #------ Computing the values returned from the parser -----
     if [[ 1 -eq $P_HELP ]]; then
                 help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
-                [[ "pdf-name" = "$SUB_CMD" ]] && help_cropmarks
                 help_draft
                 [[ "pdf-name" = "$SUB_CMD" ]] && help_formatter
                 [[ "pdf-name" = "$SUB_CMD" ]] && help_grayscale_pdf
@@ -1184,15 +1178,6 @@ function help_compact {
     cat <<EOF
     --compact                 Print the filelist on a single line.
                               Ignored when -s|--show is set.
-                              Default: off
-EOF
-}
-function help_cropmarks {
-    cat <<EOF
-    --cropmarks               Add cropmarks to the PDF. Only available for
-                              the XEP formatter, FOP currently does not support
-                              cropmarks.
-                              Ignored when FOP is used.
                               Default: off
 EOF
 }
