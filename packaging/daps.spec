@@ -17,7 +17,7 @@
 
 
 Name:           daps
-Version:        3.1.0
+Version:        3.3.0
 Release:        0
 
 %define docbuilddir    %{_datadir}/daps
@@ -178,7 +178,6 @@ exit 0
 %doc %{_defaultdocdir}/%{name}/*
 
 %{_bindir}/*
-%attr(644, root, root) %{_datadir}/%{name}/libexec/*.xsl
 %{_datadir}/bash-completion/completions/%{name}
 %{_datadir}/emacs/site-lisp/docbook_macros.el
 %{_datadir}/xml/daps/schema/*
