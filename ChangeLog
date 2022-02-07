@@ -1,4 +1,38 @@
 -------------------------------------------------------------------
+Mon Feb 7 19:00:00 UTC 2022 - sknorr@suse.de
+
+Stable release DAPS 3.3.0:
+
+* New features:
+  - DocBook table validation is now enabled by default as part of
+    validation and building (#532)
+  - Improved validation to always check XML validity, tables, images,
+    and IDs, rather than stopping after the first issue occurs
+  - Set up Poppins font in FOP config delivered with DAPS
+
+* Bug fixes:
+  - Fixed validation failures occurring because `--verbose` was set
+  - Fixed xml-wellformedness check to use a non-zero exit code
+    when entity definitions are missing (#539)
+  - Improved image check during validation to check within context
+    of entire set, not just current root ID (#627)
+  - Fixed output of missing/duplicated image list displayed during
+    build (#634)
+  - Fixed paths to entity files in `unpack-locdrop`
+  - Fixed output of `daps -v` when there is no XSL-FO formatter
+    installed (#622)
+  - Fixed `daps spellcheck --help` output
+  - Improved messages for `unpack-locdrop` and other subcommands
+
+* Removed features:
+  - Removed unused `process-xrefs` and `checkconformance`
+    stylesheets (#612)
+
+* Repository changes:
+  - Integrated Python tooling and tests for `xml-wellformed` and
+    `getentityname`
+
+-------------------------------------------------------------------
 Thu Jun 10 10:00:00 UTC 2021 - sknorr@suse.de
 
 Stable release DAPS 3.2.0:
