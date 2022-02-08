@@ -1,0 +1,57 @@
+#!/bin/bash
+
+# Self-destruct the repo before:
+# git clean -fd
+
+# Only for trans/SLE12GA, the odd branch out, we need a directory name prefix
+prefix=
+
+
+
+spin() {
+  if [[ "$1" == 'clear' ]]; then
+    echo -e '\b '
+    return
+  fi
+
+  if [[ "$spinstate" == '/' ]]; then spinstate='-'
+  elif [[ "$spinstate" == '-' ]]; then spinstate='\'
+  elif [[ "$spinstate" == '\' ]]; then spinstate='|'
+  else spinstate='/'
+  fi
+
+  echo -ne "\b$spinstate"
+}
+
+
+for d in ${prefix}sles/* ${prefix}sled/*; do
+  [[ $d == "${prefix}sles/en" ]] || [[ $d == "${prefix}sled/en" ]] && continue
+  for fm in dia eps fig jpg png svg odg pdf; do
+    mkdir -p $d/images/src/$fm
+  done
+done
+
+for f in sles/en/images/src/*/*; do
+  for d in ${prefix}sles/* ${prefix}sled/*; do
+    [[ $d == "${prefix}sles/en" ]] || [[ $d == "${prefix}sled/en" ]] && continue
+
+    spin
+    fln=$(echo "$f" | grep -oP '[^/]+/[^/]+$')
+    fmt=$(echo "$fln" | grep -oP '^[^/]+')
+    pure_fln=$(echo "$fln" | grep -oP '[^/]+$')
+
+    if [[ -L $d/images/src/$fln ]]; then
+      readlink -q $d/images/src/$fln >/dev/null
+      if [[ "$?" -ne 0 ]]; then
+        echo "- Rmming $d/images/src/$fln"
+        $d/images/src/$fln
+      fi
+    fi
+
+    if [[ ! -e $d/images/src/$fln ]]; then
+      cd $d/images/src/$fmt
+      ln -s ../../../../../$f $pure_fln
+      cd - >/dev/null
+    fi
+  done
+done
