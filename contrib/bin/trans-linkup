@@ -1,0 +1,59 @@
+#!/bin/bash
+
+basetree="${BASETREE:-${PWD}}"
+# important: must be relative to $basetree!
+transtrees="${TRANSTREES:-l10n/*/*}"
+
+relevantdirs="./adoc ./xml ./images/src/dia ./images/src/ditaa ./images/src/jpg ./images/src/png ./images/src/svg ./images/src/odg"
+
+
+
+[[ -d $basetree ]] || \
+  { echo "Could not find untranslated tree at '$basetree'. To override path to untranslated tree, run: BASETREE=... $0" ; exit 1; }
+
+# this "cd" is important! multiple assumptions below are based on it!
+cd "$basetree" || { echo "Could not switch to '$basetree'. Permissions issue?" ; exit 1; }
+
+  for transtree in $transtrees; do
+    [[ -d "$transtree" ]] || \
+      { echo "Could not find translation tree at '$(realpath $basetree)/$transtree'. To override path to translation tree, run: TRANSTREES='...' $0" ; exit 1; }
+  done
+
+
+  # find relevant files in basetree, without failing when any particular dir
+  # does not exist
+  basetree_files=$(find $relevantdirs -name "*" 2>/dev/null | sed -r 's,^./,,')
+
+
+  for transtree in $transtrees; do
+
+    if [[ $( basename "$transtree" | sed -r 's/^([a-z]{2})([-_][A-Za-z]{2})?$//') ]]; then
+      echo "Are you sure '$basetree/$transtree' is an appropriate translation base directory?"
+      echo "It does not look like a dir named after a language code."
+      echo "To override path to translation tree, run: TRANSTREES='...' $0"
+      echo "[anykey] to continue, [Ctrl-C] to stop."
+      read answer
+    fi
+
+    echo "-> Venturing into $transtree"
+    for basefile in $basetree_files; do
+      if [[ -d "$basefile" ]]; then
+        continue
+      else
+        # either symlink or real file already exists, skip
+        [[ -e "$transtree/$basefile" ]] && continue
+
+        basedir=$(dirname "$basefile")
+        basefilename=$(basename "$basefile")
+        levelsup=$(echo "$transtree/$basedir" | sed -r -e 's,^./,,' -e 's,[^/]+,..,g')
+        mkdir -p "$transtree/$basedir"
+        cd "$transtree/$basedir" >/dev/null 2>/dev/null || { echo "Could not switch to '$transtree/$basedir'. Permissions issue?" ; exit 1; }
+          echo "  - Creating link: $PWD/$basefilename"
+          ln -s "$levelsup/$basefile" "$basefilename"
+          git add "$basefilename"
+        cd - || { echo "Could not switch back to '$basetree'. Permissions issue?" ; exit 1; }
+      fi
+    done
+
+  done
+
