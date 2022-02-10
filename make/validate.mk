@@ -38,7 +38,7 @@ ifeq "$(strip $(VALIDATE_IMAGES))" "1"
 	  --file $(SETFILES_TMP) --stylesheet \
 		$(DAPSROOT)/daps-xslt/common/extract-files-and-images.xsl \
 		$(XSLTPROCESSOR) 2>/dev/null))
-  _IMG_DUPES := $(sort $(wildcard $(addprefix $(IMG_SRCDIR)/*/,$(addsuffix .*, \
+  _IMG_DUPES := $(sort $(wildcard $(addprefix $(IMG_SRC_DIR)/*/,$(addsuffix .*, \
 		  $(filter \
 		  $(shell echo $(basename $(notdir $(SRC_IMG_ALL)) 2>/dev/null) | \
 		  tr " " "\n" | sort |uniq -d 2>/dev/null),$(basename $(_IMG_USED)  \

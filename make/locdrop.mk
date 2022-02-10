@@ -112,7 +112,7 @@ ifneq "$(strip $(USED_ALL))" ""
   # The addprefix/addsuffix calls transform it into
   # images/src/*/foo.* and wildcard finds the existing file from this pattern
   #
-  TO_TRANS_IMGS := $(sort $(wildcard $(addprefix $(IMG_SRCDIR)/*/,$(addsuffix .*,$(basename $(shell xsltproc $(DAPSROOT)/daps-xslt/common/get-graphics.xsl $(TO_TRANS_FILES) 2>/dev/null))))))
+  TO_TRANS_IMGS := $(sort $(wildcard $(addprefix $(IMG_SRC_DIR)/*/,$(addsuffix .*,$(basename $(shell xsltproc $(DAPSROOT)/daps-xslt/common/get-graphics.xsl $(TO_TRANS_FILES) 2>/dev/null))))))
   TO_TRANS_IMG_TAR :=$(LOCDROP_EXPORT_BOOKDIR)/graphics-translation-$(DOCNAME)$(LANGSTRING).tar.bz2
 endif
 
@@ -129,7 +129,7 @@ ifneq "$(strip $(USED_SET))" ""
   # and sort removes the duplicates
   #
   USED_SET_ALL := $(sort $(wildcard \
-     $(addprefix $(IMG_SRCDIR)/*/,$(addsuffix .*,$(basename $(USED_SET)) ))))
+     $(addprefix $(IMG_SRC_DIR)/*/,$(addsuffix .*,$(basename $(USED_SET)) ))))
 
   ifdef TO_TRANS_IMGS
     NO_TRANS_IMGS = $(filter-out $(TO_TRANS_IMGS),$(USED_SET_ALL))

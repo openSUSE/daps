@@ -13,7 +13,7 @@
 clean:
 	rm -rf $(PROFILE_PARENT_DIR)
 	rm -rf $(TMP_DIR)
-	rm -rf $(ADOC_DIR)
+	rm -rf $(ADOC_RESULT_DIR)
 	@ccecho "info" "Successfully removed all profiled and temporary files."
 
 .PHONY: clean-images

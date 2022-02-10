@@ -25,7 +25,7 @@
 # stylesheet 
 
 ifeq "$(strip $(SRC_FORMAT))" "adoc"
-  PROFILES := $(subst $(ADOC_DIR)/,$(PROFILEDIR)/,$(MAIN))
+  PROFILES := $(subst $(ADOC_RESULT_DIR)/,$(PROFILEDIR)/,$(MAIN))
   ifeq "$(strip $(ADOC_POST))" "yes"
     PROFILE_STYLESHEET := $(ADOC_POST_STYLE)
   endif
@@ -103,7 +103,7 @@ profile: $(PROFILES)
 ifeq "$(strip $(SRC_FORMAT))" "xml"
   $(PROFILEDIR)/%.xml: $(SRC_DIR)/%.xml $(ENTITIES_DOC) $(DOCCONF) | $(PROFILEDIR)
 else
-  $(PROFILEDIR)/%.xml: $(ADOC_DIR)/%.xml $(ENTITIES_DOC) $(DOCCONF) | $(PROFILEDIR)
+  $(PROFILEDIR)/%.xml: $(ADOC_RESULT_DIR)/%.xml $(ENTITIES_DOC) $(DOCCONF) | $(PROFILEDIR)
 endif
     ifeq "$(VERBOSITY)" "2"
 	@(tput el1; echo -en "\r   Profiling $<")
