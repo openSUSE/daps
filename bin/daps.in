@@ -62,10 +62,6 @@ VARLIST=(
     ADOC_SET
     ADOC_TYPE
     ASCIIDOC
-    SPELL_CHECKER
-    SPELL_EXTRA_DICT
-    SPELL_LANG
-    SPELL_SKIP_TAGS
     BUILD_DIR
     CB_OPTIONS
     CHECK_WELLFORMED
@@ -111,6 +107,7 @@ VARLIST=(
     HTML_CSS
     HTMLSINGLE
     IMAGES_COLOR
+    IMG_SRC_DIR
     IMG_VIEWER
     INCLUDE_MANIFEST
     INK_OPTIONS
@@ -167,6 +164,10 @@ VARLIST=(
     ROOTID
     SETDATE
     SHOW
+    SPELL_CHECKER
+    SPELL_EXTRA_DICT
+    SPELL_LANG
+    SPELL_SKIP_TAGS
     SRC_DIR
     SRC_FORMAT
     STATIC_DIR
@@ -1462,23 +1463,23 @@ fi
 if [[ -z $SRC_DIR ]]; then
     # SRC_DIR has not been set by config file, set xml or adoc as default
     if [[ -d "${PRJ_DIR}/${SRC_FORMAT}" ]]; then
-	SRC_DIR="${PRJ_DIR}/${SRC_FORMAT}"
+        SRC_DIR="${PRJ_DIR}/${SRC_FORMAT}"
     else
-	exit_on_error "Cannot find a directory holding the sources. Either specify a directory\nin the config or DC-file with SRC_DIR or provide the sources in the default\ndirectories: \"xml/\" for DocBook or \"adoc/\" for ASCIIDoc."
+        exit_on_error "Cannot find a directory holding the sources. Either specify a directory\nin the config or DC-file with SRC_DIR or provide the sources in the default\ndirectories: \"xml/\" for DocBook or \"adoc/\" for ASCIIDoc."
     fi
 else
     # SRC_DIR was set by config file
     #
     # no absolute paths allowed
     if [[ "$SRC_DIR" =~ ^/ ]]; then
-	exit_on_error "SRC_DIR was specified with an absolute path. Please use a path relative to the project directory."
+        exit_on_error "SRC_DIR was specified with an absolute path. Please use a path relative to the project directory."
     # no path outside of PRJ_DIR allowed
     elif [[ "$SRC_DIR" =~ ^\.\./ ]]; then
-	exit_on_error "The SRC_DIR does not reside in the project directory ($PRJ_DIR), this is not supported."
+        exit_on_error "The SRC_DIR does not reside in the project directory ($PRJ_DIR), this is not supported."
     elif [[ ! -d "${PRJ_DIR}/${SRC_DIR}" ]]; then
-	exit_on_error "SRC_DIR points to a non-existing directory (${PRJ_DIR}/${SRC_DIR})."
+        exit_on_error "SRC_DIR points to a non-existing directory (${PRJ_DIR}/${SRC_DIR})."
     else
-	SRC_DIR="${PRJ_DIR}/${SRC_DIR}"
+        SRC_DIR="${PRJ_DIR}/${SRC_DIR}"
     fi
 fi
 
@@ -1492,7 +1493,7 @@ if [[ -z "$MAIN_CMDL" ]]; then
         MAIN="${PRJ_DIR}/$MAIN"
     # MAIN was provided with an absolute path
     elif [[ "$MAIN" =~ ^/ ]]; then
-	exit_on_error "MAIN was specified with an absolute path. Please use a path relative to the project directory."	
+        exit_on_error "MAIN was specified with an absolute path. Please use a path relative to the project directory."
     # no path outside of PRJ_DIR allowed
     elif [[ "$MAIN" =~ ^\.\./ ]]; then
         exit_on_error "MAIN does not reside in the project directory ($PRJ_DIR), this is not supported."
@@ -1726,27 +1727,19 @@ export SETFILES_TMP
 #
 if [[ "adoc" = "$SRC_FORMAT" ]]; then
     ADOC_MAIN="$MAIN"
-    ADOC_DIR="${BUILD_DIR}/.adoc"
-    MAIN="${ADOC_DIR}/${BOOK}.xml"
+    ADOC_RESULT_DIR="${BUILD_DIR}/.adoc"
+    MAIN="${ADOC_RESULT_DIR}/${BOOK}.xml"
 
-    # make the path for ADOC_IMG_DIR absolute if a relative path was
-    # provided by config file
-    #
-    if [[ -z $ADOC_IMG_DIR_CMDL ]]; then
-        # path was not provided on cmdl
-        if [[ -n $ADOC_IMG_DIR ]]; then
-            # path was provided by config
-            # if not absolute, prepend PRJ_DIR
-            [[ ! "/" == ${ADOC_IMG_DIR:1} ]] && ADOC_IMG_DIR="$PRJ_DIR/$ADOC_IMG_DIR"
-            #  error out if $PRJ_DIR/$ADOC_IMG_DIR does not exist
-            [[ ! -d $ADOC_IMG_DIR ]] && exit_on_error "AsciiDoc image directory $ADOC_IMG_DIR does not exist"
-        fi
-    fi
-    export ADOC_IMG_DIR ADOC_MAIN ADOC_DIR MAIN
-    [[ 1 -eq $FORCE_REBUILD ]] && MOPTS="--always-make"
+    export ADOC_MAIN ADOC_RESULT_DIR MAIN
     [[ 2 -gt $VERBOSITY ]] && MOPTS="$MOPTS --silent"
+    # we always want to create a fresh bigfile
+    #
+    make $MOPTS --always-make -f $DAPSROOT/make/adoc2xml.mk || exit_on_error "\nConverting the AsciiDoc sources to XML caused a fatal error.\nCheck the $(basename ${ASCIIDOC}) message above for details."
 
-    make $MOPTS -f $DAPSROOT/make/adoc2xml.mk  || exit_on_error "\nConverting the AsciiDoc sources to XML caused a fatal error.\nCheck the $(basename ${ASCIIDOC}) message above for details."
+    # now that we have run the adoc to XML conversion SRC_DIR needs to be set
+    # to the directory containing the resulting XML file
+    export SRC_DIR="$ADOC_RESULT_DIR"
+
 fi
 
 #-------------------------------------------------------------------

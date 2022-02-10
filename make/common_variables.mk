@@ -256,9 +256,9 @@ DAPSSTRINGS := --stringparam "converter.name=$(MY_NAME)" \
 #
 IMG_GENDIR         := $(BUILD_DIR)/.images
 ifneq "$(strip $(ADOC_IMG_DIR))" ""
-  IMG_SRCDIR := $(BUILD_DIR)/.adoc_images/src
+  IMG_SRC_DIR := $(BUILD_DIR)/.adoc_images/src
 else
-  IMG_SRCDIR         := $(PRJ_DIR)/images/src
+  IMG_SRC_DIR         :=  $(addprefix $(PRJ_DIR)/,$(IMG_SRC_DIR))
 endif
 
 IMG_GEN_DIRECTORIES := $(IMG_GENDIR)/gen/png \
@@ -268,12 +268,12 @@ IMG_GEN_DIRECTORIES := $(IMG_GENDIR)/gen/png \
 # generate lists of all existing images
 # Image formats: dia ditaa jpg odg png svg
 #
-SRCDIA      := $(wildcard $(IMG_SRCDIR)/dia/*.dia)
-SRCDITAA    := $(wildcard $(IMG_SRCDIR)/ditaa/*.ditaa)
-SRCJPG      := $(wildcard $(IMG_SRCDIR)/jpg/*.jpg)
-SRCODG      := $(wildcard $(IMG_SRCDIR)/odg/*.odg)
-SRCPNG      := $(wildcard $(IMG_SRCDIR)/png/*.png)
-SRCSVG      := $(wildcard $(IMG_SRCDIR)/svg/*.svg)
+SRCDIA      := $(wildcard $(IMG_SRC_DIR)/dia/*.dia)
+SRCDITAA    := $(wildcard $(IMG_SRC_DIR)/ditaa/*.ditaa)
+SRCJPG      := $(wildcard $(IMG_SRC_DIR)/jpg/*.jpg)
+SRCODG      := $(wildcard $(IMG_SRC_DIR)/odg/*.odg)
+SRCPNG      := $(wildcard $(IMG_SRC_DIR)/png/*.png)
+SRCSVG      := $(wildcard $(IMG_SRC_DIR)/svg/*.svg)
 SRC_IMG_ALL := $(SRCDIA) $(SRCDITAA) $(SRCJPG) $(SRCODG) $(SRCPNG) $(SRCSVG)
 
 #-------

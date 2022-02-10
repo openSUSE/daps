@@ -39,7 +39,7 @@ Files & Directories\n\
 --------------------\n\
 BUILD_DIR          = $(BUILD_DIR)\n\
 IMG_GENDIR         = $(IMG_GENDIR)\n\
-IMG_SRCDIR         = $(IMG_SRCDIR)\n\
+IMG_SRC_DIR        = $(IMG_SRC_DIR)\n\
 MAIN               = $(MAIN)\n\
 PACK_DIR           = $(PACK_DIR)\n\
 PRJ_DIR            = $(PRJ_DIR)\n\

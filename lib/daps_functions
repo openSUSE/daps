@@ -689,6 +689,7 @@ function call_make {
         for V in BOOK BUILD_DIR DAPSROOT DOCCONF PRJ_DIR SRC_DIR; do
             printf "%${COLWIDTH}s: %s\n" "$V" "${!V}"
         done
+        printf "%${COLWIDTH}s: %s\n" "IMG_SRC_DIR" "${PRJ_DIR}/$IMG_SRC_DIR"
 
         echo
 
