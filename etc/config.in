@@ -578,6 +578,18 @@ HTML_CSS=""
 #
 IMG_VIEWER=""
 
+## Key:         IMG_SRC_DIR
+## ----------------------
+## Description: Path to the directory that holds the image source files.
+## Type:        Relative path to directory (without a trailing slash),
+##              path needs to be relative to the project directory ($PRJ_DIR)
+## Default:     images/src
+#
+#  If you want to change it on a book or project level, use the DC-file
+#  If you want to change it globally, change here
+#
+IMG_SRC_DIR="images/src"
+
 ## Key:         INCLUDE_MANIFEST
 ## -----------------------------
 ## Description: Include a manifest file to the archive created by dist-html
@@ -860,11 +872,11 @@ SPELL_SKIP_TAGS="author command email envar filename firstname guimenu keycap li
 ## Type:        Relative path to directory (without a trailing slash),
 ##              path needs to be relative to the project directory ($PRJ_DIR)
 ## Default:     Depends on the format of the MAIN file; if it is an XML file
-##              (incl. an assembly) it will default to "$PRJ_DIR/xml", for
-##              ASCIIDoc to "$PRJ_DIR/adoc"
+##              (incl. an assembly) it will default to "xml", for
+##              ASCIIDoc to "adoc"
 #
 # If changed, allows to have several source subdirectories in your project
-# directory, so you ca better organize your files. In such a case this value
+# directory, so you can better organize your files. In such a case this value
 # is supposed to be set in the doc-config files (DC-files).
 # Example directory structure:
 #
