@@ -281,12 +281,12 @@ IMG_GEN_DIRECTORIES := $(IMG_GENDIR)/gen/png \
 # generate lists of all existing images
 # Image formats: dia ditaa jpg odg png svg
 #
-SRCDIA      := $(wildcard $(IMG_SRC_DIR)/dia/*.dia)
-SRCDITAA    := $(wildcard $(IMG_SRC_DIR)/ditaa/*.ditaa)
-SRCJPG      := $(wildcard $(IMG_SRC_DIR)/jpg/*.jpg)
-SRCODG      := $(wildcard $(IMG_SRC_DIR)/odg/*.odg)
-SRCPNG      := $(wildcard $(IMG_SRC_DIR)/png/*.png)
-SRCSVG      := $(wildcard $(IMG_SRC_DIR)/svg/*.svg)
+SRCDIA      := $(wildcard $(IMG_SRC_DIR)/dia/*.dia $(IMG_SRC_DIR)/*.dia)
+SRCDITAA    := $(wildcard $(IMG_SRC_DIR)/ditaa/*.ditaa $(IMG_SRC_DIR)/*.ditaa)
+SRCJPG      := $(wildcard $(IMG_SRC_DIR)/jpg/*.jpg $(IMG_SRC_DIR)/*.jpg)
+SRCODG      := $(wildcard $(IMG_SRC_DIR)/odg/*.odg $(IMG_SRC_DIR)/*.odg)
+SRCPNG      := $(wildcard $(IMG_SRC_DIR)/png/*.png $(IMG_SRC_DIR)/*.png)
+SRCSVG      := $(wildcard $(IMG_SRC_DIR)/svg/*.svg $(IMG_SRC_DIR)/*.svg)
 SRC_IMG_ALL := $(SRCDIA) $(SRCDITAA) $(SRCJPG) $(SRCODG) $(SRCPNG) $(SRCSVG)
 
 #-------
