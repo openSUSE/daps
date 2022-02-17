@@ -61,13 +61,6 @@ ifeq "$(strip $(PROFILE_STYLESHEET))" ""
   endif
 endif
 
-
-# Will be used on profiling only
-#
-ifdef HTMLROOT
-  HROOTSTRING  := --stringparam "provo.root=$(HTMLROOT)"
-endif
-
 # Allows to set a custom publication date
 #
 ifdef SETDATE
