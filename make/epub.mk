@@ -99,7 +99,7 @@ EPUB_BIGFILE := $(TMP_DIR)/epub_$(DOCNAME).xml
 # inline images
 #
 EPUB_INLINE_DIR := $(EPUB_OEBPS)
-EPUB_INLINE_IMAGES := $(subst $(IMG_GENDIR)/color,$(EPUB_INLINE_DIR),$(ONLINE_IMAGES))
+EPUB_INLINE_IMAGES := $(subst $(IMG_GENDIR)/color,$(EPUB_INLINE_DIR),$(COLOR_IMAGES))
 
 # Directories
 #
@@ -191,7 +191,7 @@ $(EPUB_CONTENT_OPF): $(EPUB_BIGFILE)
 #---------------
 # Inline Graphics
 #
-$(EPUB_INLINE_IMAGES): $(ONLINE_IMAGES) | $(EPUB_OEBPS)
+$(EPUB_INLINE_IMAGES): $(COLOR_IMAGES) | $(EPUB_OEBPS)
 
 $(EPUB_INLINE_DIR)/%.png: $(IMG_GENDIR)/color/%.png 
 	ln -sf $(shell readlink -e $< 2>/dev/null) $@

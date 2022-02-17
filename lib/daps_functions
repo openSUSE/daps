@@ -271,11 +271,6 @@ function parse_args {
                 export LIST_NOXML=1
                 shift
                 ;;
-            --online)
-                # images: generate online images
-                export IMAGES_ONLINE=1
-                shift
-                ;;
             --optipng)
                 # locdrop/package-src/unpack-locdrop: Optimize PNGs
                 export OPTIPNG=1
@@ -1463,12 +1458,6 @@ function help_noxml {
     cat <<EOF
     --noxml                   Exclude XML files from list.
                               Default: unset
-EOF
-}
-function help_online {
-    cat <<EOF
-    --online                  Only generate images used for HTML builds.
-                              Default: off
 EOF
 }
 function help_optipng {

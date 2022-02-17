@@ -18,12 +18,13 @@
 
 
 # Overview
-# DAPS uses images in $PRJ_DIR/images/src/<FORMAT>/
+# DAPS uses images in $PRJ_DIR/$IMG_SRC_DIR/<FORMAT>/
+# or alternatively $PRJ_DIR/$IMG_SRC_DIR/
 # Supported image formats are .dia, .ditaa, .odg, .png, and .svg
 # - When creating HTML manuals all formats are converted to PNG
 # - When creating PDF manuals all formats are converted to
 #   either PNG, or SVG depending on the "format" attribute in the
-#   <imagedata> tag of the XMl source
+#   <imagedata> tag of the XML source
 # The format attribute may take the following values
 #
 # SOURCE | ROLE HTML | ROLE FOP
@@ -86,11 +87,12 @@ USED := $(sort $(shell $(XSLTPROC) --stringparam "filetype=img" \
 USED_JPG := $(filter $(addprefix $(IMG_SRC_DIR)/jpg/,$(USED)) $(addprefix $(IMG_SRC_DIR)/,$(USED)), $(SRCJPG))
 USED_PNG := $(filter $(addprefix $(IMG_SRC_DIR)/png/,$(USED)) $(addprefix $(IMG_SRC_DIR)/,$(USED)), $(SRCPNG))
 
-# For HTML builds SVG are not directly used, but rather converted to PNG
-# DIA, and DITAA are never directly used in the XML sources, but converted
-# to SVG/PNG first. So we pretend all files in USED are SVG/DITAA/DIA files
-# and then generate a list of files common to the fake USED and
-# SRCDITAA/SRCDIA
+# For HTML builds SVG are not directly used, but rather converted to PNG.
+# DIA, ODG, SVG and DITAA are never directly used in the XML sources, but
+# converted to SVG/PNG first. So we pretend all files in USED are
+# ODG/SVG/DITAA/DIA files and then generate a list of files common to the
+# fake USED and SRCSVG/SRCODG/SRCDITAA/SRCDIA. The result is a list of files
+# in the 4 formats that need to be converted to SVG and PNG
 #
 USED_DIA := $(filter \
 	$(addprefix $(IMG_SRC_DIR)/dia/,$(addsuffix .dia,$(basename $(USED)))) \
@@ -159,22 +161,25 @@ MISSING_IMG := $(sort $(filter-out $(notdir $(basename $(SRC_IMG_ALL))), \
 
 COLOR_IMAGES     := $(addprefix $(IMG_GENDIR)/color/,$(USED))
 GRAYSCALE_IMAGES := $(addprefix $(IMG_GENDIR)/grayscale/,$(USED))
-ONLINE_IMAGES    := $(addprefix $(IMG_GENDIR)/color/,$(USED))
 
-GEN_IMAGES       := $(addprefix $(IMG_GENDIR)/gen/png/,$(GEN_PNG)) $(addprefix $(IMG_GENDIR)/gen/svg/,$(GEN_SVG))
+# This list has all PNG/SVG images created from DIA/DITAA/ODG. Since all
+# SVGs source images are parsed as well, it also includes USED_SVG
+#
+GEN_IMAGES       := $(addprefix $(IMG_GENDIR)/color/,$(GEN_PNG)) $(addprefix $(IMG_GENDIR)/gen/,$(GEN_SVG)) \
+  $(addprefix $(IMG_GENDIR)/gen/,$(notdir $(USED_SVG)))
 
 # ----------------------------
 # Generating SVG/PNG from ODG
 #
 # lodraw is not capable of being executed in parallel, therfore the image
 # creation via pattern targets is not possible. We use an empty target instead
-# and make it a dependenc of $(GEN_IMAGES) $(ONLINE_IMAGES) $(COLOR_IMAGES)
+# and make it a dependenc of $(GEN_IMAGES) $(COLOR_IMAGES)
 #
 
 # Only run the .odg_gen target if there are ODG files!!
 #
 ifneq "$(strip $(USED_ODG))" ""
-  $(GEN_IMAGES) (ONLINE_IMAGES) (COLOR_IMAGES): $(IMG_GENDIR)/gen/.odg_gen
+  $(GEN_IMAGES) $(COLOR_IMAGES): $(IMG_GENDIR)/gen/.odg_gen
 endif
 
 # The ODG stuff is an ugly hack anyway, so this probably does not matter
@@ -182,7 +187,7 @@ endif
 #
 # In case an SVG has been replaced by an ODG or in case there are dual source
 # images (svg+odg) a link to the SVG/PNG is present in
-# $(IMG_GENDIR)/gen/svg|png/
+# $(IMG_GENDIR)/gen/
 # If that is the case, lodraw follows this link and overwrites the source
 # file
 # Therefore we need to remove the links first
@@ -190,11 +195,11 @@ endif
 .PHONY: clean_links_for_odg
 clean_links_for_odg: $(USED_ODG)
 	for _IMG in  $(notdir $(subst .odg,,$(USED_ODG))); do \
-	  if [ -h $(IMG_GENDIR)/gen/png/$${_IMG}.png ]; then \
-	    rm $(IMG_GENDIR)/gen/png/$$_IMG.png; \
+	  if [ -h $(IMG_GENDIR)/color/$${_IMG}.png ]; then \
+	    rm $(IMG_GENDIR)/color/$${_IMG}.png; \
 	  fi; \
-	  if [ -h $(IMG_GENDIR)/gen/svg/$$_IMG.svg ]; then \
-	    rm $(IMG_GENDIR)/gen/svg/$$_IMG.svg; \
+	  if [ -h $(IMG_GENDIR)/gen/$${_IMG}.svg ]; then \
+	    rm $(IMG_GENDIR)/gen/$${_IMG}.svg; \
 	  fi; \
 	done
 
@@ -202,11 +207,11 @@ $(IMG_GENDIR)/gen/.odg_gen: $(USED_ODG) clean_links_for_odg
 ifeq "$(VERBOSITY)" "2"
 	@echo "   Converting *.odg to PNG"
 endif
-	lodraw  --headless --convert-to png --outdir $(IMG_GENDIR)/gen/png/ $(USED_ODG) > /dev/null
+	lodraw  --headless --convert-to png --outdir $(IMG_GENDIR)/color/ $(USED_ODG) > /dev/null
 ifeq "$(VERBOSITY)" "2"
 	@echo "   Converting *.odg to SVG"
 endif
-	lodraw  --headless --convert-to svg --outdir $(IMG_GENDIR)/gen/svg/ $(USED_ODG) >/dev/null
+	lodraw  --headless --convert-to svg --outdir $(IMG_GENDIR)/gen/ $(USED_ODG) >/dev/null
 	touch $@
 
 
@@ -215,20 +220,16 @@ endif
 PHONY: images
 images:
   ifeq "$(IMAGES_ALL)" "1"
-  images: $(COLOR_IMAGES) $(GRAYSCALE_IMAGES) $(ONLINE_IMAGES)
+  images: $(COLOR_IMAGES) $(GRAYSCALE_IMAGES)
 	@ccecho "result" "Images generated in $(IMG_GENDIR)/color/ and $(IMG_GENDIR)/grayscale/"
   else
-    ifeq "$(IMAGES_ONLINE)" "1"
-      images: $(ONLINE_IMAGES)
-	@ccecho "result" "Online images generated in $(IMG_GENDIR)/color/"
-    endif
     ifeq "$(GRAYSCALE)" "1"
       images: $(GRAYSCALE_IMAGES)
 	@ccecho "result" "Images generated in $(IMG_GENDIR)/grayscale/"
     endif
     ifeq "$(IMAGES_GEN)" "1"
       images: $(GEN_IMAGES)
-	@ccecho "result" "Images generated in $(IMG_GENDIR)/gen/"
+	@ccecho "result" "Images generated in $(IMG_GENDIR)/gen/ (SVGs) and in $(IMG_GENDIR)/color( (PNGs)"
     endif
     ifeq "$(IMAGES_COLOR)" "1"
       images: $(COLOR_IMAGES)
@@ -241,7 +242,6 @@ images:
 # We want to keep the generated files
 #
 .PRECIOUS: $(COLOR_IMAGES) $(GRAYSCALE_IMAGES) $(GEN_IMAGES)
-.PRECIOUS: $(addprefix $(IMG_GENDIR)/gen/svg/,$(notdir $(USED_SVG)))
 
 #---------------
 # Optimize (size-wise) PNGs
@@ -351,13 +351,8 @@ _INKSCAPE_IS_NEW := $(shell if [[ "$(_INKSCAPE_TEST)" = "$(_INKSCAPE_VERSION_SOR
 #
 
 #---------------
-# Link images that are used in the manuals
+# Link existing source images that are used in the manuals
 #
-# existing color PNGs
-#
-# TODO: remove static exiftool dependency
-#
-
 $(IMG_GENDIR)/color/%.png: $(IMG_SRC_DIR)/png/%.png | $(IMG_GEN_DIRECTORIES)
   ifdef HAVE_OPTIPNG
     ifdef HAVE_EXIFTOOL
@@ -375,33 +370,6 @@ $(IMG_GENDIR)/color/%.png: $(IMG_SRC_DIR)/%.png | $(IMG_GEN_DIRECTORIES)
     endif
   endif
 	ln -sf $< $@
-
-# generated PNGs
-$(IMG_GENDIR)/color/%.png: $(IMG_GENDIR)/gen/png/%.png | $(IMG_GEN_DIRECTORIES)
-	ln -sf $< $@
-
-#---------------
-# Create grayscale PNGs used in the manuals
-#
-# from existing color PNGs
-$(IMG_GENDIR)/grayscale/%.png: $(IMG_SRC_DIR)/png/%.png | $(IMG_GEN_DIRECTORIES)
-ifeq "$(VERBOSITY)" "2"
-	@echo "   Converting $(notdir $<) to grayscale"
-endif
-	convert $< $(CONVERT_OPTS_PNG) $@ $(DEVNULL)
-
-$(IMG_GENDIR)/grayscale/%.png: $(IMG_SRC_DIR)/%.png | $(IMG_GEN_DIRECTORIES)
-ifeq "$(VERBOSITY)" "2"
-	@echo "   Converting $(notdir $<) to grayscale"
-endif
-	convert $< $(CONVERT_OPTS_PNG) $@ $(DEVNULL)
-
-# from generated color PNGs
-$(IMG_GENDIR)/grayscale/%.png: $(IMG_GENDIR)/gen/png/%.png | $(IMG_GEN_DIRECTORIES)
-ifeq "$(VERBOSITY)" "2"
-	@echo "   Converting $(notdir $<) to grayscale"
-endif
-	convert $< $(CONVERT_OPTS_PNG) $@ $(DEVNULL)
 
 #---------------
 # Create color PNGs from other formats
@@ -423,7 +391,7 @@ endif
 
 # DIA -> PNG
 # create color PNGs from DIA
-$(IMG_GENDIR)/gen/png/%.png: $(IMG_SRC_DIR)/dia/%.dia | $(IMG_GEN_DIRECTORIES)
+$(IMG_GENDIR)/color/%.png: $(IMG_SRC_DIR)/dia/%.dia | $(IMG_GEN_DIRECTORIES)
 ifeq "$(VERBOSITY)" "2"
 	@echo "   Converting $(notdir $<) to PNG"
 endif
@@ -431,7 +399,7 @@ endif
 	LANG=C dia -t png --export=$@ $< $(DEVNULL) $(ERR_DEVNULL)
 	$(run_optipng)
 
-$(IMG_GENDIR)/gen/png/%.png: $(IMG_SRC_DIR)/%.dia | $(IMG_GEN_DIRECTORIES)
+$(IMG_GENDIR)/color/%.png: $(IMG_SRC_DIR)/%.dia | $(IMG_GEN_DIRECTORIES)
 ifeq "$(VERBOSITY)" "2"
 	@echo "   Converting $(notdir $<) to PNG"
 endif
@@ -441,7 +409,7 @@ endif
 
 # DITAA -> PNG
 # create color PNGs from DITAA
-$(IMG_GENDIR)/gen/png/%.png: $(IMG_SRC_DIR)/ditaa/%.ditaa | $(IMG_GEN_DIRECTORIES)
+$(IMG_GENDIR)/color/%.png: $(IMG_SRC_DIR)/ditaa/%.ditaa | $(IMG_GEN_DIRECTORIES)
 ifeq "$(VERBOSITY)" "2"
 	@echo "   Converting $(notdir $<) to PNG"
 endif
@@ -449,7 +417,7 @@ endif
 	ditaa $< $@ --transparent --overwrite --scale 2.5 --no-shadows $(DEVNULL) $(ERR_DEVNULL)
 	$(run_optipng)
 
-$(IMG_GENDIR)/gen/png/%.png: $(IMG_SRC_DIR)/%.ditaa | $(IMG_GEN_DIRECTORIES)
+$(IMG_GENDIR)/color/%.png: $(IMG_SRC_DIR)/%.ditaa | $(IMG_GEN_DIRECTORIES)
 ifeq "$(VERBOSITY)" "2"
 	@echo "   Converting $(notdir $<) to PNG"
 endif
@@ -459,8 +427,7 @@ endif
 
 # SVG -> PNG
 # create color PNGs from SVGs
-#$(IMG_GENDIR)/gen/png/%.png: $(IMG_GENDIR)/gen/svg/%.svg | $(IMG_GEN_DIRECTORIES)
-$(IMG_GENDIR)/gen/png/%.png: $(IMG_SRC_DIR)/svg/%.svg | $(IMG_GEN_DIRECTORIES)
+$(IMG_GENDIR)/color/%.png: $(IMG_GENDIR)/gen/%.svg | $(IMG_GEN_DIRECTORIES)
 ifeq "$(VERBOSITY)" "2"
 	@echo "   Converting $(notdir $<) to PNG"
 endif
@@ -472,30 +439,37 @@ else
 endif
 	$(run_optipng)
 
-$(IMG_GENDIR)/gen/png/%.png: $(IMG_SRC_DIR)/%.svg | $(IMG_GEN_DIRECTORIES)
+# Create grayscale PNGs
+#
+# all PNGs we need are in $(IMG_GENDIR)/color, generate from there
+#
+$(IMG_GENDIR)/grayscale/%.png: $(IMG_GENDIR)/color/%.png | $(IMG_GEN_DIRECTORIES)
 ifeq "$(VERBOSITY)" "2"
-	@echo "   Converting $(notdir $<) to PNG"
+	@echo "   Converting $(notdir $<) to grayscale"
 endif
-	$(remove_link)
-ifeq "$(_INKSCAPE_IS_NEW)" "yes"
-	inkscape $(INK_OPTIONS) --export-type="png" --export-filename $@ $< $(ERR_DEVNULL)
-else
-	inkscape -z -e $@ -f $< $(DEVNULL) && ( test -f $< || false )
-endif
-	$(run_optipng)
+	convert $< $(CONVERT_OPTS_PNG) $@ $(DEVNULL)
+
 
 #------------------------------------------------------------------------
 # SVGs
 #
 
-#---------------
-# Link images that are used in the manuals
-#
-
 # SVGs are never used directly from source, since they are all generated
-# Color SVGs are transformed via stylesheet in order to wipe out
+# Even existing SVGs are transformed via stylesheet in order to wipe out
 # some tags that cause trouble with xep or fop
-$(IMG_GENDIR)/color/%.svg: $(IMG_GENDIR)/gen/svg/%.svg | $(IMG_GEN_DIRECTORIES)
+# All SVGs are generated to $(IMG_GENDIR)/gen/ and then linked/generated
+# to $(IMG_GENDIR)/color/ and $(IMG_GENDIR)/grayscale/
+
+# Wipe troublesome tags
+#
+$(IMG_GENDIR)/gen/%.svg: $(IMG_SRC_DIR)/svg/%.svg | $(IMG_GEN_DIRECTORIES)
+ifeq "$(VERBOSITY)" "2"
+	@echo "   Fixing $(notdir $<)"
+endif
+	$(XSLTPROC) --stylesheet $(STYLESVG) --file $< \
+	  --output $@ --xsltproc_args "--novalid" $(XSLTPROCESSOR) $(DEVNULL)
+
+$(IMG_GENDIR)/gen/%.svg: $(IMG_SRC_DIR)/%.svg | $(IMG_GEN_DIRECTORIES)
 ifeq "$(VERBOSITY)" "2"
 	@echo "   Fixing $(notdir $<)"
 endif
@@ -503,13 +477,33 @@ endif
 	  --output $@ --xsltproc_args "--novalid" $(XSLTPROCESSOR) $(DEVNULL)
 
 #---------------
+# Create color SVGs from other formats
+
+# DIA -> SVG
+#
+$(IMG_GENDIR)/gen/%.svg: $(IMG_SRC_DIR)/dia/%.dia | $(IMG_GEN_DIRECTORIES)
+ifeq "$(VERBOSITY)" "2"
+	@echo "   Converting $(notdir $<) to SVG"
+endif
+	LANG=C dia -t svg --export=$@ $< $(DEVNULL) $(ERR_DEVNULL)
+
+$(IMG_GENDIR)/gen/%.svg: $(IMG_SRC_DIR)/%.dia | $(IMG_GEN_DIRECTORIES)
+ifeq "$(VERBOSITY)" "2"
+	@echo "   Converting $(notdir $<) to SVG"
+endif
+	LANG=C dia -t svg --export=$@ $< $(DEVNULL) $(ERR_DEVNULL)
+
+#---------------
+# Link generated SVGs to $(IMG_GENDIR)/color
+#
+
+$(IMG_GENDIR)/color/%.svg: $(IMG_GENDIR)/gen/%.svg | $(IMG_GEN_DIRECTORIES)
+	ln -sf $< $@
+
+#---------------
 # Create grayscale SVGs used in the manuals
 #
-# Before generating grayscale SVGs we need to fix the original using
-# $(STYLESVG) - as is done for color SVGs as well (see above). Instead of
-# generating it and piping the result to the grayscale conversion (as it was
-# done in 1.x), generate and use the online version - it will probably be
-# needed anyway
+# Simply convert all generated SVG images in $(IMG_GENDIR)/color/
 #
 $(IMG_GENDIR)/grayscale/%.svg: $(IMG_GENDIR)/color/%.svg | $(IMG_GEN_DIRECTORIES)
 ifeq "$(VERBOSITY)" "2"
@@ -518,32 +512,6 @@ endif
 	$(XSLTPROC) --stylesheet $(STYLESVG2GRAY) --file $< \
 	  --output $@ --xsltproc_args "--novalid" $(XSLTPROCESSOR) $(DEVNULL)
 
-#---------------
-# Create color SVGs from other formats
-
-# DIA -> SVG
-#
-$(IMG_GENDIR)/gen/svg/%.svg: $(IMG_SRC_DIR)/dia/%.dia | $(IMG_GEN_DIRECTORIES)
-ifeq "$(VERBOSITY)" "2"
-	@echo "   Converting $(notdir $<) to SVG"
-endif
-	LANG=C dia -t svg --export=$@ $< $(DEVNULL) $(ERR_DEVNULL)
-
-$(IMG_GENDIR)/gen/svg/%.svg: $(IMG_SRC_DIR)/%.dia | $(IMG_GEN_DIRECTORIES)
-ifeq "$(VERBOSITY)" "2"
-	@echo "   Converting $(notdir $<) to SVG"
-endif
-	LANG=C dia -t svg --export=$@ $< $(DEVNULL) $(ERR_DEVNULL)
-
-# SVG -> SVG
-#
-# source SVGs are linked to gen/svg and are processed from there into
-# online/ and print/
-$(IMG_GENDIR)/gen/svg/%.svg: $(IMG_SRC_DIR)/svg/%.svg | $(IMG_GEN_DIRECTORIES)
-	ln -sf $< $@
-
-$(IMG_GENDIR)/gen/svg/%.svg: $(IMG_SRC_DIR)/%.svg | $(IMG_GEN_DIRECTORIES)
-	ln -sf $< $@
 
 #------------------------------------------------------------------------
 # JPG
@@ -567,13 +535,11 @@ $(IMG_GENDIR)/color/%.jpg: $(IMG_SRC_DIR)/%.jpg | $(IMG_GEN_DIRECTORIES)
 #---------------
 # Create grayscale JPGs
 #
-$(IMG_GENDIR)/grayscale/%.jpg: $(IMG_SRC_DIR)/jpg/%.jpg | $(IMG_GEN_DIRECTORIES)
-ifeq "$(VERBOSITY)" "2"
-	@echo "   Converting $(notdir $<) to grayscale"
-endif
-	convert $< $(CONVERT_OPTS_JPG) $@ $(DEVNULL)
+# Like with the PNGs, we use the links in $(IMG_SRC_DIR)/color/ to
+# create the grayscale JPGs with a single target
+#
 
-$(IMG_GENDIR)/grayscale/%.jpg: $(IMG_SRC_DIR)/%.jpg | $(IMG_GEN_DIRECTORIES)
+$(IMG_GENDIR)/grayscale/%.jpg: $(IMG_GENDIR)/color/%.jpg | $(IMG_GEN_DIRECTORIES)
 ifeq "$(VERBOSITY)" "2"
 	@echo "   Converting $(notdir $<) to grayscale"
 endif
