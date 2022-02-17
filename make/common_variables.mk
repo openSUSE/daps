@@ -274,9 +274,8 @@ else
   IMG_SRC_DIR         :=  $(addprefix $(PRJ_DIR)/,$(IMG_SRC_DIR))
 endif
 
-IMG_GEN_DIRECTORIES := $(IMG_GENDIR)/gen/png \
-                   $(IMG_GENDIR)/gen/svg \
-                   $(IMG_GENDIR)/color $(IMG_GENDIR)/grayscale
+IMG_GEN_DIRECTORIES := $(IMG_GENDIR)/gen/ $(IMG_GENDIR)/color \
+  $(IMG_GENDIR)/grayscale
 
 # generate lists of all existing images
 # Image formats: dia ditaa jpg odg png svg
