@@ -298,20 +298,6 @@ optipng:
 # Warnings
 #
 
-# This warning is solely for publishing stuff on novell.com/documentation,
-# therefore we make it dependend on HTMLROOT which also is only used
-# for novell.com/documentation publishing
-ifdef HTMLROOT
-  warn-cap: USED_LC := $(shell echo $(USED) | tr [:upper:] [:lower:] 2>/dev/null)
-  warn-cap: WRONG_CAP := $(filter-out $(USED_LC), $(USED))
-  warn-cap:
-    ifdef WRONG_CAP
-      ifneq "$(VERBOSITY)" "0"
-	@ccecho "warn" "Not all image file names are lower case. This will make problems when creating online docs:\n$(WRONG_CAP)" >2
-      endif
-    endif
-endif
-
 # List missing images
 #
 .PHONY: list-images-missing
