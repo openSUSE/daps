@@ -31,10 +31,11 @@ function oneTimeSetUp () {
     # Clean up the build directory
     clean_build_dir all
     _IMGDIR=$($_DAPSEXEC -d $_DCFILE showvariable VARIABLE=IMG_GENDIR 2>/dev/null)
+    _IMGDIR_SRC=$($_DAPSEXEC -d $_DCFILE showvariable VARIABLE=IMG_SRC_DIR 2>/dev/null)
+
     if [ $? -ne 0 ]; then
         exit_on_error " The initial DAPS call to determine the path to the resulting image directory failed. Skipping tests"
     fi
-    _IMGDIR_SRC=${_PRJ_DIR}/images/src
     _IMGDIR_COLOR=${_IMGDIR}/color
     _IMGDIR_GEN=${_IMGDIR}/gen
     _IMGDIR_GRAYSCALE=${_IMGDIR}/grayscale
@@ -82,16 +83,13 @@ function test_imagesDIA () {
 
     assertTrue \
         " └─ DIA to PNG generation failed" \
-        "[ -s ${_IMGDIR_GEN}/png/${_DIA_IMG}.png ]"
+        "[ -s ${_IMGDIR_COLOR}/${_DIA_IMG}.png ]"
     assertTrue \
         " └─ DIA to SVG generation failed" \
-        "[ -s ${_IMGDIR_GEN}/svg/${_DIA_IMG}.svg ]"
+        "[ -s ${_IMGDIR_GEN}/${_DIA_IMG}.svg ]"
     assertTrue \
-        " └─ Color PNG link for $_DIA_IMG is missing" \
-        "[ -L ${_IMGDIR_COLOR}/${_DIA_IMG}.png ]"
-    assertTrue \
-        " └─ Color SVG for $_DIA_IMG is missing" \
-        "[ -s ${_IMGDIR_COLOR}/${_DIA_IMG}.svg ]"
+        " └─ Color SVG link for $_DIA_IMG is missing" \
+        "[ -L ${_IMGDIR_COLOR}/${_DIA_IMG}.svg ]"
     assertTrue \
         " └─ Grayscale PNG for $_DIA_IMG is missing" \
         "[ -s ${_IMGDIR_GRAYSCALE}/${_DIA_IMG}.png ]"
@@ -127,16 +125,13 @@ function test_imagesODG () {
 
     assertTrue \
         " └─ ODG to PNG generation failed" \
-        "[ -s ${_IMGDIR_GEN}/png/${_ODG_IMG}.png ]"
+        "[ -s ${_IMGDIR_COLOR}/${_ODG_IMG}.png ]"
     assertTrue \
         " └─ ODG to SVG generation failed" \
-        "[ -s ${_IMGDIR_GEN}/svg/${_ODG_IMG}.svg ]"
-    assertTrue \
-        " └─ Color PNG link for $_ODG_IMG is missing" \
-        "[ -L ${_IMGDIR_COLOR}/${_ODG_IMG}.png ]"
+        "[ -s ${_IMGDIR_GEN}/${_ODG_IMG}.svg ]"
     assertTrue \
         " └─ Color SVG for $_ODG_IMG is missing" \
-        "[ -s ${_IMGDIR_COLOR}/${_ODG_IMG}.svg ]"
+        "[ -L ${_IMGDIR_COLOR}/${_ODG_IMG}.svg ]"
     assertTrue \
         " └─ Grayscale PNG for $_ODG_IMG is missing" \
         "[ -s ${_IMGDIR_GRAYSCALE}/${_ODG_IMG}.png ]"
@@ -155,10 +150,7 @@ function test_imagesDITAA () {
 
     assertTrue \
         " └─ DITAA to PNG generation failed" \
-        "[ -s ${_IMGDIR_GEN}/png/${_DITAA_IMG}.png ]"
-    assertTrue \
-        " └─ Color PNG link for $_DITAA_IMG is missing" \
-        "[ -L ${_IMGDIR_COLOR}/${_DITAA_IMG}.png ]"
+        "[ -s ${_IMGDIR_COLOR}/${_DITAA_IMG}.png ]"
     assertTrue \
         " └─ Grayscale PNG for $_DITAA_IMG is missing" \
         "[ -s ${_IMGDIR_GRAYSCALE}/${_DITAA_IMG}.png ]"
@@ -192,16 +184,13 @@ function test_imagesSVG () {
 
     assertTrue \
         " └─ SVG to PNG generation failed" \
-        "[ -s ${_IMGDIR_GEN}/png/${_SVG_IMG}.png ]"
+        "[ -s ${_IMGDIR_COLOR}/${_SVG_IMG}.png ]"
     assertTrue \
         " └─ SVG to SVG generation failed" \
-        "[ -s ${_IMGDIR_GEN}/svg/${_SVG_IMG}.svg ]"
-    assertTrue \
-        " └─ Color PNG link for $_SVG_IMG is missing" \
-        "[ -L ${_IMGDIR_COLOR}/${_SVG_IMG}.png ]"
+        "[ -s ${_IMGDIR_GEN}/${_SVG_IMG}.svg ]"
     assertTrue \
         " └─ Color SVG for $_SVG_IMG is missing" \
-        "[ -s ${_IMGDIR_COLOR}/${_SVG_IMG}.svg ]"
+        "[ -L ${_IMGDIR_COLOR}/${_SVG_IMG}.svg ]"
     assertTrue \
         " └─ Grayscale PNG for $_SVG_IMG is missing" \
         "[ -s ${_IMGDIR_GRAYSCALE}/${_SVG_IMG}.png ]"

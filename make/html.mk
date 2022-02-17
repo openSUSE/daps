@@ -158,7 +158,7 @@ endif
 
 # inline Images
 #
-HTML_INLINE_IMAGES := $(subst $(IMG_GENDIR)/color/,$(HTML_DIR)/images/,$(ONLINE_IMAGES))
+HTML_INLINE_IMAGES := $(subst $(IMG_GENDIR)/color/,$(HTML_DIR)/images/,$(COLOR_IMAGES))
 
 #--------------
 # HTML
@@ -171,8 +171,8 @@ ifeq "$(CLEAN_DIR)" "1"
   html: $(shell if [[ $$(expr match "$(HTML_DIR)" "$(RESULT_DIR)") -gt 0 && -d "$(HTML_DIR)" ]]; then rm -r "$(HTML_DIR)"; fi 2>&1 >/dev/null)
 endif
 html: list-images-multisrc list-images-missing
-ifdef ONLINE_IMAGES
-  html: $(ONLINE_IMAGES) copy_inline_images_html
+ifdef COLOR_IMAGES
+  html: $(COLOR_IMAGES) copy_inline_images_html
 endif
 html: copy_static_images_html
 html: $(HTML_RESULT)
@@ -237,8 +237,8 @@ endif
 #
 .PHONY: copy_inline_images_html
 copy_inline_images_html: | $(HTML_DIR)/images
-copy_inline_images_html: $(ONLINE_IMAGES)
-	for IMG in $(ONLINE_IMAGES); do $(HTML_GRAPH_COMMAND) $$IMG $(HTML_DIR)/images; done
+copy_inline_images_html: $(COLOR_IMAGES)
+	for IMG in $(COLOR_IMAGES); do $(HTML_GRAPH_COMMAND) $$IMG $(HTML_DIR)/images; done
 
 
 #---------------

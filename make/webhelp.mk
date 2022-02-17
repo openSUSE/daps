@@ -182,7 +182,7 @@ endif
 
 # inline Images
 #
-WEBHELP_INLINE_IMAGES := $(subst $(IMG_GENDIR)/color/,$(WEBHELP_DIR)/images/,$(ONLINE_IMAGES))
+WEBHELP_INLINE_IMAGES := $(subst $(IMG_GENDIR)/color/,$(WEBHELP_DIR)/images/,$(COLOR_IMAGES))
 
 
 #--------------
@@ -196,8 +196,8 @@ ifeq "$(CLEAN_DIR)" "1"
   webhelp: $(shell if [[ $$(expr match "$(WEBHELP_DIR)" "$(RESULT_DIR)") -gt 0 && -d "$(WEBHELP_DIR)" ]]; then rm -r "$(WEBHELP_DIR)"; fi 2>&1 >/dev/null)
 endif
 webhelp: list-images-multisrc list-images-missing
-ifdef ONLINE_IMAGES
-  webhelp: $(ONLINE_IMAGES) copy_inline_images_wh
+ifdef COLOR_IMAGES
+  webhelp: $(COLOR_IMAGES) copy_inline_images_wh
 endif
 webhelp: copy_static_images_wh
 webhelp: $(WEBHELP_RESULT)
@@ -260,8 +260,8 @@ endif
 #
 .PHONY: copy_inline_images_wh
 copy_inline_images_wh: | $(WEBHELP_DIR)/images
-copy_inline_images_wh: $(ONLINE_IMAGES)
-	for IMG in $(ONLINE_IMAGES); do $(HTML_GRAPH_COMMAND) $$IMG $(WEBHELP_DIR)/images; done
+copy_inline_images_wh: $(COLOR_IMAGES)
+	for IMG in $(COLOR_IMAGES); do $(HTML_GRAPH_COMMAND) $$IMG $(WEBHELP_DIR)/images; done
 
 
 #---------------
