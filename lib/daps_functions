@@ -74,7 +74,6 @@ function parse_args {
                 # epub/html/package-html/webhelp: Path to custom CSS file
                 # processed differently in respective targets
                 # no direct export here
-                declare P_CSS
                 if [[ $2 != "none" ]]; then
                     sanitize_path "$2" "P_CSS"
                 else
@@ -84,7 +83,6 @@ function parse_args {
                 ;;
             --def-file)
                 # locdrop/package-src: include DEF-file
-                declare DEF_FILE
                 sanitize_path "$2" "DEF_FILE"
                 export DEF_FILE
                 shift 2
@@ -112,7 +110,6 @@ function parse_args {
                 ;;
             --export-dir)
                 # locdrop: export directory
-                declare EXPORT_DIR
                 sanitize_path "$2" "EXPORT_DIR"
                 export EXPORT_DIR
                 shift 2
@@ -126,7 +123,6 @@ function parse_args {
             --file)
                 # getimages/linkcheck/spellcheck/stylecheck/xmlformat
                 # no need to export (not passed to make)
-                declare P_FILE
                 sanitize_path "$2" "P_FILE"
                 shift 2
                 ;;
@@ -209,6 +205,7 @@ function parse_args {
             --name)
                 # used almost everywhere to set the filename
                 export OUTPUTNAME="$2" BOOK="$2"
+                export RESULT_DIR="${BUILD_DIR}/${BOOK}"
                 shift 2
                 ;;
             --nodc)
@@ -253,7 +250,6 @@ function parse_args {
             --notrans-dir)
                 # unpack-locdrop: path to en directory
                 # no need to export (not passed to make)
-                declare P_NOTRANS_DIR
                 sanitize_path "$2" "P_NOTRANS_DIR"
                 shift 2
                 ;;
@@ -279,7 +275,6 @@ function parse_args {
             --output-dir)
                 # unpack lockdrop: output directory
                 # no need to export (not passed to make)
-                declare P_OUTPUT_DIR=""
                 sanitize_path "$2" "P_OUTPUT_DIR"
                 shift 2
                 ;;
@@ -349,7 +344,6 @@ function parse_args {
                 ;;
             --statdir)
                 # epub/html/package-html: directory containing js and css
-                declare STATIC_DIR
                 sanitize_path "$2" "STATIC_DIR"
                 export STATIC
                 shift 2
@@ -368,7 +362,7 @@ function parse_args {
                 ;;
             --target)
                 # dapsenv/showvariable: specify subcommand
-                TARGET="$2"
+                export TARGET="$2"
                 shift 2
                 ;;
             --trans-files)
@@ -427,31 +421,15 @@ function parse_args {
 #
 ###########################################################################
 function init_env {
-    # Create the log directory and a link to the DC-file in R_DIR
-    # (R_DIR and LOG_DIR are set in bin/daps)
+    # Create the log directory and a link to the DC-file in RESULT_DIR
+    # (RESULT_DIR and LOG_DIR are set in bin/daps)
 
     local DC_COUNT TEST_ROOTID_RESULT
 
-    # create directories
-
-    mkdir -p "$R_DIR"
+    # create log directory
+    mkdir -p "$RESULT_DIR"
     if [[ 1 -eq $WRITE_LOG ]]; then
         mkdir -p "$LOG_DIR" || exit_on_error "Cannot create $LOG_DIR"
-    fi
-
-
-    if [[ -n $"$DOCCONF" && ! -f ${R_DIR}/$(basename "$DOCCONF") ]]; then
-        ln -sf "$DOCCONF" "${R_DIR}/$(basename "$DOCCONF")"
-        if [[ 0 -ne $? && 0 -ne $VERBOSITY ]]; then
-            ccecho "warn" "Warning: Cannot create link to $DOCCONF in $R_DIR"
-        fi
-    fi
-
-    # There should only be one DC-file in $R_DIR
-    #
-    DC_COUNT=$(find -L "$R_DIR" -maxdepth 1 -name "${CONF_PREFIX}*" -type f | wc -l 2>/dev/null)
-    if [[ $DC_COUNT -gt 1 && 0 -ne $VERBOSITY ]]; then
-        ccecho "warn" "$R_DIR contains more than one DC-file"
     fi
 
     # test if ROOTID exist
@@ -681,7 +659,7 @@ function call_make {
         echo
 
         # Directories
-        for V in BOOK BUILD_DIR DAPSROOT DOCCONF PRJ_DIR SRC_DIR; do
+        for V in BOOK MAIN BUILD_DIR DAPSROOT DOCCONF PRJ_DIR SRC_DIR; do
             printf "%${COLWIDTH}s: %s\n" "$V" "${!V}"
         done
         printf "%${COLWIDTH}s: %s\n" "IMG_SRC_DIR" "${PRJ_DIR}/$IMG_SRC_DIR"

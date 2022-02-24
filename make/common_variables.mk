@@ -27,19 +27,19 @@ ifndef BOOK
   $(error $(shell ccecho "error" "Fatal error: BOOK is not set"))
 endif
 ifndef BUILD_DIR
-  $(error $(shell ccecho "error" "Fatal error: No path to build directory set"))
+  $(error $(shell ccecho "error" "Fatal error: No path to build directory (BUILD_DIR) set"))
 endif
 ifndef PRJ_DIR
-  $(error $(shell ccecho "error" "Fatal error: No path to working directory set"))
+  $(error $(shell ccecho "error" "Fatal error: No path to working directory (PRJ_DIR) set"))
 endif
 ifndef SRC_DIR
-  $(error $(shell ccecho "error" "Fatal error: No path to doc source files set"))
+  $(error $(shell ccecho "error" "Fatal error: No path to doc source files (SRC_DIR) set"))
 endif
 ifndef MAIN
   $(error $(shell ccecho "error" "Fatal error: No MAIN file set"))
 endif
 ifndef XSLTPROCESSOR
-  $(error $(shell ccecho "error" "Fatal error: No XSLT processor file set"))
+  $(error $(shell ccecho "error" "Fatal error: No XSLT processor (XSLTPROCESSOR) set"))
 endif
 
 #--------------------------------------------------
@@ -89,7 +89,6 @@ endif
 # Build DIRECTORIES
 #
 
-RESULT_DIR         := $(BUILD_DIR)/$(BOOK)
 TMP_DIR            := $(BUILD_DIR)/.tmp
 PACK_DIR           := $(RESULT_DIR)/package
 
@@ -255,12 +254,6 @@ DAPSSTRINGS := --stringparam "converter.name=$(MY_NAME)" \
 # Image Directories
 #
 IMG_GENDIR         := $(BUILD_DIR)/.images
-ifneq "$(strip $(ADOC_IMG_DIR))" ""
-  IMG_SRC_DIR := $(BUILD_DIR)/.adoc_images/src
-else
-  IMG_SRC_DIR         :=  $(addprefix $(PRJ_DIR)/,$(IMG_SRC_DIR))
-endif
-
 IMG_GEN_DIRECTORIES := $(IMG_GENDIR)/gen/ $(IMG_GENDIR)/color \
   $(IMG_GENDIR)/grayscale
 
