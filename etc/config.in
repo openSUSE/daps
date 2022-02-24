@@ -82,21 +82,6 @@
 #
 ADOC_FAILURE_LEVEL="WARN"
 
-## Key: ADOC_IMG_DIR
-## --------------------
-## Description: Directory hosting images for the AsciiDoc documents
-## Type:        absolute path
-## Default:     ""
-#
-# If set, DAPS will automatically generate the image structure
-# required for XML processing. The directory needs to host all
-# images on a flat level; subdirectories will be ignored
-#
-# Set this value in a DC-file or on the command-line with
-# --adocimgdir
-#
-ADOC_IMG_DIR=""
-
 ## Key: ADOC_POST
 ## --------------------
 ## Description: Do post-processing on AsciiDoctor-generated XML?
@@ -250,18 +235,6 @@ CONVERT_OPTS_JPG="-type grayscale"
 # Do not change unless you really know what you do.
 #
 CONVERT_OPTS_PNG="-type grayscale -colors 256"
-
-## Key:         DOCCONF_DEFAULT
-## -----------------------------
-## Description: Specify a default DC-file that is used whenever
-##              no DC-file is specified on the command line or via
-##              DOCCONF_NAME in the DC-FILE
-## Type:        String
-## Default:     ""
-#
-# This value is usually set in a book specific DC-file
-#
-DOCCONF_DEFAULT=""
 
 ## Key:         DIA_OPTIONS
 ## -------------------------
@@ -509,49 +482,6 @@ FORMATTER="fop"
 #
 GZIP_MAN="yes"
 
-
-## Key:         JING_JAVA_FLAGS
-## ----------------------------
-## Description: Additional java properties for running jing
-## Type:        String (-D<prop>)
-## Default:     ""
-#
-JING_JAVA_FLAGS=""
-
-## Key:         JING_JAVA_JARS
-## ---------------------------
-## Description: Additional Jars for running jing
-## Type:        String
-## Default:     ""
-#
-JING_JAVA_JARS=""
-
-## Key:         JING_JAVA_OPTIONS
-## ------------------------------
-## Description: Additional java options for running jing
-## Type:        String (-X<option>), see java -X for help
-## Default:     ""
-#
-JING_JAVA_OPTIONS=""
-
-## Key:         JING_WRAPPER
-## -------------------------
-## Description: Wrapper script for Jing
-## Type:        PATH to script
-## Default:     "@pkgdatadir@/libexec/daps-jing"
-#
-# Optional wrapper script for calling jing. If set to "jing", it will run
-# the first jing executable found in your path (usually this will be
-# /usr/bin/jing)
-#
-# The default will probably not work on Debian/Ubuntu, since they
-# use a different way to set Java options. Setting up a custom wrapper
-# script for Ubuntu/Debian might be needed (not tested)
-#
-# Also see JING_*
-#
-JING_WRAPPER="@pkgdatadir@/libexec/daps-jing"
-
 ## Key:         HTML5
 ## ------------------------
 ## Description: Use XHTML5 instead of XHTML1 for HTML output
@@ -590,17 +520,6 @@ IMG_VIEWER=""
 #
 IMG_SRC_DIR="images/src"
 
-## Key:         INCLUDE_MANIFEST
-## -----------------------------
-## Description: Include a manifest file to the archive created by dist-html
-##              containing  list of included HTML files
-## Type:        Bool
-## Default:     ""
-#
-# Only affects the dist-html subcommand
-#
-INCLUDE_MANIFEST=""
-
 ## Key:         INK_OPTIONS
 ## ------------------------
 ## Description: Command line options for Inkscape >= 1.0 to convert SVG to PNG
@@ -616,12 +535,54 @@ INK_OPTIONS=""
 ## ------------------------
 ## Description: Flags for jing
 ## Type:        String, whitespace-separated
-## Default:     "-Dorg.apache.xerces.xni.parser.XMLParserConfiguration=org.apache.xerces.parsers.XIncludeParserConfiguration"
+## Default:     ""
 #
 # The default flag enables jing to follow xi:includes
 # Do not change unless you really know what you do.
 #
-JING_FLAGS="-Dorg.apache.xerces.xni.parser.XMLParserConfiguration=org.apache.xerces.parsers.XIncludeParserConfiguration"
+JING_FLAGS=""
+
+## Key:         JING_JAVA_FLAGS
+## ----------------------------
+## Description: Additional java properties for running jing
+## Type:        String (-D<prop>)
+## Default:     "-Dorg.apache.xerces.xni.parser.XMLParserConfiguration=org.apache.xerces.parsers.XIncludeParserConfiguration"
+#
+JING_JAVA_FLAGS="-Dorg.apache.xerces.xni.parser.XMLParserConfiguration=org.apache.xerces.parsers.XIncludeParserConfiguration"
+
+## Key:         JING_JAVA_JARS
+## ---------------------------
+## Description: Additional Jars for running jing
+## Type:        String
+## Default:     ""
+#
+JING_JAVA_JARS=""
+
+## Key:         JING_JAVA_OPTIONS
+## ------------------------------
+## Description: Additional java options for running jing
+## Type:        String (-X<option>), see java -X for help
+## Default:     ""
+#
+JING_JAVA_OPTIONS=""
+
+## Key:         JING_WRAPPER
+## -------------------------
+## Description: Wrapper script for Jing
+## Type:        PATH to script
+## Default:     "@pkgdatadir@/libexec/daps-jing"
+#
+# Optional wrapper script for calling jing. If set to "jing", it will run
+# the first jing executable found in your path (usually this will be
+# /usr/bin/jing)
+#
+# The default will probably not work on Debian/Ubuntu, since they
+# use a different way to set Java options. Setting up a custom wrapper
+# script for Ubuntu/Debian might be needed (not tested)
+#
+# Also see JING_*
+#
+JING_WRAPPER="@pkgdatadir@/libexec/daps-jing"
 
 ## Key:         MAIN
 ## -----------------
@@ -788,18 +749,10 @@ ROOTID=""
 ## Default:     DAPS performs a lookup for aspell and hunspell. If only one
 ##              of these packages is installed, it will be used automatically.
 ##              If both are installed, aspell will be used.
-##              If you want to force using one of the two spellcheckers, specify
-##              it here.
+##              If you want to force using one of the two spellcheckers,
+##              specify it here.
 ##
 SPELL_CHECKER=""
-
-## Key:         SPELL_CHECKER
-## ----------------------
-## Description: Spellchecker application to use
-## Type:        Name of the spellchecker's binary
-## Default:     "aspell"
-#
-SPELL_CHECKER="aspell"
 
 ## Key:         SPELL_EXTRA_DICT
 ## ----------------------
