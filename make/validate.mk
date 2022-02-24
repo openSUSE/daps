@@ -71,36 +71,36 @@ $(PROFILEDIR)/.validate validate: $(PROFILES)
   ifeq "$(strip $(VALIDATE_IDS))" "1"
 	$(eval FAULTY_IDS=$(shell $(XSLTPROC) --xinclude --stylesheet $(DAPSROOT)/daps-xslt/common/get-all-xmlids.xsl --file $(PROFILED_MAIN) $(XSLTPROCESSOR) | grep -P '[^-a-zA-Z0-9]'))
   endif
-	if [[ -n "$(FAULTY_XML)" ]]; then \
+	@if [[ -n "$(FAULTY_XML)" ]]; then \
 	  ccecho "error" "Fatal error: The document contains XML errors:"; \
 	  echo -e "$(FAULTY_XML)"; \
 	  echo "--------------------------------"; \
 	fi
-	if [[ -n "$(FAULTY_TABLES)" ]]; then \
+	@if [[ -n "$(FAULTY_TABLES)" ]]; then \
 	  ccecho "error" "Fatal error: The following tables contain errors:"; \
 	  echo -e "$(FAULTY_TABLES)"; \
 	  echo "--------------------------------"; \
 	fi
-	if [[ -n "$(FAULTY_IDS)" ]]; then \
+	@if [[ -n "$(FAULTY_IDS)" ]]; then \
 	  ccecho "error" "The following IDs contain unwanted characters:"; \
 	  echo -e "$(subst $(SPACE),\n,$(sort $(FAULTY_IDS)))"; \
 	  echo "--------------------------------"; \
 	fi
-	if [[ -n "$(_IMG_MISS)" ]]; then \
+	@if [[ -n "$(_IMG_MISS)" ]]; then \
 	  ccecho "error" "Fatal error: The following images are missing:"; \
 	  echo -e "$(subst $(SPACE),\n,$(sort $(_IMG_MISS)))"; \
 	  echo "--------------------------------"; \
 	fi
-	if [[ -n "$(_IMG_DUPES)" ]]; then \
+	@if [[ -n "$(_IMG_DUPES)" ]]; then \
 	  ccecho "warn" "Warning: Image names not unique$(COMMA) multiple sources available for the following images:"; \
 	  echo -e "$(subst $(SPACE),\n,$(sort $(_IMG_DUPES)))"; \
 	  echo "--------------------------------"; \
 	fi
-	if [[ -n "$(strip $(FAULTY_XML)$(FAULTY_TABLES)$(FAULTY_IDS)$(_IMG_MISS))" ]]; then \
+	@if [[ -n "$(strip $(FAULTY_XML)$(FAULTY_TABLES)$(FAULTY_IDS)$(_IMG_MISS))" ]]; then \
 	  ccecho "error" "Document does not validate!"; \
 	  exit 1; \
 	fi
-	touch $(PROFILEDIR)/.validate
+	@touch $(PROFILEDIR)/.validate
   ifeq "$(TARGET)" "validate"
 	@ccecho "result" "Document is valid."
   endif
