@@ -41,48 +41,32 @@ export prefix=@prefix@
 #
 
 
-# PENDING:
-# DISTVER, PRODUCTNAME, and PRODUCTNAMEREG are only need for resolving the
-# suse-PIs. Once we get rid of that, remove these variables from the list
-#
 
-# TODO fs 2012-12-20:
-# A lot of variables get exported in lib/daps_functions _and_ here - this is
-# not necessary. Clean up!
+
+
 
 declare -a VARLIST
 VARLIST=(
     ADOC_ATTRIBUTES
     ADOC_BACKEND
     ADOC_FAILURE_LEVEL
-    ADOC_IMG_DIR
     ADOC_POST
     ADOC_POST_STYLE
-    ADOC_SET_STYLE
     ADOC_SET
+    ADOC_SET_STYLE
     ADOC_TYPE
     ASCIIDOC
+    BOOK
     BUILD_DIR
     CB_OPTIONS
-    CHECK_WELLFORMED
     COLOR
-    COMMENTS
-    COMMENT_STR
     CONF_PREFIX
     CONVERT_OPTS_JPG
     CONVERT_OPTS_PNG
-    CROPMARKS
-    DB5TODB4
-    DB5TODB4NH
-    DBNOCONV
     DEBUG
-    DISTVER
-    DAPS_CONFIG_FILE
     DAPSROOT
     DAPSROOT_DEFAULT
     DEF_FILE
-    DESKTOPFILES
-    DEVEL
     DIA_OPTIONS
     DOCBOOK4_PROFILE_URN
     DOCBOOK4_STYLE_URI
@@ -94,12 +78,10 @@ VARLIST=(
     DOCBOOK_VERSION
     DOCCONF
     DOCCONF_DEFAULT
-    DOCUMENTFILES
     DRAFT
     DRAFT_STR
-    EPUB3
+    EPUBCHECK
     EPUB_CSS
-    EXPORT_DIR
     FALLBACK_STYLEROOT
     FOP_CONFIG_FILE
     FOP_CMD_OPTIONS
@@ -109,46 +91,24 @@ VARLIST=(
     FOP_WRAPPER
     FORCE_REBUILD
     FORMATTER
-    GRAYSCALE
     GZIP_MAN
     HTML5
     HTML_CSS
-    HTMLSINGLE
     IMAGES_COLOR
     IMG_SRC_DIR
     IMG_VIEWER
-    INCLUDE_MANIFEST
     INK_OPTIONS
     JING_JAVA_FLAGS
     JING_JAVA_JARS
     JING_JAVA_OPTIONS
     JING_WRAPPER
-    LEAN
     LIB_DIR
     LIBEXEC_DIR
     LOG_DIR
     MAIN
     META
     META_STR
-    NAME
-    NODC
-    NOENT
-    NOEPUB
-    NOGZIP
-    NOHTML
-    NOIMG
-    NOPDF
-    NOSEARCH
-    NOSET
-    NOSTATIC
-    NOREFCHECK
-    NOT_VALIDATE_TABLES
-    NOVALID
-    NOXML
-    OPTIPNG
     OUTPUTNAME
-    PAGEFILES
-    PARAMS
     PRJ_DIR
     PROFARCH
     PROFAUDIENCE
@@ -168,10 +128,8 @@ VARLIST=(
     PROFWORDSIZE
     REMARKS
     REMARK_STR
-    RESULTCHECK
+    RESULT_DIR
     ROOTID
-    SETDATE
-    SHOW
     SPELL_CHECKER
     SPELL_EXTRA_DICT
     SPELL_LANG
@@ -179,24 +137,20 @@ VARLIST=(
     SRC_DIR
     SRC_FORMAT
     STATIC_DIR
-    STATIC_HTML
-    STRINGPARAMS
     STYLEDEVEL
     STYLEROOT
-    TARGET
     TXT_IGNORE_STYLEROOT
     TXT_PARAMS
-    WH_SEARCH
     VALID_ROOTELEMENTS
-    VALIDATE_IDS
-    VALIDATE_IMAGES
     VERBOSITY
+    WH_SEARCH
     XEP_CONFIG_FILE
     XEP_CMD_OPTIONS
     XEP_JAVA_FLAGS
     XEP_JAVA_JARS
     XEP_JAVA_OPTIONS
     XEP_WRAPPER
+    XML_CATALOG_FILES
     XMLFORMAT_CONFIG_FILE
     XML_MAIN_CATALOG
     XML_USER_CATALOGS
@@ -226,9 +180,7 @@ UNSETLIST=(
     CONFIG
     DC_PATH_EXISTS
     DOCBOOK5_RNG_URI_CMDL
-    DOCCONF_CMDL
     DOCCONF_NAME
-    DAPSROOT_CMDL
     FALLBACK_STYLEROOT_CMDL
     HELP_SUBCMD
     MAIN_CMDL
@@ -257,6 +209,7 @@ PATHLIST=(
   [FOP_CONFIG_FILE]="FOP configuration file"
   [FOP_WRAPPER]="FOP wrapper script"
   [HTML_CSS]="CSS file for HTML"
+  [IMG_SRC_DIR]="directory for the image source files"
   [JING_WRAPPER]="Jing wrapper script"
   [MAIN]="MAIN-file"
   [SRC_DIR]="directory for the adoc or xml source files"
@@ -505,15 +458,6 @@ Global Options:
                             Default: unset
                             This option can be specified multiple times. Only
                             works with AsciiDoc sources and is ignored otherwise.
-  --adocimgdir=IMG_DIR      Specify a directory for the images used in the
-                            AsciiDoc sources. Must contain all images,
-                            subdirectories are ignored.
-                            Not required if the images reside in the directory
-                            structure required by for DocBook projects
-                            (see DAPS manual).
-                            Default: unset
-                            Only works with AsciiDoc sources and is ignored
-                            otherwise.
   --adocset                 If specified, DAPS tries to convert the AsciiDoc
                             document into a set. Requires an AsciiDoc document
                             that consists of parts (each part will be
@@ -561,14 +505,20 @@ Global Options:
   --force                   Force a rebuild of the document even when an
                             up-to-date version exists.
   --help, -h                Help
+  --imgsrcdir=IMG_SRC_DIR   Specify a directory for the images used in the
+                            sources. Must contain all images, either in the
+                            specified directory, or in subdirectories carrying
+                            the name of the supported formats
+                            (jpg/, png/, svg/, ...)
+                            Default: images/src/{dia,ditaa,jpg,odg,pgn,svg}
   --jobs=X                  Specify how many parallel jobs to use. Higher
                             numbers will significantly increase the processing
                             speed, but will also set your machine under heavy
                             load, up to a point where it may become
                             (temporarily) unresponsive.
                             Default: Use as man jobs as available CPU cores.
-  --main=MAINFILE
-  -m MAINFILE               Path to the main file defining your document.
+  --main=MAIN
+  -m MAIN                   Path to the main file defining your document.
                             Note: Options --main and --docconfig exclude
                                   each other.
   --schema=URN              URN to a DocBook 5 schema that is to be used for
@@ -577,6 +527,11 @@ Global Options:
                             Note: To validate with a local schema, specify an
                                   absolute path with a "file://" prefix
                                   (e.g. "file:///foo/schema.rnc").
+  --srcdir=SRC_DIR          Specify a directory for the xml or adoc source
+                            files. Must contain all respective source files
+                            for the the project.
+                            Default: $PRJ_DIR/xml or $PRJ_DIR/adoc, depending
+                                     on the source format
   --styleroot=DIR           By default, daps uses the DocBook stylesheets to
                             create output. If you have your own set of
                             stylesheets, specify the absolute path to the
@@ -819,77 +774,23 @@ function check_pathlist {
 }
 
 # ---------
-# Try to automatically get the DOCCONF
-#
-function autoset_docconf {
-    # if there is only one DOCCONF file in the current directory, use it
-    # and also set PRJ_DIR
-    #
-    local DC_FILENAME DC_PARENT DC_REAL_PATH DC_REAL_DIR
-    declare -a DC_COUNT
-    DC_COUNT=( $(find -L . -maxdepth 1 -name "${CONF_PREFIX}*" -type f) )
-    if [[ 1 -eq ${#DC_COUNT[@]} ]]; then
-        # There is only one DOCCONF file
-        #
-        # two possibilities:
-        # 1. We are already in PRJ_DIR
-        # 2. We are in the documents build result directory
-        # (PRJ_DIR/build/<name>), where daps creates a link to the
-        # real ENV file
-        if [[ -h ${DC_COUNT[0]} ]]; then
-            # DOCCONF is a link
-            DC_REAL_PATH=$(readlink -nm "${DC_COUNT[0]}")
-            if [[ 0 -eq $? ]]; then
-            declare -g $VARNAME="$ABSPATH"
-        else
-            exit_on_error "$VARNAME=$MYPATH: Path does not exist"
-        fi
-            DC_REAL_DIR=$(dirname "$DC_REAL_PATH")
-            DC_FILENAME=$(basename "$DC_REAL_PATH")
-            DC_PARENT=${DC_FILENAME#${CONF_PREFIX}*}
-            if [[ -e ${DC_REAL_DIR}/build/${DC_PARENT}/$DC_FILENAME ]]; then
-                # we are in the result dir - set DOCCONF to the
-                # real path (with links "resolved")
-                DOCCONF_CMDL="$DC_REAL_PATH"
-            else
-                # we are in PRJ_DIR
-                # preserve links
-                DOCCONF_CMDL="${PWD}/${DC_COUNT[0]}"
-            fi
-        else
-            # no link, we are in PRJ_DIR
-            sanitize_path "${DC_COUNT[0]}" "DOCCONF_CMDL"
-        fi
-        # set PRJ_DIR
-        PRJ_DIR=$(dirname "$DOCCONF_CMDL")
-        if [[ 2 -le $VERBOSITY ]]; then
-            echo "Using automatically detected DOCCONF $DOCCONF_CMDL"
-        fi
-    else
-        # more than one or no DOCCONF
-        exit_on_error "Could not find a valid MAIN file.\nPlease specify either a DOCCONF or a MAIN file at the command line"
-    fi
-}
-
-
-# ---------
 # Recover command-line values
 #
 function recover_cmdl_values {
     # adoc attributes is special because it can be specified multiple times
     # we want to keep all values
-    test -n "$ADOC_ATTRIBUTES_CMDL" && ADOC_ATTRIBUTES="$ADOC_ATTRIBUTES $ADOC_ATTRIBUTES_CMDL"
-    test -n "$ADOC_SET_CMDL"  && ADOC_SET="$ADOC_SET_CMDL"
-    test -n "$BUILD_DIR_CMDL" && BUILD_DIR="$BUILD_DIR_CMDL"
-    test -n "$COLOR_CMDL"     && COLOR="$COLOR_CMDL"
+    test -n "$ADOC_ATTRIBUTES_CMDL"  && ADOC_ATTRIBUTES="$ADOC_ATTRIBUTES $ADOC_ATTRIBUTES_CMDL"
+    test -n "$ADOC_SET_CMDL"         && ADOC_SET="$ADOC_SET_CMDL"
+    test -n "$BUILD_DIR_CMDL"        && BUILD_DIR="$BUILD_DIR_CMDL"
+    test -n "$COLOR_CMDL"            && COLOR="$COLOR_CMDL"
     test -n "$DOCBOOK5_RNG_URI_CMDL" && DOCBOOK5_RNG_URI="$DOCBOOK5_RNG_URI_CMDL"
-    test -n "$DOCCONF_CMDL"   && DOCCONF="$DOCCONF_CMDL"
-    test -n "$DAPSROOT_CMDL"  && DAPSROOT="$DAPSROOT_CMDL"
     test -n "$FALLBACK_STYLEROOT_CMDL" && FALLBACK_STYLEROOT="$FALLBACK_STYLEROOT_CMDL"
-    test -n "$MAIN_CMDL"      && MAIN="$MAIN_CMDL"
-    test -n "$STYLEROOT_CMDL" && STYLEROOT="$STYLEROOT_CMDL"
-    test -n "$VERBOSITY_CMDL" && VERBOSITY="$VERBOSITY_CMDL"
-    test -n "$XSLTPROCESSOR_CMDL" && XSLTPROCESSOR="$XSLTPROCESSOR_CMDL"
+    test -n "$IMG_SRC_DIR_CMDL"      && IMG_SRC_DIR="$IMG_SRC_DIR_CMDL"
+    test -n "$MAIN_CMDL"             && MAIN="$MAIN_CMDL"
+    test -n "$SRC_DIR_CMDL"          && SRC_DIR="$SRC_DIR_CMDL"
+    test -n "$STYLEROOT_CMDL"        && STYLEROOT="$STYLEROOT_CMDL"
+    test -n "$VERBOSITY_CMDL"        && VERBOSITY="$VERBOSITY_CMDL"
+    test -n "$XSLTPROCESSOR_CMDL"    && XSLTPROCESSOR="$XSLTPROCESSOR_CMDL"
 }
 
 # ---------
@@ -1025,7 +926,7 @@ export POSIXLY_CORRECT=1
 # Therefore we need to save each variable twice in order to recover the
 # original value.
 
-ARGS=$(getopt -o d:e:hm:v:: -l adocattr:,adocimgdir:,adocset,builddir:,config:,color:,colour:,commands,debug,docconfig:,dapsroot:,envfile:,fb_styleroot:,force,help,jobs:,main:,schema:,styleroot:,verbosity::,version,xsltprocessor: -n "$ME" -- "$@")
+ARGS=$(getopt -o d:e:hm:v:: -l adocattr:,adocset,builddir:,config:,color:,colour:,commands,debug,docconfig:,dapsroot:,envfile:,fb_styleroot:,force,help,imgsrcdir:,jobs:,main:,schema:,srcdir:,styleroot:,verbosity::,version,xsltprocessor: -n "$ME" -- "$@")
 
 # Exit when getopt returns errors
 #
@@ -1038,13 +939,6 @@ while true ; do
     case "$1" in
         --adocattr)
             ADOC_ATTRIBUTES_CMDL="$ADOC_ATTRIBUTES_CMDL --attribute=\"$2\""
-            shift 2
-            ;;
-        --adocimgdir)
-            [[ -d $2 ]] || exit_on_error "ADOC_IMG_DIR \"$2\" is not a valid directory"
-            # make path absolute and strip trailing slash
-            sanitize_path "$2" "ADOC_IMG_DIR_CMDL"
-            ADOC_IMG_DIR="$ADOC_IMG_DIR_CMDL"
             shift 2
             ;;
         --adocset)
@@ -1080,16 +974,13 @@ while true ; do
             ;;
         -d|--docconfig|-e|--envfile)
             # make path absolute and strip trailing slash
-            sanitize_path "$2" "DOCCONF_CMDL"
-            DOCCONF="$DOCCONF_CMDL"
+            sanitize_path "$2" "DOCCONF"
             shift 2
             ;;
         --dapsroot)
             [[ -d $2 ]] || exit_on_error "DAPSROOT \"$2\" is not a valid directory"
             # make path absolute and strip trailing slash
-            sanitize_path "$2" "DAPSROOT_CMDL"
-            DAPSROOT="$DAPSROOT_CMDL"
-#           DEVEL=1
+            sanitize_path "$2" "DAPSROOT"
             shift 2
             ;;
         --debug)
@@ -1127,6 +1018,13 @@ while true ; do
                 CALL_SCMDHELP=1
             fi
             ;;
+        --imgsrcdir)
+            [[ -d $2 ]] || exit_on_error "IMG_SRC_DIR \"$2\" is not a valid directory"
+            # strip trailing slash (if any)
+            IMG_SRC_DIR_CMDL=${2%/}
+            IMG_SRC_DIR="$IMG_SRC_DIR_CMDL"
+            shift 2
+            ;;
         --jobs)
             if [[ $2 =~ ^[0-9][0-9]*$ ]]; then
                 JOBS="$2"
@@ -1144,6 +1042,13 @@ while true ; do
         --schema)
             DOCBOOK5_RNG_URI_CMDL="$2"
             DOCBOOK5_RNG_URI="$DOCBOOK5_RNG_URI_CMDL"
+            shift 2
+            ;;
+        --srcdir)
+            [[ -d $2 ]] || exit_on_error "SRC_DIR \"$2\" is not a valid directory"
+            # strip trailing slash (if any)
+            SRC_DIR_CMDL=${2%/}
+            SRC_DIR="$SRC_DIR_CMDL"
             shift 2
             ;;
         --styleroot)
@@ -1188,11 +1093,16 @@ while true ; do
         *) exit_on_error "Internal error!" ;;
     esac
 done
+#-----------------------------------
+# Perform first checks
+#
 
 # You can only specify DOCCONF or MAIN, not both
+# Also --main must not have --srcdir
 #
-if [[ -n "$DOCCONF_CMDL" && -n "$MAIN_CMDL" ]]; then
-    exit_on_error "The options -d/--docconfig and --main exclude each other."
+if [[ -n "$MAIN_CMDL" ]]; then
+    [[ -n "$DOCCONF" ]] && exit_on_error "The options -d/--docconfig and --main exclude each other."
+    [[ -n "$SRC_DIR_CMDL" ]] && exit_on_error "The options --main and --srcdir exclude each other."
 fi
 
 # Check FALLBACK_STYLEROOT and STYLEROOT
@@ -1207,11 +1117,11 @@ unset POSIXLY_CORRECT # we want the regular getopts behaviour on the second run
 
 #-----------------------------------
 # Store the subcommand and it's args
-
+#
 # extract the subcommand from $@ if $ME has been called with no arguments
 # or with "help" as the only argument, run global help. If it was called with
-# SUBCOMMAND help or help SUBCOMMAND, rewrite the command so the subcommand help
-# is displayed.
+# SUBCOMMAND help or help SUBCOMMAND, rewrite the command so the subcommand
+# help is displayed.
 
 if [[ -z "$1" ]] || [[ help = "$1" && -z "$2" ]]; then
     # Call: "$ME" or "$ME help"
@@ -1247,78 +1157,84 @@ else
     declare -a SCMD_ARGS=( "$@" )
 
 fi
-
-# Now that we have the subcommand, check whether it is valid
+#-----------------------------------
+# Check whether subcommand it is valid
 #
 if [[ -z ${SUBCOMMANDS[$SUBCMD]} ]]; then
     exit_on_error "Unknown subcommand \"$SUBCMD\"\nType '$ME help' to get a list of global parameters and subcommands"
 fi
 
+#-----------------------------------
+# Check whether command line tries to set "forbidden" variables
+#
 # Now check, whether subcommand help has been requested by -h or --help
 # anywhere in the argument string or if SCMD_ARGS contains bad strings
 #
 case "${SCMD_ARGS[@]}" in
-    "-h"|"-h "*|*" -h "*|*" -h"|"--help"|"--help "*|*" --help "*|*" --help")
-        declare -a SCMD_ARGS=( "-h" )
-        ;;
+#    "-h"|"-h "*|*" -h "*|*" -h"|"--help"|"--help "*|*" --help "*|*" --help")
+#        declare -a SCMD_ARGS=( "-h" )
+#        ;;
     *DOCCONF*|*DAPSROOT*|*PRJ_DIR*|*MAIN*)
         if [[ showvariable != $SUBCMD ]]; then
             exit_on_error "Please specify PRJ_DIR, DOCCONF, MAIN, or DAPSROOT via command line options"
         fi
 esac
 
+#----------------------
+# Compatibility check
+# User config has moved some time ago, make sure old one is not used anymore
+#
+if [[ -f $USER_CONFIG_OLD && ! -f $USER_CONFIG ]]; then
+        exit_on_error "The DAPS user configuration file has moved from\n~/.daps/config to ~/.config/daps/dapsrc\nPlease move or delete $USER_CONFIG_OLD"
+fi
 
 # ----------------------------------------------------------------------------
-# Setting up the environment for the complete mechanics
-#
-# The environment is set up using the following hierarchy
-# (1 == always wins)
-#
-# 1. Command line
-#    - either as a real option
-#    - or as variable declaration (FOO=bar) --> debugging and developing
-# 2. DC-file
-# 3. $USER_CONFIG (user config file)
-# 4. @sysconfig@/daps/config or $DAPSROOT/etc/config
+# Setting up the environment with DAPSROOT
 #
 # In order to make developing easier, there is a hidden feature to set
 # DAPSROOT, allowing to have multiple daps versions installed into
 # different directories. You can switch between them by setting DAPSROOT
 # accordingly. Either by command line switch --dapsroot or in  your user
-# config file (DAPSROOT="<path>")
+# config file (DAPSROOT="<path>") or in a config file specified by --config
 #
 # Since command line values take precedence we need to recover them every
 # time we source a file
 #
+# If DAPSROOT is already set, we do not need to do anything here
+# If not, check whether DAPSROOT is specified in one of the configs
+# otherwise use the default DAPSROOT_DEFAULT
 
+#----------------------
 # Set the config file that will get parsed:
 #
+# DAPS_CONFIG_FILE comes via --config
 if [[ -n $DAPS_CONFIG_FILE ]]; then
     CONF_TO_PARSE="$DAPS_CONFIG_FILE"
+# User Config
 elif [[ -f $USER_CONFIG ]]; then
     CONF_TO_PARSE="$USER_CONFIG"
 fi
 
+#----------------------
+# parse the user/specified config to get DAPSROOT
 #
-# source the user config for the first time to get DAPSROOT
+# only if DAPSROOT has not been specified on the command line
+# _and_ a config file has been specified/exists
+# Preserve command line values afterwards
 #
-
-# Removing the Code to move an old user config and replace it with an error
-if [[ -f $USER_CONFIG_OLD && ! -f $USER_CONFIG ]]; then
-        exit_on_error "The DAPS user configuration file has moved from\n~/.daps/config to ~/.config/daps/dapsrc\nPlease move or delete $USER_CONFIG_OLD"
-fi
-
-# Set DAPSROOT via user config file
-if [[ -s $CONF_TO_PARSE && -z "$DAPSROOT_CMDL" ]]; then
+if [[ -z "$DAPSROOT" && -s $CONF_TO_PARSE ]]; then
     parse_config "$CONF_TO_PARSE"
     # make DAPSROOT path absolute and remove trailing /
     [[ -n "$DAPSROOT" ]] && sanitize_path "$DAPSROOT" "DAPSROOT"
     recover_cmdl_values
 fi
 
-# IF we have a custom DAPSROOT, $DAPSROOT is set by now - if not, use the default
+#----------------------
+# Set up environment
+#
+# We have a custom DAPSROOT
 if [[ -n "$DAPSROOT" ]]; then
-    # custom DAPSROOT was set
+    # check if valid
     if [[ ! -d "$DAPSROOT" ]]; then
         exit_on_error exit_on_error "DAPSROOT \"$2\" is not a valid directory"
     else
@@ -1350,15 +1266,33 @@ fi
 #
 XSLTPROC=${LIBEXEC_DIR}/daps-xslt
 
-
-# ---------------------------------------------
+# ----------------------------------------------------------------------------
 # Source functions and parse system config
+#
+# The environment is set up using the following hierarchy
+# (1 == always wins)
+#
+# 1. Command line
+#    - either as a real option
+#    - or as variable declaration (FOO=bar) --> debugging and developing
+# 2. DC-file
+# 3. $USER_CONFIG (user config file)
+# 4. @sysconfig@/daps/config or $DAPSROOT/etc/config
 #
 # Now that everything is in place, source the functions, parse the system
 # config and the user config (again)
+
+#----------------------
+# Get the DAPS functions from DAPSROOT/lib
+#
 source "$LIB_DIR/daps_functions"
+
+#----------------------
+# Parse the system config from DAPSROOT/etc
+#
 parse_config "$CONFIG"
 
+#----------------------
 # Parse user config
 #
 if [[ -s $CONF_TO_PARSE ]]; then
@@ -1366,12 +1300,17 @@ if [[ -s $CONF_TO_PARSE ]]; then
     # make DAPSROOT path absolute and remove trailing / (again)
     [[ -n "$DAPSROOT" ]] && sanitize_path "$DAPSROOT" "DAPSROOT"
 fi
+
+#----------------------
+# Preserve command line values
+#
 recover_cmdl_values
 
-#----------------------------------
-# Run early commands that do not need to have an environment fully set up
 
-#
+# ----------------------------------------------------------------------------
+# Run early commands that do not need a DC-file or MAIN
+
+#----------------------
 # run help if requested
 #
 if [[ "${SCMD_ARGS[@]}" = "-h" ]]; then
@@ -1382,6 +1321,7 @@ if [[ "${SCMD_ARGS[@]}" = "-h" ]]; then
     exit 0
 fi
 
+#----------------------
 # Sample call for early commands
 #
 #case "$SUBCMD" in
@@ -1391,127 +1331,174 @@ fi
 #      ;;
 #esac
 
-#-------------------------------------
-# Parse DOCCONF and set up MAIN, PRJ_DIR
-#
-# Three possibilities:
-# 1. MAIN was set on the command line or via user config
-# 2. DOCCONF was set on the command line
-# 3. MAIN and DOCCONF were _not_ set
-#
-# Use MAIN_CMDL and DOCCONF_CMDL in the following in order to avoid that
-# these get overwritten by chance with values from the DOCCONF files
-# (DOCCONF should never be set in a DC file and MAIN_CMDL should always
-# overwrite a MAIN setting from DOCCONF)
-# The real values will be set when calling recover_cmdl_values
+#----------------------------------------------------------------------------
+# Late check
+# Has a DOCCONF or MAIN been specified? One of them is required
 
-# set DOCCONF_CMDL if DC-file was parsed
-[[ -n "$DOCCONF" && -z "$DOCCONF_CMDL" ]] && DOCCONF_CMDL=$DOCCONF
-
-if [[ -z "$DOCCONF_CMDL" && -z "$MAIN_CMDL" ]]; then
-# DOCCONF and MAIN were not set on the command line, check other possibilities
-    if [[ -n "$DOCCONF_DEFAULT" ]]; then
-    # check if a default value was specified in the user/system config file
-        if [[ -e $DOCCONF_DEFAULT ]]; then
-            sanitize_path "$DOCCONF_DEFAULT" "DOCCONF_CMDL"
-            PRJ_DIR=$(dirname "$DOCCONF_CMDL")
-            if [[ 2 -le $VERBOSITY ]]; then
-                echo "Using DOCCONF $DOCCONF_DEFAULT from config files"
-            fi
-        else
-            exit_on_error "DOCCONF_DEFAULT \"$DOCCONF_DEFAULT\" not found in current directory.\nCheck your config file(s)."
-        fi
-    else
-    # try to automatically set DOCCONF
-        autoset_docconf
-    fi
-elif [[ -n "$MAIN_CMDL" ]]; then
-    # MAIN was set on the command line or in the user config
-
-    # if MAIN was set on the command line, we are good, path was already
-    # checked
-    # Checking path in case that a wrong path was specified by the user config
-    [[ -e "$MAIN_CMDL" ]] || exit_on_error "MAIN \"$MAIN_CMDL\" that was specified in the config file does not exist"
-
-    # get the source format (XML/ADOC) from MAIN
-    SRC_FORMAT=${MAIN_CMDL##*.}
-    # Set a PRJ_DIR
-    PRJ_DIR=$(readlink -en "$(dirname "$MAIN_CMDL")")
-    PRJ_DIR=${PRJ_DIR%*/$SRC_FORMAT}
-elif [[ -n "$DOCCONF_CMDL" ]]; then
-    # check if DOCCONF is a regular file
-    if [[ -e $DOCCONF_CMDL ]]; then
-        sanitize_path "$DOCCONF_CMDL" "DOCCONF_CMDL"
-        PRJ_DIR=$(dirname "$DOCCONF_CMDL")
-    else
-        exit_on_error "The file \"$DOCCONF\" you specified with --docconf is not a valid file"
-    fi
+if [[ -z $DOCCONF && -z $MAIN_CMDL ]]; then
+    exit_on_error "You either need to specify a DC-file or a MAIN file"
 fi
 
+#----------------------------------------------------------------------------
+# Set up the environment
 #
-# Checking MAIN_CMDL, DOCCONF_CMDL, PRJ_DIR and DAPSROOT
+# If exist, parse DOCCONF and set up MAIN, PRJ_DIR
+# otherwise try to set up PRJ_DIR from MAIN
 #
-[[ -z "$DOCCONF_CMDL" && -z "$MAIN_CMDL" ]] && exit_on_error "Fatal: Neither \$DOCCONF nor $MAIN are set. This should not have happened. Please report a bug."
-[[ -z "$PRJ_DIR" ]] && exit_on_error "Fatal: \$PRJ_DIR is not set. This should not have happened. Please report a bug."
-[[ -z "$DAPSROOT" ]] && exit_on_error "Fatal: \$DAPSROOT is not set. This should not have happened. Please report a bug."
+# If DOCCONF has been set:
+#  * DOCCONF needs to reside in PRJ_DIR
+#  * DOCCONF needs to have a value for MAIN
+#
+# If MAIN_CMDL has been set
+#  * SRC_DIR is dirname $MAIN_CMDL
+#  * PRJ_DIR is assumed to be dirname $SRC_DIR
+#  * If IMG_SRC_DIR is specified, ${PRJ_DIR}/$IMG_SRC_DIR needs to exist
 
-# FINALLY! Parse the DOCCONF file, recover the command line values
-[[ -n "$DOCCONF_CMDL" ]] && parse_config "$DOCCONF_CMDL"
+#----------------------
+# MAIN_CMDL was set
+if [[ -n "$MAIN_CMDL" ]]; then
+    SRC_DIR="$(dirname $MAIN_CMDL)"
+    PRJ_DIR="$(dirname $SRC_DIR)"
+    SRC_FORMAT="${MAIN##*.}"
+    # Validate SRC_FORMAT - needs to be xml or adoc
+    [[ "adoc" = "$SRC_FORMAT" || "xml" = "$SRC_FORMAT" ]] || exit_on_error "$MAIN is an unsupported file type (.$SRC_FORMAT)\nmust be AsciiDoc (.adoc) or DocBook (.xml)"
+fi
 
-# Check if a MAIN has been set
-[[ -z "$MAIN" && -z "$MAIN_CMDL" ]] &&  exit_on_error "Fatal: No MAIN file has been set. Please specify one via command line or config file"
-
-# get the source format (XML/ADOC) from MAIN if not set, yet
-[[ -z $SRC_FORMAT ]] && SRC_FORMAT=${MAIN##*.}
-
-# Validate SRC_FORMAT - needs to be xml or adoc
-[[ "adoc" = "$SRC_FORMAT" || "xml" = "$SRC_FORMAT" ]] || exit_on_error "$MAIN is an unsupported file type (.$SRC_FORMAT)\nmust be AsciiDoc (.adoc) or DocBook (.xml)"
-
-# Set SRC_DIR if necessary
-if [[ -z $SRC_DIR ]]; then
-    # SRC_DIR has not been set by config file, set xml or adoc as default
-    if [[ -d "${PRJ_DIR}/${SRC_FORMAT}" ]]; then
-        SRC_DIR="${PRJ_DIR}/${SRC_FORMAT}"
-    else
-        exit_on_error "Cannot find a directory holding the sources. Either specify a directory\nin the config or DC-file with SRC_DIR or provide the sources in the default\ndirectories: \"xml/\" for DocBook or \"adoc/\" for ASCIIDoc."
-    fi
-else
-    # SRC_DIR was set by config file
+#----------------------
+# DOCCONF was set
+if [[ -n "$DOCCONF" ]]; then
+    # DC-files need to reside in the PRJ_DIR
+    # set PRJ_DIR
+    PRJ_DIR="$(dirname $DOCCONF)"
+    sanitize_path "$PRJ_DIR" "PRJ_DIR"
+    # Parse the DC-file
+    parse_config "$DOCCONF"
+    # Preserve command line values
+    recover_cmdl_values
     #
-    # no absolute paths allowed
-    if [[ "$SRC_DIR" =~ ^/ ]]; then
-        exit_on_error "SRC_DIR was specified with an absolute path. Please use a path relative to the project directory."
-    # no path outside of PRJ_DIR allowed
-    elif [[ "$SRC_DIR" =~ ^\.\./ ]]; then
-        exit_on_error "The SRC_DIR does not reside in the project directory ($PRJ_DIR), this is not supported."
-    elif [[ ! -d "${PRJ_DIR}/${SRC_DIR}" ]]; then
-        exit_on_error "SRC_DIR points to a non-existing directory (${PRJ_DIR}/${SRC_DIR})."
+    # Checks
+    #
+    # DC-file needs at least a value for MAIN
+    [[ -z "$MAIN" ]] &&  exit_on_error "Fatal: No MAIN file has been set. Please specify one via command line\nor config file"
+    [[ "$MAIN" =~ ^/ ]] && exit_on_error "Fatal: MAIN was specified with an absolute path. Please use a path relative\nto the project directory ($PRJ_DIR)."
+    [[ "$MAIN" =~ ^\.\./ ]] && exit_on_error "MAIN does not reside in the project directory ($PRJ_DIR), this is\nnot supported."
+    if [[ -n "$SRC_DIR" ]]; then
+        [[ "$SRC_DIR" =~ ^/ ]] && exit_on_error "SRC_DIR was specified with an absolute path. Please use a path relative to\nthe project directory ($PRJ_DIR)."
+        [[ "$SRC_DIR" =~ ^\.\./ ]] && exit_on_error "
+The SRC_DIR does not reside in the project directory ($PRJ_DIR), this is\nnot supported."
+    fi
+    #
+    # Now set MAIN and SRC_DIR
+    #
+    SRC_FORMAT="${MAIN##*.}"
+    # Validate SRC_FORMAT - needs to be xml or adoc
+    [[ "adoc" = "$SRC_FORMAT" || "xml" = "$SRC_FORMAT" ]] || exit_on_error "$MAIN is an unsupported file type (.$SRC_FORMAT)\nmust be AsciiDoc (.adoc) or DocBook (.xml)"
+    # MAIN exists
+    if [[ -e "${PRJ_DIR}/$MAIN" ]]; then
+        # check if SRC_DIR matches MAIN
+        if [[ -n $SRC_DIR ]]; then
+            [[ "$(dirname $MAIN)" != "$SRC_DIR" ]] && exit_on_error "MAIN ($MAIN) and SRC_DIR ($SRC_DIR) point to different directories.\nMAIN needs to reside in SRC_DIR."
+            # MAIN and SRC_DIR are OK
+            SRC_DIR="${PRJ_DIR}/$SRC_DIR"
+        else
+            SRC_DIR="${PRJ_DIR}/$(dirname $MAIN)"
+        fi
+        MAIN="${PRJ_DIR}/$MAIN"
     else
-        SRC_DIR="${PRJ_DIR}/${SRC_DIR}"
+        # Do we have SRC_DIR?
+        if [[ -n $SRC_DIR ]]; then
+            if [[ -e "${PRJ_DIR}/${SRC_DIR}/$MAIN" ]]; then
+                MAIN="${PRJ_DIR}/${SRC_DIR}/$MAIN"
+                SRC_DIR="${PRJ_DIR}/${SRC_DIR}"
+            else
+                exit_on_error "MAIN ($MAIN) cannot be found in SRC_DIR ($SRC_DIR).\nPlease check $DOCCONF"
+            fi
+        # Check for defaults (xml/MAIN, adoc/MAIN)
+        elif [[ -e "${PRJ_DIR}/${SRC_FORMAT}/$MAIN" ]]; then
+            MAIN="${PRJ_DIR}/${SRC_FORMAT}/$MAIN"
+            if [[ -n "$SRC_DIR" ]]; then
+                [[ "$(dirname $MAIN)" != "$SRC_DIR" ]] && exit_on_error "MAIN ($MAIN) and SRC_DIR ($SRC_DIR) point to different directories.\nMAIN needs to reside in SRC_DIR."
+            fi
+            # SRC_DIR is OK
+            SRC_DIR="${PRJ_DIR}/${SRC_FORMAT}"
+        # no working MAIN, no SRC_DIR => error
+        else
+            exit_on_error "MAIN ($MAIN) does not exist or cannot be found. Either specify a path relativ\nto PRJ_DIR or set SRC_DIR in $DOCCONF"
+        fi
     fi
 fi
 
-# Set MAIN if necessary
-if [[ -z "$MAIN_CMDL" ]]; then
-    # MAIN was provided without any path
-    if [[ -e "${SRC_DIR}/$MAIN" ]]; then
-        MAIN="${SRC_DIR}/$MAIN"
-    # MAIN was provided with a relative path
-    elif [[ -e "${PRJ_DIR}/$MAIN" ]]; then
-        MAIN="${PRJ_DIR}/$MAIN"
-    # MAIN was provided with an absolute path
-    elif [[ "$MAIN" =~ ^/ ]]; then
-        exit_on_error "MAIN was specified with an absolute path. Please use a path relative to the project directory."
-    # no path outside of PRJ_DIR allowed
-    elif [[ "$MAIN" =~ ^\.\./ ]]; then
-        exit_on_error "MAIN does not reside in the project directory ($PRJ_DIR), this is not supported."
-    else
-        exit_on_error "$MAIN does not exist or does not reside in $PRJ_DIR, please check your config"
+#----------------------
+# Validate IMG_SRC_DIR
+#
+if [[ -n "$IMG_SRC_DIR" ]]; then
+    [[ -d "${PRJ_DIR}/$IMG_SRC_DIR" ]] || exit_on_error "Fatal: The IMG_SRC_DIR needs to be relative to $PRJ_DIR"
+    IMG_SRC_DIR="${PRJ_DIR}/$IMG_SRC_DIR"
+fi
+
+#----------------------
+# Set and create BUILD_DIR in case it has not been set on the command line or DC file
+#
+[[ -z "$BUILD_DIR" ]] && BUILD_DIR=${PRJ_DIR}/build
+mkdir -p "$BUILD_DIR"
+
+#----------------------
+# Set BOOK
+#
+# Backwards compatability:
+# In DAPS 3.1 PDFNAME was replaced by OUTPUTNAME. Use the following code
+# to stay backwards compatible
+
+[[ -n "$PDFNAME" && -z "$OUTPUTNAME" ]] && OUTPUTNAME="$PDFNAME"
+
+if [[ -n "$OUTPUTNAME" ]]; then
+    BOOK="$OUTPUTNAME"
+else
+    if [[ -n "$DOCCONF" ]]; then
+        DC_FILE=$(basename "$DOCCONF")
+        export BOOK="${DC_FILE#${CONF_PREFIX}*}"
+    elif [[ -n "$MAIN_CMDL" ]]; then
+        # --main was specified, BOOK is set to basenme of MAIN
+        BOOK="$(basename "$MAIN" .${SRC_FORMAT})"
+    fi
+fi
+
+#----------------------
+# XML_CATALOG_FILES
+#
+# XML_MAIN_CATALOG is set via config. If it differs from the system setting for
+# XML_CATALOG_FILES, add it to XML_CATALOG_FILES (in first place)
+#
+# Next, check if XML_DEVEL_CATALOG is set. If so, add it to XML_CATALOG_FILES
+# (in first place). XML_DEVEL_CATALOG is automatically set by this script when
+# working from a Git clone
+#
+if [[ -n "$XML_CATALOG_FILES" ]]; then
+    if [[ $XML_CATALOG_FILES != $XML_MAIN_CATALOG ]]; then
+        XML_CATALOG_FILES="$XML_CATALOG_FILES $XML_MAIN_CATALOG"
     fi
 else
-    MAIN="$MAIN_CMDL"
+    XML_CATALOG_FILES="$XML_MAIN_CATALOG"
 fi
 
+[[ -n "$XML_USER_CATALOGS" ]] &&  XML_CATALOG_FILES="$XML_USER_CATALOGS $XML_CATALOG_FILES"
+[[ -n "$XML_DEVEL_CATALOG" ]] &&  XML_CATALOG_FILES="$XML_DEVEL_CATALOG $XML_CATALOG_FILES"
+
+#----------------------
+# Result directory / LOG directory
+#
+RESULT_DIR="${BUILD_DIR}/${BOOK}"
+LOG_DIR="${RESULT_DIR}/log"
+
+
+# ----------------------------------------------------------------------------
+# Check all paths from the $PATHLIST array with PRJ_DIR as base dir
+#
+check_pathlist "$PRJ_DIR"
+
+# ----------------------------------------------------------------------------
+# Adjust wrapper scripts if necessary
+#
 # FOP/XEP/ASCIIDOC CONFIG AND WRAPPER / JING WRAPPER
 # when using a Git checkout, @sysconfdir@ and @pkgdatadir@ have not been
 # replaced
@@ -1533,74 +1520,7 @@ XEP_WRAPPER=${XEP_WRAPPER/#@pkgdatadir\@/${DAPSROOT}}
 
 XMLFORMAT_CONFIG_FILE=${XMLFORMAT_CONFIG_FILE/#@sysconfdir\@\/daps/${DAPSROOT}/etc}
 
-#
-# Now that we are set, recover the command line values one last time and
-# check all paths
-#
-recover_cmdl_values
-check_pathlist "$PRJ_DIR"
-
-#----------
-# Values that need to be exported and are not set in the config
-#
-
-# book name
-
-# Backwards compatability:
-# In DAPS 3.1 PDFNAME was replaced by OUTPUTNAME. Use the following code
-# to stay backwards compatible
-
-if [[ -n "$PDFNAME" && -z "$OUTPUTNAME" ]]; then
-    OUTPUTNAME="$PDFNAME"
-fi
-
-if [[ -n "$OUTPUTNAME" ]]; then
-    export BOOK="$OUTPUTNAME"
-else
-    if [[ -n "$DOCCONF" ]]; then
-        DC_FILE=$(basename "$DOCCONF")
-        export BOOK="${DC_FILE#${CONF_PREFIX}*}"
-    elif [[ -n "$MAIN_CMDL" ]]; then
-        # --main was specified, BOOK is set to basenme of MAIN
-        BOOK="$(basename "$MAIN" .${SRC_FORMAT})"
-        export BOOK
-    fi
-fi
-
-# XML_CATALOG_FILES
-#
-# XML_MAIN_CATALOG is set via config. If it differs from the system setting for
-# XML_CATALOG_FILES, add it to XML_CATALOG_FILES (in first place)
-#
-# Next, check if XML_DEVEL_CATALOG is set. If so, add it to XML_CATALOG_FILES
-# (in first place). XML_DEVEL_CATALOG is automatically set by this script when
-# working from a Git clone
-#
-if [[ -n "$XML_CATALOG_FILES" ]]; then
-    if [[ $XML_CATALOG_FILES != $XML_MAIN_CATALOG ]]; then
-        XML_CATALOG_FILES="$XML_CATALOG_FILES $XML_MAIN_CATALOG"
-    fi
-else
-    XML_CATALOG_FILES="$XML_MAIN_CATALOG"
-fi
-if [[ -n "$XML_USER_CATALOGS" ]]; then
-    XML_CATALOG_FILES="$XML_USER_CATALOGS $XML_CATALOG_FILES"
-fi
-if [[ -n "$XML_DEVEL_CATALOG" ]]; then
-    XML_CATALOG_FILES="$XML_DEVEL_CATALOG $XML_CATALOG_FILES"
-fi
-export XML_CATALOG_FILES
-
 # ----------------------------------------------------------------------------
-# Set paths
-#
-# set all basic paths that have not been set by now
-
-#----------------------------------
-# default BUILD_DIR if not specified elsewhere
-[[ -z "$BUILD_DIR" ]] && BUILD_DIR=${PRJ_DIR}/build
-
-#----------------------------------
 # DocBook Stylesheet and Schema locations (from system or user config file)
 # These stylesheets are used as a fallback and/or when no STYLEROOT is
 # specified on the command line or the DC file
@@ -1687,10 +1607,8 @@ fi
 
 # remove the file:// or file: (Debian, Tumbleweed) string from the styles
 # use ##*file:// rather than #file:// because sometimes xmlcatalog also outputs
-# warnings to stdout which we would like to ignore. Fortunately, the file:// URL
-# is always the last string
-#
-# Is there a better way to do this with shell built-ins?
+# warnings to stdout which we would like to ignore.
+# Fortunately, file:// URL is always the last string
 #
 DOCBOOK_STYLES=${DOCBOOK_STYLES##*file:}
 DOCBOOK_STYLES=${DOCBOOK_STYLES#*//}
@@ -1710,17 +1628,12 @@ DOCBOOK_STYLES=${DOCBOOK_STYLES%/}
 # PROFCONDITION=foobar is directly passed on to make and therefore is
 # not known here
 
-#----------------------------------
-# Result directory / LOG directory
-#
-R_DIR="${BUILD_DIR}/${BOOK}"
-LOG_DIR="${R_DIR}/log"
 
-#-------------------------------------------------------------------
+# ----------------------------------------------------------------------------
 # Now export all variables set by the config file
 export "${VARLIST[@]}"
 
-#-------------------------------------------------------------------
+# ----------------------------------------------------------------------------
 # Create a temporary file for SETFILES (setfiles.mk)
 # this needs to be done here, otherwise it is impossible to
 # delete the file after the script has run
@@ -1728,7 +1641,7 @@ export "${VARLIST[@]}"
 SETFILES_TMP=$(mktemp -q --tmpdir daps_setfiles.XXXXXXXX 2>/dev/null) || exit_on_error "Could not write temporary SETFILES file."
 export SETFILES_TMP
 
-#-------------------------------------------------------------------
+# ----------------------------------------------------------------------------
 # Create XML from AsciiDoc
 #
 if [[ "adoc" = "$SRC_FORMAT" ]]; then
@@ -1748,7 +1661,7 @@ if [[ "adoc" = "$SRC_FORMAT" ]]; then
 
 fi
 
-#-------------------------------------------------------------------
+# ----------------------------------------------------------------------------
 # Check whether the document is _well-formed_ (but not whether they
 # it is valid). If it is not, exit and display an error message.
 # Works for both DocBook 4 and DocBook 5, as we are only checking for
@@ -1768,7 +1681,7 @@ if [[ 0 -ne $? ]]; then
     fi
 fi
 
-#-------------------------------------------------------------------
+# ----------------------------------------------------------------------------
 # Finally, run the Subcommands
 #
 

@@ -100,11 +100,7 @@ profile: $(PROFILES)
 # linking the entity files is not needed when profiling, because the
 # entities are already resolved
 #
-ifeq "$(strip $(SRC_FORMAT))" "xml"
-  $(PROFILEDIR)/%.xml: $(SRC_DIR)/%.xml $(ENTITIES_DOC) $(DOCCONF) | $(PROFILEDIR)
-else
-  $(PROFILEDIR)/%.xml: $(ADOC_RESULT_DIR)/%.xml $(ENTITIES_DOC) $(DOCCONF) | $(PROFILEDIR)
-endif
+$(PROFILEDIR)/%.xml: $(SRC_DIR)/%.xml $(ENTITIES_DOC) $(DOCCONF) | $(PROFILEDIR)
     ifeq "$(VERBOSITY)" "2"
 	@(tput el1; echo -en "\r   Profiling $<")
     endif
