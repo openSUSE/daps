@@ -395,11 +395,15 @@ endif
 # Stylesheets do)
 #
 
-XMLLANG ?= $(shell $(XSLTPROC) --stylesheet $(STYLELANG) --file $(MAIN) $(XSLTPROCESSOR) | tr - _ 2>/dev/null)
-
-ifneq "$(strip $(XMLLANG))" ""
-  LL ?= $(shell tr '[:upper:]' '[:lower:]' <<< $(XMLLANG) 2>/dev/null)
-  LANGSTRING   := _$(XMLLANG)
+ifeq "$(strip $(IS_ASSEMBLY))" "assembly"
+  LL         ?= $(ASSEMBLY_LANG)
+  LANGSTRING := _$(ASSEMBLY_LANG)
+else
+  XMLLANG ?= $(shell $(XSLTPROC) --stylesheet $(STYLELANG) --file $(MAIN) $(XSLTPROCESSOR) | tr - _ 2>/dev/null)
+  ifneq "$(strip $(XMLLANG))" ""
+    LL ?= $(shell tr '[:upper:]' '[:lower:]' <<< $(XMLLANG) 2>/dev/null)
+    LANGSTRING   := _$(XMLLANG)
+  endif
 endif
 
 #-----

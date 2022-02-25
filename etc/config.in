@@ -171,6 +171,20 @@ ADOC_SET_STYLE="@pkgdatadir@/daps-xslt/asciidoc/setify.xsl"
 #
 ADOC_TYPE="article"
 
+## Key: ASSEMBLY_LANG
+## --------------------
+## Description: Language of a DocBook assembly file
+## Type:        language code, lowercase, either e.g. en or en_us
+## Default:     en
+#
+# NOTE: The DocBook Stylesehets (5.2 beta) creating a bigfile from an
+#       assembly have a bug and do not transfer the xml:lang attribute
+#       to the bigfile. Use this value to specify the language in a DC-file.
+#       By default "en" is assumed.
+#       This will be removed once the DocBook stylesheets are fixed
+#
+ASSEMBLY_LANG="en"
+
 ## Key:         BUILD_DIR
 ## ----------------------
 ## Description: Build directory where all daps generated files will go
