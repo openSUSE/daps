@@ -2,24 +2,24 @@
 <!--
    Purpose:
      Extract language from @lang or @xml:lang attributes
-     
+
    Parameters:
      * allowed.roots (string)
        String of allowed root elements, separated by spaces.
        Use the local name (without any namespace prefixes).
-       
+
    Input:
      DocBook 4 or DocBook 5 documents with book, article, or
      chapter as root element.
-     
+
    Output:
      String of the found language
-      If the root element is not equal to book or book doesn't 
+      If the root element is not equal to book or book doesn't
       contain a lang attribute, it will print an error.
-   
+
    Author:    Thomas Schraitle <toms@opensuse.org>
    Copyright (C) 2012-2020 SUSE Software Solutions Germany GmbH
-   
+
 -->
 <xsl:stylesheet version="1.0"
    xmlns:db="http://docbook.org/ns/docbook"
@@ -27,9 +27,9 @@
 
 <xsl:output method="text"/>
 
-<xsl:param name="allowed.roots">appendix article bibliography book chapter
- glossary glossdiv part preface qandaset reference refsect1 refsect2 refsect3
- refsection sect1 sect2 sect3 sect4 sect5 section set</xsl:param>
+<xsl:param name="allowed.roots">appendix article assembly bibliography book
+chapter glossary glossdiv part preface qandaset reference refsect1 refsect2
+refsect3 refsection sect1 sect2 sect3 sect4 sect5 section set</xsl:param>
 
 
 <xsl:template match="/">

@@ -56,6 +56,7 @@ VARLIST=(
     ADOC_SET_STYLE
     ADOC_TYPE
     ASCIIDOC
+    ASSEMBLY_LANG
     BOOK
     BUILD_DIR
     CB_OPTIONS
@@ -98,6 +99,7 @@ VARLIST=(
     IMG_SRC_DIR
     IMG_VIEWER
     INK_OPTIONS
+    IS_ASSEMBLY
     JING_JAVA_FLAGS
     JING_JAVA_JARS
     JING_JAVA_OPTIONS
@@ -1644,6 +1646,10 @@ DOCBOOK_STYLES=${DOCBOOK_STYLES%/}
 # PROFCONDITION=foobar is directly passed on to make and therefore is
 # not known here
 
+# ----------------------------------------------------------------------------
+# Check whether we have an assembly by checking the root element from MAIN
+#
+IS_ASSEMBLY=$(xml sel -t -v "local-name(/*)" $MAIN 2>/dev/null)
 
 # ----------------------------------------------------------------------------
 # Now export all variables set by the config file
@@ -1676,6 +1682,25 @@ if [[ "adoc" = "$SRC_FORMAT" ]]; then
     export SRC_DIR="$ADOC_RESULT_DIR"
 
 fi
+
+# ----------------------------------------------------------------------------
+# Create an XML bigfile from an assembly
+#
+if [[ "assembly" == "$IS_ASSEMBLY" ]]; then
+    ASSEMBLY_MAIN="$MAIN"
+    ASSEMBLY_RESULT_DIR="${BUILD_DIR}/.assembly"
+    MAIN="${ASSEMBLY_RESULT_DIR}/${BOOK}.xml"
+
+    export ASSEMBLY_MAIN ASSEMBLY_RESULT_DIR MAIN
+
+    [[ 2 -gt $VERBOSITY ]] && MOPTS="$MOPTS --silent"
+    # we always want to create a fresh bigfile
+    #
+    make $MOPTS --always-make -f $DAPSROOT/make/assembly2db.mk  || exit_on_error "\nConverting the assembly to DocBook caused a fatal error."
+    export SRC_DIR="$ASSEMBLY_RESULT_DIR"
+fi
+
+
 
 # ----------------------------------------------------------------------------
 # Check whether the document is _well-formed_ (but not whether they
