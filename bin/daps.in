@@ -528,6 +528,8 @@ Global Options:
   --srcdir=SRC_DIR          Specify a directory for the xml or adoc source
                             files. Must contain all respective source files
                             for the the project.
+                            It is not necessary to specify this option when
+                            using --main.
                             Default: $PRJ_DIR/xml or $PRJ_DIR/adoc, depending
                                      on the source format
   --styleroot=DIR           By default, daps uses the DocBook stylesheets to
@@ -1096,11 +1098,9 @@ done
 #
 
 # You can only specify DOCCONF or MAIN, not both
-# Also --main must not have --srcdir
 #
 if [[ -n "$MAIN_CMDL" ]]; then
     [[ -n "$DOCCONF" ]] && exit_on_error "The options -d/--docconfig and --main exclude each other."
-    [[ -n "$SRC_DIR_CMDL" ]] && exit_on_error "The options --main and --srcdir exclude each other."
 fi
 
 # Check FALLBACK_STYLEROOT and STYLEROOT
@@ -1355,6 +1355,9 @@ fi
 #----------------------
 # MAIN_CMDL was set
 if [[ -n "$MAIN_CMDL" ]]; then
+    if [[ -n "$SRC_DIR" ]]; then
+        [[ "$(dirname $MAIN)" != "$SRC_DIR" ]] && echo -e "Warning: MAIN ($MAIN) and SRC_DIR ($SRC_DIR) point to different directories.\nIgnoring value provided with --srcdir."
+    fi
     SRC_DIR="$(dirname $MAIN_CMDL)"
     PRJ_DIR="$(dirname $SRC_DIR)"
     SRC_FORMAT="${MAIN##*.}"
@@ -1429,9 +1432,22 @@ fi
 #----------------------
 # Validate IMG_SRC_DIR
 #
+
+# compatibility to older DAPS versions
+[[ -n "$ADOC_IMG_DIR" && -z "$IMG_SRC_DIR" ]] && IMG_SRC_DIR="$ADOC_IMG_DIR"
+
 if [[ -n "$IMG_SRC_DIR" ]]; then
-    [[ -d "${PRJ_DIR}/$IMG_SRC_DIR" ]] || exit_on_error "Fatal: The IMG_SRC_DIR needs to be relative to $PRJ_DIR"
-    IMG_SRC_DIR="${PRJ_DIR}/$IMG_SRC_DIR"
+    if [[ -d "${PRJ_DIR}/$IMG_SRC_DIR" ]]; then
+        IMG_SRC_DIR="${PRJ_DIR}/$IMG_SRC_DIR"
+    else
+        exit_on_error "Fatal: ${PRJ_DIR}/$IMG_SRC_DIR does not exist.\nThe IMG_SRC_DIR needs to be relative to $PRJ_DIR and needs to exist."
+    fi
+else
+    if [[ -d "${PRJ_DIR}/$IMG_SRC_DIR_DEFAULT" ]]; then
+        IMG_SRC_DIR="${PRJ_DIR}/$IMG_SRC_DIR_DEFAULT"
+    else
+        [[ $VERBOSITY -ge 2 ]] && echo "Ignoring IMG_SRC_DIR_DEFAULT ($IMG_SRC_DIR_DEFAULT) since it does not exist."
+    fi
 fi
 
 #----------------------
