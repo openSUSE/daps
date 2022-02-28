@@ -508,17 +508,28 @@ HTML_CSS=""
 #
 IMG_VIEWER=""
 
-## Key:         IMG_SRC_DIR
-## ----------------------
-## Description: Path to the directory that holds the image source files.
+## Key:         IMG_SRC_DIR_DEFAULT
+## --------------------------------
+## Description: Default path to the directory that holds the image source
+##              files.
 ## Type:        Relative path to directory (without a trailing slash),
-##              path needs to be relative to the project directory ($PRJ_DIR)
+##              Path needs to be relative to the project directory ($PRJ_DIR)
 ## Default:     images/src
 #
 #  If you want to change it on a book or project level, use the DC-file
-#  If you want to change it globally, change here
+#  and add a value for IMG_SRC_DIR. For a per build option us
+#  --imgsrcdir with daps
+#  If you want to change a global default change here
 #
-IMG_SRC_DIR="images/src"
+#  IMPORTANT:
+#  This value will only be taken into account
+#  * if IMG_SRC_DIR was not defined on the command line or a DC-file
+#    AND
+#  * if IMG_SRC_DIR was not set (see above)
+#    AND
+#  * the given directory exists (if not, will be ignored)
+# 
+IMG_SRC_DIR_DEFAULT="images/src"
 
 ## Key:         INK_OPTIONS
 ## ------------------------
