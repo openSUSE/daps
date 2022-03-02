@@ -693,15 +693,10 @@ function call_make {
         echo
 
         # Profiling
-        if [[ -z $PROFILE_URN ]]; then
-            printf "%${COLWIDTH}s: %s\n" "PROFILING" "Off"
-        else
-            printf "%${COLWIDTH}s: %s\n" "PROFILING" "On"
-            # show all profiling variables and their values
-            for PROFVAR in ${PROFVARIABLES[*]}; do
-                [[ -n ${!PROFVAR} ]] && printf "%${COLWIDTH}s: %s\n" "$PROFVAR" "${!PROFVAR}"
-            done
-        fi
+        # show all profiling variables and their values
+        for PROFVAR in ${PROFVARIABLES[*]}; do
+            [[ -n ${!PROFVAR} ]] && printf "%${COLWIDTH}s: %s\n" "$PROFVAR" "${!PROFVAR}"
+        done
 
         echo
 

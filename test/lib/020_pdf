@@ -203,6 +203,7 @@ function test_pdfGrayscaleCropmarks () {
     endSkipping
 
 }
+
 #--------------------------------
 # * Is the draft watermark image included when using the --draft option?
 # * Are remarks displayed when using the --remarks option?
@@ -244,16 +245,12 @@ function test_pdfRemarksDraftMeta () {
        "$?"
 
    # checking REMARKS
-   # --param "show.comments=1" needs to occur once for each XML file on
-   # profiling and another time when creating the fo-file
    #
-   _REMARK_COUNT_ACTUAL=$(grep -E -c -- "--param\s+\"show\.comments=1\"" $_LOGFILE)
-   let "_REMARK_COUNT_EXPECTED=${#_XML_FILES[@]} + 1"
-   assertEquals \
-       " └─ --param \"show.comments=1\" appears less often in the log file than expected" \
-       "$_REMARK_COUNT_EXPECTED" "$_REMARK_COUNT_ACTUAL"
-
-   expr "$_PDF_BUILD_PATH" : '.*\(_remarks\)' >/dev/null
+   grep -E -q -- "--param\s+\"show\.comments=1\"" $_LOGFILE 2>/dev/null
+   assertTrue \
+       " └─ Param for Remarks mode is not correctly specified when generating the FO-file" \
+       "$?"
+   expr "$_PDF_BUILD_PATH" : '.*\(_remarks\)' >/dev/null 2>&1
    assertTrue \
        ' └─ String "_remarks" does not appear in the PDF filename' \
        "$?"

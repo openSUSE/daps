@@ -89,6 +89,14 @@ VARLIST=(
     DESKTOPFILES
     DEVEL
     DIA_OPTIONS
+    DOCBOOK4_PROFILE_URN
+    DOCBOOK4_STYLE_URI
+    DOCBOOK5_PROFILE_URN
+    DOCBOOK5_RNG
+    DOCBOOK5_RNG_URI
+    DOCBOOK5_STYLE_URI
+    DOCBOOK_STYLES
+    DOCBOOK_VERSION
     DOCCONF
     DOCCONF_DEFAULT
     DOCUMENTFILES
@@ -1672,16 +1680,14 @@ DOCBOOK_STYLES=${DOCBOOK_STYLES%/}
 #
 [[ -d "$DOCBOOK_STYLES" ]] || exit_on_error "DOCBOOK4_STYLE_URI or DOCBOOK5_STYLE_URI points to a non-existing directory \"$DOCBOOK_STYLES\"."
 
-# ...and export
-export DOCBOOK_STYLES DOCBOOK5_RNG DOCBOOK_VERSION
-
-#--------------------------
-# Get PROFILE_URN to determine whether profiling is turned on
-# will get exported via VARLIST
+# ----------------------------------------------------------------------------
+# Determine whether profiling is turned on and if so, set PROFILE_URN
 #
-if [[ "xml" = "$SRC_FORMAT" ]]; then
-    PROFILE_URN=$($XSLTPROC --stylesheet "${DAPSROOT}/daps-xslt/common/get-xml-stylesheet.xsl" --file "$MAIN" "$XSLTPROCESSOR") || exit_on_error "Could not get DocBook version. Maybe $MAIN is not well-formed?"
-fi
+# This needs to be done in make/common_variables.mk to allow passing
+# profiling variable via command line to make:
+# daps -d DC-foo profile PROFCONDITION=foobar
+# PROFCONDITION=foobar is directly passed on to make and therefore is
+# not known here
 
 #----------------------------------
 # Result directory / LOG directory
