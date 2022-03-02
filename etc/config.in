@@ -246,6 +246,23 @@ CONVERT_OPTS_PNG="-type grayscale -colors 256"
 #
 DIA_OPTIONS="-t cairo-svg"
 
+## Key: DOCBOOK4_PROFILE_URN
+## -------------------------
+## Description: URN to a DocBook 4 profiling stylesheet
+## Type:        URN
+## Default:     "urn:x-daps:xslt:profiling:docbook45-profile.xsl"
+#
+# URN to a stylesheet used to profile DocBook 4 content. The stylesheet
+# should match the DocBook version you are using, see comments below for
+# possible values
+#
+#
+#DOCBOOK4_PROFILE_URN="urn:x-daps:xslt:profiling:docbook41-profile.xsl"
+#DOCBOOK4_PROFILE_URN="urn:x-daps:xslt:profiling:docbook42-profile.xsl"
+#DOCBOOK4_PROFILE_URN="urn:x-daps:xslt:profiling:docbook43-profile.xsl"
+#DOCBOOK4_PROFILE_URN="urn:x-daps:xslt:profiling:docbook44-profile.xsl"
+DOCBOOK4_PROFILE_URN="urn:x-daps:xslt:profiling:docbook45-profile.xsl"
+
 ## Key: DOCBOOK4_STYLE_URI
 ## ------------------
 ## Description: URI to DocBook 4 stylesheets
@@ -264,6 +281,37 @@ DIA_OPTIONS="-t cairo-svg"
 # cannot be resolved by xmlcatalog.
 #
 DOCBOOK4_STYLE_URI="http://docbook.sourceforge.net/release/xsl/current/"
+
+## Key: DOCBOOK5_PROFILE_URN
+## -------------------------
+## Description: URN to a DocBook 5 profiling stylesheet
+## Type:        URN
+## Default:     "urn:x-daps:xslt:profiling:docbook51-profile.xsl"
+#
+# URN to a stylesheet used to profile DocBook 5 content. The stylesheet
+# should match the DocBook version you are using, see comments below for
+# possible values
+#
+#
+#DOCBOOK5_PROFILE_URN="urn:x-daps:xslt:profiling:docbook50-profile.xsl"
+DOCBOOK5_PROFILE_URN="urn:x-daps:xslt:profiling:docbook51-profile.xsl"
+
+## Key: DOCBOOK5_RNG_URI
+## ------------------
+## Description: URI to DocBook 5 Relax NG schema
+## Type:        URI
+## Default:     "http://docbook.org/xml/@db5version@/rng/docbook.rng"
+#
+# URI to the DocBook 5 Relax NG schema that can be resolved by xmlcatalog
+# There should be no need to change this entry
+# In case you use a git checkout the DB5 version will be masked with 
+# \@db5version\@. This string will automatically be replaced with "5.1" if
+# DocBook 5.1 is installed, otherwise it will be set to "5.0"
+# If you do not like this, replace the value with one of the commented lines
+#
+#DOCBOOK5_RNG_URI="http://docbook.org/xml/5.0/rng/docbookxi.rng"
+#DOCBOOK5_RNG_URI="http://docbook.org/xml/5.1/rng/docbookxi.rng"
+DOCBOOK5_RNG_URI="http://docbook.org/xml/@db5version@/rng/docbookxi.rng"
 
 ## Key: DOCBOOK5_STYLE_URI
 ## ------------------
@@ -284,23 +332,6 @@ DOCBOOK4_STYLE_URI="http://docbook.sourceforge.net/release/xsl/current/"
 # cannot be resolved by xmlcatalog.
 #
 DOCBOOK5_STYLE_URI="http://docbook.sourceforge.net/release/xsl-ns/current/"
-
-## Key: DOCBOOK5_RNG_URI
-## ------------------
-## Description: URI to DocBook 5 Relax NG schema
-## Type:        URI
-## Default:     "http://docbook.org/xml/@db5version@/rng/docbook.rng"
-#
-# URI to the DocBook 5 Relax NG schema that can be resolved by xmlcatalog
-# There should be no need to change this entry
-# In case you use a git checkout the DB5 version will be masked with 
-# \@db5version\@. This string will automatically be replaced with "5.1" if
-# DocBook 5.1 is installed, otherwise it will be set to "5.0"
-# If you do not like this, replace the value with one of the commented lines
-#
-#DOCBOOK5_RNG_URI="http://docbook.org/xml/5.0/rng/docbookxi.rng"
-#DOCBOOK5_RNG_URI="http://docbook.org/xml/5.1/rng/docbookxi.rng"
-DOCBOOK5_RNG_URI="http://docbook.org/xml/@db5version@/rng/docbookxi.rng"
 
 ## Key:         DRAFT
 ## ------------------
