@@ -21,8 +21,8 @@ STYLEASSEMBLY  := $(firstword $(wildcard $(addsuffix \
 # Let's use ROOTID for this purpose
 # NEEDS TO BE FIXED: ASSEMBLY_STRUCTURE and ROOTID are bothe needed
 #
-ifneq "$(strip $(ROOTID))" ""
-  ASSEMBLYSTRINGS := --stringparam "structure.id=$(ROOTID)"
+ifneq "$(strip $(STRUCTID))" ""
+  ASSEMBLYSTRINGS := --stringparam "structure.id=$(STRUCTID)"
 endif
 
 all: $(MAIN)
