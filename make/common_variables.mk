@@ -129,7 +129,20 @@ endif
 # That setup allows to not have to redo profiling every time.
 #
 
-ifdef PROFILE_URN
+# Determine whether profiling is turned on and if so, set PROFILE_URN
+# Add SETDATE here, because is set we need to do profiling as well to
+# be able to set a custom date
+#
+IS_PROFILE := $(PROFARCH) $(PROFAUDIENCE) $(PROFCONDITION) \
+  $(PROFCONFORMANCE) $(PROFLANG) $(PROFOS) $(PROFOUTPUTFORMAT) \
+  $(PROFREVISION) $(PROFREVISIONFLAG) $(PROFROLE) $(PROFSECURITY) \
+  $(PROFSTATUS) $(PROFUSERLEVEL) $(PROFVENDOR) $(PROFWORDSIZE) $(SETDATE)
+ifneq "$(strip $(IS_PROFILE))" ""
+  ifeq "$(strip $(DOCBOOK_VERSION))" "4"
+    PROFILE_URN := $(DOCBOOK4_PROFILE_URN)
+  else
+    PROFILE_URN := $(DOCBOOK5_PROFILE_URN)
+  endif
   ifdef PROFARCH
     PROFILEDIR := $(PROFILEDIR)_$(PROFARCH)
     PROFSTRINGS += --stringparam "profile.arch=$(PROFARCH)"
