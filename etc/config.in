@@ -894,6 +894,23 @@ SRC_DIR=""
 #
 STATIC_DIR=""
 
+## Key:         STRUCTID
+## ---------------------
+## Description: ID of a DocBook Assemly structure
+## Type:        String (must be a valid structure id from the assembly)
+## Default:     ""
+#
+# DocBook assemblies allow to define different structures in a single
+# assembly file. Each structure can be identified by a unique ID.
+# To build a specific structure you need to specify the respective ID,
+# otherwise the first structure defined in the assembly file will be build.
+#
+# To be set in the DC-file only.
+# Only valid when building from assemblies, will otherwise be silently
+# ignored.
+#
+STRUCTID=""
+
 ## Key:      STYLEDEVEL
 ## -------------------
 ## Description: Custom stylesheets directory for development purposes.
