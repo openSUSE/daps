@@ -1,0 +1,127 @@
+#!/bin/bash
+#
+# Copyright (C) 2012-2022 SUSE Software Solutions Germany GmbH
+#
+# Author:
+# Frank Sundermeyer <fsundermeyer at opensuse dot org>
+#
+# Script to create directories hosting translations
+#
+
+# set some defaults
+
+basedir="${PWD}"
+dcfiles=()
+l10ndir="l10n"
+products=()
+languages=(ar-ar cs-cz de-de es-es fr-fr hu-hu it-it ja-jp ko-kr pl-pl pt-br ru-ru zh-cn zh-tw)
+
+function exit_on_error {
+    echo -e "ERROR: ${1}" >&2
+    exit 1;
+}
+
+function help() {
+    cat <<EOF_helptext
+Usage:
+$(basename $0) [-h] [--options]
+
+When called without parameters, the default values will be used.
+
+  -h                             This help.
+
+  --basedir                      Basic directory containing the DC-files and
+                                 the non-translated sources.
+                                 Default: Current directory
+
+  --dcfiles                      Space-separated list of DC-files that should
+                                 be copied to each language directory.
+                                 Default: Empty
+
+  --h                            This help.
+
+  --l10ndir                      Directory under which the languages directories
+                                 will be created (in BASEDIR).
+                                 Default: l10n
+
+  --languages="LANG1 LANG2 ..."  Space separated list of language directories.
+                                 Default: ar-ar cs-cz de-de es-es fr-fr hu-hu
+                                          it-it ja-jp ko-kr pl-pl pt-br ru-ru
+                                          zh-cn zh-tw
+
+  --product                      Product sub-directory; will be created under
+                                 L10NDIR. If languages and (optionally)
+                                 DC-files are the same, you can also specify
+                                 more than one product (space separated).
+                                 Default: Empty
+
+EOF_helptext
+}
+
+# ----------------------------------------------------
+
+ARGS=$(getopt -o h -l basedir:,dcfiles:,help,l10ndir:,languages:,product: -n "$ME" -- "$@")
+
+# Exit when getopt returns errors
+#
+GETOPT_RETURN_CODE=$?
+[[ 0 -ne $GETOPT_RETURN_CODE ]] && exit $GETOPT_RETURN_CODE
+
+eval set -- "$ARGS"
+
+while true ; do
+    case "$1" in
+        --basedir)
+            [[ -d $2 ]] || exit_on_error "basedir \"$2\" is not a valid directory"
+            # strip trailing slash (if any)
+            basedir=${2%/}
+            shift 2
+            ;;
+        --dcfiles)
+            read -ra dcfiles <<<"$2"
+            shift 2
+            ;;
+        --help)
+            help && exit 0
+            ;;
+        --l10ndir)
+            # strip trailing slash (if any)
+            l10ndir=${2%/}
+            shift 2
+            ;;
+        --languages)
+            read -ra languages <<<"$2"
+            shift 2
+            ;;
+        --product)
+            read -ra products <<<"$2"
+            shift 2
+            ;;
+        --) shift ; break ;;
+        *) exit_on_error "Internal error!" ;;
+    esac
+done
+
+# ----------------------------------------------------
+
+pushd "$basedir" >/dev/null
+for p in "${products[@]}"; do
+    for l in "${languages[@]}"; do
+        dir="${l10ndir}/${p}/${l}"
+        mkdir -p "$dir" >/dev/null
+        echo "Created directory ${basedir}/$dir"
+        if [[ ${#dcfiles[@]} != 0 ]]; then
+            pushd "$dir" >/dev/null
+            for dc in "${dcfiles[@]}"; do
+                if [[ -e "${basedir}/$dc" ]]; then
+                    cp -f "${basedir}/$dc" .
+                    echo "  Copied $dc to ${basedir}/${dir}"
+                else
+                    echo "${basedir}/$dc does not exist, skipping" && continue
+                fi
+            done
+            popd >/dev/null
+        fi
+    done
+done
+popd >/dev/null
