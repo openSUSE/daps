@@ -1739,8 +1739,14 @@ fi
 CHECK_WELLFORMED=$(PYTHONWARNINGS="ignore" ${LIBEXEC_DIR}/daps-xmlwellformed --xinclude ${MAIN} 2>&1)
 
 if [[ 0 -ne $? ]]; then
+    # sometimes daps-xmnlwellformed stumbles upon errors and does not produce
+    # any error text (e.g. on a missing entities file)
+    # Let's ignore these cases and hope for the best
+    # (these errors will get caught in the validation check)
+    if [[ -n "$CHECK_WELLFORMED" ]]; then
     ccecho "error" "Fatal error:\n$CHECK_WELLFORMED"
     exit 1
+    fi
 fi
 
 #-------------------------------------------------------------------
