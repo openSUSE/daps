@@ -38,9 +38,12 @@ jobs:
           echo "\n"
           echo "::debug::---end"
 
+      - name: Get updates
+        run: sudo apt-get update
+
       - name: Install dependencies
         run: |
-          sudo apt-get install -y autoconf \
+          sudo apt-get install -y --fix-missing autoconf \
                               automake \
                               autotools-dev \
                               checkbot \
