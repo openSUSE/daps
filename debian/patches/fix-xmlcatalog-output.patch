@@ -2,12 +2,12 @@ xmlcatalog outputs wrong file URLs, which breaks package compilation.
 Therefore the stripping logic is adjusted to work with file:/ onyl URLs.
 --- a/Makefile.am
 +++ b/Makefile.am
-@@ -53,7 +53,7 @@
+@@ -74,7 +74,7 @@
  if HAS_DAPS_XSL
    STYLEROOT := $(daps_xsl)
  else
--  STYLEROOT := $(subst file://,,$(shell $(XMLCATALOG) $(root_catalog) $(db4_xslt_url)))
-+  STYLEROOT := $(subst file:,,$(shell $(XMLCATALOG) $(root_catalog) $(db4_xslt_url)))
+-  STYLEROOT := $(patsubst //%,%,$(patsubst file:%,%,$(shell $(XMLCATALOG) $(root_catalog) $(db4_xslt_url))))
++  STYLEROOT := $(patsubst %,%,$(patsubst file:%,%,$(shell $(XMLCATALOG) $(root_catalog) $(db4_xslt_url))))
  endif
  
  
