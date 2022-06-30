@@ -13,7 +13,7 @@
 basedir="${PWD}"
 dcfiles=()
 l10ndir="l10n"
-products=(sles sled)
+products=()
 languages=(ar-ar cs-cz de-de es-es fr-fr hu-hu it-it ja-jp ko-kr pl-pl pt-br ru-ru zh-cn zh-tw)
 
 function exit_on_error {
@@ -49,16 +49,18 @@ When called without parameters, the default values will be used.
                                           it-it ja-jp ko-kr pl-pl pt-br ru-ru
                                           zh-cn zh-tw
 
-  --products                     Space-seperated list of sub-directories that
-                                 will be created under L10NDIR.
-                                 Default: sles sled
+  --product                      Product sub-directory; will be created under
+                                 L10NDIR. If languages and (optionally)
+                                 DC-files are the same, you can also specify
+                                 more than one product (space separated).
+                                 Default: Empty
 
 EOF_helptext
 }
 
 # ----------------------------------------------------
 
-ARGS=$(getopt -o h -l basedir:,dcfiles:,help,l10ndir:,languages:,products: -n "$ME" -- "$@")
+ARGS=$(getopt -o h -l basedir:,dcfiles:,help,l10ndir:,languages:,product: -n "$ME" -- "$@")
 
 # Exit when getopt returns errors
 #
@@ -91,7 +93,7 @@ while true ; do
             read -ra languages <<<"$2"
             shift 2
             ;;
-        --products)
+        --product)
             read -ra products <<<"$2"
             shift 2
             ;;
