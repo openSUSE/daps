@@ -12,9 +12,10 @@
 include $(DAPSROOT)/make/common_variables.mk
 
 # Stylesheets and Settings
-
-STYLEASSEMBLY  := $(firstword $(wildcard $(addsuffix \
+# Can be overwritten in DC files or in shell
+STYLEASSEMBLY  ?= $(firstword $(wildcard $(addsuffix \
 	        /assembly/assemble.xsl, $(STYLE_ROOTDIRS))))
+
 
 # used to select one structure among several (if assembly file provides
 # multiple structures)
@@ -33,7 +34,7 @@ $(MAIN): $(ASSEMBLY_MAIN) | $(ASSEMBLY_RESULTDIR)
   endif
 	$(XSLTPROC) $(ASSEMBLYSTRINGS) $(XSLTPARAM) $(PARAMS) \
 	    $(STRINGPARAMS) --output $@ --stylesheet $(STYLEASSEMBLY) \
-	    --file $< $(XSLTPROCESSOR) $(DEVNULL) \
+	    --xinclude --file $< $(XSLTPROCESSOR) $(DEVNULL) \
 	    $(ERR_DEVNULL);
   ifeq "$(VERBOSITY)" "2"
 	@ccecho "info" "Successfully created XML bigfile $@"
