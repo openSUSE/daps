@@ -415,9 +415,9 @@ AM_CONDITIONAL([HAS_DAPS_XSL], [test -d $daps_xsl])
 
 dnl -------------------------------------------------------------------------
 dnl Add more distributions if needed
-AM_CONDITIONAL([DIST_REDHAT], [egrep -iq "^NAME=\"?(fedora|redhat)\"?" /etc/os-release])
-AM_CONDITIONAL([DIST_SUSE], [egrep -iq "^NAME=\"?(opensuse|sles|sled)\"?" /etc/os-release])
-AM_CONDITIONAL([DIST_DEBIAN], [egrep -iq "^NAME=\"?(ubuntu|debian)\"?" /etc/os-release])
+AM_CONDITIONAL([DIST_REDHAT], [grep -E -iq "^NAME=\"?(fedora|redhat)\"?" /etc/os-release])
+AM_CONDITIONAL([DIST_SUSE], [grep -E -iq "^NAME=\"?(opensuse|sles|sled)\"?" /etc/os-release])
+AM_CONDITIONAL([DIST_DEBIAN], [grep -E -iq "^NAME=\"?(ubuntu|debian)\"?" /etc/os-release])
 
 dnl -------------------------------------------------------------------------
 dnl Set a conditional to determine whether ADOC is supported

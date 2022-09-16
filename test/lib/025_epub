@@ -112,7 +112,7 @@ function test_epubStyleroot () {
     #
 
     $_DAPSEXEC -d $_DCFILE --styleroot=${_DOC_DIR} --fb_styleroot=${_STANDARD_STYLES} --debug epub >/dev/null 2>&1
-    egrep -q -- "--stylesheet /.*/${_STANDARD_STYLES}" $_LOGFILE 2>/dev/null
+    grep -E -q -- "--stylesheet /.*/${_STANDARD_STYLES}" $_LOGFILE 2>/dev/null
     assertTrue \
         " └─ The Fallback Styleroot specified on the command line was not used." \
         "$?"
@@ -133,7 +133,7 @@ function test_epubStyleroot () {
     # Testing Styleroot specified with --styleroot
     #
     eval "$_DAPSEXEC -d $_DCFILE --styleroot ${_STANDARD_STYLES} --debug epub >/dev/null 2>&1"
-    egrep -q -- "--stylesheet /.*/${_STANDARD_STYLES}" $_LOGFILE 2>/dev/null
+    grep -E -q -- "--stylesheet /.*/${_STANDARD_STYLES}" $_LOGFILE 2>/dev/null
     assertTrue \
         " └─ The Styleroot specified on the command line was not used." \
         "$?"
@@ -247,7 +247,7 @@ function test_epubRootid () {
     assertTrue \
         ' └─ Building an EPUB with --rootid failed ' \
        "$?"
-    egrep -q -- "--stringparam\s+\"rootid=${_ROOTID}\"" $_LOGFILE 2>/dev/null
+    grep -E -q -- "--stringparam\s+\"rootid=${_ROOTID}\"" $_LOGFILE 2>/dev/null
     assertTrue \
         ' └─ Stringparam for ROOTID is not correctly specified when generating the EPUB-file' \
         "$?"

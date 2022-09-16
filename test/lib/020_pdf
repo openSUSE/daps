@@ -114,7 +114,7 @@ function test_pdfStyleroot () {
     #
 
     $_DAPSEXEC -d $_DCFILE --styleroot=${_DOC_DIR} --fb_styleroot=${_STANDARD_STYLES} --debug pdf >/dev/null 2>&1
-    egrep -q -- "--stylesheet /.*/${_STANDARD_STYLES}" $_LOGFILE 2>/dev/null
+    grep -E -q -- "--stylesheet /.*/${_STANDARD_STYLES}" $_LOGFILE 2>/dev/null
     assertTrue \
         " └─ The Fallback Styleroot specified on the command line was not used." \
         "$?"
@@ -135,7 +135,7 @@ function test_pdfStyleroot () {
     # Testing Styleroot specified with --styleroot
     #
     $_DAPSEXEC -d $_DCFILE --styleroot ${_STANDARD_STYLES} --debug pdf >/dev/null 2>&1
-    egrep -q -- "--stylesheet /.*/${_STANDARD_STYLES}" $_LOGFILE 2>/dev/null
+    grep -E -q -- "--stylesheet /.*/${_STANDARD_STYLES}" $_LOGFILE 2>/dev/null
     assertTrue \
         " └─ The Styleroot specified on the command line was not used." \
         "$?"
@@ -173,7 +173,7 @@ function test_pdfGrayscaleCropmarks () {
        "$_PDF_NAME_PATH" "$_PDF_BUILD_PATH"
 
    # Check for the format.print parameter
-   egrep -q -- "--param\s+\"format\.print=1\"" $_LOGFILE 2>/dev/null
+   grep -E -q -- "--param\s+\"format\.print=1\"" $_LOGFILE 2>/dev/null
    assertTrue \
        ' └─ Param format.print=1 is not specified when generating the FO-file' \
        "$?"
@@ -190,7 +190,7 @@ function test_pdfGrayscaleCropmarks () {
     # Check cropmarks (for XEP only)
     [[ fop == $_FOPROC ]] && startSkipping
 
-    egrep -q -- "--param\s+\"crop\.marks=1\"" $_LOGFILE 2>/dev/null
+    grep -E -q -- "--param\s+\"crop\.marks=1\"" $_LOGFILE 2>/dev/null
     assertTrue \
        ' └─ Param crop.marks=1 is not specified when generating the FO-file' \
        "$?"
@@ -234,7 +234,7 @@ function test_pdfRemarksDraftMeta () {
 
    # checking DRAFT mode
    #
-   egrep -q -- "--stringparam\s+\"draft\.mode=yes\"" $_LOGFILE 2>/dev/null
+   grep -E -q -- "--stringparam\s+\"draft\.mode=yes\"" $_LOGFILE 2>/dev/null
    assertTrue \
        ' └─ Stringparam for DRAFT mode is not correctly specified when generating the FO-file' \
        "$?"
@@ -247,7 +247,7 @@ function test_pdfRemarksDraftMeta () {
    # --param "show.comments=1" needs to occur once for each XML file on
    # profiling and another time when creating the fo-file
    #
-   _REMARK_COUNT_ACTUAL=$(egrep -c -- "--param\s+\"show\.comments=1\"" $_LOGFILE)
+   _REMARK_COUNT_ACTUAL=$(grep -E -c -- "--param\s+\"show\.comments=1\"" $_LOGFILE)
    let "_REMARK_COUNT_EXPECTED=${#_XML_FILES[@]} + 1"
    assertEquals \
        " └─ --param \"show.comments=1\" appears less often in the log file than expected" \
@@ -317,7 +317,7 @@ function test_pdfRootidXsltparam () {
     assertTrue \
         ' └─ Building a pdf with --rootid and --param failed ' \
        "$?"
-    egrep -q -- "--stringparam\s+\"rootid=$_ROOTID\"" $_LOGFILE 2>/dev/null
+    grep -E -q -- "--stringparam\s+\"rootid=$_ROOTID\"" $_LOGFILE 2>/dev/null
     assertTrue \
         ' └─ Stringparam for ROOTID is not correctly specified when generating the FO-file' \
         "$?"
@@ -334,7 +334,7 @@ function test_pdfRootidXsltparam () {
         "$_PAGECOUNT_EXPECTED" "$_PAGECOUNT"
 
     # check xsltparam
-    egrep -q -- "$_XSLTPARAM" $_LOGFILE 2>/dev/null
+    grep -E -q -- "$_XSLTPARAM" $_LOGFILE 2>/dev/null
     assertTrue \
         ' └─ Param for XSLTPARAM is not correctly specified when generating the FO-file' \
         "$?"
