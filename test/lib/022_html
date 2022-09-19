@@ -185,7 +185,7 @@ function test_htmlRemarksDraftMeta () {
 
    # checking DRAFT mode
    #
-   egrep -q -- "background-image.*draft.png" ${_HTML_BUILD_PATH}/index.html 2>/dev/null
+   grep -E -q -- "background-image.*draft.png" ${_HTML_BUILD_PATH}/index.html 2>/dev/null
    assertTrue \
        ' └─ Generated HTML does not seem to have a DRAFT bg-image' \
        "$?"
@@ -401,7 +401,7 @@ function test_htmlRootidXsltparam () {
         ' └─ Building a html document with --rootid and --param failed ' \
        "$?"
 
-    egrep -q -- "--stringparam\s+\"rootid=$_ROOTID\"" $_LOGFILE 2>/dev/null
+    grep -E -q -- "--stringparam\s+\"rootid=$_ROOTID\"" $_LOGFILE 2>/dev/null
     assertTrue \
         ' └─ Stringparam for ROOTID is not correctly specified when generating the FO-file' \
         "$?"
@@ -428,7 +428,7 @@ function test_htmlRootidXsltparam () {
         "$?"
 
     # check xsltparam
-    egrep -q -- "$_XSLTPARAM" $_LOGFILE 2>/dev/null
+    grep -E -q -- "$_XSLTPARAM" $_LOGFILE 2>/dev/null
     assertTrue \
         ' └─ Param for XSLTPARAM is not correctly specified when generating HTML' \
         "$?"
@@ -460,7 +460,7 @@ function test_htmlStylerootStatdir () {
     #
 
     $_DAPSEXEC -d $_DCFILE --styleroot=${_DOC_DIR} --fb_styleroot=${_STANDARD_STYLES} --debug html >/dev/null 2>&1
-    egrep -q -- "--stylesheet /.*/${_STANDARD_STYLES}" $_LOGFILE 2>/dev/null
+    grep -E -q -- "--stylesheet /.*/${_STANDARD_STYLES}" $_LOGFILE 2>/dev/null
     assertTrue \
         " └─ The Fallback Styleroot specified on the command line was not used." \
         "$?"
@@ -481,7 +481,7 @@ function test_htmlStylerootStatdir () {
     # Testing Styleroot specified with --styleroot
     #
     $_DAPSEXEC -d $_DCFILE --styleroot ${_STANDARD_STYLES} --debug html >/dev/null 2>&1
-    egrep -q -- "--stylesheet /.*/${_STANDARD_STYLES}" $_LOGFILE 2>/dev/null
+    grep -E -q -- "--stylesheet /.*/${_STANDARD_STYLES}" $_LOGFILE 2>/dev/null
     assertTrue \
         " └─ The Styleroot specified on the command line was not used." \
         "$?"

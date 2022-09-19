@@ -101,7 +101,7 @@ function test_profilingFilelist () {
 # Have the entities been resolved?
 #
 function test_profilingEntities () {
-    egrep -q "&ent[0-9];" ${_PROFILEDIR}/*.xml 2>/dev/null
+    grep -E -q "&ent[0-9];" ${_PROFILEDIR}/*.xml 2>/dev/null
     assertFalse \
         ' └─ Not all entities have been resolved' \
         "$?"
@@ -194,7 +194,7 @@ function test_profilingContent () {
     clean_build_dir profiles
     _PROFILEDIR=$($_DAPSEXEC -v0 --main $_MAIN_PROFILING showvariable VARIABLE=PROFILEDIR)
     $_DAPSEXEC -v0 --main $_MAIN_PROFILING profile >/dev/null 2>&1
-    _COUNT=$(egrep "(arch|condition|os|vendor)=(arch|condition|os|vendor)[12]" \
+    _COUNT=$(grep -E "(arch|condition|os|vendor)=(arch|condition|os|vendor)[12]" \
         ${_PROFILEDIR}/*.xml 2>/dev/null | wc -l)
     assertEquals \
         ' └─ Content has been filtered from XML although no profiling attribute was set' \
@@ -206,7 +206,7 @@ function test_profilingContent () {
     clean_build_dir profiles
     _PROFILEDIR=$($_DAPSEXEC -v0 --main $_MAIN_PROFILING showvariable VARIABLE=PROFILEDIR PROFARCH=foo PROFCONDITION=foo PROFOS=foo PROFVENDOR=foo)
     $_DAPSEXEC -v0 --main $_MAIN_PROFILING profile PROFARCH=foo PROFCONDITION=foo PROFOS=foo PROFVENDOR=foo >/dev/null 2>&1
-    egrep "(arch|condition|os|vendor)=(arch|condition|os|vendor)[12]" \
+    grep -E "(arch|condition|os|vendor)=(arch|condition|os|vendor)[12]" \
         ${_PROFILEDIR}/*.xml >/dev/null 2>&1
     assertFalse \
         ' └─ Profiled XML contains content that should have been filtered (all profiling variables have been set to a value that has no match in the XML)' \

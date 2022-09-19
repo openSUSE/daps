@@ -204,7 +204,7 @@ function test_locdropRootid () {
     assertTrue \
         ' └─ Building a locdrop with --rootid failed' \
         "$?"
-    egrep -q -- "--stringparam\s+\"rootid=$_ROOTID\"" $_LOGFILE 2>/dev/null
+    grep -E -q -- "--stringparam\s+\"rootid=$_ROOTID\"" $_LOGFILE 2>/dev/null
     assertTrue \
 	' └─ Stringparam for ROOTID is not correctly specified when generating the locdrop' \
 	"$?"

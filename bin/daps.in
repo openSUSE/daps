@@ -297,8 +297,8 @@ else
 fi
 
 # Set the maximum number of concurrent jobs to the number of cores
-# If egrep does not return something useful, set it to "2" as a sane default
-JOBS=$(egrep -s -m1 "cpu cores\s*:" /proc/cpuinfo 2>/dev/null | sed 's/cpu cores\s*:\s*//')
+# If grep -E does not return something useful, set it to "2" as a sane default
+JOBS=$(grep -E -s -m1 "cpu cores\s*:" /proc/cpuinfo 2>/dev/null | sed 's/cpu cores\s*:\s*//')
 [[ -z $JOBS ]] && JOBS=2
 
 #---------------------------------------------------

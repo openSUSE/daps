@@ -152,7 +152,7 @@ for FILE in ${DATA_DIR}/*.po; do
 	# Strings are ignored and an error message is printed to STDERR
         #
 	# two email addresses => entries have not been separated with ";"
-	egrep -sq "[^@]*@[^@]*@" <<< "$TRANS"  >/dev/null 2>&1
+	grep -E -sq "[^@]*@[^@]*@" <<< "$TRANS"  >/dev/null 2>&1
 	if [[ 0 -eq $? ]]; then
 	    echo -e "Format error in $FILE: $TRANSL" >&2
 	    continue
@@ -171,7 +171,7 @@ for FILE in ${DATA_DIR}/*.po; do
 	fi
 
 	# extract year(s)
-	# expr can only handle basic regexp, so let's use egrep here
+	# expr can only handle basic regexp, so let's use grep -E here
 	# the regexp catches the following occurences:
         # <DATA>, YEAR
 	# <DATA>,YEAR
@@ -186,7 +186,7 @@ for FILE in ${DATA_DIR}/*.po; do
 	# <DATA>,YEAR - YEAR
 	# ...
 	# and the same variant with with YEAR following DATA
-        YEAR=$(egrep -o "([，, ] *[[:digit:]]{4}( *[，, -] *[[:digit:]]{4})?|^[[:digit:]]{4}( *[，, -] *)?([[:digit:]]{4})?)" <<< "$TRANS" )
+        YEAR=$(grep -E -o "([，, ] *[[:digit:]]{4}( *[，, -] *[[:digit:]]{4})?|^[[:digit:]]{4}( *[，, -] *)?([[:digit:]]{4})?)" <<< "$TRANS" )
 	if [[ -n $YEAR ]]; then
 	    # Remove year from TRANSL string
 	    TRANSL=${TRANSL/"$YEAR"/}

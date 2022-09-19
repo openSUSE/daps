@@ -99,7 +99,7 @@ function test_adoc_advanced() {
     assertTrue \
         ' └─ Profiling with $_DCFILE failed' \
         "$?"
-    egrep -q -- "/daps-xslt/asciidoc/postprocess.xsl" $_LOGFILE 2>/dev/null
+    grep -E -q -- "/daps-xslt/asciidoc/postprocess.xsl" $_LOGFILE 2>/dev/null
     assertTrue \
         " └─ The stylesheet for postprocessing the AsciiDoctor-generated XML was not used." \
         "$?"

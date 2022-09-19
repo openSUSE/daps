@@ -96,7 +96,7 @@ endif
 # If grep fails, we at least have ADOC_MAIN
 #
 ADOC_SRCFILES := $(ADOC_MAIN) $(wildcard $(addprefix \
- $(DOC_DIR)/adoc/,$(shell egrep '^include::' $(ADOC_MAIN) 2>/dev/null | sed 's/.*::\([^\[]*\).*/\1/g' 2>/dev/null)))
+ $(DOC_DIR)/adoc/,$(shell grep -E '^include::' $(ADOC_MAIN) 2>/dev/null | sed 's/.*::\([^\[]*\).*/\1/g' 2>/dev/null)))
 #ADOC_SRCFILES := $(wildcard $(DOC_DIR)/adoc/*.adoc)
 
 #
