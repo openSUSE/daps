@@ -218,7 +218,12 @@
    </xsl:attribute>
 </xsl:template>
 
-<!-- Remove any non-XInclude attributes -->
-<xsl:template match="xi:include/@*" mode="profile" />
+<!-- Remove any non-XInclude attributes
+
+    Issue #676: add priority="0" to overwrite default priority of 0.5 -> 0
+    The recovery strategy has changed in libxslt >=1.1.35
+    See https://www.w3.org/TR/1999/REC-xslt-19991116#conflict
+-->
+<xsl:template match="xi:include/@*" mode="profile" priority="0" />
 
 </xsl:stylesheet>
