@@ -1,0 +1,117 @@
+#!/bin/bash
+# Add links from translated documentation trees to original tree ("original"
+# usually means the English files). The approach here is to treat all files in
+# certain directories as relevant and link them up. This may lead to more
+# symlinks being generated than strictly necessary.
+# Creates a Git commit for all new files at the end.
+#
+# Does not take parameters.
+# Does allow setting the following variables (which can be combined):
+# # tree of untranslated files (default: $PWD):
+#     BASETREE=/path/to/untranslated/source/directory           trans-linkup
+# # tree(s) of translated files (default: l10n/*/*):
+#     TRANSTREES='relative/path/to/translations/{de-de,fr-fr}'  trans-linkup
+# # run DAPS validation at the end? Be aware this option deletes 'build/' dirs
+# # (default: off)
+#     VALIDATE=1  `                                             trans-linkup
+# # create a Git commit at the end? (default: off)
+#     CREATE_GIT_COMMIT=1                                       trans-linkup
+
+
+create_git_commit="${CREATE_GIT_COMMIT:-0}"
+validate="${VALIDATE:-0}"
+
+basetree="${BASETREE:-${PWD}}"
+# important: must be relative to $basetree!
+transtrees="${TRANSTREES:-l10n/*/*}"
+
+relevantdirs="./adoc ./xml ./images/src/dia ./images/src/ditaa ./images/src/jpg ./images/src/png ./images/src/svg ./images/src/odg"
+
+break_exit() {
+  >&2 echo "$1"
+  exit 1
+}
+
+
+[[ -d $basetree ]] || \
+  break_exit "Could not find untranslated tree at '$basetree'. To override path to untranslated tree, run: BASETREE=... $0"
+
+basetree=$(realpath $basetree)
+
+# this `cd` is important! multiple assumptions below are based on it!
+cd "$basetree" || break_exit "Could not switch to '$basetree'. Permissions issue?"
+
+  # force expansion, sorry for eval
+  transtrees=$(eval echo $transtrees)
+  for transtree in $transtrees; do
+    [[ -d "$transtree" ]] || \
+      break_exit "Could not find translation tree at '$(realpath $basetree)/$transtree'. To override path to translation tree, run: TRANSTREES='...' $0"
+  done
+
+
+  # find relevant files in basetree, without failing when any particular dir
+  # does not exist
+  basetree_files=$(find $relevantdirs -name "*" 2>/dev/null | sed -r 's,^./,,')
+
+
+  for transtree in $transtrees; do
+
+    if [[ $( basename "$transtree" | sed -r 's/^([a-z]{2})([-_][A-Za-z]{2})?$//') ]]; then
+      echo "Are you sure '$basetree/$transtree' is an appropriate translation base directory?"
+      echo "It does not look like a dir named after a language code."
+      echo "To override path to translation tree, run: TRANSTREES='...' $0"
+      echo "[anykey] to continue, [Ctrl-C] to stop."
+      read answer
+    fi
+
+    echo -e "\n-> Running through $transtree"
+    for basefile in $basetree_files; do
+      if [[ -d "$basefile" ]]; then
+        continue
+      else
+        # either symlink or real file already exists, skip
+
+        # is there a regular file already?
+        [[ -f "$transtree/$basefile" ]] && continue
+        # is there a symlink already?
+        if [[ -L "$transtree/$basefile" ]]; then
+          # is the symlink working?
+          [[ -e "$transtree/$basefile" ]] && continue
+          # if not delete it, and replace with a non-broken one later
+          echo "  - Deleting broken link '$(realpath $transtree)/$basefile'."
+          rm "$transtree/$basefile"
+        fi
+
+        basedir=$(dirname "$basefile")
+        basefilename=$(basename "$basefile")
+        mkdir -p "$transtree/$basedir"
+        pushd "$transtree/$basedir" >/dev/null 2>/dev/null || break_exit "Could not switch to '$transtree/$basedir'. Permissions issue?"
+          relativepath=$(realpath --relative-to . "$basetree/$basedir")
+          echo "  - Creating link: $PWD/$basefilename"
+          ln -s "$relativepath/$basefilename" "$basefilename"
+          [[ -e "$basefilename" ]] || break_exit "Newly created symlink '$PWD/$basefilename' is broken. This is most likely a bug in the script."
+          [[ "$create_git_commit" -eq 1 ]] && git add "$basefilename"
+        popd >/dev/null 2>/dev/null || break_exit "Could not switch back to '$basetree'. Permissions issue?"
+      fi
+    done
+
+  done
+
+  code=0
+  if [[ "$validate" -eq 1 ]]; then
+    for transtree in $transtrees; do
+      # had trouble getting `find -exec` to work properly (without an error message)
+      pushd "$transtree" >/dev/null 2>/dev/null || break_exit "Could not switch to '$transtree'. Permissions issue?"
+        builddirs=$(find . -name 'build' -type d)
+        [[ "$builddirs" ]] && rm -rf $builddirs
+      popd >/dev/null 2>/dev/null || break_exit "Could not switch back to '$basetree'. Permissions issue?"
+      dc_files=$(find $transtree -name "DC-*" 2>/dev/null)
+      for dc_file in $dc_files; do
+        echo -en "Validating $dc_file: "
+        daps -d "$dc_file" validate
+        [[ $? -ne 0 ]] && code=1
+      done
+    done
+  fi
+  [[ "$code" -eq 0 ]] || break_exit "At least one document failed to validate."
+  [[ "$create_git_commit" -eq 1 ]] && git commit -m "l10n: Add symlinks to translations"
