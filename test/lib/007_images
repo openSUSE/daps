@@ -148,21 +148,21 @@ function test_imagesODG () {
 #--------------------------------
 # * Are the DITAA images correctly converted to PNG?
 #
-function test_imagesDITAA () {
-    local _DITAA_IMG
+#function test_imagesDITAA () {
+#    local _DITAA_IMG
 
-    _DITAA_IMG=$(basename -s .ditaa $(find ${_IMGDIR_SRC}/ditaa -type f | head -1))
+#    _DITAA_IMG=$(basename -s .ditaa $(find ${_IMGDIR_SRC}/ditaa -type f | head -1))
 
-    assertTrue \
-        " └─ DITAA to PNG generation failed" \
-        "[ -s ${_IMGDIR_GEN}/png/${_DITAA_IMG}.png ]"
-    assertTrue \
-        " └─ Color PNG link for $_DITAA_IMG is missing" \
-        "[ -L ${_IMGDIR_COLOR}/${_DITAA_IMG}.png ]"
-    assertTrue \
-        " └─ Grayscale PNG for $_DITAA_IMG is missing" \
-        "[ -s ${_IMGDIR_GRAYSCALE}/${_DITAA_IMG}.png ]"
-}
+#    assertTrue \
+#        " └─ DITAA to PNG generation failed" \
+#        "[ -s ${_IMGDIR_GEN}/png/${_DITAA_IMG}.png ]"
+#    assertTrue \
+#        " └─ Color PNG link for $_DITAA_IMG is missing" \
+#        "[ -L ${_IMGDIR_COLOR}/${_DITAA_IMG}.png ]"
+#    assertTrue \
+#        " └─ Grayscale PNG for $_DITAA_IMG is missing" \
+#        "[ -s ${_IMGDIR_GRAYSCALE}/${_DITAA_IMG}.png ]"
+#}
 
 
 #--------------------------------
