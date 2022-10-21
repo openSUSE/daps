@@ -171,24 +171,33 @@ function unpack-locdrop {
     # to send them
     #
 
-    if [[ 1 -eq $P_REMOVEDM ]]; then
-        echo "Removing <dm:docmanager> blocks"
-        # check for xmlstarlet binary
-        for _binary in xmlstarlet xml; do
-            XMLSTARLET=$(which $_binary 2>/dev/null)
-            [[ 0 -eq $? ]] && break
-        done
-        [[ -z $XMLSTARLET ]] && exit_on_error "Required package \"xmlstarlet\" is not installed"
+    # check for xmlstarlet binary
+    for _binary in xmlstarlet xml; do
+        XMLSTARLET=$(which $_binary 2>/dev/null)
+        [[ 0 -eq $? ]] && break
+    done
+    [[ -z $XMLSTARLET ]] && exit_on_error "Required package \"xmlstarlet\" is not installed"
 
-        #
-        # Get a list of all translated xml files
-        #
-        XML_TRANS_FILE_LIST=$(awk '{for(i=1;i<=NF;++i)if($i~/xml\/.*\.xml/)print $i}' <(echo "$ALL_TRANS_FILES") 2>/dev/null) || exit_on_error "Could not get list of translated XML files"
-        for _XML_TRANS_FILE in $XML_TRANS_FILE_LIST; do
-            #echo "$_XML_TRANS_FILE"
+    #
+    # Get a list of all translated xml files
+    #
+    XML_TRANS_FILE_LIST=$(awk '{for(i=1;i<=NF;++i)if($i~/xml\/.*\.xml/)print $i}' <(echo "$ALL_TRANS_FILES") 2>/dev/null) || exit_on_error "Could not get list of translated XML files"
+    #
+    # Remove entire docmanager block (with --remove-dm) or at least
+    # dm_editurl, since we do not have editable localised content
+    #
+    for _XML_TRANS_FILE in $XML_TRANS_FILE_LIST; do
+        if [[ 1 -eq $P_REMOVEDM ]]; then
+            # Remove complete docmanager block
+            echo "Removing <dm:docmanager> block"
             $XMLSTARLET ed -S --inplace -N dm="urn:x-suse:ns:docmanager" -d "//dm:docmanager" $_XML_TRANS_FILE
-        done
-    fi
+        else
+            # Remove editurl part - we only want bugreports for localised
+            # content. This is always done.
+            echo "Removing <dm:editurl> tag"
+            $XMLSTARLET ed -S --inplace -N dm="urn:x-suse:ns:docmanager" -d "//dm:docmanager/dm:editurl"$_XML_TRANS_FILE
+        fi
+    done
 
     # Link not translated images and XML files
     #
