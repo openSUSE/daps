@@ -1,4 +1,36 @@
 -------------------------------------------------------------------
+Tue Oct 25 13:39:00 UTC 2022 - fsundermeyer@opensuse.org
+
+Stable release DAPS 3.3.2:
+
+* Bug fixes:
+  - Make DAPS work with libslt > 1.1.34
+    (https://github.com/openSUSE/daps/issues/679)
+  - Profiling no longer requires processing instruction
+    - if DC-file/command line contains profile settings the
+      profiling stylesheets will autoimatically be applied
+      (https://github.com/openSUSE/daps/issues/529)
+  - FOP support for google noto-sans fonts (for Japanese, Korean,
+    traditional & simplified Chinese)
+    (https://github.com/openSUSE/daps/issues/684)
+  - Fix validation error where errors were ignored or failed with a
+    bash error
+    (https://github.com/openSUSE/daps/issues/679)
+  - unpacking locdrops automatically removes dm:editurl from
+    docmanager XML header (if present)
+  - Building parts of a document (with --rootid) is no longer
+    supported when rootid points to a section or sect1 (because
+    depending on HTML chunkling, this may result in an empty
+    document)
+    (https://github.com/openSUSE/daps/issues/686)
+
+* Helper scripts:
+  - Added a few scripts for handling SUSE localization branches,
+    improving SEO and migrating frm DocBook4 to DocBook5
+    - can be found in the sources under contrib/ (not included in
+      SUSE packages)
+
+-------------------------------------------------------------------
 Mon Feb 14 09:00:00 UTC 2022 - sknorr@suse.de
 
 Stable release DAPS 3.3.1:
