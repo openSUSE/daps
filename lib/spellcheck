@@ -40,8 +40,8 @@ function spellcheck {
         if [[ -z "$SPELL_CHECKER" ]]; then
             # no spell checker defined in the configs or on the command line
             # searching for aspell or hunspell
-            # If both are installed, favor aspell
-            for SC in aspell hunspell; do
+            # If both are installed, favor hunspell
+            for SC in hunspell aspell; do
                 SPELL_CHECKER="$(which  --skip-alias --skip-functions "$SC" 2>/dev/null)"
                 [[ -n "$SPELL_CHECKER" ]] && break;
             done
@@ -137,6 +137,8 @@ function spellcheck {
             fi
             SPELLCMD="$SPELL_CHECKER -H -i utf-8 -d $SPELL_LANG"
             if [[ -n "$SPELL_EXTRA_DICT" ]]; then
+                # check dictionary
+                [[ "$SPELL_EXTRA_DICT" =~ / || "$SPELL_EXTRA_DICT" =~ .dic$ ]] && exit_on_error "Hunspell dictionaries must be placed in Hunspell's search path/n(check with hunspell -D;\n/usr/share/hunspell/ or $HOME/Library/Spelling should work on most distributions).\nSpecify a dictionary here by filename without suffix only.\nRather than \"/use/share/hunspell/my_dict.dic\" just use \"my_dict\"."
                 SPELLCMD+=",$SPELL_EXTRA_DICT"
             fi
             LIST_PARAM="-l"

@@ -1210,19 +1210,30 @@ function help_epub3 {
                               Default: ePUB version 2
 EOF
 }
+function help_extra-dict {
+    cat <<EOF
+    --extra-dict=filename     Specify a path to an additional custom
+                              dictionary.
+                              NOTE on aspell: aspell can use disctionaries in
+                                *.rws format, You can specify an absolute
+                                path to the file.
+                              NOTE on hunspell: Dictionaries in *.dict format
+                                must be placed in Hunspell's search path (check
+                                with hunspell -D; /usr/share/hunspell/ or
+                                $HOME/Library/Spelling/ should work on most
+                                distributions). Specify a dictionary here by
+                                filename without suffix only.
+                                Rather than "/use/share/hunspell/my_dict.dic"
+                                just specify "my_dict".
+                              Default: unset
+EOF
+}
 function help_export-dir {
     cat <<EOF
     --export-dir=DIRECTORY    Specify a directory where to copy the results
                               of the $TARGET command. The directory will be
                               created if it does not exist.
                               Default: <BUILD_DIRECTORY>/locdrop
-EOF
-}
-function help_extra-dict {
-    cat <<EOF
-    --extra-dict=filename     Specify a path to an additional custom
-                              dictionary.
-                              Default: unset
 EOF
 }
 function help_file {
