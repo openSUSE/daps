@@ -2,7 +2,7 @@ dnl                               -*- Autoconf -*-
 dnl Process this file with autoconf to produce a configure script
 dnl or use autogen.sh (recommended)
 dnl
-dnl Copyright (C) 2012-2020 SUSE Software Solutions Germany GmbH
+dnl Copyright (C) 2012-2022 SUSE Software Solutions Germany GmbH
 dnl
 dnl Authors:
 dnl Frank Sundermeyer <fsundermeyer at opensuse dot org>
@@ -11,14 +11,14 @@ dnl
 
 m4_define(daps_version_major, 3)
 m4_define(daps_version_minor, 3)
-m4_define(daps_version_micro, [1])
+m4_define(daps_version_micro, [2])
 # API version
 m4_define([daps_api_version],[daps_version_major])
 
 m4_define([daps_version], [daps_version_major.daps_version_minor.daps_version_micro])
 
-AC_PREREQ([2.68])
-AC_INIT([DAPS], [daps_version], [https://github.com/openSUSE/daps], [daps], [https://opensuse.github.io/daps])
+AC_PREREQ([2.71])
+AC_INIT([DAPS],[daps_version],[https://github.com/openSUSE/daps],[daps],[https://opensuse.github.io/daps])
 AC_CONFIG_MACRO_DIR([m4])
 
 DAPS_VERSION_MAJOR=daps_version_major
@@ -62,7 +62,7 @@ dnl $DEBUG is used with bin/daps
 dnl $Q is the quiet switch for the Makefile
 
 AC_ARG_ENABLE([debug],
-    [AC_HELP_STRING([--enable-debug], [Enable debug mode])],
+    [AS_HELP_STRING([--enable-debug],[Enable debug mode])],
       [debug="--debug"], [quiet="@"])
 eval "eval DEBUG=$debug Q=$quiet"
 
@@ -74,7 +74,7 @@ dnl this needs to be done with the package's post-install
 dnl commands
 
 AC_ARG_ENABLE([edit-rootcatalog],
-    [AC_HELP_STRING([--disable-edit-rootcatalog], [Disable editing the XML root catalog. Use this switch when running make install from a package generating script (such as a spec file).])],
+    [AS_HELP_STRING([--disable-edit-rootcatalog],[Disable editing the XML root catalog. Use this switch when running make install from a package generating script (such as a spec file).])],
       [if test "yes" = $enableval; then cat_edit=1; else cat_edit=0; fi],
       [cat_edit=1])
 AM_CONDITIONAL([CATALOG_EDIT], [test 1 = $cat_edit])
@@ -222,7 +222,7 @@ AM_PATH_PYTHON([3.4])
 dnl AM_PATH_PYTHON([2.6])
 
 dnl Variables HAVE_PYMOD_* are filled with "yes" or "no"
-AC_PYTHON_MODULE([lxml], [fatal])
+AX_PYTHON_MODULE([lxml],[fatal])
 AC_SUBST(HAVE_PYMOD_LXML)
 
 
@@ -428,8 +428,10 @@ dnl No distribution-specific info in the BuildService
 dnl /var/adm/fillup-templates is SUSE-specific
 AM_CONDITIONAL([DIST_SUSEBS], [test -d /var/adm/fillup-templates])
 dnl -------------------------------------------------------------------------
-AC_OUTPUT([Makefile])
-AC_OUTPUT([doc/xml/entity-decl.ent])
+AC_CONFIG_FILES([Makefile])
+AC_OUTPUT
+AC_CONFIG_FILES([doc/xml/entity-decl.ent])
+AC_OUTPUT
 
 AC_MSG_RESULT([
 dnl ###########################################################################
