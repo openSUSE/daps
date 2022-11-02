@@ -1,68 +1,103 @@
 Source: daps
 Section: text
 Priority: optional
-Maintainer: Haug Bürger <haug.buerger@zalando.de>
-Build-Depends: autotools-dev,
-               bash (>=4),
-               debhelper (>=9),
-               dia,
-               dh-autoreconf,
-               docbook,
-               docbook-xml,
-               docbook-xsl (>=1.7.8),
-               ghostscript,
-               imagemagick,
-               libxml2-utils,
-               make,
-               poppler-utils,
-               python-libxml2,
-               python-lxml,
-               xml-core,
-               xmlstarlet,
-               xsltproc
-Standards-Version: 3.9.6
+Maintainer: Filippo Rusconi <lopippo@debian.org>
+Build-Depends: 
+ bash,
+ debhelper,
+ dh-python,
+ python3,
+ ditaa,
+ epubcheck,
+ remake,
+ fop,
+ jing,
+ dia,
+ optipng,
+ exiftool,
+ libreoffice-draw,
+ asciidoctor,
+ w3m,
+ trang,
+ libsaxon-java,
+ libsaxonb-java,
+ libsaxonhe-java,
+ docbook-xml,
+ docbook5-xml,
+ docbook-xsl,
+ docbook-xsl-ns,
+ ghostscript,
+ imagemagick,
+ inkscape,
+ libxml2-utils,
+ poppler-utils,
+ python3-libxml2,
+ python3-lxml,
+ xml-core,
+ xmlstarlet,
+ xsltproc,
+ docbook-to-man
+Standards-Version: 4.6.1
 Homepage: http://opensuse.github.io/daps
-Vcs-Git: https://github.com/openSUSE/daps.git
-Vcs-Browser: https://github.com/openSUSE/daps
+Vcs-Browser: https://salsa.debian.org/lopippo/daps
+Vcs-Git: https://salsa.debian.org/lopippo/daps.git
 
 Package: daps
 Architecture: all
 Depends: bash (>=4),
-         bzip2,
-         docbook,
-         docbook-xml,
-         docbook-xsl (>=1.7.8),
-         fop (>= 0.96),
-         imagemagick,
-         inkscape,
-         libxml2-utils,
-         libxml-commons-external-java,
-         libxmlgraphics-commons-java,
-         make,
-         poppler-utils,
-         python-libxml2,
-         python-lxml,
-         sgml-base,
-         sgml-data,
-         w3m,
-         xml-core,
-         xmlstarlet,
-         xsltproc,
-         zip,
-         ${misc:Depends},
-         ${shlibs:Depends}
-Recommends: aspell,
-            docbook5-xml,
-            docbook-xsl-ns,
-            jing
+ bzip2,
+ docbook-xml,
+ docbook5-xml,
+ docbook-xsl,
+ docbook-xsl-ns,
+ ditaa,
+ epubcheck,
+ remake,
+ fop,
+ jing,
+ dia,
+ optipng,
+ exiftool,
+ libsaxon-java,
+ libsaxonb-java,
+ libsaxonhe-java,
+ libavalon-framework-java,
+ ghostscript,
+ imagemagick,
+ inkscape,
+ libxml2-utils,
+ libxml-commons-external-java,
+ libxmlgraphics-commons-java,
+ make,
+ remake,
+ poppler-utils,
+ python3,
+ python3-libxml2,
+ python3-lxml,
+ sgml-base,
+ sgml-data,
+ w3m,
+ xml-core,
+ xmlstarlet,
+ xsltproc,
+ zip,
+ docbook-mathml,
+ libjs-mathjax,
+ fonts-mathjax,
+ fonts-mathjax-extras,
+ libjeuclid-core-java,
+ libjeuclid-fop-java,
+ ${misc:Depends},
+ ${perl:Depends},
+ ${python3:Depends}
+Recommends: aspell
 Suggests: aspell-en,
-          calibre,
-          checkbot,
-          epubcheck,
-          dia,
-          libimage-exiftool-perl,
-          optipng,
-          xmlformat-perl
+ calibre,
+ libreoffice-draw,
+ xfig,
+ xmlformat-perl,
+ asciidoctor,
+ trang
 Description: DocBook Authoring and Publishing Suite (DAPS)
  DAPS contains a set of stylesheets, scripts and makefiles that enable
  you to create HTML, PDF, EPUB and other formats from DocBook XML with a
@@ -72,7 +107,3 @@ Description: DocBook Authoring and Publishing Suite (DAPS)
  DAPS also includes tools that assist you when writing DocBook XML:
  linkchecker, validator, spellchecker, editor macros and stylesheets for
  converting DocBook XML.
- .
- DAPS is the successor of susedoc. See
- /usr/share/doc/packages/daps/README.upgrade_from_susedoc_4.x
- for upgrade instructions.
