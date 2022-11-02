@@ -1,0 +1,14 @@
+This patch remove the --skip-alias --skip-functions flags to the which command
+call because the Debian which program does not support them.
+
+--- a/bin/daps-xmlformat.in
++++ b/bin/daps-xmlformat.in
+@@ -20,7 +20,7 @@
+ # take the first one that exists
+ #
+ for _BINARY in xmlformat xmlformat.pl xmlformat.rb; do
+-    XMLFORMAT_CMD="$(which --skip-alias --skip-functions "$_BINARY" 2>/dev/null)" && break
++    XMLFORMAT_CMD="$(which "$_BINARY" 2>/dev/null)" && break
+ done
+ 
+ _XMLF_VERSION=$($XMLFORMAT_CMD --version 2>/dev/null | head -n1 | cut -d' ' -f2)
