@@ -68,7 +68,7 @@ PDF_RESULT := $(RESULT_DIR)/$(DOCNAME)
 ifeq "$(GRAYSCALE)" "1"
   PDF_RESULT := $(PDF_RESULT)_gray
 else
-  PDF_RESULT := $(PDF_RESULT)_color
+  PDF_RESULT := $(PDF_RESULT)
 endif
 
 # cropmarks are currently only supported by XEP
