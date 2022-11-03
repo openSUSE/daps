@@ -97,7 +97,7 @@ ifeq "$(GRAYSCALE)" "1"
 else
   FOSTRINGS  += --param "format.print=0" \
 	        --stringparam "img.src.path=$(IMG_GENDIR)/color/"
-  FOFILE     := $(FOFILE)_color
+  FOFILE     := $(FOFILE)
 endif
 
 # cropmarks are currently only supported by XEP
