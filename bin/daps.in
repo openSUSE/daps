@@ -887,7 +887,12 @@ function parse_config {
 
         # set variables
         if [[ 1 -eq $CONCAT ]]; then
-            declare -g $KEY="${!KEY} $VALUE"
+            if [[ -n "${!KEY}" ]]; then
+                declare -g $KEY="${!KEY} $VALUE"
+            else
+                # += was used without previously setting the valiarble
+                declare -g $KEY="$VALUE"
+            fi
         else
             declare -g $KEY="$VALUE"
         fi
