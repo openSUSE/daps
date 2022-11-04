@@ -183,9 +183,6 @@ fi
 dnl dia
 AC_PATH_PROG([DIA], [dia], [0])
 
-dnl exiftool
-AC_PATH_PROG([EXIFTOOL], [exiftool], [0])
-
 dnl inkscape
 AC_PATH_PROG([INKSCAPE], [inkscape], [0])
 
@@ -522,9 +519,8 @@ else
 fi
 
 dnl Optimize PNGs (optipng)
-if test 0 = "$OPTIPNG" -o 0 = "$EXIFTOOL"; then
-  AC_MSG_RESULT([Size optimization for .png       |    no   | install optipng and/or exiftool
-])
+if test 0 = "$OPTIPNG"; then
+  AC_MSG_RESULT([Size optimization for .png       |    no   | install optipng])
 else
   AC_MSG_RESULT([Size optimization for .png       |   yes   |])
 fi
