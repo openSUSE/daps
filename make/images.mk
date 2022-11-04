@@ -58,10 +58,9 @@
 # provide-images and provide-*-images
 
 #------------------------------------------------------------------------
-# Check for optipng and exiftool
+# Check for optipng
 #
 HAVE_OPTIPNG  := $(shell which optipng 2>/dev/null)
-HAVE_EXIFTOOL := $(shell which exiftool 2>/dev/null)
 
 #------------------------------------------------------------------------
 # xslt stylsheets
@@ -79,7 +78,7 @@ STYLESVG2GRAY  := $(DAPSROOT)/daps-xslt/common/svg.color2grayscale.xsl
 
 USED := $(sort $(shell $(XSLTPROC) --stringparam "filetype=img" \
 	 $(ROOTSTRING) --file $(SETFILES_TMP) \
-         --stylesheet $(DAPSROOT)/daps-xslt/common/extract-files-and-images.xsl $(XSLTPROCESSOR) 2>/dev/null))
+         --stylesheet $(DAPSROOT)/daps-xslt/common/extract-files-and-images.xsl $(XSLTPROCESSOR) $(ERR_DEVNULL)))
 
 # JPG and PNG can be directly taken from the USED list - the filter
 # function generates lists of all PNG common to USED and SCRPNG
@@ -248,30 +247,9 @@ images:
 #
 .PHONY: optipng
 optipng:
-  ifndef HAVE_OPTIPNG
-	@ccecho "error" "Error: optipng is not installed" && false
-  endif
-  ifndef HAVE_EXIFTOOL
-	@ccecho "error" "Error: exiftool is not installed" && false
-  endif
-
   ifdef USED_PNG
-	( j=0; \
-	for i in $(USED_PNG); do  \
-	  if [[ -z $$(exiftool -Comment $$i | grep optipng) ]]; then \
-	    let "j += 1"; \
-	    optipng -o2 $$i >/dev/null 2>&1; \
-	    exiftool -Comment=optipng -overwrite_original -P $$i >/dev/null || true; \
-			if [[ "$(VERBOSITY)" -gt "0" ]]; then \
-	    	echo $$i; \
-			fi \
-	  fi \
-	done; \
-	if [ 0 == $$j ]; then \
-	  ccecho "result" "No files needed optimization"; \
-	else \
-	  ccecho "result" "$$j files have been optimized."; \
-	fi )
+	optipng -o2 -fix -preserve $(USED_PNG) $(DEVNULL) $(ERR_DEVNULL)
+	ccecho "result" "All PNGs for $(BOOK) are optimized"
   else
 	@ccecho "warn" "Warning: This document does not contain any PNGs to optimize."
   endif
@@ -355,19 +333,15 @@ _INKSCAPE_IS_NEW := $(shell if [[ "$(_INKSCAPE_TEST)" = "$(_INKSCAPE_VERSION_SOR
 #
 $(IMG_GENDIR)/color/%.png: $(IMG_SRC_DIR)/png/%.png | $(IMG_GEN_DIRECTORIES)
   ifdef HAVE_OPTIPNG
-    ifdef HAVE_EXIFTOOL
-	@exiftool -Comment $< | grep optipng > /dev/null || \
+	optipng -o0 -simulate $< 2>&1 | grep -q "already optimized"  || \
 	  ccecho "warn" " $< not optimized." >&2
-    endif
   endif
 	ln -sf $< $@
 
 $(IMG_GENDIR)/color/%.png: $(IMG_SRC_DIR)/%.png | $(IMG_GEN_DIRECTORIES)
   ifdef HAVE_OPTIPNG
-    ifdef HAVE_EXIFTOOL
-	@exiftool -Comment $< | grep optipng > /dev/null || \
+	optipng -o0 -simulate $< 2>&1 | grep -q "already optimized"  || \
 	  ccecho "warn" " $< not optimized." >&2
-    endif
   endif
 	ln -sf $< $@
 
@@ -385,7 +359,7 @@ endef
 
 ifdef HAVE_OPTIPNG
   define run_optipng
-optipng -o2 $@ >/dev/null 2>&1
+optipng -o2 -fix -preserve $@ >/dev/null 2>&1
   endef
 endif
 
