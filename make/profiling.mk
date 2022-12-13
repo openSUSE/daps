@@ -102,7 +102,7 @@ profile: $(PROFILES)
 #
 $(PROFILEDIR)/%.xml: $(SRC_DIR)/%.xml $(ENTITIES_DOC) $(DOCCONF) | $(PROFILEDIR)
     ifeq "$(VERBOSITY)" "2"
-	@(tput el1; echo -en "\r   Profiling $<")
+	@echo -en "\r   Profiling $<\n"
     endif
 	$(XSLTPROC) --output $@ $(PROFSTRINGS) $(HROOTSTRING) \
 	  --stringparam "filename=$(notdir $<)" \
