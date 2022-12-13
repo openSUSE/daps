@@ -46,7 +46,8 @@
  xmlns="&db5ns;"
  xmlns:d="&db5ns;"
  xmlns:xlink="http://www.w3.org/1999/xlink"
- xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+ xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+ exclude-result-prefixes="d">
 
   <xsl:import href="../common/copy.xsl"/>
   <xsl:output indent="yes"/>
@@ -153,6 +154,13 @@
       <xsl:with-param name="linkend" select="normalize-space(substring-after(@xlink:href, '#'))"/>
       <xsl:with-param name="text" select="."/>
     </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template match="d:footnoteref">
+    <xsl:element name="xref" namespace="&db5ns;">
+      <xsl:copy-of select="@*"/>
+      <!-- empty element, no need to process further nodes -->
+    </xsl:element>
   </xsl:template>
 
   <xsl:template name="make-xref">
