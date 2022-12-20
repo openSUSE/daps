@@ -49,6 +49,7 @@ TMP_DIR            = $(TMP_DIR)\n\
 \n\
 Document specifics\n\
 ------------------\n\
+SRC_FORMAT         = $(SRC_FORMAT)\n\
 DOCNAME            = $(DOCNAME)\n\
 FALLBACK_STYLEROOT = $(FALLBACK_STYLEROOT)\n\
 HTML_CSS           = $(HTML_CSS)\n\
