@@ -1678,9 +1678,10 @@ export SETFILES_TMP
 if [[ "adoc" = "$SRC_FORMAT" ]]; then
     ADOC_MAIN="$MAIN"
     ADOC_RESULT_DIR="${BUILD_DIR}/.adoc"
+    ADOC_SRC_DIR="$SRC_DIR"
     MAIN="${ADOC_RESULT_DIR}/${BOOK}.xml"
 
-    export ADOC_MAIN ADOC_RESULT_DIR MAIN
+    export ADOC_MAIN ADOC_RESULT_DIR ADOC_SRC_DIR MAIN
     [[ 2 -gt $VERBOSITY ]] && MOPTS="$MOPTS --silent"
     # we always want to create a fresh bigfile
     #

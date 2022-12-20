@@ -93,14 +93,12 @@ endif
 
 # Get the adoc sourcefiles
 #
-# include statements always start at the begin of the line, no other
-# characters (incl. space) are allowed before it
+# via external script  $(LIBEXEC_DIR)/get_adoc_includes.sh
+# (also gets includes within includes)
 #
-# If grep fails, we at least have ADOC_MAIN
-#
-ADOC_SRCFILES := $(ADOC_MAIN) $(wildcard $(addprefix \
- $(SRC_DIR)/,$(shell grep -E '^include::' $(ADOC_MAIN) 2>/dev/null | sed 's/.*::\([^\[]*\).*/\1/g' 2>/dev/null)))
-#ADOC_SRCFILES := $(wildcard $(PRJ_DIR)/adoc/*.adoc)
+
+ADOC_DOCINFO := $(addsuffix -docinfo.xml,$(basename $(ADOC_MAIN)))
+ADOC_SRCFILES := $(wildcard $(addprefix $(ADOC_SRC_DIR)/,$(shell $(LIBEXEC_DIR)/get_adoc_includes.sh $(ADOC_MAIN)))) $(wildcard $(ADOC_DOCINFO))
 
 all: $(MAIN)
 
@@ -112,7 +110,6 @@ all: $(MAIN)
 # set -o pipefail makes sure make exits when the asciidoctor command
 # returns != 0
 
-#all: $(MAIN)
 $(MAIN): $(ADOC_SRCFILES) | $(ADOC_RESULT_DIR)
   ifeq "$(VERBOSITY)" "2"
 	@ccecho "info"  "   Creating XML from AsciiDoc..."
