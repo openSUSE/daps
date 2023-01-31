@@ -172,11 +172,19 @@ if test 0 = "$CATALOG"; then
 fi
 
 dnl -------------------------------------------------------------------------
+dnl It checks for each saxon major release, prioritizing saxon12
 AC_MSG_NOTICE([===== Checking for Saxon...])
 AC_PATH_PROGS([SAXON], [saxon12 saxon11 saxon10], [0])
 if test 0 = "$SAXON"; then
-   AC_MSG_WARN([saxon10, saxon11, or saxon12 not found])
+   AC_MSG_WARN([saxon10, saxon11, nor saxon12 found])
+else
+  dnl Set saxon version
+  SAXON_VERSION=${SAXON##*saxon}
+  AC_MSG_NOTICE([Found saxon version $SAXON_VERSION])
+  AC_SUBST(SAXON_VERSION)
 fi
+
+AM_CONDITIONAL([HAS_SAXON], [test 0 != $SAXON])
 
 dnl -------------------------------------------------------------------------
 AC_MSG_NOTICE([===== Checking for Image conversion tools...])
