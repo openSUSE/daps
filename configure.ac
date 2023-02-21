@@ -9,9 +9,10 @@ dnl Frank Sundermeyer <fsundermeyer at opensuse dot org>
 dnl Thomas Schraitle  <toms at opensuse dot org>
 dnl
 
-m4_define(daps_version_major, 3)
-m4_define(daps_version_minor, 3)
-m4_define(daps_version_micro, [2])
+m4_define(daps_version_major, 4)
+m4_define(daps_version_minor, 0)
+m4_define(daps_version_micro, [beta1])
+
 # API version
 m4_define([daps_api_version],[daps_version_major])
 
