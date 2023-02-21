@@ -49,7 +49,7 @@
   <para>
    &dapsacr; supports technical writers in the editing, translation and
    publishing process of DocBook XML files (in the following, simply
-   called as XML files):
+   called XML files):
   </para>
 
   <variablelist>
@@ -72,7 +72,9 @@
       output formats. But &dapsacr; also supports custom layouts for your
       documentation projects (or for individual books within your set).
       Thus your XML documents can be published in different layouts without
-      having to change the sources or the configuration.
+      having to change the sources or the configuration. Note that &dapsacr;
+      only supports using customized DocBook stylesheets; the customization
+      itself requires to tweak the DocBook stylesheets written in XSLT.
 <!--You do not need to define custom stylesheets for <emphasis>all</emphasis>
      output formats&mdash;in case a custom layout cannot be found, &dapsacr;
      will automatically fall back to the DocBook stylesheets.-->
@@ -118,11 +120,11 @@
     <term>Spell Check</term>
     <listitem>
      <para>
-      &dapsacr; supports spell checking of your XML sources with &aspell;
-      from the command line. Depending on the XML editor you use, you can
-      also integrate a custom &aspell; dictionary into your editor. For
-      details, refer to <xref linkend="sec.daps.user.edit.spell"/> and
-      <xref linkend="sec.daps.user.editors.jedit.spellcheck"/>.
+      &dapsacr; supports spell checking of your XML sources with &hunspell; or
+      &aspell; from the command line. Depending on the XML editor you use, you
+      can also integrate a custom dictionary into your editor. For
+      details, refer to <xref linkend="sec.daps.user.edit.spell"/> and <xref
+      linkend="sec.daps.user.editors.jedit.spellcheck"/>.
      </para>
     </listitem>
    </varlistentry>
@@ -163,7 +165,7 @@
       called in DocBook). For example, you can profile certain parts of your
       XML texts for different (processor) architectures, operating systems,
       vendors or target groups. &dapsacr; supports profiling. Use the
-      <literal>PROF*</literal> keys defined in &dapsconf-sys; to define
+      <envar>PROF*</envar> keys defined in &dapsconf-sys; to define
       which information should be included in the output. For details, refer
       to <xref linkend="cha.daps.user.modular"/>.
      </para>
@@ -223,209 +225,8 @@
    </varlistentry>
   </variablelist>
  </sect1>
- <sect1 id="sec.daps.user.config">
-  <title>&dapsacr; Configuration</title>
- &daps-config;
- </sect1>
- <sect1 id="sec.daps.user.basics">
-  <title>Defining Documentation Projects</title>
 
-  <para>
-   The easiest way to set up a new documentation project from scratch is to
-   use the &dapsacr; initialization script <command>daps-init</command>. For
-   instructions how to do so, refer to <xref linkend="pro.daps.init"/>. The
-   script automatically creates the
-   <xref linkend="sec.daps.user.basics.files" xrefstyle="select:title"/> and
-   <xref linkend="sec.daps.user.basics.dirstruct" xrefstyle="select:title"/>
-   that you need to get started with &dapsacr;.
-  </para>
-
-  <para>
-   To migrate existing DocBook projects so that you can manage and publish
-   them with &dapsacr;, follow the step-by-step instructions in
-   <xref linkend="app.daps.user.migrate"/>.
-  </para>
- </sect1>
-
- <sect1 id="sec.daps.user.basics.dirstruct">
-  <title>Directory Structure</title>
-
-  <!--taroth 2012-04-26: cave, same contents in DAPS Quick
-   (art_daps_quick.xml, see id=sec.daps.quick.basics.dirstruct)-->
-
-  <!--taroth 2012-04-26: impossible to outsource to phrases-decl.ent and
-   include it multiple times (callout IDs!)-->
-
-  <para>
-   For &dapsacr; to work out of the box, your XML files and images must be
-   organized in a specific structure within your project directory.
-   <xref linkend="ex.daps.dir.prj" xrefstyle="select:label"/> shows the
-   required structure including the key files for a &dapsacr; documentation
-   project. You can also create multiple project directories for
-   individual documentation projects, but they all need the substructure
-   outlined below.
-  </para>
-
-  <sect2 id="sec.daps.user.oview.dir.src">
-   <title>Source Files</title>
-   <example id="ex.daps.dir.prj">
-    <title>Required Directory Structure</title>
-    <screen><replaceable>YOUR_PRJ_DIR/</replaceable> <co id="co.prjdir.base"/>
-     |--&dc;-* <co id="co.prjdir.dc"/>
-     |--images/
-     |   |--src/<co id="co.prjdir.img.src"/>
-     |   |  |--dia/
-     |   |  |--eps/
-     |   |  |--fig/
-     |   |  |--jpg
-     |   |  |--pdf/
-     |   |  |--png/
-     |   |  |--svg/
-     |--xml/<co id="co.prjdir.xml"/>
-     |   |--MAIN*.xml<co id="co.prjdir.main"/>
-         |--*.xml</screen>
-   </example>
-
-   <calloutlist>
-    <callout arearefs="co.prjdir.base">
-     <para>
-      <quote>Working directory</quote> for the respective documentation
-      project (in the following also called <literal>project directory</literal> ).
-     </para>
-    </callout>
-    <callout arearefs="co.prjdir.dc">
-     <para>
-      On the topmost level of your project directory, store the &dclong;
-      (&dc;) file defining your documentation project. You can store multiple &dc;
-      files here (for multiple books belonging to the same documentation
-      project, or &dc; files for various documentation projects). For more
-      information, refer to <xref linkend="sec.daps.user.basics.files"/>.
-     </para>
-    </callout>
-    <callout arearefs="co.prjdir.img.src">
-     <para>
-      Top-level directory for any original images that you want to use in the
-      documentation project. Contains subdirectories for images in various
-      formats. Any images to be referenced in the XML sources must be put in
-      the respective subdirectories. For basic information about referencing
-      images, refer to <xref linkend="sec.daps.user.imgs.refer"/>.
-     </para>
-    </callout>
-    <callout arearefs="co.prjdir.xml">
-     <para>
-      Directory holding the XML &main; file and all other XML files for the
-      documentation project. If you declare entities in one or more external
-      files (for example, in <filename>entity-decl.ent</filename>), put the
-      entity declaration files here, too.
-     </para>
-    </callout>
-    <callout arearefs="co.prjdir.main">
-     <para>
-       The &main; file of the documentation project.  It contains the
-       <quote>starting point</quote> (the highest-level object) of your
-       documentation project and includes
-       <quote>references</quote> to other books, chapters, appendixes, etc.
-       For more information, refer to
-      <xref linkend="sec.daps.user.basics.files"/>.
-     </para>
-    </callout>
-   </calloutlist>
-   &daps-note-subdirs;
-
-   <important>
-    <title>File names</title>
-    <para>
-     The following rules apply to source file names:
-    </para>
-    <itemizedlist>
-     <listitem>
-      <para>
-       File names must not include spaces
-      </para>
-     </listitem>
-     <listitem>
-      <para>
-       File name extensions must be lowercase (file.xml, image.svg and
-       <emphasis>not</emphasis> file.XML, image.SVG)
-      </para>
-     </listitem>
-    </itemizedlist>
-   </important>
-
-  </sect2>
-
-  <sect2 id="sec.daps.user.oview.dir.build">
-   <title>The <filename>build</filename> Subdirectory</title>
-   <para>
-    To strictly discriminate between all source content added by users and
-    the content generated by &dapsacr;, &dapsacr; uses a
-    <filename>build</filename> directory. When generating output from your
-    documentation project for the first time, &dapsacr; adds a
-    <filename>build</filename> directory to your project directory. It
-    is located parallel to the <filename>xml</filename> and
-    <filename>images</filename> subdirectories. (If desired, the name and
-    path of the <filename>build</filename> directory can be changed with the
-    parameter <parameter>BUILD_DIR</parameter> in &dapsconf-sys; or
-    &dapsconf-user;.)
-   </para>
-   <para>
-    The <filename>build</filename> directory is structured as follows:
-   </para>
-   <example id="ex.daps.user.build">
-    <title>Build Directory</title>
-    <screen><replaceable>YOUR_PRJ_DIR</replaceable> <co id="co.docdir"/>
-     <emphasis role="strong">|--build/</emphasis> <co id="co.builddir"/>
-     |--<replaceable>NAME_OF_&dc;1</replaceable>/ <co id="co.builddir.dc"/>
-     |--<replaceable>NAME_OF_&dc;2</replaceable>/ <xref linkend="co.builddir.dc"/>
-     |--.images/ <co id="co.builddir.img"/>
-     |--.profiled/ <co id="co.builddir.profiled"/>
-     |--.tmp/ <co id="co.builddir.tmp"/></screen>
-   </example>
-   <calloutlist>
-    <callout arearefs="co.docdir">
-     <para>
-      <quote>Working directory</quote> for the respective documentation
-      project.
-     </para>
-    </callout>
-    <callout arearefs="co.builddir">
-     <para>
-      Directory that holds all contents build by &dapsacr;.
-     </para>
-    </callout>
-    <callout arearefs="co.builddir.dc">
-     <para> For each of your documentation deliverables, &dapsacr; creates a
-      subdirectory. It is named after the respective &dc; from which you
-      build the book, article or set. For example, the output for
-        <filename>&dc;-<replaceable>NAME</replaceable></filename> is written
-      to
-        <filename><replaceable>YOUR_PRJ_DIR</replaceable>/build/<replaceable>NAME</replaceable></filename>.
-      All formats that have been generated from the &dc; (PDF, HTML, TXT,
-      &epub; etc.) can be found there. A <filename>log</filename>
-      subdirectory stores log files for each output format that has been
-      generated by &dapsacr;. </para>
-    </callout>
-    <callout arearefs="co.builddir.img">
-     <para>
-      Directory holding the images created by &dapsacr;.
-     </para>
-    </callout>
-    <callout arearefs="co.builddir.profiled">
-     <para>
-      Directory holding the profiled XML sources created by &dapsacr;.
-     </para>
-    </callout>
-    <callout arearefs="co.builddir.tmp">
-     <para>
-      Directory holding temporary files created by &dapsacr; (for example,
-      the FO files).
-     </para>
-    </callout>
-   </calloutlist>
-  </sect2>
- </sect1>
-
-  <sect1 id="sec.daps.user.basics.files">
+<sect1 id="sec.daps.user.basics.files">
    <title>Key Files</title>
    &daps-key-files; <para>
     In the following sections, find examples for &main; and &dc; files,
@@ -456,6 +257,73 @@
     have been replaced by the generic <sgmltag>info</sgmltag> element.
    </para>
 </note>
+
+  <important>
+    <title>File name conventions</title>
+    <para>
+     The following rules apply to source file names:
+    </para>
+    <itemizedlist>
+     <listitem>
+      <para>
+       File names must not include spaces
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       The following file name suffixes are supported (lowercase only).
+      </para>
+      <itemizedlist>
+       <listitem>
+        <para>
+         DocBook XML files: <literal>.xml</literal>
+        </para>
+       </listitem>
+       <listitem>
+        <para>
+         DocBook entity files: <literal>.ent</literal>
+        </para>
+       </listitem>
+       <listitem>
+        <para>
+         ASCIIDoc files, ASCIIDoc attribute files: <literal>.adoc</literal>
+        </para>
+       </listitem>
+       <listitem>
+        <para>
+         Dia images: <literal>.dia</literal>
+        </para>
+       </listitem>
+       <listitem>
+        <para>
+         Ditaa images: <literal>.ditaa</literal>
+        </para>
+       </listitem>
+       <listitem>
+        <para>
+         JPG images: <literal>.jpg</literal>
+        </para>
+       </listitem>
+       <listitem>
+        <para>
+         OpenOffice images: <literal>.odg</literal>
+        </para>
+       </listitem>
+       <listitem>
+        <para>
+         PNG images: <literal>.png</literal>
+        </para>
+       </listitem>
+       <listitem>
+        <para>
+         SVP images: <literal>.svg</literal>
+        </para>
+       </listitem>
+      </itemizedlist>
+     </listitem>
+    </itemizedlist>
+   </important>
+
 
   <sect2 id="sec.daps.user.basics.single">
    <title>Single Deliverables (Article or Book)</title>
@@ -977,7 +845,375 @@ export DOCCONF=$BASH_SOURCE <co id="co.daps.dc.set.source"/></screen>
    </example>
   </sect2>
  </sect1>
-<!--taroth 2012-05-08: updated until here, todo: add directory stuff created by
+
+ <sect1 id="sec.daps.user.config">
+  <title>&dapsacr; Directory Configuration</title>
+ &daps-config;
+ </sect1>
+ <sect1 id="sec.daps.user.basics">
+  <title>Defining Documentation Projects</title>
+
+  <para>
+   The easiest way to set up a new documentation project from scratch is to
+   use the &dapsacr; initialization script <command>daps-init</command>. For
+   instructions how to do so, refer to <xref linkend="pro.daps.init"/>. The
+   script automatically creates the
+   <xref linkend="sec.daps.user.basics.files" xrefstyle="select:title"/> and
+   <xref linkend="sec.daps.user.basics.dirstruct" xrefstyle="select:title"/>
+   that you need to get started with &dapsacr;.
+  </para>
+
+  <para>
+   To migrate existing DocBook projects so that you can manage and publish
+   them with &dapsacr;, follow the step-by-step instructions in
+   <xref linkend="app.daps.user.migrate"/>.
+  </para>
+ </sect1>
+
+ <sect1 id="sec.daps.user.basics.dirstruct">
+  <title>Directory Structure</title>
+
+  <!--taroth 2012-04-26: cave, same contents in DAPS Quick
+   (art_daps_quick.xml, see id=sec.daps.quick.basics.dirstruct)-->
+
+  <!--taroth 2012-04-26: impossible to outsource to phrases-decl.ent and
+   include it multiple times (callout IDs!)-->
+
+  <para>
+   For &dapsacr; to work out of the box, your XML files and images must be
+   organized following a some simple rules. DAPS supports a default directory
+   structure (shown in <xref linkend="ex.daps.dir.prj"
+   xrefstyle="select:label"/>) that does not require any kind of configuration.
+   This directory structure is created when using <command>daps-init</command>.
+  </para>
+  <para>
+   For larger projects or specific writing styles (such as topic-based
+   authoring), DAPS also allows you to set up complex directory structures.
+   Such a setup requires to put the information where to find images and
+   source files into the document's configuration file (DC-file).
+  </para>
+
+  <important>
+   <title>Separation of Projects</title>
+   <para>
+    Although not strictly required, it is strongly recommended to use separate
+    directories for different documentation projects (each using one of the
+    substructures outlined below).
+   </para>
+  </important>
+
+  <sect2 id="sec.daps.user.basics.dirstruct.default">
+   <title>The Default Directory Structure</title>
+
+   <para>
+    The default directory structure is the recommended setup for regular
+    DocBook projects or ASCIIDoc projects. It is best suited for projects
+    resulting in a single document or for multiple documents combined in a
+    DocBook set.
+   </para>
+
+   <example id="ex.daps.dir.prj">
+    <title>DAPS' Default Directory Structure</title>
+    <screen><replaceable>YOUR_PRJ_DIR/</replaceable> <co id="co.prjdir.base"/>
+     |--&dc;-* <co id="co.prjdir.dc"/>
+     |--images/
+     |   |--src/<co id="co.prjdir.img.src"/>
+     |   |  |--dia/
+     |   |  |--eps/
+     |   |  |--fig/
+     |   |  |--jpg
+     |   |  |--pdf/
+     |   |  |--png/
+     |   |  |--svg/
+     |--xml/ (--adoc)<co id="co.prjdir.xml"/>
+     |   |--MAIN1.xml (--MAIN1.adoc)<co id="co.prjdir.main"/>
+     |   |--MAIN2.xml (--MAIN2.adoc)
+     |   |--*.xml (--*.adoc)</screen>
+   </example>
+
+   <calloutlist>
+    <callout arearefs="co.prjdir.base">
+     <para>
+      <quote>Working directory</quote> for the respective documentation
+      project (in the following also called <literal>project directory</literal> ).
+     </para>
+    </callout>
+    <callout arearefs="co.prjdir.dc">
+     <para>
+      On the topmost level of your project directory, store the &dclong;
+      (&dc;) file defining your documentation project. You can store multiple &dc;
+      files here (for multiple books belonging to the same documentation
+      project, or &dc; files for various documentation projects). For more
+      information, refer to <xref linkend="sec.daps.user.basics.files"/>.
+     </para>
+    </callout>
+    <callout arearefs="co.prjdir.img.src">
+     <para>
+      Top-level directory for any original images that you want to use in the
+      documentation project. Contains subdirectories for images in various
+      formats. Any images to be referenced in the XML sources must be put in
+      the respective subdirectories. For basic information about referencing
+      images, refer to <xref linkend="sec.daps.user.imgs.refer"/>.
+     </para>
+     <para>
+      Alternatively, you can also put all images directly into the <filename
+      class="directory">images/</filename> directory. In case you created the
+      project using <command>daps-init</command>, move all images accordingly
+      and delete the <literal>images/src</literal> subdirectory afterwards.
+      Adjusting image paths in the XML sources is <emphasis>not</emphasis>
+      necessary.
+     </para>
+    </callout>
+    <callout arearefs="co.prjdir.xml">
+     <para>
+      <filename class="directory">xml/</filename>: Directory containing the XML
+      &main; file and all other XML files for a DocBook documentation
+      project. If you declare entities in one or more external files (for
+      example, in <filename>entity-decl.ent</filename>), put the entity
+      declaration files here, too.
+     </para>
+     <para>
+      <filename class="directory">adoc/</filename>: Directory containing the
+      ASCIIDoc &main; file and all other ASCIIDoc files for aa ASCIIDoc
+      documentation project. If you declare attributes in one or more external
+      files, put them here, too.
+     </para>
+    </callout>
+    <callout arearefs="co.prjdir.main">
+     <para>
+       The &main; file of the documentation project.  It contains the
+       <quote>starting point</quote> (the highest-level object) of your
+       documentation project and includes
+       <quote>references</quote> to other books, chapters, appendixes, etc.
+       For more information, refer to
+      <xref linkend="sec.daps.user.basics.files"/>.
+     </para>
+    </callout>
+   </calloutlist>
+   &daps-note-subdirs;
+
+   <important>
+    <title>Use the default directory setup for DocBook Sets</title>
+    <para>
+     In case you organize several manuals and/or articles in a DocBook set, it
+     is strongly recommended use the default directory layout and keep all xml
+     files in a single directory.
+    </para>
+   </important>
+
+  </sect2>
+
+  <sect2 id="sec.daps.user.basics.dirstruct.custom">
+   <title>The Custom Directory Structure</title>
+
+   <para>
+    The custom directory structure is primarily suited to support topic-based
+    projects making use of DocBook assemblies. It allows, for example to
+    separate topic types and assembly definitions.
+   </para>
+
+   <example id="ex.daps.dir.prj_custom">
+    <title>DAPS' Custom Directory Structure for Topic-Based Authoring</title>
+    <screen><replaceable>YOUR_PRJ_DIR/</replaceable> <co id="co.prjdir_custom.base"/>
+     |--&dc;-admin1 <co id="co.prjdir_custom.dc"/>
+     |--&dc;-admin2
+     |--&dc;-deployment1
+     |--&dc;-deployment2
+     |--articles_admin/<co id="co.prjdir_custom.assemblies"/>
+     |   |--admin1_assembly.xml
+     |   |--admin2_assembly.xml
+     |--articles_deployment/
+     |   |--deployment1_assembly.xml
+     |   |--deployment2_assembly.xml
+     |--general/<co id="co.prjdir_custom.general"/>
+     |   |--disclaimer.xml
+     |   |--typography.xml
+     |   |--entities.ent
+     |--concepts/<co id="co.prjdir_custom.concepts"/>
+     |   |--concept1.xml
+     |   |--concept2.xml
+     |   |--concept3.xml
+     |--references/<co id="co.prjdir_custom.references"/>
+     |   |--reference1.xml
+     |   |--reference2.xml
+     |   |--reference3.xml
+     |--tasks/<co id="co.prjdir_custom.tasks"/>
+     |   |--task1.xml
+     |   |--task2.xml
+     |   |--task3.xml
+     |   |->../common/entities.ent
+     |--imgs/<co id="co.prjdir_custom.imgs"/>
+     |   |--*.dia
+     |   |--*.ditaa
+     |   |--*.jpg
+     |   |--*.odg
+     |   |--*.png
+     |   |--*.svg</screen>
+   </example>
+
+   <calloutlist>
+    <callout arearefs="co.prjdir_custom.base">
+     <para>
+      <quote>Working directory</quote> for the respective documentation project
+      (in the following also called <literal>project directory</literal> ).
+     </para>
+    </callout>
+    <callout arearefs="co.prjdir_custom.dc">
+     <para>
+      On the topmost level of your project directory, store
+      <emphasis>all</emphasis> &dclong; (&dc;) files defining your
+      deliverables. If your are using assembly files as in this example, each
+      DC-file points to an assembly file (rather than to a &main; as in the
+      previous example. The &dc; files also need to contain information on
+      where to find the assemblies (<envar>SRC_DIR</envar>) and the images
+      (<envar>IMG_SRC_DIR</envar>).
+     </para>
+     <para>
+      For the four &dc; files the respective sections look like this:
+     </para>
+     <screen># -&dc;-admin1
+MAIN=admin1_assembly.xml
+SRC_DIR=articles_admin
+IMG_SRC_DIR=imgs</screen>
+     <screen># -&dc;-admin2
+MAIN=admin2_assembly.xml
+SRC_DIR=articles_admin
+IMG_SRC_DIR=imgs</screen>
+     <screen># -&dc;-deployment1
+MAIN=deployment1_assembly.xml
+SRC_DIR=deployment_admin
+IMG_SRC_DIR=imgs</screen>
+     <screen># -&dc;-deployment2
+MAIN=deployment2_assembly.xml
+SRC_DIR=articles_admin
+IMG_SRC_DIR=imgs</screen>
+     <para>
+      For more information, refer to <xref linkend="sec.daps.user.basics.files"/>.
+     </para>
+    </callout>
+    <callout arearefs="co.prjdir_custom.assemblies">
+     <para>
+      Directory containing the assemblies, the files defining your
+      deliverables. In this example, we set up two directories containing
+      assemblies for the two categories <quote>administration</quote> and
+      <quote>deplyoment</quote>. To include <literal>resources</literal> from
+      the other directories , use a relative path, e.g. <literal>&lt;resource
+      href="../tasks/task.1xml" xml:id="task1"&gt;</literal>. The same is true
+      for entity files located in <filename
+      class="directory">general</filename>.
+     </para>
+    </callout>
+    <callout arearefs="co.prjdir_custom.general">
+     <para>
+      Directory containing general files such as disclaimers, licenses, etc. In
+      case you maintain one or more entity files, it is suggested placing themn
+      here, too.
+     </para>
+    </callout>
+    <callout arearefs="co.prjdir_custom.concepts co.prjdir_custom.references co.prjdir_custom.tasks">
+     <para>
+      Directory containing concept / reference / task XML snippets.
+     </para>
+    </callout>
+    <callout arearefs="co.prjdir_custom.imgs">
+     <para>
+      Directory containing images for all deliverables.
+     </para>
+    </callout>
+   </calloutlist>
+  </sect2>
+
+  <sect2 id="sec.daps.user.oview.dir.build">
+   <title>The <filename>build</filename> Subdirectory</title>
+   <para>
+    To strictly discriminate between all source content added by users and the
+    content generated by &dapsacr;, &dapsacr; uses a <filename>build</filename>
+    directory. When generating output from your documentation project for the
+    first time, &dapsacr; adds a <filename>build</filename> directory to your
+    project directory. It is located directly underneath the project
+    directory. (If desired, the name and path of the <filename>build</filename>
+    directory can be changed with the parameter
+    <parameter>BUILD_DIR</parameter> in &dapsconf-sys; or &dapsconf-user;.)
+   </para>
+   <para>
+    The <filename>build</filename> directory is structured as follows:
+   </para>
+   <example id="ex.daps.user.build">
+    <title>Build Directory</title>
+    <screen><replaceable>YOUR_PRJ_DIR</replaceable> <co id="co.docdir"/>
+     <emphasis role="strong">|--build/</emphasis> <co id="co.builddir"/>
+     |--<replaceable>NAME_OF_&dc;1</replaceable>/ <co id="co.builddir.dc"/>
+     |--<replaceable>NAME_OF_&dc;2</replaceable>/ <xref linkend="co.builddir.dc"/>
+     |--.images/ <co id="co.builddir.img"/>
+     |--.profiled/ <co id="co.builddir.profiled"/>
+     |--.tmp/ <co id="co.builddir.tmp"/></screen>
+   </example>
+   <calloutlist>
+    <callout arearefs="co.docdir">
+     <para>
+      <quote>Working directory</quote> for the respective documentation
+      project.
+     </para>
+    </callout>
+    <callout arearefs="co.builddir">
+     <para>
+      Directory that holds all files created by &dapsacr;.
+     </para>
+    </callout>
+    <callout arearefs="co.builddir.dc">
+     <para> For each of your documentation deliverables, &dapsacr; creates a
+      subdirectory. It is named after the respective &dc; from which you
+      build the book, article or set. For example, the output for
+        <filename>&dc;-<replaceable>NAME</replaceable></filename> is written
+      to
+        <filename><replaceable>YOUR_PRJ_DIR</replaceable>/build/<replaceable>NAME</replaceable></filename>.
+      All formats that have been generated from the &dc; (PDF, HTML, TXT,
+      &epub; etc.) can be found there. A <filename>log</filename>
+      subdirectory stores log files for each output format that has been
+      generated by &dapsacr;. </para>
+    </callout>
+    <callout arearefs="co.builddir.img">
+     <para>
+      Directory holding the images created by &dapsacr;.
+     </para>
+    </callout>
+    <callout arearefs="co.builddir.profiled">
+     <para>
+      Directory holding the profiled XML sources created by &dapsacr;.
+     </para>
+    </callout>
+    <callout arearefs="co.builddir.tmp">
+     <para>
+      Directory holding temporary files created by &dapsacr; (for example,
+      the FO files).
+     </para>
+    </callout>
+   </calloutlist>
+
+   <tip>
+    <title>Exclude generated Files from Versioning</title>
+    <para>
+     Since DAPS writes all files it generates to the <filename
+     class="directory">build</filename> directory, it can easily be excluded
+     from any versioning system by adding it to the respective ignore-list (for
+     example to <filename>.gitignore</filename> for Git).
+    </para>
+   </tip>
+   <tip>
+    <title>Removing the build directory</title>
+    <para>
+     The <filename class="directory">build/</filename> directory can be removed
+     at any time - &dapsacr; will rebuild all files in case it is missing. In
+     fact, if your build fails or behaves unexpected, removing <filename
+     class="directory">build/</filename> and restarting the job may help.
+    </para>
+   </tip>
+
+
+  </sect2>
+ </sect1>
+
+  <!--taroth 2012-05-08: updated until here, todo: add directory stuff created by
      DAPS-->
 
  <sect1 id="sec.daps.user.syntax">

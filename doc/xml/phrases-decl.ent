@@ -34,8 +34,7 @@
 <!ENTITY daps-feedback
   '<para>We want to hear your comments and suggestions about &dapslong; (including
    this guide and the other documentation included with &dapsacr;). You can
-   contact us on the <literal>#opensuse-doc</literal> IRC channel on
-   <literal>irc.freenode.net</literal> or in the discussion forum at <ulink
+   contact us in the discussion forum at <ulink
    url="https://github.com/openSUSE/daps/discussions"/>.
    For bugs or enhancement requests, open an issue at
    <ulink url="https://github.com/openSUSE/daps/issues/new"/>. A user account
@@ -63,6 +62,9 @@
    <para>When installing &dapsacr; as an RPM package (on any SUSE-based system),
    dependencies on other software packages are automatically resolved during
    installation. No additional action is required.</para>
+   <para>When installing DAPS from the sources, find a list of software
+   dependencies at
+   <ulink url="https://github.com/openSUSE/daps/blob/main/INSTALL.adoc"/>.</para>
 '>
 
 <!ENTITY daps-addon
@@ -219,6 +221,23 @@
       during installation.</para>
     </step>
    </procedure>'>
+
+<!ENTITY daps-install-linux
+'<para>
+  DAPS can easily be installed from source running <command>configure</command>,
+  <command>make</command>, and <command>make install</command>. Source archives
+  are available for download from https://github.com/openSUSE/daps/releases. This
+  will make DAPS available for all users on the system.
+ </para>
+ <para>
+  Alternatively, you can also run DAPS directly from a GitHub checkout without
+  installing it. Use this method, if you want to install DAPS for a single user.
+ </para>
+ <para>
+  Instructions for installing DAPS from source as well as for using it from a
+  Git checkout can be found at
+  <ulink url="https://github.com/openSUSE/daps/blob/main/INSTALL.adoc"/>.
+ </para>'>
 
 <!ENTITY daps-images-intro
 ' <para>
@@ -771,8 +790,7 @@ directory and in the profiled sources, as indicated by
      <filename>image/src/*</filename> Directories</title>
     <para>Avoid subdirectories within the <filename>xml</filename> and
       <filename>image/src/*</filename> directories. Referencing or including
-     files from subdirectories within those directories can lead
-     to unpredictable results with &dapsacr;.</para>
+     files from subdirectories within those directories is not supported.</para>
    </important>'>
   
 <!ENTITY daps-note-filelists
