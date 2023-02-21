@@ -1,4 +1,115 @@
 -------------------------------------------------------------------
+Tue Feb 21 11:02:00 UTC 2023 - fsundermeyer@opensuse.org
+
+Beta release DAPS 4.0.beta1:
+
+* New features:
+  - Support for DocBook assemblies
+    - DocBook's topic-based authoring approach, the Assemblies
+      (https://tdg.docbook.org/tdg/5.2/ch06.html) are now supported
+      by DAPS. IF MAIN in the DC-file is set to an assembly, it
+      will automatically be recognized as an assembly by DAPS and
+      be converted to a bigfile that is then processed like a
+      regular DocBook file.
+      In case you assembly consists more than one structure, create
+      a DC-file for each structure and set STRUCTID to the
+      respective structure ID(s) in the DC file(s).
+      NOTE: assembly-support in DocBook is still in development.
+            DAPS requires DocBook 5.2-pre or better!
+    - Limitations:
+      File list commands (e.g. list-srcfiles) will not show the
+      assembly files and included resources, but rather the bigfile.
+      Images will be correctly listed.
+      Similar limitations apply to the package-src and locdrop
+      commands - the packages will contain the bigfile rather
+      than the original sources.
+      Correctly supporting these features is planned for future
+      DAPS releases.
+  - Custom source directories:
+    - Previous DAPS versions required sources to be located in
+      directories xml/ (DocBook) or adoc/ (ASCIIDoc) and
+      images/src/<IMGFORMAT>. These directories had to be in the
+      same directory as the respective DC-file.
+      By setting SRC_DIR and IMG_SRC_DIR you now set custom
+      directories for xml/adoc sources and images. Placing images
+      in subdirectories representing their format is also no longer
+      necessary (but still supported). This allows a much more
+      flexible directory setup.
+      Default settings are the ones inherited from DAPS 3.x:
+      xml/ (DocBook) or adoc/ (ASCIIDoc) and
+      images/src/<IMGFORMAT> (images).
+      Values can be set via DC-file (for document-specific settings)
+      or globally in /etc/daps/config or via the command-line
+      (daps -d <DC> --imgsrcdir="foo/img" --srcdir="foo")
+	!! Refer to the documentation for more details
+      (incl. do's and dont's). !!
+  - Always rebuild:
+    - DAPS makes use of Makefiles to make sure only files that
+      really need to be touched get rebuild. So if you would, for
+      example build a PDF and then rebuild it again while the
+      sources have not changed, DAPS would do nothing but displaying
+      the link of the existing PDF. This considerably speeds up
+      build times for large projects.
+      However, it fails to recognize the necessity of a rebuild when
+      changing stylesheets, or sometimes produces unwanted
+      results. With DAPS 3.x you could specify daps --force to force
+      rebuilding everything.
+      With DAPS 4 rebuilding everything will become the new default.
+      To restore the old behavior, set ALWAYS_REBUILD=no in
+      /etc/daps.config (global setting), in ~/.config/daps/dapsrc
+      (user setting), or in the DC-file (document setting).
+  - New default spell-checker: hunspell
+    - Switching from aspell to hunspell as the default spell checker
+      To restore the old behavior, set SPELL_CHECLKER=aspell in
+      /etc/daps.config (global setting), in ~/.config/daps/dapsrc
+      (user setting), or in the DC-file (document setting). You can
+      specify the spell checker on the command line, see
+      daps spellcheck help
+  - PDF file names:
+    - In DAPS 3.x PDF file names for color PDFs followed the pattern
+      <NAME>_color.pdf. The string "_color" has been removed from the
+      filename. Note that graysacle PDFs continue to use the pattern
+      <NAME>_grayscale.pdf
+      (https://github.com/openSUSE/daps/issues/665)
+  - PNG optimization
+    - In DAPS 3.x, When optimizing PNGs with optipng an exif
+      comment "optipng" was added to the image. However, when
+      editing the image afterwards and saving it without
+      optimization, it would be skipped by subsequent optipng runs,
+      because the exif information was still there. The following
+      has been changed:
+      - exif information is no longer used (also removes dependency
+	on exiftool)
+      - with each optipng run, all images are scanned by optipng
+        using "optipng -o0 -simulate" (which should not introduce
+        a performance penalty compared to looking up EXIF information
+      - if the check reveals a requirement for optimization
+	the image is changed by a second optipng call
+      - using "optipng -fix" also ensures to fix iCCP warnings
+        with libpng > 1.6
+      (https://github.com/openSUSE/daps/issues/513)
+  - Improved file lists for ASCIIDoc sources
+    - list-srcfiles on adoc MAINs now also lists docinfo-files
+      and includes from includes. Conditionals are _not_
+      evaluated, list-srcfiles will always show _all_ included
+      adoc files.
+      (https://github.com/openSUSE/daps/issues/656)
+
+* Bug fixes:
+  - Added documentation on uppercase and lowercase file extensions
+    (good: *.png, bad: *.PNG)
+    (https://github.com/openSUSE/daps/issues/436)
+  - In case a variable was _initially_ assigned with "+=" (VAR+=value)
+    rather than with "=" (VAR=value) a space was added in front of
+    the value.
+  (https://github.com/openSUSE/daps/issues/650)
+
+* Removed features:
+  - automatic detection of a single or default DC-file has been
+    disabled, the DOCCONF_DEFAULT configuration option has been
+    removed
+
+-------------------------------------------------------------------
 Tue Oct 25 13:39:00 UTC 2022 - fsundermeyer@opensuse.org
 
 Stable release DAPS 3.3.2:
