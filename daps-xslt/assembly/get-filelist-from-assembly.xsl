@@ -13,6 +13,10 @@
    Parameters:
      * seperator (string): separator between each file, default is space
 
+   Hint:
+     The stylesheets reports only those resources that are actually used
+     inside a <structure>.
+
    Author:
      Thomas Schraitle <toms@opensuse.org>
 
