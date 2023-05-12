@@ -31,19 +31,22 @@
 
 
   <xsl:template name="error">
+    <xsl:param name="node" select="."/>
     <xsl:param name="id">
       <xsl:choose>
-        <xsl:when test="ancestor-or-self::*/@xml:id[last()]">
-          <xsl:value-of select="ancestor-or-self::*/@xml:id[last()]"/>
+        <xsl:when test="$node/ancestor-or-self::*/@xml:id[last()]">
+          <xsl:value-of select="$node/ancestor-or-self::*/@xml:id[last()]"/>
         </xsl:when>
         <xsl:otherwise>n/a</xsl:otherwise>
       </xsl:choose>
     </xsl:param>
-    <xsl:param name="title" select="(ancestor-or-self::*/d:title|ancestor-or-self::*/d:info/d:title)[last()]"/>
-    <xsl:param name="node" select="."/>
+    <xsl:param name="title" select="($node/ancestor-or-self::*/d:title|$node/ancestor-or-self::*/d:info/d:title)[last()]"/>
+    <xsl:param name="level">ERROR</xsl:param>
+    <xsl:param name="msg">Empty inline found.</xsl:param>
 
-    <xsl:message>[ERROR] Empty inline <xsl:value-of 
-      select="concat('&lt;', local-name($node), '>')"/> found near id=<xsl:value-of
+    <xsl:message><xsl:value-of
+      select="concat('[', $level, '] ', $msg, ' Element &lt;', local-name($node), '>')"
+       /> located near id=<xsl:value-of
         select="$id"/>, title=<xsl:value-of select="normalize-space($title)"/>
         XPath=<xsl:call-template name="xpath.location"/>
     </xsl:message>
@@ -85,6 +88,14 @@
         <xsl:call-template name="error"/>
       </xsl:when>
     </xsl:choose>
+  </xsl:template>
+
+
+  <xsl:template match="d:indexterm">
+    <xsl:call-template name="error">
+      <!-- <xsl:with-param name="level">WARN</xsl:with-param> -->
+      <xsl:with-param name="msg">Deprecated indexterm found (primary=<xsl:value-of select="normalize-space(d:primary)"/>).</xsl:with-param>
+    </xsl:call-template>
   </xsl:template>
 
 </xsl:stylesheet>
