@@ -58,7 +58,7 @@
     <xsl:apply-templates/>
   </xsl:template>
 
-  <xsl:template match="chapter|db:chapter">
+  <xsl:template match="chapter|db:chapter|article|db:article">
     <xsl:variable name="num">
       <xsl:number from="book" level="any"/>
     </xsl:variable>
