@@ -40,8 +40,8 @@
     <xsl:param name="node" select="."/>
     <xsl:param name="id">
       <xsl:choose>
-        <xsl:when test="$node/ancestor-or-self::*/@xml:id[last()]">
-          <xsl:value-of select="$node/ancestor-or-self::*/@xml:id[last()]"/>
+        <xsl:when test="($node/ancestor-or-self::*/@xml:id)[last()]">
+          <xsl:value-of select="($node/ancestor-or-self::*/@xml:id)[last()]"/>
         </xsl:when>
         <xsl:otherwise>n/a</xsl:otherwise>
       </xsl:choose>
