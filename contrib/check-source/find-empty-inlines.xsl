@@ -5,6 +5,10 @@
      Find empty inline elements in our sources.
      These elements cause layout issues in HTML.
 
+   Parameters:
+     prefix:  the prefix to use for the output XPath (default "d")
+              (without the colon)
+
    Input:
      DocBook 5 document
 
@@ -29,6 +33,8 @@
   <xsl:strip-space elements="*"/>
   <xsl:preserve-space elements="d:screen d:programlisting"/>
 
+<!--  <xsl:param name="prefix">d</xsl:param>-->
+
 
   <xsl:template name="error">
     <xsl:param name="node" select="."/>
@@ -48,7 +54,9 @@
       select="concat('[', $level, '] ', $msg, ' Element &lt;', local-name($node), '>')"
        /> located near id=<xsl:value-of
         select="$id"/>, title=<xsl:value-of select="normalize-space($title)"/>
-        XPath=<xsl:call-template name="xpath.location"/>
+        XPath=<xsl:call-template name="xpath.location">
+          <xsl:with-param name="prefix" select="$prefix"/>
+        </xsl:call-template>
     </xsl:message>
   </xsl:template>
 

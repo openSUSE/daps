@@ -4,7 +4,8 @@
      Returns the XPath of a node, including predicates if needed
 
    Parameters:
-     None
+     prefix:  the prefix to use for the output XPath (default "d")
+              (without the colon)
 
    Dependencies:
      None
@@ -28,7 +29,10 @@
    Original template from http://docbook.sourceforge.net/release/xsl/current/lib/lib.xsl
 --> 
 
+    <xsl:param name="prefix">d</xsl:param>
+
     <xsl:template name="xpath.location">
+        <xsl:param name="prefix" select="$prefix"/>
         <xsl:param name="node" select="."/>
         <xsl:param name="path" select="''"/>
 
@@ -38,6 +42,7 @@
             select="count($node/preceding-sibling::*[name(.) = name($node)])"/>
 
         <xsl:variable name="next.path">
+            <xsl:if test="$prefix != ''"><xsl:value-of select="concat($prefix, ':')"/></xsl:if>
             <xsl:value-of select="local-name($node)"/>
             <xsl:if test="$path != ''">
                 <xsl:if test="$prec-sib >0">
@@ -51,6 +56,7 @@
         <xsl:choose>
             <xsl:when test="$node/parent::*">
                 <xsl:call-template name="xpath.location">
+                    <xsl:with-param name="prefix" select="$prefix"/>
                     <xsl:with-param name="node" select="$node/parent::*"/>
                     <xsl:with-param name="path" select="$next.path"/>
                 </xsl:call-template>
