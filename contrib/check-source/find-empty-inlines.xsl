@@ -76,7 +76,7 @@
                        d:errortype|d:exceptionname|d:fax|d:filename|d:firstname|
                        d:foreignphrase|d:funcdef|d:function|d:guilabel|d:guimenu|
                        d:guimenuitem|d:guisubmenu|d:hardware|d:holder|d:honorific|
-                       d:initializer|d:issuenum|d:jobtitle|d:keycode|d:keysym|
+                       d:initializer|d:issuenum|d:jobtitle|d:keycap[not(@function)]|d:keycode|d:keysym|
                        d:keyword|d:label|d:lhs|d:lineage|d:lineannotation|
                        d:literal|d:macrodef|d:macroname|d:manvolnum|d:markup|
                        d:mathphrase|d:member|d:modfier|d:msgaud|d:msglevel|d:msgtext|
@@ -92,6 +92,8 @@
                        d:year
                        ">
     <xsl:choose>
+      <!-- Don't report inlines with a xref -->
+      <xsl:when test="d:xref"/>
       <xsl:when test="normalize-space(.) = ''">
         <xsl:call-template name="error"/>
       </xsl:when>
