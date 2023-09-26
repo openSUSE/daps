@@ -340,7 +340,7 @@
   <sect2 id="sec.daps.user.basics.single">
    <title>Single deliverables (article or book)</title>
    <para>
-   The simplest case of a documentation project is probably a white paper or
+   The simplest case of a documentation project is a white paper or
    article. Typically, its content can be stored in a single XML file with
    <sgmltag>article</sgmltag> as the root element. In this case, this single
    XML file would be the &main; file, as it specifies the highest-level object
@@ -351,7 +351,7 @@
    <sgmltag>sect1</sgmltag>, <sgmltag>sect2</sgmltag>, etc.).
    </para>
    <tip>
-    <title>Creating an Example Document</title>
+    <title>Creating an example document</title>
     <para> The command <command>daps-init</command> allows you to automatically
      set up an example article or book, together with a &dc; file, as
      described in <xref linkend="pro.daps.init"/>. Use the
@@ -367,7 +367,7 @@
      linkend="ex.daps.main.art.db5" xrefstyle="select:label"/>, respectively.
    </para>
    <example id="ex.daps.main.art.db4">
-    <title>&main; file of an Article (DocBook 4.x)</title>
+    <title>&main; file of an article (DocBook 4.x)</title>
 <screen>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 [...]
 
@@ -411,7 +411,7 @@
    </example>
 
   <example id="ex.daps.main.art.db5">
-    <title>&main; file of an Article (DocBook 5.x)</title>
+    <title>&main; file of an article (DocBook 5.x)</title>
 <screen>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 [...]
 
@@ -475,7 +475,7 @@
      linkend="ex.daps.main.art.db5" xrefstyle="select:label"/> could look as follows:
    </para>
    <example id="ex.daps.user.dc.art.simple">
-    <title>Basic &dc; File for an Article</title>
+    <title>Basic &dc; file for an article</title>
 <screen>## Doc config file for the DAPS example document
 ## See /etc/daps/config for documentation of the settings below
 ##
@@ -499,7 +499,7 @@
     file is similar:
    </para>
    <example id="ex.daps.main.book.db4">
-    <title>&main; file of a Book (DocBook 4.x)</title>
+    <title>&main; file of a book (DocBook 4.x)</title>
 <screen>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 [...]
 
@@ -539,7 +539,7 @@
    </example>
 
  <example id="ex.daps.main.book.db5">
-    <title>&main; file of a Book (DocBook 5.x)</title>
+    <title>&main; file of a book (DocBook 5.x)</title>
 <screen>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 [...]
 
@@ -605,7 +605,7 @@
     specify a set of custom style sheets.
    </para>
    <example id="ex.daps.dc.book">
-    <title>&dc; File For a Book with Custom Layout</title>
+    <title>&dc; file for a book with custom layout</title>
 <screen>## Doc config file for the DAPS example book
 ## See /etc/daps/config for documentation of the settings below
 
@@ -652,7 +652,7 @@ STYLEROOT="/usr/share/xml/docbook/stylesheet/custom/xslt" <co id="co.daps.dc.boo
    </para>
 
    <example id="ex.daps.main.set">
-    <title>&main; file of a Set (DocBook 4.x)</title>
+    <title>&main; file of a set (DocBook 4.x)</title>
 <screen>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 [...]
 
@@ -683,7 +683,7 @@ STYLEROOT="/usr/share/xml/docbook/stylesheet/custom/xslt" <co id="co.daps.dc.boo
    </para>
 
    <example id="ex.daps.dc.quick">
-    <title>&dc; File For a Book in a Set</title>
+    <title>&dc; file for a book in a set</title>
 <screen>## Doc config file for &dapsquick;
 ## See /etc/daps/config for documentation of the settings below
 
@@ -729,7 +729,7 @@ STYLEROOT="/usr/share/xml/docbook/stylesheet/suse/xslt/flyer" <co id="co.daps.dc
     </calloutlist>
    </example>
    <example id="ex.daps.dc.user">
-    <title>&dc; File For Another Book in the Same Set</title>
+    <title>&dc; file for another book in the same set</title>
 <screen>## Doc config file for &dapsuser;
 ## See /etc/daps/config for documentation of the settings below
 
@@ -805,7 +805,7 @@ DRAFT="yes" <co id="co.daps.dc.user.draft"/>
     the set). Find an example &dc; file in <xref linkend="ex.daps.dc.set"/>.
    </para>
    <example id="ex.daps.dc.set">
-    <title>&dc; File for a Set</title>
+    <title>&dc; file for a set</title>
 <screen>## Doc config file for the &dapsacr; Documentation Set
 ## See /etc/daps/config for documentation of the settings below
 
@@ -892,22 +892,22 @@ export DOCCONF=$BASH_SOURCE <co id="co.daps.dc.set.source"/></screen>
 
   <para>
    For &dapsacr; to work out of the box, your XML files and images must be
-   organized following a some simple rules. DAPS supports a default directory
+   organized following simple rules. &dapsacr; supports a default directory
    structure (shown in <xref linkend="ex.daps.dir.prj"
    xrefstyle="select:label"/>) that does not require any kind of configuration.
    This directory structure is created when using <command>daps-init</command>.
   </para>
   <para>
    For larger projects or specific writing styles (such as topic-based
-   authoring), DAPS also allows you to set up complex directory structures.
+   authoring), &dapsacr; also allows you to set up complex directory structures.
    Such a setup requires putting the information on where to find images and
-   source files into the document's configuration file (DC-file).
+   source files into the document's configuration file (&dc; file).
   </para>
 
   <important>
    <title>Separation of projects</title>
    <para>
-    Although not strictly required, it is strongly recommended to use separate
+    Although not strictly required, we strongly recommended using separate
     directories for different documentation projects (each using one of the
     substructures outlined below).
    </para>
@@ -924,7 +924,7 @@ export DOCCONF=$BASH_SOURCE <co id="co.daps.dc.set.source"/></screen>
    </para>
 
    <example id="ex.daps.dir.prj">
-    <title>DAPS' Default Directory Structure</title>
+    <title>&dapsacr;' default directory structure</title>
     <screen><replaceable>YOUR_PRJ_DIR/</replaceable> <co id="co.prjdir.base"/>
      |--&dc;-* <co id="co.prjdir.dc"/>
      |--images/
@@ -1004,7 +1004,7 @@ export DOCCONF=$BASH_SOURCE <co id="co.daps.dc.set.source"/></screen>
    &daps-note-subdirs;
 
    <important>
-    <title>Use the default directory setup for DocBook Sets</title>
+    <title>Use the default directory setup for DocBook sets</title>
     <para>
      If you organize several manuals and/or articles in a DocBook set, we
      strongly recommend using the default directory layout and keeping all XML
@@ -1024,7 +1024,7 @@ export DOCCONF=$BASH_SOURCE <co id="co.daps.dc.set.source"/></screen>
    </para>
 
    <example id="ex.daps.dir.prj_custom">
-    <title>DAPS' Custom Directory Structure for Topic-Based Authoring</title>
+    <title>&dapsacr;' custom directory structure for topic-based authoring</title>
     <screen><replaceable>YOUR_PRJ_DIR/</replaceable> <co id="co.prjdir_custom.base"/>
      |--&dc;-admin1 <co id="co.prjdir_custom.dc"/>
      |--&dc;-admin2
@@ -1150,7 +1150,7 @@ IMG_SRC_DIR=imgs</screen>
     The <filename>build</filename> directory is structured as follows:
    </para>
    <example id="ex.daps.user.build">
-    <title>Build Directory</title>
+    <title>Build directory</title>
     <screen><replaceable>YOUR_PRJ_DIR</replaceable> <co id="co.docdir"/>
      <emphasis role="strong">|--build/</emphasis> <co id="co.builddir"/>
      |--<replaceable>NAME_OF_&dc;1</replaceable>/ <co id="co.builddir.dc"/>
@@ -1173,7 +1173,7 @@ IMG_SRC_DIR=imgs</screen>
     </callout>
     <callout arearefs="co.builddir.dc">
      <para>For each of your documentation deliverables, &dapsacr; creates a
-      subdirectory. It is named after the respective &dc; from which you
+      subdirectory. It is named after the respective &dc; file from which you
       build the book, article or set. For example, the output for
         <filename>&dc;-<replaceable>NAME</replaceable></filename> is written
       to
@@ -1204,7 +1204,7 @@ IMG_SRC_DIR=imgs</screen>
    <tip>
     <title>Exclude generated files from versioning</title>
     <para>
-     Since &dapsacr; writes all files it generates to the <filename
+     Since &dapsacr; writes all files that it generates to the <filename
      class="directory">build</filename> directory, it can easily be excluded
      from any versioning system by adding it to the respective ignore list (for
      example, to <filename>.gitignore</filename> for Git).
@@ -1214,7 +1214,7 @@ IMG_SRC_DIR=imgs</screen>
     <title>Removing the build directory</title>
     <para>
      The <filename class="directory">build/</filename> directory can be removed
-     at any time&nbsp;&dapsacr; will rebuild all files in case it is missing. In
+     at any time&mdash;&dapsacr; will rebuild all files in case it is missing. In
      fact, if your build fails or behaves unexpectedly, removing <filename
      class="directory">build/</filename> and restarting the job may help.
     </para>
@@ -1250,7 +1250,7 @@ IMG_SRC_DIR=imgs</screen>
   include it multiple times (callout IDs!)-->
 
   <example id="ex.daps.user.syntax">
-   <title>&dapsacr; Syntax</title>
+   <title>&dapsacr; syntax</title>
 <screen>&prompt.user;&dapscmd;<co id="co.daps.user.syntax.main"/> --debug<co id="co.daps.user.syntax.debug"/> -d<co id="co.daps.user.syntax.dc"/> &dc;-daps-example html<co id="co.daps.user.syntax.output"/> --static<co id="co.daps.user.syntax.static"/></screen>
    <calloutlist>
     <callout arearefs="co.daps.user.syntax.main">
@@ -1260,14 +1260,13 @@ IMG_SRC_DIR=imgs</screen>
     </callout>
     <callout arearefs="co.daps.user.syntax.debug">
      <para>
-      Global Option <option>--debug</option>: Sets the highest verbosity
+      Global option <option>--debug</option>: Sets the highest verbosity
       level (number of messages shown during the transformation process from
       XML to HTML).
      </para>
     </callout>
     <callout arearefs="co.daps.user.syntax.dc">
-     <para>
-      Global Option <option>-d</option>: Defines the relative or absolute
+     <para>option <option>-d</option>: Defines the relative or absolute
       path to the &dclong; file. In this example, <command>daps</command> is
       called in the same directory that holds the &dclong; file.
      </para>

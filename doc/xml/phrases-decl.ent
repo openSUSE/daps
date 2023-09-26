@@ -405,7 +405,7 @@
    are always defined as <option>KEY="VALUE"</option> pairs. Any parameter can be
    set in various locations, which are listed below in ascending order with
    regard to their hierarchy. If conflicting values are set for the same parameter,
-   the value defined in the next higher hierarchy level takes precedence. Values
+   the value defined at the next higher hierarchy level takes precedence. Values
    defined on the command line always take precedence over values set in any other
    locations.
   </para>
@@ -430,7 +430,7 @@
    <listitem>
     <para>
      on the fly at the command line by specifying options to a
-     <command>daps</command> command.
+     <command>daps</command> command
     </para>
    </listitem>
   </itemizedlist>'>
@@ -525,17 +525,16 @@
    HTML outputs of the document.</para>'>
 
 <!ENTITY daps-editor
- ' <para>
-   As &dapsacr; does not include any editor software, you are completely
-   free in the choice of your XML editor. While you can use your text editor of
-   choice, it is helpful if the editor supports editing XML in
-   accordance with the schema you use. Several open source editors can be
-   extended with plug-ins for automatic tag insertion and completion,
-   insertion of <sgmltag>xref</sgmltag> elements and for checks if the XML
-   document is well-formed. If you are already familiar with vi or Emacs,
-   you can configure them to support XML editing mode. If you prefer an
-   editor with a graphical user interface,
-   <ulink url="http://www.jedit.org/">jEdit</ulink> is a good choice.
+ '<para>
+  As &dapsacr; does not include any editor software, you are completely
+  free in the choice of your XML editor. When choosing an editor, it is
+  helpful if the editor supports editing XML in accordance with the schema
+  you use. Several open source editors can be extended with plug-ins for
+  automatic tag insertion and completion, insertion of <sgmltag>xref</sgmltag>
+  elements and for checks if the XML document is well-formed.</para>
+  <para>We recommend <ulink url="https://code.visualstudio.com/">Visual Studio Code</ulink>
+  as a first-choice editor, followed by vi and Emacs, respectively. All three editors
+  can be configured to support XML editing mode.
   </para>'>
 
 
@@ -722,7 +721,7 @@ directory and in the profiled sources, as indicated by
    For a short help text on a specific <emphasis>subcommand</emphasis>, use:
   </para>
 
-  <screen>&prompt.user;&dapscmd; help  <replaceable>subcommand</replaceable>&nbsp;</screen>
+  <screen>&prompt.user;&dapscmd; help <replaceable>subcommand</replaceable>&nbsp;</screen>
 
   <para>
    For example, if you want more information about generating HTML output,
@@ -733,9 +732,9 @@ directory and in the profiled sources, as indicated by
 
 <!ENTITY daps-dc-file-tip
 '<tip>
-   <title>Specifying the &dc; File</title>
+   <title>Specifying the &dc; file</title>
    <para>For execution of most commands, &dapsacr; needs to know which &dc; file
-      to use. Usually, you do so by specifying a &dc; file with the global option
+      to use. Usually, you specify a &dc; file with the global option
      <option>-d</option>. For example:</para>
      <screen>&prompt.user;&dapscmd; -d <replaceable>PATH_TO_DC_FILE</replaceable> pdf</screen>
      <para>Only in the following cases you may omit the <option>-d</option>
@@ -784,10 +783,10 @@ directory and in the profiled sources, as indicated by
  <!ENTITY daps-note-subdirs
  ' <important>
     <title>Structure of the <filename>xml</filename> and
-     <filename>image/src/*</filename> Directories</title>
-    <para>Avoid subdirectories within the <filename>xml</filename> and
+     <filename>image/src/*</filename> directories</title>
+    <para>Avoid subdirectories in the <filename>xml</filename> and
       <filename>image/src/*</filename> directories. Referencing or including
-     files from subdirectories within those directories is not supported.</para>
+     files from subdirectories in those directories is not supported.</para>
    </important>'>
   
 <!ENTITY daps-note-filelists
