@@ -41,36 +41,28 @@
 <!--taroth 2012-03-08: building an appliance with a pre-configured jedit would
   be a great idea-->
  <sect1 id="sec.daps.user.edit.basics">
-  <title>Basic Structural Elements</title>
+  <title>Basic structural elements</title>
   &db-structure-elements;
  </sect1>
  <sect1 id="sec.daps.user.edit.editor">
-  <title>Choice of Editor</title>
+  <title>Choice of editor</title>
  &daps-editor;
  <para>
-   XML elements can be nested deeply <remark>dpopov 2016-10-11: XML supports
-   deep nesting</remark>. Constructs like <sgmltag>variablelist</sgmltag>,
+   XML supports deep nesting. Constructs like <sgmltag>variablelist</sgmltag>,
    <sgmltag>table</sgmltag> or <sgmltag>image</sgmltag> often have a lot of
-   child elements&mdash;some of them required, some optional. If you have an
-   editor with schema support, it will tell you which elements are allowed at
-   the current cursor position, but nevertheless it is cumbersome if you need
-   to insert the child elements of complex XML constructs
-   consecutively. <remark>dpopov 2016-10-11: Although an editor with schema
-   support can prompt you which elements are allowed at the current cursor
-   position, it can still be tedious to insert elements of complex XML
-   constructs one by one.</remark>
- </para>
-
-  <para>
-   Most editors allow you to write or record macros that can be used to
-   automatically insert <quote>skeletons</quote> for complex XML
-   constructs. For Emacs, &dapsacr; already includes macros for adding DocBook
-   elements. For details, refer to <xref
-   linkend="sec.daps.user.editors.emacs.macros"/>.
+   child elements&mdash;some of them required, some optional. Although an editor
+   with schema support can prompt you which elements are allowed at the current cursor
+   position, it can still be tedious to insert elements of complex XML constructs
+   one by one. Most editors allow writing or recording macros that can be used to
+   automatically insert <quote>skeletons</quote> for complex XML constructs.
+   For Emacs, &dapsacr; already includes macros for adding DocBook
+   elements. For details, refer to <xref linkend="sec.daps.user.editors.emacs.macros"/>.
   </para>
+  <para>See more information about certain features of VS Code, vim and Emacs in
+  <xref linkend="app.daps.user.editors"/>.</para>
  </sect1>
  <sect1 id="sec.daps.user.edit.spell">
-  <title>Spell Checking</title>
+  <title>Spell checking</title>
 
   <para>
    &dapsacr; comes with a spell checker optimized for DocBook documents. The
