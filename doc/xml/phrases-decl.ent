@@ -14,8 +14,8 @@
 
 <!ENTITY daps-description-long
 "The &dapslong; (&dapsacr;) is developed as open source software for Linux*
- operating systems and is licensed under the GPL.  A number of integrated
- tools, stylesheets, scripts, and makefiles help technical writers in the
+ operating systems and is licensed under the GPL. A number of integrated
+ tools, style sheets, scripts and makefiles help technical writers in the
  editing, translation and publishing process. &dapsacr; supports single
  source publishing into several different output formats, and is suited
  both for small documentation projects and for comprehensive projects,
@@ -493,18 +493,18 @@
   '<para>
    For a custom layout, use the <parameter>STYLEROOT</parameter> parameter to
    specify the (absolute or relative) path to the directory containing the
-   custom stylesheets. Using absolute paths is recommended for &dc; files.
+   custom style sheets. Using absolute paths is recommended for &dc; files.
    </para>'>
 
 <!ENTITY daps-co-fbstyleroot
   '<para>Allows you to define a fallback which is used in case the custom
-     stylesheets defined with <parameter>STYLEROOT</parameter> cannot be accessed.
-     In case neither the stylesheets specified with <parameter>STYLEROOT</parameter>
+     style sheets defined with <parameter>STYLEROOT</parameter> cannot be accessed.
+     In case neither the style sheets specified with <parameter>STYLEROOT</parameter>
      nor with <parameter>FALLBACK_STYLEROOT</parameter> can be accessed, &dapsacr;
      uses the default DocBook layout.</para>'>
 
 <!ENTITY daps-co-css
-  '<para>If not specified, &dapsacr; will use the default DocBook stylesheets for
+  '<para>If not specified, &dapsacr; will use the default DocBook style sheets for
      production of HTML and &epub;. For custom CSS styles, specify the
      (absolute or relative) path to the respective CSS file. Using absolute paths
      is recommended for &dc; files.</para>'>
@@ -533,7 +533,7 @@
   automatic tag insertion and completion, insertion of <sgmltag>xref</sgmltag>
   elements and for checks if the XML document is well-formed.</para>
   <para>We recommend <ulink url="https://code.visualstudio.com/">Visual Studio Code</ulink>
-  as a first-choice editor, followed by vi and Emacs, respectively. All three editors
+  as a first-choice editor, followed by Vim and Emacs, respectively. All three editors
   can be configured to support XML editing mode.
   </para>'>
 
@@ -553,7 +553,7 @@
    usually subdivided into sections (<sgmltag>section</sgmltag> elements or
    <sgmltag>sect1</sgmltag>, <sgmltag>sect2</sgmltag> etc.). Smaller structural
    units are <sgmltag>para</sgmltag> (for paragraphs), or list elements
-   such as <sgmltag>orderlist</sgmltag>, <sgmltag>itemizedlist</sgmltag>, or
+   such as <sgmltag>orderedlist</sgmltag>, <sgmltag>itemizedlist</sgmltag>, or
    <sgmltag>variablelist</sgmltag>.
   </para>
 
@@ -567,18 +567,17 @@
 <!ENTITY db-profiling-intro
 '<para>
    Similar products often share a considerable amount of features and differ
-   in details only. It is therefore convenient to apply the same approach to
-   the documentation of similar products or product families: Share most of
-   the XML source code and only differentiate text snippets where necessary.
-   DocBook allows you to create documentation variants from the same pool of XML
-   sources by means of <emphasis>profiling</emphasis>. </para>'>
+   in details only. So, when documenting similar products or product families,
+   use the same approach. Share most of the XML source code and only change text
+   snippets when needed. DocBook allows you to create documentation variants
+   from the same pool of XML sources by means of <emphasis>profiling</emphasis>.</para>'>
 
 
 <!ENTITY db-profiling
  ' <para>
-      In DocBook XML files you can mark some elements as conditional by using
+      In DocBook XML files, you can mark some elements as conditional by using
       profiling attributes. When processing the files to generate output, specify
-      which conditions apply to the output. The stylesheets will then include or
+      which conditions apply to the output. The style sheets will then include or
       exclude the marked text, according to the conditions.</para>
       <para>Profiling allows you to keep both common and product-specific
       content in one XML file and select at production time which information
@@ -759,7 +758,7 @@ directory and in the profiled sources, as indicated by
 <!ENTITY daps-output-all
 '<para>
    The number of output formats may be extended in the future, depending on
-   the output formats that are supported by DocBook stylesheets. For an
+   the output formats that are supported by DocBook style sheets. For an
    overview of all output formats, run <command>daps&nbsp;help</command>.
    The available output formats are listed below <menuchoice><guimenu>Subcommands</guimenu>
    <guimenu>Generate Books</guimenu> </menuchoice>.
@@ -791,19 +790,19 @@ directory and in the profiled sources, as indicated by
   
 <!ENTITY daps-note-filelists
 ' <note>
-   <title>Output of File Listings</title>
+   <title>Output of file listings</title>
    <para>By default, the output of the listing commands is a list of file names
     (including the absolute path), all printed in one line with the file names
     separated by blanks. This default output format is useful for piping (or
     copying and pasting) the output for use with another command. </para>
-   <para>If you need a pretty printed output where each file name is listed on a
+   <para>If you need a pretty-printed output where each file name is listed on a
     separate line, use the <option>--pretty</option> option. </para>
   </note>'>
   
 <!ENTITY daps-note-superfluous-files
   ' <important>
-      <title>Use a <sgmltag>set</sgmltag> to Check for Superfluous
-       Files</title>
+      <title>Use a <sgmltag>set</sgmltag> to check for superfluous
+       files</title>
       <para> If you are storing multiple &dc; files in the same project
        directory, use the &dc; file of a <sgmltag>set</sgmltag> for this check.
        As it contains all articles and books in the project directory, this makes
