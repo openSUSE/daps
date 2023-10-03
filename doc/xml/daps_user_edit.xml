@@ -25,9 +25,7 @@
     </listitem>
     <listitem>
      <para>
-      Adapting your documentation to fit multiple similar product versions
-      at once <remark>dpopov 2016-10-11: How to use the same source to
-      document similar product versions</remark>
+      Using the same source to document similar product versions
      </para>
     </listitem>
     <listitem>
@@ -83,7 +81,7 @@
   </para>
 
   <note>
-   <title><command>spellcheck</command> Options and XIncludes</title>
+   <title><command>spellcheck</command> options and XIncludes</title>
    <para>
     All options in the following examples can be used together, except for
     <option>--file</option> and <option>--rootid</option> that are mutually exclusive.
@@ -97,7 +95,7 @@
 
   <variablelist>
    <varlistentry>
-    <term>Spell Checking Files in a Documentation Project</term>
+    <term>Spell checking files in a documentation project</term>
     <listitem>
 <screen>&prompt.user;&dapscmd; -d <replaceable>PATH_TO_&dc;_FILE</replaceable> spellcheck</screen>
      <para>
@@ -108,7 +106,7 @@
       spell check continues with the next file in the project.
      </para>
      <para>
-      Uses the ROOTID defined in the specified &dc; file as starting point.
+      Uses the ROOTID defined in the specified &dc; file as the starting point.
       You can restrict the spell check to parts of the set, such as a
       <sgmltag>book</sgmltag>, <sgmltag>article</sgmltag>,
       <sgmltag>glossary</sgmltag>, <sgmltag>appendix</sgmltag>,
@@ -120,7 +118,7 @@
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term>Spell Checking a Single XML File</term>
+    <term>Spell checking a single XML file</term>
     <listitem>
 <screen>&prompt.user;&dapscmd; -d <replaceable>PATH_TO_&dc;_FILE</replaceable> spellcheck --file <replaceable>PATH_TO_XML_FILE</replaceable>&nbsp;</screen>
      <para>
@@ -132,7 +130,7 @@
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term>Spell Checking XML Files in Languages Other than English</term>
+    <term>Spell checking XML files in languages other than English</term>
     <listitem>
 <screen>&prompt.user;&dapscmd; -d <replaceable>PATH_TO_&dc;_FILE</replaceable> spellcheck --lang=<replaceable>LANG</replaceable> \
   [--file <replaceable>PATH_TO_XML_FILE</replaceable>]</screen>
@@ -148,7 +146,7 @@
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term>Spell Checking XML Files in Batch Mode</term>
+    <term>Spell checking XML files in batch mode</term>
     <listitem>
 <screen>&prompt.user;&dapscmd; -d <replaceable>PATH_TO_&dc;_FILE</replaceable> spellcheck --list \
   [--file <replaceable>PATH_TO_XML_FILE</replaceable>]</screen>
@@ -156,13 +154,13 @@
       Checks the specified documentation project or file. Returns a list of
       misspelled words to standard output. You can use the
       <option>--list</option> option to easily collect a list of words that
-      are unknown to &hunspell; and use this output as basis for a custom
+      are unknown to &hunspell; and use this output as the basis for a custom
       &hunspell; word list or dictionary.
      </para>
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term>Spell Checking XML Files with an Additional Custom Dictionary</term>
+    <term>Spell checking XML files with an additional custom dictionary</term>
     <listitem>
 <screen>&prompt.user;&dapscmd; -d <replaceable>PATH_TO_&dc;_FILE</replaceable> spellcheck --extra-dict=<replaceable>PATH_TO_CUSTOM_DICT</replaceable> \
 [--file <replaceable>PATH_TO_XML_FILE</replaceable>]</screen>
@@ -183,13 +181,13 @@
   </para>
  </sect1>
  <sect1 id="sec.daps.user.edit.chklink">
-  <title>Checking Links to Web Pages</title>
+  <title>Checking links to Web pages</title>
 
   <para>
    To prevent the <literal>404</literal> or similar errors, &dapsacr; includes
    a link checker for validating all external links (such as HTTP, HTTPS and
    FTP links) in the XML sources. This tool is based on
-   <literal>checkbot</literal>, see <command>man 1 checkbot</command> for more
+   <literal>checkbot</literal> See <command>man 1 checkbot</command> for more
    information. The link checker searches for the <sgmltag
    class="attribute">url</sgmltag> attribute in <sgmltag>ulink</sgmltag>
    elements and checks links included there. Use it to create a report of all
@@ -207,7 +205,7 @@
 
   <variablelist>
    <varlistentry>
-    <term>Checking Links in a Documentation Project</term>
+    <term>Checking links in a documentation project</term>
     <listitem>
 <screen>&prompt.user;&dapscmd; -d <replaceable>PATH_TO_&dc;_FILE</replaceable> linkcheck</screen>
      <para>
@@ -232,7 +230,7 @@
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term>Checking Links in a Single XML File</term>
+    <term>Checking links in a single XML file</term>
     <listitem>
 <screen>&prompt.user;&dapscmd; -d <replaceable>PATH_TO_&dc;_FILE</replaceable> linkcheck --file=<replaceable>PATH_TO_XML_FILE</replaceable>&nbsp;</screen>
      <para>
@@ -246,7 +244,7 @@
   </variablelist>
 
   <figure id="fig.daps.user.edit.chklink">
-   <title>Example Output of <command>daps linkcheck</command></title>
+   <title>Example output of <command>daps linkcheck</command></title>
    <mediaobject>
     <imageobject role="fo">
      <imagedata fileref="daps_chklink_report.png" width="90%"/>
@@ -258,17 +256,17 @@
   </figure>
 
   <tip>
-   <title>Opening the Link Check Report</title>
+   <title>Opening the link check report</title>
    <para>
     To directly open the link check report, use the &dapsacr; command output
-    as an argument for a browser (for example, the command line Web browser
+    as an argument for a browser (for example, the command-line Web browser
     <command>w3m</command>):
    </para>
    <screen>&prompt.user;<command>w3m</command> -dump $(&dapscmd; -d <replaceable>PATH_TO_&dc;_FILE</replaceable> linkcheck)</screen>
   </tip>
  </sect1>
  <sect1 id="sec.daps.user.edit.profile">
-  <title>Profiling&mdash;Support for Document Variants</title>
+  <title>Profiling&mdash;support for document variants</title>
   &db-profiling-intro;
   &db-profiling;
   <para>
@@ -276,25 +274,24 @@
   </para>
  </sect1>
  <sect1 id="sec.daps.user.edit.manage">
-  <title>Keeping Track of Your Documentation Project</title>
+  <title>Keeping track of your documentation project</title>
   <para>&dapsacr; provides useful commands that can help you to keep track of the files and images in your documentation project.</para>
   <variablelist>
    <varlistentry>
-    <term>Listing All Files in a Documentation Project</term>
+    <term>Listing all files in a documentation project</term>
     <listitem>
      <screen>&prompt.user;&dapscmd; -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> list-srcfiles</screen>
-     <para>Lists all source files (XML sources, images, entity declarations, and
+     <para>Lists all source files (XML sources, images, entity declarations and
       the &dc; file) used by the document specified with the &dc; file.
        </para>
        <screen>&prompt.user;&dapscmd; -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> list-srcfiles --xmlonly</screen>
-       <para>List only source XML files used by the document specified with the &dc; file. </para>
+       <para>Lists only source XML files used by the document specified with the &dc; file. </para>
        <screen>&prompt.user;&dapscmd; -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> list-srcfiles --imgonly</screen>
-       <para>List only source images used by the document specified with the &dc; file. </para>
+       <para>Lists only source images used by the document specified with the &dc; file. </para>
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term>Checking for Superfluous <remark>dpopov 2016-10-11: Perhaps Unused instead of Superfluous? </remark>
-    Files</term>
+    <term>Checking for unused files</term>
     <listitem>
      <screen>&prompt.user;&dapscmd;&nbsp;<parameter>-d</parameter>&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;list-srcfiles-unused</screen>
      <para>
@@ -309,7 +306,7 @@
     </listitem>
    </varlistentry>
   <varlistentry>
-   <term>Checking Where an ID or File is Included</term>
+   <term>Checking where an ID or file is included</term>
    <listitem>
     <screen>&prompt.user;&dapscmd;-d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> list-file --rootid
      <replaceable>ID</replaceable></screen>
@@ -333,14 +330,14 @@ The ID "sec.template.examples.images" appears in:
    <xref linkend="ex.daps.output.pretty"/> for a comparison of both outputs.</para>
 
   <example id="ex.daps.output.default">
-   <title>Default Output of a File Listing &dapsacr; Command</title>
+   <title>Default output of a file listing &dapsacr; command</title>
    <screen><?dbsuse-fo font-size="0.70em"?>&prompt.user;<command>daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;list-srcfiles</command>
 <replaceable>YOUR_PRJ_DIR</replaceable>/DC-daps-example&nbsp;<replaceable>YOUR_PRJ_DIR</replaceable>/images/src/png/example1.png&nbsp;<replaceable
 >YOUR_PRJ_DIR</replaceable>/images/src/png/example_png2.png&nbsp;<replaceable>YOUR_PRJ_DIR</replaceable>/xml/MAIN-daps-example.xml</screen>
   </example>
 
   <example id="ex.daps.output.pretty">
-   <title>Pretty-printed Output of a File Listing &dapsacr; Command</title>
+   <title>Pretty-printed output of a file listing &dapsacr; command</title>
    <screen>&prompt.user;<command>daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;list-srcfiles&nbsp;--pretty</command>
 <replaceable>YOUR_PRJ_DIR</replaceable>/DC-daps-example
 <replaceable>YOUR_PRJ_DIR</replaceable>/images/src/png/example_png1.png
@@ -349,30 +346,29 @@ The ID "sec.template.examples.images" appears in:
   </example>
 
   <tip>
-   <title>Using Pretty-Printed Output for Counting</title>
-   <para> To count the number of files listed in a given output, you can
+   <title>Using pretty-printed output for counting</title>
+   <para>To count the number of files listed in a given output, you can
     also combine the <parameter>--pretty</parameter> parameter with the
     <command>wc</command> command: </para>
    <screen>&prompt.user;&dapscmd; -d <replaceable>PATH_TO_&dc;_FILE</replaceable> list-srcfiles --pretty | wc -l</screen>
    <para> For <xref linkend="ex.daps.output.pretty"
    xrefstyle="select:label"/>, the command above would return
-    <computeroutput>4</computeroutput> as a value.
+    <literal>4</literal> as a value.
    </para>
   </tip>
-
  </sect1>
 
  <sect1 id="sec.daps.user.edit.more">
-  <title>Further Information</title>
+  <title>Further information</title>
 
   <para>
-   For a complete DocBook reference see
-   <ulink url="http://www.docbook.org/tdg/en/html/docbook.html"><citetitle>&tdg;</citetitle>
+   For a complete DocBook reference, see
+   <ulink url="https://tdg.docbook.org/tdg/5.0/docbook"><citetitle>&tdg;</citetitle>
    </ulink>.
   </para>
 
   <para>
-   Useful tips and tricks on using DocBook and the DocBook stylesheets can be
+   Useful tips and tricks on using DocBook and the DocBook style sheets can be
    found in <citetitle>The DoCookBook&mdash;Recipes for DocBook Developers and
    Writers</citetitle>, available at <ulink
    url="http://doccookbook.sourceforge.net/"></ulink>
