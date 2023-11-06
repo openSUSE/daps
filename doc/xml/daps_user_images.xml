@@ -282,7 +282,7 @@
     <term>Listing All Graphics Referenced in a Documentation Project
      </term>
     <listitem>
-     <screen>&prompt.user;&dapscmd;&nbsp;<parameter>-d</parameter>&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;list-srcfiles&nbsp;--noent&nbsp;--noxml&nbsp;--nodc</screen>
+     <screen>&prompt.user;&dapscmd;&nbsp;<parameter>-d</parameter>&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;list-srcfiles&nbsp;--imgonly</screen>
      <para> Lists all graphics file used by the DocBook files that are referenced in the document
       specified by the current &dc; file. </para>
     </listitem>
@@ -362,30 +362,34 @@
 
   <para> See
    <xref linkend="ex.daps.graphics.output.default"/> and
-   <xref linkend="ex.daps.graphics.output.pretty"/> for a comparison of both outputs.</para>
+   <xref linkend="ex.daps.graphics.output.single"/> for a comparison of both outputs.</para>
 
   <example id="ex.daps.graphics.output.default">
-   <title>Default Output of an Image-related &dapsacr; Command</title>
-   <screen><?dbsuse-fo font-size="0.70em"?><replaceable>YOUR_PRJ_DIR</replaceable>/images/src/dia/example_dia1.dia <replaceable>YOUR_PRJ_DIR</replaceable>/images/src/png/example_png1.png <replaceable>YOUR_PRJ_DIR</replaceable>/images/src/png/example_png2.png <replaceable>YOUR_PRJ_DIR</replaceable>/images/src/png/example_png3.png <replaceable>YOUR_PRJ_DIR</replaceable>/images/src/svg/example_svg.svg ...</screen>
-  </example>
-
-  <example id="ex.daps.graphics.output.pretty">
-   <title>Pretty-printed Output of an Image-related &dapsacr;
-    Command</title>
-   <screen>&prompt.user;<command>daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;list-images-multisrc&nbsp;--pretty</command>
+    <title>Default output of an image-related &dapsacr; command</title>
+    <screen>&prompt.user;<command>daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;list-srcfilesc&nbsp;--imgonly</command>
 <replaceable>YOUR_PRJ_DIR</replaceable>/images/src/dia/example_dia1.dia
 <replaceable>YOUR_PRJ_DIR</replaceable>/images/src/png/example_png1.png
 <replaceable>YOUR_PRJ_DIR</replaceable>/images/src/png/example_png2.png
 <replaceable>YOUR_PRJ_DIR</replaceable>/images/src/png/example_png3.png
-<replaceable>YOUR_PRJ_DIR</replaceable>/images/src/svg/example_svg.svg ...</screen>
+<replaceable>YOUR_PRJ_DIR</replaceable>/images/src/svg/example_svg.svg</screen>
+  </example>
+
+  <example id="ex.daps.graphics.output.single">
+   <title>Single line output of an image-related &dapsacr;
+    command</title>
+   <screen>&prompt.user;<command>daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;list-srcfiles&nbsp;--imgonly | xargs</command>
+   <?dbsuse-fo font-size="0.70em"?><replaceable>YOUR_PRJ_DIR</replaceable>/images/src/dia/example_dia1.dia <replaceable>YOUR_PRJ_DIR</replaceable>/images/src/png/example_png1.png <replaceable>YOUR_PRJ_DIR</replaceable>/images/src/png/example_png2.png <replaceable>YOUR_PRJ_DIR</replaceable>/images/src/png/example_png3.png <replaceable>YOUR_PRJ_DIR</replaceable>/images/src/svg/example_svg.svg</screen>
+   <screen>&prompt.user;<command>echo $(daps-d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;list-srcfiles&nbsp;--imgonly)</command>
+   <?dbsuse-fo font-size="0.70em"?><replaceable>YOUR_PRJ_DIR</replaceable>/images/src/dia/example_dia1.dia <replaceable>YOUR_PRJ_DIR</replaceable>/images/src/png/example_png1.png <replaceable>YOUR_PRJ_DIR</replaceable>/images/src/png/example_png2.png <replaceable>YOUR_PRJ_DIR</replaceable>/images/src/png/example_png3.png <replaceable>YOUR_PRJ_DIR</replaceable>/images/src/svg/example_svg.svg</screen>
   </example>
 
   <tip>
    <title>Use Pretty-Printed Output for Counting</title>
-   <para> To count the number of images listed in a given output, you can combine the <parameter>--pretty</parameter> parameter with the
+   <para> To count the number of images listed in a given output, you can use
+   the <parameter>--pretty</parameter> parameter and pipe the output to the
     <command>wc</command> command: </para>
-   <screen>&prompt.user;&dapscmd; -d <replaceable>PATH_TO_&dc;_FILE</replaceable> list-images-multisrc --pretty | wc -l</screen>
-   <para> For <xref linkend="ex.daps.graphics.output.pretty"
+   <screen>&prompt.user;&dapscmd; -d <replaceable>PATH_TO_&dc;_FILE</replaceable> list-srcfiles --imgonly --pretty | wc -l</screen>
+   <para> For <xref linkend="ex.daps.graphics.output.default"
     xrefstyle="select:label"/>, the command above would return
     <computeroutput>5</computeroutput> as value.
    </para>
