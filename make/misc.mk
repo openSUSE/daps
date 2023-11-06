@@ -120,4 +120,23 @@ productinfo: $(BIGFILE)
 	@echo -n "PRODUCTNUMBER=\"$(shell $(XMLSTARLET) sel $(NAMESPACE) -t -v "(/*/*/$(ELEM_PREFIX)productnumber)[1]" $< 2>/dev/null)\""
   endif
 
+#---------------
+# Bookinfo
+#
+.PHONY: docinfo
+ifeq "$(DOCBOOK_VERSION)" "5"
+  docinfo: NAMESPACE := -N db5="http://docbook.org/ns/docbook"
+  docinfo: ELEM_PREFIX := db5:
+  docinfo: ATTR_PREFIX := xml:
+endif
+ifdef ROOTID
+  docinfo: ID_PREF := *[@$(ATTR_PREFIX)id='$(ROOTID)']/*/
+endif
+docinfo: $(BIGFILE)
+	@echo -e "Title:\t\t\t$(shell $(XMLSTARLET) sel $(NAMESPACE) -t -v "normalize-space((//$(ID_PREF)$(ELEM_PREFIX)title)[1])" $< 2>/dev/null)"
+	@echo -e "Product Name:\t\t$(shell $(XMLSTARLET) sel $(NAMESPACE) -t -v "normalize-space((//$(ID_PREF)$(ELEM_PREFIX)productname)[1])" $< 2>/dev/null)"
+	@echo -e "Product Version:\t$(shell $(XMLSTARLET) sel $(NAMESPACE) -t -v "normalize-space((//$(ID_PREF)$(ELEM_PREFIX)productnumber)[1])" $< 2>/dev/null)"
+	@echo -e "Authors:\t\t$(shell $(XMLSTARLET) sel $(NAMESPACE) -T -t -m '//$(ID_PREF)$(ELEM_PREFIX)authorgroup' -m '$(ELEM_PREFIX)author' -v 'concat($(ELEM_PREFIX)personname/$(ELEM_PREFIX)firstname, " ", $(ELEM_PREFIX)personname/$(ELEM_PREFIX)surname)'  -i 'position() != last()' -o ', ' $< 2>/dev/null)"
+	@echo -e "Language:\t\t$(XMLLANG)"
+	@echo -e "Type:\t\t\t$(ROOTELEMENT)"
 
