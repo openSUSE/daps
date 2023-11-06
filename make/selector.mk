@@ -146,7 +146,8 @@ endif
 #---------------
 # Miscellaneous
 #
-MISCTARGETS := bigfile linkcheck stylecheck productinfo
+
+MISCTARGETS := bigfile docinfo linkcheck stylecheck productinfo
 
 ifeq "$(MAKECMDGOALS)" "$(filter $(MAKECMDGOALS),$(MISCTARGETS))"
   include $(DAPSROOT)/make/setfiles.mk
