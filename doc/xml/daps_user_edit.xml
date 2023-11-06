@@ -327,31 +327,34 @@ The ID "sec.template.examples.images" appears in:
 
  <para> See
    <xref linkend="ex.daps.output.default"/> and
-   <xref linkend="ex.daps.output.pretty"/> for a comparison of both outputs.</para>
+   <xref linkend="ex.daps.output.single"/> for a comparison of both outputs.</para>
 
   <example id="ex.daps.output.default">
    <title>Default output of a file listing &dapsacr; command</title>
-   <screen><?dbsuse-fo font-size="0.70em"?>&prompt.user;<command>daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;list-srcfiles</command>
-<replaceable>YOUR_PRJ_DIR</replaceable>/DC-daps-example&nbsp;<replaceable>YOUR_PRJ_DIR</replaceable>/images/src/png/example1.png&nbsp;<replaceable
->YOUR_PRJ_DIR</replaceable>/images/src/png/example_png2.png&nbsp;<replaceable>YOUR_PRJ_DIR</replaceable>/xml/MAIN-daps-example.xml</screen>
-  </example>
-
-  <example id="ex.daps.output.pretty">
-   <title>Pretty-printed output of a file listing &dapsacr; command</title>
-   <screen>&prompt.user;<command>daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;list-srcfiles&nbsp;--pretty</command>
+   <screen>&prompt.user;<command>daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;list-srcfiles</command>
 <replaceable>YOUR_PRJ_DIR</replaceable>/DC-daps-example
 <replaceable>YOUR_PRJ_DIR</replaceable>/images/src/png/example_png1.png
 <replaceable>YOUR_PRJ_DIR</replaceable>/images/src/png/example_png2.png
 <replaceable>YOUR_PRJ_DIR</replaceable>/xml/MAIN-daps-example.xml</screen>
   </example>
 
+  <example id="ex.daps.output.single">
+   <title>Single line output of a file listing &dapsacr; command</title>
+   <screen><?dbsuse-fo font-size="0.70em"?>&prompt.user;<command>daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;list-srcfiles | xargs</command>
+<replaceable>YOUR_PRJ_DIR</replaceable>/DC-daps-example&nbsp;<replaceable>YOUR_PRJ_DIR</replaceable>/images/src/png/example1.png&nbsp;<replaceable
+>YOUR_PRJ_DIR</replaceable>/images/src/png/example_png2.png&nbsp;<replaceable>YOUR_PRJ_DIR</replaceable>/xml/MAIN-daps-example.xml</screen>
+   <screen><?dbsuse-fo font-size="0.70em"?>&prompt.user;<command>echo $(daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;list-srcfiles)</command>
+<replaceable>YOUR_PRJ_DIR</replaceable>/DC-daps-example&nbsp;<replaceable>YOUR_PRJ_DIR</replaceable>/images/src/png/example1.png&nbsp;<replaceable
+>YOUR_PRJ_DIR</replaceable>/images/src/png/example_png2.png&nbsp;<replaceable>YOUR_PRJ_DIR</replaceable>/xml/MAIN-daps-example.xml</screen>
+  </example>
+
   <tip>
    <title>Using pretty-printed output for counting</title>
    <para>To count the number of files listed in a given output, you can
-    also combine the <parameter>--pretty</parameter> parameter with the
+    use the <parameter>--pretty</parameter> parameter and pipe the output to the
     <command>wc</command> command: </para>
    <screen>&prompt.user;&dapscmd; -d <replaceable>PATH_TO_&dc;_FILE</replaceable> list-srcfiles --pretty | wc -l</screen>
-   <para> For <xref linkend="ex.daps.output.pretty"
+   <para> For <xref linkend="ex.daps.output.default"
    xrefstyle="select:label"/>, the command above would return
     <literal>4</literal> as a value.
    </para>

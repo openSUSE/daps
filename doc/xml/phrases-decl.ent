@@ -791,12 +791,11 @@ directory and in the profiled sources, as indicated by
 <!ENTITY daps-note-filelists
 ' <note>
    <title>Output of file listings</title>
-   <para>By default, the output of the listing commands is a list of file names
-    (including the absolute path), all printed in one line with the file names
-    separated by blanks. This default output format is useful for piping (or
-    copying and pasting) the output for use with another command. </para>
-   <para>If you need a pretty-printed output where each file name is listed on a
-    separate line, use the <option>--pretty</option> option. </para>
+   <para>By default, the output of the listing commands is a list of single file
+    names on separate lines. In case the output does not go to the
+    terminal (e.g. when being passed to a pipe) all names are printed on a single
+    line with the file names separated by spaces (unless you use the
+    <option>--pretty</option> parameter). </para>
   </note>'>
   
 <!ENTITY daps-note-superfluous-files
