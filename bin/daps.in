@@ -311,6 +311,9 @@ HELP_SUBCOMMAND[dist-webhelp]="Creates a distributable tar archive of a webhelp 
 SUBCOMMANDS[dist-webhelp-name]="show_names"
 HELP_SUBCOMMAND[dist-webhelp-name]="Print the file name that would result when building a distributable tar archive\nof a webhelp document."
 
+SUBCOMMANDS[docinfo]="build_generic"
+HELP_SUBCOMMAND[docinfo]="Print information such as title, language, etc on a book or article."
+
 SUBCOMMANDS[epub]="build_epub"
 HELP_SUBCOMMAND[epub]="Build an eBook from the XML sources."
 
@@ -393,7 +396,7 @@ SUBCOMMANDS[pdf-name]="show_names"
 HELP_SUBCOMMAND[pdf-name]="Print the file name that would result when building a grayscale PDF document."
 
 SUBCOMMANDS[productinfo]="build_generic"
-HELP_SUBCOMMAND[productinfo]="Print the contents of the tags <productname> and <productnumber for the given ROOTID"
+HELP_SUBCOMMAND[productinfo]="Print the contents of the tags <productname> and <productnumber for the given ROOTID."
 
 SUBCOMMANDS[profile]="build_generic"
 HELP_SUBCOMMAND[profile]="Create profiled souces from the original XML sources. If the MAIN-file does\nnot contain profiling instructions, link the files into the profile directory."
@@ -636,6 +639,8 @@ Subcommands:
                               errors that cannot be found otherwise.
     dapsenv                   Print a list of the most important make variables
                               and their value.
+    docinfo                   Print information such as tTitle, language, etc
+                              on a book or article.
     images                    Generates all images for the given DC-file or
                               rootid.
     showvariable              Print value of a given make variable:
