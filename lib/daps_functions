@@ -768,6 +768,8 @@ function call_make {
             $MAKE_CMD
         fi
     fi
+    # show path to log file if DEBUG is on
+    #
     if [[ 1 -eq $WRITE_LOG && 1 -eq $DEBUG ]]; then
         ccecho "info" "Find the log file at\n$LOGFILE"
     fi
