@@ -60,7 +60,7 @@
 #------------------------------------------------------------------------
 # Check for optipng
 #
-HAVE_OPTIPNG  := $(shell which optipng 2>/dev/null)
+HAVE_OPTIPNG  := $(shell command -v optipng 2>/dev/null)
 
 #------------------------------------------------------------------------
 # xslt stylsheets

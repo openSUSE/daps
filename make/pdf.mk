@@ -20,7 +20,7 @@
 
 # binary checks
 ifeq "$(FORMATTER)" "xep"
-  HAVE_XEP := $(shell which xep 2>/dev/null)
+  HAVE_XEP := $(shell command -v xep 2>/dev/null)
   ifndef HAVE_XEP
     $(error $(shell ccecho "error" "Error: PDF formatter xep is not installed"))
   endif
