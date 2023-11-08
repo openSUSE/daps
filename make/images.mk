@@ -112,6 +112,23 @@ USED_SVG := $(filter \
 USED_ALL := $(USED_DIA) $(USED_DITAA) $(USED_JPG) \
                 $(USED_ODG) $(USED_PNG) $(USED_SVG)
 
+
+# check the availability of dia and ditaa
+#
+ifneq "$(USED_DIA)" ""
+  HAVE_DIA = $(shell command -v dia 2>/dev/null)
+  ifeq "$(HAVE_DIA)" ""
+    $(error $(shell ccecho "error" "Error: dia is not installed, can't process $(USED_DIA)"))
+   endif
+endif
+ifneq "$(USED_DITAA)" ""
+  HAVE_DIA = $(shell command -v ditaa 2>/dev/null)
+  ifeq "$(HAVE_DITAA)" ""
+    $(error $(shell ccecho "error" "Error: ditaa is not installed, can't process $(USED_DITAA)"))
+   endif
+endif
+
+
 # generated images
 #
 GEN_PNG := $(subst .dia,.png,$(notdir $(USED_DIA))) \
