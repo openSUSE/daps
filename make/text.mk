@@ -19,7 +19,7 @@
 
 # binary check
 ifeq "$(TARGET)" "text"
-  HAVE_W3M = $(shell which w3m 2>/dev/null)
+  HAVE_W3M = $(shell command -v w3m 2>/dev/null)
   ifeq "$(HAVE_W3M)" ""
     $(error $(shell ccecho "error" "Error: w3m is not installed"))
    endif
