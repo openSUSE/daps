@@ -169,7 +169,7 @@ function test_htmlRemarksDraftMeta () {
 
     clean_build_dir results
 
-    _HTML_BUILD_PATH=$($_DAPSEXEC -d $_DCFILE --debug html --draft --remarks --meta 2>/dev/null | tail -n 1)
+    _HTML_BUILD_PATH=$($_DAPSEXEC -d $_DCFILE --debug html --draft --remarks --meta 2>/dev/null | tail -n 3 | head -n 1)
    assertTrue \
        ' └─ Building HTML with --draft --remarks --meta failed' \
        "$?"
@@ -396,7 +396,7 @@ function test_htmlRootidXsltparam () {
 
     clean_build_dir results
 
-    _HTML_BUILD_PATH=$($_DAPSEXEC -d $_DCFILE --debug html --rootid $_ROOTID --param="$_XSLTPARAM" 2>/dev/null | tail -n 1)
+    _HTML_BUILD_PATH=$($_DAPSEXEC -d $_DCFILE --debug html --rootid $_ROOTID --param="$_XSLTPARAM" 2>/dev/null | tail -n 3 | head -n 1)
     assertTrue \
         ' └─ Building a html document with --rootid and --param failed ' \
        "$?"
