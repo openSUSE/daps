@@ -45,7 +45,6 @@ BuildRequires:  jing
 BuildRequires:  libxml2-tools
 BuildRequires:  libxslt
 BuildRequires:  libxslt-tools
-BuildRequires:  poppler-tools
 BuildRequires:  python3-lxml
 BuildRequires:  suse-xsl-stylesheets
 BuildRequires:  svg-dtd
@@ -75,7 +74,6 @@ Requires:       java >= 1.8.0
 Requires:       jing
 Requires:       libxslt
 Requires:       make
-Requires:       poppler-tools
 Requires:       python3-lxml
 Requires:       suse-xsl-stylesheets
 Requires:       svg-schema
@@ -95,6 +93,7 @@ Recommends:     libreoffice-draw
 %endif
 Recommends:     optipng
 Recommends:     perl-checkbot
+Recommends:     poppler-tools
 Recommends:     remake
 Recommends:     suse-doc-style-checker
 Recommends:     suse-documentation-dicts-en
