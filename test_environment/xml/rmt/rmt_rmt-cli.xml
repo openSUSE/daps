@@ -1,0 +1,448 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sect1
+[
+  <!ENTITY % entities SYSTEM "../common/generic-entities.ent">
+    %entities;
+]>
+<sect1 xmlns="http://docbook.org/ns/docbook"
+       xmlns:xi="http://www.w3.org/2001/XInclude"
+       xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0"
+       xml:id="sec-rmt-tools-rmt-cli">
+ <info>
+  <title>&rmt; command line interface (<command>rmt-cli</command>)</title>
+  <dm:docmanager xmlns:dm="urn:x-suse:ns:docmanager">
+   <dm:translation>yes</dm:translation>
+  </dm:docmanager>
+ </info>
+ <para/>
+
+ <sect2 xml:id="sec-rmt-tools-rmt-cli-overview">
+  <title>Overview</title>
+  <para>
+   The key command to manage the &rmt; is <command>rmt-cli</command>
+   (<filename>/usr/bin/rmt-cli</filename>). The <command>rmt-cli</command>
+   command should be used together with the sub-commands described in this
+   section. If the <command>rmt-cli</command> command is used alone, it prints
+   a list of all available sub-commands. To get help for individual
+   sub-commands, use <command>man rmt-cli</command> or <command>rmt-cli help
+   [subcommand]</command>.
+  </para>
+  <para>
+   The following sub-commands are available:
+  </para>
+  <variablelist>
+   <varlistentry>
+    <term><command>rmt-cli sync</command></term>
+    <listitem>
+     <para>
+      Synchronize database with &scc;.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term><command>rmt-cli products</command></term>
+    <listitem>
+     <para>
+      List and modify products.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term><command>rmt-cli repos</command></term>
+    <listitem>
+     <para>
+      List and modify repositories.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term><command>rmt-cli mirror</command></term>
+    <listitem>
+     <para>
+      Mirror repositories.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term><command>rmt-cli systems</command></term>
+    <listitem>
+     <para>
+      List and modify systems.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term><command>rmt-cli import</command></term>
+    <listitem>
+     <para>
+      Import commands for offline mode.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term><command>rmt-cli export</command></term>
+    <listitem>
+     <para>
+      Export commands for offline mode.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term><command>rmt-cli version</command></term>
+    <listitem>
+     <para>
+      Show &rmt; version.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+  <para>
+   The following sections explain each sub-command in detail.
+  </para>
+ </sect2>
+
+ <sect2 xml:id="sec-rmt-tools-rmt-cli-sync">
+  <title><command>sync</command></title>
+  <para>
+   This command triggers synchronization with the &scc; instantly. The command
+   has no further options. Synchronization is also triggered each night by the
+   &systemd; timer <systemitem>rmt-server-sync.timer</systemitem>.
+  </para>
+  <para>
+   During synchronization, no data is uploaded to the &scc;. This command for
+   example updates local product definitions and repository data.
+  </para>
+ </sect2>
+
+ <sect2 xml:id="sec-rmt-tools-rmt-cli-products">
+  <title><command>products</command></title>
+  <para>
+   List and modify products.
+  </para>
+  <variablelist>
+   <varlistentry>
+    <term><command>rmt-cli products list [--all] [--csv]</command></term>
+    <listitem>
+     <para>
+      Lists the products that are enabled for mirroring. Use the
+      <option>--all</option> flag to list all available products. Use the
+      <option>--csv</option> flag to output the list in CSV format.
+      <option>ls</option> can be used as a shortcut for <option>list</option>.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term><command>rmt-cli products enable [id | string] [--all-modules]</command></term>
+    <listitem>
+     <para>
+      Enables mandatory repositories of a product by its ID or product string.
+      The <option>--all-modules</option> flag enables all modules of a product
+      instead of only the recommended ones.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term><command>rmt-cli products disable [id | string]</command></term>
+    <listitem>
+     <para>
+      Disables all repositories of a product by its ID or product string.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+ </sect2>
+
+ <sect2 xml:id="sec-rmt-tools-rmt-cli-repos">
+  <title><command>repos</command></title>
+  <variablelist>
+   <varlistentry>
+    <term><command>rmt-cli repos list [--all] [--csv]</command></term>
+    <listitem>
+     <para>
+      Lists the repositories that are enabled for mirroring. Use the
+      <option>--all</option> flag to list all available repositories. Use the
+      <option>--csv</option> flag to output the list in CSV format.
+      <option>ls</option> can be used as a shortcut for <option>list</option>.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term><command>rmt-cli repos enable [id]</command></term>
+    <listitem>
+     <para>
+      Enables mirroring of a single repository by its ID.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term><command>rmt-cli repos disable [id]</command></term>
+    <listitem>
+     <para>
+      Disables mirroring of a single repository by its ID.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term><command>rmt-cli repos clean</command></term>
+    <listitem>
+     <para>
+      Removes locally mirrored files of repositories that are not
+      marked to be mirrored.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+ </sect2>
+
+ <sect2 xml:id="sec-rmt-tools-rmt-cli-repos-custom">
+  <title><command>repos custom</command></title>
+  <variablelist>
+   <varlistentry>
+    <term><command>rmt-cli repos custom list [--csv]</command></term>
+    <listitem>
+     <para>
+      Lists all your custom repositories. Use the <option>--csv</option> flag
+      to output the list in CSV format. <option>ls</option> can be used as a
+      shortcut for <option>list</option>.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term><command>rmt-cli repos custom add [url] [name] [--id]</command></term>
+    <listitem>
+     <para>
+      Adds a new custom repository. Use the <option>--id</option> flag to
+      specify a custom alphanumeric ID.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term><command>rmt-cli repos custom enable [id]</command></term>
+    <listitem>
+     <para>
+      Enables mirroring of a custom repository.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term><command>rmt-cli repos custom disable [id]</command></term>
+    <listitem>
+     <para>
+      Disables mirroring of a custom repository.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term><command>rmt-cli repos custom remove [id]</command></term>
+    <listitem>
+     <para>
+      Removes a custom repository.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term><command>rmt-cli repos custom products [id]</command></term>
+    <listitem>
+     <para>
+      Lists the products attached to the custom repository with the given ID.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term><command>rmt-cli repos custom attach [id] [product id]</command></term>
+    <listitem>
+     <para>
+      Attaches an existing custom repository to a product.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term><command>rmt-cli repos custom detach [id] [product id]</command></term>
+    <listitem>
+     <para>
+      Detaches an existing custom repository from a product.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+ </sect2>
+
+ <sect2 xml:id="sec-rmt-tools-rmt-cli-mirror">
+  <title><command>mirror</command></title>
+  <variablelist>
+   <varlistentry>
+    <term><command>rmt-cli mirror</command></term>
+    <listitem>
+     <para>
+      Starts the mirroring process manually.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term><command>rmt-cli mirror all</command></term>
+    <listitem>
+     <para>
+      Mirrors all enabled repositories.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term><command>rmt-cli mirror repository [IDs]</command></term>
+    <listitem>
+     <para>
+      Mirrors enabled repositories by a list of IDs.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term><command>rmt-cli mirror product [IDs]</command></term>
+    <listitem>
+     <para>
+      Mirrors enabled repositories for a product by a list of IDs.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+ </sect2>
+
+ <sect2 xml:id="sec-rmt-tools-rmt-cli-systems">
+  <title><command>systems</command></title>
+  <variablelist>
+   <varlistentry>
+    <term><command>rmt-cli systems list</command></term>
+    <listitem>
+     <para>
+      This command lists registered systems.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term><command>rmt-cli systems scc-sync</command></term>
+    <listitem>
+     <para>
+      This command forwards registered systems' data to SCC.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term><command>rmt-cli systems remove [TARGET]</command></term>
+    <listitem>
+     <para>
+      This command removes a system from RMT as identified by the
+      <guimenu>Login</guimenu> column of the output of the <command>rmt-cli
+      systems list</command> command.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term><command>rmt-cli systems purge</command></term>
+    <listitem>
+     <para>
+      This command lists and provides the option to delete inactive systems.
+      It has the following options:
+     </para>
+     <itemizedlist>
+      <listitem>
+       <para>
+        <option>--before <replaceable>DATE</replaceable></option>&mdash;lists 
+        systems that have been inactive since <replaceable>DATE</replaceable>
+        until now. Default is the last 3 months.
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+        <option>--no-confirmation</option>&mdash;allows the administrator to
+        delete matching systems without confirmation.
+       </para>
+      </listitem>
+     </itemizedlist>
+<screen>&prompt.root;rmt-cli systems purge --before 2021-06-16
++------------+----------+---------------------+---------------------+----------+
+| Login      | Hostname | Registration time   | Last seen           | Products |
++------------+----------+---------------------+---------------------+----------+
+| SCC_c5b0.. | 6e485e48b| 2021-06-11 13:38:07 | 2021-06-11 13:52:01 | SLES/15..|
+| SCC_5fcf.. | node52   | 2021-06-15 13:29:24 | 2021-06-15 13:31:25 | SLES/15..|
++------------+----------+---------------------+---------------------+----------+
+Do you want to delete these systems? (y/n) y
+Purged systems that have not contacted this RMT since 2021-06-16.
+</screen>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+ </sect2>
+
+ <sect2 xml:id="sec-rmt-tools-rmt-cli-import">
+  <title><command>import</command></title>
+  <para>
+   This command is required for the <emphasis>offline mode</emphasis>. For
+   details, see <xref linkend="sec-rmt-mirroring-export-import"
+   />.
+  </para>
+  <variablelist>
+   <varlistentry>
+    <term><command>rmt-cli import data [path]</command></term>
+    <listitem>
+     <para>
+      Run this on the offline &rmt; to read the JSON files from the given path
+      and fill the local database with data.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term><command>rmt-cli import repos [path]</command></term>
+    <listitem>
+     <para>
+      Run this on the offline &rmt; to import RPM packages.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+ </sect2>
+
+ <sect2 xml:id="sec-rmt-tools-rmt-cli-export">
+  <title><command>export</command></title>
+  <para>
+   This command is required for the <emphasis>offline mode</emphasis>. For
+   details, see <xref linkend="sec-rmt-mirroring-export-import"
+   />.
+  </para>
+  <variablelist>
+   <varlistentry>
+    <term><command>rmt-cli export data [path]</command></term>
+    <listitem>
+     <para>
+      Run this on an online &rmt; to get the latest data from &scc; and save
+      the result as JSON files at the specified path.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term><command>rmt-cli export settings [path]</command></term>
+    <listitem>
+     <para>
+      Run this on the offline &rmt; to save the settings for enabled
+      repositories at a given path as <filename>repos.json</filename>.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term><command>rmt-cli export repos [path]</command></term>
+    <listitem>
+     <para>
+      Run this regularly on the online &rmt; to mirror the set of repositories
+      specified in the <filename>repos.json</filename> at the given path. The
+      mirrored repository files will be stored in subdirectories of the same
+      path.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+ </sect2>
+
+ <sect2 xml:id="sec-rmt-tools-rmt-cli-version">
+  <title><command>version</command></title>
+  <para>
+   Display the version of <command>rmt-cli</command>.
+  </para>
+ </sect2>
+</sect1>

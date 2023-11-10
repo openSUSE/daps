@@ -1,0 +1,915 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter
+[
+  <!ENTITY % entities SYSTEM "../common/generic-entities.ent">
+    %entities;
+]>
+
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0" xml:id="cha-tuning-power">
+<!--
+ power management on the server (not mobile computers)
+ Info Provider: Thomas Renniger <trenn@suse.de>
+-->
+
+ <title>Power management</title>
+ <info>
+      <abstract>
+        <para>
+    Power management aims at reducing operating costs for energy and cooling
+    systems while at the same time keeping the performance of a system at a
+    level that matches the current requirements. Thus, power management is
+    always a matter of balancing the actual performance needs and power
+    saving options for a system. Power management can be implemented and
+    used at different levels of the system. A set of specifications for
+    power management functions of devices and the operating system interface
+    to them has been defined in the Advanced Configuration and Power
+    Interface (ACPI). As power savings in server environments can primarily
+    be achieved at the processor level, this chapter introduces the
+    main concepts and highlights a few tools for analyzing and influencing
+    relevant parameters.
+   </para>
+      </abstract>
+      <dm:docmanager xmlns:dm="urn:x-suse:ns:docmanager">
+        <dm:bugtracker>
+        </dm:bugtracker>
+	<dm:translation>yes</dm:translation>
+      </dm:docmanager>
+    </info>
+
+ <sect1 xml:id="sec-tuning-power-cpu">
+  <title>Power management at CPU Level</title>
+
+  <para>
+   At the CPU level, you can control power usage in several ways. For
+   example, by using idling power states (C-states), changing CPU frequency
+   (P-states), and throttling the CPU (T-states). The following sections
+   give a short introduction to each approach and its significance for power
+   savings. Detailed specifications can be found at
+   <link xlink:href="https://uefi.org/sites/default/files/resources/ACPI_Spec_6_4_Jan22.pdf"/>.
+  </para>
+
+  <sect2 xml:id="sec-tuning-power-cpu-cstates">
+   <title>C-states (processor operating states)</title>
+   <para>
+    Modern processors have several power saving modes called
+    <literal>C-states</literal>. They reflect the capability of an idle
+    processor to turn off unused components to save power.
+   </para>
+   <para>
+    When a processor is in the <literal>C0</literal> state, it is executing
+    instructions. A processor running in any other C-state is idle. The
+    higher the C number, the deeper the CPU sleep mode: more components are
+    shut down to save power. Deeper sleep states can save large amounts of
+    energy. Their downside is that they introduce latency. This means, it
+    takes more time for the CPU to go back to <literal>C0</literal>.
+    Depending on workload (threads waking up, triggering CPU usage and then
+    going back to sleep again for a short period of time) and hardware (for
+    example, interrupt activity of a network device), disabling the deepest
+    sleep states can increase overall performance. For details
+    on how to do so, refer to
+    <xref linkend="sec-tuning-power-tools-cpupower-idle-info"/>.
+   </para>
+   <para>
+    Some states also have submodes with different power saving latency
+    levels. Which C-states and submodes are supported depends on the
+    respective processor. However, <literal>C1</literal> is always
+    available.
+   </para>
+   <para>
+    <xref linkend="tab-tuning-power-cstates"/> gives an overview of the most
+    common C-states.
+   </para>
+   <table xml:id="tab-tuning-power-cstates">
+    <title>C-states</title>
+    <tgroup cols="2">
+     <thead>
+      <row>
+       <entry>
+        <para>
+         Mode
+        </para>
+       </entry>
+       <entry>
+        <para>
+         Definition
+        </para>
+       </entry>
+      </row>
+     </thead>
+     <tbody>
+      <row>
+       <entry>
+        <para>
+         C0
+        </para>
+       </entry>
+       <entry>
+        <para>
+         Operational state. CPU fully turned on.
+        </para>
+       </entry>
+      </row>
+      <row>
+       <entry>
+        <para>
+         C1
+        </para>
+       </entry>
+       <entry>
+        <para>
+         First idle state. Stops CPU main internal clocks via software. Bus
+         interface unit and APIC are kept running at full speed.
+        </para>
+       </entry>
+      </row>
+      <row>
+       <entry>
+        <para>
+         C2
+        </para>
+       </entry>
+       <entry>
+        <para>
+         Stops CPU main internal clocks via hardware. State in which the
+         processor maintains all software-visible states, but may take
+         longer to wake up through interrupts.
+        </para>
+       </entry>
+      </row>
+      <row>
+       <entry>
+        <para>
+         C3
+        </para>
+       </entry>
+       <entry>
+        <para>
+         Stops all CPU internal clocks. The processor does not need to keep
+         its cache coherent, but maintains other states. Some processors
+         have variations of the C3 state that differ in how long it takes to
+         wake the processor through interrupts.
+        </para>
+       </entry>
+      </row>
+     </tbody>
+    </tgroup>
+   </table>
+   <para>
+    To avoid needless power consumption, it is recommended to test your
+    workloads with deep sleep states enabled versus deep sleep states
+    disabled. For more information, refer to
+    <xref
+     linkend="sec-tuning-power-tools-cpupower-idle-info"/> or the
+    <command>cpupower-idle-set(1)</command> man page.
+   </para>
+  </sect2>
+
+  <sect2 xml:id="sec-tuning-power-cpu-pstates">
+   <title>P-states (processor performance states)</title>
+   <para>
+    While a processor operates (in C0 state), it can be in one of several
+    CPU performance states <literal>(P-states)</literal>. Whereas C-states
+    are idle states (all but C0), <literal>P-states</literal> are
+    operational states that relate to CPU frequency and voltage.
+   </para>
+   <para>
+    The higher the P-state, the lower the frequency and voltage at which the
+    processor runs. The number of P-states is processor-specific and the
+    implementation differs across the different types. However,
+    <literal>P0</literal> is always the highest-performance state (except for <xref
+     linkend="sec-tuning-cpu-power-turbo"/>). Higher
+    P-state numbers represent slower processor speeds and lower power
+    consumption. For example, a processor in <literal>P3</literal> state runs
+    more slowly and uses less power than a processor running in the
+    <literal>P1</literal> state. To operate at any P-state, the processor
+    must be in the <literal>C0</literal> state, which means that it is
+    working and not idling. The CPU P-states are also defined in the ACPI
+    specification, see <link xlink:href="https://uefi.org/sites/default/files/resources/ACPI_Spec_6_5_Aug29.pdf"/>.
+   </para>
+   <para>
+    C-states and P-states can vary independently of one another.
+   </para>
+  </sect2>
+
+
+  <sect2 xml:id="sec-tuning-cpu-power-turbo">
+   <title>Turbo features</title>
+<!--taroth 2011-09-22: terminology: AMD: Turbo CORE, Intel: Turbo Boost-->
+   <para>
+    Turbo features allow to dynamically <literal>overtick</literal> active CPU
+    cores while other cores are in deep sleep states. This increases the performance
+    of active threads while still
+    complying with Thermal Design Power (TDP) limits.
+   </para>
+   <para>
+    However, the conditions under which a CPU core can use turbo frequencies
+    are architecture-specific. Learn how to evaluate the efficiency of those
+    new features in <xref linkend="sec-tuning-power-tools-cpupower"/>.
+   </para>
+  </sect2>
+ </sect1>
+
+<!--relates to P-States-->
+<!-- <sect1 xml:id="sec-tuning-power-cpufreq">
+  <title>The Linux kernel &cpufreq; infrastructure</title>
+  <para>
+   Processor performance states (P-states) and processor operating states
+   (C-states) are the capability of a processor to switch between different
+   supported operating frequencies and voltages to modulate power
+   consumption.
+  </para>
+
+  <para>
+   To dynamically scale processor frequencies at runtime, you can use the
+   &cpufreq; infrastructure to set a static or dynamic power policy for
+   the system. Its main components are:
+  </para>
+
+  <itemizedlist mark="bullet" spacing="normal">
+   <listitem>
+    <para>
+     The &cpufreq; subsystem, which provides a common interface to
+     various low-level technologies and high-level policies.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     In-kernel governors, which are policy governors that can change the CPU
+     frequency based on different criteria.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     CPU-specific drivers that implement the technology for a particular
+     type of processor.
+    </para>
+   </listitem>
+  </itemizedlist>
+
+  <para>
+   The dynamic scaling of the clock speed helps to consume less power and
+   generate less heat when not operating at full capacity.
+  </para>-->
+
+  <sect1 xml:id="sec-tuning-power-governors">
+   <title>In-kernel governors</title>
+  <para> The in-kernel governors belong to the Linux kernel &cpufreq; infrastructure and can be
+   used to dynamically scale processor frequencies at runtime. You can think of the governors as a
+   sort of preconfigured power scheme for the CPU. The &cpufreq; governors use P-states to
+   change frequencies and lower power consumption. The dynamic governors can switch between CPU
+   frequencies, based on CPU usage, to allow for power savings while not sacrificing performance.
+  </para>
+   <para>
+    The following governors are available with the &cpufreq; subsystem:
+   </para>
+   <variablelist>
+    <varlistentry>
+     <term>Performance governor</term>
+     <listitem>
+      <para>
+       The CPU frequency is statically set to the highest possible for
+       maximum performance. Consequently, saving power is not the focus of
+       this governor.
+      </para>
+      <para>See also <xref linkend="sec-tuning-power-options-p-states"/>.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>Powersave governor</term>
+     <listitem>
+      <para>
+       The CPU frequency is statically set to the lowest possible. This can
+       have severe impact on the performance, as the system never rises
+       above this frequency no matter how busy the processors are. An important
+       exception is the <literal>intel_pstate</literal> which defaults to the
+       <literal>powersave</literal> mode. This is due to a hardware-specific
+       decision but functionally it operates similarly to the
+       <literal>on-demand</literal> governor.
+      </para>
+      <para>
+       However, using this governor often does not lead to the expected
+       power savings as the highest savings can be achieved at idle
+       through entering C-states. With the powersave governor, processes run
+       at the lowest frequency and thus take longer to finish. This means it
+       takes longer until the system can go into an idle C-state.
+      </para>
+      <para>
+       Tuning options: The range of minimum frequencies available to the
+       governor can be adjusted (for example, with the
+       <command>cpupower</command> command line tool).
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>On-demand governor</term>
+     <listitem>
+      <para>
+       The kernel implementation of a dynamic CPU frequency policy: The
+       governor monitors the processor usage. When it exceeds a
+       certain threshold, the governor sets the frequency to the highest
+       available. If the usage is less than the threshold, the next lowest
+       frequency is used. If the system continues to be underemployed, the
+       frequency is again reduced until the lowest available frequency is
+       set.
+      </para>
+     </listitem>
+    </varlistentry>
+   </variablelist>
+   <important>
+   <title>Drivers and in-kernel governors</title>
+   <para>Not all drivers use the in-kernel governors to dynamically scale power frequency at
+    runtime. For example, the <literal>intel_pstate</literal> driver adjusts power frequency itself. Use
+    the <command>cpupower frequency-info</command> command to find out which driver your system
+    uses.</para>
+   <!--taroth 2015-12-03: commenting on behalf on trenn-->
+   <!--<para>By default, <literal>intel_pstate</literal> uses a similar policy like the
+    powersave governor. However, you can also make <literal>intel_pstate</literal> statically set
+    CPU frequency to the highest possible value, similar to using the performance governor. See
+     <xref linkend="sec-tuning-power-options-p-states"/> for how to do so.</para>-->
+   </important>
+  </sect1>
+
+  <!--<sect2 xml:id="sec-tuning-power-cpufreq-files">
+   <title>Related files and directories</title>
+   <para>
+    If the &cpufreq; subsystem in enabled on your system (which it is by
+    default with &sls;), you can find the relevant files and directories
+    under <filename>/sys/devices/system/cpu/</filename>. If you list the
+    contents of this directory, you will find a
+    <filename>cpu{0..x}</filename> subdirectory for each processor, and
+    several other files and directories. A <filename>cpufreq</filename>
+    subdirectory in each processor directory holds several files and
+    directories that define the parameters for &cpufreq;. Some
+    are writable (for &rootuser;), some are read-only. If your
+    system currently uses the on-demand or conservative governor, you will
+    see a separate subdirectory for those governors in
+    <filename>cpufreq</filename>, containing the parameters for the
+    governors.
+   </para>
+   <note>
+    <title>Different processor settings</title>
+    <para>
+     The settings under the <filename>cpufreq</filename> directory can be
+     different for each processor. If you want to use the same policies
+     across all processors, you need to adjust the parameters for each
+     processor. Instead of looking up or modifying the current settings
+     manually (in <filename>/sys/devices/system/cpu*/cpufreq</filename>), we
+     advise to use the tools provided by the
+     <systemitem class="resource">cpupower</systemitem> package for that.
+    </para>
+   </note>
+  </sect2>
+ </sect1>
+-->
+ <sect1 xml:id="sec-tuning-power-tools-cpupower">
+  <title>The <systemitem class="resource">cpupower</systemitem> tools</title>
+   <para>The <command>cpupower</command> tools are designed to give an overview
+   of <emphasis>all</emphasis> CPU power-related parameters that are supported
+   on a given machine, including turbo (or boost) states. Use the toolset to
+   view and modify settings of the kernel-related &cpufreq; and cpuidle systems
+   and other settings not related to frequency scaling or idle states. The
+   integrated monitoring framework can access both kernel-related parameters
+   and hardware statistics. Therefore, it is ideally suited for performance
+   benchmarks. It also helps you to identify the dependencies between turbo and
+   idle states.
+   </para>
+   <para> After installing the <systemitem class="resource">cpupower</systemitem> package, view the
+   available <command>cpupower</command> subcommands with
+   <command>cpupower&nbsp;--help</command>. Access the general man page with
+   <command>man&nbsp;cpupower</command>, and the man pages of the subcommands with
+   <command>man&nbsp;cpupower-<replaceable>SUBCOMMAND</replaceable></command>.
+   </para>
+
+   <sect2 xml:id="sec-tuning-power-tools-cpupower-freq-info">
+    <title>Viewing current settings with <command>cpupower</command></title>
+    <para>
+     The <command>cpupower&nbsp;frequency-info</command> command shows the
+     statistics of the cpufreq driver used in the kernel. Additionally, it
+     shows if turbo (boost) states are supported and enabled in the BIOS.
+     Run without any options, it shows an output similar to the following:
+    </para>
+    <example>
+     <title>Example output of <command>cpupower frequency-info</command></title>
+     <screen>&prompt.root;cpupower frequency-info
+analyzing CPU 0:
+  driver: intel_pstate
+  CPUs which run at the same hardware frequency: 0
+  CPUs which need to have their frequency coordinated by software: 0
+  maximum transition latency: 0.97 ms.
+  hardware limits: 1.20 GHz - 3.80 GHz
+  available cpufreq governors: performance, powersave
+  current policy: frequency should be within 1.20 GHz and 3.80 GHz.
+                  The governor "powersave" may decide which speed to use
+                  within this range.
+  current CPU frequency is 3.40 GHz (asserted by call to hardware).
+  boost state support:
+    Supported: yes
+    Active: yes
+    3500 MHz max turbo 4 active cores
+    3600 MHz max turbo 3 active cores
+    3600 MHz max turbo 2 active cores
+    3800 MHz max turbo 1 active cores</screen>
+    </example>
+    <para>
+     To get the current values for all CPUs, use
+     <command>cpupower&nbsp;-c&nbsp;all&nbsp;frequency-info</command>.
+    </para>
+   </sect2>
+   <sect2 xml:id="sec-tuning-power-tools-cpupower-idle-info">
+    <title>Viewing kernel idle statistics with <command>cpupower</command></title>
+    <para>
+     The <command>idle-info</command> subcommand shows the statistics of the
+     cpuidle driver used in the kernel. It works on all architectures that
+     use the cpuidle kernel framework.
+    </para>
+    <example>
+     <title>Example output of <command>cpupower idle-info</command></title>
+     <screen>&prompt.root;cpupower idle-info
+CPUidle driver: intel_idle
+CPUidle governor: menu
+
+Analyzing CPU 0:
+Number of idle states: 6
+Available idle states: POLL C1-SNB C1E-SNB C3-SNB C6-SNB C7-SNB
+POLL:
+Flags/Description: CPUIDLE CORE POLL IDLE
+Latency: 0
+Usage: 163128
+Duration: 17585669
+C1-SNB:
+Flags/Description: MWAIT 0x00
+Latency: 2
+Usage: 16170005
+Duration: 697658910
+C1E-SNB:
+Flags/Description: MWAIT 0x01
+Latency: 10
+Usage: 4421617
+Duration: 757797385
+C3-SNB:
+Flags/Description: MWAIT 0x10
+Latency: 80
+Usage: 2135929
+Duration: 735042875
+C6-SNB:
+Flags/Description: MWAIT 0x20
+Latency: 104
+Usage: 53268
+Duration: 229366052
+C7-SNB:
+Flags/Description: MWAIT 0x30
+Latency: 109
+Usage: 62593595
+Duration: 324631233978</screen>
+    </example>
+    <para>
+     After finding out which processor idle states are supported with
+     <command>cpupower idle-info</command>, individual states can be
+     disabled using the <command>cpupower idle-set</command> command.
+     Typically one wants to disable the deepest sleep state, for example:
+    </para>
+<screen>&prompt.root;cpupower idle-set -d 5</screen>
+<!--taroth 2015-12-01: the -D option is only available since SLE 12 SP1 GMC, *not* for SLE 12   -->
+    <para>Or, for disabling all CPUs with latencies equal to or higher than <literal>80</literal>:</para>
+    <screen>&prompt.root;cpupower idle-set -D 80</screen>
+
+    <!--taroth 2015-12-01: on behalf of trenn, commented the following para for now,
+    because it will only be made available in an online update-->
+
+     <!-- <para>You can make this changes permanent as described in <xref
+     linkend="sec-tuning-power-options-c-states"/>. But before you do
+    so, check for performance or power impact.</para>-->
+   </sect2>
+   <sect2 xml:id="sec-tuning-power-tools-cpupower-monitor">
+    <title>Monitoring kernel and hardware statistics with <command>cpupower</command></title>
+    <para>
+     Use the <command>monitor</command> subcommand to report processor topology, and monitor frequency
+     and idle power state statistics over a certain period of time. The
+     default interval is <literal>1</literal> second, but it can be changed
+     with the <option>-i</option>. Independent processor sleep states and
+     frequency counters are implemented in the tool&mdash;some retrieved
+     from kernel statistics, others reading out hardware registers. The
+     available monitors depend on the underlying hardware and the system.
+     List them with <command>cpupower&nbsp;monitor&nbsp;-l</command>.
+     For a description of the individual monitors, refer to the
+     cpupower-monitor man page.
+    </para>
+    <para>
+     The <command>monitor</command> subcommand allows you to execute
+     performance benchmarks. To compare kernel statistics with hardware
+     statistics for specific workloads, concatenate the respective command, for example:</para>
+
+     <screen><command>cpupower</command> <option>monitor</option> db_test.sh</screen>
+    <example xml:id="ex-cpupower-monitor">
+     <title>Example <command>cpupower monitor</command> output</title>
+<screen>&prompt.root;cpupower monitor
+|Mperf                   || Idle_Stats
+ <co xml:id="co-cpupower-mon-mperf"/>&nbsp;                        <co xml:id="co-cpupower-mon-idle"/>&nbsp;
+CPU | C0   | Cx   | Freq || POLL | C1   | C2   | C3
+   0|  3.71| 96.29|  2833||  0.00|  0.00|  0.02| 96.32
+   1| 100.0| -0.00|  2833||  0.00|  0.00|  0.00|  0.00
+   2|  9.06| 90.94|  1983||  0.00|  7.69|  6.98| 76.45
+   3|  7.43| 92.57|  2039||  0.00|  2.60| 12.62| 77.52
+     </screen>
+     <calloutlist>
+      <callout arearefs="co-cpupower-mon-mperf">
+       <para>
+        Mperf shows the average frequency of a CPU, including boost
+        frequencies, over time. Additionally, it shows the
+        percentage of time the CPU has been active (<literal>C0</literal>)
+        or in any sleep state (<literal>Cx</literal>). As the turbo states are managed by the
+        BIOS, it is impossible to get the frequency values at a given
+        instant. On modern processors with turbo features the Mperf monitor
+        is the only way to find out about the frequency a certain CPU has
+        been running in.
+       </para>
+      </callout>
+      <callout arearefs="co-cpupower-mon-idle">
+       <para>
+        Idle_Stats shows the statistics of the cpuidle kernel subsystem. The
+        kernel updates these values every time an idle state is entered or
+        left. Therefore, there can be a few inaccuracies when cores are in an
+        idle state for some time when the measure starts or ends.
+       </para>
+      </callout>
+     </calloutlist>
+     <para>
+      Apart from the (general) monitors in the example above, other
+      architecture-specific monitors are available. For detailed
+      information, refer to the <command>cpupower-monitor</command> man
+      page.
+     </para>
+    </example>
+    <para>
+     By comparing the values of the individual monitors, you can find
+     correlations and dependencies and evaluate how well the power saving
+     mechanism works for a certain workload. In
+     <xref linkend="ex-cpupower-monitor" xrefstyle="select:label"/> you can
+     see that CPU <literal>0</literal> is idle (the value of
+     <literal>Cx</literal> is near 100%), but runs at a high frequency.
+     This is because the CPUs <literal>0</literal> and <literal>1</literal>
+     have the same frequency values which means that there is a dependency
+     between them.
+    </para>
+   </sect2>
+   <sect2 xml:id="sec-tuning-power-tools-cpupower-freq-set">
+    <title>Modifying current settings with <command>cpupower</command></title>
+    <para>
+     You can use
+     <command>cpupower&nbsp;frequency-set</command> command as &rootuser; to
+     modify current settings. It allows you to set values for the minimum or
+     maximum CPU frequency the governor may select or to create a new
+     governor. With the <option>-c</option> option, you can also specify for
+     which of the processors the settings should be modified. That makes it
+     easy to use a consistent policy across all processors without adjusting
+     the settings for each processor individually. For more details and the
+     available options, see the man page
+     <literal>cpupower-frequency-set</literal> or run
+     <command>cpupower&nbsp;frequency-set</command>
+     <option>--help</option>.
+    </para>
+   </sect2>
+  </sect1>
+
+ <sect1 xml:id="sec-tuning-power-options">
+  <title>Special tuning options</title>
+
+  <para>
+   The following sections highlight important settings.
+  </para>
+
+  <sect2 xml:id="sec-tuning-power-options-p-states">
+   <title>Tuning options for P-states</title>
+   <para>
+    The &cpufreq; subsystem offers several tuning options for P-states:
+    You can switch between the different governors, influence minimum or
+    maximum CPU frequency to be used or change individual governor
+    parameters.
+   </para>
+   <para>
+    To switch to another governor at runtime, use
+    <command>cpupower&nbsp;frequency-set</command> with the <option>-g</option> option. For
+    example, running the following command (as &rootuser;) will activate the
+    performance governor:
+   </para>
+<screen>&prompt.root;cpupower frequency-set -g performance</screen>
+   <para>
+    To set values for the minimum or maximum CPU frequency the governor may
+    select, use the <option>-d</option> or <option>-u</option> option,
+    respectively.
+   </para>
+   <!--taroth 2015-12-01: on behalf of trenn, commented the following para for now,
+    because it will only be made available in an online update-->
+   <!--<para>
+    If you want to disable dynamic processor frequency scaling and want the change
+    to persist also after a reboot or shutdown, use the parameter
+    <literal>CPUFREQ_PERFORMANCE_GOVERNOR</literal>
+    <remark>taroth 2015-11-24: might also be renamed to CPUFREQ_DISABLE,
+     check again with trenn</remark> in
+    <filename>/etc/sysconfig/cpupower.conf</filename>.
+   </para>-->
+
+   <!--/etc/sysconfig/cpupower
+
+    # Config file for cpupower oneshot configuration
+    # This is about power savings vs performance CPU settings
+    # These are set once at boot up or get adjusted if service is restarted
+
+    #
+    ## Description: Disable processor frequency scaling
+    ## Type:        yesno
+    ## Default:     no
+    #
+    # Enable the processor frequency performance governor which is equal to
+    # disable dynamic processor frequency scaling.
+    # This makes sense (depending on your CPU):
+    #   - for better performance
+    #   - on latest CPUs better power savings: Work is done quicker and the more
+    #     efficient processor sleep states are entered quicker and longer
+    #   - benchmarking of workloads
+    #
+    # Only disables dynamic frequency scaling and enables frequency performance
+    # mode, the value "no" has no effect
+    #
+    CPUFREQ_PERFORMANCE_GOVERNOR="no"
+
+   -->
+  </sect2>
+
+  <!--taroth 2015-12-01: on behalf of trenn, commented the following section for now,
+  because it will only be made available in an online update-->
+
+  <!--<sect2 id="sec-tuning-power-options-c-states">
+   <title>Tuning options for C-states</title>
+
+
+   <!-\-/etc/sysconfig/cpupower
+
+    # Config file for cpupower oneshot configuration
+    # This is about power savings vs performance CPU settings
+    # These are set once at boot up or get adjusted if service is restarted
+
+    #
+    ## Descripion: Disable processor sleep states by latency
+    ## Type:       integer(1:)
+    ## Default:    ""
+    #
+    # The value is in microseconds.
+    #
+    # There are fake sleep states (POLL) from the kernel which cannot
+    # be switched off. Also C1 (x86) should not get disabled.
+    # See cpupower-idle-info(1) and cpupower-monitor to examine supported processor
+    # idle states on your system and which one got disabled by below variable.
+    #
+    # Disabling specific C-states may affect the ability of the processor to
+    # enter extreme high frequencies (also called turbo or boost modes) which
+    # may contradict with what you want to achieve (better performance). This
+    # very much depends of the type of your CPU (energy efficient ones).
+    #
+    # To re-enable all sleep states again, use cpupower idle-set -E manually or
+    # add a value which is bigger than the longest taking latency of supported
+    # sleep states.
+    #
+    MAXIMUM_CPU_SLEEP_LATENCY=""
+   -\->
+   <para>
+   To disable processor sleep states depending on latency, use the
+     <literal>MAXIMUM_CPU_SLEEP_LATENCY</literal> variable in
+     <filename>/etc/sysconfig/cpupower.conf</filename>. <remark>taroth 2015-11-11: trenn, is the
+     following correct?</remark> All sleep states that have a higher latency than the value (in
+    microseconds)that you set for <literal>MAXIMUM_CPU_SLEEP_LATENCY</literal> will be disabled.
+   </para>
+   <para>However, use <command>cpupower-idle-info</command> and <command>cpupower-monitor</command>
+    to examine the supported processor idle states on your system and which one got disabled by the
+    variable, because disabling specific C-states may affect the ability of the processor to enter
+    extreme high frequencies (also called turbo features), which may contradict what you want to
+    achieve (better performance).</para>
+  </sect2>-->
+ </sect1>
+
+ <sect1 xml:id="sec-tuning-power-trouble">
+  <title>Troubleshooting</title>
+
+  <variablelist>
+   <varlistentry>
+    <term>BIOS options enabled?</term>
+    <listitem>
+     <para>
+      To use C-states or P-states, check your BIOS options:
+     </para>
+     <itemizedlist mark="bullet" spacing="normal">
+      <listitem>
+       <para>
+        To use C-states, make sure to enable <literal>CPU C State</literal>
+        or similar options to benefit from power savings at idle.
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+        To use P-states and the &cpufreq; governors, make sure to enable
+        <literal>Processor Performance States</literal> options or similar.
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+        Even if P-states and C-states are available, it is possible that the
+        platform firmware is managing CPU frequencies which may be sub-optimal.
+        For example, if <literal>pcc-cpufreq</literal> is loaded then the
+        OS is only giving hints to the firmware, which is free to ignore the
+        hints. This can be addressed by selecting "OS Management" or similar
+        for CPU frequency managed in the BIOS. After reboot, an alternative
+        driver will be used but the performance impact should be carefully
+        measured.
+       </para>
+      </listitem>
+
+     </itemizedlist>
+     <para>
+      In case of a CPU upgrade, make sure to upgrade your BIOS, too. The
+      BIOS needs to know the new CPU and its frequency stepping to
+      pass this information on to the operating system.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>Log file information?</term>
+    <listitem>
+     <para>
+      Check the &systemd; journal (see <xref linkend="cha-journalctl"/>)
+      for any output regarding the &cpufreq; subsystem. Only severe
+      errors are reported there.
+     </para>
+     <para>
+      If you suspect problems with the &cpufreq; subsystem on your
+      machine, you can also enable additional debug output. To do so, either
+      use <command>cpufreq.debug=7</command> as boot parameter or execute
+      the following command as &rootuser;:
+     </para>
+<screen>&prompt.root;echo 7 &gt; /sys/module/cpufreq/parameters/debug</screen>
+     <para>
+      This will cause &cpufreq; to log more information to
+      <command>dmesg</command> on state transitions, which is useful for
+      diagnosis. But as this additional output of kernel messages can be
+      rather comprehensive, use it only if you are sure that a
+      problem exists.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+ </sect1>
+
+ <sect1 xml:id="sec-tuning-power-more">
+  <title>More information</title>
+
+  <para>
+   Platforms with a Baseboard Management Controller (BMC) may have additional
+   power management configuration options accessible via the service
+   processor. These configurations are vendor specific and therefore not
+   subject of this guide. For more information, refer to the manuals provided
+   by your vendor.
+   <!-- For example, <citetitle>HP ProLiant Server Power Management
+   on SUSE Linux Enterprise Server 11&mdash;Integration Note </citetitle>
+   provides detailed information how the HP platform specific power management
+   features interact with the Linux kernel. The paper is available from <link
+   xlink:href="http://h18004.www1.hp.com/products/servers/technology/whitepapers/os-techwp.html"/>. -->
+  </para>
+  <para os="sled">
+   For more information about &powertop;, refer to
+   <link xlink:href="https://01.org/powertop"/>.
+  </para>
+ </sect1>
+
+ <sect1 xml:id="sec-tuning-power-tools-powertop">
+  <title>Monitoring power consumption with &powertop;</title>
+  <para>
+   &powertop; helps to identify the causes of unnecessary high power
+   consumption. This is especially
+   useful for laptops, where minimizing power consumption is
+   more important. It supports both Intel and AMD processors.
+   Install it in the usual way:
+  </para>
+  <screen>&prompt.sudo;<command>zypper in powertop</command></screen>
+  <para>
+   &powertop; combines several sources of information (analysis of
+   programs, device drivers, kernel options, number and sources of
+   interrupts waking up processors from sleep states) and provides
+   several ways of viewing them. You can launch it in interactive mode,
+   which runs in an ncurses session (see
+   <xref linkend="fig-powertop-curses"/>):
+  </para>
+  <screen>&prompt.sudo;<command>powertop</command></screen>
+
+  <figure xml:id="fig-powertop-curses">
+   <title>&powertop; in interactive mode</title>
+   <mediaobject>
+    <imageobject role="fo">
+     <imagedata fileref="powertop_ncurses.png" width="75%"/>
+    </imageobject>
+    <imageobject role="html">
+     <imagedata fileref="powertop_ncurses.png" width="75%"/>
+    </imageobject>
+   </mediaobject>
+  </figure>
+
+  <para>
+   &powertop; supports exporting reports to HTML and CSV.
+   The following example generates a single report of a 240-second run:
+  </para>
+  <screen>&prompt.sudo;<command>powertop --iteration=1 --time=240 --html=<replaceable>POWERREPORT.HTML</replaceable></command></screen>
+  <para>
+   It can be useful to run separate reports over time.
+   The following example runs &powertop; 10 times for 20 seconds each time,
+   and creates a separate HTML report for each run:
+  </para>
+  <screen>&prompt.sudo;<command>powertop --iteration=10 --time=20 --html=<replaceable>POWERREPORT.HTML</replaceable></command></screen>
+  <para>
+   This creates 10 time-stamped reports:
+  </para>
+  <screen>powerreport-20200108-104512.html
+powerreport-20200108-104451.html
+powerreport-20200108-104431.html
+[...]</screen>
+  <para>
+   An HTML report looks like <xref linkend="fig-powertop-html"/>:
+  </para>
+  <figure xml:id="fig-powertop-html">
+   <title>HTML &powertop; report</title>
+   <mediaobject>
+    <imageobject role="fo">
+     <imagedata fileref="powertop_html.png" width="75%"/>
+    </imageobject>
+    <imageobject role="html">
+     <imagedata fileref="powertop_html.png" width="75%"/>
+    </imageobject>
+   </mediaobject>
+  </figure>
+
+  <para>
+   The Tuning tab of the HTML reports, and the Tunables tab in the
+   interactive mode, both provide commands for testing the various power
+   settings. The HTML report prints the commands, which you can copy
+   to a root command line for testing, for example
+   <command>echo '0' > '/proc/sys/kernel/nmi_watchdog'</command>.
+   The ncurses mode provides a simple toggle between <literal>Good</literal>
+   and <literal>Bad</literal>. <literal>Good</literal> runs a command
+   to enable power saving, and <literal>Bad</literal> turns off power saving.
+   Enable all &powertop; settings with one command:
+  </para>
+  <screen>&prompt.sudo;<command>powertop --auto-tune</command></screen>
+  <para>
+   None of these changes survive a reboot. To make any changes
+   permanent, use <command>sysctl</command>, <command>udev</command>,
+   or &systemd; to run your selected commands at
+   boot. &powertop; includes a &systemd; service file,
+   <filename>/usr/lib/systemd/system/powertop.service</filename>. This
+   starts &powertop; with the <command>--auto-tune</command> option:
+  </para>
+  <screen>ExecStart=/usr/sbin/powertop --auto-tune</screen>
+  <para>
+   Test this carefully before launching the &systemd; service,
+   to see if it gives the results that you want.
+   You should not use USB keyboards and mice should not enter power save mode to avoid constantly
+   waking them up and disturbing other devices. For easier testing and configuration editing,
+   extract the commands from an HTML report with <command>awk</command>:
+  </para>
+  <screen>&prompt.user;awk -F '&lt;/?td ?>' '/tune/ { print $4 }' <replaceable>POWERREPORT.HTML</replaceable></screen>
+  <para>
+   In calibrate mode, &powertop; sets up several runs that use different idle
+   settings for backlight, CPU, Wi-Fi, USB devices, and disks, and helps to
+   identify optimal brightness settings on battery power:
+  </para>
+  <screen>&prompt.sudo;<command>powertop --calibrate</command></screen>
+
+  <para>
+   You may call a file that creates a workload for more accurate calibration:
+  </para>
+  <screen>&prompt.sudo;<command>powertop --calibrate --workload=<replaceable>FILENAME</replaceable> --html=POWERREPORT.HTML</command></screen>
+
+  <para>
+   For more information, see:
+  </para>
+  <itemizedlist>
+   <listitem>
+    <para>
+     The &powertop; project page at <link xlink:href="https://01.org/powertop"/>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <xref linkend="sec-util-proc-procinfo-sysctl"/>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <xref linkend="cha-systemd"/>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <xref linkend="cha-udev"/>
+    </para>
+   </listitem>
+  </itemizedlist>
+ </sect1>
+</chapter>

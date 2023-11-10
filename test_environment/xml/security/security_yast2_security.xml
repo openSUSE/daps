@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter
+[
+  <!ENTITY % entities SYSTEM "../common/generic-entities.ent">
+    %entities;
+]>
+
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0" xml:id="cha-security-yast-security">
+ <title>Configuring security settings with &yast;</title>
+ <info>
+  <dm:docmanager xmlns:dm="urn:x-suse:ns:docmanager">
+   <dm:bugtracker>
+   </dm:bugtracker>
+   <dm:translation>yes</dm:translation>
+  </dm:docmanager>
+  <abstract>
+   <para>
+    The &yast; module <guimenu>Security Center</guimenu>
+    provides a central control panel for configuring security-related settings
+    for &productname;. Use it to configure security aspects such as
+    settings for the login procedure and for password creation, for boot
+    permissions, user creation, or for default file permissions. Launch it
+    from the &yast; control center with <menuchoice>
+    <guimenu>Security and Users</guimenu>
+    <guimenu>Security Center</guimenu></menuchoice>. The
+    <guimenu>Security Center</guimenu> dialog opens to
+    the <guimenu>Security Overview</guimenu>, with additional
+    configuration dialogs in the left and right panes.
+   </para>
+  </abstract>
+ </info>
+ <sect1 xml:id="sec-security-yast-security-overview">
+  <title><guimenu>Security overview</guimenu></title>
+
+  <para>
+   The <guimenu>Security Overview</guimenu> displays a comprehensive list of
+   the most important security settings for your system. The security status
+   of each entry in the list is visible. A green check mark
+   indicates a secure setting while a red cross indicates an entry as being
+   insecure. Click <guimenu>Help</guimenu> to open an overview of the
+   setting and information on how to make it secure. To change a setting,
+   click the corresponding link in the Status column. Depending on the
+   setting, the following entries are available:
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term><guimenu>Enabled</guimenu>/<guimenu>Disabled</guimenu>
+    </term>
+    <listitem>
+     <para>
+      Click this entry to toggle the status of the setting to either enabled
+      or disabled.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term><guimenu>Configure</guimenu>
+    </term>
+    <listitem>
+     <para>
+      Click this entry to launch another &yast; module for configuration.
+      You are returned to the Security Overview when leaving the module.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term><guimenu>Unknown</guimenu>
+    </term>
+    <listitem>
+     <para>
+      A setting's status is set to unknown when the associated service is
+      not installed. Such a setting does not represent a potential security
+      risk.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <figure xml:id="fig-yast-security-overview">
+   <title>&yast; security center and hardening: security overview</title>
+   <mediaobject>
+    <imageobject role="fo">
+     <imagedata width="75%" fileref="yast2_security_overview.png"/>
+    </imageobject>
+    <imageobject role="html">
+     <imagedata fileref="yast2_security_overview.png"/>
+    </imageobject>
+   </mediaobject>
+  </figure>
+ </sect1>
+ <sect1 xml:id="sec-security-yast-security-predefined-configs">
+  <title><guimenu>Predefined security configurations</guimenu></title>
+
+  <para>
+   &productname; includes three <guimenu>Predefined Security
+   Configurations</guimenu>. These configurations affect all the settings
+   available in the <guimenu>Security Center</guimenu> module. Click
+   <guimenu>Predefined Security Configurations</guimenu> in the left pane
+   to see the predefined configurations. Click the one you want to apply,
+   then the module closes. If you wish to modify the predefined settings,
+   re-open the <guimenu>Security Center</guimenu> module, click
+   <guimenu>Predefined Security Configurations</guimenu>, then click
+   <guimenu>Custom Settings</guimenu> in the right pane. Any changes you
+   make are applied to your selected predefined configuration.
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term><guimenu>Workstation</guimenu>
+    </term>
+    <listitem>
+     <para>
+      A configuration for a workstation with any kind of network connection
+      (including a connection to the Internet).
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term><guimenu>Roaming device</guimenu>
+    </term>
+    <listitem>
+     <para>
+      This setting is designed for a laptop or tablet that connects to
+      different networks.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term><guimenu>Network server</guimenu>
+    </term>
+    <listitem>
+     <para>
+      Security settings designed for a machine providing network services
+      such as a Web server, file server, name server, etc. This set provides
+      the most secure configuration of the predefined settings.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term><guimenu>Custom settings</guimenu>
+    </term>
+    <listitem>
+     <para>
+      Select <guimenu>Custom Settings</guimenu> to modify any of the three
+      predefined configurations after they have been applied.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+ </sect1>
+ <sect1 xml:id="sec-security-yast-security-password">
+  <title><guimenu>Password settings</guimenu></title>
+
+  <para>
+   Passwords that are easy to guess are a major security issue. The
+   <guimenu>Password Settings</guimenu> dialog provides the means to ensure
+   that only secure passwords can be used.
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term><guimenu>Check new passwords</guimenu>
+    </term>
+    <listitem>
+     <para>
+      By activating this option, a warning is issued if new passwords
+      appear in a dictionary, or if they are proper names (proper nouns).
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term><guimenu>Minimum acceptable password length</guimenu>
+    </term>
+    <listitem>
+     <para>
+      If the user chooses a password with a length shorter than specified
+      here, a warning is issued.
+     </para>
+    </listitem>
+   </varlistentry>
+<!-- fs 2015-10-08: No longer present in SLE 12 SP1
+   <varlistentry>
+    <term><guimenu>Test for complicated passwords</guimenu>
+    </term>
+    <listitem>
+     <para>
+      When this option is checked, any new password is checked that it
+      consists of a mixture of characters, digits and special characters. If
+      it fails to pass this test, a warning is issued upon the entering of
+      the new password.
+     </para>
+    </listitem>
+    </varlistentry>
+-->
+   <varlistentry>
+    <term><guimenu>Number of passwords to remember</guimenu>
+    </term>
+    <listitem>
+     <para>
+      When password expiration is activated (via <guimenu>Password
+      Age</guimenu>), this setting stores the given number of a user's
+      previous passwords, preventing their reuse.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term><guimenu>Password encryption method</guimenu>
+    </term>
+    <listitem>
+     <para>
+      Choose a password encryption algorithm. Normally there is no need to
+      change the default (Blowfish).
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term><guimenu>Password age</guimenu>
+    </term>
+    <listitem>
+     <para>
+      Activate password expiration by specifying a minimum and a maximum
+      time limit (in days). By setting the minimum age to a value greater
+      than <literal>0</literal> days, you can prevent users from immediately
+      changing their passwords again (and in doing so circumventing the
+      password expiration). Use the values <literal>0</literal> and
+      <literal>99999</literal> to deactivate password expiration.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term><guimenu>Days before password expires warning</guimenu>
+    </term>
+    <listitem>
+     <para>
+      When a password expires, the user receives a warning in advance.
+      Specify the number of days before the expiration date that the
+      warning should be issued.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+ </sect1>
+ <sect1 xml:id="sec-security-yast-security-boot">
+  <title><guimenu>Boot settings</guimenu></title>
+
+  <para>
+   Configure which users can shut down the machine via the
+   graphical login manager in this dialog. You can also specify how
+   <keycombo> <keycap function="control"/> <keycap function="alt"/>
+   <keycap function="delete"/> </keycombo> is interpreted and who
+   can hibernate the system.
+  </para>
+ </sect1>
+
+ <sect1 xml:id="sec-security-yast-security-login">
+  <title><guimenu>Login settings</guimenu></title>
+
+  <para>
+   This dialog lets you configure security-related login settings:
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term><guimenu>Delay after incorrect login attempt</guimenu>
+    </term>
+    <listitem>
+     <para>
+      To make it difficult to guess a user's password by repeatedly
+      logging in, it is recommended to delay the display of the login prompt
+      that follows an incorrect login. Specify the value in seconds. Make
+      sure that users who have mistyped their passwords do not need to wait
+      too long.
+     </para>
+    </listitem>
+   </varlistentry>
+<!--fs 2015-10-08: No longer present in SLE 12 SP1
+   <varlistentry>
+    <term><guimenu>Record successful login attempts</guimenu>
+    </term>
+    <listitem>
+     <para>
+      With this option turned on, the last successful login attempt is
+      recorded in <filename>/var/log/lastlog</filename> and displayed when
+      logging in. This data is also used by the command
+      <command>finger</command>.
+     </para>
+     <note>
+      <para>
+       Note that logging to <filename>/var/log/wtmp</filename> is not
+       affected by this option. This file collects login dates, login times
+       and reboot dates. The content of <filename>/var/log/wtmp</filename>
+       can be displayed by using the command <command>last</command>.
+      </para>
+     </note>
+    </listitem>
+    </varlistentry>
+-->
+   <varlistentry>
+    <term><guimenu>Allow remote graphical login</guimenu>
+    </term>
+    <listitem>
+     <para>
+      When checked, the graphical login manager (GDM) can be accessed from
+      the network. This is a potential security risk.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+ </sect1>
+ <sect1 xml:id="sec-security-yast-security-user">
+  <title><guimenu>User addition</guimenu></title>
+
+  <para>
+   Set minimum and maximum values for user and group IDs. These default
+   settings would rarely need to be changed.
+  </para>
+ </sect1>
+ <sect1 xml:id="sec-security-yast-security-misc">
+  <title><guimenu>Miscellaneous settings</guimenu></title>
+
+  <para>
+   Other security settings that do not fit the above-mentioned categories are
+   listed here:
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term><guimenu>File permissions</guimenu>
+    </term>
+    <listitem>
+     <para>
+      &productname; comes with three predefined sets of file permissions
+      for system files. These permission sets define whether a regular user
+      can read log files or start certain programs. <guimenu>Easy</guimenu>
+      file permissions are suitable for stand-alone machines. These settings
+      allow regular users to, for example, read most system files. See the
+      file <filename>/etc/permissions.easy</filename> for the complete
+      configuration. The <guimenu>Secure</guimenu> file permissions are
+      designed for multiuser machines with network access. A thorough
+      explanation of these settings can be found in
+      <filename>/etc/permissions.secure</filename>. The
+      <guimenu>Paranoid</guimenu> settings are the most restrictive ones and
+      should be used with care. See
+      <filename>/etc/permissions.paranoid</filename> for more information.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term><guimenu>User launching updatedb</guimenu>
+    </term>
+    <listitem>
+     <para>
+      The program <command>updatedb</command> scans the system and creates a
+      database of all files, which can be queried with the command
+      <command>locate</command>. When <command>updatedb</command> is run as
+      user nobody, only world-readable files are added to the database.
+      When run as user &rootuser;, almost all files (except the ones root
+      is not allowed to read) are added.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term><guimenu>Enable magic SysRq keys</guimenu>
+    </term>
+    <listitem>
+     <para>
+      The magic SysRq key is a key combination that enables you to have certain
+      control over the system even when it has crashed. The complete
+      documentation can be found at <link
+      xlink:href="https://www.kernel.org/doc/html/latest/admin-guide/sysrq.html"/>.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+ </sect1>
+</chapter>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter
+[
+  <!ENTITY % entities SYSTEM "../common/generic-entities.ent">
+    %entities;
+]>
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0" xml:id="cha-apparmor-repos">
+ <title>&aa; profile repositories</title>
+ <info>
+      <dm:docmanager xmlns:dm="urn:x-suse:ns:docmanager">
+        <dm:bugtracker>
+        </dm:bugtracker>
+	<dm:translation>yes</dm:translation>
+      </dm:docmanager>
+    </info>
+    <para>
+  &aa; ships with a set of profiles enabled by default. These are created
+  by the &aa; developers, and are stored in
+  <filename>/etc/apparmor.d</filename>. In addition to these profiles,
+<!-- AppArmor 3.0 will have them in /usr/share/ -->
+  &productname; ships profiles for individual applications together with
+  the relevant application. These profiles are not enabled by default, and
+  reside under another directory than the standard &aa; profiles,
+  <filename>/usr/share/apparmor/extra-profiles</filename>.
+ </para>
+ <!-- <sect1 xml:id="sec-apparmor-repos-local"> -->
+ <!--  <title>Using the local repository</title> -->
+
+  <para>
+   The &aa; tools (&yast;, <command>aa-genprof</command> and
+   <command>aa-logprof</command>) support the use of a local repository.
+   Whenever you start to create a new profile from scratch, and there
+   already is an inactive profile in your local repository, you are asked
+   whether you want to use the existing inactive one from
+   <filename>/usr/share/apparmor/extra-profiles</filename> and whether you want
+   to base your efforts on it. If you decide to use this profile, it gets
+   copied over to the directory of profiles enabled by default
+   (<filename>/etc/apparmor.d</filename>) and loaded whenever &aa; is
+   started. Any further adjustments will be done to the active profile under
+   <filename>/etc/apparmor.d</filename>.
+  </para>
+ <!-- </sect1> -->
+</chapter>

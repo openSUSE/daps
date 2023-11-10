@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter
+[
+  <!ENTITY % entities SYSTEM "entities/generic-entities.ent">
+    %entities;
+]>
+
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0" xml:id="cha-ftp">
+ <title>Setting up an FTP server with &yast;</title>
+ <info>
+  <abstract>
+   <para>
+    Using the &yast; <guimenu>FTP Server</guimenu> module, you can configure
+    your machine to function as an FTP (File Transfer Protocol) server.
+    Anonymous and/or authenticated users can connect to your machine and
+    download files using the FTP protocol. Depending on the configuration, they
+    can also upload files to the FTP server. &yast; uses vsftpd (Very Secure
+    FTP Daemon).
+   </para>
+  </abstract>
+  <dm:docmanager xmlns:dm="urn:x-suse:ns:docmanager">
+   <dm:bugtracker></dm:bugtracker>
+   <dm:translation>yes</dm:translation>
+  </dm:docmanager>
+ </info>
+ <para>
+  If the &yast; FTP Server module is not available in your system, install the
+  <systemitem class="resource">yast2-ftp-server</systemitem> package. (For
+  managing the FTP server from the command line, see 
+  <xref linkend="sec-yast-ftp-server"/>.)
+ </para>
+ <para>
+  To configure the FTP server using &yast;, follow these steps:
+ </para>
+ <procedure>
+  <step>
+   <para>
+    Open the &yast; control center and choose <menuchoice> <guimenu>Network
+    Services</guimenu> <guimenu>FTP Server</guimenu> </menuchoice> or run the
+    <command>yast2 ftp-server</command> command as &rootuser;.
+   </para>
+  </step>
+  <step>
+   <para>
+    If there is not any FTP server installed in your system, you will be asked
+    which server to install when the &yast; FTP Server module starts. Choose
+    the vsftpd server and confirm the dialog.
+   </para>
+  </step>
+  <step>
+   <para>
+    In the <guimenu>Start-Up</guimenu> dialog, configure the options for
+    starting of the FTP server. For more information, see
+    <xref linkend="sec-ftp-start"/>.
+   </para>
+   <para>
+    In the <guimenu>General</guimenu> dialog, configure FTP directories,
+    welcome message, file creation masks and other parameters. For more
+    information, see <xref linkend="sec-ftp-general"/>.
+   </para>
+   <para>
+    In the <guimenu>Performance</guimenu> dialog, set the parameters that
+    affect the load on the FTP server. For more information, see
+    <xref linkend="sec-ftp-performance"/>.
+   </para>
+   <para>
+    In the <guimenu>Authentication</guimenu> dialog, set whether the FTP server
+    should be available for anonymous and/or authenticated users. For more
+    information, see <xref linkend="sec-ftp-auth"/>.
+   </para>
+   <para>
+    In the <guimenu>Expert Settings</guimenu> dialog, configure the operation
+    mode of the FTP server, SSL connections and firewall settings. For more
+    information, see <xref linkend="sec-ftp-expert"/>.
+   </para>
+  </step>
+  <step>
+   <para>
+    Click <guimenu>Finish</guimenu> to save the configurations.
+   </para>
+  </step>
+ </procedure>
+ <sect1 xml:id="sec-ftp-start">
+  <title>Starting the FTP server</title>
+
+  <para>
+   In the <guimenu>Service Start</guimenu> frame of the <guimenu>FTP
+   Start-Up</guimenu> dialog set the way the FTP server is started up. You can
+   choose between starting the server automatically during the system boot and
+   starting it manually. If the FTP server should be started only after an FTP
+   connection request, choose <guimenu>Via socket</guimenu>.
+  </para>
+
+  <para>
+   The current status of the FTP server is shown in the <guimenu>Switch On and
+   Off</guimenu> frame of the <guimenu>FTP Start-Up</guimenu> dialog. Start the
+   FTP server by clicking <guimenu>Start FTP Now</guimenu>. To stop the server,
+   click <guimenu>Stop FTP Now</guimenu>. After having changed the settings of
+   the server click <guimenu>Save Settings and Restart FTP Now</guimenu>. Your
+   configurations will be saved by leaving the configuration module with
+   <guimenu>Finish</guimenu>.
+  </para>
+
+  <figure xml:id="fig-yast2-ftp-start-up">
+   <title>FTP server configuration — start-up</title>
+   <mediaobject>
+    <imageobject role="fo">
+     <imagedata fileref="yast2_ftp-start-up.png" width="75%"/>
+    </imageobject>
+    <imageobject role="html">
+     <imagedata fileref="yast2_ftp-start-up.png" width="75%"/>
+    </imageobject>
+   </mediaobject>
+  </figure>
+ </sect1>
+ <sect1 xml:id="sec-ftp-general">
+  <title>FTP general settings</title>
+
+  <para>
+   In the <guimenu>General Settings</guimenu> frame of the <guimenu>FTP General
+   Settings</guimenu> dialog you can set the <guimenu>Welcome message</guimenu>
+   which is shown after connecting to the FTP server.
+  </para>
+
+  <para>
+   If you check the <guimenu>Chroot Everyone</guimenu> option, all local users
+   will be placed in a chroot jail in their home directory after login. This
+   option has security implications, especially if the users have upload
+   permission or shell access, so be careful enabling this option.
+  </para>
+
+  <para>
+   If you check the <guimenu>Verbose Logging</guimenu> option, all FTP requests
+   and responses are logged.
+  </para>
+
+  <para>
+   You can limit permissions of files created by anonymous and/or authenticated
+   users with umask. Set the file creation mask for anonymous users in
+   <guimenu>Umask for Anonymous</guimenu> and the file creation mask for
+   authenticated users in <guimenu>Umask for Authenticated Users</guimenu>. The
+   masks should be entered as octal numbers with a leading zero. For more
+   information about umask, see the umask man page
+   (<command>man&nbsp;1p&nbsp;umask</command>).
+  </para>
+
+  <para>
+   In the <guimenu>FTP Directories</guimenu> frame set the directories used for
+   anonymous and authorized users. With <guimenu>Browse</guimenu>, you can
+   select a directory to be used from the local file system. The default FTP
+   directory for anonymous users is <filename>/srv/ftp</filename>. Note that
+   vsftpd does not allow this directory to be writable for all users. The
+   subdirectory <filename>upload</filename> with write permissions for
+   anonymous users is created instead.
+  </para>
+ </sect1>
+ <sect1 xml:id="sec-ftp-performance">
+  <title>FTP performance settings</title>
+
+  <para>
+   In the <guimenu>Performance</guimenu> dialog set the parameters which affect
+   the load on the FTP server. <guimenu>Max Idle Time</guimenu> is the maximum
+   time (in minutes) the remote client may spend between FTP commands. In case
+   of longer inactivity, the remote client is disconnected. <guimenu>Max
+   Clients for One IP</guimenu> determines the maximum number of clients which
+   can be connected from a single IP address. <guimenu>Max Clients</guimenu>
+   determines the maximum number of clients which may be connected. Any
+   additional clients will get an error message.
+  </para>
+
+  <para>
+   The maximum data transfer rate (in KB/s) is set in <guimenu>Local Max
+   Rate</guimenu> for local authenticated users, and in <guimenu>Anonymous Max
+   Rate</guimenu> for anonymous clients respectively. The default value for the
+   rate settings is <literal>0</literal>, which means unlimited data transfer
+   rate.
+  </para>
+ </sect1>
+ <sect1 xml:id="sec-ftp-auth">
+  <title>Authentication</title>
+
+  <para>
+   In the <guimenu>Enable/Disable Anonymous and Local Users</guimenu> frame of
+   the <guimenu>Authentication</guimenu> dialog, you can set which users are
+   allowed to access your FTP server. You can choose between the following
+   options: granting access to anonymous users only, to authenticated users
+   only (with accounts on the system) or to both types of users.
+  </para>
+
+  <para>
+   To allow users to upload files to the FTP server, check
+   <guimenu>Enable Upload</guimenu> in the <guimenu>Uploading</guimenu> frame
+   of the <guimenu>Authentication</guimenu> dialog. Here you can allow
+   uploading or creating directories even for anonymous users by checking the
+   respective box.
+  </para>
+
+  <note>
+   <title>vsftp&mdash;allowing file upload for anonymous users</title>
+   <para>
+    If a vsftpd server is used and you want anonymous users to be able to
+    upload files or create directories, a subdirectory with writing permissions
+    for all users needs to be created in the anonymous FTP directory.
+   </para>
+  </note>
+ </sect1>
+ <sect1 xml:id="sec-ftp-expert">
+  <title>Expert settings</title>
+
+  <para>
+   An FTP server can run in active or in passive mode. By default the server
+   runs in passive mode. To switch into active mode, deselect the <guimenu>Enable
+   Passive Mode</guimenu> option in the <guimenu>Expert Settings</guimenu> dialog.
+   You can also change the range of ports on the server used for the data
+   stream by tweaking the <guimenu>Min Port for Pas. Mode</guimenu> and
+   <guimenu>Max Port for Pas. Mode</guimenu> options.
+  </para>
+
+  <para>
+   If you want encrypted communication between clients and the server, you can
+   <guimenu>Enable SSL</guimenu> and, additionally, <guimenu>Enable
+   TLS</guimenu>. Specify the RSA certificate to be used for SSL encrypted
+   connections.
+  </para>
+
+  <important>
+   <para>
+    By default, new versions of the <systemitem class="daemon">vsftpd
+    </systemitem> daemon have the TLS protocol older than version 1.2 disabled.
+    If you use an FTP client that requires an older version of the TLS protocol,
+    you need to add the following configuration to the
+    <filename>/etc/vsftpd.conf</filename> file:
+   </para>
+<screen>
+ssl_tlsv1 = YES
+ssl_tlsv1_1 = YES
+</screen>
+   <para>
+    Then restart the <systemitem class="daemon">vsftpd</systemitem> daemon to
+    reread the configuration:
+   </para>
+<screen>&prompt.sudo;systemctl restart vsftpd.service</screen>
+  </important>
+
+  <para>
+   If your system is protected by a firewall, check <guimenu>Open Port in
+   Firewall</guimenu> to enable a connection to the FTP server.
+  </para>
+ </sect1>
+ <sect1 xml:id="sec-ftp-info">
+  <title>More information</title>
+
+  <para>
+   For more information about the FTP server read the manual pages of
+   <command>vsftpd</command> and <command>vsftpd.conf</command>.
+  </para>
+ </sect1>
+</chapter>

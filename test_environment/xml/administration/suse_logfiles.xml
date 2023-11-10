@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sect2
+[
+  <!ENTITY % entities SYSTEM "entities/generic-entities.ent">
+    %entities;
+]>
+
+<sect2 xmlns="http://docbook.org/ns/docbook" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0" xml:id="sec-suse-log">
+ <title>Log files: package logrotate</title>
+ <info>
+  <dm:docmanager xmlns:dm="urn:x-suse:ns:docmanager">
+   <dm:bugtracker></dm:bugtracker>
+   <dm:translation>yes</dm:translation>
+  </dm:docmanager>
+ </info>
+ <para>
+  There are several system services (<emphasis>daemons</emphasis>) that, along
+  with the kernel itself, regularly record the system status and specific
+  events onto log files. This way, the administrator can regularly check the
+  status of the system at a certain point in time, recognize errors or faulty
+  functions and troubleshoot them with pinpoint precision. These log files are
+  normally stored in <filename>/var/log</filename> as specified by FHS and grow
+  on a daily basis. The <systemitem>logrotate</systemitem> package helps
+  control the growth of these files. For more details refer to
+  <xref linkend="sec-tuning-syslog-logrotate"/>.
+ </para>
+</sect2>

@@ -1,0 +1,640 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sect1
+[
+  <!ENTITY % entities SYSTEM "entities/generic-entities.ent">
+    %entities;
+]>
+<!-- FATE#320468 [DOCU] Create a network teaming (teamd) section in
+                 administration guide doc
+     Compare to sec.network.iface-bonding
+-->
+<sect1 version="5.1" xml:id="sec-network-iface-teaming"
+ xmlns="http://docbook.org/ns/docbook"
+ xmlns:xi="http://www.w3.org/2001/XInclude"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+ <title>Setting up team devices for &netteam;</title>
+
+ <info>
+  <dm:docmanager xmlns:dm="urn:x-suse:ns:docmanager">
+   <dm:translation>yes</dm:translation>
+  </dm:docmanager>
+ </info>
+
+ <remark>toms 2016-06-16: FATE#320468</remark>
+
+ <para>
+  The term <quote>link aggregation</quote> is the general term which describes
+  combining (or aggregating) a network connection to provide a logical layer.
+  Sometimes you find the terms <quote>channel teaming</quote>, <quote>Ethernet
+  bonding</quote>, <quote>port truncating</quote>, etc. which are synonyms and
+  refer to the same concept.
+ </para>
+
+ <para>
+  This concept is widely known as <quote>bonding</quote> and was originally
+  integrated into the Linux kernel (see <xref linkend="sec-network-iface-bonding"/> for the
+  original implementation). The term <emphasis>&netteam;</emphasis> is used to
+  refer to the new implementation of this concept.
+ </para>
+
+ <para>
+  The main difference between bonding and &netteam; is that teaming supplies a
+  set of small kernel modules responsible for providing an interface
+  for teamd instances. Everything else is handled in user space. This is
+  different from the original bonding implementation which contains all of its
+  functionality exclusively in the kernel. For a comparison refer to <xref
+   linkend="tab-team-comparison"/>.
+ </para>
+
+ <table xml:id="tab-team-comparison">
+  <title>Feature comparison between bonding and team</title>
+  <tgroup cols="3">
+   <colspec colname="c1"/>
+   <colspec colname="c2"/>
+   <colspec colname="c3"/>
+   <thead>
+    <row>
+     <entry>Feature</entry>
+     <entry>Bonding</entry>
+     <entry>Team</entry>
+    </row>
+   </thead>
+   <tbody>
+    <row>
+     <entry>broadcast, round-robin TX policy</entry>
+     <entry>yes</entry>
+     <entry>yes</entry>
+    </row>
+    <row>
+     <entry>active-backup TX policy</entry>
+     <entry>yes</entry>
+     <entry>yes</entry>
+    </row>
+    <row>
+     <entry>LACP (802.3ad) support</entry>
+     <entry>yes</entry>
+     <entry>yes</entry>
+    </row>
+    <row>
+     <entry>hash-based TX policy</entry>
+     <entry>yes</entry>
+     <entry>yes</entry>
+    </row>
+    <row>
+     <entry>user can set hash function</entry>
+     <entry>no</entry>
+     <entry>yes</entry>
+    </row>
+    <row>
+     <entry>TX load-balancing support (TLB)</entry>
+     <entry>yes</entry>
+     <entry>yes</entry>
+    </row>
+    <row>
+     <entry>TX load-balancing support for LACP</entry>
+     <entry>no</entry>
+     <entry>yes</entry>
+    </row>
+    <row>
+     <entry>Ethtool link monitoring</entry>
+     <entry>yes</entry>
+     <entry>yes</entry>
+    </row>
+    <row>
+     <entry>ARP link monitoring</entry>
+     <entry>yes</entry>
+     <entry>yes</entry>
+    </row>
+    <row>
+     <entry>NS/NA (IPV6) link monitoring</entry>
+     <entry>no</entry>
+     <entry>yes</entry>
+    </row>
+    <row>
+     <entry>RCU locking on TX/RX paths</entry>
+     <entry>no</entry>
+     <entry>yes</entry>
+    </row>
+    <row>
+     <entry>port prio and stickiness</entry>
+     <entry>no</entry>
+     <entry>yes</entry>
+    </row>
+    <row>
+     <entry>separate per-port link monitoring setup</entry>
+     <entry>no</entry>
+     <entry>yes</entry>
+    </row>
+    <row>
+     <entry>multiple link monitoring setup</entry>
+     <entry>limited</entry>
+     <entry>yes</entry>
+    </row>
+    <row>
+     <entry>VLAN support</entry>
+     <entry>yes</entry>
+     <entry>yes</entry>
+    </row>
+    <row>
+     <entry>multiple device stacking</entry>
+     <entry>yes</entry>
+     <entry>yes</entry>
+    </row>
+    <row>
+     <entry namest="c1" nameend="c3">Source: <link
+      xlink:href="http://libteam.org/files/teamdev.pp.pdf"/></entry>
+    </row>
+   </tbody>
+  </tgroup>
+ </table>
+
+ <para>
+  Both implementations, bonding and &netteam;, can be used in
+  parallel. &netteam; is an alternative to the existing bonding
+  implementation. It does not replace bonding.
+ </para>
+
+ <para>
+  &netteam; can be used for different use cases. The two most important use
+  cases are explained later and involve:
+ </para>
+
+ <itemizedlist>
+  <listitem>
+   <para>
+    Load balancing between different network devices.
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    Failover from one network device to another in case one of the devices
+    should fail.
+   </para>
+  </listitem>
+ </itemizedlist>
+
+ <para>
+  <remark>toms 2016-06-21: FATE#320947 for Teaming in/with YaST</remark>
+  Currently, there is no &yast; module to support creating a teaming device.
+  You need to configure &netteam; manually. The general procedure is shown
+  below which can be applied for all your &netteam; configurations:
+ </para>
+
+ <procedure xml:id="pro-team-general">
+  <title>General procedure</title>
+  <step>
+   <para>
+    Install the package <package>libteam-tools</package>:
+   </para>
+<screen>&prompt.sudo;<command>zypper in libteam-tools</command></screen>
+  </step>
+  <step>
+   <para>
+    Create a configuration file under
+    <filename>/etc/sysconfig/network/</filename>. Usually it will be
+    <filename>ifcfg-team0</filename>. If you need more than one &netteam;
+    device, give them ascending numbers.
+   </para>
+   <para>
+    This configuration file contains several variables which are explained in
+    the man pages (see <command>man ifcfg</command> and <command>man
+    ifcfg-team</command>). An example configuration can be found in your
+    system in the file <filename>/etc/sysconfig/network/ifcfg.template</filename>.
+   </para>
+  </step>
+  <step>
+   <para>
+    Remove the configuration files of the interfaces which will be used for the
+    teaming device (usually <filename>ifcfg-eth0</filename> and
+    <filename>ifcfg-eth1</filename>).
+   </para>
+   <para>
+    It is recommended to make a backup and remove both files. Wicked will
+    re-create the configuration files with the necessary parameters for
+    teaming.
+   </para>
+  </step>
+  <step>
+   <para>
+    Optionally, check if everything is included in Wicked's configuration file:
+   </para>
+<screen>&prompt.sudo;<command>wicked show-config</command></screen>
+  </step>
+  <step>
+   <para>
+    Start the &netteam; device <systemitem class="service">team0</systemitem>:
+   </para>
+<screen>&prompt.sudo;<command>wicked ifup all team0</command></screen>
+   <para>
+    In case you need additional debug information, use the option
+    <option>--debug all</option> after the <command>all</command> subcommand.
+   </para>
+  </step>
+  <step>
+   <para>
+    Check the status of the &netteam; device. This can be done by the following
+    commands:
+   </para>
+   <itemizedlist>
+    <listitem>
+     <para>
+      Get the state of the teamd instance from Wicked:
+     </para>
+<screen>&prompt.sudo;<command>wicked ifstatus --verbose team0</command></screen>
+    </listitem>
+    <listitem>
+     <para>
+      Get the state of the entire instance:
+     </para>
+<screen>&prompt.sudo;<command>teamdctl team0 state</command></screen>
+    </listitem>
+    <listitem>
+     <para>
+      Get the systemd state of the teamd instance:
+     </para>
+<screen>&prompt.sudo;<command>systemctl status teamd@team0</command></screen>
+    </listitem>
+   </itemizedlist>
+   <para>
+    Each of them shows a slightly different view depending on your needs.
+   </para>
+  </step>
+  <step>
+   <para>
+    In case you need to change something in the
+    <filename>ifcfg-team0</filename> file afterward, reload its configuration
+    with:
+   </para>
+<screen>&prompt.sudo;<command>wicked ifreload team0</command></screen>
+  </step>
+ </procedure>
+
+ <para>
+  Do <emphasis>not</emphasis> use <command>systemctl</command> for starting or
+  stopping the teaming device! Instead, use the <command>wicked</command>
+  command as shown above.
+ </para>
+
+ <para>
+  To completely remove the team device, use this procedure:
+ </para>
+ <procedure>
+  <title>Removing a team device</title>
+  <step>
+   <para>
+    Stop the &netteam; device <systemitem class="service">team0</systemitem>:
+   </para>
+   <screen>&prompt.sudo;<command>wicked ifdown team0</command></screen>
+  </step>
+  <step>
+   <para>
+    Rename the file <filename>/etc/sysconfig/network/ifcfg-team0</filename> to <filename>/etc/sysconfig/network/.ifcfg-team0</filename>.
+    Inserting a dot in front of the file name makes it
+    <quote>invisible</quote> for wicked. If you really do not need the
+    configuration anymore, you can also remove the file.
+   </para>
+  </step>
+  <step>
+   <para>Reload the configuration:</para>
+   <screen>&prompt.sudo;<command>wicked ifreload all</command></screen>
+  </step>
+ </procedure>
+
+ <sect2 xml:id="sec-network-iface-teaming-lb">
+  <title>Use case: load balancing with &netteam;</title>
+  <para>
+   Load balancing is used to improve bandwidth. Use the following configuration
+   file to create a &netteam; device with load balancing capabilities. Proceed
+   with <xref linkend="pro-team-general"/> to set up the device. Check the
+   output with <command>teamdctl</command>.
+  </para>
+  <example xml:id="ex-team-lb">
+   <title>Configuration for load balancing with &netteam;</title>
+<screen>STARTMODE=auto <co xml:id="co-team-lb-startmode"/>
+BOOTPROTO=static <co xml:id="co-team-lb-boot-and-ip"/>
+IPADDRESS="&exampledomain1ip;.1/24" <xref linkend="co-team-lb-boot-and-ip"/>
+IPADDR6="fd00:deca:fbad:50::1/64" <xref linkend="co-team-lb-boot-and-ip"/>
+
+TEAM_RUNNER="loadbalance" <co xml:id="co-team-lb-loadbalance"/>
+TEAM_LB_TX_HASH="ipv4,ipv6,eth,vlan"
+TEAM_LB_TX_BALANCER_NAME="basic"
+TEAM_LB_TX_BALANCER_INTERVAL="100"
+
+TEAM_PORT_DEVICE_0="eth0" <co xml:id="co-team-lb-dev"/>
+TEAM_PORT_DEVICE_1="eth1" <xref linkend="co-team-lb-dev"/>
+
+TEAM_LW_NAME="ethtool" <co xml:id="co-team-lb-name"/>
+TEAM_LW_ETHTOOL_DELAY_UP="10" <co xml:id="co-team-lb-ethtool-delay"/>
+TEAM_LW_ETHTOOL_DELAY_DOWN="10" <xref linkend="co-team-lb-ethtool-delay"
+/></screen>
+<!-- Sync this calloutlist with the second example. Mostly the
+        explanations are the same.
+   -->
+   <calloutlist>
+    <callout arearefs="co-team-lb-startmode">
+     <para>
+      Controls the start of the teaming device. The value of
+      <literal>auto</literal> means, the interface will be set up when the
+      network service is available and will be started automatically on every
+      reboot.
+     </para>
+     <para>
+      In case you need to control the device yourself (and prevent it from
+      starting automatically), set <varname>STARTMODE</varname> to
+      <literal>manual</literal>.
+     </para>
+    </callout>
+    <callout arearefs="co-team-lb-boot-and-ip">
+     <para>
+      Sets a static IP address (here
+      <systemitem
+       class="ipaddress">&exampledomain1ip;.1</systemitem>
+      for IPv4 and
+      <systemitem class="ipaddress">fd00:deca:fbad:50::1</systemitem> for
+      IPv6).
+     </para>
+     <para>
+      If the &netteam; device should use a dynamic IP address, set
+      <literal>BOOTPROTO="dhcp"</literal> and remove (or comment) the line with
+      <varname>IPADDRESS</varname> and <varname>IPADDR6</varname>.
+     </para>
+    </callout>
+    <callout arearefs="co-team-lb-loadbalance">
+     <para>
+      Sets <varname>TEAM_RUNNER</varname> to <literal>loadbalance</literal> to
+      activate the load balancing mode.
+     </para>
+    </callout>
+    <callout arearefs="co-team-lb-dev">
+     <para>
+      Specifies one or more devices which should be aggregated to create the
+      &netteam; device.
+     </para>
+    </callout>
+    <callout arearefs="co-team-lb-name">
+     <para>
+      Defines a link watcher to monitor the state of subordinate devices. The
+      default value <literal>ethtool</literal> checks only if the device is up
+      and accessible. This makes this check fast enough. However, it does not
+      check if the device can really send or receive packets.
+     </para>
+     <para>
+      If you need a higher confidence in the connection, use the
+      <literal>arp_ping</literal> option. This sends pings to an arbitrary host
+      (configured in the <varname>TEAM_LW_ARP_PING_TARGET_HOST</varname>
+      variable). The &netteam; device is considered to be up only if the
+      replies are received.
+     </para>
+    </callout>
+    <callout arearefs="co-team-lb-ethtool-delay">
+     <para>
+      Defines the delay in milliseconds between the link coming up (or down)
+      and the runner being notified.
+     </para>
+    </callout>
+   </calloutlist>
+  </example>
+ </sect2>
+
+ <sect2 xml:id="sec-network-iface-teaming-failover">
+  <title>Use case: failover with &netteam;</title>
+  <para>
+   Failover is used to ensure high availability of a critical &netteam; device
+   by involving a parallel backup network device. The backup network device is
+   running all the time and takes over if and when the main device fails.
+  </para>
+  <para>
+   Use the following configuration file to create a &netteam; device with
+   failover capabilities. Proceed with <xref linkend="pro-team-general"/> to
+   set up the device. Check the output with <command>teamdctl</command>.
+  </para>
+  <example xml:id="ex-team-failover">
+   <title>Configuration for DHCP &netteam; device</title>
+<screen>STARTMODE=auto <co xml:id="co-team-failover-startmode"/>
+BOOTPROTO=static <co xml:id="co-team-failover-boot-and-ip"/>
+IPADDR="&exampledomain1ip;.2/24" <xref linkend="co-team-failover-boot-and-ip"/>
+IPADDR6="fd00:deca:fbad:50::2/64" <xref linkend="co-team-failover-boot-and-ip"/>
+
+TEAM_RUNNER=activebackup <co xml:id="co-team-failover-activebackup"/>
+TEAM_PORT_DEVICE_0="eth0" <co xml:id="co-team-failover-dev"/>
+TEAM_PORT_DEVICE_1="eth1" <xref linkend="co-team-failover-dev"/>
+
+TEAM_LW_NAME=ethtool <co xml:id="co-team-failover-name"/>
+TEAM_LW_ETHTOOL_DELAY_UP="10" <co xml:id="co-team-failover-ethtool-delay"/>
+TEAM_LW_ETHTOOL_DELAY_DOWN="10" <xref linkend="co-team-failover-ethtool-delay"
+/></screen>
+   <calloutlist>
+    <callout arearefs="co-team-failover-startmode">
+     <para>
+      Controls the start of the teaming device. The value of
+      <literal>auto</literal> means the interface will be set up when the
+      network service is available and will be started automatically on every
+      reboot.
+     </para>
+     <para>
+      In case you need to control the device yourself (and prevent it from
+      starting automatically), set <varname>STARTMODE</varname> to
+      <literal>manual</literal>.
+     </para>
+    </callout>
+    <callout arearefs="co-team-failover-boot-and-ip">
+     <para>
+      Sets a static IP address (here
+      <systemitem
+       class="ipaddress">&exampledomain1ip;.2</systemitem>
+      for IPv4 and
+      <systemitem class="ipaddress">fd00:deca:fbad:50::2</systemitem> for
+      IPv6).
+     </para>
+     <para>
+      If the &netteam; device should use a dynamic IP address, set
+      <literal>BOOTPROTO="dhcp"</literal> and remove (or comment) the line with
+      <varname>IPADDRESS</varname> and <varname>IPADDR6</varname>.
+     </para>
+    </callout>
+    <callout arearefs="co-team-failover-activebackup">
+     <para>
+      Sets <varname>TEAM_RUNNER</varname> to <literal>activebackup</literal> to
+      activate the failover mode.
+     </para>
+    </callout>
+    <callout arearefs="co-team-failover-dev">
+     <para>
+      Specifies one or more devices which should be aggregated to create the
+      &netteam; device.
+     </para>
+    </callout>
+    <callout arearefs="co-team-failover-name">
+     <para>
+      Defines a link watcher to monitor the state of subordinate devices. The
+      default value <literal>ethtool</literal> checks only if the device is up
+      and accessible. This makes this check fast enough. However, it does not
+      check if the device can really send or receive packets.
+     </para>
+     <para>
+      If you need a higher confidence in the connection, use the
+      <literal>arp_ping</literal> option. This sends pings to an arbitrary host
+      (configured in the <varname>TEAM_LW_ARP_PING_TARGET_HOST</varname>
+      variable). Only if the replies are received, the &netteam; device is
+      considered to be up.
+     </para>
+    </callout>
+    <callout arearefs="co-team-failover-ethtool-delay">
+     <para>
+      Defines the delay in milliseconds between the link coming up (or down)
+      and the runner being notified.
+     </para>
+    </callout>
+   </calloutlist>
+  </example>
+ </sect2>
+
+ <sect2 xml:id="sec-network-iface-teaming-vlan">
+  <title>Use case: VLAN over team device</title>
+  <!-- From doccomment#33334 -->
+  <para>
+   VLAN is an abbreviation of <emphasis>Virtual Local Area Network</emphasis>.
+   It allows the running of multiple <emphasis>logical</emphasis> (virtual)
+   Ethernets over one single physical Ethernet. It logically splits the
+   network into different broadcast domains so that packets are only switched
+   between ports that are designated for the same VLAN.
+  </para>
+  <para>
+   The following use case creates two static VLANs on top of a team device:
+  </para>
+  <itemizedlist>
+   <listitem>
+     <para><systemitem class="other" otherclass="device">vlan0</systemitem>,
+      bound to the IP address <systemitem class="ipaddress"
+       >&subnetI;0.1</systemitem></para>
+   </listitem>
+   <listitem>
+     <para><systemitem class="other" otherclass="device">vlan1</systemitem>,
+      bound to the IP address <systemitem class="ipaddress"
+       >&subnetII;0.1</systemitem></para>
+   </listitem>
+  </itemizedlist>
+
+  <para>Proceed as follows:</para>
+  <procedure>
+   <step>
+    <para>
+     Enable the VLAN tags on your switch. To use load balancing
+     for your team device, your switch needs to be capable of
+     <emphasis>Link Aggregation Control Protocol</emphasis> (LACP) (802.3ad).
+     Consult your hardware manual about the details.
+    </para>
+   </step>
+   <!--
+   <step>
+    <para>
+     Enable the kernel module <systemitem>8021q</systemitem>.
+    </para>
+   </step>
+   -->
+   <step>
+    <para>
+     Decide if you want to use load balancing or failover for your team device.
+     Set up your team device as described in <xref linkend="sec-network-iface-teaming-lb"/>
+     or <xref linkend="sec-network-iface-teaming-failover"/>.
+    </para>
+   </step>
+   <step>
+    <para>
+     In <filename>/etc/sysconfig/network</filename> create a file
+     <filename>ifcfg-vlan0</filename> with the following content:
+    </para>
+    <screen>STARTMODE="auto"
+BOOTPROTO="static" <co xml:id="co-team-vlan-bootproto"/>
+IPADDR='&subnetI;0.1/24' <co xml:id="co-team-vlan-ipaddr"/>
+ETHERDEVICE="team0" <co xml:id="co-team-vlan-etherdevice"/>
+VLAN_ID="0" <co xml:id="co-team-vlan-vlan-id"/>
+VLAN='yes'</screen>
+    <calloutlist>
+     <callout arearefs="co-team-vlan-bootproto">
+      <para>
+       Defines a fixed IP address, specified in <varname>IPADDR</varname>.
+      </para>
+     </callout>
+     <callout arearefs="co-team-vlan-ipaddr">
+      <para>
+       Defines the IP address, here with its netmask.
+      </para>
+     </callout>
+     <callout arearefs="co-team-vlan-etherdevice">
+      <para>
+       Contains the real interface to use for the VLAN interface, here our
+       team device (<systemitem>team0</systemitem>).
+      </para>
+     </callout>
+     <callout arearefs="co-team-vlan-vlan-id">
+      <para>
+       Specifies a unique ID for the VLAN. Preferably, the file name and the
+       <varname>VLAN_ID</varname> corresponds to the name
+       <filename>ifcfg-vlan<replaceable>VLAN_ID</replaceable></filename>.
+       In our case <varname>VLAN_ID</varname> is <literal>0</literal> which
+       leads to the file name <filename>ifcfg-vlan0</filename>.
+      </para>
+     </callout>
+     <!--<callout arearefs="co-team-vlan">
+      <para>
+
+      </para>
+     </callout>-->
+    </calloutlist>
+   </step>
+   <step>
+    <para>
+     Copy the file <filename>/etc/sysconfig/network/ifcfg-vlan0</filename> to
+     <filename>/etc/sysconfig/network/ifcfg-vlan1</filename> and change the
+     following values:
+    </para>
+    <itemizedlist>
+     <listitem>
+      <para>
+       <varname>IPADDR</varname> from <systemitem class="ipaddress"
+       >&subnetI;0.1/24</systemitem> to <systemitem class="ipaddress"
+        >&subnetII;0.1/24</systemitem>.</para>
+     </listitem>
+     <listitem>
+      <para>
+       <varname>VLAN_ID</varname> from <literal>0</literal> to
+      <literal>1</literal>.
+      </para>
+     </listitem>
+    </itemizedlist>
+   </step>
+   <step>
+    <para>
+     Start the two VLANs:
+    </para>
+    <screen>&prompt.root;<command>wicked</command> ifup vlan0 vlan1</screen>
+   </step>
+   <step>
+    <para>
+     Check the output of <command>ifconfig</command>:
+    </para>
+    <screen>&prompt.root;<command>ifconfig</command> -a
+[...]
+vlan0     Link encap:Ethernet  HWaddr 08:00:27:DC:43:98
+          inet addr:&subnetI;0.1 Bcast:&subnetI;0.255 Mask:255.255.255.0
+          inet6 addr: fe80::a00:27ff:fedc:4398/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:12 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 b)  TX bytes:816 (816.0 b)
+
+vlan1     Link encap:Ethernet  HWaddr 08:00:27:DC:43:98
+          inet addr:&subnetII;0.1 Bcast:&subnetII;0.255 Mask:255.255.255.0
+          inet6 addr: fe80::a00:27ff:fedc:4398/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:12 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 b)  TX bytes:816 (816.0 b)</screen>
+   </step>
+   <!-- I feel, there is anything missing here... -->
+  </procedure>
+ </sect2>
+</sect1>

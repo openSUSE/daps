@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sect1
+[
+  <!ENTITY % entities SYSTEM "entities/generic-entities.ent">
+    %entities;
+]>
+
+<sect1 version="5.0" xml:id="sec-updater"
+  xmlns="http://docbook.org/ns/docbook"
+  xmlns:xi="http://www.w3.org/2001/XInclude"
+  xmlns:xlink="http://www.w3.org/1999/xlink">
+ <title>The &gnome; package updater</title>
+
+ <info>
+  <dm:docmanager xmlns:dm="urn:x-suse:ns:docmanager">
+   <dm:bugtracker></dm:bugtracker>
+   <dm:translation>yes</dm:translation>
+  </dm:docmanager>
+ </info>
+
+ <para>
+  &suse; offers a continuous stream of software security patches and updates
+  for your product. They can be installed using tools available with your
+  desktop or by running the <xref linkend="cha-onlineupdate-you"
+  xrefstyle="select:title nopage"/><!-- YaST Online Update -->
+  module. This section describes how to update the system from the GNOME
+  desktop using the <guimenu>Package Updater</guimenu>.
+ </para>
+
+ <para>
+  Contrary to the &yast; Online Update module, the GNOME <guimenu>Package
+  Updater</guimenu> not only offers to install patches from the update
+  repositories, but also new versions of packages that are already
+  installed. (Patches fix security issues or malfunctions; the functionality
+  and version number is usually not changed. New versions of a package increase
+  the version number and add functionality or introduce major changes.)
+ </para>
+
+ <para>
+  Whenever new patches or package updates are available, &gnome; shows a
+  notification in the notification area or on the lock screen.
+ </para>
+ <figure>
+  <title>Update notification on &gnome; desktop</title>
+  <mediaobject>
+   <imageobject role="fo">
+    <imagedata os="osuse" fileref="gnome_update_notification_desktop_osuse.png" width="75%"/>
+    <imagedata os="sles;sled" fileref="gnome_update_notification_desktop.png" width="75%"/>
+   </imageobject>
+   <imageobject role="html">
+    <imagedata os="osuse" fileref="gnome_update_notification_desktop_osuse.png" width="75%"/>
+    <imagedata os="sles;sled" fileref="gnome_update_notification_desktop.png" width="75%"/>
+   </imageobject>
+  </mediaobject>
+ </figure>
+ <para>
+  To configure the notification settings for the <guimenu>Package
+  Updater</guimenu>, start GNOME <guimenu>Settings</guimenu> and choose
+  <menuchoice><guimenu>Notifications</guimenu>
+  <guimenu>Package Updater</guimenu></menuchoice>.
+ </para>
+
+ <procedure>
+  <title>Installing patches and updates with the GNOME package updater</title>
+  <step>
+   <para>
+    To install the patches and updates, click the notification message. This
+    opens the &gnome; <guimenu>Package Updater</guimenu>. Alternatively, open
+    the updater from <guimenu>Activities</guimenu> by typing <literal>package
+    U</literal> and choosing <guimenu>Package Updater</guimenu>.
+   </para>
+   <informalfigure>
+    <mediaobject>
+     <imageobject role="fo">
+      <imagedata fileref="gupdater_updates.png" width="75%"/>
+     </imageobject>
+     <imageobject role="html">
+      <imagedata fileref="gupdater_updates.png" width="75%"/>
+     </imageobject>
+    </mediaobject>
+   </informalfigure>
+  </step>
+  <step>
+   <para>
+    Updates are sorted into four categories:
+   </para>
+   <variablelist>
+    <varlistentry>
+     <term>Security updates (patches)</term>
+     <listitem>
+      <para>
+       Fix severe security hazards and should always be installed.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>Recommended updates (patches)</term>
+     <listitem>
+      <para>
+       Fix issues that could compromise your computer. Installing them is
+       strongly recommended.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>Optional updates (patches)</term>
+     <listitem>
+      <para>
+       Fix non-security relevant issues or provide enhancements.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>Other updates</term>
+     <listitem>
+      <para>
+       New versions of packages that are installed.
+      </para>
+     </listitem>
+    </varlistentry>
+   </variablelist>
+   <para>
+    All available updates are preselected for installation. If you do not want
+    to install all updates, deselect unwanted updates first. It is strongly
+    recommended to always install all security and recommended updates.
+   </para>
+   <para>
+    To get detailed information on an update, click its title and then
+    <guimenu>Details</guimenu>. The information is displayed in a box
+    beneath the package list.
+   </para>
+  </step>
+  <step>
+    <para>
+     Click <guimenu>Install Updates</guimenu> to start the installation.
+    </para>
+   </step>
+   <step>
+    <para>
+     Some updates may require to restart the machine or to log out. Check
+     the message displayed after installation for instructions.
+    </para>
+   </step>
+ </procedure>
+</sect1>

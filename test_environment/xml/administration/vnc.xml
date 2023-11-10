@@ -1,0 +1,887 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter
+[
+  <!ENTITY % entities SYSTEM "entities/generic-entities.ent">
+    %entities;
+  <!ENTITY remmina-plus-icon "<inlinemediaobject xmlns='http://docbook.org/ns/docbook'><textobject
+role='description'><phrase>Add new session</phrase></textobject><imageobject role='fo'><imagedata fileref='remmina_plus.png' width='1.2em' format='PNG'/></imageobject><imageobject role='html'><imagedata fileref='remmina_plus.png' width='1.2em' format='PNG'/></imageobject></inlinemediaobject>">
+]>
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0" xml:id="cha-vnc">
+ <title>Remote graphical sessions with VNC</title>
+ <info>
+  <dm:docmanager xmlns:dm="urn:x-suse:ns:docmanager">
+   <dm:bugtracker/>
+   <dm:translation>yes</dm:translation>
+  </dm:docmanager>
+  <abstract>
+   <para>
+    Virtual Network Computing (VNC) enables you to access a remote computer
+    via a graphical desktop, and run remote graphical applications. VNC is 
+    platform-independent and accesses the remote machine from any operating 
+    system. This chapter describes how to connect to a VNC server with the 
+    desktop clients vncviewer and Remmina, and how to operate a VNC server.
+   </para>
+     <para>
+    &productname; supports two different kinds of VNC sessions: one-time
+    sessions that <quote>live</quote> While the VNC connection from the
+    client is kept up, and persistent sessions that <quote>live</quote> until
+    they are explicitly terminated.
+   </para>
+  <para>
+   A VNC server can offer both kinds of sessions simultaneously on different
+   ports, but an open session cannot be converted from one type to the other.
+  </para>
+   </abstract>
+</info>
+
+ <sect1 xml:id="sec-vnc-viewer">
+  <title>The <command>vncviewer</command> client</title>
+ <important os="osuse">
+  <title>Supported display managers</title>
+  <para>
+   A machine can reliably accept VNC connections only if it uses a display
+   manager that supports the XDMCP protocol. While
+   <systemitem>gdm</systemitem>, <systemitem>lxdm</systemitem>, or
+   <systemitem>lightdm</systemitem> support XDMCP, the KDE 5 default display
+   manager <systemitem>sddm</systemitem> does not support it. When changing the
+   default display manager, remember to log out of the current X session and
+   restart the display manager with
+  </para>
+<screen>
+&prompt.user;sudo systemctl restart xdm.service
+</screen>
+ </important>
+
+  <para>
+   To connect to a VNC service provided by a server, a client is needed. The
+   default in &productname; is <command>vncviewer</command>, provided by the
+   <systemitem class="resource">tigervnc</systemitem> package.
+  </para>
+
+  <sect2 xml:id="sec-vnc-viewer-connectcli">
+   <title>Connecting using the vncviewer CLI</title>
+   <para>
+    To start your VNC viewer and initiate a session with the server, use the
+    command:
+   </para>
+<screen>&prompt.user;vncviewer &wsIname;:1</screen>
+   <para>
+    Instead of the VNC display number you can also specify the port number with
+    two colons:
+   </para>
+<screen>&prompt.user;vncviewer &wsIname;::5901</screen>
+   <note>
+    <title>Display and port number</title>
+    <para>
+     The actual display or port number you specify in the VNC client must be the
+     same as the display or port number selected when configuring a VNC server
+     on the target machine. See <xref linkend="sec-vnc-persistent"/> for further
+     info.
+    </para>
+   </note>
+  </sect2>
+
+  <sect2 xml:id="sec-vnc-viewer-connectgui">
+   <title>Connecting using the vncviewer GUI</title>
+   <para>
+    When running <command>vncviewer</command> without specifying
+    <command>--listen</command> or a host to connect to, it shows a window
+    asking for connection details. Enter the host into the <guimenu>VNC
+    server</guimenu> field like in <xref linkend="sec-vnc-viewer-connectcli"/>
+    and click <guimenu>Connect</guimenu>.
+   </para>
+   <figure xml:id="fig-vnc-viewer-connectgui">
+    <title>vncviewer</title>
+    <mediaobject>
+     <textobject role="description"><phrase>vncviewer asking for connection details</phrase>
+     </textobject>
+     <imageobject role="html">
+      <imagedata fileref="vnc_connect.png"/>
+     </imageobject>
+     <imageobject role="fo">
+      <imagedata fileref="vnc_connect.png"/>
+     </imageobject>
+    </mediaobject>
+   </figure>
+  </sect2>
+
+  <sect2 xml:id="sec-vnc-viewer-encrypt">
+   <title>Notification of unencrypted connections</title>
+   <para>
+    The VNC protocol supports different kinds of encrypted connections, not to
+    be confused with password authentication. If a connection does not use TLS,
+    the text <quote>(Connection not encrypted!)</quote> can be seen in the
+    window title of the VNC viewer.
+   </para>
+  </sect2>
+ </sect1>
+
+ <sect1 xml:id="vnc-remmina">
+  <title>Remmina: the remote desktop client</title>
+
+  <para>
+   Remmina is a modern and feature rich remote desktop client. It supports
+   several access methods, for example VNC, SSH, RDP and Spice.
+  </para>
+
+  <sect2 xml:id="vnc-remmina-install">
+   <title>Installation</title>
+   <para>
+    To use Remmina, verify whether the <package>remmina</package> package is
+    installed on your system, and install it if not. Remember to install the
+    VNC plug-in for Remmina as well:
+   </para>
+<screen>
+&prompt.root;zypper in remmina remmina-plugin-vnc
+</screen>
+  </sect2>
+
+  <sect2 xml:id="vnc-remmina-usage">
+   <title>Main window</title>
+   <para>
+    Run Remmina by entering the <command>remmina</command> command.
+   </para>
+   <figure>
+    <title>Remmina's main window</title>
+    <mediaobject>
+     <imageobject role="fo">
+      <imagedata fileref="remmina.png" width="50%"/>
+     </imageobject>
+     <imageobject role="html">
+      <imagedata fileref="remmina.png" width="50%"/>
+     </imageobject>
+    </mediaobject>
+   </figure>
+   <para>
+    The main application window shows the list of stored remote sessions. Here
+    you can add and save a new remote session, quick-start a new session
+    without saving it, start a previously saved session, or set Remmina's
+    global preferences.
+   </para>
+  </sect2>
+
+  <sect2 xml:id="vnc-remmina-addnew">
+   <title>Adding remote sessions</title>
+   <para>
+    To add and save a new remote session, click &remmina-plus-icon; in the
+    top left of the main window. The
+    <guimenu>Remote Desktop Preference</guimenu> window opens.
+   </para>
+   <figure>
+    <title>Remote desktop preference</title>
+    <mediaobject>
+     <imageobject role="fo">
+      <imagedata fileref="remmina_session_details.png" width="80%"/>
+     </imageobject>
+     <imageobject role="html">
+      <imagedata fileref="remmina_session_details.png" width="80%"/>
+     </imageobject>
+    </mediaobject>
+   </figure>
+   <para>
+    Complete the fields that specify your newly added remote session profile.
+    The most important are:
+   </para>
+   <variablelist>
+    <varlistentry>
+     <term>Name</term>
+     <listitem>
+      <para>
+       Name of the profile. It will be listed in the main window.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>Protocol</term>
+     <listitem>
+      <para>
+       The protocol to use when connecting to the remote session, for example
+       VNC.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>Server</term>
+     <listitem>
+      <para>
+       The IP or DNS address and display number of the remote server.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>User name, password</term>
+     <listitem>
+      <para>
+       Credentials to use for remote authentication. Leave empty for no
+       authentication.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>Color depth, quality</term>
+     <listitem>
+      <para>
+       Select the best options according to your connection speed and quality.
+      </para>
+     </listitem>
+    </varlistentry>
+   </variablelist>
+   <para>
+    Select the <guimenu>Advanced</guimenu> tab to enter more specific settings.
+   </para>
+   <tip>
+    <title>Disable encryption</title>
+    <para>
+     If the communication between the client and the remote server is not
+     encrypted, activate <guimenu>Disable encryption</guimenu>, otherwise the
+     connection fails.
+    </para>
+   </tip>
+   <para>
+    Select the <guimenu>SSH</guimenu> tab for advanced SSH tunneling and
+    authentication options.
+   </para>
+   <para>
+    Confirm with <guimenu>Save</guimenu>. Your new profile will be listed in
+    the main window.
+   </para>
+  </sect2>
+
+  <sect2 xml:id="vnc-remmina-start">
+   <title>Starting remote sessions</title>
+   <para>
+    You can either start a previously saved session, or quick-start a remote
+    session without saving the connection details.
+   </para>
+   <sect3 xml:id="vnc-remmina-quickstart">
+    <title>Quick-starting remote sessions</title>
+    <para>
+     To start a remote session quickly without adding and saving connection
+     details, use the drop-down box and text box at the top of the main window.
+    </para>
+    <figure>
+     <title>Quick-starting</title>
+     <mediaobject>
+      <imageobject role="fo">
+       <imagedata fileref="remmina_quickstart.png" width="40%"/>
+      </imageobject>
+      <imageobject role="html">
+       <imagedata fileref="remmina_quickstart.png" width="40%"/>
+      </imageobject>
+     </mediaobject>
+    </figure>
+    <para>
+     Select the communication protocol from the drop-down box, for example
+     <quote>VNC</quote>, then enter the VNC server DNS or IP address followed by
+     a colon and a display number, and confirm with <keycap function="enter"/>.
+    </para>
+   </sect3>
+   <sect3>
+    <title>Opening saved remote sessions</title>
+    <para>
+     To open a specific remote session, double-click it from the list of
+     sessions.
+    </para>
+   </sect3>
+   <sect3>
+    <title>Remote sessions window</title>
+    <para>
+     Remote sessions are opened in tabs of a separate window. Each tab hosts
+     one session. The toolbar on the left of the window helps you manage the
+     windows/sessions. For example, toggle full-screen mode, resize the window to
+     match the display size of the session, send specific keystrokes to the
+     session, take screenshots of the session, or set the image quality.
+    </para>
+    <figure>
+     <title>Remmina viewing remote session</title>
+     <mediaobject>
+      <imageobject role="fo">
+       <imagedata fileref="remmina_sle15inside.png" width="80%"/>
+      </imageobject>
+      <imageobject role="html">
+       <imagedata fileref="remmina_sle15inside.png" width="80%"/>
+      </imageobject>
+     </mediaobject>
+    </figure>
+   </sect3>
+  </sect2>
+
+  <sect2 xml:id="vnc-remmina-edit-delete-clone">
+   <title>Editing, copying, and deleting saved sessions</title>
+   <para>
+    To <emphasis>edit</emphasis> a saved remote session, right-click its name
+    in Remmina's main window and select <guimenu>Edit</guimenu>. Refer to
+    <xref linkend="vnc-remmina-addnew"/> for the description of the relevant
+    fields.
+   </para>
+   <para>
+    To <emphasis>copy</emphasis> a saved remote session, right-click its name
+    in Remmina's main window and select <guimenu>Copy</guimenu>. In the
+    <guimenu>Remote Desktop Preference</guimenu> window, change the name of the
+    profile, optionally adjust relevant options, and confirm with
+    <guimenu>Save</guimenu>.
+   </para>
+   <para>
+    To <emphasis>Delete</emphasis> a saved remote session, right-click its name
+    in Remmina's main window and select <guimenu>Delete</guimenu>. Confirm
+    with <guimenu>Yes</guimenu> in the next dialog.
+   </para>
+  </sect2>
+
+  <sect2 xml:id="vnc-remmina-cmdline">
+   <title>Running remote sessions from the command line</title>
+   <para>
+    If you need to open a remote session from the command line or from a batch
+    file without first opening the main application window, use the following
+    syntax:
+   </para>
+<screen>
+ &prompt.user;remmina -c <replaceable>profile_name</replaceable>.remmina
+</screen>
+   <para>
+    Remmina's profile files are stored in the
+    <filename>.local/share/remmina/</filename> directory in your home
+    directory. To determine which profile file belongs to the session you want
+    to open, run Remmina, click the session name in the main window, and read
+    the path to the profile file in the window's status line at the bottom.
+   </para>
+   <figure>
+    <title>Reading path to the profile file</title>
+    <mediaobject>
+     <imageobject role="fo">
+      <imagedata fileref="remmina_status.png" width="50%"/>
+     </imageobject>
+     <imageobject role="html">
+      <imagedata fileref="remmina_status.png" width="50%"/>
+     </imageobject>
+    </mediaobject>
+   </figure>
+   <para>
+    While Remmina is not running, you can rename the profile file to a more
+    reasonable file name, such as <filename>sle15.remmina</filename>. You can
+    even copy the profile file to your custom directory and run it using the
+    <command>remmina -c</command> command from there.
+   </para>
+  </sect2>
+ </sect1>
+ 
+ <sect1 xml:id="sec-vnc-one-time">
+  <title>Configuring one-time sessions on the VNC server</title>
+
+  <para>
+   A one-time session is initiated by the remote client. It starts a graphical
+   login screen on the server. This way you can choose the user which starts
+   the session and, if supported by the login manager, the desktop environment.
+   When you cancel the client connection to such a VNC session, all
+   applications started within that session will be terminated, too. One-time
+   VNC sessions cannot be shared, but it is possible to have multiple sessions
+   on a single host at the same time.
+  </para>
+
+  <procedure xml:id="pro-vnc-one-time-activate">
+   <title>Enabling one-time VNC sessions</title>
+   <step>
+    <para>
+     Start <menuchoice> <guimenu>&yast;</guimenu> <guimenu>Network
+     Services</guimenu> <guimenu>Remote Administration (VNC)</guimenu>
+     </menuchoice>.
+    </para>
+   </step>
+   <step>
+    <para>
+     Check <guimenu>Allow Remote Administration Without Session
+     Management</guimenu>.
+    </para>
+   </step>
+   <step>
+    <para>
+     Activate <guimenu>Enable access using a web browser</guimenu> if you plan
+     to access the VNC session in a Web browser window.
+    </para>
+   </step>
+   <step>
+    <para>
+     If necessary, also check <guimenu>Open Port in Firewall</guimenu> (for
+     example, when your network interface is configured to be in the External
+     Zone). If you have more than one network interface, restrict opening the
+     firewall ports to a specific interface via <guimenu>Firewall
+     Details</guimenu>.
+    </para>
+   </step>
+   <step>
+    <para>
+     Confirm your settings with <guimenu>Next</guimenu>.
+    </para>
+   </step>
+   <step>
+    <para>
+     In case not all needed packages are available yet, you need to approve the
+     installation of missing packages.
+    </para>
+    <tip>
+     <title>Restart the display manager</title>
+     <para>
+      &yast; makes changes to the display manager settings. You need to log out
+      of your current graphical session and restart the display manager for the
+      changes to take effect.
+     </para>
+    </tip>
+   </step>
+  </procedure>
+
+  <figure>
+   <title>Remote administration</title>
+   <mediaobject>
+    <imageobject role="fo">
+     <imagedata fileref="vnc_nosession.png" width="70%"/>
+    </imageobject>
+    <imageobject role="html">
+     <imagedata fileref="vnc_nosession.png" width="70%"/>
+    </imageobject>
+   </mediaobject>
+  </figure>
+
+  <sect2 xml:id="sec-vnc-one-time-configs">
+   <title>Available configurations</title>
+   <para>
+    The default configuration on &productname; serves sessions with a
+    resolution of 1024x768 pixels at a color depth of 16-bit. The sessions are
+    available on ports <systemitem class="resource">5901</systemitem> for
+    <quote>regular</quote> VNC viewers (equivalent to VNC display
+    <literal>1</literal>) and on port
+    <systemitem class="resource">5801</systemitem> for Web browsers.
+   </para>
+   <para>
+    Other configurations can be made available on different
+    ports<phrase os="sles;osuse">, see
+    <xref linkend="sec-vnc-one-time-config"/></phrase>.<phrase os="sled"> Ask
+    your system administrator for details if you need to modify the
+    configuration.</phrase>
+   </para>
+   <para>
+    VNC display numbers and X display numbers are independent in one-time
+    sessions. A VNC display number is manually assigned to every configuration
+    that the server supports (:1 in the example above). Whenever a VNC session
+    is initiated with one of the configurations, it automatically gets a free X
+    display number.
+   </para>
+   <para>
+    By default, both the VNC client and server try to communicate securely via a
+    self-signed SSL certificate, which is generated after installation. You can
+    either use the default one, or replace it with your own. When using the
+    self-signed certificate, you need to confirm its signature before the first
+    connection&mdash;both in the VNC viewer and the Web browser.
+   </para>
+   <tip>
+    <para>
+     Some VNC clients refuse to establish a secure connection via the default
+     self-signed certificate. For example, the Vinagre client verifies the
+     certification against the GnuTLS global trust store and fails if the
+     certificate is self-signed. In such a case, either use an encryption
+     method other than <literal>x509</literal>, or generate a properly signed
+     certificate for the VNC server and import it to the client's system trust
+     store.
+    </para>
+   </tip>
+  </sect2>
+
+  <sect2 xml:id="sec-vnc-one-time-connect">
+   <title>Initiating a one-time VNC session</title>
+   <para>
+    To connect to a one-time VNC session, a VNC viewer must be installed, see
+    also <xref linkend="sec-vnc-viewer"/>.  Alternatively use a
+    JavaScript-capable Web browser to view the VNC session by entering the
+    following URL: <literal>http://&wsIname;:5801</literal>
+   </para>
+  </sect2>
+
+  <sect2 xml:id="sec-vnc-one-time-config">
+   <title>Configuring one-time VNC sessions</title>
+   <para>
+    You can skip this section, if you do not need or want to modify the default
+    configuration.
+   </para>
+   <para>
+    One-time VNC sessions are started via the &systemd; socket
+    <systemitem>xvnc.socket</systemitem>. By default it offers six
+    configuration blocks: three for VNC viewers (<literal>vnc1</literal> to
+    <literal>vnc3</literal>), and three serving a JavaScript client
+    (<literal>vnchttpd1</literal> to <literal>vnchttpd3</literal>). By default
+    only <literal>vnc1</literal> and <literal>vnchttpd1</literal> are active.
+   </para>
+   <para>
+    To activate the VNC server socket at boot time, run the following command:
+   </para>
+<screen>&prompt.sudo; systemctl enable xvnc.socket</screen>
+   <para>
+    To start the socket immediately, run:
+   </para>
+<screen>&prompt.sudo; systemctl start xvnc.socket</screen>
+   <para>
+    The <command>Xvnc</command> server can be configured via the
+    <literal>server_args</literal> option. For a list of options, see
+    <command>Xvnc --help</command>.
+   </para>
+   <para>
+    When adding custom configurations, make sure they are not using ports that
+    are already in use by other configurations, other services, or existing
+    persistent VNC sessions on the same host.
+   </para>
+   <para>
+    Activate configuration changes by entering the following command:
+   </para>
+<screen>&prompt.sudo;systemctl reload xvnc.socket</screen>
+   <important>
+    <title>Firewall and VNC ports</title>
+    <para>
+     When activating Remote Administration as described in
+     <xref linkend="pro-vnc-one-time-activate"/>, the ports
+     <systemitem class="resource">5801</systemitem> and
+     <systemitem class="resource">5901</systemitem> are opened in the firewall.
+     If the network interface serving the VNC sessions is protected by a
+     firewall, you need to manually open the respective ports when activating
+     additional ports for VNC sessions. See
+     <xref linkend="cha-security-firewall"/> for instructions.
+    </para>
+   </important>
+  </sect2>
+ </sect1>
+ 
+ <sect1 xml:id="sec-vnc-persistent">
+  <title>Configuring persistent VNC server sessions</title>
+
+  <para>
+   A persistent session can be accessed from multiple clients simultaneously.
+   This is ideal for demonstration purposes where one client has full access
+   and all other clients have view-only access. Another use case are training sessions
+   where the trainer may need access to the trainee's desktop.
+  </para>
+
+  <tip xml:id="sec-vnc-persistent-connect">
+   <title>Connecting to a persistent VNC session</title>
+   <para>
+    To connect to a persistent VNC session, a VNC viewer must be installed.
+    Refer to <xref linkend="sec-vnc-viewer"/> for more details. Alternatively,
+    use a JavaScript-capable Web browser to view the VNC session by entering the
+    following URL: <literal>http://&wsIname;:5801</literal>.
+   </para>
+  </tip>
+  
+  <sect2 xml:id="vnc-persistent-vncmanager">
+   <title>VNC session initiated using <systemitem>vncmanager</systemitem></title>
+   <para></para>
+   <procedure xml:id="vnc-persistent-vncmanager-enable">
+    <title>Enabling persistent VNC sessions</title>
+    <step>
+     <para>
+      Start <menuchoice> <guimenu>&yast;</guimenu> <guimenu>Network
+      Services</guimenu> <guimenu>Remote Administration (VNC)</guimenu>
+      </menuchoice>.
+     </para>
+    </step>
+    <step>
+     <para>
+      Activate <guimenu>Allow Remote Administration With Session
+      Management</guimenu>.
+     </para>
+    </step>
+    <step>
+     <para>
+      Activate <guimenu>Enable access using a web browser</guimenu> if you plan
+      to access the VNC session in a Web browser window.
+     </para>
+    </step>
+    <step>
+     <para>
+      If necessary, also check <guimenu>Open Port in Firewall</guimenu> (for
+      example, when your network interface is configured to be in the External
+      Zone). If you have more than one network interface, restrict opening the
+      firewall ports to a specific interface via <guimenu>Firewall
+      Details</guimenu>.
+     </para>
+    </step>
+    <step>
+     <para>
+      Confirm your settings with <guimenu>Next</guimenu>.
+     </para>
+    </step>
+    <step>
+     <para>
+      In case not all needed packages are available yet, you need to approve
+      the installation of missing packages.
+     </para>
+     <tip>
+      <title>Restart the display manager</title>
+      <para>
+       &yast; makes changes to the display manager settings. You need to log
+       out of your current graphical session and restart the display manager
+       for the changes to take effect.
+      </para>
+     </tip>
+    </step>
+   </procedure>
+   <sect3 xml:id="vnc-persistent-vncmanager-configure">
+    <title>Configuring persistent VNC sessions</title>
+    <para>
+     After you enable the VNC session management as described in <xref
+     linkend="vnc-persistent-vncmanager-enable"/>, you can normally connect to
+     the remote session with your favorite VNC viewer, such as
+     <command>vncviewer</command> or Remmina. After you log in, the
+     <quote>VNC</quote> icon appears in the system tray of your desktop
+     environment. Click the icon to open the <guimenu>VNC Session</guimenu>
+     window. If your desktop environment does not support icons in the system
+     tray, run <command>vncmanager-controller</command> manually.
+    </para>
+    <figure>
+     <title>VNC session settings</title>
+     <mediaobject>
+      <imageobject role="fo">
+       <imagedata fileref="vncmanager_session.png" width="85%"/>
+      </imageobject>
+      <imageobject role="html">
+       <imagedata fileref="vncmanager_session.png" width="85%"/>
+      </imageobject>
+     </mediaobject>
+    </figure>
+    <para>
+     There are several settings that influence the VNC session's behavior:
+    </para>
+    <variablelist>
+     <varlistentry>
+      <term><guimenu>Non-persistent, private</guimenu>
+      </term>
+      <listitem>
+       <para>
+        This is equivalent to a one-time session. It is not visible to others
+        and is terminated after you disconnect from it. Refer to <xref
+         linkend="sec-vnc-one-time"/> for more information.
+       </para>
+      </listitem>
+     </varlistentry>
+     <varlistentry>
+      <term><guimenu>Persistent, visible</guimenu>
+      </term>
+      <listitem>
+       <para>
+        The session is visible to other users and keeps running even after you
+        disconnect from it.
+       </para>
+      </listitem>
+     </varlistentry>
+     <varlistentry>
+      <term><guimenu>Session name</guimenu>
+      </term>
+      <listitem>
+       <para>
+        Specify the name of the persistent session so that it is easily
+        identified when reconnecting.
+       </para>
+      </listitem>
+     </varlistentry>
+     <varlistentry>
+      <term><guimenu>No password required</guimenu>
+      </term>
+      <listitem>
+       <para>
+        The session is freely accessible without having to log in under user
+        credentials.
+       </para>
+      </listitem>
+     </varlistentry>
+     <varlistentry>
+      <term><guimenu>Require user login</guimenu>
+      </term>
+      <listitem>
+       <para>
+        You need to log in with a valid user name and password to access the
+        session. Lists the valid user names in the <guimenu>Allowed
+        users</guimenu> text box.
+       </para>
+      </listitem>
+     </varlistentry>
+     <varlistentry>
+      <term><guimenu>Allow one client at a time</guimenu>
+      </term>
+      <listitem>
+       <para>
+        Prevents multiple users from joining the session at the same time.
+       </para>
+      </listitem>
+     </varlistentry>
+     <varlistentry>
+      <term><guimenu>Allow multiple clients at a time</guimenu>
+      </term>
+      <listitem>
+       <para>
+        Allows multiple users to join the persistent session at the same time.
+        Useful for remote presentations or training sessions.
+       </para>
+      </listitem>
+     </varlistentry>
+    </variablelist>
+    <para>
+     Confirm with <guimenu>OK</guimenu>.
+    </para>
+   </sect3>
+   <sect3 xml:id="vnc-persistent-vncmanager-join">
+    <title>Joining persistent VNC sessions</title>
+    <para>
+     After you set up a persistent VNC session as described in
+     <xref linkend="vnc-persistent-vncmanager-configure"/>, you can join
+     it with your VNC viewer. After your VNC client connects to the server,
+     you will be prompted to choose whether you want to create a new session
+     or join the existing one:
+    </para>
+    <figure>
+     <title>Joining a persistent VNC session</title>
+     <mediaobject>
+      <imageobject role="fo">
+       <imagedata fileref="vncmanager_whether.png" width="80%"/>
+      </imageobject>
+      <imageobject role="html">
+       <imagedata fileref="vncmanager_whether.png" width="80%"/>
+      </imageobject>
+     </mediaobject>
+    </figure>
+    <para>
+     After you click the name of the existing session, you may be asked for
+     login credentials, depending on the persistent session settings.
+    </para>
+   </sect3>
+  </sect2>
+ </sect1>
+ 
+ <sect1 xml:id="sec-vnc-encrypt">
+  <title>Configuring encryption on the VNC server</title>
+
+  <para>
+   If the VNC server is set up properly, all communication between the VNC
+   server and the client is encrypted. The authentication happens at the
+   beginning of the session; the actual data transfer only begins afterward.
+  </para>
+
+  <para>
+   Whether for a one-time or a persistent VNC session, security options are
+   configured via the <option>-securitytypes</option> parameter of the
+   <command>/usr/bin/Xvnc</command> command located on the
+   <literal>server_args</literal> line. The <option>-securitytypes</option>
+   parameter selects both authentication method and encryption. It has the
+   following options:
+  </para>
+
+  <variablelist>
+   <title>Authentications</title>
+   <varlistentry>
+    <term>None, TLSNone, x509None</term>
+    <listitem>
+     <para>
+      No authentication.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>VncAuth, TLSVnc, x509Vnc</term>
+    <listitem>
+     <para>
+      Authentication using custom password.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>Plain, TLSPlain, x509Plain</term>
+    <listitem>
+     <para>
+      Authentication using PAM to verify user's password.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <variablelist>
+   <title>Encryptions</title>
+   <varlistentry>
+    <term>None, vncAuth, plain</term>
+    <listitem>
+     <para>
+      No encryption.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>TLSNone, TLSVnc, TLSPlain</term>
+    <listitem>
+     <para>
+      Anonymous TLS encryption. Everything is encrypted, but there is no
+      verification of the remote host. So you are protected against passive
+      attackers, but not against man-in-the-middle attackers.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>X509None, x509Vnc, x509Plain</term>
+    <listitem>
+     <para>
+      TLS encryption with certificate. If you use a self-signed certificate,
+      you will be asked to verify it on the first connection. On subsequent
+      connections you will be warned only if the certificate changed. So you
+      are protected against everything except man-in-the-middle on the first
+      connection (similar to typical SSH usage). If you use a certificate
+      signed by a certificate authority matching the machine name, then you get
+      full security (similar to typical HTTPS usage).
+     </para>
+     <tip>
+      <para>
+       Some VNC clients refuse to establish a secure connection via the default
+       self-signed certificate. For example, the Vinagre client verifies the
+       certification against the GnuTLS global trust store and fails if the
+       certificate is self-signed. In such a case, either use an encryption
+       method other than <literal>x509</literal>, or generate a properly signed
+       certificate for the VNC server and import it to the client's system trust
+       store.
+      </para>
+     </tip>
+     <tip>
+      <title>Path to certificate and key</title>
+      <para>
+       With X509 based encryption, you need to specify the path to the X509
+       certificate and the key with <option>-X509Cert</option> and
+       <option>-X509Key</option> options.
+      </para>
+     </tip>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <para>
+   If you select multiple security types separated by comma, the first one
+   supported and allowed by both client and server will be used. That way you
+   can configure opportunistic encryption on the server. This is useful if you
+   need to support VNC clients that do not support encryption.
+  </para>
+
+  <para>
+   On the client, you can also specify the allowed security types to prevent a
+   downgrade attack if you are connecting to a server which you know has
+   encryption enabled (although our vncviewer will warn you with the
+   "Connection not encrypted!" message in that case).
+  </para>
+ </sect1>
+ <sect1 xml:id="sec-vnc-wayland">
+  <title>Compatibility with Wayland</title>
+  <para>
+    The Remote Administration (VNC) feature relies on X11 and may result in an
+    empty screen if Wayland is enabled.
+
+    The display manager must be configured to use X11 instead of Wayland.
+
+    For <package>gdm</package>, edit <filename>/etc/gdm/custom.conf</filename>.
+    In the <literal>[daemon]</literal> section, add
+    <literal>WaylandEnable=false</literal> to the configuration file.
+
+    When logging in, the user must choose an X11-compatible session as well.
+
+    If you wish to remove the Wayland option for &gnome;, you can remove and lock
+    the <package>gnome-session-wayland</package> package.
+  </para>
+ </sect1>
+</chapter>

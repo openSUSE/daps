@@ -1,0 +1,491 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter
+[
+  <!ENTITY % entities SYSTEM "entities/generic-entities.ent">
+    %entities;
+]>
+
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0" xml:id="cha-adminhelp">
+ <title>Help and documentation</title>
+ <info>
+  <dm:docmanager xmlns:dm="urn:x-suse:ns:docmanager">
+   <dm:bugtracker></dm:bugtracker>
+   <dm:translation>yes</dm:translation>
+  </dm:docmanager>
+ </info>
+ <para>
+  &productnamereg; comes with several sources of information and documentation,
+  available online or integrated into your installed system.
+ </para>
+ <variablelist>
+  <varlistentry>
+   <term>Product Documentation</term>
+   <listitem>
+    <para>
+      Extensive documentation for &productname; is available at <link os="sles"
+      xlink:href="https://documentation.suse.com/#sles"/><link os="sled"
+      xlink:href="https://documentation.suse.com/#sled"/><link os="osuse"
+      xlink:href="https://doc.opensuse.org"/>. Topics covered range from
+      deployment, upgrade and system administration to virtualization, system
+      tuning and security, among others.
+    </para>
+    <para os="sles">
+      At <link xlink:href="https://documentation.suse.com/sbp-supported.html"/>,
+      you can find &suse;'s best practice series of documents covering hands-on
+      documentation on implementation scenarios. At <link
+      xlink:href="https://documentation.suse.com/trd-supported.html"/>, our
+      technical reference documentation series provides guides on deploying
+      solution components from &suse; and its partners.
+    </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term>Documentation in <filename>/usr/share/doc</filename></term>
+   <listitem>
+    <para>
+     This directory holds release notes for your system (in the subdirectory
+     <filename>release-notes</filename>). It also contains information of
+     installed packages in the subdirectory <filename>packages</filename>. Find
+     more detailed information in <xref linkend="sec-help-onboard-docdir"/>.
+    </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term>Man pages and info pages for shell commands</term>
+   <listitem>
+    <para>
+     When working with the shell, you do not need to know the options of the
+     commands by heart. Traditionally, the shell provides integrated help by
+     means of man pages and info pages. Read more in
+     <xref linkend="sec-help-onboard-manpages"/> and
+     <xref linkend="sec-help-onboard-infopages"/>.
+    </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term>Desktop help center</term>
+   <listitem>
+    <para>
+     The help center of the &gnome; desktop (&yelp;) provides central access to
+     the &gnome; desktop documentation.
+    </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term>Separate help packages for certain applications</term>
+   <listitem>
+    <para>
+     When installing new software with &yast;, the software documentation is
+     normally installed automatically and appears in the help center of your
+     desktop. However, certain applications, such as GIMP, may have different
+     online help packages that can be installed separately with &yast; and do
+     not integrate into the help centers.
+    </para>
+   </listitem>
+  </varlistentry>
+ </variablelist>
+ <sect1 xml:id="sec-help-onboard-docdir">
+  <title>Documentation directory</title>
+
+  <para>
+    The traditional directory to find documentation on your installed Linux
+    system is <filename>/usr/share/doc</filename>. The directory contains the
+    release notes and information about the packages installed on your system,
+    plus manuals and more.
+  </para>
+
+  <note>
+   <title>Contents depend on installed packages</title>
+   <para>
+    In the Linux world, manuals and other kinds of documentation are
+    available in the form of packages, like software. How much and which
+    information you find in <filename>/usr/share/doc</filename> also depends
+    on the (documentation) packages installed. If you cannot find the
+    subdirectories mentioned here, check if the respective packages are
+    installed on your system and add them with &yast;, if needed.
+   </para>
+  </note>
+
+  <sect2 xml:id="sec-help-onboard-docdir-releasenotes">
+   <title>Release notes</title>
+   <para>
+     We provide HTML, PDF, RTF and text versions of &productname; release
+     notes. They are available on your installed system under
+     <filename>/usr/share/doc/release-notes/</filename> or online at your
+     product-specific Web page at <link os="sles;sled"
+     xlink:href="https://www.suse.com/releasenotes//"/><link os="osuse"
+     xlink:href="https://doc.opensuse.org/release-notes/"/>.
+   </para>
+  </sect2>
+
+  <sect2 xml:id="sec-help-onboard-docdir-pkg">
+   <title>Package documentation</title>
+   <para>
+    Under <filename>packages</filename>, find the documentation
+    that is included in the software packages installed on your system. For
+    every package, a subdirectory
+    <filename>/usr/share/doc/packages/<replaceable>PACKAGENAME</replaceable></filename>
+    is created. It often contains README files for the package and sometimes
+    examples, configuration files, or additional scripts. The following list
+    introduces typical files to be found under
+    <filename>/usr/share/doc/packages</filename>. None of these entries are
+    mandatory and many packages only include a few of them.
+   </para>
+   <variablelist>
+    <varlistentry>
+     <term><filename>AUTHORS</filename>
+     </term>
+     <listitem>
+      <para>
+       List of the main developers.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><filename>BUGS</filename>
+     </term>
+     <listitem>
+      <para>
+       Known bugs or malfunctions. May also contain a link to a Bugzilla Web
+       page where you can search all bugs.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><filename>CHANGES</filename>
+     </term>
+     <term><filename>ChangeLog</filename>
+     </term>
+     <listitem>
+      <para>
+       Summary of changes from version to version. It is interesting for
+       developers, because it is detailed.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><filename>COPYING</filename>
+     </term>
+     <term><filename>LICENSE</filename>
+     </term>
+     <listitem>
+      <para>
+       Licensing information.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><filename>FAQ</filename>
+     </term>
+     <listitem>
+      <para>
+       Question and answers collected from mailing lists or newsgroups.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><filename>INSTALL</filename>
+     </term>
+     <listitem>
+      <para>
+       How to install this package on your system. As the package is already
+       installed by the time you get to read this file, you can safely ignore
+       the contents of this file.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><filename>README</filename>, <filename>README.*</filename>
+     </term>
+     <listitem>
+      <para>
+       General information on the software. For example, for what purpose and
+       how to use it.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><filename>TODO</filename>
+     </term>
+     <listitem>
+      <para>
+       Features planned for the future.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><filename>MANIFEST</filename>
+     </term>
+     <listitem>
+      <para>
+       List of files with a brief summary.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><filename>NEWS</filename>
+     </term>
+     <listitem>
+      <para>
+       Description of what is new in this version.
+      </para>
+     </listitem>
+    </varlistentry>
+   </variablelist>
+  </sect2>
+ </sect1>
+ <sect1 xml:id="sec-help-onboard-manpages">
+  <title>Man pages</title>
+
+  <para>
+   Man pages are an essential part of any Linux system. They explain the usage
+   of a command and all available options and parameters. Man pages can be
+   accessed with <command>man</command> followed by the name of the command,
+   for example, <command>man&nbsp;ls</command>.
+  </para>
+
+  <para>
+   Man pages are displayed directly in the shell. To navigate them, move up and
+   down with <keycap function="pageup"/> and <keycap function="pagedown"/>.
+   Move between the beginning and the end of a document with
+   <keycap function="home"/> and <keycap function="end"/>. End this viewing
+   mode by pressing <keycap>Q</keycap>. Learn more about the
+   <command>man</command> command itself with <command>man man</command>. Man
+   pages are sorted in categories as shown in
+   <xref linkend="tab-help-mancategory"/> (taken from the man page for man
+   itself).
+  </para>
+
+  <table xml:id="tab-help-mancategory">
+   <title>Man pages&mdash;categories and descriptions</title>
+   <tgroup cols="2">
+    <thead>
+     <row>
+      <entry>
+       <para>
+        Number
+       </para>
+      </entry>
+      <entry>
+       <para>
+        Description
+       </para>
+      </entry>
+     </row>
+    </thead>
+    <tbody>
+     <row>
+      <entry>
+       <para>
+        1
+       </para>
+      </entry>
+      <entry>
+       <para>
+        Executable programs or shell commands
+       </para>
+      </entry>
+     </row>
+     <row>
+      <entry>
+       <para>
+        2
+       </para>
+      </entry>
+      <entry>
+       <para>
+        System calls (functions provided by the kernel)
+       </para>
+      </entry>
+     </row>
+     <row>
+      <entry>
+       <para>
+        3
+       </para>
+      </entry>
+      <entry>
+       <para>
+        Library calls (functions within program libraries)
+       </para>
+      </entry>
+     </row>
+     <row>
+      <entry>
+       <para>
+        4
+       </para>
+      </entry>
+      <entry>
+       <para>
+        Special files (normally found in <filename>/dev</filename>)
+       </para>
+      </entry>
+     </row>
+     <row>
+      <entry>
+       <para>
+        5
+       </para>
+      </entry>
+      <entry>
+       <para>
+        File formats and conventions (<filename>/etc/fstab</filename>)
+       </para>
+      </entry>
+     </row>
+     <row>
+      <entry>
+       <para>
+        6
+       </para>
+      </entry>
+      <entry>
+       <para>
+        Games
+       </para>
+      </entry>
+     </row>
+     <row>
+      <entry>
+       <para>
+        7
+       </para>
+      </entry>
+      <entry>
+       <para>
+        Miscellaneous (including macro packages and conventions), for example,
+        man(7), groff(7)
+       </para>
+      </entry>
+     </row>
+     <row>
+      <entry>
+       <para>
+        8
+       </para>
+      </entry>
+      <entry>
+       <para>
+        System administration commands (normally only for &rootuser;)
+       </para>
+      </entry>
+     </row>
+     <row>
+      <entry>
+       <para>
+        9
+       </para>
+      </entry>
+      <entry>
+       <para>
+        Kernel routines (nonstandard)
+       </para>
+      </entry>
+     </row>
+    </tbody>
+   </tgroup>
+  </table>
+
+  <para>
+   Each man page consists of several parts labeled <citetitle>NAME</citetitle>,
+   <citetitle>SYNOPSIS</citetitle>, <citetitle>DESCRIPTION</citetitle>,
+   <citetitle>SEE ALSO</citetitle>, <citetitle>LICENSING</citetitle>, and
+   <citetitle>AUTHOR</citetitle>. There may be additional sections available
+   depending on the type of command.
+  </para>
+ </sect1>
+ <sect1 xml:id="sec-help-onboard-infopages">
+  <title>Info pages</title>
+
+  <para>
+   Info pages are another important source of information on your system.
+   normally, they are more detailed than man pages. They consist of more than
+   command line options and contain sometimes whole tutorials or reference
+   documentation. To view the info page for a certain command, enter
+   <command>info</command> followed by the name of the command, for example,
+   <command>info ls</command>. You can browse an info page with a viewer
+   directly in the shell and display the different sections, called
+   <quote>nodes</quote>. Use <keycap function="space"/> to move forward and
+   <keycap function="backspace"/> to move backward. Within a node, you can also
+   browse with <keycap function="pageup"/> and <keycap function="pagedown"/>
+   but only <keycap function="space"/> and <keycap function="backspace"/>
+   takes you also to the previous or subsequent node. Press <keycap>Q</keycap>
+   to end the viewing mode. Not every command comes with an info page and vice
+   versa.
+  </para>
+ </sect1>
+ <sect1 xml:id="sec-help-online">
+  <title>Online resources</title>
+
+  <para>
+   For an overview of
+   all documentation available for &productname; check out the
+   product-specific documentation Web pages at
+   <phrase os="sles;sled"><link
+   xlink:href="https://documentation.suse.com/"/></phrase><phrase os="osuse"><link
+   xlink:href="https:/doc.opensuse.org/"/></phrase>.
+  </para>
+
+  <para>
+   If you are searching for additional product-related information, you can
+   also refer to the following Web sites:
+  </para>
+
+  <variablelist>
+   <varlistentry os="sles;sled">
+    <term>&suse; technical support</term>
+    <listitem>
+     <para>
+      The &suse; Technical Support can be found at
+      <link xlink:href="https://www.suse.com/support/"/> if you have questions
+      or need solutions for technical problems.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>User community</term>
+    <listitem>
+     <para>
+      <link os="osuse" xlink:href="https://forums.opensuse.org/">&opensuse;
+      Forums</link><link os="sles;sled"
+      xlink:href="https://community.suse.com/">SUSE and Rancher Community</link>
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry os="sles;sled">
+    <term>&suse; blog</term>
+    <listitem>
+     <para>
+      The &suse; blog offers articles, tips, Q and A:
+      <link xlink:href="https://www.suse.com/c/blog/"/>
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>&gnome; documentation</term>
+    <listitem>
+     <para>
+      Documentation for &gnome; users, administrators and developers is
+      available at <link xlink:href="https://help.gnome.org/"/>.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>The Linux documentation project</term>
+    <listitem>
+     <para>
+      The Linux Documentation Project (TLDP) is run by a team of volunteers who
+      write Linux-related documentation (see
+      <link xlink:href="https://www.tldp.org"/>). It is a
+      comprehensive documentation resource for Linux. The set of documents
+      contains tutorials for beginners, but is mainly focused on experienced
+      users and professional system administrators. TLDP publishes HOWTOs,
+      FAQs, and guides (handbooks) under a free license. Parts of the
+      documentation from TLDP are also available on &productname;.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+ </sect1>
+</chapter>

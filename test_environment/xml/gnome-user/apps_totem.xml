@@ -1,0 +1,473 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter
+[
+  <!ENTITY % entities SYSTEM "../common/generic-entities.ent">
+    %entities;
+  <!ENTITY pause-icon "<inlinemediaobject xmlns='http://docbook.org/ns/docbook'><textobject role='description'><phrase>&gnome; Videos Pause</phrase></textobject><imageobject role='fo'><imagedata fileref='totem_pause_button.svg' width='0.8em' format='SVG'/></imageobject><imageobject role='html'><imagedata fileref='totem_pause_button-fallback.png' width='1em' format='PNG'/></imageobject></inlinemediaobject>">
+  <!ENTITY play-icon "<inlinemediaobject xmlns='http://docbook.org/ns/docbook'><textobject role='description'><phrase>&gnome; Videos Play</phrase></textobject><imageobject role='fo'><imagedata fileref='totem_play_button.svg' width='0.8em' format='SVG'/></imageobject><imageobject role='html'><imagedata fileref='totem_play_button-fallback.png' width='1em' format='PNG'/></imageobject></inlinemediaobject>">
+  <!ENTITY next-icon "<inlinemediaobject xmlns='http://docbook.org/ns/docbook'><textobject role='description'><phrase>&gnome; Videos Next</phrase></textobject><imageobject role='fo'><imagedata fileref='totem_next_button.svg' width='0.8em' format='SVG'/></imageobject><imageobject role='html'><imagedata fileref='totem_next_button-fallback.png' width='1em' format='PNG'/></imageobject></inlinemediaobject>">
+  <!ENTITY previous-icon "<inlinemediaobject xmlns='http://docbook.org/ns/docbook'><textobject role='description'><phrase>&gnome; Videos Previous</phrase></textobject><imageobject role='fo'><imagedata fileref='totem_previous_button.svg' width='0.8em' format='SVG'/></imageobject><imageobject role='html'><imagedata fileref='totem_previous_button-fallback.png' width='1em' format='PNG'/></imageobject></inlinemediaobject>">
+]>
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0" xml:id="cha-gnome-totem">
+ <title><guimenu>&gnome; Videos</guimenu></title>
+ <info>
+  <abstract>
+   <para>
+    Learn how to play a video file or DVD and how to set video preferences. 
+   </para>
+  </abstract>
+  <dm:docmanager xmlns:dm="urn:x-suse:ns:docmanager">
+   <dm:bugtracker></dm:bugtracker>
+   <dm:translation>yes</dm:translation>
+  </dm:docmanager>
+ </info>
+<!--taroth 2016-07-01: could not find a video to be played with brasero,
+  therefore not checked with SLE 12 SP2-->
+ <para>
+  &gnome; Videos is the default movie player. &gnome; Videos provides the
+  following multimedia features:
+ </para>
+ <itemizedlist mark="bullet" spacing="normal">
+  <listitem>
+   <para>
+    Support for a variety of video and audio files
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    A variety of zoom levels and aspect ratios, and a full screen view
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    Seek and volume controls
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    Playlists
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    Complete keyboard navigation
+   </para>
+  </listitem>
+<!-- These are features of GNOME Videos. But these are also mostly
+  implementation details that only become important when Videos is uninstalled.
+  - sknorr, 2015-09-24 -->
+<!--<listitem>
+   <para>
+    Video thumbnailer for &gnome;
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    &nautilus; properties tab
+   </para>
+  </listitem>-->
+ </itemizedlist>
+ <para>
+  To start &gnome; Videos, open the <guimenu>Activities</guimenu> overview by
+  pressing <keycap
+  function="meta"/> and search for <literal>video</literal>.
+ </para>
+ <sect1 xml:id="sec-gnome-totem-using">
+  <title>Using <guimenu>&gnome; Videos</guimenu></title>
+
+  <para>
+   When you start &gnome; Videos, the following window is displayed.
+  </para>
+
+  <figure pgwide="0" xml:id="fig-gnome-totem-using-startup">
+   <title><guimenu>&gnome; Videos</guimenu> start-up window</title>
+   <mediaobject>
+    <imageobject role="fo">
+     <imagedata fileref="totem_a.png" width="75%"/>
+    </imageobject>
+    <imageobject role="html">
+     <imagedata fileref="totem_a.png" width="75%"/>
+    </imageobject>
+   </mediaobject>
+  </figure>
+
+  <sect2 xml:id="sec-gnome-totem-using-open-file">
+   <title>Opening a video or audio file</title>
+   <procedure>
+    <step>
+     <para>
+      Press the <guimenu>+</guimenu> button in the upper left corner of the window
+       and select <guimenu>Add Local Video</guimenu>.
+     </para>
+    </step>
+    <step>
+     <para>
+      Select the video you want to open, then click <guimenu>Add</guimenu>.
+     </para>
+     <para>
+      The video will be added to the list in the main window and you can select
+      it from there.
+     </para>
+    </step>
+   </procedure>
+   <para>
+    You can also drag a file from another application (such as a file manager)
+    to the &gnome; Videos window. &gnome; Videos opens the file and plays the
+    movie or song. &gnome; Videos displays the title of the movie or song
+    beneath the display area and in the titlebar of the window.
+   </para>
+   <note>
+    <title>Unrecognized file format</title>
+    <para>
+     If you try to open a file format that &gnome; Videos does not recognize,
+     the application displays an error message and recommends a suitable codec.
+    </para>
+   </note>
+   <para>
+    You can double-click a video or audio file in &nautilus; to open it in the
+    &gnome; Videos window by default.
+   </para>
+  </sect2>
+
+  <sect2 xml:id="sec-gnome-totem-using-open-uri">
+   <title>Opening a video or audio file by URI location</title>
+   <procedure>
+    <step>
+     <para>
+      Press the <guimenu>+</guimenu> button in the upper left corner of the window
+      and select <guimenu>Add Web video</guimenu>.
+     </para>
+    </step>
+    <step>
+     <para>
+      Type or paste the address of the video you want to open.
+     </para>
+    </step>
+    <step>
+     <para>
+      Press <guimenu>Add</guimenu>.
+     </para>
+     <para>
+      The video will be added to the list in the main window and you can select
+      it from there.
+      </para>
+    </step>
+   </procedure>
+  </sect2>
+
+  <sect2 xml:id="sec-gnome-totem-using-play-medium">
+   <title>Playing a DVD, VCD, or CD</title>
+   <para>
+    To play a DVD, VCD, or CD, insert the disc in the drive of your
+    computer, then move the mouse pointer over the notification and press
+    <guimenu>Open with Videos</guimenu>.
+   </para>
+   <para>
+    To eject a DVD, VCD, or CD, click <menuchoice> <guimenu>Movie</guimenu>
+    <guimenu>Eject</guimenu> </menuchoice>.
+   </para>
+   <para>
+    To pause a movie or song that is playing, click the &pause-icon; button,
+    or click <menuchoice> <guimenu>Movie</guimenu>
+    <guimenu>Play/Pause</guimenu> </menuchoice>. When you pause a movie or
+    song, the statusbar displays <guimenu>Paused</guimenu> and the time elapsed
+    on the current movie or song.
+   </para>
+   <para>
+    To resume playing a movie or song, click the &play-icon;
+    button, or click <menuchoice> <guimenu>Movie</guimenu>
+    <guimenu>Play/Pause</guimenu></menuchoice>.
+   </para>
+   <para>
+    To play or pause a movie, you can also press <keycap>P</keycap>.
+   </para>
+   <para>
+    To view properties of a movie or song, click <menuchoice>
+    <guimenu>View</guimenu> <guimenu>Sidebar</guimenu> </menuchoice> to make
+    the sidebar appear. The dialog contains the title, artist, year, and
+    duration of movie or song, video dimensions, codec, frame rate, and the
+    audio bit rate.
+   </para>
+  </sect2>
+
+<!--  <sect2 xml:id="sec-gnome-totem-using-seek">
+ <remark> jufa 2022-04-14: the behavior has changed, you can now use the arrow
+ buttons or move the slider. I believe these are basic things, each user knows so
+ no need for describing them</remark>
+   <title>Seeking through movies or songs</title>
+   <para>
+    To seek through movies or songs, use any of the following methods:
+   </para>
+   <variablelist>
+    <varlistentry>
+     <term>To skip forward</term>
+     <listitem>
+      <para>
+       Click <menuchoice> <guimenu>Go</guimenu> <guimenu>Skip Forward</guimenu>
+       </menuchoice>. Alternatively, use <keycap function="left"/>.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>To skip backward</term>
+     <listitem>
+      <para>
+       Click <menuchoice> <guimenu>Go</guimenu> <guimenu>Skip
+       Backward</guimenu> </menuchoice>. Alternatively, use
+       <keycap function="right"/>.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>To move to next movie or song</term>
+     <listitem>
+      <para>
+       Click <menuchoice> <guimenu>Go</guimenu> <guimenu>Next
+       Chapter/Movie</guimenu> </menuchoice>, or click the &next-icon; button.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>To move to previous movie or song</term>
+     <listitem>
+      <para>
+       Click <menuchoice> <guimenu>Go</guimenu> <guimenu>Previous
+       Chapter/Movie</guimenu> </menuchoice>, or click the &previous-icon;
+       button.
+      </para>
+     </listitem>
+    </varlistentry>
+   </variablelist>
+  </sect2> -->
+
+  <sect2 xml:id="sec-gnome-totem-using-zoom">
+   <title>Changing the zoom factor</title>
+   <para>
+    To change the zoom factor of the display area, use any of the following
+    methods:
+   </para>
+   <variablelist>
+    <varlistentry>
+     <term>To zoom to full screen mode</term>
+     <listitem>
+      <para>
+       Click the arrow button in the upper right corner of the player.
+       Alternatively, press <keycap>F</keycap>.
+      </para>
+      <para>
+       To exit fullscreen mode, press <keycap>F</keycap> again or
+       <keycap function="escape"/>.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>
+      To zoom in or out
+     </term>
+     <listitem>
+      <para>
+       Press the menu button in the upper right corner of the window and select
+       <guimenu>Zoom In</guimenu> or press <keycap>R</keycap>. To zoom out,
+       disable <guimenu>Zoom In</guimenu> or press <keycap>T</keycap>.
+      </para>
+     </listitem>
+     </varlistentry>
+    
+<!--<varlistentry> <remark> jufa 2022-04-14 can't find these options</remark>
+     <term>To zoom to half size (50%) of the original movie or visualization</term>
+     <listitem>
+      <para>
+       Click <menuchoice> <guimenu>View</guimenu> <guimenu>Fit Window to
+       Movie</guimenu> <guimenu>Resize 1:2</guimenu> </menuchoice>.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>To zoom to size (100%) of the original movie or visualization</term>
+     <listitem>
+      <para>
+       Click <menuchoice> <guimenu>View</guimenu> <guimenu>Fit Window to
+       Movie</guimenu> <guimenu>Resize 1:1</guimenu> </menuchoice>.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>To zoom to double size (200%) of the original movie or visualization</term>
+     <listitem>
+      <para>
+       Click <menuchoice> <guimenu>View</guimenu> <guimenu>Fit Window to Movie
+       </guimenu> <guimenu>Resize 2:1</guimenu> </menuchoice>.
+      </para>
+     </listitem>
+    </varlistentry>-->
+   </variablelist>
+   <para>
+    To switch between different aspect ratios, press the menu button in the
+   upper right corner of the window and select <guimenu>Aspect Ratio</guimenu>.
+   </para>
+   <para>
+    The default aspect ratio is <guimenu>Auto</guimenu>.
+   </para>
+  </sect2>
+
+<!-- <remark>jufa 2022-04-14: can't find this option</remark>
+  <sect2 xml:id="sec-gnome-totem-using-controls">
+   <title>Showing or hiding controls</title>
+   <para>
+    To hide the window controls of &gnome; Videos, click <menuchoice>
+    <guimenu>View</guimenu> <guimenu>Show Controls</guimenu> </menuchoice> and
+    deselect the option. To show the controls on the &gnome; Videos window,
+    right-click the window, then select <guimenu>Show Controls</guimenu>. If
+    the Show Controls option is selected, &gnome; Videos shows the menubar,
+    time elapsed slider, seek control buttons, volume slider, and statusbar on
+    the window. If the Show Controls option is not selected, the application
+    hides these controls and shows only the display area.
+   </para>
+  </sect2>-->
+
+  <sect2 xml:id="sec-gnome-totem-using-subtitles">
+   <title>Choosing subtitles</title>
+   <para>
+    To choose the language of the subtitles, press the menu button in the
+    upper right corner of the window and select <guimenu>Subtitles</guimenu>.
+    Then select the subtitles language (DVD) or the subtitle file (AVI etc.) you
+    want to display.
+   </para>
+   <para>
+    To disable the display of subtitles, select <guimenu>None</guimenu>.
+   </para>
+   <para>
+    By default, &gnome; Videos chooses the same language for the subtitles that
+    you use on your computer.
+   </para>
+   <para>
+    &gnome; Videos automatically loads and displays subtitles if the file that
+    contains them has the same name as the video file. It supports the
+    following subtitle file extensions: <filename>srt</filename>,
+    <filename>asc</filename>, <filename>txt</filename>,
+    <filename>sub</filename>, <filename>smi</filename>, or
+    <filename>ssa</filename>.
+   </para>
+  </sect2>
+ </sect1>
+ 
+ <sect1 xml:id="sec-gnome-totem-prefs">
+  <title>Modifying <guimenu>&gnome; Videos</guimenu> preferences</title>
+  <para>
+   &gnome; Videos offers some additional options to configure the application
+   to your needs.
+  </para>
+  <para>
+   To modify &gnome; Videos preferences, press the menu button in the upper right
+   corner of the window and select <guimenu>Preferences</guimenu>.
+  </para>
+
+  <sect2 xml:id="sec-gnome-totem-prefs-general">
+   <title><guimenu>General</guimenu> preferences</title>
+ 
+   <figure pgwide="0" xml:id="fig-gnome-totem-prefs-general">
+    <title><guimenu>&gnome; Videos</guimenu> general preferences</title>
+    <mediaobject>
+     <imageobject role="fo">
+      <imagedata fileref="totem_general.png" width="55%"/>
+     </imageobject>
+     <imageobject role="html">
+      <imagedata fileref="totem_general.png" width="55%"/>
+     </imageobject>
+    </mediaobject>
+   </figure>
+   <para>
+    General Preferences include the following:
+   </para>
+   <variablelist>
+    <varlistentry>
+     <term>External subtitles</term>
+     <listitem>
+      <para>
+       Tick the option <guimenu>Load subtitle files when movie is
+        loaded</guimenu> if you want subtitles to be loaded automatically.
+      </para>
+      <para>
+       Adjust font type and size by clicking its name. Choose the font type from
+       the drop-down box. Click on the slider and change the font size. When
+       ready, click <guimenu>Select</guimenu>.
+      </para>
+      <para>
+       Choose the encoding from the drop-down box.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>Plugins</term>
+     <listitem>
+      <para>
+       Plugins offer extra features and extend functionality. You can view the
+       list of plugins by clicking <guimenu>Plugins</guimenu>.
+      </para>
+     </listitem>
+    </varlistentry>
+   </variablelist>
+  </sect2>
+
+  <sect2 xml:id="sec-gnome-totem-prefs-display">
+   <title><guimenu>Display</guimenu> preferences</title>
+   <para>
+    The Display Preferences let you choose if you want to enable deinterlacing
+    and allow you to adjust Brightness, Contrast, Saturation, or Hue.
+   </para>
+   <figure pgwide="0" xml:id="fig-gnome-totem-prefs-display">
+    <title><guimenu>&gnome; Videos</guimenu> display preferences</title>
+    <mediaobject>
+     <imageobject role="fo">
+      <imagedata fileref="totem_display.png" width="55%"/>
+     </imageobject>
+     <imageobject role="html">
+      <imagedata fileref="totem_display.png" width="55%"/>
+     </imageobject>
+    </mediaobject>
+   </figure>
+   <para>
+    Display Preferences include the following:
+   </para>
+   <variablelist>
+    <varlistentry>
+     <term><guimenu>Videos</guimenu></term>
+     <listitem>
+      <para>
+      Allows you to specify whether you want to <guimenu>Disable deinterlacing
+      of interlaced videos</guimenu>. 
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><guimenu>Color balance</guimenu></term>
+     <listitem>
+      <para>
+       This option allows you to adjust <guimenu>Brightness</guimenu>,
+       <guimenu>Contrast</guimenu>, <guimenu>Saturation</guimenu>, or
+       <guimenu>Hue</guimenu> of your videos.
+      </para>
+     </listitem>
+    </varlistentry>
+   </variablelist>
+  </sect2>
+
+  <sect2 xml:id="sec-gnome-totem-prefs-audio">
+   <title><guimenu>Audio</guimenu> preferences</title>
+   <para>
+    The Audio Preferences dialog lets you select the audio output type.
+   </para>
+   <figure pgwide="0" xml:id="fig-gnome-totem-prefs-audio">
+    <title><guimenu>&gnome; Videos</guimenu> audio preferences</title>
+    <mediaobject>
+     <imageobject role="fo">
+      <imagedata fileref="totem_audio.png" width="55%"/>
+     </imageobject>
+     <imageobject role="html">
+      <imagedata fileref="totem_audio.png" width="55%"/>
+     </imageobject>
+    </mediaobject>
+   </figure>
+  </sect2>
+ </sect1>
+</chapter>

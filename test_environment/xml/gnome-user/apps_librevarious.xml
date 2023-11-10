@@ -1,0 +1,726 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter
+[
+  <!ENTITY % entities SYSTEM "../common/generic-entities.ent">
+    %entities;
+]>
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0" xml:id="cha-lo-various">
+ <title>&libo; Impress, Base, Draw, and Math</title>
+ <info>
+  <dm:docmanager xmlns:dm="urn:x-suse:ns:docmanager">
+   <dm:bugtracker></dm:bugtracker>
+   <dm:translation>yes</dm:translation>
+  </dm:docmanager>
+ </info>
+
+ <para>
+  Besides &libo; Writer and &libo; Calc, &libo; also includes the following
+  modules:
+  </para>
+  <itemizedlist>
+   <listitem>
+    <para>
+     <productname>Impress</productname>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <productname>Base</productname>
+    </para>
+   </listitem>
+  <listitem>
+   <para>
+    <productname>Draw</productname>
+   </para>
+  </listitem>
+   <listitem>
+    <para>
+     <productname>Math</productname>
+    </para>
+   </listitem>
+  </itemizedlist>
+ <para>
+  With these, you can create presentations, design
+  databases, draw up graphics and diagrams, and create mathematical formulas.
+ </para>
+ 
+ <sect1 xml:id="sec-lo-various-impress">
+  <title>Using presentations with <productname>Impress</productname></title>
+
+  <para>
+   Use &libo; Impress to create presentations for screen display or printing.
+   If you have used other presentation software,
+   <productname>Impress</productname> makes it easy to switch.
+   It works very similarly to other presentation software.
+  </para>
+
+  <sect2 xml:id="sec-lo-various-impress-create">
+   <title>Creating a presentation</title>
+   <para>
+    There are two ways to create a new presentation. When starting 
+    <productname>Impress</productname>, the <guimenu>Select a Template</guimenu>
+    dialog opens. To use one of the templates, select it and click
+    <guimenu>Open</guimenu>. To start from scratch with no templates, close the
+    template selection with <guimenu>Cancel</guimenu>.
+   </para>
+  </sect2>
+
+  <sect2 xml:id="sec-lo-various-impress-master">
+   <title>Using master pages</title>
+   <para>
+    Master pages give your presentation a consistent look by defining what
+    fonts and other design elements are used. Impress uses two types of master
+    pages:
+   </para>
+   <variablelist>
+    <varlistentry>
+     <term>Master slide</term>
+     <listitem>
+      <para>
+       Contains elements that appear on all slides. For example, you might want
+       your company logo to appear in the same place on every slide. The slide
+       master also determines the text formatting style for the heading and
+       outline of every slide that uses that master page, as well as any
+       information you want to appear in a header or footer.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>Master notes</term>
+     <listitem>
+      <para>
+       Determines the formatting and appearance of the notes in your
+       presentation.
+      </para>
+     </listitem>
+    </varlistentry>
+   </variablelist>
+   <sect3 xml:id="sec-lo-various-impress-master-create">
+    <title>Creating a master slide</title>
+    <para>
+     <productname>Impress</productname> comes with a collection of preformatted
+     master pages. To customize presentations further, create your own slide
+     masters.
+    </para>
+    <procedure>
+     <step>
+      <para>
+       Start <productname>Impress</productname> with an existing presentation
+       or create a new one as described in
+       <xref linkend="sec-lo-various-impress-create"/>.
+      </para>
+     </step>
+     <step>
+      <para>
+       Click <menuchoice> <guimenu>View</guimenu>
+       <guimenu>Master Slide</guimenu> </menuchoice>.
+      </para>
+      <para>
+       This opens the current master slide in <guimenu>Master View</guimenu>.
+       The <guimenu>Master View</guimenu> toolbar appears.
+      </para>
+     </step>
+     <step>
+      <para>
+       Right-click the left-hand panel, then click <guimenu>New
+       Master</guimenu>.
+      </para>
+     </step>
+     <step>
+      <para>
+       Edit the master slide until it has the final look.
+      </para>
+      <para>
+       Master view allows editing outline styles by directly formatting the
+       sample text on the slide.
+      </para>
+     </step>
+     <step>
+      <para>
+       To finish editing master slides, in the <guimenu>Master View</guimenu>
+       toolbar, click <guimenu>Close Master View</guimenu>. Alternatively,
+       choose
+       <menuchoice>
+        <guimenu>View</guimenu><guimenu>Normal</guimenu></menuchoice>.
+      </para>
+     </step>
+    </procedure>
+    <tip>
+     <title>Collect master slides in a template</title>
+     <para>
+      When you have created all of the master slides you want to use in your
+      presentations, you can save them in an Impress template. Then, any time
+      you want to create presentations that use those master slides, open a new
+      presentation with your template.
+     </para>
+    </tip>
+   </sect3>
+   <sect3 xml:id="sec-lo-various-impress-master-apply">
+    <title>Applying a master slide</title>
+    <para>
+     Master slides can be applied to selected slides or to all slides of a
+     presentation.
+    </para>
+    <procedure>
+     <step>
+      <para>
+       Open your presentation.
+      </para>
+      <tip>
+       <title>Applying master slides</title>
+       <para>
+       To apply a master slide to multiple slides but not all slides:
+       Select the slides that you want a slide master applied to.
+      </para>
+      </tip>
+     </step>
+     <step>      
+      <para>
+       To select multiple slides, press<keycap function="control"/> in the
+       <guimenu>Slides</guimenu> pane while clicking the slides you want to
+       use.
+      </para>
+     </step>
+     <step>
+      <para>
+       In the <emphasis>Tasks</emphasis> pane, open the
+       <guimenu>Master Pages</guimenu> pane and click the master page you want to
+       apply. The master slide is applied to the corresponding page or pages.
+      </para>
+      <para>
+       If you do not see the <guimenu>Task Pane</guimenu>, click <menuchoice>
+       <guimenu>View</guimenu> <guimenu>Task Pane</guimenu> </menuchoice>.
+      </para>
+     </step>
+    </procedure>
+   </sect3>
+  </sect2>
+ </sect1>
+ <sect1 xml:id="sec-lo-various-base">
+  <title>Using databases with <guimenu>Base</guimenu></title>
+
+  <para>
+   &libo; includes the database module <productname>Base</productname> for
+   designing a database to store many kinds of information. From a simple
+   address book or recipe file to a sophisticated document management system.
+  </para>
+
+  <para>
+   Tables, forms, queries, and reports can be created manually or by using
+   convenient wizards. For example, the <guimenu>Table Wizard</guimenu> contains
+   several common fields for business and personal use. Databases created in
+   <productname>Base</productname> can be used as data sources, such as when
+   creating form letters.
+  </para>
+
+  <para>
+   It is beyond the scope of this document to detail database design with 
+   <productname>Base</productname>.
+   Find more information in the sources listed in
+   <xref linkend="sec-lo-oview-help"/>.
+  </para>
+
+  <sect2 xml:id="sec-lo-various-base-predefined">
+   <title>Creating a database using predefined options</title>
+   <para>
+    <productname>Base</productname> comes with several predefined database
+    fields to help you create a database. A wizard guides you through the steps
+    to create a new database.
+    The steps in this section are specific to creating an address book using
+    predefined fields, but it should be easy to follow them to use the
+    predefined fields for any of the built-in database options.
+   </para>
+   <para>
+    The process for creating a database can be broken into several
+    subprocesses:
+   </para>
+   <orderedlist spacing="normal">
+    <listitem>
+     <para>
+      <xref linkend="sec-lo-various-base-predefined-create" xrefstyle="select:title"/>
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      <xref linkend="sec-lo-various-base-predefined-setup" xrefstyle="select:title"/>
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      <xref linkend="sec-lo-various-base-predefined-createform" xrefstyle="select:title"/>
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      <xref linkend="sec-lo-various-base-predefined-modifyform" xrefstyle="select:title"/>
+     </para>
+    </listitem>
+   </orderedlist>
+   <sect3 xml:id="sec-lo-various-base-predefined-create">
+    <title>Creating the database</title>
+    <procedure>
+     <step>
+      <para>
+       Start &libo; Base.
+      </para>
+      <para>
+       The <guimenu>&libo; Database Wizard</guimenu> starts.
+      </para>
+      <para>
+       You can choose between creating a new database in <guimenu>HSQLDB
+       Embedded</guimenu> format, use an existing database file, or connecting
+       to an existing database.
+      </para>
+     </step>
+     <step>
+      <para>
+       Proceed with <guimenu>Next</guimenu>.
+      </para>
+     </step>
+     <step>
+      <para>
+       In case you have created a new database, click <guimenu>Yes, register the
+       database for me</guimenu> to make your database information available to
+       other &libo; modules and select the check boxes to <guimenu>Open the
+       database for editing</guimenu> and <guimenu>Create tables using the
+       table wizard</guimenu>. Then click <guimenu>Finish</guimenu>.
+       Browse to the directory where you want to save the database, specify a
+       name for the database, then click <guimenu>Save</guimenu>.
+      </para>
+     </step>
+    </procedure>
+   </sect3>
+   <sect3 xml:id="sec-lo-various-base-predefined-setup">
+    <title>Setting up the database table</title>
+    <para>
+     After you have created the database, if you have selected the
+     <guimenu>Create tables using the table wizard</guimenu> check box, the
+     table wizard opens. If you have not, go to the
+     <guimenu>Task</guimenu> area and click <guimenu>Use Wizard to Create
+     Table</guimenu>. Next, define the fields you want to use in your database
+     table.
+    </para>
+    <para>
+     In this example, you will set up an address database.
+    </para>
+    <procedure>
+     <step>
+      <para>
+       For this example, click <guimenu>Personal</guimenu>.
+      </para>
+      <para>
+       The list <guimenu>Sample tables</guimenu> changes to show the predefined
+       tables for personal use where the address table template is. The table
+       templates listed under <guimenu>Business</guimenu> contain predefined
+       business tables.
+      </para>
+     </step>
+     <step>
+      <para>
+       In the <guimenu>Sample tables</guimenu> list, click
+       <guimenu>Addresses</guimenu>.
+      </para>
+      <para>
+       The available fields for the predefined address book appear in the
+       <guimenu>Available fields</guimenu> menu.
+      </para>
+     </step>
+     <step>
+      <para>
+       In the <guimenu>Available fields</guimenu> menu, click the fields you
+       want to use in your address book.
+      </para>
+      <para>
+       Select one item at a time by clicking. Alternatively, to select multiple
+       items, hold <keycap function="shift"/> and click each of the items
+       separately.
+      </para>
+     </step>
+     <step>
+      <para>
+       Click the icons <guimenu>single right arrow</guimenu> and
+       <guimenu>single left arrow</guimenu> to move selected items to or off
+       the <guimenu>Selected fields</guimenu> list.
+      </para>
+      <para>
+       To move all available fields to the <guimenu>Selected fields</guimenu>
+       menu, click the icon <guimenu>double right arrow</guimenu>.
+      </para>
+     </step>
+     <step>
+      <para>
+       Use the icons <guimenu>up arrow</guimenu> and
+       <guimenu>down arrow</guimenu> to adjust the order of the selected
+       entries.
+      </para>
+      <para>
+       The fields appear in the table and forms in the order in which they are
+       listed.
+      </para>
+      <informalfigure>
+       <mediaobject>
+        <textobject><phrase>Field selection</phrase></textobject>
+        <imageobject role="fo">
+         <imagedata fileref="oo-wizard-base.png" width="90%"/>
+        </imageobject>
+        <imageobject role="html">
+         <imagedata fileref="oo-wizard-base.png" width="85%"/>
+        </imageobject>
+       </mediaobject>
+      </informalfigure>
+     </step>
+     <step>
+      <para>
+       Click <guimenu>Next</guimenu> to proceed.
+      </para>
+     </step>
+     <step>
+      <para>
+       Make sure each of the fields is defined correctly.
+      </para>
+      <para>
+       You can change the field name, type, maximum characters and whether it
+       is a required field. For this example, leave the settings as they are,
+       then click <guimenu>Next</guimenu>.
+      </para>
+     </step>
+     <step>
+      <para>
+       Make sure that <guimenu>Create a primary key</guimenu> and
+       <guimenu>Automatically add a primary key</guimenu> are activated.
+       Additionally activate <guimenu>Auto value</guimenu>.
+      </para>
+      <para>
+       Proceed with <guimenu>Next</guimenu>.
+      </para>
+     </step>
+     <step>
+      <para>
+       Give the table a name, and activate <guimenu>Create a form based on this
+       table</guimenu>.
+      </para>
+      <para>
+       Proceed with <guimenu>Finish</guimenu>.
+      </para>
+     </step>
+    </procedure>
+   </sect3>
+   <sect3 xml:id="sec-lo-various-base-predefined-createform">
+    <title>Creating a form</title>
+    <para>
+     Next, create the form to use when entering data into your address book.
+    </para>
+    <para>
+     After the previous step, you should be in the
+     <guimenu>Form Wizard</guimenu> already. Otherwise, open it by going to the
+     main window. Under <guimenu>Tables</guimenu>, right-click the
+     correct table. Click <guimenu>Form Wizard</guimenu>.
+    </para>
+    <procedure>
+     <step>
+      <para>
+       In the <guimenu>Form Wizard</guimenu>, click the double right-arrow icon
+       to move all available fields to the <guimenu>Fields in the
+       form</guimenu> list, then click <guimenu>Next</guimenu>.
+      </para>
+     </step>
+     <step>
+      <para>
+       To add a subform, activate <guimenu>Add Subform</guimenu>, then
+       click <guimenu>Next</guimenu>.
+      </para>
+      <para>
+       For this example, accept the default selections.
+      </para>
+     </step>
+     <step>
+      <para>
+       Select how you want to arrange your form, then click
+       <guimenu>Next</guimenu>.
+      </para>
+     </step>
+     <step>
+      <para>
+       Select <guimenu>The form is to display all data</guimenu> and leave all
+       of the check boxes deactivated, then click <guimenu>Next</guimenu>.
+      </para>
+     </step>
+     <step>
+      <para>
+       Apply a style and field border, then click <guimenu>Next</guimenu>.
+      </para>
+      <para>
+       For this example, accept the default selections.
+      </para>
+     </step>
+     <step>
+      <para>
+       Name the form, activate <guimenu>Modify the form</guimenu>,
+       then click <guimenu>Finish</guimenu>.
+      </para>
+     </step>
+    </procedure>
+   </sect3>
+   <sect3 xml:id="sec-lo-various-base-predefined-modifyform">
+    <title>Modifying the form</title>
+    <para>
+     After the form has been defined, you can modify the appearance of the form
+     to suit your preferences.
+    </para>
+    <para>
+     After the previous step, you should be in the
+     <guimenu>Database Form</guimenu> editor already. If not, select the right
+     form by clicking <guimenu>Forms</guimenu> in the side bar of the main
+     window. Then, in the <guimenu>Forms</guimenu> area, right-click the
+     correct form. Select <guimenu>Edit</guimenu>.
+    </para>
+    <procedure>
+     <step>
+      <para>
+       Arrange the fields on the form by dragging them to their new locations.
+      </para>
+      <para>
+       For example, move the field <guimenu>First Name</guimenu>, so it appears
+       to the right of the field <guimenu>Last Name</guimenu>.
+      </para>
+     </step>
+     <step>
+      <para>
+       When you have finished modifying the form, save it and close it.
+      </para>
+     </step>
+    </procedure>
+   </sect3>
+   <sect3 xml:id="sec-lo-base-predefined-info">
+    <title>Further steps</title>
+    <para>
+     After you have created your database tables and forms, you are ready to
+     enter your data. You can also design queries and reports to help sort and
+     display the data.
+    </para>
+    <para>
+     Refer to &libo; online help and other sources listed in
+     <xref linkend="sec-lo-oview-help"/> for additional information about Base.
+    </para>
+   </sect3>
+  </sect2>
+ </sect1>
+ <sect1 xml:id="sec-lo-various-draw">
+  <title>Creating graphics with <guimenu>Draw</guimenu></title>
+
+  <para>
+   Use &libo; Draw to create graphics and diagrams.
+   You can export your drawings to the most common vector graphics formats and
+   import them into any application that lets you import graphics, including
+   other &libo; modules. You can also create Adobe* Flash* (SWF) versions of
+   your drawings.
+  </para>
+
+  <procedure>
+   <title>Creating a graphic</title>
+   <step>
+    <para>
+     Start &libo; Draw.
+    </para>
+   </step>
+   <step>
+    <para>
+     Use the toolbar <guimenu>Drawing</guimenu> at the right side of the window
+     to create a graphic. To create a new shape or text object, use the shape
+     buttons of the toolbar:
+    </para>
+    <itemizedlist>
+     <listitem>
+      <para>
+       To create a single shape or text object, click a shape button once.
+       Then click and drag over the document to create an object.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       To create a multiple shape or text object, double-click a shape button.
+       Then click and drag over the document to create objects. When you are
+       done, click the mouse pointer icon in the toolbar.
+      </para>
+     </listitem>
+    </itemizedlist>
+   </step>
+   <step>
+    <para>
+     Save the graphic.
+    </para>
+   </step>
+  </procedure>
+
+  <para>
+   To embed an existing Draw graphic into a &libo; document, select <menuchoice>
+   <guimenu>Insert</guimenu> <guimenu>Object</guimenu> <guimenu>OLE
+   Object</guimenu> </menuchoice>. Select <guimenu>Create from file</guimenu>
+   and click <guimenu>Search</guimenu> to navigate to the Draw file to insert.
+  </para>
+  <para>
+   To be able to edit the graphic later on its own, activate
+   <guimenu>Link to file</guimenu>.
+  </para>
+  <para>
+   If you insert a file as OLE object, you can edit the object later by
+   double-clicking it.
+  </para>
+
+  <procedure xml:id="pro-lo-various-draw">
+   <title>Opening <guimenu>Draw</guimenu> from other &libo; modules</title>
+   <para>
+    One particularly useful feature of <productname>Draw</productname> is the
+    ability to open it from other &libo; modules, so you can create a drawing
+    that is automatically imported into your document.
+   </para>
+   <step>
+    <para>
+     From a &libo; module (for example, from <productname>Writer</productname>),
+     click <menuchoice>
+     <guimenu>Insert</guimenu> <guimenu>Object</guimenu> <guimenu>OLE
+     Object</guimenu> <guimenu>&libo; Drawing</guimenu></menuchoice> and
+     confirm with <guimenu>OK</guimenu>.
+    </para>
+    <para>
+     The user interface of <productname>Draw</productname> opens.
+    </para>
+   </step>
+   <step>
+    <para>
+     Create your drawing.
+    </para>
+   </step>
+   <step>
+    <para>
+     Click in your document, outside the <productname>Draw</productname> frame.
+    </para>
+    <para>
+     The drawing is automatically inserted into your document.
+    </para>
+   </step>
+  </procedure>
+ </sect1>
+ <sect1 xml:id="sec-lo-various-math">
+  <title>Creating mathematical formulas with <productname>Math</productname>
+  </title>
+
+  <para>
+   It is usually difficult to include complex mathematical formulas in your
+   documents. To make this task easier, the &libo; Math equation editor lets you
+   create formulas using operators, functions, and formatting assistants. You
+   can then save those formulas as an object that can be imported into other
+   documents. Math functions can be inserted into other &libo; documents like
+   any other graphic object.
+  </para>
+
+  <note>
+   <title><productname>Math</productname> for creating mathematical formulas
+   </title>
+   <para>
+    Math is not a calculator. The functions it creates are graphical objects.
+    Even if they are imported into <productname>Calc</productname>, these
+    functions cannot be evaluated.
+   </para>
+  </note>
+
+  <para>
+   To create a formula, proceed as follows:
+  </para>
+  <procedure>
+   <step>
+    <para>
+     Start &libo; Math.
+    </para>
+   </step>
+   <step>
+    <para>
+     Click <menuchoice> <guimenu>File</guimenu> <guimenu>New</guimenu>
+     <guimenu>Formula</guimenu> </menuchoice>. The formula window opens.
+    </para>
+   </step>
+   <step>
+    <para>
+     Enter your formula in the lower part of the window. For example, the
+     binomial theorem in &libo; Math syntax is:
+    </para>
+<screen>(a + b)^2 = a^2 + 2 a b + b^2</screen>
+    <para>
+     The result is displayed in the upper part of the window.
+    </para>
+   </step>
+   <step>
+    <para>
+     Use the side bar panel <guimenu>Formula Elements</guimenu> or right-click
+     the lower part of the window to insert other terms. If you need symbols,
+     use <menuchoice> <guimenu>Tools</guimenu> <guimenu>Symbols</guimenu>
+     </menuchoice> to, for example, insert Greek or other special characters.
+    </para>
+   </step>
+   <step>
+    <para>
+     Save the document.
+    </para>
+   </step>
+  </procedure>
+
+  <para>
+   The result is shown in <xref linkend="fig-lo-various-math"/>:
+  </para>
+
+  <figure xml:id="fig-lo-various-math">
+   <title>Mathematical formula in <productname>&libo; Math</productname>
+   </title>
+   <mediaobject>
+    <imageobject role="html">
+     <imagedata fileref="oo_formula.png" width="100%"/>
+    </imageobject>
+    <imageobject role="fo">
+     <imagedata fileref="oo_formula.png" width="80%"/>
+    </imageobject>
+   </mediaobject>
+  </figure>
+
+  <para>
+   It is possible to include your formula in <productname>Writer</productname>.
+   To do so, proceed as follows:
+  </para>
+
+  <procedure>
+   <step>
+    <para>
+     Create a new <productname>Writer</productname> document or open an
+     existing one.
+    </para>
+   </step>
+   <step>
+    <para>
+     Select <menuchoice> <guimenu>Insert</guimenu> <guimenu>Object</guimenu>
+     <guimenu>OLE Object</guimenu> </menuchoice> in the main menu. The
+     <guimenu>Insert OLE Object</guimenu> window appears.
+    </para>
+   </step>
+   <step>
+    <para>
+     Select <guimenu>Create from file</guimenu>.
+    </para>
+   </step>
+   <step>
+    <para>
+     Click <guimenu>Search</guimenu> to locate your formula. To choose the
+     formula file, click <guimenu>Open</guimenu>.
+    </para>
+    <para>
+     To be able to edit the formula later on its own, activate
+     <guimenu>Link to file</guimenu>.
+    </para>
+   </step>
+   <step>
+    <para>
+     Confirm with <guimenu>OK</guimenu>. The formula is inserted at the
+     current cursor position.
+    </para>
+   </step>
+  </procedure>
+ </sect1>
+</chapter>

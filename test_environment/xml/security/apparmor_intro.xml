@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter
+[
+  <!ENTITY % entities SYSTEM "../common/generic-entities.ent">
+    %entities;
+]>
+
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0" xml:id="cha-apparmor-intro">
+ <title>Introducing &aa;</title>
+ <info>
+      <dm:docmanager xmlns:dm="urn:x-suse:ns:docmanager">
+        <dm:bugtracker>
+        </dm:bugtracker>
+	<dm:translation>yes</dm:translation>
+      </dm:docmanager>
+    </info>
+    <para>
+  Many security vulnerabilities result from bugs in
+  <emphasis>trusted</emphasis> programs. A trusted program runs with
+  privileges that attackers want to possess. The program fails to keep that
+  trust if there is a bug in the program that allows the attacker to acquire
+  said privilege.
+ </para>
+ <para>
+  &aareg; is an application security solution designed specifically to
+  apply privilege confinement to suspect programs. &aa; allows the
+  administrator to specify the domain of activities the program can perform
+  by developing a security <emphasis>profile</emphasis>.  A security profile
+  is a listing of files that the program may access and the operations the
+  program may perform. &aa; secures applications by enforcing good
+  application behavior without relying on attack signatures, so it can
+  prevent attacks even if previously unknown vulnerabilities are being
+  exploited.
+ </para>
+ <sect1>
+  <title>&aa; components</title>
+ <para>
+  &aa; consists of:
+ </para>
+ <itemizedlist mark="bullet" spacing="normal">
+  <listitem>
+   <para>
+    A library of &aa; profiles for common Linux* applications, describing
+    what files the program needs to access.
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    A library of &aa; profile foundation classes (profile building
+    blocks) needed for common application activities, such as DNS lookup and
+    user authentication.
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    A tool suite for developing and enhancing &aa; profiles, so that you
+    can change the existing profiles to suit your needs and create new
+    profiles for your own local and custom applications.
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    Several specially modified applications that are &aa; enabled to
+    provide enhanced security in the form of unique subprocess confinement
+    (including Apache).
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    The &aa;-related kernel code and associated control scripts to
+    enforce &aa; policies on your &productnamereg; system.
+   </para>
+  </listitem>
+ </itemizedlist>
+ </sect1>
+ <sect1 xml:id="sec-apparmor-intro-background">
+  <title>Background information on &aa; profiling</title>
+
+  <para>
+   For more information about the science and security of &aa;, refer to
+   the following papers:
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term><citetitle>SubDomain: Parsimonious Server Security</citetitle> by
+     Crispin Cowan, Steve Beattie, Greg Kroah-Hartman, Calton Pu, Perry Wagle,
+     and Virgil Gligor</term>
+    <listitem>
+     <para>
+      Describes the initial design and implementation of &aa;. Published
+      in the proceedings of the USENIX LISA Conference, December 2000, New
+      Orleans, LA. This paper is now out of date, describing syntax and
+      features that are different from the current &aa; product. This
+      paper should be used only for background, and not for technical
+      documentation.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term><citetitle>Defcon Capture the Flag: Defending Vulnerable Code from Intense Attack</citetitle>
+     by Crispin Cowan, Seth Arnold, Steve Beattie, Chris Wright, and John Viega</term>
+    <listitem>
+     <para>
+      A good guide to strategic and tactical use of &aa; to solve severe
+      security problems in a short period of time. Published in the
+      Proceedings of the DARPA Information Survivability Conference and Expo
+      (DISCEX III), April 2003, Washington, DC.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term><citetitle>AppArmor for Geeks</citetitle> by Seth Arnold</term>
+    <listitem>
+     <para>
+      This document tries to convey a better understanding of the technical
+      details of &aa;. It is available at
+      <link xlink:href="https://en.opensuse.org/SDB:AppArmor_geeks"/>.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+ </sect1>
+</chapter>

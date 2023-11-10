@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter
+[
+  <!ENTITY % entities SYSTEM "../common/generic-entities.ent">
+    %entities;
+]>
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0" xml:id="cha-security-auth">
+<!-- ============================================================ -->
+<!-- ============================================================ -->
+<!-- ============================================================ -->
+ <title>Setting up authentication clients using &yast;</title>
+ <info>
+  <dm:docmanager xmlns:dm="urn:x-suse:ns:docmanager">
+   <dm:translation>yes</dm:translation>
+  </dm:docmanager>
+  <abstract>
+   <para>
+    Whereas Kerberos is used for authentication, LDAP is used for authorization
+    and identification. Both can work together. For more information about LDAP, see
+    <xref linkend="cha-security-ldap"/>, and about Kerberos, see
+    <xref linkend="cha-security-kerberos"/>.
+   </para>
+  </abstract>
+ </info>
+
+ <sect1 xml:id="sec-security-auth-yast-client">
+  <title>Configuring an authentication client with &yast;</title>
+
+  <para>
+   &yast; allows setting up authentication to clients using different
+   modules:
+  </para>
+
+&security-auth-client-yast;
+
+ </sect1>
+
+ <sect1 xml:id="sec-security-auth-sssd">
+  <title>SSSD</title>
+  <para>
+   Two of the &yast; modules are based on SSSD: <guimenu>User Logon
+   Management</guimenu> and <guimenu>LDAP and Kerberos
+   Authentication</guimenu>.
+  </para>
+  <para>
+   SSSD stands for System Security Services Daemon. SSSD talks to remote
+   directory services that provide user data and provides
+   authentication methods, such as LDAP, &krb;, or &ad; (&ada;). It also
+   provides an NSS (Name Service Switch) and PAM (Pluggable Authentication
+   Module) interface.
+  </para>
+  <para>
+   SSSD can locally cache user data and then allow users to use the data,
+   even if the real directory service is (temporarily) unreachable.
+  </para>
+  <sect2 xml:id="sec-security-auth-sssd-status">
+   <title>Checking the status</title>
+   <para>
+    After running one of the &yast; authentication modules, you can check
+    whether SSSD is running with:
+   </para>
+<screen>&prompt.root;<command>systemctl status sssd</command>
+sssd.service - System Security Services Daemon
+   Loaded: loaded (/usr/lib/systemd/system/sssd.service; enabled)
+   Active: active (running) since Thu 2015-10-23 11:03:43 CEST; 5s ago
+   [...]</screen>
+  </sect2>
+
+  <sect2 xml:id="sec-security-auth-sssd-cache">
+   <title>Caching</title>
+   <para>
+    To allow logging in when the authentication back-end is unavailable, SSSD
+    will use its cache even if it was invalidated. This happens until the
+    back-end is available again.
+   </para>
+   <para>
+    To invalidate the cache, run <command>sss_cache -E</command> (the
+    command <command>sss_cache</command> is part of the package
+    <package>sssd-tools</package>).
+   </para>
+   <para>
+    To remove the SSSD cache, run:
+   </para>
+  <screen>&prompt.sudo;<command>systemctl stop sssd</command>
+&prompt.sudo;<command>rm -f /var/lib/sss/db/*</command>
+&prompt.sudo;<command>systemctl start sssd</command></screen>
+  </sect2>
+ </sect1>
+</chapter>

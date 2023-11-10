@@ -1,0 +1,1425 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter
+[
+  <!ENTITY % entities SYSTEM "../common/generic-entities.ent">
+    %entities;
+]>
+
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0" xml:id="cha-security-ad">
+ <title>&ad; support</title>
+ <info>
+      <dm:docmanager xmlns:dm="urn:x-suse:ns:docmanager">
+        <dm:bugtracker>
+        </dm:bugtracker>
+        <dm:translation>yes</dm:translation>
+      </dm:docmanager>
+    </info>
+    <para>
+  &ad;* (&ada;) is a directory-service based on LDAP, Kerberos, and
+  other services. It is used by Microsoft&thrdmrk; Windows&thrdmrk; to manage
+  resources, services, and people. In a Microsoft Windows network, &ad; provides
+  information about these objects, restricts access to them, and enforces
+  policies.
+  &productnamereg; lets you join existing &ad; domains and integrate your
+  Linux machine into a Windows environment.
+ </para>
+ <sect1 xml:id="sec-security-ad-integrate">
+  <title>Integrating Linux and &ad; environments</title>
+
+  <para>
+   With a Linux client (configured as an &ad; client) that is
+   joined to an existing &ad; domain, benefit from various
+   features not available on a pure &productname; Linux client:
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term>Browsing shared files and directories with SMB</term>
+    <listitem>
+     <para>
+      &nautilus; (previously called Nautilus) supports browsing shared resources
+      through SMB.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>Sharing files and directories with SMB</term>
+    <listitem>
+     <para>
+      &nautilus; supports sharing directories and files as in Windows.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>Accessing and manipulating user data on the Windows server</term>
+    <listitem>
+     <para>
+      Through &nautilus;, users can access their Windows user data and
+      can edit, create, and delete files and directories on the Windows
+      server. Users can access their data without having to enter their
+      password multiple times.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>Offline authentication</term>
+    <listitem>
+     <para>
+      Users can log in and access their local data on the Linux
+      machine even if they are offline or the &ad; server is unavailable for
+      other reasons.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>Windows password change</term>
+    <listitem>
+     <para>
+      This port of &ad; support in Linux enforces corporate password policies
+      stored in &ad;. The display managers and console support
+      password change messages and accept your input. You can even use the
+      Linux <command>passwd</command> command to set Windows passwords.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>Single sign-on through kerberized applications</term>
+    <listitem>
+     <para>
+      <remark>sknorr, 2014-08-27: "kerberized"? can we avoid that?</remark>
+      Many desktop applications are Kerberos-enabled
+      (<emphasis>kerberized</emphasis>), which means they can transparently
+      handle authentication for the user without the need for password
+      reentry at Web servers, proxies, groupware applications, or other
+      locations.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <note>
+   <title>Managing Unix attributes from Windows Server&thrdmrk; 2016 and later</title>
+   <para>
+    In Windows Server 2016 and later, Microsoft has removed the role
+    <emphasis>IDMU/NIS Server</emphasis> and along with it the
+    <emphasis>Unix Attributes</emphasis> plug-in for the
+    <emphasis>Active Directory Users and Computers</emphasis> MMC snap-in.
+   </para>
+   <para>
+    However, Unix attributes can still be managed manually when
+    <guimenu>Advanced Options</guimenu> are enabled in the
+    <emphasis>Active Directory Users and Computers</emphasis> MMC snap-in.
+    For more information, see
+    <link xlink:href="https://blogs.technet.microsoft.com/activedirectoryua/2016/02/09/identity-management-for-unix-idmu-is-deprecated-in-windows-server/"/>.
+   </para>
+   <para>
+    Alternatively, use the method described in
+    <xref linkend="pro-security-ad-join-sssd"/> to complete
+    attributes on the client side (in particular, see
+    <xref linkend="st-security-sssd-home-dir"/>).
+   </para>
+  </note>
+
+  <para>
+   The following section contains technical background for most of the
+   previously named features.
+   <phrase os="sled;osuse">For more information about file and
+   printer sharing using &ad;, see <xref linkend="book-gnome-user"/>.</phrase>
+  </para>
+ </sect1>
+ <sect1 xml:id="sec-security-ad-background">
+  <title>Background information for Linux &ad; support</title>
+
+  <para>
+   Many system components need to interact flawlessly to integrate
+   a Linux client into an existing Windows &ad; domain. The following
+   sections focus on the underlying processes of the key events in &ad;
+   server and client interaction.
+  </para>
+
+  <para>
+   To communicate with the directory service, the client needs to share at
+   least two protocols with the server:
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term>LDAP</term>
+    <listitem>
+     <para>
+      LDAP is a protocol optimized for managing directory information. A
+      Windows domain controller with &ad; can use the LDAP protocol to
+      exchange directory information with the clients. To learn more about
+      LDAP, refer
+      to <xref linkend="cha-security-ldap"/>.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>Kerberos</term>
+    <listitem>
+     <para> Kerberos is a third-party trusted authentication service.
+            All its clients trust Kerberos authorization of another
+            client's identity, enabling kerberized single sign-on (SSO)
+            solutions. Windows supports a Kerberos implementation,
+            making Kerberos SSO possible even with Linux clients. To
+            learn more about Kerberos in Linux, refer to <xref
+              linkend="cha-security-kerberos"/>. </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <para>
+   Depending on which &yast; module you use to set up Kerberos authentication,
+   different client components process account and authentication data:
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term>Solutions based on SSSD</term>
+    <listitem>
+     <itemizedlist>
+      <listitem>
+       <para>
+        The <systemitem class="daemon">sssd</systemitem> daemon is the
+        central part of this solution. It handles all communication with the
+        &ad; server.
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+        To gather name service information,
+        <systemitem class="daemon">sssd_nss</systemitem> is used.
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+        To authenticate users, the
+        <systemitem class="resource">pam_sss</systemitem> module for PAM
+        is used. The creation of user homes for the &ad; users on the Linux
+        client is handled by <filename>pam_mkhomedir</filename>.
+       </para>
+       <para>
+        For more information about PAM, see <xref linkend="cha-pam"/>.
+       </para>
+      </listitem>
+     </itemizedlist>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>Solution based on Winbind (Samba)</term>
+    <listitem>
+     <itemizedlist>
+      <listitem>
+       <para>
+        The <systemitem class="daemon">winbindd</systemitem> daemon is the
+        central part of this solution. It handles all communication with the
+        &ad; server.
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+        To gather name service information,
+        <systemitem class="daemon">nss_winbind</systemitem> is used.
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+        To authenticate users, the
+        <systemitem class="resource">pam_winbind</systemitem> module for PAM
+        is used. The creation of user homes for the &ad; users on the Linux
+        client is handled by <filename>pam_mkhomedir</filename>.
+       </para>
+       <para>
+        For more information about PAM, see <xref linkend="cha-pam"/>.
+       </para>
+      </listitem>
+     </itemizedlist>
+     <para>
+      <xref linkend="fig-ad-schema"/> highlights the most prominent
+      components of Winbind-based &ad; authentication.
+     </para>
+     <figure xml:id="fig-ad-schema">
+      <title>Schema of Winbind-based &ad; authentication</title>
+      <mediaobject>
+       <imageobject role="fo">
+        <imagedata fileref="sled10_ad_schema.png" width="75%"/>
+       </imageobject>
+       <imageobject role="html">
+        <imagedata fileref="sled10_ad_schema.png" width="75%"/>
+       </imageobject>
+      </mediaobject>
+     </figure>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <para>
+   Applications that are PAM-aware, like the login routines and the &gnome;
+   display manager, interact with the PAM and NSS layer to authenticate
+   against the Windows server. Applications supporting Kerberos
+   authentication (such as file managers, Web browsers, or e-mail clients)
+   use the Kerberos credential cache to access user's Kerberos tickets,
+   making them part of the SSO framework.
+  </para>
+
+  <sect2 xml:id="sec-security-ad-background-domain-join">
+   <title>Domain join</title>
+   <para>
+    During domain join, the server and the client establish a secure
+    relation. On the client, the following tasks need to be performed to
+    join the existing LDAP and Kerberos SSO environment provided by the
+    Windows domain controller. The entire join process is handled by the
+    &yast; Domain Membership module, which can be run during installation
+    or in the installed system:
+   </para>
+   <procedure>
+    <step>
+     <para>
+      The Windows domain controller providing both LDAP and KDC (Key
+      Distribution Center) services is located.
+     </para>
+    </step>
+    <step>
+     <para>
+      A machine account for the joining client is created in the directory
+      service.
+     </para>
+    </step>
+    <step>
+     <para>
+      An initial ticket granting ticket (TGT) is obtained for the client and
+      stored in its local Kerberos credential cache. The client needs this
+      TGT to get further tickets allowing it to contact other services, like
+      contacting the directory server for LDAP queries.
+     </para>
+    </step>
+    <step>
+     <para>
+      NSS and PAM configurations are adjusted to enable the client to
+      authenticate against the domain controller.
+     </para>
+    </step>
+   </procedure>
+   <para>
+    During client boot, the winbind daemon is started and retrieves the
+    initial Kerberos ticket for the machine account. winbindd automatically
+    refreshes the machine's ticket to keep it valid. To keep track of the
+    current account policies, winbindd periodically queries the domain
+    controller.
+   </para>
+  </sect2>
+
+  <sect2 xml:id="sec-security-ad-background-logon">
+   <title>Domain login and user homes</title>
+   <para>
+    The login manager of &gnome; (GDM) has been extended to allow the handling
+    of &ad; domain login. Users can choose to log in to the primary domain the
+    machine has joined or to one of the trusted domains with which the
+    domain controller of the primary domain has established a trust
+    relationship.
+   </para>
+   <para>
+    User authentication is mediated by several PAM modules as described
+    in <xref linkend="sec-security-ad-background"/>. If there are errors, the
+    error codes are translated into user-readable error messages that PAM
+    gives at login through any of the supported methods (GDM, console and
+    SSH):
+   </para>
+   <variablelist>
+    <varlistentry>
+     <term><literal>Password has expired</literal>
+     </term>
+     <listitem>
+      <para>
+       The user sees a message stating that the password has expired and
+       needs to be changed. The system prompts for a new password and
+       informs the user if the new password does not comply with corporate
+       password policies (for example the password is too short, too simple,
+       or already in the history). If a user's password change fails, the
+       reason is shown and a new password prompt is given.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><literal>Account disabled</literal>
+     </term>
+     <listitem>
+      <para>
+       The user sees an error message stating that the account has been
+       disabled and to contact the system administrator.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><literal>Account locked out</literal>
+     </term>
+     <listitem>
+      <para>
+       The user sees an error message stating that the account has been
+       locked and to contact the system administrator.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><literal>Password has to be changed</literal>
+     </term>
+     <listitem>
+      <para>
+       The user can log in but receives a warning that the password needs to
+       be changed soon. This warning is sent three days before that password
+       expires. After expiration, the user cannot log in.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><literal>Invalid workstation</literal>
+     </term>
+     <listitem>
+      <para>
+       When a user is restricted to specific workstations and the current
+       &productname; machine is not among them, a message appears that
+       this user cannot log in from this workstation.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><literal>Invalid logon hours</literal>
+     </term>
+     <listitem>
+      <para>
+       When a user is only allowed to log in during working hours and tries
+       to log in outside working hours, a message informs the user that
+       logging in is not possible at that time.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><literal>Account expired</literal>
+     </term>
+     <listitem>
+      <para>
+       An administrator can set an expiration time for a specific user
+       account. If that user tries to log in after expiration, the user gets
+       a message that the account has expired and cannot be used to log in.
+      </para>
+     </listitem>
+    </varlistentry>
+   </variablelist>
+   <para>
+    During a successful authentication, the client
+    acquires a ticket granting ticket (TGT) from the Kerberos server of
+    &ad; and stores it in the user's credential cache. It also
+    renews the TGT in the background, requiring no user interaction.
+   </para>
+   <para>
+    &productname; supports local home directories for &ad; users. If
+    configured through &yast; as described in
+    <xref linkend="sec-security-ad-config"/>, user home directories are
+    created when a Windows/&ad; user first logs in to the Linux client. These
+    home directories look and feel identical to standard Linux user home
+    directories and work independently of the &ad; Domain Controller.
+   </para>
+   <para>
+    Using a
+    local user home, it is possible to access a user's data on this machine
+    (even when the &ad; server is disconnected) if the Linux client
+    has been configured to perform offline authentication.
+   </para>
+  </sect2>
+
+  <sect2 xml:id="sec-security-ad-background-offline">
+   <title>Offline service and policy support</title>
+   <para>
+    Users in a corporate environment must have the ability to become roaming
+    users (for example, to switch networks or even work disconnected for
+    some time). To enable users to log in to a disconnected machine,
+    extensive caching was integrated into the winbind daemon. The winbind
+    daemon enforces password policies even in the offline state. It tracks
+    the number of failed login attempts and reacts according to the policies
+    configured in &ad;. Offline support is disabled by default
+    and must be explicitly enabled in the &yast; Domain Membership
+    module.
+   </para>
+   <para>
+    When the domain controller has become unavailable, the user can still
+    access network resources (other than the &ad; server itself) with valid
+    Kerberos tickets that have been acquired before losing the connection
+    (as in Windows). Password changes cannot be processed unless the domain
+    controller is online. While disconnected from the &ad; server, a user
+    cannot access any data stored on this server. When a workstation has
+    become disconnected from the network entirely and connects to the
+    corporate network again later, &productname; acquires a new Kerberos
+    ticket when the user has locked and unlocked the desktop (for
+    example, using a desktop screen saver).
+   </para>
+  </sect2>
+ </sect1>
+ <sect1 xml:id="sec-security-ad-config">
+  <title>Configuring a Linux client for &ad;</title>
+
+  <para>
+   Before your client can join an &ad; domain, adjustments must be made
+   to your network setup to ensure the flawless interaction of client and
+   server.
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term>DNS</term>
+    <listitem>
+     <para>
+      Configure your client machine to use a DNS server that can forward DNS
+      requests to the &ad; DNS server. Alternatively, configure your machine
+      to use the &ad; DNS server as the name service data source.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>NTP</term>
+    <listitem>
+     <para>
+      To succeed with Kerberos authentication, the client must have its time
+      set accurately. It is highly recommended to use a central NTP time
+      server for this purpose (this can be also the NTP server running on
+      your &ad; domain controller). If the clock skew between
+      your Linux host and the domain controller exceeds a certain limit,
+      Kerberos authentication fails and the client is logged in using the
+      weaker NTLM (NT LAN Manager) authentication. For more details about
+      using &ad; for time synchronization, see
+      <xref linkend="proc-ad-join"/>.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>Firewall</term>
+    <listitem>
+     <para>
+      To browse your network neighborhood, either disable the firewall
+      entirely or mark the interface used for browsing as part of the
+      internal zone.
+     </para>
+     <para>
+      <remark>sknorr, 2014-08-26: Should better be a procedure.</remark>
+      To change the firewall settings on your client, log in as
+      &rootuser; and start the &yast; firewall module. Select
+      <guimenu>Interfaces</guimenu>. Select your network interface from the
+      list of interfaces and click <guimenu>Change</guimenu>. Select
+      <guimenu>Internal Zone</guimenu> and apply your settings with
+      <guimenu>OK</guimenu>. Leave the firewall settings with <menuchoice>
+      <guimenu>Next</guimenu> <guimenu>Finish</guimenu> </menuchoice>. To
+      disable the firewall, check the <guimenu>Disable Firewall Automatic
+      Starting</guimenu> option, and leave the firewall module with
+      <menuchoice> <guimenu>Next</guimenu> <guimenu>Finish</guimenu>
+      </menuchoice>.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>&ad; account</term>
+    <listitem>
+     <para>
+      You cannot log in to an &ad; domain unless the &ad; administrator has
+      provided you with a valid user account for that domain. Use the &ad;
+      user name and password to log in to the &ad; domain from your Linux
+      client.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <sect2 xml:id="sec-security-ad-configure-choose">
+   <title>Choosing which &yast; module to use for connecting to &ad;</title>
+   <para>
+    &yast; contains multiple modules that allow connecting to an &ad;:
+   </para>
+
+  &security-auth-client-yast;
+
+  </sect2>
+  <sect2 xml:id="sec-security-ad-sssd">
+   <title>Joining &ad; using <guimenu>User logon management</guimenu></title>
+   <para>
+    The &yast; module <guimenu>User Logon Management</guimenu> supports
+    authentication at an &ad;. Additionally, it also supports the following
+    related authentication and identification providers:
+   </para>
+   <variablelist>
+    <varlistentry>
+     <term>Identification providers</term>
+     <listitem>
+      <itemizedlist>
+       <listitem>
+        <formalpara>
+         <title><guimenu>Delegate to third-party software library</guimenu></title>
+         <para>
+          Support for legacy NSS providers via a proxy.
+         </para>
+        </formalpara>
+       </listitem>
+       <listitem>
+        <formalpara>
+         <title><guimenu>FreeIPA</guimenu></title>
+         <para>
+          FreeIPA and Red Hat Enterprise Identity Management provider.
+         </para>
+       </formalpara>
+      </listitem>
+      <listitem>
+       <formalpara>
+        <title><guimenu>Generic directory service (LDAP)</guimenu></title>
+        <para>
+         An LDAP provider. For more information about configuring LDAP, see
+         <command>man 5 sssd-ldap</command>.
+        </para>
+       </formalpara>
+       </listitem>
+       <listitem>
+        <formalpara>
+         <title><guimenu>Local SSSD file database</guimenu></title>
+         <para>
+          An SSSD-internal provider for local users.
+         </para>
+        </formalpara>
+       </listitem>
+      </itemizedlist>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>Authentication providers</term>
+     <listitem>
+      <itemizedlist>
+       <listitem>
+        <formalpara>
+         <title><guimenu>Delegate to third-party software library</guimenu></title>
+         <para>
+          Relay authentication to another PAM target via a proxy.
+         </para>
+        </formalpara>
+       </listitem>
+       <listitem>
+        <formalpara>
+         <title><guimenu>FreeIPA</guimenu></title>
+         <para>
+          FreeIPA and Red Hat Enterprise Identity Management provider.
+         </para>
+        </formalpara>
+       </listitem>
+       <listitem>
+        <formalpara>
+         <title><guimenu>Generic Kerberos service</guimenu></title>
+         <para>
+          An LDAP provider.
+         </para>
+        </formalpara>
+       </listitem>
+       <listitem>
+        <formalpara>
+         <title><guimenu>Generic directory service (LDAP)</guimenu></title>
+         <para>
+          Kerberos authentication.
+         </para>
+        </formalpara>
+       </listitem>
+       <listitem>
+        <formalpara>
+         <title><guimenu>Local SSSD file database</guimenu></title>
+         <para>
+          An SSSD-internal provider for local users.
+         </para>
+        </formalpara>
+       </listitem>
+       <listitem>
+        <formalpara>
+         <title><guimenu>This domain does not provide authentication service</guimenu></title>
+         <para>
+          Disables authentication explicitly.
+         </para>
+        </formalpara>
+       </listitem>
+      </itemizedlist>
+     </listitem>
+    </varlistentry>
+   </variablelist>
+
+   <para>
+    To join an &ad; domain using SSSD and the
+    <guimenu>User Logon Management</guimenu> module of &yast;, proceed as
+    follows:
+   </para>
+
+   <procedure xml:id="pro-security-ad-join-sssd">
+    <title>Joining an &ad; domain using <guimenu>User logon management</guimenu></title>
+    <step>
+     <para>
+      Open &yast;.
+     </para>
+    </step>
+    <step>
+     <para>
+      To be able to use DNS auto-discovery later, set up the &ad; Domain
+      Controller (the &ad; server) as the name server for your client.
+     </para>
+     <substeps>
+      <step>
+       <para>
+        In &yast;, click <guimenu>Network Settings</guimenu>.
+       </para>
+      </step>
+      <step>
+       <para>
+        Select <guimenu>Hostname/DNS</guimenu>, then enter the IP address of
+        the &ad; Domain Controller into the text box <guimenu>Name Server
+        1</guimenu>.
+       </para>
+       <para>
+        Save the setting with <guimenu>OK</guimenu>.
+       </para>
+      </step>
+     </substeps>
+    </step>
+    <step>
+     <para>
+      From the &yast; main window, start the module <guimenu>User Logon
+      Management</guimenu>.
+     </para>
+     <para>
+      The module opens with an overview showing different network properties
+      of your computer and the authentication method currently in use.
+     </para>
+     <figure xml:id="fig-security-logonmanagement">
+      <title>Main window of <guimenu>User logon management</guimenu></title>
+      <mediaobject>
+       <imageobject role="html">
+        <imagedata fileref="ad-overview.png"/>
+       </imageobject>
+       <imageobject role="fo">
+        <imagedata fileref="ad-overview.png" width="65%"/>
+       </imageobject>
+       <textobject role="description">
+        <phrase>
+         Overview window showing the computer name, IP address, and its
+         authentication setting.
+        </phrase>
+       </textobject>
+      </mediaobject>
+     </figure>
+    </step>
+    <step>
+     <para>
+      To start editing, click <guimenu>Change Settings</guimenu>.
+     </para>
+    </step>
+    <step>
+     <para>
+      Now join the domain.
+     </para>
+     <substeps>
+      <step>
+       <para>
+        Click <guimenu>Add Domain</guimenu>.
+       </para>
+      </step>
+      <step>
+       <para>
+        In the appearing dialog, specify the correct
+        <guimenu>Domain name</guimenu>. Then specify the services to use for
+        identity data and authentication: Select <guimenu>Microsoft Active
+        Directory</guimenu> for both.
+       </para>
+       <para>
+        Ensure that <guimenu>Enable the domain</guimenu> is activated.
+       </para>
+       <para>
+        Click <guimenu>OK</guimenu>.
+       </para>
+      </step>
+      <step performance="optional">
+       <para>
+        You can keep the default settings in the
+        following dialog. However, there are reasons to make changes:
+       </para>
+       <itemizedlist>
+        <listitem>
+         <formalpara>
+          <title>If the local host name does not match the host name set on the
+           domain controller</title>
+          <para>
+           Find out if the host name of your computer matches the name
+           under which your computer is known to the &ad; Domain Controller. In a
+           terminal, run the command <command>hostname</command>, then compare
+           its output to the configuration of the &ad; Domain Controller.
+          </para>
+         </formalpara>
+         <para>
+          If the values differ, specify the host name from the &ad;
+          configuration under <guimenu>AD hostname</guimenu>. Otherwise, leave
+          the appropriate text box empty.
+         </para>
+        </listitem>
+        <listitem>
+         <formalpara>
+          <title>If you do not want to use DNS auto-discovery</title>
+          <para>
+           Specify the <guimenu>Host names of Active Directory
+           servers</guimenu> that you want to use. If there are multiple
+           Domain Controllers, separate their host names with commas.
+          </para>
+         </formalpara>
+        </listitem>
+       </itemizedlist>
+       <remark>
+        Cache Credentials for Offline Use -> might be helpful for identity
+        data but probably not possible or good for authentication. Right?
+        Treat Users and Groups As Case Sensitive - use case? Read All
+        Entities from Backend Database -- hguo mentioned this, and enabled it
+        but mentioned it was not exactly necessary. - sknorr, 2016-09-14
+       </remark>
+      </step>
+      <step>
+       <para>
+        To continue, click <guimenu>OK</guimenu>.
+       </para>
+       <para>
+        If not all software is installed already, the computer now
+        installs missing software. It then checks whether the configured
+        &ad; Domain Controller is available.
+       </para>
+      </step>
+      <step>
+       <para>
+        If everything is correct, the following dialog should now show that
+        it has discovered an <guimenu>Active Directory Server</guimenu> but
+        that you are <guimenu>Not yet enrolled</guimenu>.
+       </para>
+       <para>
+        In the dialog, specify the <guimenu>Username</guimenu> and
+        <guimenu>Password</guimenu> of the &ad; administrator account
+        (usually <literal>Administrator</literal>).
+       </para>
+       <para>
+        To make sure that the current domain is enabled for Samba, activate
+        <guimenu>Overwrite Samba configuration to work with this AD</guimenu>.
+       </para>
+       <para>
+        To enroll, click <guimenu>OK</guimenu>.
+       </para>
+       <figure xml:id="fig-security-logonmanagement-enroll">
+        <title>Enrolling into a domain</title>
+        <mediaobject>
+         <imageobject role="html">
+          <imagedata fileref="ad-enroll.png"/>
+         </imageobject>
+         <imageobject role="fo">
+          <imagedata fileref="ad-enroll.png" width="60%"/>
+         </imageobject>
+         <textobject role="description">
+          <phrase></phrase>
+         </textobject>
+        </mediaobject>
+       </figure>
+      </step>
+      <step>
+       <para>
+        You should now see a message confirming that you have enrolled
+        successfully. Finish with <guimenu>OK</guimenu>.
+       </para>
+      </step>
+     </substeps>
+    </step>
+    <step>
+     <para>
+      After enrolling, configure the client using the window
+      <guimenu>Manage Domain User Logon</guimenu>.
+     </para>
+     <figure xml:id="fig-security-logonmanagement-configure">
+      <title>Configuration window of <guimenu>User logon management</guimenu></title>
+      <mediaobject>
+       <imageobject role="html">
+        <imagedata fileref="ad-config.png"/>
+       </imageobject>
+       <imageobject role="fo">
+        <imagedata fileref="ad-config.png" width="70%"/>
+       </imageobject>
+       <textobject role="description">
+        <phrase></phrase>
+       </textobject>
+      </mediaobject>
+     </figure>
+     <substeps>
+      <step>
+       <para>
+        To allow logging in to the computer using login data provided by &ad;,
+        activate <guimenu>Allow Domain User Logon</guimenu>.
+       </para>
+      </step>
+      <step performance="optional">
+       <para>
+        Optionally, under <guimenu>Enable domain data source</guimenu>,
+        activate additional data sources such as information on which users are
+        allowed to use <command>sudo</command> or which network drives are
+        available.
+       </para>
+      </step>
+      <step xml:id="st-security-sssd-home-dir">
+       <para>
+        To allow &ad; users to have home directories, activate
+        <guimenu>Create Home Directories</guimenu>. The path for home
+        directories can be set in multiple ways&mdash;on the client, on
+        the server, or both ways:
+       </para>
+       <itemizedlist>
+        <listitem>
+         <para>
+          To configure the home directory paths on the Domain Controller, set
+          an appropriate value for the attribute
+          <literal>UnixHomeDirectory</literal> for each user. Additionally,
+          make sure that this attribute replicated to the global catalog. For
+          information on achieving that under Windows, see
+          <link xlink:href="https://support.microsoft.com/en-us/kb/248717"/>.
+         </para>
+        </listitem>
+        <listitem>
+         <para>
+          To configure home directory paths on the client in such a way that
+          precedence will be given to the path set on the domain controller,
+          use the option <literal>fallback_homedir</literal>.
+         </para>
+        </listitem>
+        <listitem>
+         <para>
+          To configure home directory paths on the client in such a way that
+          the client setting will override the server setting, use
+          <literal>override_homedir</literal>.
+         </para>
+        </listitem>
+       </itemizedlist>
+       <para>
+        As settings on the Domain Controller are outside of the scope of this
+        documentation, only the configuration of the client-side options will be
+        described in the following.
+       </para>
+       <para>
+        From the side bar, select
+        <menuchoice><guimenu>Service Options</guimenu>
+        <guimenu>Name switch</guimenu></menuchoice>, then click
+        <guimenu>Extended Options</guimenu>. From that window, select either
+        <literal>fallback_homedir</literal> or
+        <literal>override_homedir</literal>, then click <guimenu>Add</guimenu>.
+       </para>
+       <para>
+        Specify a value. To have home directories follow the format
+        <filename>/home/<replaceable>USER_NAME</replaceable></filename>, use
+        <literal>/home/%u</literal>.
+        For more information about possible variables, see the man page
+        <literal>sssd.conf</literal> (<command>man 5 sssd.conf</command>),
+        section
+        <citetitle>override_homedir</citetitle>.
+       </para>
+       <para>
+        Click <guimenu>OK</guimenu>.
+       </para>
+      </step>
+     </substeps>
+    </step>
+    <step>
+     <para>
+      Save the changes by clicking <guimenu>OK</guimenu>. Then make sure that
+      the values displayed now are correct. To leave the dialog, click
+      <guimenu>Cancel</guimenu>.
+     </para>
+    </step>
+   </procedure>
+  </sect2>
+
+  <sect2 xml:id="sec-security-ad-winbind">
+   <title>Joining &ad; using <guimenu>Windows domain membership</guimenu></title>
+   <para>
+    To join an &ad; domain using <command>winbind</command> and the
+    <guimenu>Windows Domain Membership</guimenu> module of &yast;, proceed as
+    follows:
+   </para>
+
+  <procedure xml:id="proc-ad-join">
+   <title>Joining an &ad; domain using <guimenu>Windows domain membership</guimenu></title>
+   <step>
+    <para>
+     Log in as &rootuser; and start &yast;.
+    </para>
+   </step>
+   <step>
+    <para>
+     Start <menuchoice> <guimenu>Network Services</guimenu> <guimenu>Windows
+     Domain Membership</guimenu> </menuchoice>.
+    </para>
+   </step>
+   <step>
+    <para>
+     Enter the domain to join at <guimenu>Domain or Workgroup</guimenu> in
+     the <guimenu>Windows Domain Membership</guimenu> screen (see
+     <xref linkend="fig-ad-smbclient"/>). If the DNS settings on your host
+     are properly integrated with the Windows DNS server, enter the &ad;
+     domain name in its DNS format
+     (<literal>mydomain.mycompany.com</literal>). If you enter the short
+     name of your domain (also known as the pre&ndash;Windows 2000 domain
+     name), &yast; must rely on NetBIOS name resolution instead of DNS to
+     find the correct domain controller.
+<!-- 2010-02-05, toba: cannot find the Browse button in SLES 11 SP1,
+     commenting out...
+
+     To select from a list of available
+     domains instead, use <guimenu>Browse</guimenu> to list the NetBIOS
+     domains then select the desired domain.
+
+     -->
+    </para>
+    <figure xml:id="fig-ad-smbclient">
+     <title>Determining Windows domain membership</title>
+     <mediaobject>
+      <imageobject role="fo">
+       <imagedata fileref="ad_sambaclient.png" width="75%"/>
+      </imageobject>
+      <imageobject role="html">
+       <imagedata fileref="ad_sambaclient.png" width="75%"/>
+      </imageobject>
+     </mediaobject>
+    </figure>
+   </step>
+   <step>
+    <para>
+     To use the SMB source for Linux authentication, activate
+     <guimenu>Also Use SMB Information for Linux Authentication</guimenu>.
+    </para>
+   </step>
+   <step>
+    <para>
+     To automatically create a local home directory for &ad; users on the
+     Linux machine, activate <guimenu>Create Home Directory on
+     Login</guimenu>.
+    </para>
+   </step>
+   <step>
+    <para>
+     Check <guimenu>Offline Authentication</guimenu> to allow your domain
+     users to log in even if the &ad; server is temporarily unavailable, or if
+     you do not have a network connection.
+    </para>
+   </step>
+   <step>
+    <para>
+     To change the UID and GID ranges for the Samba users and groups, select
+     <guimenu>Expert Settings</guimenu>. Let DHCP retrieve
+     the WINS server only if you need it. This is the case when certain
+     machines are resolved only by the WINS system.
+    </para>
+   </step>
+   <step>
+    <para>
+     Configure NTP time synchronization for your &ad; environment by selecting
+     <guimenu>NTP Configuration</guimenu> and entering an appropriate server
+     name or IP address. This step is obsolete if you have already entered
+     the appropriate settings in the stand-alone &yast; NTP configuration
+     module.
+    </para>
+   </step>
+   <step>
+    <para>
+     Click <guimenu>OK</guimenu> and confirm the domain join when prompted
+     for it.
+    </para>
+   </step>
+   <step>
+    <para>
+     Provide the password for the Windows administrator on the &ad; server and
+     click <guimenu>OK</guimenu> (see <xref linkend="fig-ad-join1"/>).
+    </para>
+    <figure xml:id="fig-ad-join1">
+     <title>Providing administrator credentials</title>
+     <mediaobject>
+      <imageobject role="fo">
+       <imagedata fileref="ad_join1.png" width="30%"/>
+      </imageobject>
+      <imageobject role="html">
+       <imagedata fileref="ad_join1.png" width="30%"/>
+      </imageobject>
+     </mediaobject>
+    </figure>
+   </step>
+  </procedure>
+
+  <para>
+   After you have joined the &ad; domain, you can log in to it from your
+   workstation using the display manager of your desktop or the console.
+  </para>
+
+  <important>
+   <title>Domain name</title>
+   <para>
+    Joining a domain may not succeed if the domain name ends with
+    <literal>.local</literal>. Names ending in <literal>.local</literal>
+    cause conflicts with Multicast DNS (MDNS) where
+    <literal>.local</literal> is reserved for link-local host names.
+   </para>
+  </important>
+
+  <note>
+   <title>Only administrators can enroll a computer</title>
+   <para>
+    Only a domain administrator account, such as
+    <literal>Administrator</literal>, can join &productname; into Active
+    Directory.
+   </para>
+  </note>
+  </sect2>
+  <sect2 xml:id="sec-security-ad-connection">
+   <title>Checking &ad; connection status</title>
+   <para>
+    To check whether you are successfully enrolled in an &ad; domain,
+    use the following commands:
+   </para>
+   <itemizedlist>
+    <listitem>
+     <para>
+      <command>klist</command> shows whether the current user has a valid
+      Kerberos ticket.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      <command>getent passwd</command> shows published LDAP data for all
+      users.
+     </para>
+    </listitem>
+   </itemizedlist>
+  </sect2>
+  </sect1>
+ <sect1 xml:id="sec-security-ad-login">
+  <title>Logging in to an &ad; domain</title>
+
+  <para>
+   Provided your machine has been configured to authenticate against Active
+   Directory and you have a valid Windows user identity, you can log in to
+   your machine using the &ad; credentials. Login is supported for &gnome;, the
+   console, SSH and any other PAM-aware application.
+  </para>
+
+  <important>
+   <title>Offline authentication</title>
+   <para>
+    &productname; supports offline authentication, allowing you to log in
+    to your client machine even when it is offline. See
+    <xref linkend="sec-security-ad-background-offline"/> for details.
+   </para>
+  </important>
+
+  <sect2 xml:id="sec-security-ad-login-gui">
+   <title>GDM</title>
+   <para>
+    To authenticate a &gnome; client machine against an &ad; server, proceed as
+    follows:
+   </para>
+   <procedure>
+    <step>
+     <para>
+      Click <guimenu>Not listed</guimenu>.
+     </para>
+    </step>
+    <step>
+     <para>
+      In the text box <guimenu>Username</guimenu>,
+      enter the domain name and the Windows user name in this form:
+      <literal><replaceable>DOMAIN_NAME</replaceable>\<replaceable>USER_NAME</replaceable></literal>.
+     </para>
+    </step>
+    <step>
+     <para>
+      Enter your Windows password.
+     </para>
+    </step>
+   </procedure>
+   <para>
+    If configured to do so, &productname; creates a user home directory
+    on the local machine on the first login of each user authenticated via &ad;.
+    This allows you to benefit from the &ad; support of &productname; while
+    still having a fully functional Linux machine at your disposal.
+   </para>
+  </sect2>
+
+  <sect2 xml:id="sec-security-ad-login-console">
+   <title>Console login</title>
+   <para>
+    Besides logging in to the &ad; client machine using a graphical front-end,
+    you can log in using the text-based console or even remotely using SSH.
+   </para>
+   <para>
+    To log in to your &ad; client from a console, enter
+    <literal><replaceable>DOMAIN_NAME</replaceable>\<replaceable>USER_NAME</replaceable></literal>
+    at the <literal>login:</literal> prompt and provide the password.
+   </para>
+   <para>
+    To remotely log in to your &ad; client machine using SSH, proceed as
+    follows:
+   </para>
+   <procedure>
+    <step>
+     <para>
+      At the login prompt, enter:
+     </para>
+<screen>&prompt.user;ssh <replaceable>DOMAIN_NAME</replaceable>\\<replaceable>USER_NAME</replaceable>@<replaceable>HOST_NAME</replaceable></screen>
+     <para>
+      The <literal>\</literal> domain and login delimiter is escaped with
+      another <literal>\</literal> sign.
+     </para>
+    </step>
+    <step>
+     <para>
+      Provide the user's password.
+     </para>
+    </step>
+   </procedure>
+  </sect2>
+ </sect1>
+ <sect1 xml:id="sec-security-ad-passwd">
+  <title>Changing passwords</title>
+
+  <para>
+   &productname; helps the user choose a suitable new
+   password that meets the corporate security policy. The underlying PAM
+   module retrieves the current password policy settings from the domain
+   controller and informs the user by a message on login about the specific
+   password quality requirements a user account typically has.
+   Like its Windows counterpart, &productname; presents a message
+   describing:
+  </para>
+
+  <itemizedlist mark="bullet" spacing="normal">
+   <listitem>
+    <para>
+     Password history settings
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Minimum password length requirements
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Minimum password age
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Password complexity
+    </para>
+   </listitem>
+  </itemizedlist>
+
+  <para>
+   The password change process cannot succeed unless all requirements have
+   been successfully met. Feedback about the password status is given both
+   through the display managers and the console.
+  </para>
+
+  <para>
+   GDM provides feedback about password expiration and the prompt for new
+   passwords in an interactive mode. To change passwords in the display
+   managers, provide the password information when prompted.
+  </para>
+
+  <para>
+   To change your Windows password, you can use the standard Linux utility,
+   <command>passwd</command>, instead of having to manipulate this data on
+   the server. To change your Windows password, proceed as follows:
+  </para>
+
+  <procedure>
+   <step>
+    <para>
+     Log in at the console.
+    </para>
+   </step>
+   <step>
+    <para>
+     Enter <literal>passwd</literal>.
+    </para>
+   </step>
+   <step>
+    <para>
+     Enter your current password when prompted.
+    </para>
+   </step>
+   <step>
+    <para>
+     Enter the new password.
+    </para>
+   </step>
+   <step>
+    <para>
+     Reenter the new password for confirmation. If your new password does
+     not comply with the policies on the Windows server, this feedback is
+     given to you and you are prompted for another password.
+    </para>
+   </step>
+  </procedure>
+
+  <para>
+   To change your Windows password from the &gnome; desktop, proceed as
+   follows:
+  </para>
+
+  <procedure>
+   <step>
+    <para>
+     Click the <guimenu>Computer</guimenu> icon on the left edge of the
+     panel.
+    </para>
+   </step>
+   <step>
+    <para>
+     Select <guimenu>Control Center</guimenu>.
+    </para>
+   </step>
+   <step>
+    <para>
+     From the <guimenu>Personal</guimenu> section, select
+     <menuchoice><guimenu>About Me</guimenu> <guimenu>Change
+     Password</guimenu></menuchoice>.
+    </para>
+   </step>
+   <step>
+    <para>
+     Enter your old password.
+    </para>
+   </step>
+   <step>
+    <para>
+     Enter and confirm the new password.
+    </para>
+   </step>
+   <step>
+    <para>
+     Leave the dialog with <guimenu>Close</guimenu> to apply your settings.
+    </para>
+   </step>
+  </procedure>
+ </sect1>
+
+ <sect1 xml:id="sec-active-directory-certificate-auto-enrollment">
+  <title>&ad; certificate auto-enrollment</title>
+  <para>
+   Certificate auto-enrollment enables network devices to automatically
+   enroll certificates from Active Directory Certificate Services, including
+   &productname; devices, with no user intervention. This is managed by &ad;'s
+   Group Policy, using Samba's <command>samba-gpupdate</command> command.
+  </para>
+  <sect2 xml:id="sec-active-directory-auto-enrollment-server-configuration">
+   <title>Configuring certificate auto-enrollment on the server</title>
+   <para>
+    The Windows server roles <literal>Certification Authority</literal>,
+    <literal>Certificate Enrollment Policy Web Service</literal>,
+    <literal>Certificate Enrollment Web Service</literal> and
+    <literal>Network Device Enrollment Service</literal> all must be installed
+    and configured on the &ad; server.
+   </para>
+   <para>
+    Configure Group Policy auto-enrollment as described in this Microsoft
+    documentation: <link xlink:href="https://docs.microsoft.com/en-us/windows-server/networking/core-network-guide/cncg/server-certs/configure-server-certificate-autoenrollment#configure-server-certificate-auto-enrollment"/>.
+   </para>
+  </sect2>
+  <sect2 xml:id="sec-active-directory-auto-enrollment-client-configuration">
+   <title>Enable certificate auto-enrollment on the client</title>
+   <para>
+    Follow the steps in the following procedure to enable certificate on
+    your clients.
+   </para>
+   <procedure xml:id="pro-enable-certification-auto-enrollment-client">
+    <step>
+    <para>
+     Install the <package>samba-gpupdate</package> package. This
+     automatically installs the <package>certmonger</package>,
+     <package>cepces</package> and <package>sscep</package> dependencies.
+     Samba uses <command>sscep</command> to download the Certificate
+     Authority root chain, then uses the
+     <systemitem class="daemon">certmonger</systemitem>
+     paired with <systemitem>cepces</systemitem> to monitor the host
+     certificate templates.
+     </para>
+    </step>
+    <step>
+     <para>
+      Join to an Active Directory domain (one where the CA has been
+      previously configured as explained in <xref linkend="sec-active-directory-auto-enrollment-server-configuration"/>).
+     </para>
+    </step>
+    <step>
+     <para>
+      On Winbind-joined machines, set the <filename>smb.conf</filename>
+      global parameter by adding the line
+      <literal>apply group policies = yes</literal>.
+     </para>
+    </step>
+    <step>
+    <para>
+     For SSSD-joined machines, install <package>oddjob-gpupdate</package>
+     from <link xlink:href="https://github.com/openSUSE/oddjob-gpupdate"/>.
+    </para>
+   </step>
+   <step>
+    <para>
+     Then verify that certificate auto-enrollment is correctly configured by
+     running the following command on the client:
+    </para>
+    <screen>&prompt.user;<command>/usr/sbin/samba-gpupdate --rsop</command>
+    </screen>
+    <para>
+    If you see output like the following example, it is correctly
+    configured:
+   </para>
+   <screen>Resultant Set of Policy
+Computer Policy
+GPO: Default Domain Policy
+==========================================================
+CSE: gp_cert_auto_enroll_ext
+-----------------------------------------------------------
+Policy Type: Auto Enrollment Policy
+-----------------------------------------------------------
+[ &lt;<replaceable>CA NAME</replaceable>> ] =
+[ CA Certificate ] =
+----BEGIN CERTIFICATE----
+&lt;<replaceable>CERTIFICATE</replaceable>>
+----END CERTIFICATE----
+[ Auto Enrollment Server ] = &lt;<replaceable>DNS NAME</replaceable>></screen>
+     </step>
+     <step>
+      <para>
+       Use the following command to display installed certificates:
+      </para>
+      <screen>&prompt.user;<command>getcert list</command>
+ Number of certificates and requests being tracked: 1.
+ Request ID 'Machine':
+ status: MONITORING
+ stuck: no
+ key pair storage: type=FILE,location='/var/lib/samba/private/certs/Machine.key'
+ certificate: type=FILE,location='/var/lib/samba/certs/Machine.crt'
+ CA: &lt;<replaceable>CA NAME</replaceable>>
+ issuer: CN=&lt;<replaceable>CA NAME</replaceable>>
+ subject: CN=&lt;<replaceable>HOSTNAME</replaceable>>
+ expires: 2017-08-15 17:37:02 UTC
+ dns: &lt;<replaceable>hostname</replaceable>>
+ key usage: digitalSignature,keyEncipherment
+ eku: id-kp-clientAuth,id-kp-serverAuth
+ certificate template/profile: Machine</screen>
+    </step>
+   </procedure>
+   <para>
+    Certificates are installed in <filename>/var/lib/samba/certs</filename>
+    and private keys are installed in
+    <filename>/var/lib/samba/private</filename>/certs.
+   </para>
+   <para>
+    For more information, see <command>man samba-gpupdate</command>.
+   </para>
+  </sect2>
+ </sect1>
+</chapter>

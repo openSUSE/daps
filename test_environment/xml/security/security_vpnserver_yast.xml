@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sect1
+[
+  <!ENTITY % entities SYSTEM "../common/generic-entities.ent">
+    %entities;
+]>
+<!--
+ Contact:
+ - Howard Guo <hguo@suse.de>
+
+-->
+<sect1 xmlns="http://docbook.org/ns/docbook"
+  xmlns:xi="http://www.w3.org/2001/XInclude"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  version="5.0" xml:id="sec-security-yastvpn">
+ <info>
+  <title>Setting up a VPN server or client using &yast;</title>
+  <dm:docmanager xmlns:dm="urn:x-suse:ns:docmanager">
+   <dm:translation>yes</dm:translation>
+  </dm:docmanager>
+ </info>
+ <para>
+  You can also use &yast; to set up a VPN server. However, the &yast; module
+  does not support OpenVPN. Instead, it provides support for the IPsec protocol
+  (as implemented in the software
+  <phrase role="productname">StrongSwan</phrase>). Like OpenVPN, IPsec
+  is a widely supported VPN scheme.
+ </para>
+
+ <!-- <sect2 xml:id="sec-security-yastvpn-server"> -->
+ <!--  <title>Setting up the server</title> -->
+
+  <procedure xml:id="pro-security-yastvpn-server">
+   <title>Setting up an IPsec server</title>
+   <step>
+    <para>
+     To start the &yast; VPN module, select
+     <menuchoice><guimenu>Applications</guimenu>
+     <guimenu>VPN Gateways and Clients</guimenu></menuchoice>.
+    </para>
+   </step>
+   <step>
+    <para>
+     Under <guimenu>Global Configuration</guimenu>, activate
+     <guimenu>Enable VPN Daemon</guimenu>.
+    </para>
+   </step>
+   <step>
+    <para>
+     To create a new VPN, click <guimenu>New VPN</guimenu>, then enter a name
+     for the connection.
+    </para>
+   </step>
+   <step>
+    <para>
+     Under <guimenu>Type</guimenu>, select <guimenu>Gateway (Server)</guimenu>.
+    </para>
+   </step>
+   <step>
+    <para>
+     Then choose the scenario:
+    </para>
+    <itemizedlist>
+     <listitem>
+      <para>
+       The scenarios <guimenu>Secure communication with a pre-shared
+       key</guimenu> and <guimenu>Secure communication with a
+       certificate</guimenu> are best suited to Linux client setups.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       The scenario <guimenu>Provide access to Android, iOS, Mac OS X
+       clients</guimenu> sets up a configuration that is natively supported by
+       modern versions of Android, iOS, and macOS. It is based on a pre-shared
+       key setup with an additional user name and password authentication.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       The scenario <guimenu>Provide access to Windows 7, Windows 8
+       clients</guimenu> is a configuration that is natively supported by
+       Windows and BlackBerry devices. It is based on a certificate setup
+       with an additional user name and password authentication.
+      </para>
+     </listitem>
+    </itemizedlist>
+    <para>
+     For this example, choose <guimenu>Secure communication with a pre-shared
+     key</guimenu>.
+    </para>
+   </step>
+   <step>
+    <para>
+     To specify the key, click <guimenu>Edit Credentials</guimenu>. Activate
+     <guimenu>Show key</guimenu>, then type the secret key. Confirm with
+     <guimenu>OK</guimenu>.
+    </para>
+   </step>
+   <step>
+    <para>
+     Choose whether and how to limit access within your VPN under
+     <guimenu>Provide VPN clients access to</guimenu>. To enable only certain
+     IP ranges, specify these in CIDR format, separated by commas in
+     <guimenu>Limited CIDRs</guimenu>. For more information about the CIDR
+     format, see
+     <link xlink:href="https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing"/>.
+    </para>
+   </step>
+   <step>
+    <para>
+     Under <guimenu>Clients' address pool</guimenu>, specify the format of IP
+     addresses your VPN should provide to its clients.
+    </para>
+   </step>
+   <step>
+    <para>
+     To finish, click <guimenu>OK</guimenu>. The &yast; VPN module will now
+     automatically add and enable firewall rules to allow clients to connect to
+     the new VPN.
+    </para>
+    <para>
+     To view the connection status,
+     in the following confirmation window, click <guimenu>Yes</guimenu>.
+     You will then see the output of
+     <command>systemctl status</command> for your VPN, which allows you to check
+     if the VPN is running and configured correctly.
+    </para>
+   </step>
+  </procedure>
+ <!-- </sect2> -->
+</sect1>

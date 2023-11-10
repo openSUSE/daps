@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="urn:x-suse:xslt:profiling:docbook50-profile.xsl"
+ type="text/xml"
+ title="Profiling step"?>
+<!DOCTYPE book
+[
+  <!ENTITY % entities SYSTEM "../common/generic-entities.ent">
+    %entities;
+]>
+
+
+<!-- ##################################################################### -->
+<!-- SLE System Analysis and Tuning Guide                                  -->
+<!-- ##################################################################### -->
+<book version="5.0" xml:lang="en" xml:id="book-tuning"
+ xmlns="http://docbook.org/ns/docbook"
+ xmlns:xi="http://www.w3.org/2001/XInclude"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+ <info>
+  <title>&tuning;</title>
+  <productname>&productname;</productname>
+  <productnumber>&productnumber;</productnumber>
+  <date>
+   <?dbtimestamp format="B d, Y"?>
+  </date>
+  <xi:include href="../common/common_copyright_gfdl.xml"/>
+  <abstract>
+   <para> &abstract_tuning; </para>
+  </abstract>
+  <dm:docmanager xmlns:dm="urn:x-suse:ns:docmanager">
+   <dm:bugtracker>
+    <dm:assignee>fs@suse.com</dm:assignee>
+   </dm:bugtracker>
+   <dm:translation>yes</dm:translation>
+  </dm:docmanager>
+ </info>
+ <xi:include href="tuning_intro.xml"/>
+
+<!-- ===================================================================== -->
+<!-- Part: Basics                                                          -->
+<!-- ===================================================================== -->
+ <part xml:id="part-tuning-basics">
+  <title>Basics</title>
+  <xi:include href="tuning_how.xml"/>
+ </part>
+
+<!-- ===================================================================== -->
+<!-- Part: System Monitoring                                               -->
+<!-- ===================================================================== -->
+ <part xml:id="part-tuning-monitoring">
+  <title>System monitoring</title>
+  <xi:include href="utilities.xml"/>
+  <xi:include href="tuning_logfiles.xml"/>
+ </part>
+
+<!-- ===================================================================== -->
+<!-- Part: Kernel Monitoring                                               -->
+<!-- ===================================================================== -->
+ <part xml:id="part-tuning-kerneltrace">
+  <title>Kernel monitoring</title>
+  <xi:include href="tuning_systemtap.xml"/>
+  <xi:include href="tuning_kprobes.xml"/>
+  <xi:include href="tuning_perf.xml"/>
+  <xi:include href="tuning_oprofile.xml"/>
+  <xi:include href="tuning_dynamic_debug.xml"/>
+ </part>
+
+<!-- ===================================================================== -->
+<!-- Part: Resource Management and Optimization                            -->
+<!-- ===================================================================== -->
+ <part xml:id="part-tuning-resources">
+  <title>Resource management</title>
+  <xi:include href="tuning_systemresources.xml"/>
+  <xi:include href="tuning_cgroups.xml"/>
+  <xi:include href="tuning_numactl.xml"/>
+  <xi:include href="tuning_power.xml"/>
+ </part>
+
+<!-- ===================================================================== -->
+<!-- Part: Kernel Optimization                                             -->
+<!-- ===================================================================== -->
+ <part xml:id="part-tuning-kernel">
+  <title>Kernel tuning</title>
+  <xi:include href="tuning_storagescheduler.xml"/>
+  <xi:include href="tuning_taskscheduler.xml"/>
+  <xi:include href="tuning_memory.xml"/>
+  <xi:include href="tuning_network.xml"/>
+  <xi:include os="sles" href="tuning_sapconf.xml"/>
+ </part>
+
+<!-- ===================================================================== -->
+<!-- Part: Handling System Dumps                                           -->
+<!-- ===================================================================== -->
+ <part xml:id="part-tuning-dumps">
+  <title>Handling system dumps</title>
+  <xi:include href="tuning_tracing.xml"/>
+  <xi:include href="tuning_kexec.xml"/>
+  <xi:include href="tuning_systemd_coredump.xml"/>
+ </part>
+
+<!-- ===================================================================== -->
+<!-- Part: Synchronized Clocks with PTP                                    -->
+<!-- ===================================================================== -->
+ <part xml:id="part-tuning-ptp">
+  <title>Synchronized clocks with &ptp;</title>
+  <xi:include href="tuning_ptp.xml"/>
+ </part>
+
+<!-- ===================================================================== -->
+<!-- Appendix                                                              -->
+<!-- ===================================================================== -->
+ <xi:include href="../common/common_legal.xml"/>
+</book>

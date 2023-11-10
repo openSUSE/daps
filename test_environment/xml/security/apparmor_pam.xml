@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter
+[
+  <!ENTITY % entities SYSTEM "../common/generic-entities.ent">
+    %entities;
+]>
+
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0" xml:id="cha-apparmor-pam">
+ <title>Confining users with <systemitem>pam_apparmor</systemitem></title>
+ <info>
+      <dm:docmanager xmlns:dm="urn:x-suse:ns:docmanager">
+        <dm:bugtracker>
+        </dm:bugtracker>
+	<dm:translation>yes</dm:translation>
+      </dm:docmanager>
+    </info>
+    <para>
+  An &aa; profile applies to an executable program; if a portion of the
+  program needs different access permissions than other portions need, the
+  program can change hats via change_hat to a different role, also known as
+  a subprofile. The <systemitem>pam_apparmor</systemitem> PAM module allows
+  applications to confine authenticated users into subprofiles based on
+  group names, user names, or a default profile. To accomplish this,
+  <systemitem>pam_apparmor</systemitem> needs to be registered as a PAM
+  session module.
+ </para>
+ <para>
+  The package <systemitem>pam_apparmor</systemitem> is not installed by
+  default, you can install it using &yast; or <command>zypper</command>.
+  Details about how to set up and configure
+  <systemitem>pam_apparmor</systemitem> can be found in
+  <filename>/usr/share/doc/packages/pam_apparmor/README</filename> after the
+  package has been installed. For details on PAM, refer to
+  <xref linkend="cha-pam"/>.
+ </para>
+</chapter>

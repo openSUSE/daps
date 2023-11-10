@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="urn:x-suse:xslt:profiling:docbook50-profile.xsl"
+                 type="text/xml"
+                 title="Profiling step"?>
+<!DOCTYPE book
+[
+  <!ENTITY % entities SYSTEM "../common/generic-entities.ent">
+    %entities;
+]>
+
+<!-- ##################################################################### -->
+<!-- Virtualization                                                        -->
+<!-- ##################################################################### -->
+<book version="5.0" xml:lang="en" xml:id="book-virtualization"
+ xmlns="http://docbook.org/ns/docbook"
+ xmlns:xi="http://www.w3.org/2001/XInclude"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+ <info>
+  <title>&virtual;</title>
+  <productname>&productname;</productname>
+  <productnumber>&productnumber;</productnumber>
+  <date>
+   <?dbtimestamp format="B d, Y"?>
+  </date>
+  <xi:include href="../common/common_copyright_gfdl.xml"/>
+  <abstract>
+   <para>&abstract_virtualization;</para>
+  </abstract>
+  <dm:docmanager xmlns:dm="urn:x-suse:ns:docmanager">
+   <dm:bugtracker>
+    <dm:assignee>fs@suse.com</dm:assignee>
+   </dm:bugtracker>
+   <dm:translation>yes</dm:translation>
+  </dm:docmanager>
+ </info>
+    <!-- ===================================================================== -->
+<!-- Introduction                                                          -->
+<!-- ===================================================================== -->
+ <xi:include href="kvm_intro.xml"/>
+ <part xml:id="part-virt-intro">
+  <title>Introduction</title>
+  <xi:include href="vt_introduction.xml"/>
+  <xi:include href="vt_scenarios.xml"/>
+  <xi:include href="xen_virtualization_basics.xml"/>
+  <xi:include href="kvm_virtualization_basics.xml"/>
+  <xi:include href="vt_tools.xml"/>
+  <xi:include href="vt_installation.xml"/>
+<!-- aginies: Supported Virtualization limits are only in RN now (since SLE 12) -->
+  <xi:include os="sles;sled" href="virt_support.xml"/>
+ </part>
+
+<!-- ===================================================================== -->
+<!-- libvirt part                                                          -->
+<!-- ===================================================================== -->
+ <part xml:id="part-virt-libvirt">
+  <title>Managing virtual machines with &libvirt;</title>
+  <xi:include href="libvirt_overview.xml"/>
+  <xi:include href="libvirt_host.xml"/>
+  <xi:include href="libvirt_guest_installation.xml"/>
+  <xi:include href="libvirt_managing.xml"/>
+  <xi:include href="libvirt_connect.xml"/>
+  <!-- 12 Managing Storage -->
+  <xi:include href="libvirt_storage.xml"/>
+  <!-- 13 Managing Networks -->
+  <!-- <xi:include href="libvirt_networking.xml"/> -->
+  <!-- 14 Configuring Virtual Machines -->
+  <xi:include href="libvirt_configuration_gui.xml"/>
+  <xi:include href="libvirt_configuration_virsh.xml"/>
+  <xi:include href="xen2kvm.xml"/>
+ </part>
+
+<!-- ===================================================================== -->
+<!-- common not specific to a hypervisor                                   -->
+<!-- ===================================================================== -->
+ <part xml:id="part-virt-common">
+  <title>Hypervisor-independent features</title>
+  <xi:include href="vt_cachemodes.xml"/>
+  <xi:include href="vt_clocksettings.xml"/>
+  <xi:include href="vt_guestfs.xml"/>
+  <xi:include href="vt_qemu_ga.xml"/>
+  <xi:include href="vt_qemu_tpm.xml"/>
+  <xi:include href="virt-crash-dump.xml"/>
+ </part>
+
+<!-- ===================================================================== -->
+<!-- xen part                                                              -->
+<!-- ===================================================================== -->
+ <part xml:id="part-virt-xen">
+  <title>Managing virtual machines with &xen;</title>
+<!--  <part id="part-virt-vmhost">
+  <title>Setting up a virtual machine host</title>
+-->
+  <xi:include href="xen_virtualization_vhost.xml"/>
+  <xi:include href="xen_host_network.xml"/>
+<!-- </part> -->
+  <xi:include href="xen_virtualization_manage.xml"/>
+  <xi:include href="xen_block_devices.xml"/>
+  <xi:include href="xen_config_options.xml"/>
+  <xi:include href="xen_administrating.xml"/>
+  <xi:include href="xen_xenstore.xml"/>
+  <xi:include href="xen_ha_setup.xml"/>
+  <xi:include href="pv2fv.xml"/>
+ </part>
+
+<!-- ===================================================================== -->
+<!-- qemu part                                                             -->
+<!-- ===================================================================== -->
+ <part xml:id="part-virt-qemu">
+  <title>Managing virtual machines with &qemu;</title>
+  <xi:include href="qemu_overview.xml"/>
+  <xi:include href="qemu_host_installation.xml"/>
+  <xi:include href="qemu_guest_installation.xml"/>
+  <xi:include href="qemu_running_vms_qemukvm.xml"/>
+  <xi:include href="qemu_monitor.xml"/>
+ </part>
+
+<!-- ===================================================================== -->
+<!-- Troubleshooting part                                                             -->
+<!-- ===================================================================== -->
+ <part xml:id="part-virt-troubleshoot">
+  <title>Troubleshooting</title>
+  <xi:include href="virt_help.xml"/>
+  <xi:include href="virt_logs.xml"/>
+ </part>
+
+<!-- ===================================================================== -->
+<!-- LXC part                                                              -->
+<!-- ===================================================================== -->
+<!-- deprecated SLE15SP3
+ <part xml:id="part-virt-lxc">
+  <title>Managing virtual machines with &lxc;</title>
+  <xi:include href="lxc.xml"/>
+  <xi:include href="lxc2libvirt.xml"/>
+ </part>
+ -->
+
+<!-- ===================================================================== -->
+<!-- Appendices                                                            -->
+<!-- ===================================================================== -->
+ <xi:include href="vt_glossary.xml"/>
+ <xi:include os="sles;sled" href="vmdp_drivers.xml"/>
+ <xi:include href="gpu_passthru.xml"/>
+ <xi:include os="sles;sled" href="xen_xmtoxl.xml"/>
+ <xi:include href="../common/common_legal.xml"/>
+</book>

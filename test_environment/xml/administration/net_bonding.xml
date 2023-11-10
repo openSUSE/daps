@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sect1
+[
+  <!ENTITY % entities SYSTEM "entities/generic-entities.ent">
+    %entities;
+]>
+
+<sect1 xmlns="http://docbook.org/ns/docbook" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0" xml:id="sec-network-iface-bonding">
+ <title>Setting up bonding devices</title>
+
+ <info>
+  <dm:docmanager xmlns:dm="urn:x-suse:ns:docmanager">
+   <dm:bugtracker></dm:bugtracker>
+   <dm:translation>yes</dm:translation>
+  </dm:docmanager>
+ </info>
+
+ <para>
+  For some systems, there is a desire to implement network connections that
+  comply to more than the standard data security or availability requirements
+  of a typical Ethernet device. In these cases, several Ethernet devices can be
+  aggregated to a single bonding device.
+ </para>
+
+ <para>
+  The configuration of the bonding device is done by means of bonding module
+  options. The behavior is mainly affected by the mode of the bonding device.
+  By default, this is <systemitem>active-backup</systemitem> which means
+  that a different bond port will become active if the active port fails.
+  The following bonding modes are available:
+ </para>
+
+ <variablelist>
+  <varlistentry>
+   <term><guimenu>0</guimenu> (balance-rr)</term>
+   <listitem>
+    <para>
+     Packets are transmitted in round-robin fashion from the first to the last
+     available interface. Provides fault tolerance and load balancing.
+    </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term><guimenu>1</guimenu> (active-backup)</term>
+   <listitem>
+    <para>
+     Only one network interface is active. If it fails, a different interface
+     becomes active. This setting is the default for &productname;. Provides
+     fault tolerance.
+    </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term><guimenu>2</guimenu> (balance-xor)</term>
+   <listitem>
+    <para>
+     Traffic is split between all available interfaces based on the number of
+     devices included in the bonding. It requires support from the switch.
+     Provides fault tolerance and load balancing.
+    </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term><guimenu>3</guimenu> (broadcast)</term>
+   <listitem>
+    <para>
+     All traffic is broadcast on all interfaces. Requires support from the
+     switch. Provides fault tolerance.
+    </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term><guimenu>4</guimenu> (802.3ad)</term>
+   <listitem>
+    <para>
+     Aggregates interfaces into groups that share the same speed and duplex
+     settings. Requires <command>ethtool</command> support in the interface
+     drivers, and a switch that supports and is configured for IEEE 802.3ad
+     Dynamic link aggregation. Provides fault tolerance and load balancing.
+    </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term><guimenu>5</guimenu> (balance-tlb)</term>
+   <listitem>
+    <para>
+     Adaptive transmit load balancing. Requires <command>ethtool</command>
+     support in the interface drivers but not switch support. Provides fault
+     tolerance and load balancing.
+    </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term><guimenu>6</guimenu> (balance-alb)</term>
+   <listitem>
+    <para>
+     Adaptive load balancing. Requires <command>ethtool</command> support in
+     the interface drivers but not switch support. Provides fault tolerance and
+     load balancing.
+    </para>
+   </listitem>
+  </varlistentry>
+ </variablelist>
+
+ <para>
+  For a more detailed description of the modes, see
+  <link
+    xlink:href="https://www.kernel.org/doc/Documentation/networking/bonding.txt"/>.
+ </para>
+
+ <tip>
+  <title>Bonding and &xen;</title>
+  <para>
+   Using bonding devices is only of interest for machines where you have
+   multiple real network cards available. In most configurations, this means
+   that you should use the bonding configuration only in &dom0;. Only if you
+   have multiple network cards assigned to a &vmguest; system it may also be
+   useful to set up the bond in a &vmguest;.
+  </para>
+ </tip>
+
+ <note arch="power">
+  <title>
+   IBM &power;: Bonding modes 5 and 6 (balance-tlb / balance-alb) unsupported
+   by ibmveth
+  </title>
+  <para>
+   There is a conflict with the tlb/alb bonding configuration and Power
+   firmware.  In short, the bonding driver in tlb/alb mode sends Ethernet
+   Loopback packets with both the source and destination MAC addresses listed
+   as the Virtual Ethernet MAC address. These packets are not supported by
+   Power firmware. Therefore bonding modes 5 and 6 are unsupported by ibmveth.
+  </para>
+ </note>
+
+ <para>
+  To configure a bonding device, use the following procedure:
+ </para>
+
+ <procedure>
+  <step>
+   <para>
+    Run <menuchoice><guimenu>&yast;</guimenu> <guimenu>System</guimenu>
+    <guimenu>Network Settings</guimenu></menuchoice>.
+   </para>
+  </step>
+  <step>
+   <para>
+    Use <guimenu>Add</guimenu> and change the <guimenu>Device Type</guimenu> to
+    <guimenu>Bond</guimenu>. Proceed with <guimenu>Next</guimenu>.
+   </para>
+   <informalfigure>
+    <mediaobject>
+     <imageobject role="fo">
+      <imagedata fileref="bond_configuration.png" width="70%"/>
+     </imageobject>
+     <imageobject role="html">
+      <imagedata fileref="bond_configuration.png" width="65%"/>
+     </imageobject>
+    </mediaobject>
+   </informalfigure>
+  </step>
+  <step>
+   <para>
+    Select how to assign the IP address to the bonding device. Three methods
+    are at your disposal:
+   </para>
+   <itemizedlist mark="bullet" spacing="normal">
+    <listitem>
+     <para>
+      No IP Address
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Dynamic Address (with DHCP or Zeroconf)
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Statically assigned IP Address
+     </para>
+    </listitem>
+   </itemizedlist>
+   <para>
+    Use the method that is appropriate for your environment.
+   </para>
+  </step>
+  <step>
+   <para>
+    In the <guimenu>Bond Ports</guimenu> tab, select the Ethernet devices that
+    should be included into the bond by activating the related check box.
+   </para>
+  </step>
+  <step>
+   <para>
+    Edit the <guimenu>Bond Driver Options</guimenu> and choose a bonding mode.
+   </para>
+  </step>
+  <step>
+   <para>
+    Make sure that the parameter <literal>miimon=100</literal> is added to the
+    <guimenu>Bond Driver Options</guimenu>. Without this parameter, the data
+    integrity is not checked regularly.
+   </para>
+  </step>
+  <step>
+   <para>
+    Click <guimenu>Next</guimenu> and leave &yast; with <guimenu>OK</guimenu>
+    to create the device.
+   </para>
+  </step>
+ </procedure>
+
+ <sect2 xml:id="sec-network-iface-bonding-hotplug">
+  <title>Hotplugging of bond ports</title>
+  <para>
+   In specific network environments (such as High Availability), there are
+   cases when you need to replace a bond port interface with another one.
+   The reason may be a constantly failing network device. The solution is to
+   set up hotplugging of bond ports.
+  </para>
+  <para>
+   The bond is configured as usual (according to <command>man 5
+   ifcfg-bonding</command>), for example:
+  </para>
+<screen>ifcfg-bond0
+          STARTMODE='auto' # or 'onboot'
+          BOOTPROTO='static'
+          IPADDR='192.168.0.1/24'
+          BONDING_MASTER='yes'
+          BONDING_SLAVE_0='eth0'
+          BONDING_SLAVE_1='eth1'
+          BONDING_MODULE_OPTS='mode=active-backup miimon=100'</screen>
+  <para>
+   The bond ports are specified with <literal>STARTMODE=hotplug</literal> and
+   <literal>BOOTPROTO=none</literal>:
+  </para>
+<screen>ifcfg-eth0
+          STARTMODE='hotplug'
+          BOOTPROTO='none'
+
+ifcfg-eth1
+          STARTMODE='hotplug'
+          BOOTPROTO='none'</screen>
+<!-- fs 2014-06-23: The eth nameing scheme will stay
+  <para>
+   Check the device name&mdash;maybe you need to replace
+   <literal>eth0</literal> and <literal>eth1</literal> with
+   <literal>ens3</literal> and <literal>ens4</literal>.
+  </para>
+-->
+  <para>
+   <literal>BOOTPROTO=none</literal> uses the <command>ethtool</command>
+   options (when provided), but does not set the link up on <command>ifup
+   eth0</command>. The reason is that the bond port interface is controlled by the
+   bond device.
+  </para>
+  <para>
+   <literal>STARTMODE=hotplug</literal> causes the bond port interface to join the
+   bond automatically when it is available.
+  </para>
+  <para>
+   The <systemitem>udev</systemitem> rules in
+   <filename>/etc/udev/rules.d/70-persistent-net.rules</filename> need to be
+   changed to match the device by bus ID (udev <systemitem>KERNELS</systemitem>
+   keyword equal to "SysFS BusID" as visible in <command>hwinfo
+   --netcard</command>) instead of by MAC address. This allows replacement of
+   defective hardware (a network card in the same slot but with a different
+   MAC) and prevents confusion when the bond changes the MAC address of all its
+   bond ports.
+  </para>
+  <para>
+   For example:
+  </para>
+<screen>SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*",
+KERNELS=="0000:00:19.0", ATTR{dev_id}=="0x0", ATTR{type}=="1",
+KERNEL=="eth*", NAME="eth0"</screen>
+  <para>
+   At boot time, the systemd <systemitem>network.service</systemitem> does not
+   wait for the hotplug bond ports, but for the bond to become ready, which
+   requires at least one available bond port. When one of the bond port interfaces gets
+   removed (unbind from NIC driver, <command>rmmod</command> of the NIC driver
+   or true PCI hotplug remove) from the system, the kernel removes it from the
+   bond automatically. When a new card is added to the system (replacement of
+   the hardware in the slot), <systemitem>udev</systemitem> renames it using
+   the bus-based persistent name rule to the name of the bond port, and calls
+   <command>ifup</command> for it. The <command>ifup</command> call
+   automatically joins it into the bond.
+   <remark>
+    ke: I think this can stay that way for now.
+   </remark>
+  </para>
+ </sect2>
+
+<!--
+  http://www.cyberciti.biz/howto/question/static/linux-ethernet-bonding-driver-howto.php
+  - this is not as fresh as the kernel documentation!
+  -->
+</sect1>

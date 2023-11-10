@@ -1,0 +1,446 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter
+[
+  <!ENTITY % entities SYSTEM "entities/generic-entities.ent">
+    %entities;
+]>
+
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0" xml:id="cha-onlineupdate-you">
+ <title>&yast; online update</title>
+ <info>
+  <dm:docmanager xmlns:dm="urn:x-suse:ns:docmanager">
+   <dm:bugtracker></dm:bugtracker>
+   <dm:translation>yes</dm:translation>
+  </dm:docmanager>
+ </info>
+ <para>
+  &suse; offers a continuous stream of software security updates for your
+  product. By default, the update applet is used to keep your system
+  up to date. Refer to <xref linkend="sec-updater"/> for further information on
+  the update applet. This chapter covers the alternative tool for updating
+  software packages: &yast; Online Update.
+ </para>
+ <para>
+  The current patches for &productnamereg; are available from an update
+  software repository<phrase os="osuse">, which is automatically configured
+  during the installation</phrase>. <phrase os="sles;sled">If you have
+  registered your product during the installation, an update repository is
+  already configured. If you have not registered &productname;, you can do so
+  by starting the <guimenu>Product Registration</guimenu> in &yast;.</phrase>
+  Alternatively, you can manually add an update repository from a source you
+  trust. To add or remove repositories, start the Repository Manager with
+  <menuchoice> <guimenu>Software</guimenu>
+  <guimenu>Software Repositories</guimenu> </menuchoice> in &yast;. Learn more
+  about the Repository Manager in <xref linkend="sec-yast-software-instsource"/>.
+ </para>
+ <note os="sles;sled">
+  <title>Error on accessing the update catalog</title>
+  <para>
+   If you are not able to access the update catalog, this may happen because of
+   an expired subscription. Normally, &productname; comes with a one-year or
+   three-year subscription, during which you have access to the update catalog.
+   This access will be denied after the subscription ends.
+  </para>
+  <para>
+   If an access to the update catalog is denied, you can see a warning
+   message prompting you to visit the &scc; and check your
+   subscription. The &scc; is available at <link xlink:href="&sccurl;/"/>.
+  </para>
+ </note>
+ &note_firewall_updates;
+ <para>
+  &suse; provides updates with different relevance levels:
+ </para>
+ <variablelist>
+  <varlistentry>
+   <term>Security updates</term>
+   <listitem>
+    <para>
+     Fix severe security hazards and should always be installed.
+    </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term>Recommended updates</term>
+   <listitem>
+    <para>
+     Fix issues that could compromise your computer.
+    </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term>Optional updates</term>
+   <listitem>
+    <para>
+     Fix non-security relevant issues or provide enhancements.
+    </para>
+   </listitem>
+  </varlistentry>
+ </variablelist>
+ <sect1 xml:id="sec-onlineupdate-you-overview">
+  <title>The online update dialog</title>
+
+  <para>
+   To open the &yast; <guimenu>Online Update</guimenu> dialog, start &yast; and
+   select <menuchoice> <guimenu>Software </guimenu> <guimenu>Online
+   Update</guimenu> </menuchoice>. Alternatively, start it from the command
+   line with <command>yast2 online_update</command>.
+  </para>
+
+  <para>
+   The <guimenu>Online Update</guimenu> window consists of four sections.
+  </para>
+
+  <figure>
+   <title>&yast; online update</title>
+   <mediaobject>
+    <imageobject role="fo">
+     <imagedata fileref="yast2_you.png" width="75%" os="sles;sled"/>
+     <imagedata fileref="yast2_you_osuse.png" width="75%" os="osuse"/>
+    </imageobject>
+    <imageobject role="html">
+     <imagedata fileref="yast2_you.png" width="75%" os="sles;sled"/>
+     <imagedata fileref="yast2_you_osuse.png" width="75%" os="osuse"/>
+    </imageobject>
+   </mediaobject>
+  </figure>
+
+  <para>
+   The <guimenu>Summary</guimenu> section on the left lists the available
+   patches for &productname;. The patches are sorted by security relevance:
+   <literal>security</literal>, <literal>recommended</literal>, and
+   <literal>optional</literal>. You can change the view of the
+   <guimenu>Summary</guimenu> section by selecting one of the following options
+   from <guimenu>Show Patch Category</guimenu>:
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term><guimenu>Needed patches</guimenu> (default view)</term>
+    <listitem>
+     <para>
+      Non-installed patches that apply to packages installed on your system.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term><guimenu>Unneeded patches</guimenu>
+    </term>
+    <listitem>
+     <para>
+      Patches that either apply to packages not installed on your system, or
+      patches that have requirements which have already have been fulfilled
+      (because the relevant packages have already been updated from another
+      source).
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term><guimenu>All patches</guimenu>
+    </term>
+    <listitem>
+     <para>
+      All patches available for &productname;.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <para>
+   Each list entry in the <guimenu>Summary</guimenu> section consists of a
+   symbol and the patch name. For an overview of the possible symbols and their
+   meaning, press <keycombo> <keycap function="shift"/> <keycap>F1</keycap>
+   </keycombo>. Actions required by <literal>Security</literal> and
+   <literal>Recommended</literal> patches are automatically preset. These
+   actions are <guimenu>Autoinstall</guimenu>, <guimenu>Autoupdate</guimenu>
+   and <guimenu>Autodelete</guimenu>.
+  </para>
+
+  <para>
+   If you install an up-to-date package from a repository other than the update
+   repository, the requirements of a patch for this package may be fulfilled
+   with this installation. In this case a check mark is displayed in front of
+   the patch summary. The patch is visible in the list until you mark it
+   for installation. This does not install the patch (because the
+   package already is up to date), but mark the patch as having been installed.
+  </para>
+
+  <para>
+   Select an entry in the <guimenu>Summary</guimenu> section to view a short
+   <guimenu>Patch Description</guimenu> at the bottom left corner of the
+   dialog. The upper right section lists the packages included in the selected
+   patch (a patch can consist of several packages). Click an entry in the upper
+   right section to view details about the respective package that is included
+   in the patch.
+  </para>
+ </sect1>
+ <sect1 xml:id="sec-onlineupdate-you-install">
+  <title>Installing patches</title>
+
+  <para>
+   The &yast; Online Update dialog allows you to either install all available
+   patches at once or manually select the desired patches. You may also revert patches that have been applied to the
+   system.
+  </para>
+
+  <para>
+   By default, all new patches (except <literal>optional</literal> ones) that
+   are currently available for your system are already marked for installation.
+   They will be applied automatically once you click <guimenu>Accept</guimenu>
+   or <guimenu>Apply</guimenu>.
+<!--taroth 2014-05-27:  http://fate.suse.com/312509-->
+   If one or multiple patches require a system reboot, you will be notified
+   about this before the patch installation starts. You can then either decide
+   to continue with the installation of the selected patches, skip the
+   installation of all patches that need rebooting and install the rest, or go
+   back to the manual patch selection.
+  </para>
+
+  <procedure>
+   <title>Applying patches with &yast; online update</title>
+   <step>
+    <para>
+     Start &yast; and select <menuchoice> <guimenu>Software</guimenu>
+     <guimenu>Online Update</guimenu> </menuchoice>.
+    </para>
+   </step>
+   <step>
+    <para>
+     To automatically apply all new patches (except <literal>optional</literal>
+     ones) that are currently available for your system, click
+     <guimenu>Apply</guimenu> or <guimenu>Accept</guimenu>.
+    </para>
+   </step>
+   <step>
+    <para>
+     First modify the selection of patches that you want to apply:
+    </para>
+    <substeps performance="required">
+     <step>
+      <para>
+       Use the respective filters and views that the interface provides. For
+       details, refer to <xref linkend="sec-onlineupdate-you-overview"/>.
+      </para>
+     </step>
+     <step>
+      <para>
+       Select or deselect patches according to your needs and wishes by
+       right-clicking the patch and choosing the respective action from the
+       context menu.
+      </para>
+      <important>
+       <title>Always apply security updates</title>
+       <para>
+        Do not deselect any <literal>security</literal>-related patches without
+        a good reason. These patches fix severe security hazards and prevent
+        your system from being exploited.
+       </para>
+      </important>
+     </step>
+     <step>
+      <para>
+       Most patches include updates for several packages. To change
+       actions for single packages, right-click a package in the package view
+       and choose an action.
+      </para>
+     </step>
+     <step>
+      <para>
+       To confirm your selection and apply the selected patches, proceed with
+       <guimenu>Apply</guimenu> or <guimenu>Accept</guimenu>.
+      </para>
+     </step>
+    </substeps>
+   </step>
+   <step>
+    <para>
+     After the installation is complete, click <guimenu>Finish</guimenu> to
+     leave the &yast; <guimenu>Online Update</guimenu>. Your system is now
+     up to date.
+    </para>
+   </step>
+  </procedure>
+ </sect1>
+
+ <sect1 xml:id="sec-onlineupdate-retracted-patches">
+  <title>Viewing retracted patches</title> 
+  
+  <para>
+    Maintenance updates are carefully tested to minimize the risk
+    of introducing a bug. If a patch proves to contain a bug, it is
+    automatically retracted. A new update (with a higher version number) is 
+    issued to revert the buggy patch, and is blocked from being installed 
+    again. You can see retracted patches, and their history, on the 
+    <guimenu>Package Classification</guimenu> tab.
+  </para>
+  <figure>
+   <title>Viewing retracted patches and history</title>
+   <mediaobject>
+    <imageobject role="fo">
+     <imagedata fileref="yast2_retracted_patches.png" width="75%"/>
+    </imageobject>
+    <imageobject role="html">
+     <imagedata fileref="yast2_retracted_patches.png" width="75%"/>
+    </imageobject>
+   </mediaobject>
+  </figure>  
+</sect1>
+
+ <sect1 xml:id="sec-onlineupdate-you-automatically">
+  <title>Automatic online update</title>
+
+  <para>
+   You may configure automatic updates with a daily, weekly or 
+   monthly schedule with &yast;. Install the
+   <systemitem class="resource">yast2-online-update-configuration</systemitem>
+   package.
+  </para>
+
+  <para>
+   By default, updates are downloaded as delta RPMs. Since rebuilding RPM
+   packages from delta RPMs is a memory- and processor-intensive task, certain
+   setups or hardware configurations may require you to disable the use of
+   delta RPMs for the sake of performance.
+  </para>
+
+  <para>
+   Some patches, such as kernel updates or packages requiring license
+   agreements, require user interaction, which would cause the automatic update
+   procedure to stop. You can configure skipping patches that require user
+   interaction.
+  </para>
+  
+  <para>
+      Use the <guimenu>Patches</guimenu> tab in the &yast;
+      <guimenu>Software</guimenu> module to review available and installed
+      patches, including references to bug reports and CVE bulletins.
+  </para>
+
+  <procedure>
+   <title>Configuring the automatic online update</title>
+   <step>
+    <para>
+     After installation, start &yast; and select <menuchoice>
+     <guimenu>Software</guimenu> <guimenu>Online Update</guimenu>
+     </menuchoice>. Choose <menuchoice><guimenu>Configuration</guimenu>
+     <guimenu>Online Update</guimenu></menuchoice>. If the
+     <package>yast2-online-update-configuration</package> is not installed, you
+     will be prompted to do that.
+    </para>
+      <figure>
+   <title>&yast; online update configuration</title>
+   <mediaobject>
+    <imageobject role="fo">
+     <imagedata fileref="yast2_autoupdate.png" width="75%"/>
+    </imageobject>
+    <imageobject role="html">
+     <imagedata fileref="yast2_autoupdate.png" width="75%"/>
+    </imageobject>
+   </mediaobject>
+  </figure>
+    <para>
+     Alternatively, start the module with
+     <command>yast2&nbsp;online_update_configuration</command> from the command
+     line.
+    </para>
+    
+   </step>
+   <step>
+    <para>
+     Choose the update interval: <guimenu>Daily</guimenu>,
+     <guimenu>Weekly</guimenu>, or <guimenu>Monthly</guimenu>.
+    </para>
+   </step>
+   <step>
+    <para>
+     Sometimes patches may require the attention of the administrator, for
+     example when restarting critical services. For example, this might be an
+     update for &deng; that requires all containers to be restarted. Before
+     these
+     patches are installed, the user is informed about the consequences and is
+     asked to confirm the installation of the patch. Such patches are called
+     <quote>Interactive Patches</quote>.
+    </para>
+    <para>
+     When installing patches automatically, it is assumed that you have
+     accepted the installation of interactive patches. If you prefer to
+     review these patches before they get installed, check <guimenu>Skip
+     Interactive Patches</guimenu>. In this case, interactive patches will be
+     skipped during automated patching. Make sure to periodically run a manual
+     online update, to check whether interactive patches are waiting to be
+     installed.
+    </para>
+   </step>
+   <step>
+    <para>
+     To automatically accept any license agreements, activate <guimenu>Agree
+     with Licenses</guimenu>.
+    </para>
+   </step>
+   <step>
+    <para>
+     To automatically install all packages recommended by updated packages,
+     activate <guimenu>Include Recommended Packages</guimenu>.
+    </para>
+   </step>
+<!--taroth 2014-05-27: http://fate.suse.com/314867-->
+   <step>
+    <para>
+     To disable the use of delta RPMs (for performance reasons), un-check
+     <guimenu>Use Delta RPMs</guimenu>.
+    </para>
+   </step>
+   <step>
+    <para>
+     To filter the patches by category (such as security or recommended),
+     check <guimenu>Filter by Category</guimenu> and add the appropriate
+     patch categories from the list. Only patches of the selected categories
+     will be installed. It is a good practice to enable only automatic
+     <guimenu>Security</guimenu> updates, and to manually review all others.
+     Patching is normally reliable, but you may wish to test non-security
+     patches, and roll them back if you encounter any problems. 
+    </para>
+    <itemizedlist>
+        <listitem>
+            <para><guimenu>Packagemanager and YaST</guimenu> supply patches
+                for package management and YaST features and modules.
+            </para>
+        </listitem>
+        <listitem>
+            <para><guimenu>Security</guimenu> patches provide crucial
+                updates and bugfixes.
+            </para>
+        </listitem>
+        <listitem>
+            <para><guimenu>Recommended</guimenu> patches are optional
+                bugfixes and enhancements.
+            </para>
+        </listitem>
+        <listitem>
+            <para><guimenu>Optional</guimenu> are new packages.</para>
+        </listitem>
+        <listitem>
+            <para><guimenu>Other</guimenu> is equivalent to miscellaneous.
+                </para>
+        </listitem>
+        <listitem>
+            <para><guimenu>Document</guimenu> is unused.
+            </para>
+        </listitem>
+    </itemizedlist>            
+    
+   </step>
+   <step>
+    <para>
+     Confirm your configuration by clicking <guimenu>OK</guimenu>.
+    </para>
+   </step>
+  </procedure>
+
+  <para>
+   The automatic online update does not automatically restart the system
+   afterward. If there are package updates that require a system reboot, you
+   need to do this manually.
+  </para>
+ </sect1>
+</chapter>

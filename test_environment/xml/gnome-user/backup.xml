@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter
+[
+  <!ENTITY % entities SYSTEM "../common/generic-entities.ent">
+    %entities;
+]>
+
+<!--
+ATM, root privileges are required.  I consider this a bug:
+http://bugzilla.suse.com/show_bug.cgi?id=579894
+If it will not get fixed, we probably must document it.
+taroth 2011-08-05: bug was fixed, but only temporarily, reopened for SP2 -
+taroth 2013-02-19: reopened for SP3
+jufa: 2023-03-29: tested today for SLE15 SP5 and  not prompted for
+root
+-->
+<chapter xmlns="http://docbook.org/ns/docbook"
+ xmlns:xi="http://www.w3.org/2001/XInclude"
+ xmlns:xlink="http://www.w3.org/1999/xlink"
+ version="5.0"
+ xml:id="cha-userbackup">
+ <title>Backing up user data</title>
+ <info>
+  <abstract>
+   <para>
+    Learn how to back up your user data such as files and directories with
+    <productname>Déjà Dup</productname>.
+   </para>
+  </abstract>
+  <dm:docmanager xmlns:dm="urn:x-suse:ns:docmanager">
+   <dm:bugtracker></dm:bugtracker>
+   <dm:translation>yes</dm:translation>
+  </dm:docmanager>
+ </info>
+<note>
+   <title><productname>Déjà Dup</productname> may not be installed</title>
+   <para>Before proceeding, make sure that the package
+   <package>deja-dup</package> is installed.</para>
+   </note>
+<para>
+ To start the <guimenu>Backups</guimenu> application, open the
+ <guimenu>Activities</guimenu> overview by pressing
+ <keycap function="meta"/> and search for <literal>back</literal>.
+</para>
+
+<informalfigure>
+ <mediaobject>
+  <textobject><phrase>Backup application</phrase></textobject>
+  <imageobject role="fo">
+   <imagedata fileref="gnome_backup.png" width="75%"/>
+  </imageobject>
+  <imageobject role="html">
+   <imagedata fileref="gnome_backup.png" width="75%"/>
+  </imageobject>
+ </mediaobject>
+</informalfigure>
+
+<sect1 xml:id="sec-gnome-backup-config">
+ <title>Configuring backups</title>
+ <para>
+  Before you can start to back up data, configure which files to back up, which
+  ones to ignore and where to store the backup.
+ </para>
+ <procedure>
+  <step>
+   <para>
+    Configure which folders to back up by clicking <guimenu>Folders to
+    save</guimenu>. By default, your home directory is preconfigured. Use the
+    plus and minus signs to add or delete folders.
+   </para>
+  </step>
+  <step>
+   <para>
+    Optionally, configure folders that should be ignored when backing up data
+    by clicking <guimenu>Folders to ignore</guimenu>. By default the trash bin
+    and the <filename>Download</filename> directory are preconfigured. Use the
+    plus and minus signs to add or delete folders.
+   </para>
+  </step>
+  <step>
+   <para>
+    To define a location where to store the backup, click <guimenu>Storage
+    location</guimenu>. You can choose a <guimenu>Local Folder</guimenu>, a
+    <guimenu>Network Server</guimenu>, or cloud storage. If you opt for the
+    latter, make sure you have provided your login credentials for the
+    respective online service via
+    <guimenu>Open Online Account Settings</guimenu>.
+   </para>
+   <para>
+    Regardless of the Storage location, provide a directory name under which
+    the backup(s) will be stored. It is recommended to choose a name that can
+    easily be associated with backups for the respective machine and data.
+   </para>
+  </step>
+ </procedure>
+</sect1>
+
+<sect1 xml:id="sec-gnome-backup-start">
+ <title>Creating backups</title>
+ <para>
+  Once you have configured which folders to back up and where to store them,
+  you have two choices for backing up. First, by manually starting the
+  backup. Switch to the <guimenu>Overview</guimenu> screen and click
+  <guimenu>Back Up Now</guimenu>. Choose whether you want to protect the backup
+  with a password or not. Proceed with <guimenu>Forward</guimenu>.
+ </para>
+ <para>
+  The second option is to schedule automatic backups: Create a backup schedule
+  by clicking <guimenu>Scheduling</guimenu>. Enter the backup frequency and
+  decide how long to keep backups. Enable scheduled backups by turning the
+  <guimenu>Automatic Backup</guimenu> switch <guimenu>On</guimenu>.
+ </para>
+</sect1>
+
+<sect1 xml:id="cha-userbackup-restore">
+ <title>Restoring data</title>
+
+ <para>
+  To restore a previous state of your data, switch to the
+  <guimenu>Overview</guimenu> screen and click <guimenu>Restore</guimenu>.
+ </para>
+
+ <procedure>
+  <step>
+   <para>
+    Choose a backup location, a directory name and
+    proceed with <guimenu>Forward</guimenu>.
+   </para>
+  </step>
+  <step>
+   <para>
+    Select the backup date which you want to restore and
+    proceed with <guimenu>Forward</guimenu>.
+   </para>
+  </step>
+  <step>
+   <para>
+    Choose whether to restore the files from the backup to their original
+    location or to a different directory. Proceed with
+    <guimenu>Forward</guimenu>.
+   </para>
+  </step>
+  <step>
+   <para>
+    Review your settings. If necessary, go <guimenu>Back</guimenu> to change
+    them. To start restoring data from the backup, click
+    <guimenu>Restore</guimenu>.
+   </para>
+  </step>
+ </procedure>
+ </sect1>
+</chapter>

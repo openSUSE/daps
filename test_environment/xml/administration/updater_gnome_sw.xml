@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sect1
+[
+  <!ENTITY % entities SYSTEM "entities/generic-entities.ent">
+    %entities;
+]>
+
+<sect1 version="5.0" xml:id="sec-updater-gnomesw"
+  xmlns="http://docbook.org/ns/docbook"
+  xmlns:xi="http://www.w3.org/2001/XInclude"
+  xmlns:xlink="http://www.w3.org/1999/xlink">
+ <title>Updating packages with <guimenu>&gnome; Software</guimenu></title>
+
+ <info>
+  <dm:docmanager xmlns:dm="urn:x-suse:ns:docmanager">
+   <dm:bugtracker></dm:bugtracker>
+   <dm:translation>yes</dm:translation>
+  </dm:docmanager>
+ </info>
+
+ <para>
+  In addition to the &gnome; <guimenu>Package Updater</guimenu>, &gnome; provides
+  <guimenu>&gnome; Software</guimenu> which has the following functionality:
+ </para>
+ <itemizedlist>
+  <listitem>
+   <para>
+    Install, update, and remove software delivered as an RPM via PackageKit
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    Install, update, and remove software delivered as a Flatpak
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    Install, update, and remove &gnome; shell extensions
+    (<link xlink:href="https://extensions.gnome.org"/>)
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    Update firmware for hardware devices using <emphasis>Linux Vendor
+    Firmware Service</emphasis> (LVFS, <link xlink:href="https://fwupd.org"/>)
+   </para>
+  </listitem>
+ </itemizedlist>
+ <para>
+  <guimenu>&gnome; Software</guimenu> also provides screenshots,
+  ratings, and reviews for software.
+ </para>
+
+ <figure>
+  <title><guimenu>&gnome; Software</guimenu>&mdash;<guimenu>Updates</guimenu>
+    view</title>
+  <mediaobject>
+   <imageobject role="fo">
+    <imagedata fileref="gnome-software-updates.png" width="75%"/>
+   </imageobject>
+   <imageobject role="html">
+    <imagedata fileref="gnome-software-updates.png" width="75%"/>
+   </imageobject>
+  </mediaobject>
+ </figure>
+
+ <para>
+  <guimenu>&gnome; Software</guimenu> has the following differences to other
+  tools provided on &productname;:
+ </para>
+ <itemizedlist>
+  <listitem>
+   <para>
+    Unlike &yast; or Zypper, for installing software packaged as an RPM,
+    <guimenu>&gnome; Software</guimenu> is restricted to software that
+    provides AppStream metadata. This includes most desktop applications.
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    While the &gnome; <guimenu>Package Updater</guimenu> updates packages within
+    the running system (forcing you to restart the respective applications),
+    <guimenu>&gnome; Software</guimenu> downloads the updates and applies
+    them after reboot.
+   </para>
+  </listitem>
+ </itemizedlist>
+</sect1>

@@ -1,0 +1,737 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter
+[
+  <!ENTITY % entities SYSTEM "../common/generic-entities.ent">
+    %entities;
+]>
+<chapter xmlns="http://docbook.org/ns/docbook"
+ xmlns:xi="http://www.w3.org/2001/XInclude"
+ xmlns:xlink="http://www.w3.org/1999/xlink"
+ version="5.0"
+ xml:id="cha-gnome-settings">
+ <title>Customizing your settings</title>
+ <info>
+  <abstract>
+   <para>
+    The look and feel of &gnome; desktop can be changed to suit your personal
+    tastes and needs.
+   </para>
+  </abstract>
+  <dm:docmanager xmlns:dm="urn:x-suse:ns:docmanager">
+   <dm:bugtracker></dm:bugtracker>
+   <dm:translation>yes</dm:translation>
+  </dm:docmanager>
+ </info>
+ <para>
+  You can change the way the &gnome; desktop looks and behaves to suit your
+  personal tastes and needs. Some possible changes of settings are:
+ </para>
+ <itemizedlist mark="bullet" spacing="normal">
+  <listitem>
+   <para>
+    Keyboard and mouse configuration, as described in
+    <xref linkend="sec-gnome-settings-hardware-keyboard"/> and
+    <xref linkend="sec-gnome-settings-hardware-mouse"/>
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    Desktop background, as described in
+    <xref linkend="sec-gnome-settings-look-deskback"/>
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    Sounds, as described in <xref linkend="sec-gnome-settings-hardware-audio"/>
+   </para>
+  </listitem>
+ </itemizedlist>
+ <para>
+  These settings and others can be changed in the &gnome;
+  <guimenu>Settings</guimenu> dialog. It focuses on look and feel,
+  personal settings and preferences of your &gnome; desktop.
+  </para>
+
+  <para>
+   To change system-wide settings, you have to use &yast; instead. This is
+   the case for administrator settings (including most of the hardware, the
+   graphical user interface, Internet access, security settings, user
+   administration, software installation and system updates and
+   information). For information about using &yast;, refer to the integrated
+   &yast; help texts or to the <phrase os="sles;sled"><xref
+   linkend="book-deployment"/></phrase><phrase os="osuse"><xref
+   linkend="book-startup"/></phrase>.
+  </para>
+
+  <para>
+   To access the &gnome; settings dialog, right-click the desktop and select
+   <guimenu>Settings</guimenu>.
+  </para>
+
+  <sect1 xml:id="sec-gnome-settings-look-deskback">
+   <title>Changing the desktop background</title>
+   <para>
+    The desktop background is the image or color that is applied to your
+    desktop. You can also customize the image shown when the screen is locked.
+   </para>
+   <para>
+    To change the desktop background:
+   </para>
+   <procedure>
+    <step>
+     <para>
+      Right-click the desktop and choose <guimenu>Change Background</guimenu>.
+     </para>
+    <figure>
+     <title>&gnome; Background settings</title>
+      <mediaobject>
+       <imageobject role="fo">
+        <imagedata fileref="preferences_background.png" width="45%"
+        />
+       </imageobject>
+       <imageobject role="html">
+        <imagedata fileref="preferences_background.png" width="45%"
+        />
+       </imageobject>
+      </mediaobject>
+     </figure>
+    </step>
+    <step>
+     <para>
+      Select one of the wallpapers (preconfigured images distributed with your
+      system) shown in the content area.
+     </para>
+    </step>
+    <step>
+     <para>
+      Alternatively, click <guimenu>Add Picture</guimenu> to select an image
+      from your <filename>Pictures</filename> directory
+      (<filename>~/Pictures</filename>) or another location in your file system.
+     </para>
+    </step>
+    <step>
+     <para>
+      Close the <guimenu>Settings</guimenu> dialog.
+     </para>
+     <para>
+      The new background is now shown on your desktop.
+     </para>
+    </step>
+   </procedure>
+  </sect1>
+
+  <sect1 xml:id="sec-gnome-settings-lang">
+   <title>Configuring language settings</title>
+   <para>
+    &productname; can be configured to use any of several languages. The
+    language setting determines the language of dialogs and menus and can also
+    determine the keyboard and clock layout.
+   </para>
+   <para>
+    To configure your language settings right-click the desktop and choose
+    <guimenu>Settings</guimenu>. Now choose <guimenu>Region &amp;
+    Language</guimenu>.
+   </para>
+   <para>
+    Here you can choose:
+   </para>
+   <itemizedlist>
+    <listitem>
+     <para>
+      <guimenu>Language</guimenu>. Choose a language from the list. For the
+      change to take effect, you are prompted to <guimenu>Restart</guimenu>
+      the desktop session. To do so, you must log out of your session and
+      log back in afterward.</para>
+    </listitem>
+    <listitem>
+     <para>
+      <guimenu>Formats</guimenu>: To change the formats for date, number,
+      currency and related options, choose a country from the list. For the
+      change to take effect, you must log out of your session and log back in
+      afterward.
+     </para>
+    </listitem>
+   </itemizedlist>
+   <note>
+    <title>
+     Settings made using <command>ibus-setup</command> do not take effect
+    </title>
+    <para>
+     On &gnome;, settings made using <command>ibus-setup</command> do not take
+     effect. <command>ibus-setup</command> can only be
+     used to configure IceWM. Instead, always use the
+     <guimenu>Settings</guimenu> application:
+    </para>
+    <itemizedlist>
+     <listitem>
+      <para>
+       To change input methods, select <guimenu>Keyboard</guimenu> in the
+       navigation pane of the <guimenu>Settings</guimenu> dialog.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       To change the key combination that switches between input methods, use
+       <menuchoice> <guimenu>Keyboard</guimenu> <guimenu>Keyboard Shortcuts</guimenu>
+       </menuchoice>. Then select the category <guimenu>Typing</guimenu>
+       and the entry <guimenu>Switch to next input source</guimenu>.
+      </para>
+     </listitem>
+    </itemizedlist>
+   </note>
+</sect1>
+   
+<sect1 xml:id="sec-gnome-settings-hardware-keyboard">
+  <title>Configuring the keyboard</title>
+  <para>
+   Refer to <xref linkend="sec-general-accessibility-mobility"/> for
+   additional settings, such as key auto-repetition and cursor blink rate,
+   and accessibility features. To configure your
+   keyboard layout, refer to <xref linkend="sec-gnome-settings-lang"/>.
+  </para>
+  <para>
+   To modify keyboard shortcuts, right-click the desktop and choose
+   <guimenu>Settings</guimenu>. Now select <menuchoice>
+   <guimenu>Keyboard</guimenu> <guimenu>Keyboard Shortcuts</guimenu> </menuchoice>.
+  </para>
+  <figure xml:id="fig-gnome-settings-hardware-keyboard">
+   <title>Keyboard shortcut dialog</title>
+   <mediaobject>
+    <imageobject role="fo">
+     <imagedata fileref="preferences_keyboard.png" width="100%"/>
+    </imageobject>
+    <imageobject role="html">
+     <imagedata fileref="preferences_keyboard.png" width="80%"/>
+    </imageobject>
+   </mediaobject>
+  </figure>
+  <para>
+   This dialog shows the keyboard shortcuts that are configured for your system.
+   To edit a key combination, click the entry that you want to change. To
+   set a new key combination, press the respective keys. To disable a shortcut,
+   press <keycap function="backspace"/> instead.
+  </para>
+ </sect1>
+
+   <sect1 xml:id="sec-gnome-settings-xmodmap">
+       <title>Using <productname>XCompose</productname> to type special
+        characters</title>
+       <para>&gnome; supports fast input source (keyboard layout) switching
+           (<xref linkend="sec-gnome-settings-lang"/>). However, if you are
+           using <command>xmodmap</command> to create custom keymaps, it may not
+           work correctly when you switch between multiple input sources. For
+           example, you have two input sources, English and German. Your
+           <command>xmodmap</command> commands work fine in the first input
+           source you select, but when you switch to the second input source
+           the same <command>xmodmap</command> commands produce incorrect output.
+            <command>xmodmap</command> is an older protocol and does not have a
+            full view of the keyboard layout, so in more complex situations it
+            causes errors.
+        </para>
+        <para>
+            An alternative method is to use <command>xcompose</command> to assign
+            special symbols to sequences of key presses. This should work
+            with any input source. Install <command>xcompose</command>
+            by installing the <literal>libX11-devel</literal> package.
+        </para>
+        <para>
+            Next, assign a compose key with the <guimenu>Tweaks</guimenu> tool
+            in the <guimenu>Activities</guimenu> overview. You will press this
+            key in sequence with one or two additional keys to print a special
+            character. The keys must be pressed in the correct sequence,
+            starting with the compose key.
+         </para>
+         <para>
+            In the <guimenu>Tweaks</guimenu> tool, navigate to
+            <menuchoice><guimenu>Keyboard &amp; Mouse</guimenu>
+            <guimenu>Compose Key</guimenu></menuchoice> and select your command
+            key (<xref linkend="fig-gnome-settings-keyboard-compose"/>).
+        </para>
+          <figure xml:id="fig-gnome-settings-keyboard-compose">
+   <title>Enabling the compose key in tweaks</title>
+   <mediaobject>
+    <imageobject role="fo">
+     <imagedata fileref="tweaks-compose.png" width="80%"/>
+    </imageobject>
+    <imageobject role="html">
+     <imagedata fileref="tweaks-compose.png" width="80%"/>
+    </imageobject>
+   </mediaobject>
+  </figure>
+  <para>
+      Next, create a <filename>~/.XCompose</filename> file. This is the default
+      per-user configuration file. Enter your 
+      key mappings in this file, like in this example:
+   </para>
+   <screen>include "%L"
+
+&lt;Multi_key> &lt;a> : "α"
+&lt;Multi_key> &lt;b> : "β"
+&lt;Multi_key> &lt;exclam>  : "¡"</screen>
+        
+    <para>
+        <literal>include "%L"</literal> includes the default compose file
+        for your locale, for example
+        <filename>/usr/share/X11/locale/en_US.UTF-8</filename>.
+    </para>
+    <para>
+        The remaining lines specify the compose key, the other key presses, and
+        the symbols they are intended to print. After you make changes to your
+        compose file, you must log out of your session and log back in to
+        activate the changes.
+    </para>
+    <para>
+        Your key assignments are case-sensitive.
+        <filename>~/.XCompose</filename> overrides the system files. Use the
+        compose file for your locale to see what is already configured, and to
+        copy symbols from it into your personal compose file. (These files
+        may have a lot of whitespace at the beginning; they are not empty so
+        keep scrolling.) As always, watch out for conflicts with the other
+        keymaps on your system.
+    </para>
+    <para>
+        For additional information see <command>man xcompose</command>.
+    </para>
+  </sect1>
+
+ <sect1 xml:id="sec-gnome-settings-hardware-bluetooth">
+  <title>Configuring Bluetooth settings</title>
+  <para>
+   The Bluetooth module lets you set the visibility of your machine over
+   Bluetooth and connect to available Bluetooth devices. To configure Bluetooth
+   connectivity, follow these steps:
+  </para>
+  <procedure>
+   <step>
+    <para>
+     Right-click the desktop and choose <guimenu>Settings</guimenu>. Now choose
+     <guimenu>Bluetooth</guimenu>.
+    </para>
+   </step>
+   <step>
+    <para>
+     To use Bluetooth, set the switch at the top on.
+    </para>
+    <para>
+     Your computer is visible as long as the Bluetooth panel is open.
+    </para>
+    <note>
+     <title>Temporary visibility</title>
+     <para>
+      The <guimenu>Visibility</guimenu> switch is meant to be used only
+      temporarily. You only need to turn it on for the initial setup of a
+      connection to a Bluetooth device. After the connection has been
+      established, turn off the switch.
+     </para>
+    </note>
+   </step>
+   <step>
+    <para>
+     On the device you want to connect, turn on Bluetooth connectivity and
+     visibility, too.
+    </para>
+   </step>
+   <step>
+    <para>
+     If the device has been found and is shown in the list, click it
+     to establish a connection to it.
+    </para>
+    <para>
+     You are asked whether the PINs of the two devices match.
+    </para>
+   </step>
+   <step>
+    <para>
+     If the PINs match, confirm this on <emphasis>both</emphasis> your
+     computer and the device.
+    </para>
+    <para>
+     The pairing is now established. On your computer, the device in the list
+     is shown as <guimenu>Connected</guimenu>.
+    </para>
+    <remark>jufa: 2022-04-08 can't take screenshot as bluetooth is not
+    enabled on VM. Commented out the screenshot</remark>
+    <!-- <informalfigure>
+     <mediaobject>
+      <imageobject role="fo">
+       <imagedata fileref="bluetooth_connect.png" width="95%"/>
+      </imageobject>
+      <imageobject role="html">
+       <imagedata fileref="bluetooth_connect.png" width="90%"/>
+      </imageobject>
+     </mediaobject>
+    </informalfigure> -->
+    <para>
+     Depending on the device type, it is also now available in other
+     applications, for example as a storage device in &nautilus;, or a sound
+     device in playback applications.
+    </para>
+   </step>
+  </procedure>
+  <para>
+   To connect to a paired Bluetooth device, select the device in the list. In
+   the dialog that appears, turn the <guimenu>Connection</guimenu> switch on.
+   You can send files to the connected device by using the <guimenu>Send
+   Files</guimenu> button. If you are connected to a device such as a mobile
+   phone, you can use it as a network device by activating the appropriate
+   option.
+  </para>
+  <para>
+   To remove a connected device from the list on your computer, click
+   <guimenu>Remove Device</guimenu> and confirm your choice. To completely
+   remove the pairing, you also need to do so on your device.
+  </para>
+ </sect1>
+
+ <sect1 xml:id="sec-gnome-settings-hardware-power">
+  <title>Configuring power settings</title>
+  <para>
+   Settings available in this dialog depend on your hardware. In the following,
+   the options that are typically available when using a laptop are described.
+   On a workstation, many of the described options are not available.
+  </para>
+  <procedure>
+   <step>
+    <para>
+     Right-click the desktop and choose <guimenu>Settings</guimenu>.
+    </para>
+   </step>
+   <step>
+    <para>
+     In the navigation pane, select <guimenu>Power</guimenu>.
+    </para>
+   </step>
+   <step>
+    <para>
+     In the <guimenu>Power Saving Options</guimenu> of the content area, set
+     after how many minutes to blank the screen (or to not blank it at all).
+    </para>
+   </step>
+   <step>
+    <para>
+     In the <guimenu>Automatic Suspend</guimenu> section of the dialog,
+     configure a time after which the computer is paused after a certain period
+     of inactivity.
+    </para>
+   </step>
+  </procedure>
+ </sect1>
+
+ <sect1 xml:id="sec-gnome-settings-hardware-mouse">
+  <title>Configuring the mouse and touchpad</title>
+  <para>
+   To modify mouse and touchpad options, right-click the desktop and choose
+   <guimenu>Settings</guimenu>. Then select
+   <guimenu>Mouse &amp; Touchpad</guimenu>.
+  </para>
+  <figure xml:id="fig-gnome-settings-hardware-mouse">
+   <title><guimenu>Mouse and Touchpad</guimenu> settings dialog</title>
+   <mediaobject>
+    <imageobject role="fo">
+     <imagedata fileref="preferences_mouse.png" width="80%"/>
+    </imageobject>
+    <imageobject role="html">
+     <imagedata fileref="preferences_mouse.png" width="80%"/>
+    </imageobject>
+   </mediaobject>
+  </figure>
+  <itemizedlist>
+   <listitem>
+    <para>
+     In the <guimenu>General</guimenu> section of the dialog, you can set the
+     <guimenu>Primary button</guimenu> orientation (left or right).
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     In the <guimenu>Mouse</guimenu> section of the dialog, use <guimenu>Mouse
+     Speed</guimenu> to adjust the sensitivity of the mouse pointer.
+     </para>
+     <para>
+     With <guimenu>Natural Scrolling</guimenu> you can set the direction in
+     which the content moves when scrolling with the mouse. When natural
+     scrolling is turned off, the content moves <emphasis>up</emphasis> while
+     pushing the scroll wheel <emphasis>down</emphasis>. When natural scrolling
+     is turned on, the content moves in the same direction as the mouse wheel.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     To test your settings, click <guimenu>Test Your Settings</guimenu> and
+     try the pointing device.
+    </para>
+   </listitem>
+  </itemizedlist>
+  <para>
+   For configuration of mouse accessibility options, refer to the
+   <xref linkend="sec-general-accessibility-mobility"/>.
+  </para>
+ </sect1>
+
+ <sect1 xml:id="sec-gnome-settings-hardware-printer">
+  <title>Installing and configuring printers</title>
+  <para>
+   The <guimenu>Printers</guimenu> dialog lets you connect to any available
+   local or remote CUPS server and configure printers.
+  </para>
+  <para>
+   To start the Printers module, right-click the desktop and choose
+   <guimenu>Settings</guimenu>. Now choose <guimenu>Printers</guimenu>. For
+   detailed information, refer to <xref linkend="cha-gnome-print"/>.
+  </para>
+ </sect1>
+
+ <sect1 xml:id="sec-gnome-settings-hardware-screen">
+  <title>Configuring screens</title>
+  <para>
+   To specify resolution and orientation for your screen or to configure
+   multiple screens, right-click the desktop and choose <guimenu>Display
+   Settings</guimenu>. The configuration options available in this dialog
+   depend on whether you have a single or a multiple monitor setup.
+  </para>
+
+  <sect2 xml:id="sec-gnome-settings-hardware-screen-single">
+   <title>Changing settings: single monitor setup</title>
+
+   <figure xml:id="fig-gnome-settings-hardware-screen-single">
+    <title>Single monitor settings dialog</title>
+    <mediaobject>
+     <imageobject role="fo">
+      <imagedata fileref="preferences_screen_single.png" width="100%"
+                />
+     </imageobject>
+     <imageobject role="html">
+      <imagedata fileref="preferences_screen_single.png" width="80%"
+                />
+     </imageobject>
+    </mediaobject>
+   </figure>
+   <variablelist>
+    <varlistentry>
+     <term><guimenu>Orientation</guimenu></term>
+     <listitem>
+      <para>
+       If you use a monitor which can change its orientation, you need to
+       adjust the display before turning the monitor. Use
+       <guimenu>Orientation</guimenu> to do this. Choose the orientation your
+       monitor supports, close the selection box and click
+       <guimenu>Apply</guimenu>.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><guimenu>Resolution</guimenu></term>
+     <listitem>
+      <para>
+       To change the screen resolution, click <guimenu>Resolution</guimenu>.
+       Choose a new value and click <guimenu>Apply</guimenu>.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><guimenu>Night Light</guimenu></term>
+     <listitem>
+      <para>
+       If you are working in a dark environment, your eyes can easily be
+       strained by the monitor. To prevent this, change the screen's color
+       palette to a warmer tone by turning on <guimenu>Night
+       Light</guimenu>. Under <guimenu>Schedule</guimenu> you can automate this
+       setting by specifying at which time <guimenu>Night Light</guimenu>
+       should be turned on and off.
+      </para>
+     </listitem>
+    </varlistentry>
+   </variablelist>
+  </sect2>
+
+  <sect2 xml:id="sec-gnome-settings-hardware-screen-multi">
+   <title>Changing settings: multiple monitor setup</title>
+<!--jufa 2022-04-08: could not check multi-display setup on the VM. Therefore
+commented out the screen. Texts taken from GNOME help.
+   <figure xml:id="fig-gnome-settings-hardware-screen-multi">
+    <title>Single monitor settings dialog</title>
+    <mediaobject>
+     <imageobject role="fo">
+      <imagedata fileref="preferences_screen.png" width="100%"
+                />
+     </imageobject>
+     <imageobject role="html">
+      <imagedata fileref="preferences_screen.png" width="80%"
+                />
+     </imageobject>
+    </mediaobject>
+   </figure>-->
+
+   <para>
+    To set up an additional monitor, connect the monitor to your computer. If
+    your system does not recognize it immediately, or you want to adjust
+    the settings, do the following:
+   </para>
+   <procedure>
+    <step>
+     <para>
+      Open the <guimenu>Activities</guimenu> overview and start typing
+      <literal>Displays</literal>.
+     </para>
+    </step>
+    <step>
+     <para>
+      Click <guimenu>Displays</guimenu> to open the panel.
+     </para>
+    </step>
+    <step>
+     <para>
+      In the display arrangement diagram, drag your displays to the relative
+      positions you want.
+     </para>
+    </step>
+    <step>
+     <para>
+      Click <guimenu>Primary Display</guimenu> to choose your primary display.
+     </para>
+     <para>
+      The primary display is the one with the <guimenu>top bar</guimenu>,
+      and where the <guimenu>Activities</guimenu> overview is shown.
+     </para>
+    </step>
+    <step>
+     <para>
+      Select the orientation, resolution or scale, and refresh rate.
+     </para>
+    </step>
+    <step>
+     <para>
+      Click <guimenu>Apply</guimenu>. The new settings are applied for 20
+      seconds before reverting. If you are happy with the settings, click
+      <guimenu>Keep Changes</guimenu>.
+     </para>
+    </step>
+   </procedure>
+   <para>
+    With two or more screens, these display modes are available:
+   </para>
+   <variablelist>
+    <varlistentry>
+     <term><guimenu>Join Display</guimenu></term>
+     <listitem>
+      <para>
+       The screen edges are joined so windows and dialogs can pass from one
+       display to another.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>Mirror</term>
+     <listitem>
+      <para>
+       The same content is shown on all displays, with the same resolution and
+       orientation for all.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>Single display</term>
+     <listitem>
+      <para>
+       Only one display is configured, effectively turning off the other
+       displays. For example, an external monitor connected to a docked laptop
+       with the lid closed.
+      </para>
+     </listitem>
+    </varlistentry>
+   </variablelist>
+   <para>
+    For further instructions refer to
+    <xref linkend="sec-gnome-settings-hardware-screen-single"/>.
+   </para>
+  </sect2>
+ </sect1>
+
+ <sect1 xml:id="sec-gnome-settings-hardware-audio">
+  <title>Configuring sound settings</title>
+  <para>
+   The <guimenu>Sound</guimenu> tool lets you manage sound devices. Here you
+   can select the general output volume or turn the sound off completely.
+  </para>
+  <para>
+   To open the sound settings, right-click the desktop and choose
+   <guimenu>Settings</guimenu>. Now choose <guimenu>Sound</guimenu>.
+  </para>
+  <figure>
+   <title>Configuring sound settings</title>
+   <mediaobject>
+    <imageobject role="fo">
+     <imagedata fileref="sound_devices.png" width="100%"/>
+    </imageobject>
+    <imageobject role="html">
+     <imagedata fileref="sound_devices.png" width="80%"/>
+    </imageobject>
+   </mediaobject>
+  </figure>
+  <para>
+    Use the <guimenu>Output</guimenu> category to select the device for sound
+    output. Choose the <guimenu>Balance</guimenu> setting you prefer.
+   </para>
+   <para>
+    Use the <guimenu>Input</guimenu> category to set the input device volume or
+    to mute the input temporarily. If you have more than one sound device, you
+    can also select a default device for audio input in the
+    <guimenu>Input Device</guimenu> list.
+   </para>
+   <para>
+    You can also choose an <guimenu>Alert Sound</guimenu>.
+   </para>
+ </sect1>
+
+ <sect1 xml:id="sec-gnome-settings-prefapps">
+  <title>Setting default applications</title>
+  <procedure>
+   <step>
+    <para>
+     To change the default application for common tasks such as
+     browsing the Internet, sending e-mails or playing multimedia files,
+     right-click the desktop and select <guimenu>Settings</guimenu>. Now
+     choose <guimenu>Default Applications</guimenu>.
+    </para>
+    <figure>
+     <title>Default applications</title>
+     <mediaobject>
+      <imageobject role="fo">
+       <imagedata fileref="preferences_preferred_apps.png" width="100%"
+       />
+      </imageobject>
+      <imageobject role="html">
+       <imagedata fileref="preferences_preferred_apps.png" width="80%"
+       />
+      </imageobject>
+     </mediaobject>
+    </figure>
+   </step>
+   <step>
+    <para>
+     You can choose an application to handle Web, mail, calendar, music,
+     videos or photographs. Select one of the available applications from the
+     drop-down boxes for the task of your choice.
+    </para>
+   </step>
+  </procedure>
+ </sect1>
+
+ <sect1 xml:id="sec-gnome-settings-share">
+  <title>Setting session sharing preferences</title>
+  <para>
+   To open a configuration dialog for allowing remote logins via SSH,
+   right-click the desktop and choose <guimenu>Settings</guimenu>. Then
+   choose <guimenu>Sharing</guimenu>.
+  </para>
+  <para>
+   Before you can share anything, you need to turn on the switch in the upper
+   part of the dialog. The switch also helps you if you quickly need to
+   disable all sharing options.
+  </para>
+    <para>
+     To enable logging in via SSH, click <guimenu>Remote Login</guimenu> and
+     enter the administrator password.
+    </para>
+  </sect1>
+</chapter>

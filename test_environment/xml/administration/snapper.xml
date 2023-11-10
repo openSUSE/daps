@@ -1,0 +1,2855 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter
+[
+  <!ENTITY % entities SYSTEM "entities/generic-entities.ent">
+    %entities;
+]>
+
+<chapter xmlns="http://docbook.org/ns/docbook"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0"
+         xml:id="cha-snapper">
+ <title>System recovery and snapshot management with Snapper</title>
+ <info>
+  <dm:docmanager xmlns:dm="urn:x-suse:ns:docmanager">
+   <dm:bugtracker></dm:bugtracker>
+   <dm:translation>yes</dm:translation>
+  </dm:docmanager>
+  <abstract>
+   <para>
+    Snapper allows creating and managing file system snapshots.
+    File system snapshots allow keeping a copy of the state of a file system
+    at a certain point of time.
+    The standard setup of Snapper is designed to allow rolling back system
+    changes.
+    However, you can also use it to create on-disk backups of user data.
+    As the basis for this functionality, Snapper uses the Btrfs file system or
+    thinly-provisioned LVM volumes with an XFS or Ext4 file system.
+   </para>
+  </abstract>
+ </info>
+
+ <para>
+  Snapper has a command line interface and a &yast; interface.
+  Snapper lets you create and manage file system snapshots on the following
+  types of file systems:
+ </para>
+ <itemizedlist>
+  <listitem>
+   <para>
+    Btrfs, a copy-on-write file system for Linux that natively supports
+    file system snapshots of subvolumes.
+    (Subvolumes are separately mountable file systems within a physical
+    partition.)
+   </para>
+   <para>
+    You can also boot from <literal>Btrfs</literal> snapshots. For more
+    information, see <xref linkend="sec-snapper-snapshot-boot"/>.
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    Thinly-provisioned LVM volumes formatted with XFS or Ext4.
+   </para>
+  </listitem>
+ </itemizedlist>
+ <para>
+  Using Snapper, you can perform the following tasks:
+ </para>
+ <itemizedlist mark="bullet" spacing="normal">
+  <listitem>
+   <para>
+    Undo system changes made by <command>zypper</command> and &yast;. See
+    <xref linkend="sec-snapper-undo"/> for details.
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    Restore files from previous snapshots. See
+    <xref linkend="sec-snapper-undo-delete-file"/> for details.
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    Do a system rollback by booting from a snapshot. See
+    <xref linkend="sec-snapper-snapshot-boot"/> for details.
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    Manually create and manage snapshots, within the running system. See
+    <xref linkend="sec-snapper-manage"/> for details.
+   </para>
+  </listitem>
+ </itemizedlist>
+
+ <sect1 xml:id="sec-snapper-setup">
+  <title>Default setup</title>
+
+  <para>
+   Snapper on &productname; is set up as an undo and recovery
+   tool for system changes. By default, the root partition
+   (<filename>/</filename>) of &productname; is formatted with
+   <literal>Btrfs</literal>. Taking snapshots is automatically enabled if the
+   root partition (<filename>/</filename>) is big enough (more
+   than approximately 16&nbsp;GB). By default, snapshots are disabled on partitions
+   other than <filename>/</filename>.
+  </para>
+
+  <tip>
+   <title>Enabling Snapper in the installed system</title>
+   <para>
+    If you disabled Snapper during the installation, you can enable it at
+    any time later. To do so, create a default Snapper configuration for the
+    root file system by running:
+   </para>
+   <screen>&prompt.sudo;snapper -c root create-config /</screen>
+   <para>
+    Afterward enable the different snapshot types as described in <xref
+    linkend="sec-snapper-setup-customize-auto-snapshots"/>.
+   </para>
+   <para>
+    Note that on a Btrfs root file system, snapshots require a file system with
+    subvolumes configured as proposed by the installer and a partition size of at
+    least 16 GB.
+   </para>
+  </tip>
+
+  <para>
+   When a snapshot is created, both the snapshot and the original point to the
+   same blocks in the file system. So, initially a snapshot does not occupy
+   additional disk space. If data in the original file system is modified,
+   changed data blocks are copied while the old data blocks are kept for the
+   snapshot. Therefore, a snapshot occupies the same amount of space as the
+   data modified. So, over time, the amount of space a snapshot allocates,
+   constantly grows. As a consequence, deleting files from a
+   <literal>Btrfs</literal> file system containing snapshots may
+   <emphasis>not</emphasis> free disk space!
+  </para>
+
+  <note>
+   <title>Snapshot location</title>
+   <para>
+    Snapshots always reside on the same partition or subvolume on which the
+    snapshot has been taken. It is not possible to store snapshots on a
+    different partition or subvolume.
+   </para>
+  </note>
+
+  <para>
+   As a result, partitions containing snapshots need to be larger than
+   partitions not containing snapshots. The exact amount depends strongly on the
+   number of snapshots you keep and the amount of data modifications. As a rule
+   of thumb, give partitions twice as much space as you normally would.
+   To prevent disks from running out of space, old snapshots are automatically
+   cleaned up. Refer to
+   <xref
+   linkend="sec-snapper-setup-customize-archiving"/> for details.
+  </para>
+
+  <sect2 xml:id="snapper-default-settings">
+   <title>Default settings</title>
+   <variablelist>
+    <varlistentry>
+     <term>Disks larger than 16&nbsp;GB</term>
+     <listitem>
+      <itemizedlist>
+       <listitem><para>Configuration file: <filename>/etc/snapper/configs/root</filename></para></listitem>
+       <listitem><para><literal>USE_SNAPPER=yes</literal></para></listitem>
+       <listitem><para><literal>TIMELINE_CREATE=no</literal></para></listitem>
+      </itemizedlist>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>Disks smaller than 16&nbsp;GB</term>
+     <listitem>
+      <itemizedlist>
+       <listitem><para>Configuration file: not created</para></listitem>
+       <listitem><para><literal>USE_SNAPPER=no</literal></para></listitem>
+       <listitem><para><literal>TIMELINE_CREATE=yes</literal></para></listitem>
+      </itemizedlist>
+     </listitem>
+    </varlistentry>
+   </variablelist>
+  </sect2>
+
+  <sect2 xml:id="snapper-snapshot-type">
+   <title>Types of snapshots</title>
+   <para>
+    Although snapshots themselves do not differ in a technical sense, we
+    distinguish between three types of snapshots, based on the events that trigger them:
+   </para>
+   <variablelist>
+    <varlistentry>
+     <term>Timeline snapshots</term>
+     <listitem>
+      <para>
+       A single snapshot is created every hour. Old snapshots are automatically
+       deleted. By default, the first snapshot of the last ten days, months,
+       and years are kept. Using the &yast; OS installation method (default),
+       timeline snapshots are enabled, except for the root file system.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>Installation snapshots</term>
+     <listitem>
+      <para>
+       Whenever one or more packages are installed with &yast; or Zypper, a
+       pair of snapshots is created: one before the installation starts
+       (<quote>Pre</quote>) and another one after the installation has finished
+       (<quote>Post</quote>). In case an important system component such as the
+       kernel has been installed, the snapshot pair is marked as important
+       (<literal>important=yes</literal>). Old snapshots are automatically
+       deleted. By default the last ten important snapshots and the last ten
+       <quote>regular</quote> (including administration snapshots) snapshots
+       are kept. Installation snapshots are enabled by default.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>Administration snapshots</term>
+     <listitem>
+      <para>
+       Whenever you administrate the system with &yast;, a pair of snapshots is
+       created: one when a &yast; module is started (<quote>Pre</quote>) and
+       another when the module is closed (<quote>Post</quote>). Old snapshots
+       are automatically deleted. By default the last ten important snapshots
+       and the last ten <quote>regular</quote> snapshots (including
+       installation snapshots) are kept. Administration snapshots are enabled
+       by default.
+      </para>
+     </listitem>
+    </varlistentry>
+   </variablelist>
+  </sect2>
+
+  <sect2 xml:id="snapper-dir-excludes">
+   <title>Directories that are excluded from snapshots</title>
+   <para>
+    Some directories need to be excluded from snapshots for different reasons.
+    The following list shows all directories that are excluded:
+   </para>
+   <xi:include href="snapshot_excludes_i.xml"/>
+  </sect2>
+
+  <sect2 xml:id="sec-snapper-setup-customize">
+   <title>Customizing the setup</title>
+   <para>
+    &productname; comes with a reasonable default setup, which should be
+    sufficient for most use cases. However, all aspects of taking automatic
+    snapshots and snapshot keeping can be configured according to your needs.
+   </para>
+   <sect3 xml:id="sec-snapper-setup-customize-auto-snapshots">
+    <title>Disabling/enabling snapshots</title>
+    <para>
+     Each of the three snapshot types (timeline, installation, administration)
+     can be enabled or disabled independently.
+    </para>
+    <variablelist>
+     <varlistentry>
+      <term>Disabling/enabling timeline snapshots</term>
+      <listitem>
+       <formalpara>
+        <title>Enabling</title>
+        <para>
+         <command>snapper -c root set-config "TIMELINE_CREATE=yes"</command>
+        </para>
+       </formalpara>
+       <formalpara>
+        <title>Disabling</title>
+        <para>
+         <command>snapper -c root set-config "TIMELINE_CREATE=no"</command>
+        </para>
+       </formalpara>
+       <para>
+        Using the &yast; OS installation method (default), timeline snapshots
+        are enabled, except for the root file system.
+       </para>
+      </listitem>
+     </varlistentry>
+     <varlistentry>
+      <term>Disabling/enabling installation snapshots</term>
+      <listitem>
+       <formalpara>
+        <title>Enabling:</title>
+        <para>
+         Install the package
+         <systemitem class="resource">snapper-zypp-plugin</systemitem>
+        </para>
+       </formalpara>
+       <formalpara>
+        <title>Disabling:</title>
+        <para>
+         Uninstall the package
+         <systemitem class="resource">snapper-zypp-plugin</systemitem>
+        </para>
+       </formalpara>
+       <para>
+        Installation snapshots are enabled by default.
+       </para>
+      </listitem>
+     </varlistentry>
+     <varlistentry>
+      <term>Disabling/enabling administration snapshots</term>
+      <listitem>
+       <formalpara>
+        <title>Enabling:</title>
+        <para>
+         Set <envar>USE_SNAPPER</envar> to <literal>yes</literal> in
+         <filename>/etc/sysconfig/yast2</filename>.
+        </para>
+       </formalpara>
+       <formalpara>
+        <title>Disabling:</title>
+        <para>
+         Set <envar>USE_SNAPPER</envar> to <literal>no</literal> in
+         <filename>/etc/sysconfig/yast2</filename>.
+        </para>
+       </formalpara>
+       <para>
+        Administration snapshots are enabled by default.
+       </para>
+      </listitem>
+     </varlistentry>
+    </variablelist>
+   </sect3>
+   <sect3 xml:id="sec-snapper-setup-customize-inst-snapshots">
+    <title>Controlling installation snapshots</title>
+    <para>
+     Taking snapshot pairs upon installing packages with &yast; or Zypper is
+     handled by the
+     <systemitem class="resource">snapper-zypp-plugin</systemitem>. An XML
+     configuration file, <filename>/etc/snapper/zypp-plugin.conf</filename>
+     defines, when to make snapshots. By default the file looks like the
+     following:
+    </para>
+<screen> 1 &lt;?xml version="1.0" encoding="utf-8"?&gt;
+ 2 &lt;snapper-zypp-plugin-conf&gt;
+ 3  &lt;solvables&gt;
+ 4   &lt;solvable match="w"<co xml:id="zypp-conf-match"/> important="true"<co xml:id="zypp-conf-important"/>&gt;kernel-*<co xml:id="zypp-conf-kernel"/>&lt;/solvable&gt;
+ 5   &lt;solvable match="w" important="true"&gt;dracut&lt;/solvable&gt;
+ 6   &lt;solvable match="w" important="true"&gt;glibc&lt;/solvable&gt;
+ 7   &lt;solvable match="w" important="true"&gt;systemd*&lt;/solvable&gt;
+ 8   &lt;solvable match="w" important="true"&gt;udev&lt;/solvable&gt;
+ 9   &lt;solvable match="w"&gt;*&lt;/solvable&gt;<co xml:id="zypp-conf-packages"/>
+10  &lt;/solvables&gt;
+11 &lt;/snapper-zypp-plugin-conf&gt;</screen>
+    <calloutlist>
+     <callout arearefs="zypp-conf-match">
+      <para>
+       The match attribute defines whether the pattern is a Unix shell-style
+       wild card (<literal>w</literal>) or a Python regular expression
+       (<literal>re</literal>).
+      </para>
+     </callout>
+     <callout arearefs="zypp-conf-important">
+      <para>
+       If the given pattern matches and the corresponding package is marked as
+       important (for example kernel packages), the snapshot will also be
+       marked as important.
+      </para>
+     </callout>
+     <callout arearefs="zypp-conf-kernel">
+      <para>
+       Pattern to match a package name. Based on the setting of the
+       <literal>match</literal> attribute, special characters are either
+       interpreted as shell wild cards or regular expressions. This pattern
+       matches all package names starting with <literal>kernel-</literal>.
+      </para>
+     </callout>
+     <callout arearefs="zypp-conf-packages">
+      <para>
+       This line unconditionally matches all packages.
+      </para>
+     </callout>
+    </calloutlist>
+    <para>
+     With this configuration snapshot, pairs are made whenever a package is
+     installed (line 9). When the kernel, dracut, glibc, systemd, or udev packages
+     marked as important are installed, the snapshot pair will also be marked
+     as important (lines 4 to 8). All rules are evaluated.
+    </para>
+    <para>
+     To disable a rule, either delete it or deactivate it using XML comments.
+     To prevent the system from making snapshot pairs for every package
+     installation for example, comment line 9:
+    </para>
+<screen> 1 &lt;?xml version="1.0" encoding="utf-8"?&gt;
+ 2 &lt;snapper-zypp-plugin-conf&gt;
+ 3  &lt;solvables&gt;
+ 4   &lt;solvable match="w" important="true"&gt;kernel-*&lt;/solvable&gt;
+ 5   &lt;solvable match="w" important="true"&gt;dracut&lt;/solvable&gt;
+ 6   &lt;solvable match="w" important="true"&gt;glibc&lt;/solvable&gt;
+ 7   &lt;solvable match="w" important="true"&gt;systemd*&lt;/solvable&gt;
+ 8   &lt;solvable match="w" important="true"&gt;udev&lt;/solvable&gt;
+ 9   &lt;!-- &lt;solvable match="w"&gt;*&lt;/solvable&gt; --&gt;
+10  &lt;/solvables&gt;
+11 &lt;/snapper-zypp-plugin-conf&gt;</screen>
+   </sect3>
+   <sect3 xml:id="sec-snapper-setup-customizing-new-subvolume">
+    <title>Creating and mounting new subvolumes</title>
+    <para>
+     Creating a new subvolume underneath the <filename>/</filename> hierarchy
+     and permanently mounting it is supported. Such a subvolume will be
+     excluded from snapshots. You need to make sure not to create it inside an
+     existing snapshot, since you would not be able to delete snapshots anymore
+     after a rollback.
+    </para>
+    <para>
+     &productname; is configured with the <filename>/@/</filename> subvolume
+     which serves as an independent root for permanent subvolumes such as
+     <filename>/opt</filename>, <filename>/srv</filename>,
+     <filename>/home</filename> and others. Any new subvolumes you create and
+     permanently mount need to be created in this initial root file system.
+    </para>
+    <para>
+     To do so, run the following commands. In this example, a new subvolume
+     <filename>/usr/important</filename> is created from
+     <filename>/dev/sda2</filename>.
+    </para>
+<screen>&prompt.sudo;mount /dev/sda2 -o subvol=@ /mnt
+&prompt.sudo;btrfs subvolume create /mnt/usr/important
+&prompt.sudo;umount /mnt</screen>
+    <para>
+     The corresponding entry in <filename>/etc/fstab</filename> needs to look
+     like the following:
+    </para>
+    <screen>/dev/sda2 /usr/important btrfs subvol=@/usr/important 0 0</screen>
+
+    <tip>
+     <title>Disable copy-on-write (cow)</title>
+     <para>
+      A subvolume may contain files that constantly change, such as
+      virtualized disk images, database files, or log files. If so, consider
+      disabling the copy-on-write feature for this volume, to avoid duplication
+      of disk blocks. Use the <option>nodatacow</option> mount option in
+      <filename>/etc/fstab</filename> to do so:
+     </para>
+     <screen>/dev/sda2 /usr/important btrfs nodatacow,subvol=@/usr/important 0 0</screen>
+     <para>
+      To alternatively disable copy-on-write for single files or directories,
+      use the command <command>chattr +C
+      <replaceable>PATH</replaceable></command>.
+     </para>
+    </tip>
+
+   </sect3>
+   <sect3 xml:id="sec-snapper-setup-customize-archiving">
+    <title>Controlling snapshot archiving</title>
+    <para>
+     Snapshots occupy disk space. To prevent disks from running out of space
+     and thus causing system outages, old snapshots are automatically deleted.
+     By default, up to ten important installation and administration snapshots
+     and up to ten regular installation and administration snapshots are kept.
+     If these snapshots occupy more than 50% of the root file system size,
+     additional snapshots will be deleted. A minimum of four important and two
+     regular snapshots are always kept.
+    </para>
+    <para>
+     Refer to <xref linkend="sec-snapper-config-modify"/> for instructions on
+     how to change these values.
+    </para>
+   </sect3>
+   <sect3 xml:id="sec-snapper-lvm">
+    <title>Using Snapper on thinly provisioned LVM volumes</title>
+    <para>
+     Apart from snapshots on <literal>Btrfs</literal> file systems, Snapper
+     also supports taking snapshots on thinly-provisioned LVM volumes (snapshots
+     on regular LVM volumes are <emphasis>not</emphasis> supported) formatted
+     with XFS, Ext4 or Ext3. For more information and setup instructions on LVM
+     volumes, refer to <xref linkend="sec-yast-system-lvm"/>.
+    </para>
+    <para>
+     To use Snapper on a thinly-provisioned LVM volume you need to create a
+     Snapper configuration for it. On LVM it is required to specify the file
+     system with
+     <option>--fstype=lvm(<replaceable>FILESYSTEM</replaceable>)</option>.
+     <literal>ext3</literal>, <literal>etx4</literal> or <literal>xfs</literal>
+     are valid values for <replaceable>FILESYSTEM</replaceable>. Example:
+    </para>
+<screen>&prompt.sudo;snapper -c lvm create-config --fstype="lvm(xfs)" /thin_lvm</screen>
+    <para>
+     You can adjust this configuration according to your needs as described in
+     <xref linkend="sec-snapper-config-modify"/>.
+    </para>
+   </sect3>
+  </sect2>
+ </sect1>
+ <sect1 xml:id="sec-snapper-undo">
+  <title>Using Snapper to undo changes</title>
+
+  <para>
+   Snapper on &productname; is preconfigured to serve as a tool that lets you
+   undo changes made by <command>zypper</command> and &yast;. For this purpose,
+   Snapper is configured to create a pair of snapshots before and after each
+   run of <command>zypper</command> and &yast;. Snapper also lets you restore
+   system files that have been accidentally deleted or modified. Timeline
+   snapshots for the root partition need to be enabled for this
+   purpose&mdash;see
+   <xref linkend="sec-snapper-setup-customize-auto-snapshots"/> for details.
+  </para>
+
+  <para>
+   By default, automatic snapshots as described above are configured for the
+   root partition and its subvolumes. To make snapshots available for other
+   partitions such as <filename>/home</filename> for example, you can create
+   custom configurations.
+  </para>
+
+  <important>
+   <title>Undoing changes compared to rollback</title>
+   <para>
+    When working with snapshots to restore data, it is important to know that
+    there are two fundamentally different scenarios Snapper can handle:
+   </para>
+   <variablelist>
+    <varlistentry>
+     <term>Undoing changes</term>
+     <listitem>
+      <para>
+       When undoing changes as described in the following, two snapshots are
+       being compared and the changes between these two snapshots are made
+       undone. Using this method also allows to explicitly select the files
+       that should be restored.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>Rollback</term>
+     <listitem>
+      <para>
+       When doing rollbacks as described in
+       <xref linkend="sec-snapper-snapshot-boot"/>, the system is reset to the
+       state at which the snapshot was taken.
+      </para>
+     </listitem>
+    </varlistentry>
+   </variablelist>
+   <para>
+    When undoing changes, it is also possible to compare a snapshot against the
+    current system. When restoring <emphasis>all</emphasis> files from such a
+    comparison, this will have the same result as doing a rollback. However,
+    using the method described in <xref linkend="sec-snapper-snapshot-boot"/>
+    for rollbacks should be preferred, since it is faster and allows you to
+    review the system before doing the rollback.
+   </para>
+  </important>
+
+  <warning>
+   <title>Data consistency</title>
+   <para>
+    There is no mechanism to ensure data consistency when creating a snapshot.
+    Whenever a file (for example, a database) is written at the same time as the
+    snapshot is being created, it will result in a corrupted or partly written
+    file. Restoring such a file will cause problems. Furthermore, certain system
+    files such as <filename>/etc/mtab</filename> must never be restored.
+    Therefore it is strongly recommended to <emphasis>always</emphasis> closely
+    review the list of changed files and their diffs. Only restore files that
+    really belong to the action you want to revert.
+   </para>
+  </warning>
+
+  <sect2 xml:id="sec-snapper-undo-yast">
+   <title>Undoing &yast; and Zypper changes</title>
+   <para>
+    If you set up the root partition with <literal>Btrfs</literal> during the
+    installation, Snapper&mdash;preconfigured for doing rollbacks of &yast; or
+    Zypper changes&mdash;will automatically be installed. Every time you start
+    a &yast; module or a Zypper transaction, two snapshots are created: a
+    <quote>pre-snapshot</quote> capturing the state of the file system before
+    the start of the module and a <quote>post-snapshot</quote> after the module
+    has been finished.
+   </para>
+   <para>
+    Using the &yast; Snapper module or the <command>snapper</command> command
+    line tool, you can undo the changes made by &yast;/Zypper by restoring
+    files from the <quote>pre-snapshot</quote>. Comparing two snapshots the
+    tools also allow you to see which files have been changed. You can also
+    display the differences between two versions of a file (diff).
+   </para>
+   <procedure xml:id="proc-snapper-undo-yast">
+    <title>Undoing changes using the &yast; <guimenu>Snapper</guimenu> module</title>
+    <step>
+     <para>
+      Start the <guimenu>Snapper</guimenu> module from the
+      <guimenu>Miscellaneous</guimenu> section in &yast; or by entering
+      <command>yast2 snapper</command>.
+     </para>
+    </step>
+    <step>
+     <para>
+      Make sure <guimenu>Current Configuration</guimenu> is set to
+      <guimenu>root</guimenu>. This is always the case unless you have manually
+      added own Snapper configurations.
+     </para>
+    </step>
+    <step>
+     <para>
+      Choose a pair of pre- and post-snapshots from the list. Both, &yast; and
+      Zypper snapshot pairs are of the type <guimenu>Pre &amp; Post</guimenu>.
+      &yast; snapshots are labeled as <literal>zypp(y2base)</literal> in the
+      <guimenu>Description column</guimenu>; Zypper snapshots are labeled
+      <literal>zypp(zypper)</literal>.
+     </para>
+     <informalfigure>
+      <mediaobject>
+       <imageobject role="fo">
+        <imagedata fileref="snapper_yast2_list.png" width="75%"/>
+       </imageobject>
+       <imageobject role="html">
+        <imagedata fileref="snapper_yast2_list.png" width="75%"/>
+       </imageobject>
+      </mediaobject>
+     </informalfigure>
+    </step>
+    <step>
+     <para>
+      Click <guimenu>Show Changes</guimenu> to open the list of files that
+      differ between the two snapshots.
+     </para>
+     <informalfigure>
+      <mediaobject>
+       <imageobject role="fo">
+        <imagedata fileref="snapper_yast2_changes.png" width="75%"/>
+       </imageobject>
+       <imageobject role="html">
+        <imagedata fileref="snapper_yast2_changes.png" width="75%"/>
+       </imageobject>
+      </mediaobject>
+     </informalfigure>
+    </step>
+    <step>
+     <para>
+      Review the list of files. To display a <quote>diff</quote> between the
+      pre- and post-version of a file, select it from the list.
+     </para>
+     <informalfigure>
+      <mediaobject>
+       <imageobject role="fo">
+        <imagedata fileref="snapper_yast2_diff.png" width="65%"/>
+       </imageobject>
+       <imageobject role="html">
+        <imagedata fileref="snapper_yast2_diff.png" width="75%"/>
+       </imageobject>
+      </mediaobject>
+     </informalfigure>
+    </step>
+    <step>
+     <para>
+      To restore one or more files, select the relevant files or directories by
+      activating the respective check box. Click <guimenu>Restore
+      Selected</guimenu> and confirm the action by clicking
+      <guimenu>Yes</guimenu>.
+     </para>
+     <informalfigure>
+      <mediaobject>
+       <imageobject role="fo">
+        <imagedata fileref="snapper_yast2_restore.png" width="75%"/>
+       </imageobject>
+       <imageobject role="html">
+        <imagedata fileref="snapper_yast2_restore.png" width="75%"/>
+       </imageobject>
+      </mediaobject>
+     </informalfigure>
+     <para>
+      To restore a single file, activate its diff view by clicking its name.
+      Click <guimenu>Restore From First</guimenu> and confirm your choice with
+      <guimenu>Yes</guimenu>.
+     </para>
+    </step>
+   </procedure>
+   <procedure xml:id="proc-snapper-yast-cmdline">
+    <title>Undoing changes using the <command>snapper</command> command</title>
+    <step>
+     <para>
+      Get a list of &yast; and Zypper snapshots by running <command>snapper
+      list -t pre-post</command>. &yast; snapshots are labeled
+      as <literal>yast <replaceable>MODULE_NAME</replaceable></literal> in the
+      <guimenu>Description column</guimenu>; Zypper snapshots are labeled
+      <literal>zypp(zypper)</literal>.
+     </para>
+<screen><?dbsuse-fo font-size="0.60em"?>&prompt.sudo;snapper list -t pre-post
+Pre # | Post # | Pre Date                      | Post Date                     | Description
+------+--------+-------------------------------+-------------------------------+--------------
+311   | 312    | Tue 06 May 2018 14:05:46 CEST | Tue 06 May 2018 14:05:52 CEST | zypp(y2base)
+340   | 341    | Wed 07 May 2018 16:15:10 CEST | Wed 07 May 2018 16:15:16 CEST | zypp(zypper)
+342   | 343    | Wed 07 May 2018 16:20:38 CEST | Wed 07 May 2018 16:20:42 CEST | zypp(y2base)
+344   | 345    | Wed 07 May 2018 16:21:23 CEST | Wed 07 May 2018 16:21:24 CEST | zypp(zypper)
+346   | 347    | Wed 07 May 2018 16:41:06 CEST | Wed 07 May 2018 16:41:10 CEST | zypp(y2base)
+348   | 349    | Wed 07 May 2018 16:44:50 CEST | Wed 07 May 2018 16:44:53 CEST | zypp(y2base)
+350   | 351    | Wed 07 May 2018 16:46:27 CEST | Wed 07 May 2018 16:46:38 CEST | zypp(y2base) </screen>
+    </step>
+    <step>
+     <para>
+      Get a list of changed files for a snapshot pair with <command>snapper
+      status</command>
+      <replaceable>PRE</replaceable>..<replaceable>POST</replaceable>. Files
+      with content changes are marked with <guimenu>c</guimenu>, files that
+      have been added are marked with <guimenu>+</guimenu> and deleted files
+      are marked with <guimenu>-</guimenu>.
+     </para>
+<screen>&prompt.sudo;snapper status 350..351
++..... /usr/share/doc/packages/mikachan-fonts
++..... /usr/share/doc/packages/mikachan-fonts/COPYING
++..... /usr/share/doc/packages/mikachan-fonts/dl.html
+c..... /usr/share/fonts/truetype/fonts.dir
+c..... /usr/share/fonts/truetype/fonts.scale
++..... /usr/share/fonts/truetype/みかちゃん-p.ttf
++..... /usr/share/fonts/truetype/みかちゃん-pb.ttf
++..... /usr/share/fonts/truetype/みかちゃん-ps.ttf
++..... /usr/share/fonts/truetype/みかちゃん.ttf
+c..... /var/cache/fontconfig/7ef2298fde41cc6eeb7af42e48b7d293-x86_64.cache-4
+c..... /var/lib/rpm/Basenames
+c..... /var/lib/rpm/Dirnames
+c..... /var/lib/rpm/Group
+c..... /var/lib/rpm/Installtid
+c..... /var/lib/rpm/Name
+c..... /var/lib/rpm/Packages
+c..... /var/lib/rpm/Providename
+c..... /var/lib/rpm/Requirename
+c..... /var/lib/rpm/Sha1header
+c..... /var/lib/rpm/Sigmd5</screen>
+    </step>
+    <step>
+     <para>
+      To display the diff for a certain file, run <command>snapper
+      diff</command>
+      <replaceable>PRE</replaceable>..<replaceable>POST</replaceable>
+      <replaceable>FILENAME</replaceable>. If you do not specify
+      <replaceable>FILENAME</replaceable>, a diff for all files will be
+      displayed.
+     </para>
+<screen>&prompt.sudo;snapper diff 350..351 /usr/share/fonts/truetype/fonts.scale
+--- /.snapshots/350/snapshot/usr/share/fonts/truetype/fonts.scale       2014-04-23 15:58:57.000000000 +0200
++++ /.snapshots/351/snapshot/usr/share/fonts/truetype/fonts.scale       2014-05-07 16:46:31.000000000 +0200
+@@ -1,4 +1,4 @@
+-1174
++1486
+ ds=y:ai=0.2:luximr.ttf -b&amp;h-luxi mono-bold-i-normal--0-0-0-0-c-0-iso10646-1
+ ds=y:ai=0.2:luximr.ttf -b&amp;h-luxi mono-bold-i-normal--0-0-0-0-c-0-iso8859-1
+[...]</screen>
+    </step>
+    <step>
+     <para>
+      To restore one or more files run <command>snapper -v undochange</command>
+      <replaceable>PRE</replaceable>..<replaceable>POST</replaceable>
+      <replaceable>FILENAMES</replaceable>. If you do not specify a
+      <replaceable>FILENAMES</replaceable>, all changed files will be restored.
+     </para>
+<screen>&prompt.sudo;snapper -v undochange 350..351
+     create:0 modify:13 delete:7
+     undoing change...
+     deleting /usr/share/doc/packages/mikachan-fonts
+     deleting /usr/share/doc/packages/mikachan-fonts/COPYING
+     deleting /usr/share/doc/packages/mikachan-fonts/dl.html
+     deleting /usr/share/fonts/truetype/みかちゃん-p.ttf
+     deleting /usr/share/fonts/truetype/みかちゃん-pb.ttf
+     deleting /usr/share/fonts/truetype/みかちゃん-ps.ttf
+     deleting /usr/share/fonts/truetype/みかちゃん.ttf
+     modifying /usr/share/fonts/truetype/fonts.dir
+     modifying /usr/share/fonts/truetype/fonts.scale
+     modifying /var/cache/fontconfig/7ef2298fde41cc6eeb7af42e48b7d293-x86_64.cache-4
+     modifying /var/lib/rpm/Basenames
+     modifying /var/lib/rpm/Dirnames
+     modifying /var/lib/rpm/Group
+     modifying /var/lib/rpm/Installtid
+     modifying /var/lib/rpm/Name
+     modifying /var/lib/rpm/Packages
+     modifying /var/lib/rpm/Providename
+     modifying /var/lib/rpm/Requirename
+     modifying /var/lib/rpm/Sha1header
+     modifying /var/lib/rpm/Sigmd5
+     undoing change done</screen>
+    </step>
+   </procedure>
+   <warning>
+    <title>Reverting user additions</title>
+    <para>
+     Reverting user additions via undoing changes with Snapper is not
+     recommended. Since certain directories are excluded from snapshots, files
+     belonging to these users will remain in the file system. If a user with
+     the same user ID as a deleted user is created, this user will inherit the
+     files. Therefore it is strongly recommended to use the &yast;
+     <guimenu>User and Group Management</guimenu> tool to remove users.
+    </para>
+   </warning>
+  </sect2>
+
+  <sect2 xml:id="sec-snapper-undo-delete-file">
+   <title>Using Snapper to restore files</title>
+   <para>
+    Apart from the installation and administration snapshots, Snapper creates
+    timeline snapshots. You can use these backup snapshots to restore files
+    that have accidentally been deleted or to restore a previous version of a
+    file. By using Snapper's diff feature you can also find out which
+    modifications have been made at a certain point of time.
+   </para>
+   <para>
+    Being able to restore files is especially interesting for data, which may
+    reside on subvolumes or partitions for which snapshots are not taken by
+    default. To be able to restore files from home directories, for example,
+    create a separate Snapper configuration for <filename>/home</filename>
+    doing automatic timeline snapshots. See
+    <xref linkend="sec-snapper-config"/> for instructions.
+   </para>
+   <warning>
+    <title>Restoring files compared to rollback</title>
+    <para>
+     Snapshots taken from the root file system (defined by Snapper's root
+     configuration), can be used to do a system rollback. The recommended way
+     to do such a rollback is to boot from the snapshot and then perform the
+     rollback. See <xref linkend="sec-snapper-snapshot-boot"/> for details.
+    </para>
+    <para>
+     Performing a rollback would also be possible by restoring all files from a
+     root file system snapshot as described below. However, this is not
+     recommended. You may restore single files, for example a configuration
+     file from the <systemitem>/etc</systemitem> directory, but not the
+     complete list of files from the snapshot.
+    </para>
+    <para>
+     This restriction only affects snapshots taken from the root file system.
+    </para>
+   </warning>
+   <procedure xml:id="proc-snapper-restore-yast">
+    <title>Restoring files using the &yast; <guimenu>Snapper</guimenu> module</title>
+    <step>
+     <para>
+      Start the <guimenu>Snapper</guimenu> module from the
+      <guimenu>Miscellaneous</guimenu> section in &yast; or by entering
+      <command>yast2 snapper</command>.
+     </para>
+    </step>
+    <step>
+     <para>
+      Choose the <guimenu>Current Configuration</guimenu> from which to choose
+      a snapshot.
+     </para>
+    </step>
+    <step>
+     <para>
+      Select a timeline snapshot from which to restore a file and choose
+      <guimenu>Show Changes</guimenu>. Timeline snapshots are of the type
+      <guimenu>Single</guimenu> with a description value of
+      <guimenu>timeline</guimenu>.
+     </para>
+    </step>
+    <step>
+     <para>
+      Select a file from the text box by clicking the file name. The difference
+      between the snapshot version and the current system is shown. Activate
+      the check box to select the file for restore. Do so for all files you
+      want to restore.
+     </para>
+    </step>
+    <step>
+     <para>
+      Click <guimenu>Restore Selected</guimenu> and confirm the action by
+      clicking <guimenu>Yes</guimenu>.
+     </para>
+    </step>
+   </procedure>
+   <procedure xml:id="proc-snapper-restore-cmdl">
+    <title>Restoring files using the <command>snapper</command> command</title>
+    <step>
+     <para>
+      Get a list of timeline snapshots for a specific configuration by running
+      the following command:
+     </para>
+<screen>&prompt.sudo;snapper -c <replaceable>CONFIG</replaceable> list -t single | grep timeline</screen>
+     <para>
+      <replaceable>CONFIG</replaceable> needs to be replaced by an existing
+      Snapper configuration. Use <command>snapper list-configs</command> to
+      display a list.
+     </para>
+    </step>
+    <step>
+     <para>
+      Get a list of changed files for a given snapshot by running the following
+      command:
+     </para>
+<screen>&prompt.sudo;snapper -c <replaceable>CONFIG</replaceable> status <replaceable>SNAPSHOT_ID</replaceable>..0</screen>
+     <para>
+      Replace <replaceable>SNAPSHOT_ID</replaceable> by the ID for the snapshot
+      from which you want to restore the files.
+     </para>
+    </step>
+    <step>
+     <para>
+      Optionally list the differences between the current file version and the
+      one from the snapshot by running
+     </para>
+<screen>&prompt.sudo;snapper -c <replaceable>CONFIG</replaceable> diff <replaceable>SNAPSHOT_ID</replaceable>..0 <replaceable>FILE NAME</replaceable></screen>
+     <para>
+      If you do not specify <replaceable>&lt;FILE NAME&gt;</replaceable>, the
+      difference for all files are shown.
+     </para>
+    </step>
+    <step>
+     <para>
+      To restore one or more files, run
+     </para>
+<screen>&prompt.sudo;snapper -c <replaceable>CONFIG</replaceable> -v undochange <replaceable>SNAPSHOT_ID</replaceable>..0 <replaceable>FILENAME1</replaceable> <replaceable>FILENAME2</replaceable></screen>
+     <para>
+      If you do not specify file names, all changed files will be restored.
+     </para>
+    </step>
+   </procedure>
+  </sect2>
+ </sect1>
+ <sect1 xml:id="sec-snapper-snapshot-boot">
+  <title>System rollback by booting from snapshots</title>
+
+  <para>
+   The &grub; version included on &productname; can boot from Btrfs snapshots.
+   Together with Snapper's rollback feature, this allows to recover a
+   misconfigured system. Only snapshots created for the default Snapper
+   configuration (<literal>root</literal>) are bootable.
+  </para>
+
+  <important>
+   <title>Supported configuration</title>
+   <para>
+<!-- fs 2016-06-17: This will change with SP3 - see FATE #316347 -->
+    As of &productname; &productnumber; system rollbacks are only supported if
+    the default subvolume configuration of the root partition has not been
+    changed.
+   </para>
+  </important>
+
+  <para>
+   When booting a snapshot, the parts of the file system included in the
+   snapshot are mounted read-only; all other file systems and parts that are
+   excluded from snapshots are mounted read-write and can be modified.
+  </para>
+
+  <important>
+   <title>Undoing changes compared to rollback</title>
+   <para>
+    When working with snapshots to restore data, it is important to know that
+    there are two fundamentally different scenarios Snapper can handle:
+   </para>
+   <variablelist>
+    <varlistentry>
+     <term>Undoing changes</term>
+     <listitem>
+      <para>
+       When undoing changes as described in <xref linkend="sec-snapper-undo"/>,
+       two snapshots are compared and the changes between these two snapshots
+       are reverted. Using this method also allows to explicitly exclude
+       selected files from being restored.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>Rollback</term>
+     <listitem>
+      <para>
+       When doing rollbacks as described in the following, the system is reset
+       to the state at which the snapshot was taken.
+      </para>
+     </listitem>
+    </varlistentry>
+   </variablelist>
+  </important>
+
+  <para>
+   To do a rollback from a bootable snapshot, the following requirements must
+   be met. When doing a default installation, the system is set up accordingly.
+  </para>
+
+  <itemizedlist mark="bullet" spacing="normal">
+   <title>Requirements for a rollback from a bootable snapshot</title>
+   <listitem>
+    <para>
+     The root file system needs to be Btrfs. Booting from LVM volume snapshots
+     is not supported.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The root file system needs to be on a single device, a single partition
+     and a single subvolume. Directories that are excluded from snapshots such
+     as <filename>/srv</filename> (see <xref linkend="snapper-dir-excludes"/>
+     for a full list) may reside on separate partitions.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The system needs to be bootable via the installed boot loader.
+    </para>
+   </listitem>
+  </itemizedlist>
+
+  <para>
+   To perform a rollback from a bootable snapshot, do as follows:
+  </para>
+
+  <procedure>
+   <step>
+    <para>
+     Boot the system. In the boot menu choose <guimenu>Bootable
+     snapshots</guimenu> and select the snapshot you want to boot. The list of
+     snapshots is listed by date&mdash;the most recent snapshot is listed
+     first.
+    </para>
+   </step>
+   <step>
+    <para>
+     Log in to the system. Carefully check whether everything works as
+     expected. Note that you cannot write to any directory that is part of the
+     snapshot. Data you write to other directories will
+     <emphasis>not</emphasis> get lost, regardless of what you do next.
+    </para>
+   </step>
+   <step>
+    <para>
+     Depending on whether you want to perform the rollback or not, choose your
+     next step:
+    </para>
+    <substeps performance="required">
+     <step>
+      <para>
+       If the system is in a state where you do not want to do a rollback,
+       reboot to boot into the current system state. You can then choose a different
+       snapshot, or start the rescue system.
+      </para>
+     </step>
+     <step>
+      <para>
+       To perform the rollback, run
+      </para>
+<screen>&prompt.sudo;snapper rollback</screen>
+      <para>
+       and reboot afterward. On the boot screen, choose the default boot entry
+       to reboot into the reinstated system. A snapshot of the file system status
+       before the rollback is created. The default subvolume for root will
+       be replaced with a fresh read-write snapshot.
+       For details, see <xref linkend="sec-snapper-snapshot-boot-rollback"/>.
+       </para>
+       <para>
+        It is useful to add a description for the snapshot with the <option>-d</option> option.
+        For example:
+       </para>
+      <screen>New file system root since rollback on <replaceable>DATE</replaceable> <replaceable>TIME</replaceable></screen>
+     </step>
+    </substeps>
+   </step>
+  </procedure>
+  <tip>
+   <title>Rolling back to a specific installation state</title>
+   <para>
+    If snapshots are not disabled during installation, an initial bootable
+    snapshot is created at the end of the initial system installation. You can
+    go back to that state at any time by booting this snapshot. The snapshot
+    can be identified by the description <literal>after installation</literal>.
+   </para>
+   <para>
+    A bootable snapshot is also created when starting a system upgrade to a
+    service pack or a new major release (provided snapshots are not disabled).
+   </para>
+  </tip>
+  <sect2 xml:id="sec-snapper-snapshot-boot-rollback">
+   <title>Snapshots after rollback</title>
+   <para>
+    Before a rollback is performed, a snapshot of the running file system
+    is created. The description references the ID of the snapshot that
+    was restored in the rollback.
+   </para>
+   <para>
+    Snapshots created by rollbacks receive the value <literal>number</literal>
+    for the <literal>Cleanup</literal> attribute. The rollback snapshots are
+    therefore automatically deleted when the set number of snapshots is reached.
+    Refer to <xref linkend="sec-snapper-clean-up" /> for details.
+    If the snapshot contains important data, extract the data from the snapshot
+    before it is removed.
+   </para>
+   <sect3 xml:id="sec-snapper-snapshot-boot-rollback-example">
+    <title>Example of rollback snapshot</title>
+    <para>
+     For example, after a fresh installation the following snapshots are
+     available on the system:
+    </para>
+<screen>
+&prompt.root;<command>snapper</command> --iso list
+Type   | # |     | Cleanup | Description           | Userdata
+-------+---+ ... +---------+-----------------------+--------------
+single | 0 |     |         | current               |
+single | 1 |     |         | first root filesystem |
+single | 2 |     | number  | after installation    | important=yes
+</screen>
+    <para>
+     After running <command>sudo snapper rollback</command> snapshot
+     <literal>3</literal> is created and contains the state of the system
+     before the rollback was executed. Snapshot <literal>4</literal> is
+     the new default Btrfs subvolume and thus the system after a reboot.
+    </para>
+<screen>
+&prompt.root;<command>snapper</command> --iso list
+Type   | # |     | Cleanup | Description           | Userdata
+-------+---+ ... +---------+-----------------------+--------------
+single | 0 |     |         | current               |
+single | 1 |     | number  | first root filesystem |
+single | 2 |     | number  | after installation    | important=yes
+single | 3 |     | number  | rollback backup of #1 | important=yes
+single | 4 |     |         |                       |
+</screen>
+   </sect3>
+  </sect2>
+
+  <sect2 xml:id="sec-snapper-snapshot-boot-identify">
+   <title>Accessing and identifying snapshot boot entries</title>
+   <para>
+    To boot from a snapshot, reboot your machine and choose <guimenu>Start
+    Bootloader from a read-only snapshot</guimenu>. A screen listing all
+    bootable snapshots opens. The most recent snapshot is listed first, the
+    oldest last. Use the keys <keycap function="down"/> and
+    <keycap function="up"/> to navigate and press <keycap function="enter"/> to
+    activate the selected snapshot. Activating a snapshot from the boot menu
+    does not reboot the machine immediately, but rather opens the boot loader
+    of the selected snapshot.
+   </para>
+   <figure xml:id="fig-snapper-snapshot-boot-identify">
+    <title>Boot loader: snapshots</title>
+    <mediaobject>
+     <imageobject role="fo">
+      <imagedata fileref="boot_snapshots.png" width="75%"/>
+     </imageobject>
+     <imageobject role="html">
+      <imagedata fileref="boot_snapshots.png" width="75%"/>
+     </imageobject>
+    </mediaobject>
+   </figure>
+   <warning>
+    <title>Booting &xen; from a Btrfs snapshot using UEFI currently fails</title>
+    <para>
+     Refer to <link
+      xlink:href="https://www.suse.com/support/kb/doc/?id=000020602"/> for more
+     details.
+    </para>
+   </warning>
+   <para>
+    Each snapshot entry in the boot loader follows a naming scheme which makes
+    it possible to identify it easily:
+   </para>
+<screen>[*]<co xml:id="snapper-boot-important"/><replaceable>OS</replaceable><co xml:id="snapper-boot-os"/> (<replaceable>KERNEL</replaceable><co xml:id="snapper-boot-kernel"/>,<replaceable>DATE</replaceable><co xml:id="snapper-boot-date"/>T<replaceable>TIME</replaceable><co xml:id="snapper-boot-time"/>,<replaceable>DESCRIPTION</replaceable><co xml:id="snapper-boot-description"/>)</screen>
+   <calloutlist>
+    <callout arearefs="snapper-boot-important">
+     <para>
+      If the snapshot was marked <literal>important</literal>, the entry is
+      marked with a <literal>*</literal>.
+     </para>
+    </callout>
+    <callout arearefs="snapper-boot-os">
+     <para>
+      Operating system label.
+     </para>
+    </callout>
+    <callout arearefs="snapper-boot-date">
+     <para>
+      Date in the format <literal>YYYY-MM-DD</literal>.
+     </para>
+    </callout>
+    <callout arearefs="snapper-boot-time">
+     <para>
+      Time in the format <literal>HH:MM</literal>.
+     </para>
+    </callout>
+    <callout arearefs="snapper-boot-description">
+     <para>
+      This field contains a description of the snapshot. In case of a manually
+      created snapshot this is the string created with the option
+      <option>--description</option> or a custom string (see
+      <xref
+      linkend="tip-snapper-snapshot-boot-custom-descr"/>). In case
+      of an automatically created snapshot, it is the tool that was called, for
+      example <literal>zypp(zypper)</literal> or
+      <literal>yast_sw_single</literal>. Long descriptions may be truncated,
+      depending on the size of the boot screen.
+     </para>
+    </callout>
+   </calloutlist>
+   <tip xml:id="tip-snapper-snapshot-boot-custom-descr">
+    <title>Setting a custom description for boot loader snapshot entries</title>
+    <para>
+     It is possible to replace the default string in the description field of a
+     snapshot with a custom string. This is for example useful if an
+     automatically created description is not sufficient, or a user-provided
+     description is too long. To set a custom string
+     <replaceable>STRING</replaceable> for snapshot
+     <replaceable>NUMBER</replaceable>, use the following command:
+    </para>
+<screen>&prompt.sudo;snapper modify --userdata "bootloader=<replaceable>STRING</replaceable>" <replaceable>NUMBER</replaceable></screen>
+    <para>
+     The description should be no longer than 25 characters&mdash;everything
+     that exceeds this size will not be readable on the boot screen.
+    </para>
+   </tip>
+  </sect2>
+
+  <sect2 xml:id="sec-snapper-snapshot-boot-limits">
+   <title>Limitations</title>
+   <para>
+    A <emphasis>complete</emphasis> system rollback, restoring the complete
+    system to the identical state as it was in when a snapshot was taken, is
+    not possible.
+   </para>
+   <sect3 xml:id="sec-snapper-limits-snapshot-boot-excludes">
+    <title>Directories excluded from snapshots</title>
+    <para>
+     Root file system snapshots do not contain all directories. See
+     <xref linkend="snapper-dir-excludes"/> for details and reasons. As a
+     general consequence, data from these directories is not restored,
+     resulting in the following limitations.
+    </para>
+    <variablelist>
+     <varlistentry>
+      <term>
+       Add-ons and third-party software may be unusable after a rollback
+      </term>
+      <listitem>
+       <para>
+        Applications and add-ons installing data in subvolumes excluded from
+        the snapshot, such as <filename>/opt</filename>, may not work after a
+        rollback, if others parts of the application data are also installed on
+        subvolumes included in the snapshot. Re-install the application or the
+        add-on to solve this problem.
+       </para>
+      </listitem>
+     </varlistentry>
+     <varlistentry>
+      <term>File access problems</term>
+      <listitem>
+       <para>
+        If an application had changed file permissions and/or ownership in
+        between snapshot and current system, the application may not be able to
+        access these files. Reset permissions and/or ownership for the affected
+        files after the rollback.
+       </para>
+      </listitem>
+     </varlistentry>
+     <varlistentry>
+      <term>Incompatible data formats</term>
+      <listitem>
+       <para>
+        If a service or an application has established a new data format in
+        between snapshot and current system, the application may not be able to
+        read the affected data files after a rollback.
+       </para>
+      </listitem>
+     </varlistentry>
+     <varlistentry>
+      <term>Subvolumes with a mixture of code and data</term>
+      <listitem>
+       <para>
+        Subvolumes like <filename>/srv</filename> may contain a mixture of code
+        and data. A rollback may result in non-functional code. A downgrade of
+        the PHP version, for example, may result in broken PHP scripts for the
+        Web server.
+       </para>
+      </listitem>
+     </varlistentry>
+     <varlistentry>
+      <term>User data</term>
+      <listitem>
+       <para>
+        If a rollback removes users from the system, data that is owned by
+        these users in directories excluded from the snapshot, is not removed.
+        If a user with the same user ID is created, this user will inherit the
+        files. Use a tool like <command>find</command> to locate and remove
+        orphaned files.
+       </para>
+      </listitem>
+     </varlistentry>
+    </variablelist>
+   </sect3>
+   <sect3 xml:id="sec-snapper-limits-snapshot-boot-grub">
+    <title>No rollback of boot loader data</title>
+    <para>
+     A rollback of the boot loader is not possible, since all
+     <quote>stages</quote> of the boot loader must fit together. This cannot be
+     guaranteed when doing rollbacks of <filename>/boot</filename>.
+    </para>
+   </sect3>
+  </sect2>
+ </sect1>
+ 
+ <sect1 xml:id="sec-snapper-homedirs">
+     <title>Enabling Snapper in user home directories</title>
+     
+     <para>
+         You may enable snapshots for users' <filename>/home</filename> 
+         directories, which supports several use cases:
+     </para>
+     <itemizedlist>
+          <listitem>
+              <para>
+                 Individual users may manage their own snapshots and rollbacks.
+             </para>
+         </listitem>
+         <listitem>
+             <para>
+                 System users, for example database, system, and network admins
+                 who want to track copies of configuration files, documentation, 
+                 and so on.
+             </para>
+         </listitem>    
+         <listitem>
+             <para>
+                 Samba shares with home directories and Btrfs back-end.
+             </para>
+         </listitem>
+     </itemizedlist>
+     <para>
+         Each user's directory is a Btrfs subvolume of <filename>/home</filename>.         
+         It is possible to set this up manually 
+         (see <xref linkend="sec-snapper-manual-home-config"/>). However, a 
+         more convenient way is to use <literal>pam_snapper</literal>.
+         The <literal>pam_snapper</literal> package installs the 
+         <literal>pam_snapper.so</literal> module and helper scripts, which 
+         automate user creation and Snapper configuration. 
+     </para>
+     <para>
+         <literal>pam_snapper</literal> provides integration with the 
+         <command>useradd</command> command, pluggable authentication modules
+         (PAM), and Snapper. By default it creates snapshots at user login and
+         logout, and also creates time-based snapshots as certain users remain
+         logged in for extended periods of time. You may change the defaults
+         using the normal Snapper commands and configuration files.
+     </para>
+
+     <sect2 xml:id="sec-snapper-install-pam-snapper">
+         <title>Installing pam_snapper and creating users</title>
+         
+         <para>
+             The easiest way is to start with a new <filename>/home</filename> 
+             directory formatted with Btrfs, and no existing users. Install
+             <literal>pam_snapper</literal>:
+         </para>
+         <screen>&prompt.root;zypper in pam_snapper</screen>
+         <para>
+             Add this line to <filename>/etc/pam.d/common-session</filename>:
+         </para>
+         <screen>session optional pam_snapper.so</screen>
+         <para>
+             Use the <command>/usr/lib/pam_snapper/pam_snapper_useradd.sh</command>
+             script to create a new user and home directory. By default the script
+             performs a dry run. Edit the script to change 
+             <literal>DRYRUN=1</literal> to <literal>DRYRUN=0</literal>. Now you
+             can create a new user:
+         </para>
+         <screen>&prompt.root;/usr/lib/pam_snapper/pam_snapper_useradd.sh \
+<replaceable>username</replaceable> <replaceable>group</replaceable> passwd=<replaceable>password</replaceable>
+Create subvolume '/home/username'
+useradd: warning: the home directory already exists.
+Not copying any file from skel directory into it.
+</screen>
+         <para>
+             The files from <filename>/etc/skel</filename> will be copied
+             into the user's home directory at their first login. Verify that
+             the user's configuration was created by listing your Snapper 
+             configurations:
+         </para>
+         <screen>&prompt.root;snapper list --all
+Config: home_username, subvolume: /home/username
+Type   | # | Pre # | Date | User | Cleanup | Description | Userdata
+-------+---+-------+------+------+---------+-------------+---------
+single | 0 |       |      | root |         | current     |
+</screen>
+        <para>
+            Over time, this output will become populated with a list of snapshots,
+            which the user can manage with the standard Snapper commands.
+        </para>
+     </sect2>
+
+     <sect2 xml:id="sec-snapper-remove-user">
+         <title>Removing users</title>
+         <para>
+             Remove users with the 
+             <command>/usr/lib/pam_snapper/pam_snapper_userdel.sh</command>
+             script. By default it performs a dry run, so edit it to change 
+             <literal>DRYRUN=1</literal> to <literal>DRYRUN=0</literal>. This 
+             removes the user, the user's home subvolume, Snapper configuration, 
+             and deletes all snapshots.
+         </para>
+         <screen>&prompt.root;/usr/lib/pam_snapper/pam_snapper_userdel.sh username</screen>
+     </sect2>
+
+     <sect2 xml:id="sec-snapper-manual-home-config">
+         <title>Manually enabling snapshots in home directories</title>
+         
+         <para>
+            These are the steps for manually setting up users' home directories
+            with Snapper. <filename>/home</filename> must be formatted with Btrfs,
+            and the users not yet created.
+        </para>
+        <screen>&prompt.root;btrfs subvol create /home/<replaceable>username</replaceable>
+&prompt.root;snapper -c home_<replaceable>username</replaceable> create-config /home/<replaceable>username</replaceable>
+&prompt.root;sed -i -e "s/ALLOW_USERS=\"\"/ALLOW_USERS=\"<replaceable>username</replaceable>\"/g" \
+/etc/snapper/configs/home_<replaceable>username</replaceable>
+&prompt.root;yast users add username=<replaceable>username</replaceable> home=/home/<replaceable>username</replaceable> password=<replaceable>password</replaceable>
+&prompt.root;chown <replaceable>username</replaceable>.<replaceable>group</replaceable> /home/<replaceable>username</replaceable>
+&prompt.root;chmod 755 /home/<replaceable>username</replaceable>/.snapshots
+</screen>
+</sect2>
+ </sect1>
+ 
+ <sect1 xml:id="sec-snapper-config">
+  <title>Creating and modifying Snapper configurations</title>
+
+  <para>
+   The way Snapper behaves is defined in a configuration file that is specific
+   for each partition or <literal>Btrfs</literal> subvolume. These
+   configuration files reside under <filename>/etc/snapper/configs/</filename>.
+  </para>
+
+  <para>
+   In case the root file system is big enough (approximately 12 GB), snapshots
+   are automatically enabled for the root file system <filename>/</filename>
+   upon installation. The corresponding default configuration is named
+   <filename>root</filename>. It creates and manages the &yast; and Zypper
+   snapshot. See <xref linkend="sec-snapper-config-modify-values"/> for a list
+   of the default values.
+  </para>
+
+
+  <note>
+   <title>Minimum root file system size for enabling snapshots</title>
+   <para>
+    As explained in <xref linkend="sec-snapper-setup"/>, enabling snapshots
+    requires additional free space in the root file system. The amount depends
+    on the amount of packages installed and the amount of changes made to the
+    volume that is included in snapshots. The snapshot frequency and the number
+    of snapshots that get archived also matter.
+   </para>
+   <para>
+    There is a minimum root file system size that is required to automatically
+    enable snapshots during the installation. Currently this size is
+    approximately 12 GB. This value may change in the future, depending on
+    architecture and the size of the base system. It depends on the values for
+    the following tags in the file <filename>/control.xml</filename> from the
+    installation media:
+   </para>
+   <screen>&lt;root_base_size&gt;
+&lt;btrfs_increase_percentage&gt;</screen>
+   <para>
+    It is calculated with the following formula: <replaceable>ROOT_BASE_SIZE</replaceable> * (1 + <replaceable>BTRFS_INCREASE_PERCENTAGE</replaceable>/100)
+   </para>
+   <para>
+    Keep in mind that this value is a minimum size. Consider using more space
+    for the root file system. As a rule of thumb, double the size you would use
+    when not having enabled snapshots.
+   </para>
+  </note>
+
+  <para>
+   You may create your own configurations for other partitions formatted with
+   <literal>Btrfs</literal> or existing subvolumes on a
+   <literal>Btrfs</literal> partition. In the following example we will set up
+   a Snapper configuration for backing up the Web server data residing on a
+   separate, <literal>Btrfs</literal>-formatted partition mounted at
+   <filename>/srv/www</filename>.
+  </para>
+
+  <para>
+   After a configuration has been created, you can either use
+   <command>snapper</command> itself or the &yast; <guimenu>Snapper</guimenu>
+   module to restore files from these snapshots. In &yast; you need to select
+   your <guimenu>Current Configuration</guimenu>, while you need to specify
+   your configuration for <command>snapper</command> with the global switch
+   <option>-c</option> (for example, <command>snapper -c myconfig
+   list</command>).
+  </para>
+
+  <para>
+   To create a new Snapper configuration, run <command>snapper
+   create-config</command>:
+  </para>
+
+<screen>&prompt.sudo;snapper -c www-data<co xml:id="snapper-create-name"/> create-config /srv/www<co xml:id="snapper-create-volume"/></screen>
+
+  <calloutlist>
+   <callout arearefs="snapper-create-name">
+    <para>
+     Name of configuration file.
+    </para>
+   </callout>
+   <callout arearefs="snapper-create-volume">
+    <para>
+     Mount point of the partition or <literal>Btrfs</literal> subvolume on
+     which to take snapshots.
+    </para>
+   </callout>
+  </calloutlist>
+
+  <para>
+   This command will create a new configuration file
+   <filename>/etc/snapper/configs/www-data</filename> with reasonable default
+   values (taken from
+   <filename>/etc/snapper/config-templates/default</filename>). Refer to
+   <xref linkend="sec-snapper-config-modify"/> for instructions on how to
+   adjust these defaults.
+  </para>
+
+  <tip>
+   <title>Configuration defaults</title>
+   <para>
+    Default values for a new configuration are taken from
+    <filename>/etc/snapper/config-templates/default</filename>. To use your own
+    set of defaults, create a copy of this file in the same directory and
+    adjust it to your needs. To use it, specify the <option>-t</option> option
+    with the create-config command:
+   </para>
+<screen>&prompt.sudo;snapper -c www-data create-config -t <replaceable>MY_DEFAULTS</replaceable> /srv/www</screen>
+  </tip>
+
+  <sect2 xml:id="sec-snapper-config-modify">
+   <title>Managing existing configurations</title>
+   <para>
+    The <command>snapper</command> command offers several subcommands for managing
+    existing configurations. You can list, show, delete and modify them:
+   </para>
+   <variablelist>
+    <varlistentry>
+     <term>Listing configurations</term>
+     <listitem>
+      <para>
+       Use the subcommand <command>snapper list-configs</command> to get all
+       existing configurations:
+      </para>
+<screen>&prompt.sudo;snapper list-configs
+Config | Subvolume
+-------+----------
+root   | /
+usr    | /usr
+local  | /local</screen>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>Showing a configuration</term>
+     <listitem>
+      <para>
+       Use the subcommand <command>snapper -c
+       <replaceable>CONFIG</replaceable> get-config</command> to display the
+       specified configuration. Replace <replaceable>CONFIG</replaceable> with
+       one of the configuration names shown by
+       <command>snapper list-configs</command>.
+       For more information about the configuration options, see
+       <xref linkend="sec-snapper-config-modify-values"/>.
+      </para>
+      <para>
+       To display the default configuration, run:
+      </para>
+<screen>&prompt.sudo;snapper -c root get-config</screen>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>Modifying a configuration</term>
+     <listitem>
+      <para>
+       Use the subcommand <command>snapper -c <replaceable>CONFIG</replaceable>
+       set-config
+       <replaceable>OPTION</replaceable>=<replaceable>VALUE</replaceable></command>
+       to modify an option in the specified configuration.
+       Replace <replaceable>CONFIG</replaceable> with one of the
+       configuration names shown by <command>snapper list-configs</command>.
+       Possible values for <replaceable>OPTION</replaceable> and
+       <replaceable>VALUE</replaceable> are listed in <xref
+       linkend="sec-snapper-config-modify-values"/>.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>Deleting a configuration</term>
+     <listitem>
+      <para>
+       Use the subcommand <command>snapper -c
+       <replaceable>CONFIG</replaceable> delete-config</command> to delete a
+       configuration. Replace <replaceable>CONFIG</replaceable> with one of the
+       configuration names shown by <command>snapper list-configs</command>.
+      </para>
+     </listitem>
+    </varlistentry>
+   </variablelist>
+   <sect3 xml:id="sec-snapper-config-modify-values">
+    <title>Configuration data</title>
+    <para>
+     Each configuration contains a list of options that can be modified from
+     the command line. The following list provides details for each option. To
+     change a value, run <command>snapper -c <replaceable>CONFIG</replaceable>
+     set-config
+     "<replaceable>KEY</replaceable>=<replaceable>VALUE</replaceable>"</command>.
+    </para>
+    <variablelist>
+     <varlistentry>
+      <term><literal>ALLOW_GROUPS</literal>,
+      <literal>ALLOW_USERS</literal>
+      </term>
+      <listitem>
+       <para>
+        Granting permissions to use snapshots to regular users. See
+        <xref linkend="sec-snapper-config-user"/> for more information.
+       </para>
+       <para>
+        The default value is <literal>""</literal>.
+       </para>
+      </listitem>
+     </varlistentry>
+     <varlistentry>
+      <term><literal>BACKGROUND_COMPARISON</literal>
+      </term>
+      <listitem>
+       <para>
+        Defines whether pre and post snapshots should be compared in the
+        background after creation.
+       </para>
+       <para>
+        The default value is <literal>"yes"</literal>.
+       </para>
+      </listitem>
+     </varlistentry>
+     <varlistentry>
+      <term><literal>EMPTY_*</literal>
+      </term>
+      <listitem>
+       <para>
+        Defines the clean-up algorithm for snapshots pairs with identical pre
+        and post snapshots. See <xref linkend="sec-snapper-clean-up-empty"/>
+        for details.
+       </para>
+      </listitem>
+     </varlistentry>
+     <varlistentry>
+      <term><literal>FSTYPE</literal>
+      </term>
+      <listitem>
+       <para>
+        File system type of the partition. Do not change.
+       </para>
+       <para>
+        The default value is <literal>"btrfs"</literal>.
+       </para>
+      </listitem>
+     </varlistentry>
+     <varlistentry>
+      <term><literal>NUMBER_*</literal></term>
+      <listitem>
+       <para>
+        Defines the clean-up algorithm for installation and administration
+        snapshots. See <xref linkend="sec-snapper-clean-up-number"/> for
+        details.
+       </para>
+      </listitem>
+     </varlistentry>
+     <varlistentry>
+      <term><literal>QGROUP</literal> / <literal>SPACE_LIMIT</literal>
+      </term>
+      <listitem>
+       <para>
+        Adds quota support to the clean-up algorithms. See
+        <xref
+        linkend="sec-snapper-clean-up-quota"/> for details.
+       </para>
+      </listitem>
+     </varlistentry>
+     <varlistentry>
+      <term><literal>SUBVOLUME</literal>
+      </term>
+      <listitem>
+       <para>
+        Mount point of the partition or subvolume to snapshot. Do not change.
+       </para>
+       <para>
+        The default value is <literal>"/"</literal>.
+       </para>
+      </listitem>
+     </varlistentry>
+     <varlistentry>
+      <term><literal>SYNC_ACL</literal>
+      </term>
+      <listitem>
+       <para>
+        If Snapper is used by regular users (see
+        <xref linkend="sec-snapper-config-user"/>), the users must be able to
+        access the <filename>.snapshot</filename> directories and to read files
+        within them. If SYNC_ACL is set to <literal>yes</literal>, Snapper
+        automatically makes them accessible using ACLs for users and groups
+        from the ALLOW_USERS or ALLOW_GROUPS entries.
+       </para>
+       <para>
+        The default value is <literal>"no"</literal>.
+       </para>
+      </listitem>
+     </varlistentry>
+     <varlistentry>
+      <term><literal>TIMELINE_CREATE</literal>
+      </term>
+      <listitem>
+       <para>
+        If set to <literal>yes</literal>, hourly snapshots are created. Valid
+        values: <literal>yes</literal>, <literal>no</literal>.
+       </para>
+       <para>
+        The default value is <literal>"no"</literal>.
+       </para>
+      </listitem>
+     </varlistentry>
+     <varlistentry>
+      <term><literal>TIMELINE_CLEANUP</literal> /
+       <literal>TIMELINE_LIMIT_*</literal>
+      </term>
+      <listitem>
+       <para>
+        Defines the clean-up algorithm for timeline snapshots. See
+        <xref
+        linkend="sec-snapper-clean-up-timeline"/> for details.
+       </para>
+      </listitem>
+     </varlistentry>
+    </variablelist>
+   </sect3>
+   <sect3 xml:id="sec-snapper-config-user">
+    <title>Using Snapper as regular user</title>
+    <para>
+     By default Snapper can only be used by &rootuser;. However, there are
+     cases in which certain groups or users need to be able to create snapshots
+     or undo changes by reverting to a snapshot:
+    </para>
+    <itemizedlist mark="bullet" spacing="normal">
+     <listitem>
+      <para>
+       Web site administrators who want to take snapshots of
+       <filename>/srv/www</filename>
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       Users who want to take a snapshot of their home directory
+      </para>
+     </listitem>
+    </itemizedlist>
+    <para>
+     For these purposes, you can create Snapper configurations that grant
+     permissions to users or/and groups. The corresponding
+     <filename>.snapshots</filename> directory needs to be readable and
+     accessible by the specified users. The easiest way to achieve this is to
+     set the SYNC_ACL option to <literal>yes</literal>.
+    </para>
+    <procedure>
+     <title>Enabling regular users to use Snapper</title>
+     <para>
+      All steps in this procedure need to be run by &rootuser;.
+     </para>
+     <step>
+      <para>
+       If a Snapper configuration does not exist yet, create one for the partition or
+       subvolume on which the user should be able to use Snapper. Refer to
+       <xref linkend="sec-snapper-config"/> for instructions. Example:
+      </para>
+<screen>&prompt.sudo;snapper --config web_data create /srv/www</screen>
+     </step>
+     <step>
+      <para>
+       The configuration file is created under
+       <filename>/etc/snapper/configs/<replaceable>CONFIG</replaceable></filename>,
+       where CONFIG is the value you specified with
+       <option>-c/--config</option> in the previous step (for example
+       <filename>/etc/snapper/configs/web_data</filename>). Adjust it according
+       to your needs. For more information, see
+       <xref linkend="sec-snapper-config-modify"/>.
+      </para>
+     </step>
+     <step>
+      <para>
+       Set values for <envar>ALLOW_USERS</envar> and/or
+       <envar>ALLOW_GROUPS</envar> to grant permissions to users and/or groups,
+       respectively. Multiple entries need to be separated by
+       <keycap function="space"/>. To grant permissions to the user
+       <systemitem class="username">www_admin</systemitem> for example, run:
+      </para>
+<screen>&prompt.sudo;snapper -c web_data set-config "ALLOW_USERS=www_admin" SYNC_ACL="yes"</screen>
+     </step>
+     <step>
+      <para>
+       The given Snapper configuration can now be used by the specified user(s)
+       and/or group(s). You can test it with the <literal>list</literal>
+       command, for example:
+      </para>
+<screen><prompt>www_admin:~ &gt; </prompt>snapper -c web_data list</screen>
+     </step>
+    </procedure>
+   </sect3>
+  </sect2>
+ </sect1>
+ <sect1 xml:id="sec-snapper-manage">
+  <title>Manually creating and managing snapshots</title>
+
+  <para>
+   Snapper is not restricted to creating and managing snapshots automatically
+   by configuration; you can also create snapshot pairs (<quote>before and
+   after</quote>) or single snapshots manually using either the command-line
+   tool or the &yast; module.
+  </para>
+
+  <para>
+   All Snapper operations are carried out for an existing configuration (see
+   <xref linkend="sec-snapper-config"/> for details). You can only take
+   snapshots of partitions or volumes for which a configuration exists. By
+   default the system configuration (<literal>root</literal>) is used.
+   To create or manage snapshots for your own configuration you need to
+   explicitly choose it. Use the <guimenu>Current Configuration</guimenu>
+   drop-down box in &yast; or specify the <option>-c</option> on the command
+   line (<command>snapper -c <replaceable>MYCONFIG</replaceable>
+   <replaceable>COMMAND</replaceable></command>).
+  </para>
+
+  <sect2 xml:id="sec-snapper-manage-metadata">
+   <title>Snapshot metadata</title>
+   <para>
+    Each snapshot consists of the snapshot itself and certain metadata. When
+    creating a snapshot you also need to specify the metadata. Modifying a
+    snapshot means changing its metadata&mdash;you cannot modify its content.
+    Use <command>snapper list</command> to show existing snapshots and their
+    metadata:
+   </para>
+   <variablelist>
+    <varlistentry>
+     <term><command>snapper --config home list</command>
+     </term>
+     <listitem>
+      <para>
+       Lists snapshots for the configuration <literal>home</literal>. To list
+       snapshots for the default configuration (root), use <command>snapper -c
+       root list</command> or <command>snapper list</command>.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><command>snapper list -a</command>
+     </term>
+     <listitem>
+      <para>
+       Lists snapshots for all existing configurations.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><command>snapper list -t pre-post</command>
+     </term>
+     <listitem>
+      <para>
+       Lists all pre and post snapshot pairs for the default
+       (<literal>root</literal>) configuration.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><command>snapper list -t single</command>
+     </term>
+     <listitem>
+      <para>
+       Lists all snapshots of the type <literal>single</literal> for the
+       default (<literal>root</literal>) configuration.
+      </para>
+     </listitem>
+    </varlistentry>
+   </variablelist>
+   <para>
+    The following metadata is available for each snapshot:
+   </para>
+   <itemizedlist mark="bullet" spacing="normal">
+    <listitem>
+     <para>
+      <emphasis role="bold">Type</emphasis>: snapshot type, see
+      <xref linkend="sec-snapper-manage-metadata-type"/> for details. This data
+      cannot be changed.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      <emphasis role="bold">Number</emphasis>: unique number of the snapshot.
+      This data cannot be changed.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      <emphasis role="bold">Pre Number</emphasis>: specifies the number of the
+      corresponding pre snapshot. For snapshots of type post only. This data
+      cannot be changed.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      <emphasis role="bold">Description</emphasis>: a description of the
+      snapshot.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      <emphasis role="bold">Userdata</emphasis>: an extended description where
+      you can specify custom data in the form of a comma-separated key=value
+      list: <literal>reason=testing, project=foo</literal>. This field is also
+      used to mark a snapshot as important (<literal>important=yes</literal>)
+      and to list the user that created the snapshot
+      (user=&exampleuser_plain;).
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      <emphasis role="bold">Cleanup-Algorithm</emphasis>: cleanup-algorithm for
+      the snapshot, see <xref linkend="sec-snapper-clean-up"/> for details.
+     </para>
+    </listitem>
+   </itemizedlist>
+   <sect3 xml:id="sec-snapper-manage-metadata-type">
+    <title>Snapshot types</title>
+    <para>
+     Snapper knows three different types of snapshots: pre, post and single.
+     Physically they do not differ, but Snapper handles them differently.
+    </para>
+    <variablelist>
+     <varlistentry>
+      <term><literal>pre</literal>
+      </term>
+      <listitem>
+       <para>
+        Snapshot of a file system <emphasis>before</emphasis> a modification.
+        Each <literal>pre</literal> snapshot corresponds to a
+        <literal>post</literal> snapshot.
+        For example, this is used for the automatic &yast;/Zypper snapshots.
+       </para>
+      </listitem>
+     </varlistentry>
+     <varlistentry>
+      <term><literal>post</literal>
+      </term>
+      <listitem>
+       <para>
+        Snapshot of a file system <emphasis>after</emphasis> a modification.
+        Each <literal>post</literal> snapshot corresponds to a
+        <literal>pre</literal> snapshot.
+        For example, this is used for the automatic &yast;/Zypper snapshots.
+       </para>
+      </listitem>
+     </varlistentry>
+     <varlistentry>
+      <term><literal>single</literal>
+      </term>
+      <listitem>
+       <para>
+        Stand-alone snapshot.
+        For example, this is used for the automatic hourly snapshots.
+        This is the default type when creating snapshots.
+       </para>
+      </listitem>
+     </varlistentry>
+    </variablelist>
+   </sect3>
+   <sect3 xml:id="sec-snapper-manage-metadata-cleanup">
+    <title>Cleanup algorithms</title>
+    <para>
+     Snapper provides three algorithms to clean up old snapshots. The
+     algorithms are executed in a daily
+     <systemitem class="daemon">cron</systemitem> job.
+     It is possible to define the
+     number of different types of snapshots to keep in the Snapper
+     configuration (see <xref linkend="sec-snapper-config-modify"/> for
+     details).
+    </para>
+    <variablelist>
+     <varlistentry>
+      <term>number</term>
+      <listitem>
+       <para>
+        Deletes old snapshots when a certain snapshot count is reached.
+       </para>
+      </listitem>
+     </varlistentry>
+     <varlistentry>
+      <term>timeline</term>
+      <listitem>
+       <para>
+        Deletes old snapshots having passed a certain age but keeps several
+        hourly, daily, monthly and yearly snapshots.
+       </para>
+      </listitem>
+     </varlistentry>
+     <varlistentry>
+      <term>empty-pre-post</term>
+      <listitem>
+       <para>
+        Deletes pre/post snapshot pairs with empty diffs.
+       </para>
+      </listitem>
+     </varlistentry>
+    </variablelist>
+   </sect3>
+  </sect2>
+
+  <sect2 xml:id="sec-snapper-manage-create">
+   <title>Creating snapshots</title>
+   <para>
+    To create a snapshot, run <command>snapper create</command> or
+    click <guimenu>Create</guimenu> in the &yast; module
+    <guimenu>Snapper</guimenu>. The following examples explain how to create
+    snapshots from the command line.
+    The &yast; interface for Snapper is not explicitly described here but
+    provides equivalent functionality.
+   </para>
+   <tip>
+    <title>Snapshot description</title>
+    <para>
+     Always specify a meaningful description to later be able to
+     identify its purpose. You can also specify additional information via
+     the option <option>--userdata</option>.
+    </para>
+   </tip>
+   <para/>
+   <variablelist>
+    <varlistentry>
+     <term><command>snapper create --from <replaceable>17</replaceable> --description 
+        "with package2"</command>
+     </term>
+     <listitem>
+      <para>
+       Creates a stand-alone snapshot (type single) from an existing snapshot, which is specified
+       by the snapshot's number from <command>snapper list</command>. (This applies to Snapper version
+       0.8.4 and newer.)
+      </para>
+     </listitem>
+    </varlistentry> 
+    <varlistentry>
+     <term><command>snapper create --description "Snapshot for week 2
+      2014"</command>
+     </term>
+     <listitem>
+      <para>
+       Creates a stand-alone snapshot (type single) for the default
+       (<literal>root</literal>) configuration with a description. Because no
+       cleanup-algorithm is specified, the snapshot will never be deleted
+       automatically.
+      </para>
+     </listitem>
+    </varlistentry>
+     <varlistentry>
+     <term><command>snapper --config home create --description "Cleanup in
+     ~&exampleuser_plain;"</command>
+     </term>
+     <listitem>
+      <para>
+       Creates a stand-alone snapshot (type single) for a custom configuration
+       named <literal>home</literal> with a description. Because no
+       cleanup-algorithm is specified, the snapshot will never be deleted
+       automatically.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><command>snapper --config home create --description "Daily data
+     backup" --cleanup-algorithm timeline</command>>
+     </term>
+     <listitem>
+      <para>
+       Creates a stand-alone snapshot (type single) for a custom configuration
+       named <literal>home</literal> with a description. The snapshot will
+       automatically be deleted when it meets the criteria specified for the
+       timeline cleanup-algorithm in the configuration.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><command>snapper create --type pre --print-number --description
+     "Before the Apache config cleanup" --userdata "important=yes"</command>
+     </term>
+     <listitem>
+      <para>
+       Creates a snapshot of the type <literal>pre</literal> and prints the
+       snapshot number. First command needed to create a pair of snapshots used
+       to save a <quote>before</quote> and <quote>after</quote> state. The
+       snapshot is marked as important.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><command>snapper create --type post --pre-number 30 --description
+     "After the Apache config cleanup" --userdata "important=yes"</command>
+     </term>
+     <listitem>
+      <para>
+       Creates a snapshot of the type <literal>post</literal> paired with the
+       <literal>pre</literal> snapshot number <literal>30</literal>. Second
+       command needed to create a pair of snapshots used to save a
+       <quote>before</quote> and <quote>after</quote> state. The snapshot is
+       marked as important.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><command>snapper create --command <replaceable>COMMAND</replaceable>
+     --description "Before and after COMMAND"</command>
+     </term>
+     <listitem>
+      <para>
+       Automatically creates a snapshot pair before and after running
+       <replaceable>COMMAND</replaceable>. This option is only available when
+       using snapper on the command line.
+      </para>
+     </listitem>
+    </varlistentry>
+   </variablelist>
+  </sect2>
+
+  <sect2 xml:id="sec-snapper-manage-modify">
+   <title>Modifying snapshot metadata</title>
+   <para>
+    Snapper allows you to modify the description, the cleanup algorithm, and
+    the user data of a snapshot. All other metadata cannot be changed. The
+    following examples explain how to modify snapshots from the command line.
+    It should be easy to adopt them when using the &yast; interface.
+   </para>
+   <para>
+    To modify a snapshot on the command line, you need to know its number. Use
+    <command>snapper list</command> to display all snapshots
+    and their numbers.
+   </para>
+   <para>
+    The &yast; <guimenu>Snapper</guimenu> module already lists all snapshots.
+    Choose one from the list and click <guimenu>Modify</guimenu>.
+   </para>
+   <variablelist>
+    <varlistentry>
+     <term><command>snapper modify --cleanup-algorithm "timeline"</command>
+      10
+     </term>
+     <listitem>
+      <para>
+       Modifies the metadata of snapshot 10 for the default
+       (<literal>root</literal>) configuration. The cleanup algorithm is set to
+       <literal>timeline</literal>.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><command>snapper --config home modify --description "daily backup"
+     -cleanup-algorithm "timeline" 120</command>
+     </term>
+     <listitem>
+      <para>
+       Modifies the metadata of snapshot 120 for a custom configuration named
+       <literal>home</literal>. A new description is set and the cleanup
+       algorithm is unset.
+      </para>
+     </listitem>
+    </varlistentry>
+   </variablelist>
+  </sect2>
+
+  <sect2 xml:id="sec-snapper-manage-delete">
+   <title>Deleting snapshots</title>
+   <para>
+    To delete a snapshot with the &yast; <guimenu>Snapper</guimenu> module,
+    choose a snapshot from the list and click <guimenu>Delete</guimenu>.
+   </para>
+   <para>
+    To delete a snapshot with the command-line tool, you need to know its
+    number. Get it by running <command>snapper list</command>. To delete a
+    snapshot, run <command>snapper delete</command>
+    <replaceable>NUMBER</replaceable>.
+   </para>
+   <para>
+    Deleting the current default subvolume snapshot is not allowed.
+   </para>
+   <para>
+    When deleting snapshots with Snapper, the freed space will be claimed by a
+    Btrfs process running in the background. Thus the visibility and the
+    availability of free space is delayed. In case you need space freed by
+    deleting a snapshot to be available immediately, use the option
+    <option>--sync</option> with the delete command.
+   </para>
+   <tip>
+    <title>Deleting snapshot pairs</title>
+    <para>
+     When deleting a <literal>pre</literal> snapshot, you should always delete
+     its corresponding <literal>post</literal> snapshot (and vice versa).
+    </para>
+   </tip>
+   <variablelist>
+    <varlistentry>
+     <term><command>snapper delete 65</command>
+     </term>
+     <listitem>
+      <para>
+       Deletes snapshot 65 for the default (<literal>root</literal>)
+       configuration.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><command>snapper -c home delete 89 90</command>
+     </term>
+     <listitem>
+      <para>
+       Deletes snapshots 89 and 90 for a custom configuration named
+       <literal>home</literal>.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><command>snapper delete --sync 23</command></term>
+     <listitem>
+      <para>
+       Deletes snapshot 23 for the default (<literal>root</literal>)
+       configuration and makes the freed space available immediately.
+      </para>
+     </listitem>
+    </varlistentry>
+   </variablelist>
+   <tip>
+    <title>Delete unreferenced snapshots</title>
+    <para>
+     Sometimes the Btrfs snapshot is present but the XML file containing the
+     metadata for Snapper is missing. In this case the snapshot is not visible
+     for Snapper and needs to be deleted manually:
+    </para>
+<screen>btrfs subvolume delete /.snapshots/<replaceable>SNAPSHOTNUMBER</replaceable>/snapshot
+rm -rf /.snapshots/SNAPSHOTNUMBER</screen>
+   </tip>
+   <tip>
+    <title>Old snapshots occupy more disk space</title>
+    <para>
+     If you delete snapshots to free space on your hard disk, make sure to
+     delete old snapshots first. The older a snapshot is, the more disk space
+     it occupies.
+    </para>
+   </tip>
+   <para>
+    Snapshots are also automatically deleted by a daily cron job. Refer to
+    <xref linkend="sec-snapper-manage-metadata-cleanup"/> for details.
+   </para>
+  </sect2>
+ </sect1>
+ <sect1 xml:id="sec-snapper-clean-up">
+  <title>Automatic snapshot clean-up</title>
+
+  <para>
+   Snapshots occupy disk space and over time the amount of disk space occupied
+   by the snapshots may become large. To prevent disks from running out of
+   space, Snapper offers algorithms to automatically delete old snapshots.
+   These algorithms differentiate between timeline snapshots and numbered
+   snapshots (administration plus installation snapshot pairs). You can specify
+   the number of snapshots to keep for each type.
+  </para>
+
+  <para>
+   Additionally, you can optionally specify a disk space quota, defining
+   the maximum amount of disk space the snapshots may occupy. It is also
+   possible to automatically delete pre and post snapshots pairs that do not
+   differ.
+  </para>
+
+  <para>
+   A clean-up algorithm is always bound to a single Snapper configuration, so
+   you need to configure algorithms for each configuration. To
+   prevent certain snapshots from being automatically deleted, refer to
+   <xref linkend="faq-snapper-permanent"/>.
+  </para>
+
+  <para>
+   The default setup (<literal>root</literal>) is configured to do clean-up
+   for numbered snapshots and empty pre and post snapshot pairs. Quota support
+   is enabled&mdash;snapshots may not occupy more than 50% of the available
+   disk space of the root partition. Timeline snapshots are disabled by
+   default, therefore the timeline clean-up algorithm is also disabled.
+  </para>
+
+  <sect2 xml:id="sec-snapper-clean-up-number">
+   <title>Cleaning up numbered snapshots</title>
+   <para>
+    Cleaning up numbered snapshots&mdash;administration plus installation
+    snapshot pairs&mdash;is controlled by the following parameters of a Snapper
+    configuration.
+   </para>
+   <variablelist>
+    <varlistentry>
+     <term><literal>NUMBER_CLEANUP</literal>
+     </term>
+     <listitem>
+      <para>
+       Enables or disables clean-up of installation and admin snapshot pairs.
+       If enabled, snapshot pairs are deleted when the total snapshot count
+       exceeds a number specified with <literal>NUMBER_LIMIT</literal> and/or
+       <literal>NUMBER_LIMIT_IMPORTANT</literal> <emphasis>and</emphasis> an
+       age specified with <literal>NUMBER_MIN_AGE</literal>. Valid values:
+       <literal>yes</literal> (enable), <literal>no</literal> (disable).
+      </para>
+      <para>
+       The default value is <literal>"yes"</literal>.
+      </para>
+      <para>
+       Example command to change or set:
+      </para>
+<screen>&prompt.sudo;snapper -c <replaceable>CONFIG</replaceable> set-config "NUMBER_CLEANUP=no"</screen>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><literal>NUMBER_LIMIT</literal> /
+      <literal>NUMBER_LIMIT_IMPORTANT</literal>
+     </term>
+     <listitem>
+      <para>
+       Defines how many regular and/or important installation and
+       administration snapshot pairs to keep. Ignored if
+       <literal>NUMBER_CLEANUP</literal> is set to
+       <literal>"no"</literal>.
+      </para>
+      <para>
+       The default value is <literal>"2-10"</literal> for
+       <literal>NUMBER_LIMIT</literal> and <literal>"4-10"</literal>
+       for <literal>NUMBER_LIMIT_IMPORTANT</literal>. The cleaning
+       algorithms delete snapshots above the specified maximum value,
+       without taking the snapshot and file system space into
+       account. The algorithms also delete snapshots above the minimum
+       value until the limits for the snapshot and file system are
+       reached.
+      </para>
+      <para>
+       Example command to change or set:
+      </para>
+<screen>&prompt.sudo;snapper -c <replaceable>CONFIG</replaceable> set-config "NUMBER_LIMIT=10"</screen>
+      <important>
+       <title>Ranged compared to constant values</title>
+       <para>
+        In case quota support is enabled (see
+        <xref
+        linkend="sec-snapper-clean-up-quota"/>) the limit needs
+        to be specified as a minimum-maximum range, for example
+        <literal>2-10</literal>. If quota support is disabled, a constant
+        value, for example <literal>10</literal>, needs to be provided,
+        otherwise cleaning-up will fail with an error.
+       </para>
+      </important>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><literal>NUMBER_MIN_AGE</literal>
+     </term>
+     <listitem>
+      <para>
+       Defines the minimum age in seconds a snapshot must have before it can
+       automatically be deleted. Snapshots younger than the value specified
+       here will not be deleted, regardless of how many exist.
+      </para>
+      <para>
+       The default value is <literal>"1800"</literal>.
+      </para>
+      <para>
+       Example command to change or set:
+      </para>
+<screen>&prompt.sudo;snapper -c <replaceable>CONFIG</replaceable> set-config "NUMBER_MIN_AGE=864000"</screen>
+     </listitem>
+    </varlistentry>
+   </variablelist>
+   <note>
+    <title>Limit and age</title>
+    <para>
+     <literal>NUMBER_LIMIT</literal>, <literal>NUMBER_LIMIT_IMPORTANT</literal>
+     and <literal>NUMBER_MIN_AGE</literal> are always evaluated. Snapshots are
+     only deleted when <emphasis>all</emphasis> conditions are met.
+    </para>
+    <para>
+     If you always want to keep the number of snapshots defined with
+     <literal>NUMBER_LIMIT*</literal> regardless of their age, set
+     <literal>NUMBER_MIN_AGE</literal> to <literal>0</literal>.
+    </para>
+    <para>
+     The following example shows a configuration to keep the last 10 important
+     and regular snapshots regardless of age:
+    </para>
+<screen>NUMBER_CLEANUP=yes
+NUMBER_LIMIT_IMPORTANT=10
+NUMBER_LIMIT=10
+NUMBER_MIN_AGE=0</screen>
+    <para>
+     If you do not want to keep snapshots beyond a certain
+     age, set <literal>NUMBER_LIMIT*</literal> to <literal>0</literal> and
+     provide the age with <literal>NUMBER_MIN_AGE</literal>.
+    </para>
+    <para>
+     The following example shows a configuration to only keep snapshots younger
+     than ten days:
+    </para>
+<screen>NUMBER_CLEANUP=yes
+NUMBER_LIMIT_IMPORTANT=0
+NUMBER_LIMIT=0
+NUMBER_MIN_AGE=864000</screen>
+   </note>
+  </sect2>
+
+  <sect2 xml:id="sec-snapper-clean-up-timeline">
+   <title>Cleaning up timeline snapshots</title>
+   <para>
+    Cleaning up timeline snapshots is controlled by the following
+    parameters of a Snapper configuration.
+   </para>
+   <variablelist>
+    <varlistentry>
+     <term><literal>TIMELINE_CLEANUP</literal>
+     </term>
+     <listitem>
+      <para>
+       Enables or disables clean-up of timeline snapshots. If enabled,
+       snapshots are deleted when the total snapshot count exceeds a number
+       specified with <literal>TIMELINE_LIMIT_*</literal>
+       <emphasis>and</emphasis> an age specified with
+       <literal>TIMELINE_MIN_AGE</literal>. Valid values:
+       <literal>yes</literal>, <literal>no</literal>.
+      </para>
+      <para>
+       The default value is <literal>"yes"</literal>.
+      </para>
+      <para>
+       Example command to change or set:
+      </para>
+<screen>&prompt.sudo;snapper -c <replaceable>CONFIG</replaceable> set-config "TIMELINE_CLEANUP=yes"</screen>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><literal>TIMELINE_LIMIT_DAILY</literal>,
+      <literal>TIMELINE_LIMIT_HOURLY</literal>,
+      <literal>TIMELINE_LIMIT_MONTHLY</literal>,
+      <literal>TIMELINE_LIMIT_WEEKLY</literal>,
+      <literal>TIMELINE_LIMIT_YEARLY</literal>
+     </term>
+     <listitem>
+      <para>
+       Number of snapshots to keep for hour, day, month, week and year.
+      </para>
+      <para>
+       The default value for each entry is <literal>"10"</literal>, except for
+       <literal>TIMELINE_LIMIT_WEEKLY</literal>, which is set to
+       <literal>"0"</literal> by default.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><literal>TIMELINE_MIN_AGE</literal>
+     </term>
+     <listitem>
+      <para>
+       Defines the minimum age in seconds a snapshot must have before it can
+       automatically be deleted.
+      </para>
+      <para>
+       The default value is <literal>"1800"</literal>.
+      </para>
+     </listitem>
+    </varlistentry>
+   </variablelist>
+   <example xml:id="ex-snapper-config-timeline">
+    <title>Example timeline configuration</title>
+<screen>TIMELINE_CLEANUP="yes"
+TIMELINE_CREATE="yes"
+TIMELINE_LIMIT_DAILY="7"
+TIMELINE_LIMIT_HOURLY="24"
+TIMELINE_LIMIT_MONTHLY="12"
+TIMELINE_LIMIT_WEEKLY="4"
+TIMELINE_LIMIT_YEARLY="2"
+TIMELINE_MIN_AGE="1800"</screen>
+    <para>
+     This example configuration enables hourly snapshots which are
+     automatically cleaned up. <literal>TIMELINE_MIN_AGE</literal> and
+     <literal>TIMELINE_LIMIT_*</literal> are always both evaluated. In this
+     example, the minimum age of a snapshot before it can be deleted is set to
+     30 minutes (1800 seconds). Since we create hourly snapshots, this ensures
+     that only the latest snapshots are kept. If
+     <literal>TIMELINE_LIMIT_DAILY</literal> is set to not zero, this means
+     that the first snapshot of the day is kept, too.
+    </para>
+    <itemizedlist mark="bullet" spacing="normal">
+     <title>Snapshots to be kept</title>
+     <listitem>
+      <para>
+       Hourly: the last 24 snapshots that have been made.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       Daily: the first daily snapshot that has been made is kept from the last
+       seven days.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       Monthly: the first snapshot made on the last day of the month is kept
+       for the last twelve months.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       Weekly: the first snapshot made on the last day of the week is kept from
+       the last four weeks.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       Yearly: the first snapshot made on the last day of the year is kept for
+       the last two years.
+      </para>
+     </listitem>
+    </itemizedlist>
+   </example>
+  </sect2>
+
+  <sect2 xml:id="sec-snapper-clean-up-empty">
+   <title>Cleaning up snapshot pairs that do not differ</title>
+   <para>
+    As explained in <xref linkend="snapper-snapshot-type"/>, whenever you run a
+    &yast; module or execute Zypper, a pre snapshot is created on start-up and
+    a post snapshot is created when exiting. In case you have not made any
+    changes there will be no difference between the pre and post snapshots.
+    Such <quote>empty</quote> snapshot pairs can be automatically be deleted by
+    setting the following parameters in a Snapper configuration:
+   </para>
+   <variablelist>
+    <varlistentry>
+     <term><literal>EMPTY_PRE_POST_CLEANUP</literal>
+     </term>
+     <listitem>
+      <para>
+       If set to <literal>yes</literal>, pre and post snapshot pairs that do
+       not differ will be deleted.
+      </para>
+      <para>
+       The default value is <literal>"yes"</literal>.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><literal>EMPTY_PRE_POST_MIN_AGE</literal>
+     </term>
+     <listitem>
+      <para>
+       Defines the minimum age in seconds a pre and post snapshot pair that
+       does not differ must have before it can automatically be deleted.
+      </para>
+      <para>
+       The default value is <literal>"1800"</literal>.
+      </para>
+     </listitem>
+    </varlistentry>
+   </variablelist>
+  </sect2>
+
+  <sect2 xml:id="sec-snapper-clean-up-manual">
+   <title>Cleaning up manually created snapshots</title>
+   <para>
+    Snapper does not offer custom clean-up algorithms for manually created
+    snapshots. However, you can assign the number or timeline clean-up
+    algorithm to a manually created snapshot. If you do so, the snapshot will
+    join the <quote>clean-up queue</quote> for the algorithm you specified.
+    You can specify a clean-up algorithm when creating a snapshot, or by
+    modifying an existing snapshot:
+   </para>
+   <variablelist>
+    <varlistentry>
+     <term><command>snapper create --description "Test" --cleanup-algorithm number</command>
+     </term>
+     <listitem>
+      <para>
+       Creates a stand-alone snapshot (type single) for the default (root)
+       configuration and assigns the <literal>number</literal> clean-up
+       algorithm.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><command>snapper modify --cleanup-algorithm "timeline" 25</command>
+     </term>
+     <listitem>
+      <para>
+       Modifies the snapshot with the number 25 and assigns the clean-up
+       algorithm <literal>timeline</literal>.
+      </para>
+     </listitem>
+    </varlistentry>
+   </variablelist>
+  </sect2>
+
+  <sect2 xml:id="sec-snapper-clean-up-quota">
+   <title>Adding disk quota support</title>
+   <para>
+    In addition to the number and/or timeline clean-up algorithms described
+    above, Snapper supports quotas. You can define what percentage of the
+    available space snapshots are allowed to occupy. This percentage value
+    always applies to the Btrfs subvolume defined in the respective Snapper
+    configuration.
+   </para>
+   <para> 
+       Btrfs quotas are applied to subvolumes, not to users. You may apply 
+       disk space quotas to users and groups (for example, with the 
+       <command>quota</command> command) in addition to using Btrfs quotas.
+   </para>
+   <para>
+    If Snapper was enabled during the installation, quota support is
+    automatically enabled. In case you manually enable Snapper at a later point
+    in time, you can enable quota support by running <command>snapper
+    setup-quota</command>. This requires a valid configuration (see
+    <xref
+    linkend="sec-snapper-config"/> for more information).
+   </para>
+   <para>
+    Quota support is controlled by the following parameters of a Snapper
+    configuration.
+   </para>
+   <variablelist>
+    <varlistentry>
+     <term><literal>QGROUP</literal>
+     </term>
+     <listitem>
+      <para>
+       The Btrfs quota group used by Snapper. If not set, run <command>snapper
+       setup-quota</command>. If already set, only change if you are familiar
+       with <command>man 8 btrfs-qgroup</command>. This value is set with
+       <command>snapper setup-quota</command> and should not be changed.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><literal>SPACE_LIMIT</literal>
+     </term>
+     <listitem>
+      <para>
+       Limit of space snapshots are allowed to use in fractions of 1 (100%).
+       Valid values range from 0 to 1 (0.1 = 10%, 0.2 = 20%, ...).
+      </para>
+     </listitem>
+    </varlistentry>
+   </variablelist>
+   <para>
+    The following limitations and guidelines apply:
+   </para>
+   <itemizedlist>
+    <listitem>
+     <para>
+      Quotas are only activated in <emphasis>addition</emphasis> to an existing
+      number and/or timeline clean-up algorithm. If no clean-up algorithm is
+      active, quota restrictions are not applied.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      With quota support enabled, Snapper will perform two clean-up runs if
+      required. The first run will apply the rules specified for number and
+      timeline snapshots. Only if the quota is exceeded after this run, the
+      quota-specific rules will be applied in a second run.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Even if quota support is enabled, Snapper will always keep the number of
+      snapshots specified with the <literal>NUMBER_LIMIT*</literal> and
+      <literal>TIMELINE_LIMIT*</literal> values, even if the quota will be
+      exceeded. It is therefore recommended to specify ranged values
+      (<literal><replaceable>MIN</replaceable>-<replaceable>MAX</replaceable></literal>)
+      for <literal>NUMBER_LIMIT*</literal> and
+      <literal>TIMELINE_LIMIT*</literal> to ensure the quota can be applied.
+     </para>
+     <para>
+      If, for example, <literal>NUMBER_LIMIT=5-20</literal> is set, Snapper
+      will perform a first clean-up run and reduce the number of regular
+      numbered snapshots to 20. In case these 20 snapshots exceed the
+      quota, Snapper will delete the oldest ones in a second run until the
+      quota is met. A minimum of five snapshots will always be kept, regardless
+      of the amount of space they occupy.
+     </para>
+    </listitem>
+   </itemizedlist>
+  </sect2>
+</sect1>
+ 
+  <sect1>
+      <title>Showing exclusive disk space used by snapshots</title>
+     <para>
+      Snapshots share data, for efficient use of storage space, so using ordinary
+      commands like <command>du</command> and <command>df</command> will not measure
+      used disk space accurately. When you want to free up disk space on Btrfs 
+      with quotas enabled, you need to know how much exclusive disk space is 
+      used by each snapshot, rather than shared space. Snapper 0.6 and up reports 
+      the used disk space for each snapshot in the
+    <literal>Used Space</literal> column:
+</para>
+<screen>&prompt.root;snapper --iso list
+  # | Type   | Pre # | Date                | User | Used Space | Cleanup | Description           | Userdata     
+----+--------+-------+---------------------+------+------------+---------+-----------------------+--------------
+ 0  | single |       |                     | root |            |         | current               |              
+ 1* | single |       | 2019-07-22 13:08:38 | root |  16.00 KiB |         | first root filesystem |              
+ 2  | single |       | 2019-07-22 14:21:05 | root |  14.23 MiB | number  | after installation    | important=yes
+ 3  | pre    |       | 2019-07-22 14:26:03 | root | 144.00 KiB | number  | zypp(zypper)          | important=no 
+ 4  | post   |     3 | 2019-07-22 14:26:04 | root | 112.00 KiB | number  |                       | important=no 
+ 5  | pre    |       | 2019-07-23 08:19:36 | root | 128.00 KiB | number  | zypp(zypper)          | important=no 
+ 6  | post   |     5 | 2019-07-23 08:19:43 | root |  80.00 KiB | number  |                       | important=no 
+ 7  | pre    |       | 2019-07-23 08:20:50 | root | 256.00 KiB | number  | yast sw_single        |              
+ 8  | pre    |       | 2019-07-23 08:23:22 | root | 112.00 KiB | number  | zypp(ruby.ruby2.5)    | important=no 
+ 9  | post   |     8 | 2019-07-23 08:23:35 | root |  64.00 KiB | number  |                       | important=no 
+10  | post   |     7 | 2019-07-23 08:24:05 | root |  16.00 KiB | number  |                       |              
+</screen>
+<para>
+    The <command>btrfs</command> command provides another view of space used by 
+    snapshots:
+</para>
+<screen>
+&prompt.root;btrfs qgroup show -p /
+qgroupid         rfer         excl parent  
+--------         ----         ---- ------  
+0/5          16.00KiB     16.00KiB ---     
+[...]    
+0/272         3.09GiB     14.23MiB 1/0     
+0/273         3.11GiB    144.00KiB 1/0     
+0/274         3.11GiB    112.00KiB 1/0     
+0/275         3.11GiB    128.00KiB 1/0     
+0/276         3.11GiB     80.00KiB 1/0     
+0/277         3.11GiB    256.00KiB 1/0     
+0/278         3.11GiB    112.00KiB 1/0     
+0/279         3.12GiB     64.00KiB 1/0     
+0/280         3.12GiB     16.00KiB 1/0     
+1/0           3.33GiB    222.95MiB --- 
+</screen>
+<para>
+    The <literal>qgroupid</literal> column displays the identification number for
+    each subvolume, assigning a qgroup level/ID combination.
+</para> 
+<para>
+    The <literal>rfer</literal> column displays the total amount of data 
+    referred to in the subvolume.
+</para>
+<para>
+    The <literal>excl</literal> column displays the exclusive data in each
+    subvolume. 
+</para>
+<para>
+    The <literal>parent</literal> column shows the parent qgroup of the subvolumes.
+</para>
+<para>    
+    The final item, <literal>1/0</literal>, shows the totals for the parent 
+    qgroup. In the above example, 222.95 MiB will be freed if all subvolumes
+    are removed. Run the following command to see which snapshots are associated
+    with each subvolume:
+</para>
+<screen>&prompt.root;btrfs subvolume list -st /
+ID	gen	top level	path	
+--	---	---------	----	
+267	298	266		@/.snapshots/1/snapshot
+272	159	266		@/.snapshots/2/snapshot
+273	170	266		@/.snapshots/3/snapshot
+274	171	266		@/.snapshots/4/snapshot
+275	287	266		@/.snapshots/5/snapshot
+276	288	266		@/.snapshots/6/snapshot
+277	292	266		@/.snapshots/7/snapshot
+278	296	266		@/.snapshots/8/snapshot
+279	297	266		@/.snapshots/9/snapshot
+280	298	266		@/.snapshots/10/snapshot
+</screen>
+     <para>
+      Doing an upgrade from one service pack to another results in snapshots
+      occupying a lot of disk space on the system subvolumes. Manually deleting 
+      these snapshots after they are no longer needed is recommended. See
+      <xref linkend="sec-snapper-manage-delete"/> for details.
+     </para>
+ </sect1>
+
+ <sect1 xml:id="sec-snapper-faqs">
+  <title>Frequently asked questions</title>
+
+  <qandaset defaultlabel="qanda">
+   <qandaentry>
+    <question>
+     <para>
+      Why does Snapper never show changes in <filename>/var/log</filename>,
+      <filename>/tmp</filename> and other directories?
+     </para>
+    </question>
+    <answer>
+     <para>
+      For certain directories, we decided to exclude them from snapshots. See
+      <xref linkend="snapper-dir-excludes"/> for a list and reasons. To exclude
+      a path from snapshots we create a subvolume for that path.
+     </para>
+    </answer>
+   </qandaentry>
+   <qandaentry>
+    <question>
+     <para>
+      Can I boot a snapshot from the boot loader?
+     </para>
+    </question>
+    <answer>
+     <para>
+      Yes&mdash;refer to <xref linkend="sec-snapper-snapshot-boot"/> for
+      details.
+     </para>
+    </answer>
+   </qandaentry>
+   <qandaentry xml:id="faq-snapper-permanent">
+    <question>
+     <para>
+      Can a snapshot be protected from deletion?
+     </para>
+    </question>
+    <answer>
+     <para>
+      Currently Snapper does not offer means to prevent a snapshot from being
+      deleted manually. However, you can prevent snapshots from being
+      automatically deleted by clean-up algorithms. Manually created snapshots
+      (see <xref linkend="sec-snapper-manage-create"/>) have no clean-up
+      algorithm assigned unless you specify one with
+      <option>--cleanup-algorithm</option>. Automatically created snapshots
+      always either have the <literal>number</literal> or
+      <literal>timeline</literal> algorithm assigned. To remove such an
+      assignment from one or more snapshots, proceed as follows:
+     </para>
+     <procedure>
+      <step>
+       <para>
+        List all available snapshots:
+       </para>
+<screen>&prompt.sudo;snapper list -a</screen>
+      </step>
+      <step>
+       <para>
+        Memorize the number of the snapshots you want to prevent from being
+        deleted.
+       </para>
+      </step>
+      <step>
+       <para>
+        Run the following command and replace the number placeholders with the
+        number(s) you memorized:
+       </para>
+<screen>&prompt.sudo;snapper modify --cleanup-algorithm "" <replaceable>#1</replaceable> <replaceable>#2</replaceable> <replaceable>#n</replaceable></screen>
+      </step>
+      <step>
+       <para>
+        Check the result by running <command>snapper list -a</command> again.
+        The entry in the column <literal>Cleanup</literal> should now be empty
+        for the snapshots you modified.
+       </para>
+      </step>
+     </procedure>
+    </answer>
+   </qandaentry>
+   <qandaentry>
+    <question>
+     <para>
+      Where can I get more information on Snapper?
+     </para>
+    </question>
+    <answer>
+     <para>
+      See the Snapper home page at <link xlink:href="http://snapper.io/"/>.
+     </para>
+    </answer>
+   </qandaentry>
+  </qandaset>
+ </sect1>
+</chapter>

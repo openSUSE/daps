@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="urn:x-suse:xslt:profiling:docbook50-profile.xsl"
+ type="text/xml"
+ title="Profiling step"?>
+<!DOCTYPE book
+[
+  <!ENTITY % entities SYSTEM "../common/generic-entities.ent">
+    %entities;
+]>
+
+<!-- ##################################################################### -->
+<!-- Security Guide                                                        -->
+<!-- ##################################################################### -->
+<book version="5.0" xml:lang="en" xml:id="book-security"
+ xmlns="http://docbook.org/ns/docbook"
+ xmlns:xi="http://www.w3.org/2001/XInclude"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+ <info>
+  <title>&secguide;</title>
+  <productname>&productname;</productname>
+  <productnumber>&productnumber;</productnumber>
+  <date>
+   <?dbtimestamp format="B d, Y"?>
+  </date>
+  <xi:include href="../common/common_copyright_gfdl.xml"/>
+  <abstract>
+   <para> &abstract_security; </para>
+  </abstract>
+  <dm:docmanager xmlns:dm="urn:x-suse:ns:docmanager">
+   <dm:bugtracker>
+    <dm:assignee>fs@suse.com</dm:assignee>
+   </dm:bugtracker>
+   <dm:translation>yes</dm:translation>
+  </dm:docmanager>
+ </info>
+ <xi:include href="security_intro.xml"/>
+ <xi:include href="security_preface.xml"/>
+
+ <part xml:id="part-auth">
+  <title>Authentication</title>
+  <xi:include href="security_pam.xml"/>
+  <xi:include href="security_nis.xml"/>
+  <xi:include href="security_auth.xml"/>
+  <xi:include href="security_ldap.xml"/>
+  <xi:include href="security_kerberos.xml"/>
+  <xi:include href="security_ad_support.xml"/>
+  <xi:include href="security_freeradius.xml"/>
+ </part>
+
+ <part xml:id="part-local-security">
+  <title>Local security</title>
+  <xi:include href="physical_security.xml"/>
+  <xi:include href="software_management.xml"/>
+  <xi:include href="file_management.xml"/>
+  <xi:include href="security_cryptofs.xml"/>
+  <xi:include href="security_cryptctl.xml"/>
+  <xi:include href="user_management.xml"/>
+  <xi:include href="security_cron_at.xml"/>
+  <xi:include href="security_spectre_meltdown_checker.xml"/>
+  <xi:include href="security_yast2_security.xml"/>
+  <xi:include href="security_polkit.xml"/>
+  <xi:include href="security_acls.xml"/>
+<!-- this is very outdated, removing until I can rewrite
+  it with updated information cschroder 12 Dec 2021
+  <xi:include href="security_certificatestore.xml"/>-->
+  <xi:include href="security_aide.xml"/>
+ </part>
+
+
+ <part xml:id="part-network-security">
+  <title>Network security</title>
+  <info/>
+  <xi:include href="security_xforwarding.xml"/>
+  <xi:include href="security_ssh.xml"/>
+  <xi:include href="security_firewall.xml"/>
+  <xi:include href="security_vpnserver.xml"/>
+  <xi:include href="security_xca.xml"/>
+  <xi:include href="security_sysctl.xml"/>
+ </part>
+
+ <part os="sles;sled" xml:id="part-compliance">
+  <title>Regulations and Compliance</title>
+  <xi:include href="common_criteria.xml"/>
+  <xi:include href="security_fips.xml"/>
+  <!-- Moved to SUSE/doc-unversioned  Feb 23 2022 cschroder-->
+  <xi:include os="sles" href="security_pcidss.xml"/>
+  <xi:include os="sles" href="security_stig.xml"/>
+ </part>
+
+ <part xml:id="part-apparmor">
+  <title>Confining privileges with &aa;</title>
+  <xi:include href="apparmor_intro.xml"/>
+  <xi:include href="apparmor_start.xml"/>
+  <xi:include href="apparmor_whatimmunize.xml"/>
+  <xi:include href="apparmor_profiles.xml"/>
+  <xi:include href="apparmor_repositories.xml"/>
+  <xi:include href="apparmor_profiles_yast.xml"/>
+  <xi:include href="apparmor_profiles_man.xml"/>
+  <xi:include href="apparmor_changehat.xml"/>
+  <xi:include href="apparmor_pam.xml"/>
+  <xi:include href="apparmor_managing.xml"/>
+  <xi:include href="apparmor_support.xml"/>
+  <xi:include href="apparmor_glossary.xml"/>
+ </part>
+
+ <part xml:id="part-selinux" os="sles;osuse">
+  <title>SELinux</title>
+  <info/>
+  <xi:include href="selinux.xml"/>
+ </part>
+
+ <part xml:id="part-audit">
+  <title>&auditguide;</title>
+  <info/>
+  <xi:include href="audit_components.xml"/>
+  <xi:include href="audit_setup.xml"/>
+  <xi:include href="audit_scenarios.xml"/>
+  <xi:include href="audit_moreinfo.xml"/>
+ </part>
+
+<!-- ===================================================================== -->
+<!-- Appendixes                                                            -->
+<!-- ===================================================================== -->
+
+ <xi:include href="../common/common_legal.xml"/>
+</book>

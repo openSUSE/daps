@@ -1,0 +1,982 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sect1
+[
+  <!ENTITY % entities SYSTEM "../common/generic-entities.ent">
+    %entities;
+]>
+<chapter xmlns="http://docbook.org/ns/docbook"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         version="5.0"
+         xml:id="cha-configure-cryptctl">
+ <info>
+  <title>Storage encryption for hosted applications with cryptctl</title>
+  <dm:docmanager xmlns:dm="urn:x-suse:ns:docmanager">
+   <dm:translation>yes</dm:translation>
+  </dm:docmanager>
+ </info>
+
+   <para>
+    Databases and similar applications are often hosted on external
+    servers that are serviced by third-party staff. Certain data center
+    maintenance tasks require third-party staff to directly access affected
+    systems. In such cases, privacy requirements necessitate disk encryption.
+   </para>
+   <para>
+    <command>cryptctl</command> allows encrypting sensitive directories using
+    LUKS and offers the following additional features:
+   </para>
+   <itemizedlist>
+    <listitem>
+     <para>
+      Encryption keys are located on a central server, which can be located on
+      customer premises.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Encrypted partitions are automatically remounted after an unplanned
+      reboot.
+     </para>
+    </listitem>
+   </itemizedlist>
+  <para>
+   <command>cryptctl</command> consists of two components:
+  </para>
+  <itemizedlist>
+   <listitem>
+    <para>
+     A client is a machine that has one or more encrypted partitions but does
+     not permanently store the necessary key to decrypt those partitions.
+     For example, clients can be cloud or otherwise hosted machines.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The server holds encryption keys that can be requested by clients to
+     unlock encrypted partitions.
+    </para>
+    <para>
+     You can also set up the <command>cryptctl</command> server to store
+     encryption keys on a KMIP&nbsp;1.3-compatible (Key Management
+     Interoperability Protocol) server. In that case, the
+     <command>cryptctl</command> server does not store the encryption keys of
+     clients and is dependent upon the KMIP-compatible server to provide
+     these.
+    </para>
+   </listitem>
+  </itemizedlist>
+  <warning>
+   <title><command>cryptctl</command> Server maintenance</title>
+   <para>
+    Since the <command>cryptctl</command> server manages timeouts for the
+    encrypted disks and, depending on the configuration, can also hold
+    encryption keys, it
+    should be under your direct control and managed only by trusted
+    personnel.
+   </para>
+   <para>
+    Additionally, it should be backed up regularly. Losing the server's data
+    means losing access to encrypted partitions on the clients.
+   </para>
+  </warning>
+  <para>
+   To handle encryption, <command>cryptctl</command> uses LUKS with
+   aes-xts-256 encryption and 512-bit keys. Encryption keys are transferred
+   using TLS with certificate verification.
+  </para>
+  <figure xml:id="fig-cryptctl-retrieve">
+   <title>Key retrieval with <command>cryptctl</command> (model without connection to KMIP server)</title>
+   <mediaobject>
+    <imageobject role="html">
+     <imagedata fileref="cryptctl-keyretrieval.png"/>
+    </imageobject>
+    <imageobject role="fo">
+     <imagedata fileref="cryptctl-keyretrieval.svg" width="70%"/>
+    </imageobject>
+    <textobject role="description">
+     <phrase>The client asks the server for the disk decryption key, the server
+     responds</phrase>
+    </textobject>
+   </mediaobject>
+  </figure>
+  <note>
+   <title>Install <command>cryptctl</command></title>
+   <para>
+    Before continuing, make sure the package <package>cryptctl</package> is
+    installed on all machines you intend to set up as servers or clients.
+   </para>
+  </note>
+  <sect1 xml:id="sec-configure-cryptctl-server">
+   <title>Setting up a <command>cryptctl</command> server</title>
+   <para>
+    Before you can define a machine as a <command>cryptctl</command> client,
+    you need to set up a machine as a <command>cryptctl</command> server.
+   </para>
+   <para>
+    Before beginning, choose whether to use a self-signed certificate to
+    secure communication between the server and clients. If not, generate a
+    TLS certificate for the server and have it signed by a certificate
+    authority.
+   </para>
+   <para>
+    Additionally, you can have clients authenticate to the server using
+    certificates signed by a certificate authority. To use this extra
+    security measure, make sure to have a CA certificate at hand before
+    starting this procedure.
+   </para>
+   <procedure>
+    <step>
+     <para>
+      As <systemitem class="username">root</systemitem>, run:
+     </para>
+     <screen>&prompt.root;<command>cryptctl init-server</command></screen>
+    </step>
+    <step>
+     <para>
+      Answer each of the following prompts and press <keycap function="enter"/>
+      after every answer. If there is a default answer, it is shown in square
+      brackets at the end of the prompt.
+     </para>
+     <substeps>
+      <step>
+       <para>
+        Create a strong password, and protect it well. This password
+        unlocks all partitions that are registered on the server.
+       </para>
+      </step>
+      <step>
+       <para>
+        Specify the path to a PEM-encoded TLS certificate or certificate chain
+        file or leave the field empty to create a self-signed certificate. If
+        you specify a path, use an absolute path.
+       </para>
+      </step>
+      <step>
+       <para>
+        If you want the server to be identified by a host name other than the
+        default shown, specify a host name. <command>cryptctl</command> generates
+        certificates which include the host name.
+       </para>
+      </step>
+      <step>
+       <para>
+        Specify the IP address that belongs to the network interface that you
+        want to listen on for decryption requests from the clients, then set
+        a port number (the default is port 3737).
+       </para>
+       <para>
+        The default IP address setting,
+        <systemitem class="ipaddress">0.0.0.0</systemitem> means that
+        <command>cryptctl</command> listens on
+        all network interfaces for client requests using IPv4.
+       </para>
+       <!-- IPv6 should work too but not with 0.0.0.0, however: this is
+       untested. - sknorr, 2016-12-02 -->
+      </step>
+      <step>
+       <para>
+        Specify a directory on the server that holds the decryption keys
+        for clients.
+       </para>
+      </step>
+      <step>
+       <para>
+        Specify whether clients need to authenticate to the server using a
+        TLS certificate. If you choose <guimenu>No</guimenu>, this means that
+        clients authenticate using disk UUIDs only. (However, communication
+        is encrypted using the server certificate in any case.)
+       </para>
+       <para>
+        If you choose <guimenu>Yes</guimenu>, pick a PEM-encoded certificate
+        authority to use for signing client certificates.
+       </para>
+      </step>
+      <step>
+       <para>
+        Specify whether to use a KMIP 1.3-compatible server (or multiple such
+        servers) to store encryption keys of clients. If you choose this
+        option, provide the host names and ports for one or multiple
+        KMIP-compatible servers.
+       </para>
+       <para>
+        Additionally, provide a user name, password, a CA certificate for the
+        KMIP server, and a client identity certificate for the
+        <command>cryptctl</command> server.
+       </para>
+       <important>
+        <title>No easy reconfiguration of KMIP setting</title>
+        <para>
+         The setting to use a KMIP server cannot easily be changed later. To
+         change this setting, both the <command>cryptctl</command> server and
+         its clients need to be configured afresh.
+        </para>
+       </important>
+      </step>
+      <step>
+       <para>
+        Finally, configure an SMTP server for e-mail notifications for
+        encryption and decryption requests or leave the prompt empty to skip
+        setting up e-mail notifications.
+       </para>
+       <note>
+        <title>Password-protected servers</title>
+        <para>
+         <command>cryptctl</command> currently cannot send e-mail using
+         authentication-protected SMTP servers. If that is necessary, set up
+         a local SMTP proxy.
+        </para>
+       </note>
+      </step>
+      <step>
+       <para>
+        When asked whether to start the <command>cryptctl</command> server,
+        enter <literal>y</literal>.
+       </para>
+      </step>
+     </substeps>
+    </step>
+    <step>
+     <para>
+      To check the status of the service
+      <systemitem class="daemon">cryptctl-server</systemitem>, use:
+     </para>
+     <screen>&prompt.root;<command>systemctl status cryptctl-server</command></screen>
+    </step>
+   </procedure>
+   <para>
+    To reconfigure the server later, do either of the following:
+   </para>
+   <itemizedlist>
+    <listitem>
+     <para>
+      Run the command <command>cryptctl init-server</command> again.
+      <command>cryptctl</command> proposes the existing settings as
+      the defaults, so that you only need to specify the values that you want
+      to change.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Make changes directly in the configuration file
+      <filename>/etc/sysconfig/cryptctl-server</filename>.
+     </para>
+     <para>
+      However, to avoid issues, do not change the settings
+      <option>AUTH_PASSWORD_HASH</option> and
+      <option>AUTH_PASSWORD_SALT</option> manually. The values of these
+      options need to be calculated correctly.
+     </para>
+    </listitem>
+   </itemizedlist>
+  </sect1>
+  <sect1 xml:id="sec-configure-cryptctl-client">
+   <title>Setting up a <command>cryptctl</command> client</title>
+   <para>
+    The following interactive setup of <command>cryptctl</command> is
+    currently the only setup method.
+   </para>
+   <para>
+    Make sure the following preconditions are fulfilled:
+   </para>
+   <itemizedlist>
+    <listitem>
+     <para>
+      A <command>cryptctl</command> server is available over the network.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      There is a directory to encrypt.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      The client machine has an empty partition available that is large
+      enough to fit the directory to encrypt.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      When using a self-signed certificate, the certificate
+      (<filename>*.crt</filename> file) generated on the server is
+      available locally on the client. Otherwise, the certificate authority
+      of the server certificate must be trusted by the client.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      If you set up the server to require clients to authenticate using a
+      client certificate, prepare a TLS certificate for the client which is
+      signed by the CA certificate you chose for the server.
+     </para>
+     <remark>
+      FIXME: needs openssl command-line-fu, or maybe xref to
+      doc-sle/sec.apache2.ssl.certificate - though certain parts there are
+      Apache-specific, that is confusing here.
+      - sknorr, 2017-09-06
+     </remark>
+    </listitem>
+   </itemizedlist>
+   <procedure>
+    <step>
+     <para>
+      As <systemitem class="username">root</systemitem>, run:
+     </para>
+     <screen>&prompt.root;<command>cryptctl encrypt</command></screen>
+    </step>
+    <step>
+     <para>
+      Answer each of the following prompts and press <keycap function="enter"/>
+      after every answer. If there is a default answer, it is shown in square
+      brackets at the end of the prompt.
+     </para>
+     <substeps>
+      <step>
+       <para>
+        Specify the host name and port to connect to on the
+        <command>cryptctl</command> server.
+       </para>
+      </step>
+      <step>
+       <para>
+        If you configured the server to have clients authenticate to it using a
+        TLS certificate, specify a certificate and a key file for the client.
+        The client certificate must be signed by the certificate
+        authority chosen when setting up the server.
+       </para>
+      </step>
+      <step>
+       <para>
+        Specify the absolute path to the server certificate (the
+        <filename>*.crt</filename> file).
+       </para>
+      </step>
+      <step>
+       <para>
+        Enter the encryption password that you specified when setting up the
+        server.
+       </para>
+      </step>
+      <step>
+       <para>
+        Specify the path to the directory to encrypt. Specify the path to the
+        empty partition that contains the encrypted content of the
+        directory.
+       </para>
+      </step>
+      <step>
+       <para>
+        Specify the number of machines that are allowed to decrypt the
+        partition simultaneously.
+       </para>
+       <para>
+        Then specify the timeout in seconds before additional machines are
+        allowed to decrypt the partition after the last vital sign was
+        received from the client or clients.
+       </para>
+       <para>
+        When a machine unexpectedly stops working and then reboots, it needs to
+        be able to unlock its partitions again. That means this timeout
+        should be set to a time slightly shorter than the reboot time of the
+        client.
+       </para>
+       <important>
+        <title>Timeout length</title>
+        <para>
+         If the time is set too long, the machine cannot decrypt
+         encrypted partitions on the first try. <command>cryptctl</command>
+         then continues to periodically check whether the encryption key has
+         become available. However, this introduces a delay.
+        </para>
+        <para>
+         If the timeout is set too short, machines with a copy of
+         the encrypted partition have an increased chance of unlocking the
+         partition first.
+        </para>
+       </important>
+      </step>
+     </substeps>
+    </step>
+    <step>
+     <para>
+      To start encryption, enter <literal>yes</literal>.
+     </para>
+     <para>
+      <command>cryptctl</command> encrypts the specified directory to
+      the previously empty partition and then mounts the newly encrypted
+      partition. The file system type is the same type as the
+      original unencrypted file system.
+     </para>
+     <para>
+      Before creating the encrypted partition,
+      <command>cryptctl</command> moves the unencrypted content of the
+      original directory to a location prefixed with
+      <literal>cryptctl-moved-</literal>.
+     </para>
+    </step>
+    <step>
+     <para>
+      To check that the directory is indeed mounted correctly, use:
+     </para>
+     <screen>
+&prompt.user;<command>lsblk -o NAME,MOUNTPOINT,UUID</command>
+NAME                        MOUNTPOINT          UUID
+[...]
+sdc
+└─sdc1                                          <replaceable>PARTITION_UUID</replaceable>
+  └─cryptctl-unlocked-sdc1  /secret-partition   <replaceable>UNLOCKED_UUID</replaceable>
+      </screen>
+     <para>
+      <command>cryptctl</command> identifies the encrypted partition by its
+      UUID. For the previous example, that is the UUID displayed next to
+      <literal>sdc1</literal>.
+     </para>
+     <para>
+      On the server, you can check whether the directory was decrypted using
+      <command>cryptctl</command>.
+     </para>
+     <screen>&prompt.root;<command>cryptctl list-keys</command></screen>
+     <para>
+      For a successfully decrypted partition, you see output like:
+     </para>
+     <screen>
+2019/06/06 15:50:00 ReloadDB: successfully loaded database of 1 records
+Total: 1 records (date and time are in zone EDT)
+Used By     When                 UUID  Max.Users  Num.Users  Mount Point
+<replaceable>IP_ADDRESS</replaceable>  2019-06-06 15:00:50  <replaceable>UUID</replaceable>  1          1          /secret-partition</screen>
+     <para>
+      For a partition not decrypted successfully, you see output like:
+     </para>
+     <screen>2019/06/06 15:50:00 ReloadDB: successfully loaded database of 1 records
+Total: 1 records (date and time are in zone EDT)
+Used By      When                 UUID  Max.Users  Num.Users  Mount Point
+             2019-06-06 15:00:50  <replaceable>UUID</replaceable>  1          1          /secret-partition</screen>
+     <para>See the difference in the empty <literal>Used by</literal> column.</para>
+     <para>
+      Verify that the UUID shown is that of the previously encrypted partition.
+     </para>
+    </step>
+    <step>
+     <para>
+      After verifying that the encrypted partition works, delete the
+      unencrypted content from the client. For example, use <command>rm</command>.
+      For more
+      safety, overwrite the content of the files before deleting them, for
+      example, using <command>shred -u</command>.
+     </para>
+     <important>
+      <title><command>shred</command> does not guarantee that data is erased</title>
+      <para>
+       Depending on the type of storage media, using
+       <command>shred</command> is not a guarantee that all data is
+       removed. In particular, SSDs employ wear leveling
+       strategies that render <command>shred</command> ineffective.
+      </para>
+     </important>
+    </step>
+   </procedure>
+   <para>
+    The configuration for the connection from client to server is stored in
+    <filename>/etc/sysconfig/cryptctl-client</filename> and can be edited
+    manually.
+   </para>
+   <para>
+    The server stores an encryption key for the client partition in
+    <filename>/var/lib/cryptctl/keydb/<replaceable>PARTITION_UUID</replaceable></filename>.
+   </para>
+  </sect1>
+
+  <sect1 xml:id="sec-cryptctl-luks-fstab">
+   <title>Configuring /etc/fstab for LUKS volumes</title>
+   <para>
+    When configuring the mount point for a new file system encrypted with
+    LUKS, &yast; uses, by default, the name of the encrypted device
+    in <filename>/etc/fstab</filename>.
+    (For example, <filename>/dev/mapper/cr_sda1</filename>.) Using the
+    device name, rather than the UUID or volume label, results in a more robust
+    operation of systemd generators and other related tools.
+   </para>
+   <para>
+    You have the option to adjust that default behavior for each device,
+    either with the Expert Partitioner in the installer, or via &ay;.
+   </para>
+   <para>
+    This change does not affect upgrades or any other scenario in which the
+    mount points are already defined in <filename>/etc/fstab</filename>.
+    Only newly created mount points are affected, such as during the
+    installation of a new system, or creating new partitions on running
+    systems.
+   </para>
+   </sect1>
+
+  <sect1 xml:id="sec-configure-cryptctl-status">
+   <title>Checking partition unlock status using server-side commands</title>
+   <para>
+    When a <command>cryptctl</command> client is active, it sends a
+    <quote>heartbeat</quote> to the <command>cryptctl</command> server every
+    10 seconds. If the server does not receive a heartbeat from the client
+    for the length of the timeout configured during the client setup, the
+    server assumes that the client is offline. It then allows another
+    client to connect (or allow the same client to reconnect after a reboot).
+   </para>
+   <para>
+    To see the usage status of all keys, use:
+   </para>
+   <screen>
+&prompt.root;<command>cryptctl list-keys</command>
+   </screen>
+   <para>
+    The information under <literal>Num. Users</literal> shows whether the key
+    is currently in use. To see more detail on a single key, use:
+   </para>
+   <screen>
+&prompt.root;<command>cryptctl show-key <replaceable>UUID</replaceable></command>
+   </screen>
+   <para>
+    This command shows information about mount point, mount options,
+    usage options, the last retrieval of the key and the last three
+    heartbeats from clients.
+   </para>
+   <para>
+    Additionally, you can use <command>journalctl</command> to find logs of
+    when keys were retrieved.
+   </para>
+  </sect1>
+  <sect1 xml:id="sec-configure-cryptctl-unlock">
+   <title>Unlocking encrypted partitions manually</title>
+   <para>
+    There are two ways of unlocking a partition manually, both of which are run
+    on a client:
+   </para>
+   <itemizedlist>
+    <listitem>
+     <formalpara>
+      <title>Online unlocking</title>
+      <para>
+       Online unlocking allows circumventing timeout or user limitations.
+       This method can be used when there is a network connection between
+       client and server but the client could not (yet) unlock the partition
+       automatically. This method unlocks all encrypted
+       partitions on a machine.
+      </para>
+     </formalpara>
+     <para>
+      To use it, run <command>cryptctl online-unlock</command>. Be prepared to
+      enter the password specified when setting up the server.
+     </para>
+    </listitem>
+    <listitem>
+     <formalpara>
+      <title>Offline unlocking</title>
+      <para>
+       This method can be used when a client cannot or must not be brought
+       online to communicate with its server. The encryption key from the
+       server must still be available. This method is meant as a last resort
+       only and can only unlock a single partition at a time.
+      </para>
+     </formalpara>
+     <para>
+      To use it, run <command>cryptctl offline-unlock</command>. The
+      server's key file for the requisite partition
+      (<filename>/var/lib/cryptctl/keydb/<replaceable>PARTITION_UUID</replaceable></filename>)
+      needs to be available on the client.
+     </para>
+    </listitem>
+   </itemizedlist>
+  </sect1>
+  <sect1 xml:id="sec-configure-cryptctl-lock">
+   <title>Maintenance downtime procedure</title>
+   <para>
+    To ensure that partitions cannot be decrypted during a maintenance
+    downtime, turn off the client and disable the
+    <command>cryptctl</command> server. You can do so by either:
+   </para>
+   <itemizedlist>
+    <listitem>
+     <para>
+      Stopping the service
+      <systemitem class="daemon">cryptctl-server</systemitem>:
+     </para>
+     <screen>
+&prompt.root;<command>systemctl stop cryptctl-server</command>
+     </screen>
+    </listitem>
+    <listitem>
+     <para>
+      Unplugging the <command>cryptctl</command> server from the network.
+     </para>
+    </listitem>
+   </itemizedlist>
+  </sect1>
+ <sect1 xml:id="sec-configure-cryptctl-ha">
+  <title>Setting up an HA environment for cryptctl-server service</title>
+  <para>
+   To avoid downtimes when the cryptctl-server needs to be stopped for
+   maintenance or suffers a damage, it is strongly recommended to set up the
+   cryptctl-server in an HA environment. You need at least a two-node &ha; cluster for
+   this.
+   The following setup shows how to create a two-node HA cluster for cryptctl-server using self-signed certificates.
+  </para>
+  <para>
+   Make sure the following preconditions are fulfilled:
+  </para>
+  <itemizedlist>
+   <listitem>
+    <para>
+     At least two servers which have &sles; and the &ha; extension installed
+     are available. All servers must also have the cryptctl package installed.
+     All servers can reach each other via SSH.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     If you set up a new cluster, you need an additional IP address for the
+     &haweb; of the cluster (<replaceable>AdminIP</replaceable>).
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     A separate IP address (<replaceable>CrypServerIP</replaceable>) is reserved for the cryptctl-server.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     A separate dns-name (<replaceable>CrypServerHostName</replaceable>) is reserved for the cryptctl-server and is resolved to the above IP address.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     An HA-enabled block device or NFS share is available to store the keys.
+    </para>
+    <para>
+     In our example, we use an NFS share:
+     <filename>nfs-server.example.org/data/cryptctl-keys</filename>. It is mounted to the standard location <filename>/var/lib/cryptctl/keydb</filename>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     It is strongly recommended to use an SBD device.
+    </para>
+   </listitem>
+  </itemizedlist>
+
+  <procedure>
+   <title>Setting up a cryptctl two-node HA cluster</title>
+   <step>
+    <para>
+     Log in to <replaceable>Node1</replaceable> as <systemitem class="username">root</systemitem>.
+    </para>
+   </step>
+   <step>
+    <para>
+     Set up a cryptctl-server as described in <xref
+      linkend="sec-configure-cryptctl-server"/>. Use the following parameters:
+    </para>
+    <substeps>
+     <step>
+      <para>
+       To create the certificate, use the dedicated hostname
+       <replaceable>CrypServerHostName</replaceable> of the cryptctl server.
+       Do <emphasis>not</emphasis> use the host name of the host.
+      </para>
+     </step>
+     <step>
+      <para>
+       Use the dedicated IP address <replaceable>CrypServerIP</replaceable> of
+       the cryptctl server. Do <emphasis>not</emphasis> use the default IP address setting.
+      </para>
+     </step>
+     <step>
+      <para>
+       Do not configure a KMIP server.
+      </para>
+     </step>
+     <step>
+      <para>
+       When asked whether to start the <command>cryptctl</command> server, enter <literal>n</literal>.
+      </para>
+     </step>
+    </substeps>
+   </step>
+   <step>
+    <para>
+     Set up a two-node HA cluster:
+    </para>
+    <substeps>
+     <step>
+      <important>
+       <para>
+        <replaceable>Node1</replaceable> must be the server where you have configured the cryptctl server.</para>
+      </important>
+      <para>On the machine where you have configured the cryptctl server, set up the first node as follows:</para>
+      <screen>&prompt.root;<command>crm cluster init -i <replaceable>NetDev</replaceable> -A <replaceable>AdminIP</replaceable> -n <replaceable>ClusterName</replaceable></command></screen>
+     </step>
+     <step>
+      <para>
+       Log in via SSH to <replaceable>Node2</replaceable> and join the cluster
+       from there:
+      </para>
+      <screen>&prompt.root;<command>ssh <replaceable>Node2</replaceable></command>
+&prompt.root;<command>crm cluster join -y <replaceable>Node1</replaceable></command></screen>
+     </step>
+     <step>
+      <para>
+       For more information, also see the <link
+        xlink:href="https://documentation.suse.com/sle-ha/html/SLE-HA-all/article-installation.html">&haquick;</link>.
+      </para>
+     </step>
+    </substeps>
+   </step>
+   <step>
+    <para>
+     Set up the resource group for the cryptctl server:
+    </para>
+   </step>
+   <step>
+    <substeps>
+     <step>
+      <para>
+       You can set up all needed resource agents and copy all files to all
+       nodes with the cryptcl crm-shell-script in one step. We strongly recommend
+       that you verify the setup in the first step:
+      </para>
+      <screen>&prompt.root;<command>crm script verify cryptctl  \
+cert-path=/etc/cryptctl/servertls/<replaceable>CertificateFileName</replaceable> \
+cert-key-path=/etc/cryptctl/servertls/<replaceable>CertificateKeyFileName</replaceable> \
+virtual-ip:ip=<replaceable>CrypServerIP</replaceable> \
+filesystem:device=<replaceable>DevicePath</replaceable>
+filesystem:fstype=<replaceable>FileSystemType</replaceable></command></screen>
+     </step>
+     <step>
+      <para>
+       If the check was successful, set up the cluster group by running the
+       script as follows:
+      </para>
+      <screen>&prompt.root;<command>crm script verify cryptctl  \
+cert-path=/etc/cryptctl/servertls/<replaceable>CertificateFileName</replaceable> \
+cert-key-path=/etc/cryptctl/servertls/<replaceable>CertificateKeyFileName</replaceable> \
+virtual-ip:ip=<replaceable>CrypServerIP</replaceable> \
+filesystem:device=<replaceable>DevicePath</replaceable>
+filesystem:fstype=<replaceable>FileSystemType</replaceable></command></screen>
+     </step>
+    </substeps>
+   </step>
+   </procedure>
+   <table xml:id="tab-parameters">
+    <title>List of all parameters to define the resource group with the cryptctl crm script.</title>
+    <tgroup cols="4">
+      <colspec colname="name"/>
+      <colspec colname="obligytory"/>
+      <colspec colname="default"/>
+      <colspec colname="description"/>
+      <thead>
+        <row>
+          <entry>
+            <para>Name</para>
+          </entry>
+          <entry>
+            <para>Mandatory</para>
+          </entry>
+          <entry>
+            <para>Default Value</para>
+          </entry>
+          <entry>
+            <para>Description</para>
+          </entry>
+        </row>
+      </thead>
+      <tbody>
+        <row>
+          <entry>
+            id
+          </entry>
+          <entry>
+            no
+          </entry>
+          <entry>
+            cryptctl
+          </entry>
+          <entry>
+            Name of the resource group.
+          </entry>
+        </row>
+        <row>
+          <entry>
+            cert-path
+          </entry>
+          <entry>
+            yes
+          </entry>
+          <entry>
+          </entry>
+          <entry>
+            The full path to the created certificate.
+          </entry>
+        </row>
+        <row>
+          <entry>
+            cert-key-path
+          </entry>
+          <entry>
+            yes
+          </entry>
+          <entry>
+          </entry>
+          <entry>
+            The full path to the created certificate key.
+          </entry>
+        </row>
+        <row>
+          <entry>
+            virtual-ip:id
+          </entry>
+          <entry>
+            no
+          </entry>
+          <entry>
+           cryptctl-vip
+          </entry>
+          <entry>
+            The ID of the virtual IP resource for the cryptctl server.
+          </entry>
+        </row>
+        <row>
+          <entry>
+            virtual-ip:ip
+          </entry>
+          <entry>
+            yes
+          </entry>
+          <entry>
+          </entry>
+          <entry>
+            The IP address of the cryptctl server.
+          </entry>
+        </row>
+        <row>
+          <entry>
+            virtual-ip:nic
+          </entry>
+          <entry>
+            no
+          </entry>
+          <entry>
+           Detected by the virtual-ip resource agent.
+          </entry>
+          <entry>
+            The network device the cryptctl server should be listening on. Only required if the device cannot be detected from the IP address.
+          </entry>
+        </row>
+        <row>
+          <entry>
+            virtual-ip:cidr_netmask
+          </entry>
+          <entry>
+            no
+          </entry>
+          <entry>
+            Detected by the virtual-ip resource agent.
+          </entry>
+          <entry>
+            The numeric netmask of the IP address of the cryptctl server. Only required if the netmask cannot be detected from the IP address.
+          </entry>
+        </row>
+        <row>
+          <entry>
+            virtual-ip:broadcast
+          </entry>
+          <entry>
+            no
+          </entry>
+          <entry>
+            Detected by the virtual-ip resource agent.
+          </entry>
+          <entry>
+            The broadcast address of the IP address of the cryptctl server. Only required if this cannot be detected from the IP address.
+          </entry>
+        </row>
+        <row>
+          <entry>
+            filesystem:id
+          </entry>
+          <entry>
+            no
+          </entry>
+          <entry>
+           cryptctl-filesystem
+          </entry>
+          <entry>
+            The ID of the filesystem resource containing the disk encryption keys and records.
+          </entry>
+        </row>
+        <row>
+          <entry>
+            filesystem:device
+          </entry>
+          <entry>
+            yes
+          </entry>
+          <entry>
+          </entry>
+          <entry>
+            The device containing the filesystem. This can be a block device
+            like <filename>/dev/sda<replaceable>...</replaceable></filename> or an NFS share path
+           <filename>server:/path</filename>.
+          </entry>
+        </row>
+        <row>
+          <entry>
+            filesystem:directory
+          </entry>
+          <entry>
+            no
+          </entry>
+          <entry>
+            /var/lib/cryptctl/keydb
+          </entry>
+          <entry>
+           The directory where the device containing the file system is located. This can be a block device
+           like <filename>/dev/sda<replaceable>...</replaceable></filename> or an NFS share path
+           <filename>server:/path</filename>.
+          </entry>
+        </row>
+        <row>
+          <entry>
+            filesystem:fstype
+          </entry>
+          <entry>
+            yes
+          </entry>
+          <entry>
+          </entry>
+          <entry>
+            The filesystem type (for example, NFS, XFS, EXT4).
+          </entry>
+        </row>
+        <row>
+          <entry>
+            filesystem:options
+          </entry>
+          <entry>
+            no
+          </entry>
+          <entry>
+            The default options of the selected file system.
+          </entry>
+          <entry>
+            Mount options for the file system.
+          </entry>
+        </row>
+      </tbody>
+    </tgroup>
+  </table>
+ </sect1>
+ <sect1 xml:id="sec-configure-cryptctl-more">
+  <title>More information</title>
+  <para>
+   For more information, also see the project home page
+   <link xlink:href="https://github.com/SUSE/cryptctl/"/>.
+  </para>
+ </sect1>
+ </chapter>

@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter
+[
+  <!ENTITY % entities SYSTEM "../common/generic-entities.ent">
+    %entities;
+]>
+<chapter xmlns="http://docbook.org/ns/docbook"
+ xmlns:xi="http://www.w3.org/2001/XInclude"
+ xmlns:xlink="http://www.w3.org/1999/xlink"
+ version="5.0"
+ xml:id="cha-gnome-print">
+ <title>Managing printers</title>
+ <info>
+  <abstract>
+   <para>
+    Learn how to set up printers and manage print jobs.
+   </para>
+  </abstract>
+  <dm:docmanager xmlns:dm="urn:x-suse:ns:docmanager">
+   <dm:bugtracker></dm:bugtracker>
+   <dm:translation>yes</dm:translation>
+  </dm:docmanager>
+ </info>
+ <para>
+  &productnamereg; makes it easy to print your documents, whether your computer
+  is connected directly to a printer or linked remotely on a network. This
+  chapter describes how to set up printers in &productname; and manage print
+  jobs.
+ </para>
+ <sect1 xml:id="sec-gnome-print-inst">
+  <title>Installing a printer</title>
+  <para>
+   Before you can install a printer, you need to know the
+   <systemitem class="username">root</systemitem> password and have your
+   printer information ready. Depending on how you connect the printer, you
+   might also need the printer URI, TCP&sol;IP address or host, and the driver
+   for the printer. Common printer drivers ship with &productname;.
+   If you cannot find a driver for the printer, check the printer
+   manufacturer's Web site.
+  </para>
+
+  <procedure>
+   <step>
+    <para>
+     Make sure the CUPS printing service is available and automatically started
+     at boot time:
+    </para>
+    <screen>&prompt.sudo;systemctl enable cups.service
+&prompt.sudo;systemctl start cups.service</screen>
+   </step>
+   <step>
+    <para>
+     Start the printer configuration by right-clicking the desktop and
+     choosing <guimenu>Settings</guimenu> and then <guimenu>Printers</guimenu>.
+    </para>
+   </step>
+   <step>
+    <para>
+     Click <guimenu>Unlock</guimenu> in the upper right corner and enter the
+     <systemitem class="username">root</systemitem> password.
+    </para>
+   </step>
+   <step>
+    <para>
+     Click the <guimenu>Add</guimenu> button.
+    </para>
+   </step>
+   <step>
+    <para>
+     If there are too many printers in the list, filter them by entering an IP
+     address or a keyword into the search field in the lower part of the
+     dialog.
+    </para>
+   </step>
+   <step>
+    <para>
+     Select a printer from the list of available printers and click
+     <guimenu>Add</guimenu>.
+    </para>
+   </step>
+  </procedure>
+
+  <para>
+   The installed printer appears in the Printers panel. You can now print to
+   the printer from any application.
+  </para>
+
+<sect2>
+   <title>Installing a local printer</title>
+ <para>
+  Connect the printer cable to your computer and connect the printer's
+  power supply. Your system can recognize many types of printers once they
+  are connected.
+ </para>
+ <para>
+  If your printer was not recognized automatically, proceed as follows:
+ </para>
+   <procedure>
+    <step>
+     <para>
+      Open the <guimenu>Activities</guimenu> overview and start typing
+      <literal>Printers</literal>.
+     </para>
+     <para>
+      Click <guimenu>Printers</guimenu>. You may have to press
+      <guimenu>Unlock</guimenu> in the top-right corner and type in your
+      <systemitem class="username">root</systemitem> password.
+     </para>
+    </step>
+    <step>
+     <para>
+      Press the <guimenu>Add</guimenu> button.
+     </para>
+    </step>
+    <step>
+     <para>
+      In the pop-up window, select your printer and press
+      <guimenu>Add</guimenu>.
+     </para>
+    </step>
+   </procedure>
+   <para>
+    The installed printer appears in the Printers dialog box. You can now
+    print to the printer from any application.
+   </para>
+  </sect2>
+ </sect1>
+ 
+ <sect1>
+  <title>Modifying printer settings</title>
+
+  <procedure>
+   <step>
+    <para>
+     Open the <guimenu>Activities</guimenu> overview and start typing
+     <literal>Printers</literal>.
+    </para>
+   </step>
+   <step>
+    <para>
+    Click <guimenu>Printers</guimenu> to open the panel.
+    </para>
+   </step>
+   <step>
+    <para>
+     Depending on your system, you may have to press <guimenu>Unlock</guimenu>
+     in the top-right corner and type in your
+     <systemitem class="username">root</systemitem> password.
+    </para>
+   </step>
+   <step>
+    <para>
+     Click the <guimenu>Settings</guimenu> button next to the printer.
+    </para>
+   </step>
+   <step>
+    <para>
+     Select <guimenu>Printer Details</guimenu>.
+    </para>
+   </step>
+   <step>
+    <para>
+     Modify the printer settings to your needs and close the dialog.
+    </para>
+   </step>
+  </procedure>
+ </sect1>
+ <sect1>
+  <title>Canceling print jobs</title>
+<para>
+ If you accidentally started a print job, you can cancel the print to save
+ paper and ink.
+</para>
+  <procedure>
+   <step>
+    <para>
+     Open the <guimenu>Activities</guimenu> overview and start typing
+     <literal>Printers</literal>.
+    </para>
+   </step>
+   <step>
+    <para>
+     Click <guimenu>Printers</guimenu> to open the panel.
+    </para>
+   </step>
+   <step>
+    <para>
+     Click the <guimenu>Show Jobs</guimenu> button on the right hand-side of the
+     <guimenu>Printers</guimenu> dialog.
+    </para>
+    <para>
+     If the print job does not appear in the list, it may be printed
+     already.
+    </para>
+   </step>
+   <step>
+    <para>
+     Cancel the print job by clicking the <guimenu>Stop</guimenu> button.
+    </para>
+   </step>
+  </procedure>
+  </sect1>
+</chapter>

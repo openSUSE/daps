@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter
+[
+  <!ENTITY % entities SYSTEM "../common/generic-entities.ent">
+    %entities;
+]>
+
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0" xml:id="cha-audit-moreinfo">
+ <title>Useful resources</title>
+ <info>
+      <dm:docmanager xmlns:dm="urn:x-suse:ns:docmanager">
+        <dm:bugtracker>
+        </dm:bugtracker>
+	<dm:translation>yes</dm:translation>
+      </dm:docmanager>
+    </info>
+    <para>
+  There are other resources available containing valuable information about
+  the Linux audit framework:
+ </para>
+ <variablelist>
+  <varlistentry>
+   <term>The audit manual pages</term>
+   <listitem>
+    <para>
+     There are several man pages installed along with the audit tools that
+     provide valuable and detailed information:
+    </para>
+    <variablelist>
+     <varlistentry>
+      <term><literal>auditd(8)</literal>
+      </term>
+      <listitem>
+       <para>
+        The Linux audit daemon
+       </para>
+      </listitem>
+     </varlistentry>
+     <varlistentry>
+      <term><literal>auditd.conf(5)</literal>
+      </term>
+      <listitem>
+       <para>
+        The Linux audit daemon configuration file
+       </para>
+      </listitem>
+     </varlistentry>
+     <varlistentry>
+      <term><literal>auditctl(8)</literal>
+      </term>
+      <listitem>
+       <para>
+        A utility to assist controlling the kernel's audit system
+       </para>
+      </listitem>
+     </varlistentry>
+     <varlistentry>
+      <term><literal>autrace(8)</literal>
+      </term>
+      <listitem>
+       <para>
+        A program similar to <command>strace</command>
+       </para>
+      </listitem>
+     </varlistentry>
+     <varlistentry>
+      <term><literal>ausearch(8)</literal>
+      </term>
+      <listitem>
+       <para>
+        A tool to query audit daemon logs
+       </para>
+      </listitem>
+     </varlistentry>
+     <varlistentry>
+      <term><literal>aureport(8)</literal>
+      </term>
+      <listitem>
+       <para>
+        A tool that produces summary reports of audit daemon logs
+       </para>
+      </listitem>
+     </varlistentry>
+    </variablelist>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term><link xlink:href="http://people.redhat.com/sgrubb/audit/index.html"/>
+   </term>
+   <listitem>
+    <para>
+     The home page of the Linux audit project. This site contains several
+     specifications relating to different aspects of Linux audit, and
+     a short FAQ.
+    </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term><filename>/usr/share/doc/packages/audit </filename>
+   </term>
+   <listitem>
+    <para>
+     The audit package itself contains a README with basic design
+     information and sample <filename>.rules </filename> files for different
+     scenarios:
+    </para>
+    <simplelist>
+     <member><filename>capp.rules</filename>: Controlled Access Protection Profile (CAPP)</member>
+     <member><filename>lspp.rules</filename>: Labeled Security Protection Profile (LSPP)</member>
+     <member><filename>nispom.rules</filename>: National Industrial Security Program Operating
+      Manual Chapter 8(NISPOM)</member>
+     <member><filename>stig.rules</filename>: Secure Technical Implementation Guide (STIG)</member>
+    </simplelist>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term><link xlink:href="https://www.commoncriteriaportal.org/"/>
+   </term>
+   <listitem>
+    <para>
+     The official Web site of the Common Criteria project. Learn all about
+     the Common Criteria security certification initiative and which role
+     audit plays in this framework.
+    </para>
+   </listitem>
+  </varlistentry>
+ </variablelist>
+</chapter>

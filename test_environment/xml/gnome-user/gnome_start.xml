@@ -1,0 +1,639 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter
+[
+  <!ENTITY % entities SYSTEM "../common/generic-entities.ent">
+    %entities;
+]>
+<chapter xmlns="http://docbook.org/ns/docbook" 
+ xmlns:xi="http://www.w3.org/2001/XInclude" 
+ xmlns:xlink="http://www.w3.org/1999/xlink" 
+ version="5.0" 
+ xml:id="cha-gnomeuser-start">
+ <title>Getting started with the &gnome; desktop</title>
+ <info>
+  <abstract>
+   <para>
+    Learn about the default configurations of &gnome;.
+   </para>
+  </abstract>
+  <dm:docmanager xmlns:dm="urn:x-suse:ns:docmanager">
+   <dm:bugtracker></dm:bugtracker>
+   <dm:translation>yes</dm:translation>
+  </dm:docmanager>
+ </info>
+ <para>
+  &gnome; is an easy-to-use graphical interface that can be customized to meet
+  your needs and personal preferences. This section describes the default
+  configuration of &gnome;. If you or your system administrator modify the
+  defaults, some aspects might be different, such as appearance or key
+  combinations.
+ </para>
+ <note os="sles;sled">
+  <title>Included session configurations</title>
+  <para>
+   Some versions of &sle; ship with as many as three different session
+   configurations based on &gnome;. These are &gnome;, &gnome; Classic, and
+   &slea; Classic. The version described here is the default configuration of
+   &sled;, which is &gnome;.
+  </para>
+ </note>
+ <note os="osuse">
+  <title>Included session configurations</title>
+  <para>
+   &productname; ships with as three different session
+   configurations based on &gnome;. These are &gnome;, &gnome; Classic, and
+   &slea; Classic. The version described here is &gnome;. The main
+   difference between the configurations is the look and feel of the home screen
+   and the main menu. The majority of what is described in the following
+   applies to all three configurations.
+  </para>
+ </note>
+ <sect1 xml:id="sec-gnome-login">
+  <title>Logging in</title>
+
+  <para>
+   In general, all users must authenticate&mdash;unless <guimenu>Auto
+   Login</guimenu> is enabled for a specific user. In this case, a particular
+   user is logged in automatically when the system starts. This can save
+   time, especially if a computer is used by a single person. It may
+   impact account security. Auto Login can be enabled or disabled during
+   installation or at any time using the &yast; User and Group Management
+   module. For more information, refer to <xref linkend="cha-yast-userman"/>.
+  </para>
+
+  <para>
+   If your computer is running in a network environment and you are not the
+   only person using the machine, you are usually prompted to enter your user
+   name and password when you start the system. <phrase os="sled"> If you did
+   not set up the system and user account yourself, check with your system
+   administrator for your user name and password.</phrase>
+  </para>
+
+  <figure>
+   <title>Default &gnome; login screen</title>
+   <mediaobject>
+    <imageobject role="fo">
+     <imagedata os="sles;sled" fileref="login_sled.png" width="90%"
+               />
+     <imagedata os="osuse" fileref="login_gnome_osuse.png" width="90%"
+               />
+    </imageobject>
+    <imageobject role="html">
+     <imagedata os="sles;sled" fileref="login_sled.png" width="75%"
+               />
+     <imagedata os="osuse" fileref="login_gnome_osuse.png" width="90%"
+               />
+    </imageobject>
+   </mediaobject>
+  </figure>
+
+  <procedure>
+   <title>Normal login</title>
+   <step>
+    <para>
+     In the login screen, select your user name.
+    </para>
+    <para>
+     If your user name is not listed, click <guimenu>Not listed?</guimenu>.
+     Then enter your user name and click <guimenu>Next</guimenu>.
+    </para>
+   </step>
+   <step>
+    <para>
+     Enter your password and confirm with <keycap function="enter"/>.
+    </para>
+   </step>
+  </procedure>
+
+  <sect2 xml:id="sec-gnome-switchsession">
+   <title>Switching the session type before logging in</title>
+   <para>
+    To try one of the additional &gnome; session configurations or
+    try another desktop environment, follow the steps below.
+   </para>
+   <procedure>
+    <step>
+     <para>
+      On the login screen, click your user name or enter it, as you normally
+      would.
+     </para>
+    </step>
+    <step>
+     <para>
+      To change the session type, click the cog wheel icon in the lower right
+      corner. A menu appears.
+     </para>
+     <figure>
+      <title>Default &gnome; login screen&mdash;session type</title>
+      <mediaobject>
+       <imageobject role="fo">
+        <imagedata os="sles;sled" fileref="login_sessiontype_sle.png"
+        width="90%"/>
+        <imagedata os="osuse" fileref="login_sessiontype_gnome_osuse.png"
+                   width="90%"/>
+       </imageobject>
+       <imageobject role="html">
+        <imagedata os="sles;sled" fileref="login_sessiontype_sle.png"
+        width="75%"/>
+        <imagedata os="osuse" fileref="login_sessiontype_gnome_osuse.png"
+                   width="75%"/>
+       </imageobject>
+      </mediaobject>
+     </figure>
+    </step>
+    <step>
+     <para>
+      From the menu, select one of the entries. Depending on your configuration
+      there may be different choices, but the default selection is as follows.
+     </para>
+     <variablelist>
+      <varlistentry>
+       <term>&gnome; (default)</term>
+       <listitem>
+        <para>
+         A &gnome; 4 configuration that is close to the upstream design.
+         It focuses on interrupting users as little as possible. However,
+         starting applications and switching between them works differently
+         from many other desktop operating systems. It uses a single panel at
+         the top of the screen. <phrase os="osuse;sled">This session is started
+         on <productname>Wayland</productname>.</phrase>
+        </para>
+       </listitem>
+      </varlistentry>
+      <varlistentry>
+       <term>&gnome; Classic</term>
+       <listitem>
+        <para>
+         &gnome; classic is for users who prefer a more traditional desktop
+         experience. It is based on &gnome; 4 technologies but provides a number
+         of changes to the user interface.
+        </para>
+       </listitem>
+      </varlistentry>
+      <varlistentry os="osuse;sled">
+       <term>&gnome; on <productname>Xorg</productname></term>
+       <listitem>
+        <para>
+         By default &productname; uses &gnome; with
+         <productname>Wayland</productname>. Choose this option to start &gnome;
+         on <productname>Xorg</productname>. This is also the version used in
+         this documentation.
+        </para>
+       </listitem>
+      </varlistentry>
+      <varlistentry>
+       <term>IceWM session</term>
+       <listitem>
+        <para>
+         A basic desktop designed to use little resources. It can be used
+         as a fallback, if other options do not work or are slow.
+        </para>
+       </listitem>
+      </varlistentry>
+      <varlistentry>
+       <term>&slea; classic</term>
+       <listitem>
+        <para>
+         This desktop is a &gnome; 4 configuration and uses a single panel that
+         is placed at the bottom of the screen. <phrase os="osuse;sled">This
+          session is started on <productname>Xorg</productname></phrase>.
+        </para>
+       </listitem>
+      </varlistentry>
+      <varlistentry os="osuse">
+       <term>TWM</term>
+       <listitem>
+        <para>
+         A minimalist desktop designed to consume as little hardware
+         resources as possible.
+        </para>
+       </listitem>
+      </varlistentry>
+     </variablelist>
+    </step>
+    <step>
+     <para>
+      Enter your password into the text box and confirm with
+      <keycap function="enter"/>.
+     </para>
+    </step>
+   </procedure>
+   <para>
+    After switching to another session type once, the chosen session
+    becomes your default session. To switch back, repeat the steps above.
+   </para>
+  </sect2>
+
+  <sect2 xml:id="sec-gnome-loginassistance">
+   <title>Assistive tools</title>
+   <para>
+    The top bar provides access to your windows and applications. Here you can
+    set the volume or screen brightness, check the battery status, log out or
+    switch users, and much more.
+   </para>
+   <para>
+    The <guimenu>Activities</guimenu> overview allows you to access your
+    windows, applications, files, folders, and the web.
+   </para>
+  </sect2>
+ </sect1>
+ <sect1 xml:id="sec-gnome-desktop">
+  <title>Desktop basics</title>
+
+  <para>
+   The &gnome; desktop appears after you first log in. The top bar displays the
+   <guimenu>Activities</guimenu> overview, the calendar, and the
+   <guimenu>System</guimenu> menu. The following list gives more
+   details on each element:
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term><guimenu>Activities</guimenu> overview</term>
+    <listitem>
+     <para>
+      The <guimenu>Activities</guimenu> overview allows you to access your
+      windows, applications, files, folders, and the web.
+     </para>
+     <para>
+      The <guimenu>Activities</guimenu> overview is described further in
+      <xref linkend="sec-gnome-start-activities"/>.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>Calendar</term>
+    <listitem>
+     <para>
+      The current day of the week and time are shown. Click it to open a menu
+      where you can access a calendar and adjust date and time settings.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term><guimenu>System</guimenu> menu</term>
+    <listitem>
+     <para>
+      In the right corner of the top bar, click the icons to open the
+      <guimenu>System</guimenu> menu where you can adjust sound
+      volume, display brightness, network connection, and power settings, or
+      log out.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <figure os="sles;sled">
+   <title>&gnome; desktop with activities overview</title>
+   <mediaobject>
+    <imageobject role="fo">
+     <imagedata fileref="desktop_sled_menu.png" width="95%"/>
+    </imageobject>
+    <imageobject role="html">
+     <imagedata fileref="desktop_sled_menu.png" width="90%"/>
+    </imageobject>
+   </mediaobject>
+  </figure>
+
+  <figure os="osuse">
+   <title>&gnome; desktop</title>
+   <mediaobject>
+    <imageobject role="fo">
+     <imagedata fileref="desktop_gnome_osuse.png" width="95%"/>
+    </imageobject>
+    <imageobject role="html">
+     <imagedata fileref="desktop_gnome_osuse.png" width="90%"/>
+    </imageobject>
+   </mediaobject>
+  </figure>
+
+  <sect2 xml:id="sec-gnome-start-activities">
+   <title><guimenu>Activities</guimenu> overview</title>
+   <para>
+    The <guimenu>Activities</guimenu> overview shows a preview of all
+    open windows and icons for favorite and running applications. It also
+    integrates searching and browsing functionality.
+   </para>
+   <sect3 xml:id="sec-gnome-start-activities-open">
+    <title>Opening the <guimenu>Activities</guimenu> overview</title>
+    <para>
+     To open the <guimenu>Activities</guimenu> overview, you have the following
+     options:
+    </para>
+    <itemizedlist mark="bullet" spacing="normal">
+     <listitem>
+      <para>
+       In the top bar, click <guimenu>Activities</guimenu> overview.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       Move your mouse pointer to the upper left hot corner.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       Press the <keycap function="meta"/> key on your keyboard.
+      </para>
+     </listitem>
+    </itemizedlist>
+   </sect3>
+   <sect3 xml:id="sec-gnome-start-activities-use">
+    <title>Using the <guimenu>Activities</guimenu> overview</title>
+    <para>
+     In the following, the most important parts of the
+     <guimenu>Activities</guimenu> overview are explained.
+    </para>
+    
+    <figure>
+     <title><guimenu>Activities</guimenu> overview</title>
+    <mediaobject>
+     <imageobject role="fo">
+      <imagedata fileref="desktop_activities_overview.png" width="95%"
+      />
+     </imageobject>
+     <imageobject role="html">
+      <imagedata fileref="desktop_activities_overview.png" width="90%"
+      />
+     </imageobject>
+    </mediaobject>
+     </figure>
+     
+    <variablelist>
+     <varlistentry>
+      <term><systemitem>dash</systemitem></term>
+      <listitem>
+       <para>
+        The <systemitem>Dash</systemitem> is the bar positioned in the center 
+        at the bottom. It contains your favorite applications and running
+        applications. If you move the mouse pointer over one of the icons, 
+        the name of the corresponding application is displayed nearby. A small
+        dot underneath the icon indicates that the application is running.
+       </para>
+       <para>
+        Right-clicking an icon opens a menu which offers different actions
+        depending on the associated program. Using <guimenu>Add to
+        Favorites</guimenu>, you can place the application icon permanently in
+        <systemitem>Dash</systemitem>. To remove a program icon from
+        <systemitem>Dash</systemitem>, select <guimenu>Remove from
+        Favorites</guimenu>. To rearrange an icon, use the mouse to drag it to
+        a new position.
+       </para>
+      </listitem>
+     </varlistentry>
+     <varlistentry>
+      <term>Search box</term>
+      <listitem>
+       <para>
+        On the top, there is a search box that you can use to find
+        applications, settings and files in your home directory.
+       </para>
+       <para>
+        To search, you do not need to click the search box. You can begin
+        typing directly after opening the <guimenu>Activities</guimenu>
+        overview. Search starts immediately, you do not need to press
+        <keycap function="enter"/>.
+       </para>
+      </listitem>
+     </varlistentry>
+    </variablelist>
+   </sect3>
+   <sect3>
+    <title>Using the <guimenu>Application</guimenu> menu</title>
+    
+    <figure>
+     <title><guimenu>Application</guimenu> menu for
+      <productname>Firefox</productname></title>
+     <mediaobject>
+      <imageobject role="fo">
+       <imagedata fileref="desktop_app_menu_firefox.png" width="70%"
+       />
+      </imageobject>
+      <imageobject role="html">
+       <imagedata fileref="desktop_app_menu_firefox.png" width="70%"
+       />
+      </imageobject>
+     </mediaobject>
+    </figure>
+    <para>
+     Right beside the <guimenu>Activities</guimenu> button, you can find the
+     <guimenu>Application</guimenu> menu. It shows the name of the active
+     application and provides quick access to the windows and details of the
+     application.
+    </para>
+   </sect3>
+  </sect2>
+
+  <sect2 xml:id="sec-gnome-start-startprograms">
+   <title>Starting programs</title>
+   <para>
+    To start a program, you have several options:
+   </para>
+   <itemizedlist>
+    <listitem>
+     <para>
+      In the top bar, click <guimenu>Activities</guimenu> and select an
+      application from the menu.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Open the <guimenu>Activities</guimenu> overview by pressing
+      <keycap function="meta"/> on your keyboard and select an application.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      If you know the exact command to start the program, you can press
+      <keycombo><keycap function="alt"/><keycap>F2</keycap></keycombo>, enter
+      the command into the dialog and press <keycap function="enter"/>.
+     </para>
+     <para>
+      For more information about the <guimenu>Activities</guimenu> overview,
+      see <xref linkend="sec-gnome-start-activities"/>.
+     </para>
+    </listitem>
+   </itemizedlist>
+  </sect2>
+  
+ </sect1>
+ <sect1 xml:id="sec-gnomeuser-start-logout">
+  <title>Pausing or finishing your session</title>
+
+  <para>
+   To pause or close your session, open the <guimenu>System</guimenu> menu
+   in the upper right corner of the top bar and choose one of the options
+   listed.
+   </para>
+
+  <itemizedlist>
+   <listitem>
+    <formalpara>
+     <title><guimenu>Lock</guimenu></title>
+     <para>
+      This pauses your session but keeps the computer on. Make sure that
+      nobody can look at or change your work while you are away. Other users
+      can log in and work in the meantime. Other users can shut down the
+      computer, but a prompt warns them that you are still logged in.
+     </para>
+    </formalpara>
+   </listitem>
+   <listitem>
+    <formalpara>
+     <title><guimenu>Log Out</guimenu> or <guimenu>Switch User</guimenu></title>
+     <para>
+      Finish the current session, but leave the computer on, so other users can
+      log in.
+     </para>
+    </formalpara>
+   </listitem>
+   <listitem>
+    <formalpara>
+     <title><guimenu>Suspend</guimenu></title>
+     <para>
+      Pause your session and put the computer into a state where it consumes a
+      minimal amount of energy. Suspend mode can be configured to lock your
+      screen, so nobody can look at or change your work. Waking up the computer
+      is generally much quicker than a full computer start.
+     </para>
+    </formalpara>
+    <para>
+     This mode is also known as suspend-to-RAM, sleep or standby mode.
+    </para>
+   </listitem>
+   <listitem>
+    <formalpara>
+     <title><guimenu>Restart</guimenu></title>
+     <para>
+      Finish the current session and restart the computer. Restarting is
+      necessary to apply the system updates.
+     </para>
+    </formalpara>
+   </listitem>
+   <listitem>
+    <formalpara>
+     <title><guimenu>Power Off</guimenu></title>
+     <para>
+      Finish the current session and turn off the computer.
+     </para>
+    </formalpara>
+   </listitem>
+  </itemizedlist>
+
+  <sect2 xml:id="sec-gnomeuser-start-login-lock">
+   <title>Locking the screen</title>
+   <para>
+    To lock the screen, open the <guimenu>System</guimenu> menu
+    in the upper right corner of the top bar and click the padlock icon.
+   </para>
+   <para>
+    When you lock your screen, a curtain with a clock appears first.
+    After some time, the screen turns black.
+   </para>
+   <para>
+    To unlock the screen, move the mouse or press a key to display the locked
+    screen dialog. Enter your password and press <keycap function="enter"/>
+    to unlock the screen.
+   </para>
+  </sect2>
+
+  <sect2 xml:id="sec-gnomeuser-start-logout-logout">
+   <title>Logging out or switching users</title>
+   <para>
+    Note that the <guimenu>Log Out</guimenu> and <guimenu>Switch User</guimenu>
+    entries only appear in the menu if you have more than one user account on
+    your system.
+    </para>
+   
+   <procedure>   
+    <step>
+     <para>
+      Click the <guimenu>System</guimenu> menu in the upper right corner of the
+      top bar to open the menu.
+     </para>
+    </step>
+    <step>
+     <para>
+      Expand the <guimenu>Power Off/Log Out</guimenu> menu.
+     </para>
+    </step>
+    <step>
+     <para>
+      Select one of the following options:
+     </para>
+     <variablelist>
+      <varlistentry>
+       <term><guimenu>Log Out</guimenu></term>
+       <listitem>
+        <para>
+         Logs you out of the current session and returns you to the Login
+         screen.
+        </para>
+       </listitem>
+      </varlistentry>
+      <varlistentry>
+       <term><guimenu>Switch User</guimenu></term>
+       <listitem>
+        <para>
+         Suspends your session, allowing another user to log in and use the
+         computer.
+        </para>
+       </listitem>
+      </varlistentry>
+     </variablelist>
+    </step>
+   </procedure>
+  </sect2>
+
+  <sect2 xml:id="sec-gnomeuser-start-logout-restart">
+   <title>Restarting or shutting down the computer</title>
+   <procedure>
+    <step>
+     <para>
+      Click the <guimenu>System</guimenu> menu in the upper right corner of the
+      top bar to open the menu.
+     </para>
+    </step>
+    <step>
+     <para>
+      In the menu, select <guimenu>Power Off/Log Out</guimenu> to expand it.
+     </para>
+    </step>
+    <step>
+     <para>
+      Select one of the following options:
+     </para>
+     <variablelist>
+      <varlistentry>
+       <term><guimenu>Suspend</guimenu></term>
+       <listitem>
+        <para>
+         Pauses your session and puts the computer into a state where it consumes a
+         minimal amount of energy. Suspend mode can be configured to lock your
+         screen, so nobody can look at or change your work. Waking up the computer
+         is generally much quicker than a full computer start.
+        </para>
+       </listitem>
+      </varlistentry>
+      <varlistentry>
+       <term><guimenu>Restart</guimenu></term>
+       <listitem>
+        <para>
+         Logs you out of the current session, then restarts the computer.
+        </para>
+       </listitem>
+      </varlistentry>
+      <varlistentry>
+       <term><guimenu>Power Off</guimenu></term>
+       <listitem>
+        <para>
+         Logs you out of the current session, then turns off the computer.
+        </para>
+       </listitem>
+      </varlistentry>   
+     </variablelist>
+    </step>
+   </procedure>
+  </sect2>
+  </sect1>
+</chapter>

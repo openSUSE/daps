@@ -1,0 +1,557 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter
+[
+  <!ENTITY % entities SYSTEM "../common/generic-entities.ent">
+    %entities;
+]>
+
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0" xml:id="cha-security">
+ <title>Security and confidentiality</title>
+ <info>
+  <dm:docmanager xmlns:dm="urn:x-suse:ns:docmanager">
+   <dm:bugtracker></dm:bugtracker>
+   <dm:translation>yes</dm:translation>
+  </dm:docmanager>
+  <abstract>
+   <para>
+    This chapter introduces basic concepts of computer security.
+    Threats and basic mitigation techniques are described. The chapter
+    also provides references to other chapters, guides and Web sites with
+    further information.
+   </para>
+  </abstract>
+ </info>
+
+ <sect1 xml:id="sec-security-overview">
+  <title>Overview</title>
+  <para>
+   One main characteristic of Linux is its ability to handle multiple
+   users at the same time (multiuser) and to allow these users to
+   simultaneously perform tasks (multitasking) on the same computer.
+   To users, there is no difference between working with data stored
+   locally and data stored in the network.
+  </para>
+  <para>
+   Because of the multiuser capability, data from different users has to be stored
+   separately to guarantee security and privacy. Also important is the ability
+   to keep data available in spite of a lost or damaged data medium, for
+   example a hard disk.
+  </para>
+  <para>
+   This chapter is primarily focused on confidentiality and privacy. But
+   a comprehensive security concept includes a regularly updated,
+   workable, and tested backup. Without a backup, restoring data after
+   it has been tampered with or after a hardware failure is very hard.
+  </para>
+  <para>
+   Use a <emphasis>defense-in-depth</emphasis> approach to security:
+   Assume that no single threat mitigation can fully protect your
+   systems and data, but multiple layers of defense will make an attack
+   much harder. Components of a defense-in-depth strategy can be the
+   following:
+  </para>
+
+  <itemizedlist>
+   <listitem>
+    <para>
+     Hashing passwords (for example with PBKDF2, bcrypt, or scrypt) and
+     salting them
+    </para>
+   </listitem>
+   <listitem>
+    <para>Encrypting data (for example with AES)</para>
+   </listitem>
+   <listitem>
+    <para>Logging, monitoring, and intrusion detection</para>
+   </listitem>
+   <listitem>
+    <para>Firewall</para>
+   </listitem>
+   <listitem>
+    <para>Antivirus scanner</para>
+   </listitem>
+   <listitem>
+    <para>Defined and documented emergency procedures</para>
+   </listitem>
+   <listitem>
+    <para>Backups</para>
+   </listitem>
+   <listitem>
+    <para>Physical security</para>
+   </listitem>
+   <listitem>
+    <para>Audits, security scans, and intrusion tests</para>
+   </listitem>
+  </itemizedlist>
+
+  <para>
+   &productname; includes software that addresses the requirements of
+   the list above. The following sections provide starting points for
+   securing your system.
+  </para>
+  <para os="sles">
+   Find more details about hardening your system in <xref
+   linkend="book-security" />.
+  </para>
+ </sect1>
+
+ <sect1 xml:id="sec-security-passwords">
+  <title>Passwords</title>
+  <para>
+   On a Linux system, only hashes of passwords are stored. Hashes are
+   one-way algorithms which scramble data to a digital fingerprint that
+   is hard to reverse.
+  </para>
+  <para>
+   The hashes are stored in the file <filename>/etc/shadow</filename>,
+   which cannot be read by normal users. Because restoring passwords is
+   possible with powerful computers, hashed passwords should not be
+   visible to regular users.
+  </para>
+  <para>
+   The <emphasis>National Institute of Standards and
+   Technology</emphasis> (<emphasis>NIST</emphasis>) publishes a
+   guideline for passwords, which is available at <link
+   xlink:href="https://pages.nist.gov/800-63-3/sp800-63b.html#sec5"
+   />
+  </para>
+  <para>
+   For details about how to set a password policy, see <xref
+   linkend="sec-security-yast-security-password" />. For general
+   information about authentication on Linux, see <xref
+   linkend="part-auth" />.
+  </para>
+  </sect1>
+ 
+  <sect1 xml:id="sec-sec-prot-general-backups">
+   <title>Backups</title>
+
+   <para>
+    If your system is compromised, backups can be used to restore a prior
+    system state. When bugs or accidents occur, backups can also be used to
+    compare the current system against an older version. For production
+    systems, it is important to take some backups off-site for cases like
+    disasters (for example, off-site storage of tapes/recordable media, or
+    off-site initiated).
+   </para>
+
+   <para>
+    For legal reasons, some firms and organizations must be careful about
+    backing up too much information and holding it too long. If your
+    environment has a policy regarding the destruction of old paper files, you
+    might need to extend this policy to Linux backup tapes as well.
+   </para>
+
+   <para>
+    The rules about physical security of servers apply to backups as well.
+    Additionally, it is advisable to encrypt backup data. This can be done
+    either per individual backup archive or for the complete backup file
+    system, if applicable. Should a backup medium ever be lost, for example
+    during transportation, the data is protected against unauthorized
+    access. The same applies if a backup system itself is compromised. To
+    some extent encryption also ensures the integrity of the backups. Keep
+    in mind, however, that the appropriate people need to be able to decrypt
+    backups in emergency situations. Also, the case that an encryption key
+    itself is compromised and needs to be replaced should be considered.
+   </para>
+
+   <para>
+    If a system is known to be compromised or suspected to be compromised,
+    then it is vital to determine the integrity status of backups. If a
+    system compromise went undetected for a long period of time, then it is
+    possible that backups already include manipulated configuration files or
+    malicious programs. Keeping a long enough history of backups allows to
+    inspect for possible unwarranted differences.
+   </para>
+
+   <para>
+    Even without any known security breach, a regular inspection of
+    differences among important configuration files in backups can help with
+    finding security issues (maybe even accidental misconfigurations). This
+    approach is best suited for files and environments where the content
+    does not change too frequently.
+   </para>
+  </sect1>
+
+ <sect1 xml:id="sec-security-integrity">
+  <title>System integrity</title>
+  <para>
+   If it is possible to physically access a computer, the firmware and
+   boot process can be manipulated to gain access when an
+   authorized person boots the machine. While not all computers can be locked
+   into inaccessible rooms, your first step should be physically locking the
+   server room. 
+  </para>
+  <para>
+      Also remember that disposing of old equipment must be handled in a secure 
+      manner. Securing the boot loader and restricting removable media also
+      provide useful physical security. See 
+      <xref linkend="cha-physical-security"/> for more information.
+  </para>
+  <para>
+   Consider taking the following additional measures:
+  </para>
+  <itemizedlist>
+   <listitem>
+    <para>
+     Configure your system so it cannot be booted from a removable
+     device.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Protect the boot process with a UEFI password, Secure Boot, and a GRUB2
+     password.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Linux systems are started by a boot loader that usually allows
+     passing additional options to the booted kernel. You can prevent others
+     from using such parameters during boot by setting an additional
+     password for the boot loader. This is crucial to system
+     security. Not only does the kernel itself run with &rootuser;
+     permissions, but it is also the first authority to grant
+     &rootuser; permissions at system start-up.
+    </para>
+    <para>
+     For more information about setting a password in the boot loader, see
+     <xref linkend="sec-grub2-password"/>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Enable hard disk encryption. For more information, see
+     <xref linkend="cha-security-cryptofs"/>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+    Use <command>cryptctl</command> to encrypt hosted storage. For more 
+    information, see <xref linkend="cha-configure-cryptctl"/>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Use AIDE to detect any changes in your system configuration. For
+     more information, see <xref linkend="cha-aide"/>.
+    </para>
+   </listitem>
+  </itemizedlist>
+ </sect1>
+
+ <sect1 xml:id="sec-security-file-access">
+  <title>File access</title>
+  <para>
+   Because of the <emphasis>everything is a file</emphasis> approach in
+   Linux, file permissions are important for controlling access to most
+   resources. This means that by using file permissions, you can define
+   access to regular files, directories and hardware devices.
+   By default, most hardware devices are only accessible for
+   &rootuser;. However, certain devices, for example serial ports, can be
+   accessible for normal users.
+  </para>
+  <para>
+   As a general rule, always work with the most restrictive privileges
+   possible for a given task. For example, it is definitely not
+   necessary to be &rootuser; to read or write e-mail. If the mail
+   program has a bug, this bug could be exploited for an attack that
+   acts with exactly the permissions of the program at the time of the
+   attack. By following the above rule, minimize the possible damage.
+  </para>
+  <para>
+   For details, see <xref linkend="sec-security-acls-traditional" /> and
+   <xref linkend="sec-security-acls-intro" />.
+  </para>
+  <para>
+   &aa; <phrase os="osuse;sles">and SELinux allow</phrase><phrase
+   os="sled">allows</phrase> you to set constraints for applications and
+   users. For details, see <xref linkend="part-apparmor" /><phrase
+   os="sles;osuse"> and <xref linkend="part-selinux" /></phrase>.
+  </para>
+  <para>
+   If there is a chance that hard disks could be accessed outside of the
+   installed operating system, for example by booting a live system or removing
+   the hardware, encrypt the data. &productname; allows you to encrypt
+   partitions containing data and the operating system. For details, see <xref
+   linkend="cha-security-cryptofs" />.
+  </para>
+ </sect1>
+
+ <sect1 xml:id="sec-security-network">
+  <title>Networking</title>
+  <para>
+   Securing network services is a crucial task. Aim to secure
+   as many layers of the <emphasis>OSI model</emphasis> as possible.
+  </para>
+  <para>
+   All communication should be authenticated and encrypted with
+   up-to-date cryptographic algorithms on the transport or application
+   layer. Use a Virtual Private Network (VPN) as an additional secure
+   layer on physical networks.
+  </para>
+  <para>
+   &productname; provides many options for securing your network:
+  </para>
+  <itemizedlist>
+   <listitem>
+    <para>
+     Use <command>openssl</command> to create X509 certificates. These certificates can be
+     used for encryption and authentication of many services.
+     You can set up your own <emphasis>certificate authority</emphasis>
+     (<emphasis>CA</emphasis>) and use it as a source of trust in your
+     network. For details, see <command>man openssl</command>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Usually, at least parts of networks are exposed to the public
+     Internet. Reduce attack surfaces by closing ports with firewall
+     rules and by uninstalling or at least disabling services that are not
+     required.
+     For details, see <xref linkend="cha-security-firewall"
+     />.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Use OpenVPN to secure communication channels over insecure
+     physical networks. For details, see <xref
+     linkend="cha-security-vpnserver" />.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Use strong authentication for network services. For details, see
+     <xref linkend="part-auth" />.
+    </para>
+   </listitem>
+  </itemizedlist>
+ </sect1>
+
+ <sect1 xml:id="sec-security-vulnerabilities">
+  <title>Software vulnerabilities</title>
+  <para>
+   Software vulnerabilities are issues in software that can be
+   exploited to obtain unauthorized access or misuse systems.
+   Vulnerabilities are especially critical if they affect remote
+   services, such as HTTP servers. Computer systems are complex,
+   therefore they always include certain vulnerabilities.
+  </para>
+  <para>
+   When such issues become known, they must be fixed in the
+   software by software developers. The resulting update must then be
+   installed by system administrators in a timely and safe manner on
+   affected systems.
+  </para>
+  <para>
+   Vulnerabilities are usually announced on centralized
+   databases, for example the <emphasis>National Vulnerability
+   Database</emphasis>, which is maintained by the US government.
+   You can subscribe to feeds to stay informed about newly
+   discovered vulnerabilities. In some cases the problems induced by
+   the bugs can be mitigated until a software update is provided.
+   Vulnerabilities are assigned a <emphasis>Common Vulnerabilities
+   and Exposures</emphasis> (<emphasis>CVE</emphasis>) number and a
+   <emphasis>Common Vulnerability Scoring System</emphasis>
+   (<emphasis>CVSS</emphasis>) score. The score helps identify
+   the severity of vulnerabilities.
+  </para>
+  <para>
+   &suse; provides a feed of security advisories. It is available at
+   <link xlink:href="https://www.suse.com/en-us/support/update/" />.
+   There is also a list of security updates by CVE number available at
+   <link xlink:href="https://www.suse.com/support/security/" />.
+  </para>
+  <note os="sles;sled">
+   <title>Backports and version numbers</title>
+   <para>
+    &suse; employs the practice of applying the important source code
+    fixes onto older stable versions of software
+    (<emphasis>backporting</emphasis>). Therefore, even if the version
+    number of a software in &productname; is lower than that of the
+    latest version number from the upstream project, the software
+    version in &productname; may already contain the latest fixes for
+    vulnerabilities.
+   </para>
+   <para>
+    For more information, see <xref linkend="cha-update-backport"/>.
+   </para>
+  </note>
+  <para>
+   Administrators should be prepared for severe
+   vulnerabilities in their systems. This includes hardening all
+   computers as far as possible. Also, we recommend to have predefined
+   procedures in place for quickly installing updates for severe
+   vulnerabilities.
+  </para>
+  <para>
+   To reduce the damage of possible attacks, use restrictive file
+   permissions. See <xref linkend="sec-security-acls-traditional" />.
+  </para>
+  <para>
+   Other useful links:
+  </para>
+  <itemizedlist>
+   <listitem>
+    <para>
+     <link xlink:href=
+     "http://lists.opensuse.org/opensuse-security-announce/" />,
+     mailing list with &opensuse; security announcements
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <link xlink:href= "https://nvd.nist.gov/"/>, the National
+     Vulnerability Database
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <link xlink:href="https://cve.mitre.org/"/>, MITRE's CVE database
+    </para>
+   </listitem>
+   <listitem>
+    <para><link
+     xlink:href="https://www.bsi.bund.de/SiteGlobals/Forms/Suche/BSI/Sicherheitswarnungen/Sicherheitswarnungen_Formular.html"
+    />, <emphasis>German Federal Office for Information
+    Security</emphasis> vulnerability feed</para>
+   </listitem>
+   <listitem>
+    <para>
+    <link
+    xlink:href="https://www.first.org/cvss/"/>, information about the Common    Vulnerability Scoring System
+    </para>
+   </listitem>
+  </itemizedlist>
+ </sect1>
+
+ <sect1 xml:id="sec-security-malware">
+  <title>Malware</title>
+  <para>
+   <emphasis>Malware</emphasis> is software that is intended to
+   interrupt the normal functioning of a computer or steal data. This
+   includes viruses, worms, ransomware or rootkits. Sometimes malware
+   uses software vulnerabilities to attack a computer. However, often
+   it is accidentally executed by a user, especially when
+   installing third-party software from unknown sources. &productname;
+   provides an extensive list of programs (packages) in its download
+   repositories. This reduces the need to download third-party
+   software. All packages provided by &suse; are signed. The package
+   manager of &productname; checks the signatures of packages after the
+   download to verify their integrity.
+  </para>
+  <para>
+   The command <command>rpm</command>&nbsp;<option>--checksig
+   <replaceable>RPM_FILE</replaceable></option> shows whether the
+   checksum and the signature of a package are correct.
+   You can find the signing key on the first DVD of &productname; and
+   on most key servers worldwide.
+  </para>
+  <para>
+   You can use the &clamav; antivirus software to detect malware on your
+   system. &clamav; can be integrated into several services, for example
+   mail servers and HTTP proxies. This can be used to filter malware
+   before it reaches the user.
+  </para>
+  <para>
+   Restrictive user privileges can reduce the risk of accidental
+   code execution.
+  </para>
+ </sect1>
+
+ <sect1 xml:id="sec-security-tips">
+  <title>Important security tips</title>
+
+  <para>
+   The following tips are a quick summary of the sections above:
+  </para>
+
+  <itemizedlist mark="bullet" spacing="normal">
+   <listitem>
+    <para>
+     Stay informed about the latest security issues. Get and install
+     the updated packages recommended by security announcements as
+     quickly as possible.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Avoid using &rootuser; privileges whenever possible. Set
+     restrictive file permissions.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Only use encrypted protocols for network communication.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Disable any network services you do not absolutely require.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Conduct regular security audits. For example, scan your network for
+     open ports.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Monitor the integrity of files on your systems with
+     <literal>AIDE</literal> (Advanced Intrusion Detection
+     Environment).
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Take proper care when installing any third-party software.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Check all your backups regularly.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Check your log files, for example with logwatch.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Configure the firewall to block all ports that are not explicitly
+     whitelisted.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Design your security measures to be redundant.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Use encryption where possible, for example for hard disks of mobile
+     computers.
+    </para>
+   </listitem>
+  </itemizedlist>
+ </sect1>
+ <sect1 xml:id="sec-security-general-report">
+  <title>Reporting security issues</title>
+
+  <para>
+   If you discover a security-related problem, first check the
+   available update packages. If no update is available, write an
+   e-mail to <email>security@suse.de</email>. Include a detailed
+   description of the problem and the version number of the package
+   concerned. We encourage you to encrypt e-mails with GPG.
+  </para>
+
+  <para>
+   You can find a current version of the SUSE GPG key at
+   <link xlink:href="https://www.suse.com/support/security/contact/"/>.
+  </para>
+ </sect1>
+</chapter>

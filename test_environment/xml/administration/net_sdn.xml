@@ -1,0 +1,554 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sect1
+[
+  <!ENTITY % entities SYSTEM "entities/generic-entities.ent">
+    %entities;
+]>
+<sect1 xmlns="http://docbook.org/ns/docbook"
+       xmlns:xi="http://www.w3.org/2001/XInclude"
+       xmlns:xlink="http://www.w3.org/1999/xlink"
+       version="5.0"
+       xml:id="sec-network-openvswitch">
+ <title>Software-defined networking with &ovs;</title>
+
+ <info>
+  <dm:docmanager xmlns:dm="urn:x-suse:ns:docmanager">
+   <dm:bugtracker></dm:bugtracker>
+   <dm:translation>yes</dm:translation>
+  </dm:docmanager>
+ </info>
+
+ <para>
+  Software-defined networking (SDN) means separating the system that controls
+  where traffic is sent (the <emphasis>control plane</emphasis>) from the
+  underlying system that forwards traffic to the selected destination (the
+  <emphasis>data plane</emphasis>, also called the <emphasis>forwarding
+  plane</emphasis>). This means that the functions previously fulfilled by a
+  single, usually inflexible switch can now be separated between a switch (data
+  plane) and its controller (control plane). In this model, the controller is
+  programmable and can be very flexible and adapt quickly to changing network
+  conditions.
+ </para>
+
+ <para>
+  &ovs; is software that implements a distributed virtual multilayer switch
+  that is compatible with the
+<!-- phrase to disable hyphenation: -->
+  <phrase role="productname">OpenFlow</phrase> protocol.
+  <phrase role="productname">OpenFlow</phrase> allows a controller application
+  to modify the configuration of a switch.
+  <phrase role="productname">OpenFlow</phrase> is layered onto the TCP protocol
+  and is implemented in a range of hardware and software. A single controller
+  can thus drive multiple, very different switches.
+ </para>
+
+ <sect2 xml:id="sec-network-openvswitch-advantage">
+  <title>Advantages of &ovs;</title>
+  <para>
+   Software-defined networking with &ovs; brings several advantages with it,
+   especially when you used together with virtual machines:
+  </para>
+  <remark>
+   Tried to create short version of this:
+   https://github.com/openvswitch/ovs/blob/master/WHY-OVS.md
+   - sknorr, 2015-09-30
+  </remark>
+  <itemizedlist>
+   <listitem>
+    <para>
+     Networking states can be identified easily.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Networks and their live state can be moved from one host to another.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Network dynamics are traceable and external software can be enabled to
+     respond to them.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     You can apply and manipulate tags in network packets to identify which
+     machine they are coming from or going to and maintain other networking
+     context.  Tagging rules can be configured and migrated.
+    </para>
+    <remark>
+     Feedback from Éric Bischoff: "[...] isn't that _how OVS works_, rather
+     than _what OVS can do_?"
+     => Added second sentence. It does ultimately seem like a feature to me,
+       though. Leaving it in for the moment.
+     - sknorr, 2015-10-15
+    </remark>
+   </listitem>
+   <listitem>
+    <para>
+     &ovs; implements the GRE protocol (<emphasis>Generic Routing
+     Encapsulation</emphasis>). This allows you, for example, to connect
+     private VM networks to each other.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     &ovs; can be used on its own, but is designed to integrate with networking
+     hardware and can control hardware switches.
+    </para>
+   </listitem>
+  </itemizedlist>
+ </sect2>
+
+ <sect2 xml:id="sec-network-openvswitch-install">
+  <title>Installing &ovs;</title>
+  <procedure>
+   <step>
+    <para>
+     Install &ovs; and supplementary packages:
+    </para>
+<screen>&prompt.root;<command>zypper</command> install openvswitch openvswitch-switch</screen>
+    <para>
+     If you plan to use &ovs; together with the &kvm; hypervisor, additionally
+     install
+     <package>tunctl</package>
+     . If you plan to use &ovs; together with the &xen; hypervisor,
+     additionally install
+     <package>openvswitch-kmp-xen</package>
+     .
+    </para>
+   </step>
+   <step>
+    <para>
+     Enable the &ovs; service:
+    </para>
+<screen>&prompt.root;<command>systemctl</command> enable openvswitch</screen>
+<!-- Remark Marius Tomaschewski: Unfortunately, there is also a
+     script link called "rcopenvswitch-switch" which you should never use, as
+     it conflicts with "openvswitch.service" and breaks everything. See
+     bsc#935912. -->
+   </step>
+   <step>
+    <para>
+     Either restart the computer or use <command>systemctl</command> to start
+     the &ovs; service immediately:
+    </para>
+<screen>&prompt.root;<command>systemctl</command> start openvswitch</screen>
+   </step>
+   <step>
+    <para>
+     To check whether &ovs; was activated correctly, use:
+    </para>
+<screen>&prompt.root;<command>systemctl</command> status openvswitch</screen>
+   </step>
+  </procedure>
+ </sect2>
+
+ <sect2 xml:id="sec-network-openvswitch-userspace">
+  <title>Overview of &ovs; daemons and utilities</title>
+  <para>
+   &ovs; consists of several components. Among them are a kernel module and
+   various user space components. The kernel module is used for accelerating
+   the data path, but is not necessary for a minimal &ovs; installation.
+  </para>
+  <sect3 xml:id="sec-network-openvswitch-daemon">
+   <title>Daemons</title>
+   <para>
+    The central executables of &ovs; are its two daemons. When you start the
+    <systemitem>openvswitch</systemitem> service, you are indirectly starting
+    them.
+   </para>
+   <para>
+    The main &ovs; daemon (<command>ovs-vswitchd</command>) provides the
+    implementation of a switch. The &ovs; database daemon
+    (<command>ovsdb-server</command>) serves the database that stores the
+    configuration and state of &ovs;.
+   </para>
+  </sect3>
+  <sect3 xml:id="sec-network-openvswitch-utility">
+   <title>Utilities</title>
+   <para>
+    &ovs; also comes with several utilities that help you work with it. The
+    following list is not exhaustive, but instead describes important commands
+    only.
+   </para>
+<!-- Some entries are commented out. These (very subjectively) seemed to be
+   less important. - sknorr, 2015-10-12 -->
+   <variablelist xml:id="vl-ovs-utility">
+    <varlistentry>
+     <term><command>ovsdb-tool</command>
+     </term>
+     <listitem>
+      <para>
+       Create, upgrade, compact, and query &ovs; databases. Do transactions on
+       &ovs; databases.
+      </para>
+     </listitem>
+    </varlistentry>
+<!-- <varlistentry>
+     <term><command>ovsdb-client</command></term>
+     <listitem>
+      <para>
+       Retrieve lists of databases itself and their tables, rows, and columns.
+       Monitor the contents of a database.
+       Do a transaction on a database.
+      </para>
+     </listitem>
+    </varlistentry> -->
+    <varlistentry>
+     <term><command>ovs-appctl</command>
+     </term>
+     <listitem>
+      <para>
+       Configure a running <command>ovs-vswitchd</command> or
+       <command>ovsdb-server</command> daemon.
+      </para>
+     </listitem>
+    </varlistentry>
+<!-- <varlistentry>
+     <term><command>ovs-benchmark</command></term>
+     <listitem>
+      <para>
+       Test latency and throughput of a flow setup.
+       <remark>
+        Flow setup is what exactly? This comes from the man page. - sknorr,
+        2015-09-30
+       </remark>
+      </para>
+     </listitem>
+    </varlistentry> -->
+<!-- <varlistentry>
+     <term><command>ovs-bugtool</command></term>
+     <listitem>
+      <para>
+       Report a bug in &ovs;.
+      </para>
+     </listitem>
+    </varlistentry> -->
+    <varlistentry>
+     <term><command>ovs-dpctl</command>, <command>ovs-dpctl-top</command>
+     </term>
+     <listitem>
+      <para>
+       Create, modify, visualize, and delete data paths. Using this tool can
+       interfere with <command>ovs-vswitchd</command> also performing data path
+       management. Therefore, it is often used for diagnostics only.
+      </para>
+      <para>
+       <command>ovs-dpctl-top</command> creates a <command>top</command>-like
+       visualization for data paths.
+       <remark>Is visualize/ation the right word? - sknorr, 2015-09-30</remark>
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><command>ovs-ofctl</command>
+     </term>
+     <listitem>
+      <para>
+       Manage any switches adhering to the
+       <phrase role="productname">OpenFlow</phrase> protocol.
+       <command>ovs-ofctl</command> is not limited to interacting with &ovs;.
+      </para>
+     </listitem>
+    </varlistentry>
+<!-- <varlistentry>
+     <term><command>ovs-pcap</command></term>
+     <listitem>
+      <para>
+       Create a hexadecimal representation of a captured network package
+       in the PCAP format.
+       This can then be used to trace how a particular package would travel.
+      </para>
+     </listitem>
+    </varlistentry> -->
+<!--<varlistentry>
+     <term><command>ovs-parse-backtrace</command></term>
+     <listitem>
+      <para>
+       Create a more readable version of backtraces from
+       <command>ovs-appctl backtrace</command>.
+      </para>
+     </listitem>
+    </varlistentry> -->
+<!-- <varlistentry>
+     <term><command>ovs-tcpundump</command></term>
+     <listitem>
+      <para>
+       Create a hexadecimal representation of the output of
+       <command>tcpdump</command>.
+       This can then be used to trace how a stream of packages would travel.
+      </para>
+     </listitem>
+    </varlistentry> -->
+<!-- <varlistentry>
+     <term><command>ovs-vlan-bug-workaround</command></term>
+     <listitem>
+      <para>
+       Some device drivers have a buggy implementation of VLAN acceleration.
+       Use this utility to work around such bugs.
+      </para>
+     </listitem>
+    </varlistentry> -->
+    <varlistentry>
+     <term><command>ovs-vsctl</command>
+     </term>
+     <listitem>
+      <para>
+       Provides a high-level interface to the configuration database. It can be
+       used to query and modify the database. In effect, it shows the status of
+       <command>ovs-vswitchd</command> and can be used to configure it.
+      </para>
+     </listitem>
+    </varlistentry>
+   </variablelist>
+  </sect3>
+ </sect2>
+
+ <sect2 xml:id="sec-network-openvswitch-bridge">
+  <title>Creating a bridge with &ovs;</title>
+  <para>
+   The following example configuration uses the Wicked network service that is
+   used by default on &productname;. To learn more about Wicked, see
+   <xref linkend="sec-network-manconf"/>.
+  </para>
+  <para>
+   When you have installed and started &ovs;, proceed as follows:
+  </para>
+  <procedure>
+   <step>
+    <para>
+     To configure a bridge for use by your virtual machine, create a file with
+     content like this:
+    </para>
+<screen>STARTMODE='auto'<co xml:id="ovs-ifcfg-mode"/>
+BOOTPROTO='dhcp'<co xml:id="ovs-ifcfg-protocol"/>
+OVS_BRIDGE='yes'<co xml:id="ovs-ifcfg-bridge"/>
+OVS_BRIDGE_PORT_DEVICE_1='<replaceable>eth0</replaceable>'<co xml:id="ovs-ifcfg-port"/></screen>
+    <calloutlist>
+     <callout arearefs="ovs-ifcfg-mode">
+      <para>
+       Set up the bridge automatically when the network service is started.
+      </para>
+     </callout>
+     <callout arearefs="ovs-ifcfg-protocol">
+      <para>
+       The protocol to use for configuring the IP address.
+      </para>
+     </callout>
+     <callout arearefs="ovs-ifcfg-bridge">
+      <para>
+       Mark the configuration as an &ovs; bridge.
+      </para>
+     </callout>
+     <callout arearefs="ovs-ifcfg-port">
+      <para>
+       Choose which device/devices should be added to the bridge. To add more
+       devices, append additional lines for each of them to the file:
+      </para>
+<screen>OVS_BRIDGE_PORT_DEVICE_<replaceable>SUFFIX</replaceable>='<replaceable>DEVICE</replaceable>'</screen>
+      <para>
+       The <replaceable>SUFFIX</replaceable> can be any alphanumeric string.
+       However, to avoid overwriting a previous definition, make sure the
+       <replaceable>SUFFIX</replaceable> of each device is unique.
+      </para>
+     </callout>
+    </calloutlist>
+    <para>
+     Save the file in the directory <filename>/etc/sysconfig/network</filename>
+     under the name <filename>ifcfg-br0</filename>. Instead of
+     <replaceable>br0</replaceable>, you can use any name you want. However,
+     the file name needs to begin with <literal>ifcfg-</literal>.
+    </para>
+    <para>
+     To learn about further options, refer to the man pages of
+     <literal>ifcfg</literal> (<command>man 5 ifcfg</command>) and
+     <literal>ifcfg-ovs-bridge</literal> (<command>man 5
+     ifcfg-ovs-bridge</command>).
+    </para>
+   </step>
+   <step>
+    <para>
+     Now start the bridge:
+     <remark>"Start" is weird - sknorr, 2015-10-26</remark>
+    </para>
+<screen>&prompt.root;<command>wicked</command> ifup <replaceable>br0</replaceable></screen>
+    <para>
+     When Wicked is done, it should output the name of the bridge and next to
+     it the state <literal>up</literal>.
+    </para>
+   </step>
+  </procedure>
+ </sect2>
+
+ <sect2 xml:id="sec-network-openvswitch-kvm">
+  <title>Using &ovs; directly with &kvm;</title>
+  <para>
+   After having created the bridge as described in
+   <xref linkend="sec-network-openvswitch-bridge"/>, you can use &ovs; to manage the network
+   access of virtual machines created with &kvm;/&qemu;.
+  </para>
+  <procedure>
+   <step>
+    <para>
+     To be able to best use the capabilities of Wicked, make some further
+     changes to the bridge configured before. Open the previously created
+     <filename>/etc/sysconfig/network/ifcfg-br0</filename> and append a line
+     for another port device:
+    </para>
+<screen>OVS_BRIDGE_PORT_DEVICE_2='<replaceable>tap0</replaceable>'</screen>
+    <para>
+     Additionally, set <literal>BOOTPROTO</literal> to <literal>none</literal>.
+     The file should now look like this:
+    </para>
+<screen>STARTMODE='auto'
+BOOTPROTO='none'
+OVS_BRIDGE='yes'
+OVS_BRIDGE_PORT_DEVICE_1='<replaceable>eth0</replaceable>'
+OVS_BRIDGE_PORT_DEVICE_2='<replaceable>tap0</replaceable>'</screen>
+    <para>
+     The new port device <replaceable>tap0</replaceable> will be configured in
+     the next step.
+    </para>
+   </step>
+   <step>
+    <para>
+     Now add a configuration file for the <replaceable>tap0</replaceable>
+     device:
+    </para>
+<screen>STARTMODE='auto'
+BOOTPROTO='none'
+TUNNEL='tap'</screen>
+    <para>
+     Save the file in the directory <filename>/etc/sysconfig/network</filename>
+     under the name <filename>ifcfg-tap0</filename>.
+    </para>
+    <tip>
+     <title>Allowing other users to access the tap device</title>
+     <para>
+      To be able to use this tap device from a virtual machine started as a
+      user who is not &rootuser;, append:
+     </para>
+<screen>TUNNEL_SET_OWNER=<replaceable>USER_NAME</replaceable></screen>
+     <para>
+      To allow access for an entire group, append:
+     </para>
+<screen>TUNNEL_SET_GROUP=<replaceable>GROUP_NAME</replaceable></screen>
+    </tip>
+   </step>
+   <step>
+    <para>
+     Finally, open the configuration for the device defined as the first
+     <literal>OVS_BRIDGE_PORT_DEVICE</literal>. If you did not change the name,
+     that should be <literal>eth0</literal>. Therefore, open
+     <filename>/etc/sysconfig/network/ifcfg-eth0</filename> and make sure that
+     the following options are set:
+    </para>
+<screen>STARTMODE='auto'
+BOOTPROTO='none'</screen>
+    <para>
+     If the file does not exist yet, create it.
+    </para>
+   </step>
+   <step>
+    <para>
+     Restart the bridge interface using Wicked:
+    </para>
+<screen>&prompt.root;<command>wicked</command> ifreload <replaceable>br0</replaceable></screen>
+    <para>
+     This will also trigger a reload of the newly defined bridge port devices.
+    </para>
+   </step>
+   <step>
+    <para>
+     To start a virtual machine, use, for example:
+    </para>
+<screen>&prompt.root;<command>qemu-kvm</command> \
+-drive file=<replaceable>/PATH/TO/DISK-IMAGE</replaceable><co xml:id="co-ovs-pathimage"/> \
+-m 512 -net nic,vlan=0,macaddr=00:11:22:EE:EE:EE \
+-net tap,ifname=<replaceable>tap0</replaceable>,script=no,downscript=no<co xml:id="co-ovs-tapdevice"/></screen>
+    <calloutlist>
+     <callout arearefs="co-ovs-pathimage">
+      <para>
+       The path to the &qemu; disk image you want to start.
+      </para>
+     </callout>
+     <callout arearefs="co-ovs-tapdevice">
+      <para>
+       Use the tap device (<literal>tap0</literal>) created before.
+      </para>
+     </callout>
+    </calloutlist>
+    <para>
+     For further information on the usage of &kvm;/&qemu;, see
+     <xref linkend="part-virt-qemu"/>.
+    </para>
+   </step>
+  </procedure>
+ </sect2>
+
+ <sect2 xml:id="sec-network-openvswitch-libvirt">
+  <title>Using &ovs; with &libvirt;</title>
+  <para>
+   After having created the bridge as described before in
+   <xref linkend="sec-network-openvswitch-bridge"/>, you can add the bridge to an existing
+   virtual machine managed with &libvirt;. Since &libvirt; has some support for
+   &ovs; bridges already, you can use the bridge created in
+   <xref linkend="sec-network-openvswitch-bridge"/> without further changes to the networking
+   configuration.
+  </para>
+  <procedure>
+   <step>
+    <para>
+     Open the domain XML file for the intended virtual machine:
+    </para>
+<screen>&prompt.root;<command>virsh</command> edit <replaceable>VM_NAME</replaceable></screen>
+    <para>
+     Replace <replaceable>VM_NAME</replaceable> with the name of the desired
+     virtual machine. This will open your default text editor.
+    </para>
+   </step>
+   <step>
+    <para>
+     Find the networking section of the document by looking for a section
+     starting with <literal>&lt;interface type="..."&gt;</literal> and ending
+     in <literal>&lt;/interface&gt;</literal>.
+    </para>
+    <para>
+     Replace the existing section with a networking section that looks somewhat
+     like this:
+    </para>
+<screen>&lt;interface type='bridge'&gt;
+  &lt;source bridge='br0'/&gt;
+  &lt;virtualport type='openvswitch'/&gt;
+&lt;/interface&gt;</screen>
+    <important>
+     <title>Compatibility of <command>virsh iface-*</command> and &vmm; with &ovs;</title>
+     <para>
+      At the moment, the &ovs; compatibility of &libvirt; is not exposed
+      through the <command>virsh iface-*</command> tools and &vmm;. If you use
+      any of these tools, your configuration can break.
+     </para>
+    </important>
+   </step>
+   <step>
+    <para>
+     You can now start or restart the virtual machine as usual.
+    </para>
+   </step>
+  </procedure>
+  <para>
+   For further information on the usage of &libvirt;, see
+   <xref linkend="part-virt-libvirt"/>.
+  </para>
+ </sect2>
+
+ <sect2 xml:id="sec-network-openvswitch-more">
+   <title>More information</title>
+
+   <para>
+     For more information on SDN, refer to the documentation section of the
+     &ovs; project Web site at <link xlink:href="https://docs.openvswitch.org/en/latest/#documentation"/>.
+   </para>
+ </sect2>
+</sect1>

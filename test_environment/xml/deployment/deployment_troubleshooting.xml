@@ -1,0 +1,565 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter
+[
+  <!ENTITY % entities SYSTEM "../common/generic-entities.ent">
+    %entities;
+]>
+<chapter version="5.0" role="General" xml:id="cha-installation-troubleshooting"
+  xmlns="http://docbook.org/ns/docbook"
+  xmlns:xi="http://www.w3.org/2001/XInclude"
+  xmlns:xlink="http://www.w3.org/1999/xlink">
+ <title>Troubleshooting</title>
+ <info>
+  <abstract>
+   <para>
+    This section covers several common installation problems and describes
+    possible solutions.
+   </para>
+  </abstract>
+  <dm:docmanager xmlns:dm="urn:x-suse:ns:docmanager">
+   <dm:bugtracker></dm:bugtracker>
+   <dm:translation>yes</dm:translation>
+  </dm:docmanager>
+ </info>
+ <sect1 xml:id="sec-installation-troubleshooting-checking-media">
+  <title>Checking media</title>
+
+  <para>
+   If you encounter any problems using the &productname; installation media,
+   check its integrity. Boot from the media and
+   choose <menuchoice><guimenu>More</guimenu> <guimenu>Check Installation
+   Media</guimenu></menuchoice> from the boot menu. A minimal system boots and
+   lets you choose which device to check. Select the respective device and
+   confirm with <guimenu>OK</guimenu> to perform the check.
+  </para>
+
+  <para>
+   On a running system, start &yast; and choose <menuchoice>
+   <guimenu>Software</guimenu> <guimenu>Media Check</guimenu> </menuchoice>.
+   Insert the medium and click <guimenu>Start Check</guimenu>. The integrity
+   check may take time.
+  </para>
+
+  <para>
+   If errors are detected during the check, do not use this medium for
+   installation. Media problems may, for example, occur when having burned the
+   medium on DVD yourself. Burning the media at a low speed (4x) helps to avoid
+   problems.
+  </para>
+ </sect1>
+ <sect1 xml:id="sec-installation-troubleshooting-dvd">
+  <title>No bootable drive available</title>
+
+  <para>
+   If your computer cannot boot from USB or DVD drive, you have several alternatives.
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term>Using an external &usbflashdrive; or DVD drive</term>
+    <listitem>
+     <para>
+      Linux supports most existing &usbflashdrive;s and DVD drives. If the
+      system has no &usbflashdrive; or DVD drive, it is still possible that an
+      external drive, connected through USB, FireWire, or SCSI, can be used to
+      boot the system. Sometimes a firmware update may help if you encounter
+      problems.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>Network boot via PXE</term>
+    <listitem>
+     <para>
+      If the machine lacks both a &usbflashdrive; and DVD drive, but it has a
+      working Ethernet connection, you can perform a network-based installation.
+      <phrase os="sles;sled">See
+      <xref
+      linkend="sec-remote-installation-scenario-vncpxe"/> and
+      <xref
+      linkend="sec-remote-installation-scenario-sshpxe"/> for
+      details.</phrase>
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>&usbflashdrive;</term>
+    <listitem>
+     <para>
+      You can use a &usbflashdrive; if the machine lacks a DVD drive and
+      a network connection. <phrase os="sles;sled">For details, see:</phrase>
+     </para>
+     <itemizedlist os="sles;sled">
+      <listitem>
+       <para arch="x86_64">
+        <xref linkend="sec-x86-media"/>
+       </para>
+      </listitem>
+      <listitem os="sles">
+       <para arch="aarch64">
+        <xref linkend="sec-aarch64-media"/>
+       </para>
+      </listitem>
+     </itemizedlist>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+ </sect1>
+ <sect1 xml:id="sec-installation-troubleshooting-bios">
+  <title>Booting from installation media fails</title>
+
+  <para>
+  The machine may fail to boot from the installation media due to an incorrect
+  boot sequence setting in BIOS. The &usbflashdrive; or DVD drive must be set as the first boot device in the BIOS boot sequence.
+  </para>
+
+  <procedure xml:id="pro-tinstallation-troubleshooting-bios">
+   <title>Changing the BIOS boot sequence</title>
+   <step>
+    <para>
+     Enter the BIOS using the proper key shown by the boot routines and
+     wait for the BIOS screen to appear.
+    </para>
+   </step>
+   <step>
+    <para>
+     To change the boot sequence in an AWARD BIOS, look for the <guimenu>BIOS
+     FEATURES SETUP</guimenu> entry. Other manufacturers may have a different
+     name for this, such as <guimenu>ADVANCED CMOS SETUP</guimenu>. When you
+     have found the entry, select it and confirm with
+     <keycap function="enter"/>.
+    </para>
+   </step>
+   <step>
+    <para>
+     Look for a subentry called <guimenu>BOOT
+     SEQUENCE</guimenu> or <guimenu>BOOT ORDER</guimenu>. Change the settings
+     by pressing <keycap function="pageup"/> or <keycap function="pagedown"/>
+     until the &usbflashdrive; or DVD drive is listed first.
+    </para>
+   </step>
+   <step>
+    <para>
+     Exit the BIOS setup screen by pressing <keycap function="escape"/>. To save
+     the changes, select <guimenu>SAVE &amp; EXIT SETUP</guimenu>, or press
+     <keycap>F10</keycap>. To save the modified settings, press
+     <keycap>Y</keycap>.
+    </para>
+   </step>
+  </procedure>
+
+  <procedure>
+   <title>Changing the boot sequence in an SCSI BIOS (Adaptec host adapter)</title>
+   <step>
+    <para>
+     Open the setup by pressing <keycombo> <keycap function="control"/>
+     <keycap>A</keycap> </keycombo>.
+    </para>
+   </step>
+   <step>
+    <para>
+     Select <guimenu>Disk Utilities</guimenu>. The connected hardware
+     components are now displayed.
+    </para>
+    <para>
+     Make note of the SCSI ID of your &usbflashdrive; or DVD drive.
+    </para>
+   </step>
+   <step>
+    <para>
+     Exit the menu with <keycap function="escape"/>.
+    </para>
+   </step>
+   <step>
+    <para>
+     Open <guimenu>Configure Adapter Settings</guimenu>. Under
+     <guimenu>Additional Options</guimenu>, select <guimenu>Boot Device
+     Options</guimenu> and press <keycap function="enter"/>.
+    </para>
+   </step>
+   <step>
+    <para>
+     Enter the ID of the &usbflashdrive; or DVD drive and press
+     <keycap
+      function="enter"/> again.
+    </para>
+   </step>
+   <step>
+    <para>
+     Press <keycap function="escape"/> twice to return to the start screen of
+     the SCSI BIOS.
+    </para>
+   </step>
+   <step>
+    <para>
+     Exit this screen and confirm with <guimenu>Yes</guimenu> to boot the
+     computer.
+    </para>
+   </step>
+  </procedure>
+
+  <para>
+   Regardless of what language and keyboard layout the installed system will
+   be using, most BIOS configurations use the US keyboard layout as shown below.
+  </para>
+
+  <figure xml:id="fig-trouble-install-keyboard-us">
+   <title>US keyboard layout</title>
+   <mediaobject>
+    <imageobject role="fo">
+     <imagedata fileref="keyboard_us.svg" width="75%"/>
+    </imageobject>
+    <imageobject role="html">
+     <imagedata fileref="keyboard_us.svg" width="75%"/>
+    </imageobject>
+   </mediaobject>
+  </figure>
+ </sect1>
+ <sect1 xml:id="sec-installation-troubleshooting-noboot">
+  <title>Boot failure</title>
+
+  <para>
+   Some hardware types, mainly very old or very recent ones, fail to boot.
+   Reasons can be missing support for hardware in the installation kernel or
+   drivers causing problems on some specific hardware.
+  </para>
+
+  <para>
+   If installation fails using the standard
+   <guimenu>Installation</guimenu> mode, try the following.
+  </para>
+
+  <procedure>
+   <step>
+    <para>
+     With the installation media still in the drive, reboot the machine with
+     <keycombo> <keycap function="control"/> <keycap function="alt"/>
+     <keycap
+       function="delete"/> </keycombo> or using the hardware reset
+     button.
+    </para>
+   </step>
+   <step>
+    <para>
+     When the boot screen appears, press <keycap>F5</keycap>, use the arrow
+     keyboard keys to navigate to <guimenu>No ACPI</guimenu>, and press
+     <keycap function="enter"/> to boot and initiate the installation process.
+     This option disables the support for ACPI power management techniques.
+    </para>
+   </step>
+   <step>
+    <para>
+     Proceed with the installation as described in
+     <xref linkend="cha-install"/>.
+    </para>
+   </step>
+  </procedure>
+
+  <para>
+   If this fails, proceed as above, but choose <guimenu>Safe Settings</guimenu>
+   instead. This option disables ACPI and DMA support. This option works with most hardware.
+  </para>
+
+  <para>
+   If both options fail, use the boot parameters prompt to specify the
+   kernel parameters to enable support for the hardware in use. For more
+   information about the parameters available as boot parameters, refer to the
+   kernel documentation located in
+   <filename>/usr/src/linux/Documentation/kernel-parameters.txt</filename>.
+  </para>
+
+  <tip>
+   <title>Obtaining kernel documentation</title>
+   <para>
+    Install the <systemitem class="systemname">kernel-source</systemitem>
+    package to view the kernel documentation.
+   </para>
+  </tip>
+
+  <para>
+   There are other ACPI-related kernel parameters that can be entered at the
+   boot prompt prior to booting for installation:
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term><systemitem>acpi=off</systemitem></term>
+    <listitem>
+     <para>
+      This parameter disables the complete ACPI subsystem on your computer.
+      This may be useful if your computer cannot handle ACPI or if you think
+      ACPI in your computer causes trouble.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term><systemitem>acpi=force</systemitem></term>
+    <listitem>
+     <para>
+      Always enable ACPI even if your computer has a BIOS released before 2000. This parameter also enables ACPI if it is set in addition to
+      <systemitem>acpi=off</systemitem>.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term><systemitem>acpi=noirq</systemitem></term>
+    <listitem>
+     <para>
+      Do not use ACPI for IRQ routing.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term><systemitem>acpi=ht</systemitem></term>
+    <listitem>
+     <para>
+      Run only enough ACPI to enable hyper-threading.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term><systemitem>acpi=strict</systemitem></term>
+    <listitem>
+     <para>
+      Be less tolerant of platforms that are not strictly ACPI-compliant.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term><systemitem>pci=noacpi</systemitem></term>
+    <listitem>
+     <para>
+      Disable PCI IRQ routing of the new ACPI system.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term><systemitem>pnpacpi=off</systemitem></term>
+    <listitem>
+     <para>
+      Enable this option to avoid issues caused by incorrectly configured device resources in BIOS.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term><systemitem>notsc</systemitem></term>
+    <listitem>
+     <para>
+      Disable the time stamp counter. This option can be used to work around
+      timing problems on your systems. It is a recent feature, so if you see
+      regressions on your machine, especially time related or even total hangs,
+      this option is worth a try.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term><systemitem>nohz=off</systemitem></term>
+    <listitem>
+     <para>
+      Disable the nohz feature. If your machine hangs, enabling this option may help.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <para>
+   When you have determined the right parameter combination, &yast;
+   automatically writes them to the boot loader configuration to make sure that
+   the system boots properly next time.
+  </para>
+
+  <para>
+   If errors occur when the kernel is loaded or during the installation, select
+   <guimenu>Memory Test</guimenu> in the boot menu to check the memory. If
+   <guimenu>Memory Test</guimenu> returns an error, this usually indicates a
+   hardware error.
+  </para>
+ </sect1>
+ <sect1 xml:id="sec-installation-troubleshooting-graph">
+  <title>Graphical installer fails to start</title>
+
+  <para>
+   The machine boots into the installation interface, and the graphical installer
+   does not start when you select <guimenu>Installation</guimenu>.
+  </para>
+
+  <para>
+   There are several ways to deal with this situation.
+  </para>
+
+  <itemizedlist>
+   <listitem>
+    <para>
+     Select another screen resolution for the installation dialogs.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Select <guimenu>Text Mode</guimenu> for installation.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Perform a remote installation via VNC using the graphical installer.
+    </para>
+   </listitem>
+  </itemizedlist>
+
+  <procedure xml:id="pro-installation-troubleshooting-graph">
+   <title>Change screen resolution for installation</title>
+   <step>
+    <para>
+     Boot for installation.
+    </para>
+   </step>
+   <step>
+    <para>
+     Press <keycap>F3</keycap> to open a menu from which to select a lower
+     resolution for installation purposes.
+    </para>
+   </step>
+   <step>
+    <para>
+     Select <guimenu>Installation</guimenu> and proceed with the installation
+     as described in <xref linkend="cha-install"/>.
+    </para>
+   </step>
+  </procedure>
+
+  <procedure xml:id="pro-installation-troubleshooting-text">
+   <title>Installation in text mode</title>
+   <step>
+    <para>
+     Boot for installation.
+    </para>
+   </step>
+   <step>
+    <para>
+     Press <keycap>F3</keycap> and select <guimenu>Text Mode</guimenu>.
+    </para>
+   </step>
+   <step>
+    <para>
+     Select <guimenu>Installation</guimenu> and proceed with the installation
+     as described in <xref linkend="cha-install"/>.
+    </para>
+   </step>
+  </procedure>
+
+  <procedure xml:id="pro-trouble-install-vnc">
+   <title>VNC installation</title>
+   <step>
+    <para>
+     Boot for installation.
+    </para>
+   </step>
+   <step>
+    <para>
+     Enter the following text at the boot parameters prompt:
+    </para>
+<screen>vnc=1 vncpassword=<replaceable>SOME_PASSWORD</replaceable></screen>
+    <para>
+     Replace <replaceable>SOME_PASSWORD</replaceable> with the password to use
+     for VNC installation.
+    </para>
+   </step>
+   <step>
+    <para>
+     Select <guimenu>Installation</guimenu> then press
+     <keycap function="enter"/> to start the installation.
+    </para>
+    <para>
+     Instead of starting right into the graphical installation routine, the
+     system continues to run in a text mode. The system then halts, displaying
+     a message containing the IP address and port number at which the installer
+     can be reached via a browser interface or a VNC viewer application.
+    </para>
+   </step>
+   <step>
+    <para>
+     When using a browser to access the installer, launch the browser and enter
+     the address information provided by the installation routines on the
+     future &productname; machine and press <keycap function="enter"/>:
+    </para>
+<screen>http://<replaceable>IP_ADDRESS_OF_MACHINE</replaceable>:5801</screen>
+    <para>
+     A dialog opens in the browser window prompting you for the VNC password.
+     Enter it and proceed with the installation as described in
+     <xref linkend="cha-install"/>.
+    </para>
+    <important>
+     <title>Cross-platform support</title>
+     <para>
+      Installation via VNC works with any browser under any operating system,
+      provided Java support is enabled.
+     </para>
+    </important>
+    <para>
+     Provide the IP address and password to your VNC viewer when prompted. A
+     window opens, displaying the installation dialogs. Proceed with the
+     installation as usual.
+    </para>
+   </step>
+  </procedure>
+ </sect1>
+ <sect1 xml:id="sec-installation-troubleshooting-mini">
+  <title>Only minimal boot screen is displayed</title>
+
+  <para>
+   You inserted the medium into the drive, the BIOS routines are finished, and
+   the system launches a minimal, text-based interface. This may happen on any
+   machine that does not have sufficient graphics memory for rendering a
+   graphical boot screen.
+  </para>
+
+  <para>
+   Although the text boot screen looks minimal, it provides nearly the same
+   functionality as the graphical one.
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term>Boot options</term>
+    <listitem>
+     <para>
+      Unlike the graphical interface, the different boot parameters cannot be
+      selected using the cursor keys of your keyboard. The boot menu of the
+      text-mode boot screen provides keywords that can be entered at the boot
+      prompt. These keywords match the options in the graphical version. Enter
+      your choice and press <keycap function="enter"/> to launch the boot
+      process.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>Custom boot options</term>
+    <listitem>
+     <para>
+      After selecting a boot parameter, enter the appropriate keyword at the
+      boot prompt or enter some custom boot parameters as described in
+      <xref linkend="sec-installation-troubleshooting-noboot"/>. To launch the
+      installation process, press <keycap function="enter"/>.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>Screen resolutions</term>
+    <listitem>
+     <para>
+      Use the function keys (<keycap>F1</keycap> ... <keycap>F12</keycap>) to
+      determine the screen resolution for installation. If you need to boot in
+      text mode, choose <keycap>F3</keycap>.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+ </sect1>
+ <sect1 xml:id="sec-installation-troubleshooting-log" os="sles">
+  <title>Log files</title>
+
+  <para os="sles">
+   For more information about log files created during installation,
+   see <xref linkend="sec-admsupport-install"/>.
+  </para>
+ </sect1>
+</chapter>

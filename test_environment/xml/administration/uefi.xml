@@ -1,0 +1,718 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter
+[
+  <!ENTITY % entities SYSTEM "entities/generic-entities.ent">
+    %entities;
+]>
+
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0" xml:id="cha-uefi">
+<!--
+* Fates
+** #313527: [META] [UEFI] Secure Boot for UEFI 2.3.1
+   Contains links to all other UEFI features
+
+** #314578: [DOCU] Document current limitations in a UEFI Secure Boot
+   Context
+   Release Notes
+** #314528: [DOCU] update documentation for Secure Boot
+
+
+osc -A https://api.suse.de sr -m"Update text and image files" home:keichwa:branches:Devel:WebYaST:1.3 webyast-user_en Devel:WebYaST:1.3
+-->
+ <title>UEFI (Unified Extensible Firmware Interface)</title>
+ <info>
+  <dm:docmanager xmlns:dm="urn:x-suse:ns:docmanager">
+   <dm:bugtracker></dm:bugtracker>
+   <dm:translation>yes</dm:translation>
+  </dm:docmanager>
+ </info>
+ <para>
+  UEFI (Unified Extensible Firmware Interface) is the interface between the
+  firmware that comes with the system hardware, all the hardware components of
+  the system, and the operating system.
+ </para>
+ <para>
+  UEFI is becoming more and more available on PC systems and thus is replacing
+  the traditional PC-BIOS. UEFI, for example, properly supports 64-bit systems
+  and offers secure booting (<quote>Secure Boot</quote>, firmware version
+  2.3.1c or better required), which is one of its most important features.
+  Lastly, with UEFI a standard firmware will become available on all x86
+  platforms.
+ </para>
+ <para>
+  UEFI additionally offers the following advantages:
+ </para>
+ <itemizedlist mark="bullet" spacing="normal">
+  <listitem>
+   <para>
+    Booting from large disks (over 2 TiB) with a GUID Partition Table (GPT).
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    CPU-independent architecture and drivers.
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    Flexible pre-OS environment with network capabilities.
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    CSM (Compatibility Support Module) to support booting legacy operating
+    systems via a PC-BIOS-like emulation.
+   </para>
+  </listitem>
+ </itemizedlist>
+ <para>
+  For more information, see
+  <link xlink:href="http://en.wikipedia.org/wiki/Unified_Extensible_Firmware_Interface"/>.
+  The following sections are not meant as a general UEFI overview; these are
+  only hints about how certain features are implemented in &productname;.
+ </para>
+ <sect1 xml:id="sec-uefi-secboot">
+  <title>Secure boot</title>
+
+<!-- # http://www.suse.com/blogs/uefi-secure-boot-overview/ -->
+
+  <para>
+   In the world of UEFI, securing the bootstrapping process means establishing
+   a chain of trust. The <quote>platform</quote> is the root of this chain of
+   trust; in the context of &productname;, the mainboard and the on-board firmware
+   could be considered the <quote>platform</quote>. In other words, it is the hardware vendor, and the chain of trust flows from
+   that hardware vendor to the component manufacturers, the OS vendors, etc.
+  </para>
+
+  <para>
+   The trust is expressed via public key cryptography. The hardware vendor puts
+   a so-called Platform Key (PK) into the firmware, representing the root of
+   trust. The trust relationship with operating system vendors and others is
+   documented by signing their keys with the Platform Key.
+  </para>
+
+  <para>
+   Finally, security is established by requiring that no code will be executed
+   by the firmware unless it has been signed by one of these
+   <quote>trusted</quote> keys&mdash;be it an OS boot loader, a driver located
+   in the flash memory of certain PCI Express card or on disk, or be it an
+   update of the firmware itself.
+  </para>
+
+  <para>
+   To use Secure Boot, you need to have your OS loader signed with
+   a key trusted by the firmware, and you need the OS loader to verify that the
+   kernel it loads can be trusted.
+  </para>
+
+  <para>
+<!-- WP, re-phrased -->
+   Key Exchange Keys (KEK) can be added to the UEFI key database. This way, you
+   can use other certificates, if they are signed with the private part
+   of the PK.
+<!-- but they must still
+have a connection to the private portion of the Platform key.-->
+  </para>
+
+  <sect2 xml:id="sec-uefi-secboot-sle">
+   <title>Implementation on &productname;</title>
+   <para>
+    Microsoft’s Key Exchange Key (KEK) is installed by default.
+   </para>
+   <note>
+    <title>GUID partitioning table (GPT) required</title>
+    <para>
+     The Secure Boot feature is enabled by default on UEFI/x86_64
+     installations. You can find the <guimenu>Enable Secure Boot
+     Support</guimenu> option in the <guimenu>Boot Code Options</guimenu> tab
+     of the <guimenu>Boot Loader Settings</guimenu> dialog. It supports booting
+     when the secure boot is activated in the firmware, while making it
+     possible to boot when it is deactivated.
+    </para>
+    <figure>
+     <title>Secure boot support</title>
+     <mediaobject>
+      <imageobject role="fo">
+       <imagedata fileref="yast2_bootloader_boot_code_efi.png" width="70%"/>
+      </imageobject>
+      <imageobject role="html">
+       <imagedata fileref="yast2_bootloader_boot_code_efi.png" width="70%"/>
+      </imageobject>
+     </mediaobject>
+    </figure>
+    <para>
+     The Secure Boot feature requires that a GUID Partitioning Table (GPT)
+     replaces the old partitioning with a Master Boot Record (MBR). If &yast;
+     detects EFI mode during the installation, it will try to create a GPT
+     partition. UEFI expects to find the EFI programs on a FAT-formatted EFI
+     System Partition (ESP).
+    </para>
+   </note>
+<!-- http://www.suse.com/blogs/uefi-secure-boot-plan/ -->
+   <para>
+    Supporting UEFI Secure Boot requires having a boot loader with
+    a digital signature that the firmware recognizes as a trusted key. That key
+    is trusted by the firmware a priori, without requiring any manual
+    intervention.
+   </para>
+   <para>
+    There are two ways of getting there. One is to work with hardware vendors
+    to have them endorse a SUSE key, which SUSE then signs the boot loader
+    with. The other way is to go through Microsoft’s Windows Logo
+    Certification program to have the boot loader certified and have Microsoft
+    recognize the SUSE signing key (that is, have it signed with their KEK). By
+    now, SUSE got the loader signed by UEFI Signing Service (that is Microsoft
+    in this case).
+   </para>
+<!-- We are currently evaluating both approaches, and may eventually
+even pursue both in parallel. -->
+   <figure xml:id="fig-uefi-secure-boot-mok2">
+    <title>UEFI: secure boot process</title>
+    <mediaobject>
+     <imageobject role="fo">
+      <imagedata fileref="uefi-secure-boot-mok2.png" width="50%"/>
+     </imageobject>
+     <imageobject role="html">
+      <imagedata fileref="uefi-secure-boot-mok2.png" width="80%"/>
+     </imageobject>
+    </mediaobject>
+   </figure>
+   <para>
+    At the implementation layer, SUSE uses the <systemitem>shim</systemitem>
+    loader which is installed by default. It is a smart solution that avoids
+    legal issues, and simplifies the certification and signing step
+    considerably. The <systemitem>shim</systemitem> loader’s job is to load a
+    boot loader such as &grub; and verify it; this boot loader in
+    turn will load kernels signed by a SUSE key only.
+   </para>
+   <para>
+    There are two types of trusted users:
+   </para>
+   <itemizedlist mark="bullet" spacing="normal">
+    <listitem>
+     <para>
+      First, those who hold the keys. The Platform Key (PK) allows almost
+      everything. The Key Exchange Key (KEK) allows all a PK can except
+      changing the PK.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Second, anyone with physical access to the machine. A user with physical
+      access can reboot the machine, and configure UEFI.
+     </para>
+    </listitem>
+   </itemizedlist>
+   <para>
+    UEFI offers two types of variables to fulfill the needs of those users:
+   </para>
+   <itemizedlist mark="bullet" spacing="normal">
+    <listitem>
+     <para>
+      The first is the so-called <quote>Authenticated Variables</quote>, which
+      can be updated from both within the boot process (the so-called Boot
+      Services Environment) and the running OS. This can be done only when the new value of
+      the variable is signed with the same key that the old value of the
+      variable was signed with. And they can only be appended to or changed to
+      a value with a higher serial number.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      The second is the so-called <quote>Boot Services Only Variables</quote>.
+      These variables are accessible to any code that runs during the boot
+      process. After the boot process ends and before the OS starts, the boot
+      loader must call the <literal>ExitBootServices</literal> call. After
+      that, these variables are no longer accessible, and the OS cannot touch
+      them.
+     </para>
+    </listitem>
+   </itemizedlist>
+   <para>
+    UEFI key lists are of the first type, as this allows online updating, adding
+    and blacklisting of keys, drivers and firmware fingerprints. It is the
+    second type of variable, the <quote>Boot Services Only Variable</quote>,
+    that helps to implement Secure Boot in a secure and open source-friendly
+    manner, and thus compatible with GPLv3.
+   </para>
+   <para>
+    SUSE starts with <systemitem>shim</systemitem>&mdash;a small and simple EFI
+    boot loader signed by SUSE and Microsoft.
+   </para>
+   <para>
+    This allows <systemitem>shim</systemitem> to load and execute.
+   </para>
+   <para>
+    <systemitem>shim</systemitem> then goes on to verify that the boot loader
+    it wants to load is trusted.
+<!-- ??? It will not use the SUSE KEK nor the
+Microsoft certificate for this. -->
+    In a default situation <systemitem>shim</systemitem> will use an
+    independent SUSE certificate embedded in its body. In addition,
+    <systemitem>shim</systemitem> will allow to <quote>enroll</quote>
+    additional keys, overriding the default SUSE key. In the following, we call
+    them <quote>Machine Owner Keys</quote> or MOKs for short.
+   </para>
+   <para>
+    Next the boot loader will verify and then boot the kernel, and the kernel
+    will do the same on the modules.
+   </para>
+  </sect2>
+
+  <sect2 xml:id="sec-uefi-secboot-mok">
+   <title>MOK (Machine Owner Key)</title>
+
+   <para>
+   To replace specific kernels, drivers or other components that are part of
+   the boot process, you need to use Machine Owner Keys (MOKs). The
+   <systemitem>mokutil</systemitem> tool can help you to manage MOKs.
+   </para>
+   <para>
+   You can create a MOK enrollment request with
+   <systemitem>mokutil</systemitem>. The request is stored in a UEFI runtime
+   (RT) variable called <systemitem>MokNew</systemitem>. During the next boot,
+   the <systemitem>shim</systemitem> boot loader detects
+   <systemitem>MokNew</systemitem> and loads
+   <systemitem>MokManager</systemitem>, which presents you with several options.
+   You can use the <guimenu>Enroll key from disk</guimenu> and
+   <guimenu>Enroll hash from disk</guimenu> options to add the key to the
+   MokList. Use the <guimenu>Enroll MOK</guimenu> option to copy the key from
+   the <systemitem>MokNew</systemitem> variable.
+   </para>
+   <para>
+   Enrolling a key from disk is normally done when the shim fails to
+   load <systemitem>grub2</systemitem> and falls back to loading
+   MokManager. As <systemitem>MokNew</systemitem> does not exist yet,
+   you have the option of locating the key on the UEFI partition.
+   </para>
+  </sect2>
+
+  <sect2 xml:id="sec-uefi-secboot-custom">
+   <title>Booting a custom kernel</title>
+   <para>
+    The following is based on
+    <link xlink:href="https://en.opensuse.org/openSUSE:UEFI#Booting_a_custom_kernel"/>.
+   </para>
+   <para>
+    Secure Boot does not prevent you from using a self-compiled kernel. You
+    must sign it with your own certificate and make that certificate known to
+    the firmware or MOK.
+   </para>
+   <procedure>
+    <step>
+     <para>
+      Create a custom X.509 key and certificate used for signing:
+     </para>
+<screen>openssl req -new -x509 -newkey rsa:2048 -keyout key.asc \
+  -out cert.pem -nodes -days 666 -subj "/CN=$USER/"</screen>
+     <para>
+<!-- bnc#811869 -->
+      For more information about creating certificates, see
+      <link xlink:href="https://en.opensuse.org/openSUSE:UEFI_Image_File_Sign_Tools#Create_Your_Own_Certificate"/>.
+     </para>
+    </step>
+    <step>
+     <para>
+      Package the key and the certificate as a PKCS#12 structure:
+     </para>
+<screen>&prompt.user;openssl pkcs12 -export -inkey key.asc -in cert.pem \
+  -name kernel_cert -out cert.p12</screen>
+    </step>
+    <step>
+     <para>
+      Generate an NSS database for use with <command>pesign</command>:
+     </para>
+<screen>&prompt.user;certutil -d . -N</screen>
+    </step>
+    <step>
+     <para>
+      Import the key and the certificate contained in PKCS#12 into the NSS
+      database:
+     </para>
+<screen>&prompt.user;pk12util -d . -i cert.p12</screen>
+    </step>
+    <step>
+     <para>
+      <quote>Bless</quote> the kernel with the new signature using
+      <command>pesign</command>:
+     </para>
+<screen>&prompt.user;pesign -n . -c kernel_cert -i arch/x86/boot/bzImage \
+  -o vmlinuz.signed -s</screen>
+    </step>
+    <step>
+     <para>
+      List the signatures on the kernel image:
+     </para>
+<screen>&prompt.user;pesign -n . -S -i vmlinuz.signed</screen>
+     <para>
+      At that point, you can install the kernel in <filename>/boot</filename>
+      as usual. Because the kernel now has a custom signature the certificate
+      used for signing needs to be imported into the UEFI firmware or MOK.
+     </para>
+    </step>
+    <step>
+     <para>
+      Convert the certificate to the DER format for import into the firmware or
+      MOK:
+     </para>
+<screen>&prompt.user;openssl x509 -in cert.pem -outform der -out cert.der</screen>
+    </step>
+    <step>
+     <para>
+      Copy the certificate to the ESP for easier access:
+     </para>
+<screen>&prompt.sudo;cp cert.der /boot/efi/</screen>
+    </step>
+    <step>
+     <para>
+      Use <command>mokutil</command> to launch the MOK list automatically.
+     </para>
+     <stepalternatives>
+      <step>
+       <substeps>
+        <step>
+         <para>
+          Import the certificate to MOK:
+         </para>
+<screen>&prompt.user;mokutil --root-pw --import cert.der</screen>
+         <para>
+          The <option>--root-pw</option> option enables usage of the &rootuser;
+          user directly.
+         </para>
+        </step>
+        <step>
+         <para>
+          Check the list of certificates that are prepared to be enrolled:
+         </para>
+<screen>&prompt.user;mokutil --list-new</screen>
+        </step>
+        <step>
+         <para>
+          Reboot the system; <systemitem>shim</systemitem> should launch
+          MokManager. You need to enter the &rootuser; password to confirm the
+          import of the certificate to the MOK list.
+         </para>
+        </step>
+        <step>
+         <para>
+          Check if the newly imported key was enrolled:
+         </para>
+<screen>&prompt.user;mokutil --list-enrolled</screen>
+        </step>
+       </substeps>
+      </step>
+      <step>
+       <substeps>
+        <step>
+         <para>
+          Alternatively, this is the procedure to launch MOK manually:
+         </para>
+         <para>
+          Reboot
+         </para>
+        </step>
+        <step>
+         <para>
+          In the &grub; menu press the '<literal>c</literal>' key.
+         </para>
+        </step>
+        <step>
+         <para>
+          Type:
+         </para>
+<screen>chainloader $efibootdir/MokManager.efi
+boot</screen>
+        </step>
+        <step>
+         <para>
+          Select <guimenu>Enroll key from disk</guimenu>.
+         </para>
+        </step>
+        <step>
+         <para>
+          Navigate to the <filename>cert.der</filename> file and press
+          <keycap function="enter"/>.
+         </para>
+        </step>
+        <step>
+         <para>
+          Follow the instructions to enroll the key. Normally this should be
+          pressing '<literal>0</literal>' and then '<literal>y</literal>' to
+          confirm.
+         </para>
+         <para>
+          Alternatively, the firmware menu may provide ways to add a new key to
+          the Signature Database.
+         </para>
+        </step>
+       </substeps>
+      </step>
+     </stepalternatives>
+    </step>
+   </procedure>
+<!--
+Booting the Machine without vendor provided Keys
+
+If the firmware menu offers options to reset the keys used for secure boot you may install new PK, KEK and db without Microsoft keys. Import /usr/lib64/efi/shim-opensuse.der into db to make openSUSE kernels boot in that case. The default shim is signed by both Microsoft and openSUSE. Some firmware versions don't support double signing though. In that case install /usr/lib64/efi/shim-opensuse.efi which only has the openSUSE signature as as /boot/efi/EFI/opensuse/shim.efi
+-->
+<!--
+Glossary
+
+PK
+    The "Platform Key" typically refers to a certificate installed by the hardware vendor on the machine. To be able to modify the KEK a valid signature of the PK is required.
+
+KEK
+    A valid signature of the "Key Exchange Key" is required to update the signature database.
+
+db
+    The Signature Database contains well known certificates, signatures or hashes of binaries. Only binaries that can be verified using that database are executed by the firmware. A valid signature of the KEK is required to update the Signature Database.
+
+dbx
+    The Forbidden Signatures Database is the opposite of 'db', a blacklist of certificates, signatures and hashes. If a binary matches any of the entries there it cannot be executed. A valid signature of the KEK is required to update the Forbidden Signature Database.
+
+MOK
+    Machine Owner Keys. An extra database of certificates or hashes used by MokManager. MokManager can be used interactively by the user during boot to update MOKs.
+-->
+  </sect2>
+
+  <sect2 xml:id="sec-uefi-secboot-non-inbox">
+   <title>Using non-inbox drivers</title>
+   <para>
+    There is no support for adding non-inbox drivers (that is, drivers that do
+    not come with &productname;) during installation with Secure Boot enabled. The
+    signing key used for SolidDriver/PLDP is not trusted by default.
+   </para>
+   <para>
+    It is possible to install third party drivers during installation with
+    Secure Boot enabled in two different ways. In both cases:
+   </para>
+   <itemizedlist mark="bullet" spacing="normal">
+    <listitem>
+     <para>
+      Add the needed keys to the firmware database via firmware/system
+      management tools before the installation. This option depends on the
+      specific hardware you are using. Consult your hardware vendor for more
+      information.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Use a bootable driver ISO from
+      <link xlink:href="https://drivers.suse.com/"/> or your hardware vendor to
+      enroll the needed keys in the MOK list at first boot.
+     </para>
+    </listitem>
+   </itemizedlist>
+   <para>
+    To use the bootable driver ISO to enroll the driver keys to the MOK list,
+    follow these steps:
+   </para>
+   <procedure>
+    <step>
+     <para>
+      Burn the ISO image above to an empty CD/DVD medium.
+     </para>
+    </step>
+    <step>
+     <para>
+      Start the installation using the new CD/DVD medium, having the standard
+      installation media at hand or a URL to a network installation
+      server.
+     </para>
+     <para>
+      If doing a network installation, enter the URL of the network
+      installation source on the boot command line using the
+      <option>install=</option> option.
+     </para>
+     <para>
+      If doing installation from optical media, the installer will first boot
+      from the driver kit and then ask to insert the first installation disk of
+      the product.
+     </para>
+    </step>
+    <step>
+     <para>
+      An initrd containing updated drivers will be used for installation.
+     </para>
+    </step>
+   </procedure>
+   <para>
+    For more information, see
+    <link xlink:href="https://drivers.suse.com/doc/Usage/Secure_Boot_Certificate.html"/>.
+   </para>
+  </sect2>
+
+  <sect2 xml:id="sec-uefi-secboot-feats">
+<!-- 2014-06-03, ke: according to fate#317500 -->
+   <title>Features and limitations</title>
+   <para>
+    When booting in Secure Boot mode, the following features apply:
+   </para>
+   <itemizedlist mark="bullet" spacing="normal">
+    <listitem>
+     <para>
+      Installation to UEFI default boot loader location, a mechanism to keep or
+      restore the EFI boot entry.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Reboot via UEFI.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Xen hypervisor will boot with UEFI when there is no legacy BIOS to fall
+      back to.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      UEFI IPv6 PXE boot support.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      UEFI video mode support, the kernel can retrieve video mode from UEFI
+      to configure KMS mode with the same parameters.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      UEFI booting from USB devices is supported.
+     </para>
+    </listitem>
+     <listitem>
+     <para>
+      Since <phrase
+      os="sles;sled;slemicro">&sles;&nbsp;15&nbsp;SP3</phrase><phrase
+      os="osuse">&leap; 15.3</phrase>, Kexec and Kdump are supported in
+      Secure Boot mode.
+     </para>
+    </listitem>
+   </itemizedlist>
+   <para>
+    When booting in Secure Boot mode, the following limitations apply:
+   </para>
+   <itemizedlist mark="bullet" spacing="normal">
+    <listitem>
+     <para>
+      To ensure that Secure Boot cannot be easily circumvented, certain kernel
+      features are disabled when running under Secure Boot.
+     </para>
+    </listitem>
+<!-- the rest is taken from fate#317500 -->
+    <listitem>
+     <para>
+      Boot loader, kernel, and kernel modules must be signed.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Hibernation (suspend on disk) is disabled.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Access to <filename>/dev/kmem</filename> and
+      <filename>/dev/mem</filename> is not possible, not even as root user.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Access to the I/O port is not possible, not even as root user. All X11
+      graphical drivers must use a kernel driver.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      PCI BAR access through sysfs is not possible.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      <literal>custom_method</literal> in ACPI is not available.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      debugfs for asus-wmi module is not available.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      the <literal>acpi_rsdp</literal> parameter does not have any effect on
+      the kernel.
+     </para>
+    </listitem>
+   </itemizedlist>
+<!--
+*** statements
+making it harder for attackers to hide a rootkit in the boot chain.
+
+
+UEFI Specification:
+
+UEFI supports booting from media that contain an UEFI OS loader or an
+UEFI-defined System Partition. An UEFI-defined System Partition is
+required by UEFI to boot from a block device. UEFI does not require any
+change to the first sector of a partition, so it is possible to build
+media that will boot on both legacy architectures and UEFI platforms.
+-->
+  </sect2>
+ </sect1>
+ <sect1 xml:id="sec-uefi-moreinfo">
+  <title>More information</title>
+
+  <itemizedlist mark="bullet" spacing="normal">
+   <listitem>
+    <para>
+     <link xlink:href="https://www.uefi.org"/> &mdash;UEFI home page where you
+     can find the current UEFI specifications.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Blog posts by Olaf Kirch and Vojtěch Pavlík (the chapter above is
+     heavily based on these posts):
+    </para>
+    <itemizedlist mark="bullet" spacing="normal">
+     <listitem>
+      <para>
+       <link xlink:href="https://www.suse.com/c/uefi-secure-boot-plan/"/>
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <link xlink:href="https://www.suse.com/c/uefi-secure-boot-overview/"/>
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <link xlink:href="https://www.suse.com/c/uefi-secure-boot-details/"/>
+      </para>
+     </listitem>
+    </itemizedlist>
+   </listitem>
+   <listitem>
+    <para>
+     <link xlink:href="https://en.opensuse.org/openSUSE:UEFI"/> &mdash;UEFI with
+     openSUSE.
+    </para>
+   </listitem>
+  </itemizedlist>
+ </sect1>
+<!--
+* Fates
+** #313527: [META] [UEFI] Secure Boot for UEFI 2.3.1
+   Enthält Verweise auf alle anderen UEFI Features
+
+** #314578: [DOCU] Document current limitations in a UEFI Secure Boot
+   Context
+   Release Notes
+** #314528: [DOCU] update documentation for Secure Boot
+
+
+osc -A https://api.suse.de sr -m"Update text and image files" home:keichwa:branches:Devel:WebYaST:1.3 webyast-user_en Devel:WebYaST:1.3
+-->
+</chapter>

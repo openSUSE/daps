@@ -1,0 +1,1013 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter
+[
+  <!ENTITY % entities SYSTEM "../common/generic-entities.ent">
+    %entities;
+]>
+<!--PM's doc requirements:
+ Data encryption (partially NEW)
+        1.High level information for end-users
+        2.Basic configuration details
+-> which application(s)? GNOME Passwords and Keys?
+        Yes, I am still pushing very hard for an unified solution here. Feature
+        302530 is pretty central to my idea here.
+        http://fedoraproject.org/wiki/FedoraCryptoConsolidation
+
+ @maintainer: GNOME Passwords and Keys are mentioned here,
+ please update - not sure where to mention the certificate store - might
+ go to new file security_certificatestore.xml
+-->
+<chapter xmlns="http://docbook.org/ns/docbook"
+ xmlns:xi="http://www.w3.org/2001/XInclude"
+ xmlns:xlink="http://www.w3.org/1999/xlink"
+ version="5.0"
+ xml:id="cha-gnome-crypto">
+ <title><guimenu>Passwords and Keys</guimenu>: signing and encrypting data</title>
+ <info>
+  <abstract>
+   <para>
+    Learn how to create and manage PGP and SSH keys.
+   </para>
+  </abstract>
+  <dm:docmanager xmlns:dm="urn:x-suse:ns:docmanager">
+   <dm:bugtracker></dm:bugtracker>
+   <dm:translation>yes</dm:translation>
+  </dm:docmanager>
+ </info>
+ <para>
+  The &gnome; Passwords and Keys program is an important component of the
+  encryption infrastructure on your system. With this program, you can create
+  and manage PGP and SSH keys, import, export and share keys, back up your keys
+  and keyring, and cache your passphrase.
+ </para>
+ <para>
+  To start the application, open the <guimenu>Activities</guimenu> overview by
+  pressing <keycap function="meta"/> and search for <literal>pass</literal>.
+ </para>
+ <figure pgwide="0">
+  <title><guimenu>Passwords and Keys</guimenu> main window</title>
+  <mediaobject>
+   <imageobject role="fo">
+    <imagedata fileref="seahorse_main.png" width="70%"/>
+   </imageobject>
+   <imageobject role="html">
+    <imagedata fileref="seahorse_main.png" width="70%"/>
+   </imageobject>
+  </mediaobject>
+ </figure>
+ <sect1 xml:id="sec-gnome-crypto-sign-encrypt">
+  <title>Signing and encryption</title>
+
+  <formalpara>
+   <title>Signing</title>
+   <para>
+    Attaching electronic signatures to pieces of information, such as e-mail
+    messages or software to prove its origin. To keep someone else from writing
+    messages using your name, and to protect both you and the people you send
+    them to, you should sign your mails. Signatures help you check the sender
+    of the messages you receive and distinguish authentic messages from
+    malicious ones.
+   </para>
+  </formalpara>
+
+  <para>
+   Software developers sign their software so that you can check the integrity.
+   Even if you get the software from an unofficial server, you can verify the
+   package with the signature.
+  </para>
+
+  <formalpara>
+   <title>Encryption</title>
+   <para>
+    You might also have sensitive information you want to protect from other
+    parties. Encryption helps you transform data and make it unreadable for
+    others. This is important for companies so they can protect internal
+    information and their employees' privacy.
+   </para>
+  </formalpara>
+ </sect1>
+ <sect1 xml:id="cha-gnome-crypto-gen-key">
+  <title>Generating a new key pair</title>
+
+  <para>
+   To exchange encrypted messages with other users, you must first generate
+   your own pair of keys. It consists of two parts:
+  </para>
+
+  <itemizedlist>
+   <listitem>
+    <formalpara>
+     <title>Public key</title>
+     <para>
+      This key is used for encryption. Distribute it to your communication
+      partners, so they can use it to encrypt files or messages for you.
+     </para>
+    </formalpara>
+   </listitem>
+   <listitem>
+    <formalpara>
+     <title>Private key</title>
+     <para>
+      This key is used for decryption. Use it to make encrypted files or
+      messages from others (or yourself) legible again.
+     </para>
+    </formalpara>
+   </listitem>
+  </itemizedlist>
+
+  <important>
+   <title>Access to the private key</title>
+   <para>
+    If others gain access to your private key, they can decrypt files and
+    messages intended only for you. Never grant others access to your private
+    key.
+   </para>
+  </important>
+
+  <sect2 xml:id="cha-gnome-crypto-gen-key-openpgp">
+   <title>Creating OpenPGP keys</title>
+   <para>
+    OpenPGP is a non-proprietary protocol for encrypting e-mail with the use of
+    public-key cryptography based on PGP. It defines standard formats for
+    encrypted messages, signatures, private keys, and certificates for
+    exchanging public keys.
+   </para>
+   <procedure>
+    <step>
+     <para>
+      Open the <guimenu>Activities</guimenu> overview and type
+      <literal>pass</literal>.
+     </para>
+    </step>
+    <step>
+     <para>
+      Open <guimenu>Passwords and Keys</guimenu>.
+     </para>
+    </step>
+    <step>
+     <para>
+      Press the <guimenu>+</guimenu> button in the upper left corner of the
+      window.
+     </para>
+    </step>
+    <step>
+     <para>
+      Select <guimenu>GPP Key</guimenu> from the list.
+     </para>
+    </step>
+    <step>
+     <para>
+      Enter your name in the <guimenu>Full Name</guimenu> field.
+     </para>
+     <para>
+      Optionally, add your e-mail address and a comment to describe the key.
+     </para>
+     </step>
+    <step>
+     <para>
+      Click <guimenu>Create</guimenu> to create the new key pair.
+     </para>
+     <para>
+      In the password dialog, enter a password for the key.
+     </para>
+    </step>
+    <step>
+     <para>
+      Confirm with <guimenu>OK</guimenu>.
+     </para>
+     <para>
+      When you specify a passphrase, use the same practices you use when you
+      create a strong password.
+      </para>
+    </step>
+   </procedure>
+  </sect2>
+
+  <sect2 xml:id="cha-gnome-crypto-gen-key-ssh">
+   <title>Creating secure shell keys</title>
+   <para>
+    Secure Shell (SSH) is a method of logging in to a remote computer to
+    execute commands on that machine. SSH keys are used in key-based
+    authentication system as an alternative to the default password
+    authentication system. With key-based authentication, there is no need to
+    manually type a password to authenticate.
+   </para>
+   <procedure>
+    <step>
+     <para>
+      Open the <guimenu>Activities</guimenu> overview and type
+      <literal>pass</literal>.
+     </para>
+    </step>
+    <step>
+     <para>
+      Open <guimenu>Passwords and Keys</guimenu>.
+     </para>
+    </step>
+    <step>
+     <para>
+      Press the <guimenu>+</guimenu> button in the upper left corner of the
+      window.
+     </para>
+    </step>
+    <step>
+     <para>
+      Select <guimenu>Secure Shell Key</guimenu> from the list.
+     </para>
+    </step>
+    <step>
+     <para>
+      Enter a description for the key.
+     </para>
+     <para>
+      Optionally, change the default settings for encryption type or key
+      strength.
+     </para>
+     <formalpara>
+      <title>Encryption type</title>
+      <para>
+       Specifies the encryption algorithms used to generate your keys. Select
+       <guimenu>RSA</guimenu> to use the Rivest-Shamir-Adleman (RSA) algorithm
+       to create the SSH key. This is the preferred and more secure choice.
+       Select <guimenu>DSA</guimenu> to use the Digital Signature Algorithm
+       (DSA) to create the SSH key.
+      </para>
+     </formalpara>
+     <formalpara>
+      <title>Key strength</title>
+      <para>
+       Specifies the length of the key in bits. The longer the key, the more
+       secure it is (provided a strong passphrase is used). Keep in mind that
+       performing any operation with a longer key requires more time than it
+       does with a shorter key. Acceptable values are between 1024 and 4096
+       bits. At least 2048 bits is recommended.
+      </para>
+     </formalpara>
+    </step>
+    <step>
+     <para>
+      Confirm either with <guimenu>Just Create Key</guimenu> or
+      <guimenu>Create and Set Up</guimenu>. The latter guides you through the
+      installation of the public key.
+     </para>
+    </step>
+   </procedure>
+  </sect2>
+  
+ </sect1>
+ <sect1 xml:id="cha-gnome-crypto-modify-key">
+  <title>Modifying key properties</title>
+
+  <para>
+   You can modify properties of existing OpenPGP or SSH keys.
+  </para>
+
+  <sect2 xml:id="cha-gnome-crypto-modify-key-openpgp">
+   <title>Editing OpenPGP key properties</title>
+   <para>
+    The descriptions in this section apply to all OpenPGP keys.
+   </para>
+   <procedure>
+    <step>
+    <para>
+     Open the <guimenu>Activities</guimenu> overview and type
+     <literal>pass</literal>.
+    </para>
+    </step>
+    <step>
+     <para>
+      Open <guimenu>Passwords and Keys</guimenu>.
+     </para>
+    </step>
+    <step>
+     <para>
+      Select <guimenu>GnuPG keys</guimenu> from the left side panel.
+     </para>
+    </step>
+    <step>
+     <para>
+      Right-click the PGP key you want to edit and select
+      <guimenu>Properties</guimenu>.
+     </para>
+     <para>
+      A dialog opens, showing the following key properties:
+     </para>
+     <formalpara>
+      <title>Key ID:</title>
+      <para>
+       The Key ID is similar to the Fingerprint, but the Key ID contains only
+       the last eight characters of the fingerprint. It is generally possible
+       to identify a key with only the Key ID, but sometimes two keys might
+       have the same Key ID.
+      </para>
+     </formalpara>
+     <formalpara>
+      <title>Fingerprint:</title>
+      <para>
+       A unique string of characters that exactly identifies a key.
+      </para>
+     </formalpara>
+    <formalpara>
+      <title>Expires:</title>
+      <para>
+       The date the key can no longer be used (a key can no longer be used to
+       perform key operations after it has expired). Changing a key's
+       expiration date to a point in the future re-enables it. A good general
+       practice is to have a master key that never expires and multiple subkeys
+       that do expire and are signed by the master key.
+      </para>
+    </formalpara>
+     <formalpara>
+      <title>Subkeys:</title>
+      <para>
+       See
+       <xref linkend="cha-gnome-crypto-modify-key-openpgp-edit-subkey"
+       xrefstyle="HeadingOnPage"/>
+       for more information.
+      </para>
+     </formalpara>
+     <formalpara>
+     <title>Override owner trust:</title>
+     <para>
+      Here you can set the level of trust for the owner of the key. Trust is an
+      indication of how sure you are of a person's ability to correctly extend
+      the Web of trust. When there is a key that you have not signed, the
+      validity of the key is determined from its signatures and how much you
+      trust the people who made those signatures.
+     </para>
+     </formalpara>
+    </step>
+    <step>
+     <para>
+      Click the plus button to add a photo to the key or change the
+      passphrase associated with the key.
+     </para>
+     <para>
+      Photo IDs allow a key owner to embed one or more pictures of themselves
+      in a key. These identities can be signed like normal user IDs. A photo ID
+      must be in JPEG format. The recommended size is 120×150 pixels.
+     </para>
+     <para>
+      If the chosen image does not meet the required file type or size,
+      <guimenu>Passwords and Keys</guimenu> can resize and convert it on the
+      fly from any image format supported by the GDK library.
+     </para>
+    </step>
+    <step>
+     <para>
+      Close the dialog to finish.
+     </para>
+    </step>
+   </procedure>
+   
+   <sect3 xml:id="cha-gnome-crypto-modify-key-openpgp-add-user">
+    <title>Adding a user ID</title>
+    <para>
+     User IDs allow multiple identities and e-mail addresses to be used with
+     the same key. Adding a user ID is useful, for example, when you want to
+     have an identity for your job and one for your friends. They take the
+     following form:
+    </para>
+<screen>Name (<replaceable>COMMENT</replaceable>) &lt;<replaceable>E-MAIL</replaceable>&gt;</screen>
+    <procedure>
+     <step>
+      <para>
+       Open the <guimenu>Activities</guimenu> overview and type
+       <literal>pass</literal>.
+      </para>
+     </step>
+     <step>
+      <para>
+       Open <guimenu>Passwords and Keys</guimenu>.
+      </para>
+     </step>
+     <step>
+      <para>
+       Select the <guimenu>GnuPG keys</guimenu> keyring from the left side
+       panel.
+      </para>
+     </step>
+     <step>
+      <para>
+       From the list, select the <guimenu>Personal PGP key</guimenu>.
+      </para>
+     </step>
+     <step>
+      <para>
+       Right-click on the key and select
+       <menuchoice><guimenu>Properties</guimenu> <guimenu>Add user ID</guimenu>
+       </menuchoice>.
+      </para>
+     </step>
+     <step>
+      <para>
+       In the dialog, fill in <guimenu>Full Name</guimenu>,
+       <guimenu>Email Address</guimenu> and <guimenu>Key Comment</guimenu> for
+       the new user ID and click <guimenu>OK</guimenu>.
+      </para>
+      <para>
+       Your e-mail address is how most people will locate your key on a key
+       server or other key provider. Make sure it is correct before continuing.
+      </para>
+     </step>
+     <step>
+      <para>
+       Enter the passphrase and click <guimenu>OK</guimenu> to finish.
+      </para>
+     </step>
+    </procedure>
+    
+   </sect3>
+   <sect3 xml:id="cha-gnome-crypto-modify-key-openpgp-edit-subkey">
+    <title>Editing OpenPGP subkey properties</title>
+    <para>
+     Each OpenPGP key has a single master key used to sign only. Subkeys are
+     used to encrypt and to sign as well. In this way, if your subkey is
+     compromised, you do not need to revoke your master key.
+    </para>
+    <procedure>
+     <step>
+      <para>
+       Open the <guimenu>Activities</guimenu> overview and type
+       <literal>pass</literal>.
+      </para>
+     </step>
+     <step>
+      <para>
+       Open <guimenu>Passwords and Keys</guimenu>.
+      </para>
+     </step>
+     <step>
+      <para>
+       Select <guimenu>GnuPG keys</guimenu> from the list.
+      </para>
+     </step>
+     <step>
+      <para>
+       Select the <guimenu>Personal PGP</guimenu> from the list.
+      </para>
+     </step>
+     <step>
+      <para>
+       Right-click on the selected key and select
+       <guimenu>Properties</guimenu>.
+      </para>
+     </step>
+     <step>
+      <para>
+       Choose the properties for your key.
+      </para>
+      </step>
+     <step>
+      <para>
+       Close the dialog to confirm the changes.
+      </para>
+     </step>
+    </procedure>
+   </sect3>
+   
+  </sect2>
+
+  <sect2 xml:id="cha-gnome-crypto-modify-key-ssh">
+   <title>Editing secure shell key properties</title>
+   <para>
+    The descriptions in this section apply to all SSH keys.
+   </para>
+   <procedure>
+    <step>
+     <para>
+      Open the <guimenu>Activities</guimenu> overview and type
+      <literal>pass</literal>.
+     </para>
+    </step>
+    <step>
+     <para>
+      Open <guimenu>Passwords and Keys</guimenu>.
+     </para>
+    </step>
+    <step>
+     <para>
+      Select <guimenu>OpenSSH keys</guimenu> from the list and right-click on
+      the key you want to edit.
+     </para>
+    </step>
+    <step>
+     <para>
+      A dialog opens where you can see and edit the following properties:
+     </para>
+     <formalpara>
+      <title>Algorithm:</title>
+      <para>
+       Specifies the encryption algorithm used to generate a key.
+      </para>
+     </formalpara>
+     <formalpara>
+      <title>Location:</title>
+      <para>
+       The location where the private key has been stored.
+      </para>
+     </formalpara>
+     <formalpara>
+      <title>Fingerprint:</title>
+      <para>
+       A unique string of characters that exactly identifies a key.
+      </para>
+     </formalpara>
+     <formalpara>
+      <title>Export</title>
+      <para>
+       Exports the key to a file.
+      </para>
+     </formalpara>
+    </step>
+    <step>
+     <para>
+      Close the dialog to confirm the changes.
+     </para>
+    </step>
+   </procedure>
+  </sect2>
+ </sect1>
+ 
+ <sect1 xml:id="cha-gnome-crypto-import-key">
+  <title>Importing keys</title>
+
+  <para>
+   Keys can be exported to text files. These files contain human-readable text
+   at the beginning and at the end of a key. This format is called an
+   ASCII-armored key.
+  </para>
+
+  <para>
+   To import keys, proceed as follows:
+  </para>
+
+  <procedure>
+   <step>
+    <para>
+     Open the <guimenu>Activities</guimenu> overview and type
+     <literal>pass</literal>.
+    </para>
+   </step>
+   <step>
+    <para>
+     Open <guimenu>Passwords and Keys</guimenu>.
+    </para>
+   </step>
+   <step>
+    <para>
+     Press the <guimenu>+</guimenu> button in the upper left corner.
+    </para>
+   </step>
+   <step>
+    <para>
+     Select <guimenu>Import from file</guimenu> from the list.
+    </para>
+   </step>
+   <step>
+    <para>
+     In the dialog, select the key to import. Public SSH keys end with
+     <filename>pub</filename>.
+    </para>
+    </step>
+   <step>
+    <para>
+     Click <guimenu>Open</guimenu> to import the key.
+    </para>
+   </step>
+  </procedure>
+
+  <para>
+   You can also paste keys inside <guimenu>Passwords and Keys</guimenu>:
+  </para>
+
+  <procedure>
+   <step>
+    <para>
+     Select an ASCII-armored public block of text, then copy it to the
+     clipboard.
+    </para>
+   </step>
+   <step>
+    <para>
+     Open the <guimenu>Activities</guimenu> overview and type
+     <literal>pass</literal>.
+    </para>
+   </step>
+   <step>
+    <para>
+     Open <guimenu>Passwords and Keys</guimenu>.
+    </para>
+   </step>
+   <step>
+    <para>
+     Press the <guimenu>+</guimenu> button in the upper left corner.
+    </para>
+    </step>
+   <step>
+    <para>
+     Paste the key to the appropriate location.
+    </para>
+   </step>
+  </procedure>
+ </sect1>
+ 
+ <sect1 xml:id="cha-gnome-crypto-export-key">
+  <title>Exporting keys</title>
+
+  <para>
+   To export keys, proceed as follows:
+  </para>
+
+  <procedure>
+   <step>
+    <para>
+     Open the <guimenu>Activities</guimenu> overview and type
+     <literal>pass</literal>.
+    </para>
+   </step>
+   <step>
+    <para>
+     Open <guimenu>Passwords and Keys</guimenu>.
+    </para>
+    <para>
+     Select the <guimenu>GnuPG keys</guimenu> keyring you want to export from
+     the left side panel.
+    </para>
+   </step>
+   <step>
+    <para>
+     Select the <guimenu>Personal PGP key</guimenu> to be exported.
+    </para>
+   </step>
+   <step>
+    <para>
+     Right-click on the key and select <guimenu>Export</guimenu>.
+    </para>
+   </step>
+   <step>
+    <para>
+     To store the key in <filename>ASCII</filename> format, select
+     <guimenu>Armored PGP keys</guimenu>.
+    </para>
+   </step>
+   <step>
+    <para>
+     Choose a location and confirm with <guimenu>Export</guimenu>.
+    </para>
+   </step>
+  </procedure>
+
+ </sect1>
+ <sect1 xml:id="cha-gnome-crypto-sign-key">
+  <title>Signing a key</title>
+
+  <para>
+   Signing another person's key means that you are giving trust to that person.
+   Before signing a key, carefully check the key's fingerprint to ensure that
+   the key really belongs to that person.
+  </para>
+
+  <para>
+   Trust is an indication of how sure you are of a person's ability to
+   correctly extend the Web of trust. When there is a key that you have not
+   signed, the validity of the key is determined from its signatures and how
+   much you trust the people who made those signatures.
+  </para>
+
+  <procedure>
+   <step>
+    <para>
+     Open the <guimenu>Activities</guimenu> overview and type
+     <literal>pass</literal>.
+    </para>
+   </step>
+   <step>
+    <para>
+     Open <guimenu>Passwords and Keys</guimenu>.
+    </para>
+   </step>
+   <step>
+    <para>
+     Import the key to be signed.
+    </para>
+   </step>
+   <step>
+    <para>
+     From the list of <guimenu>GnuPG keys</guimenu>, select the imported key.
+    </para>
+   </step>
+   <step>
+    <para>
+     Right-click the key and select
+     <menuchoice><guimenu>Properties</guimenu> <guimenu>Trust</guimenu>
+     </menuchoice>.
+    </para>
+   </step>
+   <step>
+    <para>
+     Click the <guimenu>Sign this Key</guimenu> button.
+    </para>
+   </step>
+   <step>
+    <para>
+     Choose how carefully you have checked the key.
+    </para>
+   </step>
+   <step>
+    <para>
+     Decide if you want to revoke your signature at a later date and if you want
+     to make your signature public.
+    </para>
+   </step>
+   <step>
+    <para>
+     Confirm with <guimenu>Sign</guimenu>.
+    </para>
+   </step>
+  </procedure>
+ </sect1>
+ 
+ <sect1 os="osuse" xml:id="cha-gnome-crypto-nautilus">
+  <title>File manager integration</title>
+
+  <para>
+   Passwords and Keys integrates with &nautilus;. You can encrypt, decrypt,
+   sign, verify files, and import public keys from the file manager window
+   without launching <guimenu>Passwords and Keys</guimenu>.
+  </para>
+
+  <note>
+   <title>Enabling file manager integration</title>
+   <para>
+    The package <systemitem>nautilus-extension-seahorse</systemitem> has to be
+    installed to enable file manager integration.
+   </para>
+  </note>
+
+  <sect2 xml:id="cha-gnome-crypto-nautilus-encrypt">
+   <title>Encrypting files from &nautilus;</title>
+   <procedure>
+    <step performance="required">
+     <para>
+      In &nautilus;, right-click the files you want to encrypt.
+     </para>
+    </step>
+    <step performance="required">
+     <para>
+      Select <guimenu>Encrypt</guimenu>.
+     </para>
+    </step>
+    <step performance="required">
+     <para>
+      Select the people (recipients) you want to encrypt the file to, then
+      click <guimenu>OK</guimenu>.
+     </para>
+    </step>
+    <step performance="required">
+     <para>
+      If prompted, specify the passphrase of your private key, then click
+      <guimenu>OK</guimenu>.
+     </para>
+    </step>
+   </procedure>
+  </sect2>
+
+  <sect2 xml:id="cha-gnome-crypto-nautilus-sign">
+   <title>Signing files from &nautilus;</title>
+   <procedure>
+    <step performance="required">
+     <para>
+      In &nautilus;, right-click the files you want to sign.
+     </para>
+    </step>
+    <step performance="required">
+     <para>
+      Select <guimenu>Sign</guimenu>.
+     </para>
+    </step>
+    <step performance="required">
+     <para>
+      Select a signer, then click <guimenu>OK</guimenu>.
+     </para>
+    </step>
+    <step performance="required">
+     <para>
+      If prompted, specify the passphrase of your private key, then click
+      <guimenu>OK</guimenu>.
+     </para>
+    </step>
+   </procedure>
+  </sect2>
+
+  <sect2 xml:id="cha-gnome-crypto-nautilus-decrypt">
+   <title>Decrypting files from &nautilus;</title>
+   <para>
+    To decrypt an encrypted file in &nautilus;, simply double-click the file
+    you want to decrypt.
+   </para>
+   <para>
+    If prompted, specify the passphrase of your private key.
+   </para>
+  </sect2>
+
+  <sect2 xml:id="cha-gnome-crypto-nautilus-verify">
+   <title>Verifying signatures from &nautilus;</title>
+   <para>
+    To verify files, simply double-click the detached signature file. Detached
+    signature file names often have a <filename>.sig</filename> extension.
+   </para>
+  </sect2>
+ </sect1>
+ <sect1 xml:id="cha-gnome-crypto-prefs-keyrings">
+  <title>Password keyrings</title>
+
+  <para>
+   You can use password keyring preferences to create or remove keyrings, to
+   set the default keyring for application passwords or to change the unlock
+   password of a keyring. To create a new keyring, follow these steps:
+  </para>
+
+  <procedure>
+   <step>
+   <para>
+    Open the <guimenu>Activities</guimenu> overview and type
+    <literal>pass</literal>.
+   </para>
+   </step>
+   <step>
+    <para>
+     Open <guimenu>Passwords and Keys</guimenu>.
+    </para>
+   </step>
+   <step>
+    <para>
+     Click the <guimenu>+</guimenu> button in the upper left corner.
+    </para>
+   </step>
+   <step>
+    <para>
+     Select <guimenu>Password keyring</guimenu> from the list.
+    </para>
+   </step>
+   <step>
+    <para>
+     Enter a name for the keyring and click <guimenu>Add</guimenu>.
+    </para>
+   </step>
+   <step>
+    <para>
+     Set and confirm a new <guimenu>Password</guimenu> for the keyring and
+     click <guimenu>Continue</guimenu> to create the keyring.
+    </para>
+   </step>
+  </procedure>
+
+  <para>
+   To change the unlock password of an existing keyring, right-click the
+   keyring in the <guimenu>Passwords</guimenu> tab and click <guimenu>Change
+   Password</guimenu>. You need to provide the old password to be able to
+   change it.
+  </para>
+
+  <para>
+   To change the default keyring for application passwords, right-click the
+   keyring in the <guimenu>Passwords</guimenu> tab and click <guimenu>Set as
+   Default</guimenu>.
+  </para>
+ </sect1>
+ 
+ <sect1 xml:id="cha-gnome-crypto-prefs-servers">
+  <title>Key servers</title>
+
+  <para>
+   You can keep your keys up-to-date by synchronizing keys periodically with
+   remote key servers. Synchronizing ensures, that you have the latest
+   signatures made on all of your keys, so that the Web of trust is getting
+   effective.
+  </para>
+
+  <procedure>
+   <step>
+    <para>
+     Open the <guimenu>Activities</guimenu> overview and type
+     <literal>pass</literal>.
+    </para>
+   </step>
+   <step>
+    <para>
+     Open <guimenu>Passwords and Keys</guimenu>.
+    </para>
+   </step>
+   <step>
+    <para>Select the PGP key you want to synchronize.</para>
+   </step>
+   <step>
+    <para>
+     Press the menu button in the header bar.
+    </para>
+   </step>
+   <step>
+    <para>
+     Select <guimenu>Sync and publish keys</guimenu>.
+    </para>
+    <formalpara>
+     <title>HKP key servers:</title>
+     <para>
+      HKP key servers are ordinary Web-based key servers, such as the popular
+      <literal>hkp://pgp.mit.edu:11371</literal>, also accessible at
+      <link xlink:href="http://pgp.mit.edu">http://pgp.mit.edu</link>.
+     </para>
+    </formalpara>
+    <formalpara>
+     <title>LDAP key servers:</title>
+     <para>
+      LDAP key servers are less common, but use the standard LDAP protocol to
+      serve keys. <literal>ldap://keyserver.pgp.com</literal> is a recommended
+      LDAP server.
+     </para>
+    </formalpara>
+    <para>
+     You can <guimenu>Add</guimenu> or <guimenu>Remove</guimenu> key servers to
+     be used using the buttons on the left. To add a new key server, set its
+     type, host, and port, if necessary.
+    </para>
+   </step>
+   <step>
+    <para>
+     Set whether you want to automatically publish your public keys and which
+     key server to use. Set whether you want to automatically retrieve keys from
+     key servers and whether to synchronize modified keys with key servers.
+    </para>
+   </step>
+   <step>
+    <para>
+     Click the <guimenu>Sync</guimenu> button to synchronize your key.
+    </para>
+   </step>
+  </procedure>
+ </sect1>
+ 
+ <sect1 xml:id="cha-gnome-crypto-prefs-sharing">
+  <title>Key sharing</title>
+
+  <para>
+   Key Sharing is provided by DNS-SD, also known as Bonjour or Rendezvous.
+   Enabling key sharing adds the local <guimenu>Passwords and Keys</guimenu>
+   users' public key rings to the remote search dialog. Using these local key
+   servers is generally faster than accessing remote servers.
+  </para>
+
+  <procedure>
+   <step>
+    <para>
+     Open the <guimenu>Activities</guimenu> overview and type
+     <literal>pass</literal>.
+    </para>
+   </step>
+   <step>
+    <para>
+     Open <guimenu>Passwords and Keys</guimenu>.
+    </para>
+   </step>
+   <step>
+    <para>
+     Select <guimenu>GnuPG keys</guimenu> from the left side panel.
+    </para>
+   </step>
+   <step>
+    <para>
+     From the list, select the <guimenu>Personal PGP key</guimenu> you want to
+     share.
+    </para>
+   </step>
+   <step>
+    <para>
+     Press the menu button in the header bar.
+    </para>
+   </step>
+   <step>
+    <para>
+     Select <guimenu>Sync and publish keys</guimenu>.
+    </para>
+   </step>
+   <step>
+    <para>
+     Press the <guimenu>Key Servers</guimenu> button to see the list of key
+     servers.
+    </para>
+   </step>
+   <step>
+    <para>
+     To publish your key, select a server from the menu. Close the window and
+     go back to the previous dialog.
+    </para>
+   </step>
+   <step>
+    <para>
+     Press <guimenu>Sync</guimenu> to finish.
+    </para>
+   </step>
+  </procedure>
+ </sect1>
+</chapter>

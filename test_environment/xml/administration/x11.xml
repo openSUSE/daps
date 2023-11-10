@@ -1,0 +1,493 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter
+[
+  <!ENTITY % entities SYSTEM "entities/generic-entities.ent">
+    %entities;
+]>
+
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0" xml:id="cha-gui-desktop">
+ <title>Graphical user interface</title>
+ <info>
+  <dm:docmanager xmlns:dm="urn:x-suse:ns:docmanager">
+   <dm:bugtracker></dm:bugtracker>
+   <dm:translation>yes</dm:translation>
+  </dm:docmanager>
+  <abstract>
+   <para>
+    &productname; includes the X.org server<phrase os="sled;osuse">,
+    Wayland</phrase> and the &gnome; desktop. This chapter describes the
+    configuration of the graphical user interface for all users.
+   </para>
+  </abstract>
+ </info>
+ <sect1 xml:id="sec-gui-desktop-xorg">
+  <title>X Window System</title>
+  <para>
+   The X.org server is the de facto standard for implementing the X11
+   protocol. X is network-based, enabling applications started on one
+   host to be displayed on another host connected over any kind of
+   network (LAN or Internet).
+  </para>
+  <para>
+   The X Window System needs no configuration in most cases. The hardware is
+   dynamically detected during X start-up. The use of
+   <filename>xorg.conf</filename> is therefore deprecated. If you still
+   need to specify custom options to change the way X behaves, you can
+   still do so by modifying configuration files under
+   <filename>/etc/X11/xorg.conf.d/</filename>.
+  </para>
+  <para os="sled;osuse">
+   In &productname; &productnumber; Wayland is included as an alternative
+   to the X.org server. It can be selected during the installation.
+  </para>
+  <tip arch="zseries" os="sles">
+   <title>&zseries;: configuring the graphical user interface</title>
+   <para>
+    &zseries; does not have any input or output devices supported by
+    &xvendor;. Therefore, none of the configuration procedures described in this
+    section apply. More relevant information for &zseries; can be found in
+    <xref linkend="cha-zseries"/>.
+   </para>
+  </tip>
+  <para>
+   Install the package <systemitem class="resource">xorg-docs</systemitem> to
+   get more in-depth information about X11. <command>man 5 xorg.conf</command>
+   tells you more about the format of the manual configuration (if needed).
+   More information on the X11 development can be found on the project's home
+   page at <link xlink:href="http://www.x.org"/>.
+  </para>
+
+  <para>
+   Drivers are found in <systemitem>xf86-video-*</systemitem> packages, for
+   example <systemitem>xf86-video-ati</systemitem>. Many of the drivers
+   delivered with these packages are described in detail in the related manual
+   page. For example, if you use the <literal>ati</literal> driver, find more
+   information about this driver in <command>man 4 ati</command>.
+  </para>
+
+  <para>
+   Information about third-party drivers is available in
+   <filename>/usr/share/doc/packages/&lt;package_name&gt;</filename>.
+   For example, the documentation of <systemitem
+   class="resource">x11-video-nvidiaG03</systemitem> is available in
+   <filename>/usr/share/doc/packages/x11-video-nvidiaG04</filename>
+   after the package was installed.
+  </para>
+
+  <para>
+   Install the package <systemitem class="resource">xrdp</systemitem>
+   on a server and use RDP client software
+   to access the server via the remote desktop protocol.
+  </para>
+
+ </sect1>
+ <xi:include href="x11_fonts.xml"/>
+ <sect1 xml:id="sec-gui-desktop-gnome">
+  <title>&gnome; configuration for administrators</title>
+
+  <sect2 xml:id="sec-gui-desktop-gnome-dconf">
+   <title>The <literal>dconf</literal> system</title>
+
+   <para>
+    Configuration of the &gnome; desktop is managed with
+    <literal>dconf</literal>. It is a hierarchically structured database or
+    registry that allows users to modify their personal settings, and system
+    administrators to set default or mandatory values for all users.
+    <literal>dconf</literal> replaces the <literal>gconf</literal> system of
+    &gnome; 2.
+   </para>
+
+   <para>
+    Use <command>dconf-editor</command> to view the <literal>dconf</literal>
+    options with a graphical user interface. Use <command>dconf</command> to
+    access and modify configuration options with the command line.
+   </para>
+
+   <para>
+    The &gnome; <literal>Tweaks</literal> tool provides an easy-to-use
+    user interface for additional configuration options beyond the
+    normal &gnome; configuration. The tool can be started from the
+    &gnome; application menu or from the command line with
+    <command>gnome-tweak-tool</command>.
+   </para>
+  </sect2>
+
+  <sect2 xml:id="sec-gui-desktop-gnome-global">
+   <title>System-wide configuration</title>
+   <para>
+    Global <literal>dconf</literal> configuration parameters can be set
+    in the <filename>/etc/dconf/db/</filename> directory. This includes
+    the configuration for GDM or locking certain configuration options
+    for users.
+   </para>
+   <para>
+    Use the following procedure as an example to create a system-wide
+    configuration:
+   </para>
+   <procedure>
+    <step>
+     <para>
+      Create a new directory that ends with a <literal>.d</literal> in
+      <filename>/etc/dconf/db/</filename>. This directory can contain an
+      arbitrary amount of text files with configuration options. For this
+      example, create the file
+      <filename>/etc/dconf/db/network.d/00-proxy</filename> with the
+      following content:
+     </para>
+     <screen># This is a comment
+[system/proxy/http]
+host='10.0.0.1'
+enabled=true</screen>
+    </step>
+    <step>
+     <para>
+      Parse the new configuration directives into the dconf database format:
+     </para>
+     <screen>&prompt.sudo;<command>dconf update</command></screen>
+    </step>
+    <step>
+     <para>
+      Add the new <literal>network</literal> configuration database to
+      the default user profile, by creating the file <filename>/etc/dconf/profiles/user</filename>.
+      Then add the following content:
+     </para>
+     <screen>system-db:network</screen>
+     <para>
+      The file <filename>/etc/dconf/profiles/user</filename> is a &gnome;
+      default. Other profiles can be defined in the environment variable
+      <literal>DCONF_PROFILE</literal>.
+     </para>
+    </step>
+    <step>
+     <para>
+      Optional: to lock the proxy configuration for users, create the file
+      <filename>/etc/dconf/db/network/locks/proxy</filename>. Then add
+      a line to this file with the keys that may not be changed:
+     </para>
+     <screen>/system/proxy/http/host
+/system/proxy/http/enabled</screen>
+    </step>
+   </procedure>
+   <para>
+    You can use the graphical <command>dconf-editor</command> to create a
+    profile with one user and then use <command>dconf dump /</command>
+    to list all configuration options. The configuration options can
+    then be stored in a global profile.
+   </para>
+   <para>
+    A detailed description of the global configuration is available at
+    <link xlink:href="https://wiki.gnome.org/Projects/dconf/SystemAdministrators"/>.
+   </para>
+  </sect2>
+  <sect2 xml:id="sec-gui-desktop-gnome-gtile" os="sled">
+    <title>Managing tiling windows on Wayland</title>
+    <para>
+      If you are running the &gnome; desktop on Wayland and want to have your
+     windows arranged next to each other, we recommend using the
+     <emphasis>gTile</emphasis> &gnome; extension. gTile lets you re-arrange
+     windows based on a configurable grid scheme. For example, you can launch
+     six terminals and have them arranged in 3 rows and 2 columns so that
+     they use the whole desktop area.
+    </para>
+    <sect3>
+      <title>Installing gTile</title>
+      <important>
+        <para>
+          To use the gTile &gnome; extension, you need to be running the
+         &gnome; desktop and have the <package>chrome-gnome-shell</package>
+         (for &productnameshort; 15 SP4 and older) or
+         <package>gnome-browser-connector</package> (for &productnameshort; 15
+         SP5 and newer) package installed.
+        </para>
+      </important>
+      <procedure>
+        <step>
+          <para>
+            Point your browser to the gTile extension web page
+            <link xlink:href="https://extensions.gnome.org/extension/28/gtile/"/>.
+            If you see a warning about a missing browser extension, click the
+            link and follow your Web browser's instruction on how to install
+            and enable the &gnome; Shell extension.
+          </para>
+          <figure>
+            <title>Warning about a missing &gnome; Shell extension</title>
+            <mediaobject>
+              <imageobject role="fo">
+                <imagedata fileref="gtile-browser-warning.png" width="75%"/>
+              </imageobject>
+              <imageobject role="html">
+                <imagedata fileref="gtile-browser-warning.png" width="75%"/>
+              </imageobject>
+              <textobject role="description">
+               <phrase>Warning about a missing &gnome; Shell extension</phrase>
+              </textobject>
+            </mediaobject>
+          </figure>
+        </step>
+        <step>
+          <para>
+            After the &gnome; Shell extension is installed in your Web browser,
+            you will see an <guimenu>OFF</guimenu> button on the top right of
+            the gTile Web page.  To activate the gTile extension, switch it to
+           <guimenu>ON</guimenu> by clicking it.
+          </para>
+          <figure>
+            <title>&gnome; gTile extension activated</title>
+            <mediaobject>
+              <imageobject role="fo">
+                <imagedata fileref="gtile-extension-on.png" width="75%"/>
+              </imageobject>
+              <imageobject role="html">
+                <imagedata fileref="gtile-extension-on.png" width="75%"/>
+              </imageobject>
+              <textobject role="description"><phrase>&gnome; gTile extension activated</phrase>
+              </textobject>
+            </mediaobject>
+          </figure>
+        </step>
+        <step>
+          <para>
+            A gTile tray icon appears in the &gnome; tray in the right side of
+           the &gnome; panel. You can use it to activate gTile window layouts.
+          </para>
+          <figure>
+            <title>gTile tray icon</title>
+            <mediaobject>
+              <imageobject role="fo">
+                <imagedata fileref="gtile-tray-icon.png" width="75%"/>
+              </imageobject>
+              <imageobject role="html">
+                <imagedata fileref="gtile-tray-icon.png" width="75%"/>
+              </imageobject>
+              <textobject role="description"><phrase>gTile tray icon</phrase>
+              </textobject>
+            </mediaobject>
+          </figure>
+        </step>
+      </procedure>
+    </sect3>
+    <sect3>
+      <title>Working with the gTile extension</title>
+      <procedure>
+        <title>Arranging the windows</title>
+        <step>
+          <para>
+            To open gTile for the currently focused window, press
+            <keycombo><keycap function="meta"/><keycap function="enter"/></keycombo>.
+          </para>
+        </step>
+        <step>
+          <para>
+            To set the number of columns in which the windows will be arranged,
+           press a number key.
+          </para>
+        </step>
+        <step>
+          <para>
+            To automatically tile the windows according to the
+           <guimenu>Autotile Main window sizes</guimenu> setting, press the
+           <keycap>M</keycap> key. By default, the first time you press the
+           <keycap>M</keycap> key, it will make the current window use half the
+           screen, and all other windows to be tiled in a column on the other
+           half of the screen. You can press <keycap>M</keycap> repeatedly, to
+           cycle between variants. This is helpful to keep a big main window,
+           and several smaller secondary windows.
+          </para>
+        </step>
+        <step>
+          <para>
+           To move the current window to within the predefined tiling of the
+           screen, use arrow keys.
+          </para>
+          <para>
+            To shrink or grow the number of tiles that the window occupies, use
+           <keycap function="shift"/> and an arrow key.
+          </para>
+        </step>
+        <step>
+          <para>
+            To snap a window to the edges of the neighboring windows and the
+            desktop, press
+            <keycombo><keycap function="control"/><keycap function="alt"/><keycap>S</keycap></keycombo>.
+          </para>
+        </step>
+        <step>
+          <para>
+            To close the gTile window, press <keycap function="escape"/>.
+          </para>
+        </step>
+      </procedure>
+      <procedure>
+        <title>Advanced configuration</title>
+        <step>
+          <para>
+            To open the gTile settings, run the following command:
+            <command>gnome-extensions-app</command>.
+          </para>
+        </step>
+        <step>
+          <para>
+            Select gTile and click <guimenu>Settings</guimenu>.
+          </para>
+        </step>
+        <step>
+          <para>
+           Define a preset and a key combination to easily switch between
+           frequently used window layouts.
+          </para>
+          <para>
+            For more details on how to configure the gTile extension, refer to
+           <link xlink:href="https://github.com/gTile/gTile"/>.
+          </para>
+        </step>
+      </procedure>
+    </sect3>
+  </sect2>
+
+  <sect2 xml:id="sec-gui-desktop-gnome-more-info">
+   <title>More information</title>
+   <para>
+    For more information, see
+    <link xlink:href="http://help.gnome.org/admin/"/>.
+   </para>
+  </sect2>
+ </sect1>
+
+ <sect1 xml:id="sec-gui-desktop-suse-prime">
+  <title>Switching between Intel and NVIDIA Optimus GPUs with &suse; Prime</title>
+  <para>
+   &suse; Prime is a tool for switching between onboard Intel graphical
+   processing units (GPUs), and NVIDIA GPUs equipped with NVIDIA's "switchable
+   graphics" Optimus technology. Optimus provides a mechanism for easily
+   switching between an onboard Intel GPU and a discrete NVIDIA GPU. This is
+   designed for running a laptop in a power-saving mode or at maximum
+   performance: use the Intel GPU to save power, and the NVIDIA GPU for 3D
+   applications.
+  </para>
+
+  <para os="sled">
+   &suse; Prime is included in the &slewe; for &sle;&nbsp;&productnumber;.
+  </para>
+
+  <para>
+   &suse; Prime works only on systems running X11, not Wayland. If your system
+   runs Wayland, you must disable it and fall back to X11 to use &suse; Prime
+   (see <xref linkend="sec-gui-desktop-suse-prime-prereqs"/>).
+  </para>
+
+  <sect2 xml:id="sec-gui-desktop-suse-prime-prereqs">
+   <title>Prerequisites</title>
+    <para os="osuse">
+    You must have a configured and working NVIDIA Optimus GPU using the NVIDIA
+    proprietary drivers from the &opensuse; community repository (see
+    <xref linkend="sec-gui-desktop-install-nvidia"/>), and an onboard Intel
+    GPU. Bumblebee, the older switching tool for NVIDIA Optimus, must not be
+    installed.
+   </para>
+   
+   <para os="sle;sled">
+    You must have a configured and working NVIDIA Optimus GPU using the NVIDIA
+    drivers included in &sle;&nbsp;&productnumber; (see
+    <xref linkend="sec-gui-desktop-install-nvidia"/>), and an onboard Intel
+    GPU. Bumblebee, the older switching tool for NVIDIA Optimus, must not be
+    installed.
+   </para>
+   
+   <para>
+    There must not be a <filename>/etc/X11/xorg.conf</filename> file, and no
+    configuration files with active "ServerLayout", "Device", or "Screen"
+    sections in the <filename>/etc/X11/xorg.conf.d</filename> directory.
+   </para>
+   <para>
+    &suse; Prime works only with X11. Use the <command>loginctl</command>
+    command to see if your system is using X11 or Wayland:
+   </para>
+<screen>&prompt.user;loginctl
+   SESSION        UID USER             SEAT             TTY             
+         2       1000 &exampleuser_plain;             seat0               
+&prompt.user;loginctl show-session 2|grep Type
+Type=x11
+</screen>
+   <para>
+    If your system uses Wayland, disable it by editing
+    <filename>/etc/gdm/custom.conf</filename> and un-commenting
+    <literal>WaylandEnable=false</literal>. Then reboot.
+   </para>
+  </sect2>
+
+  <sect2 xml:id="sec-gui-desktop-suse-prime-install">
+   <title>Installing and using &suse; Prime</title>
+
+    <para>
+      Your NVIDIA graphics card should already be installed and working. 
+      If it is not, see 
+      <xref linkend="sec-gui-desktop-install-nvidia"/>. 
+    </para>
+
+   <para>
+       Install the <package>suse-prime</package> package:
+   </para>
+       <screen>&prompt.sudo;zypper install suse-prime</screen>
+     
+   <para>
+    To switch your GPU run one of the following commands, then log out and log
+    back in:
+   </para>
+<screen>&prompt.sudo;prime-select intel
+&prompt.sudo;prime-select intel2
+&prompt.sudo;prime-select nvidia
+</screen>
+   <para>
+    Use the <command>intel</command> driver when it is the modesetting driver.
+    <command>intel2</command> is for systems that use the
+    <package>xf86-video-intel</package> driver. You can get this information by
+    installing and running <package>inxi</package>:
+   </para>
+<screen>&prompt.user;inxi -G
+Graphics: Device-1: Intel Xeon E3-1200 v3/4th Gen Core Processor Integrated Graphics Controller
+          Display Server: x11(X.org 1.20.1 ) drivers: modesetting (unloaded: fbdev, vesa)
+          Resolution: 1920x1080@60.00hz
+          OpenGL: renderer: Mesa DRI Intel Haswell Desktop version: 4.5 Mesa 18.2.8
+      </screen>
+   <para>
+    Which GPU is currently active?
+   </para>
+<screen>&prompt.sudo;/usr/sbin/prime-select get-current
+Driver configured: intel
+</screen>
+  </sect2>
+
+  <sect2 xml:id="sec-gui-desktop-install-nvidia">
+   <title>Installing NVIDIA drivers</title>
+   <para>
+    If you need to identify your NVIDIA card so you know which driver to use, 
+    run the following command:
+</para>
+   
+<screen>&prompt.user;/sbin/lspci | grep VGA  
+</screen>
+   <para os="osuse">
+    Follow these steps to install the drivers with Zypper. First install the
+    community repository for your distribution. For &opensuse; Tumbleweed:
+   </para>
+      <para os="sles;sled">
+    Follow these steps to install the drivers with Zypper.
+   </para>
+<screen  os="osuse">&prompt.sudo;zypper addrepo --refresh https://download.nvidia.com/opensuse/tumbleweed nvidia</screen>
+   <para  os="osuse">
+    For &opensuse; 15.&product-sp;:
+   </para>
+<screen os="osuse">&prompt.sudo;zypper addrepo --refresh https://download.nvidia.com/opensuse/leap/15.&product-sp; nvidia</screen>
+   <para>
+    List the available driver packages:
+   </para>
+<screen>&prompt.sudo;zypper se nvidia
+</screen>
+   <para>
+    Then install the drivers for your NVIDIA graphics card:
+   </para>
+<screen>&prompt.sudo;zypper se <replaceable>packagename</replaceable>
+</screen>
+  </sect2>
+ </sect1>
+</chapter>
