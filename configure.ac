@@ -503,6 +503,15 @@ else
   AC_MSG_RESULT([DocBook 5.2 support              |   yes   |])
 fi
 
+if test 0 = "$HAVE_DOCBOOK_52"; then
+  AC_MSG_RESULT([DocBook Assembly support         |    no   | install DocBook 5.2, the
+                                 |         | DocBook 5 XSL stylesheets,
+                                 |         | and jing
+])
+else
+  AC_MSG_RESULT([DocBook Assembly support         |   yes   |])
+fi
+
 
 dnl AsciiDoc support
 if test 0 = "$ASCIIDOCTOR"; then
