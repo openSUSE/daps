@@ -125,7 +125,7 @@
       </listitem>
      </varlistentry>
     <varlistentry>
-     <term>Hard Disk Space</term>
+     <term>Hard disk space</term>
      <listitem>
       <para>The disk space consumed mostly depends on the amount of your
        documentation sources and the number of output formats you want to generate.</para>
@@ -162,7 +162,7 @@
 '   <para>The quickest way to install &dapsacr; is using the
 <command>zypper</command> command.</para>
     <procedure>
-     <title>Installing &dapsacr; via Zypper From &suse-dapsrepo;</title>
+     <title>Installing &dapsacr; via Zypper from &suse-dapsrepo;</title>
      <step>
       <para>Open a browser and enter the following URL: <ulink url="https://download.opensuse.org/repositories/Documentation:/Tools"></ulink>.</para>
      </step>
@@ -309,7 +309,7 @@
      </listitem>
    </varlistentry>
    <varlistentry>
-     <term>No Spaces and Colons In File and Directory Names</term>
+     <term>No spaces and colons in file and directory names</term>
      <listitem>
       <para>Avoid spaces and colons in file and directory names. 
       The <command>make</command> command
@@ -323,7 +323,7 @@
      </listitem>
     </varlistentry>
     <varlistentry>
-     <term>Unique Image Names</term>
+     <term>Unique image names</term>
      <listitem>
       <para>Always store just one file with a particular name within the
       <filename>images/src</filename> directory of a project. As &dapsacr; tries to
@@ -351,7 +351,7 @@
      </listitem>
     </varlistentry>
    </variablelist>
-   <note><title>Hint on Using UTF-8 characters in File Names</title>
+   <note><title>Hint on using UTF-8 characters in file names</title>
    <para>
      Depending on your environment, the build process could fail if you are using
      file names with UTF-8 characters. Run the <command>locale</command>
@@ -443,7 +443,7 @@
    </para>
    <variablelist>
     <varlistentry>
-     <term>&main; File</term>
+     <term>&main; file</term>
      <listitem>
       <para>
      A DocBook XML file in the <filename>xml</filename> directory. It contains the <quote>starting point</quote> (the
@@ -458,7 +458,7 @@
      </listitem>
     </varlistentry>
     <varlistentry>
-     <term>&dclong; (&dc;) File</term>
+     <term>&dclong; (&dc;) file</term>
      <listitem>
       <para>
       A configuration file in the project directory. It defines several parameters for your
@@ -649,7 +649,7 @@
 
 <!ENTITY daps-note-output-adv
 '<note>
-   <title>Availability of Advanced Output Options</title>
+   <title>Availability of advanced output options</title>
    <para>Advanced output options are only supported for selected formats. For example, 
    <option>--draft</option> and <option>--remarks</option> are only available in HTML, 
    HTML-single, PDF, and &epub; output.     
@@ -688,18 +688,18 @@
 
 <!ENTITY daps-example-validation-error
  ' <example>
-     <title>Parser Output For Validation Errors (<sgmltag>xref</sgmltag> to unknown ID)</title>
+     <title>Parser output for validation errors (<sgmltag>xref</sgmltag> to unknown ID)</title>
      <screen>daps_user_concept.xml:60: element xref: validity error:
 IDREF attribute linkend references an unknown ID "itl.daps.user.inst.other.req"
 Document /local/svn/daps-svn/daps/doc/build/.profiled/x86-amd64-em64t_osuse_/
 MAIN.DAPS.xml does not validate
 make: *** [validate] Error 3</screen>
 </example>
-<note><title>Validating is Done in Build Directory</title>
+<note><title>Validating is done in build directory</title>
 <para>Validation is always done in the <filename>build</filename>
 directory and in the profiled sources, as indicated by
  the path above (<filename>/local/[...]/build/.profiled/[...]/MAIN.DAPS.xml
- </filename>). However,  you need to fix the validation error in the sources located in your
+ </filename>). However, you need to fix the validation error in the sources located in your
  <filename>xml</filename> directory, otherwise the fixes will not take effect. 
  Profiling is similar to conditional text. For details, refer to the chapter
  about modularizing document projects in the &dapsuser;.
@@ -811,7 +811,7 @@ directory and in the profiled sources, as indicated by
     
 <!ENTITY daps-partial-builds
 '<para>Instead of always building your complete documentation project
-     (<sgmltag>set</sgmltag>, <sgmltag>book</sgmltag>, or
+     (<sgmltag>set</sgmltag>, <sgmltag>book</sgmltag> or
      <sgmltag>article</sgmltag>), &dapsacr; also allows you to build only
     individual parts. The <quote>starting point</quote> of your documentation
     project is usually defined by the root element of the &main; file that
@@ -824,7 +824,7 @@ directory and in the profiled sources, as indicated by
 
 <!ENTITY daps-img-format-support
 '<important>
-    <title>Limited Support with &dapsacr;</title>
+    <title>Limited support with &dapsacr;</title>
     <para>
      This image format is only supported in combination with the XEP formatter. Using this format
      might also lead to longer document creation times.
