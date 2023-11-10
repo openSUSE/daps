@@ -8,7 +8,7 @@
 %entities;
 ]>
 <chapter id="cha.daps.user.modular">
- <title>Modularizing Documentation Projects</title>
+ <title>Modularizing documentation projects</title>
  <para>
   This chapter covers the following topics:
   <itemizedlist>
@@ -37,17 +37,16 @@
   </itemizedlist>
  </para>
  <sect1 id="sec.daps.user.modular.xi">
-  <title>Splitting up Documents into XIncludes</title>
+  <title>Splitting up documents into XIncludes</title>
 
   <para>
    Instead of putting the contents of a complete article or book into the
-   &main; file, DocBook allows you to divide <remark>dpopov 2016-10-12:
-   s/divide/split ?</remark> the text into separate document files. They are
-   then assembled in the &main; file using <literal>XIncludes</literal> as
-   shown in <xref linkend="ex.daps.main.set"/>. XIncludes can be used for
+   &main; file, DocBook allows you to split the text into separate document 
+   files. They are then assembled in the &main; file using <literal>XIncludes</literal> 
+   as shown in <xref linkend="ex.daps.main.set"/>. XIncludes can be used for
    splitting up sets, books, articles or chapters into separate files. For
    more information, refer to
-   <ulink url="http://www.docbook.org/tdg51/en/html/ch02.html">
+   <ulink url="https://tdg.docbook.org/tdg/5.1/ch02.html">
    <citetitle>Physical Divisions: Breaking a Document into Separate
    Files</citetitle> </ulink>.
   </para>
@@ -59,7 +58,7 @@
   </para>
  </sect1>
  <sect1 id="sec.daps.user.modular.ent.separate">
-  <title>Declaring Entities in a Separate File</title>
+  <title>Declaring entities in a separate file</title>
 
   <para>
    When maintaining a large number of documents for a product, it can be
@@ -71,7 +70,7 @@
   </para>
 
   <example id="ex.daps.ent.decl.separate">
-   <title>Separate Entity File <filename>entity-decl.ent</filename></title>
+   <title>Separate entity file <filename>entity-decl.ent</filename></title>
 <screen>&lt;?xml version="1.0" encoding="iso-8859-1" ?&gt;
 &lt;!ENTITY exampleuser "tux"&gt;
 &lt;!ENTITY exampleuserII "wilber"&gt;
@@ -80,7 +79,7 @@
   </example>
 
   <example id="ex.daps.ent.decl.reference">
-   <title>Referencing A Separate Entity File</title>
+   <title>Referencing a separate entity file</title>
 <screen>&lt;?xml version="1.0"?&gt;
 &lt;!DOCTYPE chapter PUBLIC [...]
 [
@@ -88,7 +87,7 @@
   %entities; <co id="co.daps.main.reference.load"/>
 ]&gt;
 &lt;chapter&gt;
-&lt;title&gt;Managing User Accounts&lt;/title&gt;
+&lt;title&gt;Managing user accounts&lt;/title&gt;
 [...]</screen>
    <calloutlist>
     <callout arearefs="co.daps.main.reference.ent">
@@ -117,7 +116,7 @@
   <para>It is also possible to use multiple entity files by including them into
   the separate entity file that is referenced in the XML file.</para>
   <example id="ex.daps.ent.decl.separate.multi">
-   <title>Referencing Entity Files Within an Entity File</title>
+   <title>Referencing entity files within an entity file</title>
   <screen>&lt;?xml version="1.0" encoding="iso-8859-1" ?&gt;
 &lt;!ENTITY exampleuser "tux"&gt;
 &lt;!ENTITY exampleuserII "wilber"&gt;
@@ -142,17 +141,17 @@
   </example>
  </sect1>
  <sect1 id="sec.daps.user.modular.profile">
-  <title>Profiling&mdash;Support for Document Variants</title>
+  <title>Profiling&mdash;support for document variants</title>
   &db-profiling-intro;
   &db-profiling;
 
  <sect2 id="sec.daps.user.modular.profile.basics">
-   <title>Introduction to DocBook Profiling</title>
+   <title>Introduction to DocBook profiling</title>
    <para>
     DocBook offers profiling attributes for various purposes as illustrated
     in <ulink url="http://www.sagehill.net/docbookxsl/Profiling.html">
     <citetitle>Table 26.1. Profiling attributes</citetitle> </ulink>.
-    All of them are supported by &dapsacr;.
+    &dapsacr; supports them all.
     <!--Currently, not all of them are supported by &dapsacr;. For details,
     refer to <xref linkend="sec.daps.user.modular.profile.daps"/>.-->
    </para>
@@ -165,8 +164,7 @@
 <!--, see <xref linkend="ex.daps.profiling.inline"/>.-->
    </para>
    <para>
-    Based on the conditions that you want to apply <remark>dpopov 2016-10-12:
-    define conditions?</remark> , select one or more profiling attributes and
+    Based on the conditions that you want to apply, select one or more profiling attributes and
     add them to the text snippets that are conditional. The tagged snippets
     will only be included in the output if the required condition is
     fulfilled. Any content that is valid for <emphasis>all</emphasis>
@@ -186,7 +184,7 @@
     only available in the basic or the professional edition, respectively.
    </para>
    <example id="ex.daps.profile.one">
-    <title>Product-specific Profiling (One Attribute)</title>
+    <title>Product-specific profiling (one attribute)</title>
 <screen>&lt;simplelist&gt;
   &lt;member&gt;Common Feature 1&lt;/member&gt;
   &lt;member&gt;Common Feature 2&lt;/member&gt;
@@ -265,7 +263,7 @@
    </para>
    <table id="tab.daps.profile.output.one.without" rowsep="1">
     <title>Output of <xref linkend="ex.daps.profile.one" xrefstyle="select:
-     label"/> (Without Profiling)</title>
+     label"/> (without profiling)</title>
     <tgroup cols="2">
      <colspec colnum="1" colname="1" colwidth="50*"/>
      <colspec colnum="2" colname="2" colwidth="50*"/>
@@ -336,7 +334,7 @@
     only available in the OEM version:
    </para>
    <example id="ex.daps.profile.two">
-    <title>Product-specific Profiling (Multiple Attributes)</title>
+    <title>Product-specific profiling (multiple attributes)</title>
 <screen>&lt;simplelist&gt;
   &lt;member&gt;Common Feature 1&lt;/member&gt;
   &lt;member&gt;Common Feature 2&lt;/member&gt;
@@ -421,7 +419,7 @@
   </sect2>
 
   <sect2 id="sec.daps.user.modular.profile.daps">
-   <title>Using Profiling with &dapsacr;</title>
+   <title>Using profiling with &dapsacr;</title>
    <para>
     To create multiple documentation variants of the same pool of DocBook
     files with &dapsacr;, the following requirements need to be fulfilled:
@@ -451,7 +449,7 @@
     <xref linkend="sec.daps.user.modular.profile.daps.ex"/>.
    </para>
    <sect3 id="sec.daps.user.modular.profile.daps.pa">
-    <title>XML Files: Profiling Attributes</title>
+    <title>XML files: profiling attributes</title>
     <para>
      In &dapsacr;, each profiling attribute has a corresponding profiling parameter to be used in the
      &dc; file, see <xref linkend="sec.daps.user.modular.profile.daps.pp"/>.
@@ -463,7 +461,7 @@
      <literal>PROF</literal>.
     </para>
      <table id="tab.daps.profiling" rowsep="1">
-     <title>Profiling Attributes (DocBook) and Profiling Parameters (&dapsacr;)</title>
+     <title>Profiling attributes (DocBook) and profiling parameters (&dapsacr;)</title>
      <tgroup cols="3">
       <colspec colnum="1" colname="1" colwidth="20*"/>
       <colspec colnum="2" colname="2" colwidth="50*"/>
@@ -538,7 +536,7 @@
         </entry>
         <entry colname="2">
          <para>
-          Conformance to standards, as for example <literal>lsb</literal> (Linux Standards Base).
+          Conformance to standards, as, for example, <literal>lsb</literal> (Linux Standards Base).
          </para>
         </entry>
         <entry colname="3"><parameter>PROFCONFORMANCE</parameter>
@@ -706,28 +704,28 @@
     </table>
    </sect3>
    <sect3 id="sec.daps.user.modular.profile.daps.pi">
-    <title>&main; File: Processing Instruction</title>
+    <title>&main; File: processing instruction</title>
     <para>
      To activate generation of profiled output in &dapsacr;, the following
      processing instruction (PI) must be included in the header of the &main;
      file, before the root element.
     </para>
     <note>
-     <title>Adjusting the DocBook Version in the PI</title>
+     <title>Adjusting the DocBook version in the PI</title>
      <para>As the profiling PI includes the DocBook version number, it needs to
       be adjusted according to the DocBook version you use. See <xref
        linkend="ex.daps.user.modular.pi.db4"/> and <xref
        linkend="ex.daps.user.modular.pi.db5"/>.</para>
    </note>
     <example id="ex.daps.user.modular.pi.db4">
-     <title>Profiling PI in a DocBook 4.5 File</title>
+     <title>Profiling PI in a DocBook 4.5 file</title>
         <screen>&lt;?xml-stylesheet
   href="urn:x-daps:xslt:profiling:docbook45-profile.xsl"
   type="text/xml" ?></screen>
     </example>
 
     <example id="ex.daps.user.modular.pi.db5">
-     <title>Profiling PI in a DocBook 5.0 File</title>
+     <title>Profiling PI in a DocBook 5.0 file</title>
      <screen>&lt;?xml-stylesheet
   href="urn:x-daps:xslt:profiling:docbook50-profile.xsl"
   type="text/xml" ?></screen>
@@ -740,7 +738,7 @@
      output.
     </para>
     <tip>
-     <title>Include PI in All XML Files</title>
+     <title>Include PI in all XML files</title>
      <para>
       Although &dapsacr; only checks for the profiling PI in the &main; file, it
       is a good idea to  include the PI in all XML files for any projects that
@@ -753,7 +751,7 @@
     </tip>
    </sect3>
    <sect3 id="sec.daps.user.modular.profile.daps.pp">
-    <title>&dc; Files: Profiling Parameters</title>
+    <title>&dc; files: profiling parameters</title>
     <para>
      Depending on the profiling attributes used in your XML files, a &dc;
      file may contain multiple profiling parameters, see
@@ -766,7 +764,7 @@
     </para>
    </sect3>
    <sect3 id="sec.daps.user.modular.profile.daps.ex">
-    <title>Profiling Example</title>
+    <title>Profiling example</title>
     <para>
      In the following, find a comprehensive example that shows the basic
      &dapsacr; profiling requirements in more detail. It is based on the
@@ -778,7 +776,7 @@
      (XML files, &main; file, and &dc; file).
     </para>
     <example id="ex.daps.xml.pa">
-     <title>XML File With Profiling Attributes (DocBook 4.x)</title>
+     <title>XML file with profiling attributes (DocBook 4.x)</title>
 <screen><?dbsuse-fo font-size="0.70em"?>&lt;?xml version="1.0" encoding="utf-8"?&gt;
 [...]
 
@@ -837,7 +835,7 @@
     </example>
 
     <example id="ex.daps.main.pi.db4">
-     <title>&main; file With PI for Profiling (DocBook 4.5)</title>
+     <title>&main; file with PI for profiling (DocBook 4.5)</title>
 <screen>&lt;?xml version="1.0" encoding="utf-8"?&gt;
 <emphasis role="strong">&lt;?xml-stylesheet
  href="urn:x-daps:xslt:profiling:docbook45-profile.xsl"
@@ -863,7 +861,7 @@
      </example>
 
 <example id="ex.daps.main.pi.db5">
-     <title>&main; file With PI for Profiling (DocBook 5.0)</title>
+     <title>&main; file with PI for profiling (DocBook 5.0)</title>
 <screen>&lt;?xml version="1.0" encoding="utf-8"?&gt;
 <emphasis role="strong">&lt;?xml-stylesheet
  href="urn:x-daps:xslt:profiling:docbook50-profile.xsl"
@@ -894,7 +892,7 @@
      </example>
 
     <example id="ex.daps.dc.pa.home">
-     <title>&dc; File with Profiling for Home Edition</title>
+     <title>&dc; file with profiling for home edition</title>
 <screen>## Doc Config File for Frog Sound Recordings
 ## (Home Edition)
 
@@ -925,7 +923,7 @@ PROFCONDITION="basic" <co id="co.dc.pa.profcond.basic"/>
      </calloutlist>
     </example>
     <example id="ex.daps.dc.pa.prof">
-     <title>&dc; File with Profiling for Professional Edition</title>
+     <title>&dc; file with profiling for professional edition</title>
 <screen>## Doc Config File for Frog Sound Recordings
 ## (Professional Edition)
 
@@ -956,7 +954,7 @@ PROFCONDITION="prof" <co id="co.dc.pa.profcond.prof1"/>
      </calloutlist>
     </example>
     <example id="ex.daps.dc.pa.prof.oem">
-     <title>&dc; File with Profiling for Professional Edition (OEM Version)</title>
+     <title>&dc; file with profiling for professional edition (OEM version)</title>
 <screen>## Doc Config File for Frog Sound Recordings
 ## (Professional Edition, OEM Version)
 
@@ -999,7 +997,7 @@ PROFVENDOR="oemcompany" <co id="co.dc.pa.profvendor.oem"/>
   </sect2>
  </sect1>
  <sect1 id="sec.daps.user.modular.productentities">
-  <title>Combining Entities and Profiling</title>
+  <title>Combining entities and profiling</title>
 
   <para>
    For maximum flexibility in generating documentation variants from the
@@ -1017,7 +1015,7 @@ PROFVENDOR="oemcompany" <co id="co.dc.pa.profvendor.oem"/>
   </para>
 
   <example id="ex.daps.ent.decl.profiling">
-   <title>Separate Entity File with Profiling Attributes (DocBook 5.0)</title>
+   <title>Separate entity file with profiling attributes (DocBook 5.0)</title>
 <screen><?dbsuse-fo font-size="0.60em"?>&lt;!--the following declarations are contained in the file entity-decl.ent --&gt;
 
 &lt;!ENTITY productname
@@ -1037,7 +1035,7 @@ PROFVENDOR="oemcompany" <co id="co.dc.pa.profvendor.oem"/>
 
 
    <procedure id="pro.daps.modular.productentities">
-   <title>Using Product Entities with Profiling in XML Files</title>
+   <title>Using product entities with profiling in XML files</title>
    <para> After declaring the entities as shown in <xref
      linkend="ex.daps.ent.decl.profiling" xrefstyle="select:label"/> you can use
     them throughout your documents. For &dapsacr; to process them correctly,
@@ -1089,8 +1087,8 @@ PROFVENDOR="oemcompany" <co id="co.dc.pa.profvendor.oem"/>
    document, use the entities in the text wherever you need them. </para>
 
   <example id="ex.daps.art.prof.ent.db4">
-   <title>XML File with <literal>&amp;productname;</literal> and
-    <literal>&amp;productnumber;</literal> Entities (DocBook 4.5)</title>
+   <title>XML file with <literal>&amp;productname;</literal> and
+    <literal>&amp;productnumber;</literal> entities (DocBook 4.5)</title>
 <screen><?dbsuse-fo font-size="0.65em"?>
 &lt;?xml version="1.0" encoding="utf-8"?&gt;
 
@@ -1162,8 +1160,8 @@ PROFVENDOR="oemcompany" <co id="co.dc.pa.profvendor.oem"/>
   </example>
 
  <example id="ex.daps.art.prof.ent.db5">
-   <title>XML File with <literal>&amp;productname;</literal> and
-    <literal>&amp;productnumber;</literal> Entities (DocBook 5.0)</title>
+   <title>XML file with <literal>&amp;productname;</literal> and
+    <literal>&amp;productnumber;</literal> entities (DocBook 5.0)</title>
 <screen><?dbsuse-fo font-size="0.65em"?>
 &lt;?xml version="1.0" encoding="utf-8"?&gt;
 
@@ -1254,9 +1252,9 @@ PROFVENDOR="oemcompany" <co id="co.dc.pa.profvendor.oem"/>
   </para>
 
   <table id="tab.daps.profile.output.four" rowsep="1">
-   <title>Output Variants of <xref linkend="ex.daps.art.prof.ent.db4"
+   <title>Output variants of <xref linkend="ex.daps.art.prof.ent.db4"
     xrefstyle="select:label"/> / <xref linkend="ex.daps.art.prof.ent.db5"
-    xrefstyle="select:label"/> Combined With <xref
+    xrefstyle="select:label"/> combined with <xref
      linkend="ex.daps.ent.decl.profiling" xrefstyle="select:label"/></title>
    <tgroup cols="2">
     <colspec colnum="1" colname="1" colwidth="50*"/>
