@@ -992,6 +992,7 @@ while true ; do
             ;;
         -d|--docconfig|-e|--envfile)
             # make path absolute and strip trailing slash
+            [[ -h "$2" ]] && exit_on_error "The DC-file must not by a symbolic link."
             sanitize_path "$2" "DOCCONF"
             shift 2
             ;;
