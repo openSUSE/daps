@@ -44,7 +44,7 @@
   </para>
   <note>
      <para>DocBook 4 is still used in many places, so &dapsacr; continues to
-      support it. This guide focuses more on DocBook 5 that offers many 
+      support it. This guide focuses on DocBook 5 that offers many 
       improvements over DocBook 4, including a more modern and flexible 
       markup language, a wider range of output formats and new features 
       that make it easier to manage and produce complex documents.</para>
@@ -359,7 +359,7 @@
   </tip>
   
   <example id="ex.daps.main.art.db5">
-    <title>&main; file of an article (DocBook 5.x)</title>
+    <title>&main; file of an article</title>
 <screen>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 [...]
 
@@ -443,7 +443,7 @@
    </para>
 
    <example id="ex.daps.main.book.db5">
-    <title>&main; file of a book (DocBook 5.x)</title>
+    <title>&main; file of a book</title>
 <screen>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 [...]
 
@@ -554,18 +554,17 @@ STYLEROOT="/usr/share/xml/docbook/stylesheet/custom/xslt" <co id="co.daps.dc.boo
    </para>
 
    <example id="ex.daps.main.set">
-    <title>&main; file of a set (DocBook 4.x)</title>
+    <title>&main; file of a set</title>
 <screen>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 [...]
 
-<emphasis role="strong">&lt;set lang="en"&gt;</emphasis>
+<emphasis role="strong">&lt;set xml:lang="en" 
+            xmlns="http://docbook.org/ns/docbook"
+            xmlns:xi="http://www.w3.org/2001/XInclude"&gt;</emphasis>
  &lt;title&gt;&dapsacr; Documentation&lt;/title&gt;
- &lt;xi:include href="book_daps_user.xml"
-             xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;
- &lt;xi:include href="book_daps_quickstarts.xml"
-             xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;
- &lt;!&#45;&#45;&lt;xi:include href="book_daps_developer.xml"
-             xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;&#45;&#45;&gt;
+ &lt;xi:include href="book_daps_user.xml"/&gt;
+ &lt;xi:include href="book_daps_quickstarts.xml"/&gt;
+ &lt;!&#45;&#45;&lt;xi:include href="book_daps_developer.xml"/&gt;&#45;&#45;&gt;
 <emphasis role="strong">&lt;/set&gt;</emphasis></screen>
    </example>
 
@@ -1126,9 +1125,6 @@ IMG_SRC_DIR=imgs</screen>
   </sect2>
  </sect1>
 
-  <!--taroth 2012-05-08: updated until here, todo: add directory stuff created by
-     DAPS-->
-
  <sect1 id="sec.daps.user.syntax">
   <title>Basic &dapsacr; syntax</title>
 
@@ -1182,7 +1178,7 @@ IMG_SRC_DIR=imgs</screen>
     <callout arearefs="co.daps.user.syntax.static">
      <para>
       Command option <option>--static</option>: Tells &dapsacr; to copy CSS
-      and image files to the same location like the HTML files. For more
+      and image files to the same location as the HTML files. For more
       information, see <xref linkend="tab.daps.user.output.overview"/>.
      </para>
     </callout>
