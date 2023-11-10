@@ -8,7 +8,7 @@
 %entities;
 ]>
 <chapter id="cha.daps.user.output">
- <title>Generating Output Formats</title>
+ <title>Generating output formats</title>
  <abstract>
   <para>
    This chapter covers the following topics:
@@ -41,7 +41,7 @@
   </para>
  </abstract>
  <sect1 id="sec.daps.user.output.validate">
-  <title>Validating Your XML Sources</title>
+  <title>Validating your XML sources</title>
   &daps-validation-basics;
   &daps-example-validation-error;
   <para>
@@ -69,36 +69,31 @@
 
   <variablelist>
    <varlistentry>
-    <term>Validating All XML Files in a Book, Article or Set</term>
+    <term>Validating all XML files in a book, article or set</term>
     <listitem>
 <screen>&prompt.user;&dapscmd; -d <replaceable>PATH_TO_DC_FILE</replaceable> validate </screen>
      <para>
-      If the XML files are not valid, &dapsacr; will return the parser
-      errors. If validation was successful, &dapsacr; returns: <literal>All
-      files are valid.</literal>
+      If the XML files are not valid, &dapsacr; returns parser
+      errors. If validation was successful, &dapsacr; returns: <literal>Document is valid.</literal>
      </para>
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term>Validating Files Including <sgmltag>remark</sgmltag> Elements</term>
+    <term>Validating files including <sgmltag>remark</sgmltag> elements</term>
     <listitem>
 <screen>&prompt.user;&dapscmd; -d <replaceable>PATH_TO_DC_FILE</replaceable> validate --remarks</screen>
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term>Validating Files Without Checking Cross References (<sgmltag>xref</sgmltag>)</term>
+    <term>Validating files without checking cross references (<sgmltag>xref</sgmltag>)</term>
     <listitem>
 <screen>&prompt.user;&dapscmd; -d <replaceable>PATH_TO_DC_FILE</replaceable> validate --norefcheck</screen>
-     <para>
-      This option only affects DocBook 5 sources and is ignored when
-      processing DocBook 4.
-     </para>
-    </listitem>
+   </listitem>
    </varlistentry>
   </variablelist>
  </sect1>
  <sect1 id="sec.daps.user.output.syntax">
-  <title>Basic Syntax for Generating Output</title>
+  <title>Basic syntax for generating output</title>
 
   <para>
    &dapsacr; supports a number of different output formats, including also
@@ -110,7 +105,7 @@
   <para>
    You can build several output formats (without them interfering with each
    other in the <filename>build</filename> directory), build your complete
-   documentation project (set, book, or article), or only a part of it (for
+   documentation project (set, book or article), or only a part of it (for
    example, a specific chapter).
   </para>
 
@@ -149,18 +144,18 @@
   me...</remark>-->
 
   <table id="tab.daps.user.output.overview">
-   <title>&dapsacr; Output Commands and Formats</title>
+   <title>&dapsacr; Output commands and formats</title>
    <xi:include href="daps_table_output_formats_i.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
   </table>
   &daps-output-all;
   <para>
-   By default, &dapsacr; uses the regular DocBook stylesheets, but &dapsacr;
-   also allows you to customize your output formats in a very flexible way.
+   By default, &dapsacr; uses the regular DocBook style sheets, but &dapsacr;
+   also allows you to customize your output formats in a flexible way.
    For details, refer to <xref linkend="cha.daps.user.layout"/>.
   </para>
  </sect1>
  <sect1 id="sec.daps.user.output.adv">
-  <title>Advanced Output Options</title>
+  <title>Advanced output options</title>
 
   <para>
    In the following, find some example commands for special use cases, like
@@ -177,27 +172,27 @@
 
   <variablelist>
    <varlistentry>
-    <term>Building Only Parts of a Documentation Project</term>
+    <term>Building only parts of a documentation project</term>
     <listitem>
 <screen>&prompt.user;&dapscmd; -d &dc;-daps-example pdf --rootid=cha.template.examples</screen>
      &daps-partial-builds;
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term>Specifying the &main; File on the Command Line</term>
+    <term>Specifying the &main; file on the command line</term>
     <listitem>
 <screen>&prompt.user;&dapscmd; -m <replaceable>PATH_TO_MAIN_FILE</replaceable></screen>
      <para>
       If you do not need to specify any further parameters than the &main;
       file, you can do completely without a &dc; file. With the
-      <option>-m</option> option you can specify the &main; file defining
+      <option>-m</option> option, you can specify the &main; file defining
       your document. The options <option>-m</option> and <option>-d</option>
       exclude each other.
      </para>
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term>Opening the Output Directly in a PDF Viewer</term>
+    <term>Opening the output directly in a PDF viewer</term>
     <listitem>
      <screen>&prompt.user;<command>evince</command> $(daps -d &dc;-daps-example pdf) &amp;</screen>
      <para>Use the syntax above to open the PDF output directly in a PDF viewer (for example,
@@ -205,7 +200,7 @@
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term>Getting More Information about the Build Process</term>
+    <term>Getting more information about the build process</term>
     <listitem>
      <para>
       By default &dapsacr;, only provides the path to the resulting file as
@@ -216,7 +211,7 @@
      <para>
       Output verbosity ranges from <option>-v</option> (print one line of
       results) to <option>-vvv</option> (print all commands, very verbose).
-      For example, the following command will print all files created during
+      For example, the following command prints all files created during
       the build process:
      </para>
      <screen>&prompt.user;&dapscmd; -vv -d &dc;-daps-example pdf</screen>
@@ -225,13 +220,13 @@
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term>Specifying the Number of Parallel Jobs During the Build Process</term>
+    <term>Specifying the number of parallel jobs during the build process</term>
     <listitem>
      <para>
-      By default &dapsacr; uses as many jobs as there are CPU cores
+      By default, &dapsacr; uses as many jobs as there are CPU cores
       available. Use the option <option>--jobs</option> to define the number
       of parallel jobs used for the build process. Higher numbers will lower
-      the build time, but will also increase CPU load. For example, the
+      the build time, but also increase CPU load. For example, the
       following command will use 16 jobs for the build process:
     </para>
      <screen>&prompt.user;&dapscmd; --jobs=16 -d &dc;-daps-example pdf</screen>
@@ -240,12 +235,12 @@
   </variablelist>
  </sect1>
  <sect1 id="sec.daps.user.output.xmlformat">
-  <title>Pretty XML Formatting</title>
+  <title>Pretty XML formatting</title>
   <para>
-   It can be useful to have properly formatted XML sources.
+   It is useful to have properly formatted XML sources.
    A homogeneous formatting facilitates collaboration and makes diffs more readable.
    If done consistently, <command>xmlformat</command> reduces the amount of changes
-   that need to be stored in version control systems which leads to smaller repositories.
+   that need to be stored in version control systems, which leads to smaller repositories.
   </para>
   <variablelist>
    <varlistentry>
@@ -269,7 +264,7 @@
   </variablelist>
   <important>
    <title>
-    <command>xmlformat</command> Alters Source XML Files
+    <command>xmlformat</command> alters source XML files
    </title>
    <para>
     This command reformats your XML files in place, replacing their contents with the reformatted XML.
@@ -278,14 +273,14 @@
   </important>
  </sect1>
  <sect1 id="sec.daps.user.output.timestamp">
- <title>Putting the current Date and Time into the Target Document</title>
+ <title>Putting the current date and time into the target document</title>
  <para>
  To get information about the build date and time, you can use the <sgmltag class="pi">dbtimestamp</sgmltag> tag.
  The processing instruction <sgmltag class="pi">dbtimestamp</sgmltag> is processed by &daps;, when the document
- is built. The date and time will then show up in the final document, based on how you've set the date/time format.
+ is built. The date and time then show up in the final document, based on how you've set the date/time format.
  </para>
  <example>
-	 <title>Example for implementing the dbtimestamp tag in an XML File:</title>
+	 <title>Example for implementing the dbtimestamp tag in an XML file:</title>
    <screen>&lt;para>Current date: &lt;?dbtimestamp?>.&lt;/para></screen>
  </example>
  <para>
@@ -296,7 +291,7 @@
 	 <screen>&lt;para>Current date: &lt;?dbtimestamp format="A, d B Y"?>.&lt;/para></screen>
  </example>
  <para>
- For further information about the format elements look at this site:
+ For further information about the format elements, look at this site:
  <ulink  url="http://www.sagehill.net/docbookxsl/Datetime.html"/>  
  </para>
  </sect1>
