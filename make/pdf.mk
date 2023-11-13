@@ -34,38 +34,6 @@ STYLEFO    := $(firstword $(wildcard $(addsuffix \
 STYLE_GENINDEX := $(DAPSROOT)/daps-xslt/index/xml2idx.xsl
 STYLE_ISINDEX  := $(DAPSROOT)/daps-xslt/common/search4index.xsl
 
-# Issue #419
-# The upstream stylesheets set paths for admon, callout, and navig graphics
-# to "images/" by default. However, DAPS' HTML builds require to set these
-# paths to static/images/ regardless what the stylesheets set
-# To ensure the same path ("static/images/") can be used for HTML and PDF
-# we need to create "static/images/" relative to the FO file
-# This is done by the target $(TMP_STATIC_IMG_DIR): by setting a link to the
-# stylesheet image or static directory
-# In addition to that, we will also create a link $(TMP_DIR)/images to ensure
-# building PDFs without explicitly setting a path for admon/callouts works
-# as well.
-#
-# First, determine whether we have <STYLEROOT>/static or <STYLEROOT>/images
-# (for a detailed explanation see html.mk)
-#
-# If we have a static directory, we can create a link to it in $(TMP_DIR)
-# If we have an image directory, $(TMP_DIR)/static needs to be created and
-# then a link to images in $(TMP_DIR)/static
-#
-ifdef STATIC_DIR
-  STYLEIMG  := $(STATIC_DIR)
-  IS_STATIC := static
-else
-  STYLEIMG := $(firstword $(wildcard \
-		$(addsuffix static, $(dir $(STYLEFO)))\
-		$(addsuffix static,$(dir $(patsubst %/,%,$(dir $(STYLEFO)))))\
-		$(addsuffix images,$(dir $(patsubst %/,%,$(dir $(STYLEFO)))))))
-  IS_STATIC := $(notdir $(STYLEIMG))
-endif
-
-TMP_STATIC_DIR     := $(TMP_DIR)/static
-
 # Draft mode can be enabled for PDFs, so we need to add the
 # corresponding strings to the resulting filename
 #
@@ -128,44 +96,37 @@ ifeq "$(FORMATTER)" "xep"
 endif
 
 
-# Issue #419 continued
-# The links to image or static directories need to be removed once the PDF
-# has been built, since we do not know which stylesheets (and therefore
-# which image directories) will be used in the next build.
-# Since $(TMP_DIR)/static/ can be a directory, INTERMEDIATE will not work
-# (does not remove directories), therefor using an explicit
-# rm in $(PDF_RESULT):
+# Issue #419
+# The upstream stylesheets set paths for admon, callout, and navig graphics
+# to "images/" by default. However, it is easier to collect images, css, and Javascript
+# files under a directory "<STYLEROOT>/static". DAPS supports this
+#
+# For fo it supports the following:
+# 1. <STYLEROOT>/fo/static/images
+# 2. <STYLEROOT>/fo/images
+# 3. <STYLEROOT>/static/images
+# 4. <STYLEROOT>/images
+#
+# In this order. First one wins
+#
 
-ifneq "$(IS_STATIC)" "static"
-  #  
-  # we have <STYLEROOT>/image
-  # 1. create $(TMP_DIR)/static
-  # 2. create link to images in $(TMP_DIR)/static
-  # 3. create lilnk $(TMP_DIR)/images
-  #
-  TMP_IMG_DIR        := $(TMP_DIR)/images
-  TMP_STATIC_IMG_DIR := $(TMP_STATIC_DIR)/images
-
-
-  $(TMP_STATIC_DIR): | $(TMP_DIR)
-	mkdir -p $@
-
-  $(TMP_STATIC_IMG_DIR): | $(TMP_STATIC_DIR)
-	(cd $(TMP_STATIC_DIR) && ln -sf $(STYLEIMG))
-
-  $(TMP_IMG_DIR): | $(TMP_DIR)
-	(cd $(TMP_DIR) && ln -sf $(STYLEIMG))
-
+ifdef STATIC_DIR
+  _STYLEIMG  := $(STATIC_DIR)
+#  IS_STATIC := static
 else
-  #  
-  # we have <STYLEROOT>/static
-  # create link to static in $(TMP_DIR)
-  #
-  $(TMP_STATIC_DIR): | $(TMP_DIR)
-	(cd $(TMP_DIR) && ln -sf $(STYLEIMG))
-
+  _STYLEIMG := $(firstword $(wildcard \
+		$(addsuffix static/images, $(dir $(STYLEFO)))\
+		$(addsuffix images, $(dir $(STYLEFO)))\
+		$(addsuffix static/images,$(dir $(patsubst %/,%,$(dir $(STYLEFO)))))\
+		$(addsuffix images,$(dir $(patsubst %/,%,$(dir $(STYLEFO)))))))
+#  IS_STATIC := $(notdir $(STYLEIMG))
 endif
 
+# Remove training slash if present
+#
+STYLEIMG=$(patsubst %/,%,$(_STYLEIMG))
+
+FOSTRINGS += --stringparam "admon.graphics.path=$(STYLEIMG)/"
 
 #--------------
 # PDF
@@ -245,7 +206,6 @@ $(PDF_RESULT): $(FOFILE)
 	@ccecho "info" "   Creating PDF from fo-file..."
   endif
 	(cd $(dir $(FOFILE)) && $(FORMATTER_CMD) $< $@ $(DEVNULL) $(ERR_DEVNULL))
-	@rm -rf $(TMP_STATIC_DIR) $(TMP_IMG_DIR)
   ifeq "$(VERBOSITY)" "2"
     ifneq "$(HAVE_PDFFONTS)" ""
 	@pdffonts $@ | tail -n +3 | awk '{print $5}' | grep -v "yes" \
