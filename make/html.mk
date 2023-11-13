@@ -100,6 +100,7 @@ else
   #
   STYLEIMG := $(firstword $(wildcard \
 		$(addsuffix static, $(dir $(STYLEHTML)))\
+		$(addsuffix images, $(dir $(STYLEHTML)))\
 		$(addsuffix static,$(dir $(patsubst %/,%,$(dir $(STYLEHTML)))))\
 		$(addsuffix images,$(dir $(patsubst %/,%,$(dir $(STYLEHTML)))))))
 
