@@ -244,14 +244,14 @@
    formats. For example, SVG images are converted to PNG for HTML builds, or
    color images to grayscale for black-and-white PDFs. You only need to decide
    which file format to use as source format. Of course, this decision depends on
-   the purpose of the image. For more details, see the &dapsuser;.
+   the purpose of the image.
   </para>'>
 
 <!ENTITY daps-images-dir
 '    &dapsacr; requires you to use a specific directory structure for images. All
      images that you reference from your DocBook files must be stored in
      a subdirectory of the project directory named
-     <filename>images/src/file_extension</filename>. For example, <acronym>PNG</acronym>
+     <filename>images</filename>. For example, <acronym>PNG</acronym>
      files must be stored under <filename>images/src/png</filename>. If you used
      <command>daps-init</command> to set up your project, the appropriate
      directories should already exist.
@@ -267,22 +267,12 @@
    </listitem>
    <listitem>
     <para>
-     EPS (experimental)
-    </para>
-   </listitem>
-   <listitem>
-    <para>
      FIG (input format only)
     </para>
    </listitem>
    <listitem>
     <para>
      JPEG
-    </para>
-   </listitem>
-   <listitem>
-    <para>
-     PDF (experimental - only works for PDF output and with XEP formatter)
     </para>
    </listitem>
    <listitem>
@@ -295,6 +285,11 @@
      SVG
     </para>
    </listitem>
+   <listitem>
+    <para>
+     ODG
+    </para>
+   </listitem>
   </itemizedlist>">
 
 <!ENTITY daps-file-names-req
@@ -303,7 +298,7 @@
      <term>XML extension required</term>
      <listitem>
      <para>
-       Always use the .xml extension, so DAPS can recognize the files, which are
+       Always use the .xml extension, so DAPS can recognize the files that are
        needed to build the document.
      </para>
      </listitem>
@@ -318,21 +313,22 @@
        </para>
        <para>It is good practice to only use the following characters for
        file or directory names: alphabetic characters [a-z] or [A-Z], numerical
-       characters [0-9], hyphens (<literal>-</literal>), or underscores
+       characters [0-9], hyphens (<literal>-</literal>) and underscores
        (<literal>_</literal>).</para>
      </listitem>
     </varlistentry>
     <varlistentry>
      <term>Unique image names</term>
      <listitem>
-      <para>Always store just one file with a particular name within the
-      <filename>images/src</filename> directory of a project. As &dapsacr; tries to
-      create any missing image formats from original images, it will otherwise
-      not know which one of the duplicate files to use for converting to the
-      missing formats.</para>
+      <para>Make sure there are never two (or more) images with the same base 
+      name in one documentation project. Always store just one file with a 
+      particular name in the <filename>images/src</filename> directory of a project.
+      As &dapsacr; tries to create any missing image formats from the original 
+      images, it will otherwise not know which one of the duplicate files to 
+      use for converting to the missing formats.</para>
       <para>Additionally, having a file called <filename>example.png</filename>
-      and another called <filename>example.svg</filename> in the same documentation
-      project will often lead to  questions like: Which file to use where? Do
+      and another one called <filename>example.svg</filename> in the same documentation
+      project will often lead to questions like: Which file to use where? Do
       both files display the same content? Are both files current, or is one
       outdated?</para>
       <para>
@@ -343,7 +339,7 @@
      </para>
      <para>
       It is a good idea to find a consistent file naming scheme. For example, when
-      documenting software, it might prove helpful to include the name of the
+      documenting software, it is helpful to include the name of the
       application at the beginning of the file name. You can also use prefixes like
      <filename>screenshot_</filename> and <filename>diagram_</filename>
       to separate between different types of images.
@@ -355,7 +351,7 @@
    <para>
      Depending on your environment, the build process could fail if you are using
      file names with UTF-8 characters. Run the <command>locale</command>
-     command and check if the LANG environment variable contains UTF-8. Otherwise
+     command and check if the LANG environment variable contains UTF-8. Otherwise,
      adjust the LANG environment variable accordingly.
    </para>
    </note>
@@ -376,7 +372,7 @@
     two references pointing to the same file, but using different images
     widths for PDF and HTML output. Use the
     <sgmltag class="attribute">role</sgmltag> attribute to specify the
-    output format, for example <sgmltag class="attvalue">fo</sgmltag> or
+    output format, for example, <sgmltag class="attvalue">fo</sgmltag> or
     <sgmltag class="attvalue">html</sgmltag>.
     </para>'>
 
@@ -386,7 +382,7 @@
     a PNG version for HTML output (<literal>role="html"</literal>), reference the images as follows:
    </para>
 <screen>&lt;figure&gt;
-  &lt;title&gt;Main Window&lt;/title&gt;
+  &lt;title&gt;Main window&lt;/title&gt;
   &lt;mediaobject&gt;
     &lt;imageobject role="fo"&gt;
       &lt;imagedata fileref="graphic.svg" width="70&#37;"/&gt;
@@ -394,6 +390,9 @@
     &lt;imageobject role="html"&gt;
       &lt;imagedata fileref="graphic.png" width="75&#37;"/&gt;
     &lt;/imageobject&gt;
+    &lt;textobject role="description"&gt;
+    &lt;phrase&gt;Cat chasing Geeko&lt;/phrase&gt;
+  &lt;/textobject&gt;
   &lt;/mediaobject&gt;
 &lt;/figure&gt;</screen>'>
 
@@ -638,12 +637,12 @@
 
 <!ENTITY daps-output-remarks
 '<para>When generating PDFs with FOP, the contents of the remark elements
-     is shown in italics within the text. XEP supports conversion of remark
+     are shown in italics within the text. XEP supports conversion of remark
      elements into PDF annotations. This feature is enabled in &dapsacr; by
      default, but if you want XEP to treat remark elements like FOP does, you
      can change the respective &dapsacr; parameter.<remark>taroth 2012-10-16:
      todo - add link as soon as this is covered in &dapsuser;</remark> In HTML,
-     HTML-single and &epub; output, the contents of the remark elements is shown
+     HTML-single and &epub; output, the contents of the remark elements are shown
      in red within the text.
     </para>'>
 
