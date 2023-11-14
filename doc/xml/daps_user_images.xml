@@ -8,7 +8,7 @@
 %entities;
 ]>
 <chapter id="cha.daps.user.img">
- <title>Image Handling</title>
+ <title>Image handling</title>
  <abstract>
   <para>
    This chapter covers the following topics:
@@ -20,13 +20,12 @@
     </listitem>
     <listitem>
      <para>
-      Distinction between source images and generated images. The
-      image directory structure required by &dapsacr;.
+      Distinction between source images and generated images.
      </para>
     </listitem>
     <listitem>
      <para>
-      Image directory structure required by &dapsacr;.
+      Image directory structure required by &dapsacr;
      </para>
     </listitem>
     <listitem>
@@ -48,30 +47,27 @@
   </para>
  </abstract>
  <sect1 id="sec.daps.user.imgs.usage">
-  <title>Supported Image Types</title>
+  <title>Supported image types</title>
   &daps-images-intro;
   &daps-img-formats;
 
   <para>
     There are two types of image formats: pixel-based (also called bitmap
-    formats) and vector-based.  In pixel-based image formats the data
+    formats) and vector-based. In pixel-based image formats, the data
     describes the characteristics of each pixel. Vector-based image formats
     contain a geometric description that can be rendered
-    smoothly. Vector-based images are
-    resolution-independent&mdash;<remark>dpopov 2016-10-11: scalable is better
-    than resolution-independent?</remark> they can be displayed or printed as
-    large or small as you want without showing pixel artifacts.
+    smoothly. Vector-based images are scalable, or resolution-independent&mdash;they
+    can be displayed or printed as large or small as you want without showing pixel artifacts.
   </para>
 
   <para>Among the supported image types listed below, only JPEG and PNG are pixel-based
   image formats.</para>
 
-
   <important>
    <title>Image file names</title>
    <para>
-    The general rule, that file names for DAPS must not include spaces, also
-    applies to images. Furthermore, you must use lowercase file name extensions:
+    The general rule that file names for &dapsacr; must not include spaces also
+    applies to images. Use lowercase file name extensions:
    </para>
    <itemizedlist>
     <listitem>
@@ -87,51 +83,25 @@
    </itemizedlist>
   </important>
 
-
   <sect2 id="sec.daps.user.imgs.usage.dia">
    <title>DIA</title>
-   <para>Can only be used as input format for &dapsacr;.</para>
    <para>
-    DIA is a vector image format which means it is resolution-independent.
-    Images in this format can be displayed or printed as large or small as you
-    want without showing pixel artifacts. The format is suited especially well
-    for creating diagrams. DIA files are XML files that are automatically
-    compressed when saving, thus they are often quite small.
-   </para>
+    DIA is a vector image format, which means it is resolution-independent.
+    The format is suited especially well for creating diagrams. Dia makes it easy 
+    to connect elements, add text and use simple fill and border colors.</para>
    <para>
-    DIA files can be created using the <ulink
-    url="https://live.gnome.org/Dia">Dia</ulink> application. Dia is a diagram
-    editor for drawing entity-relationship diagrams, UML diagrams, and
-    flowcharts.
-   </para>
+    DIA files can be created using the <ulink url="https://live.gnome.org/Dia">Dia</ulink> 
+    application. Dia is a diagram editor for drawing entity-relationship diagrams,
+    UML diagrams and flowcharts. DIA files are XML files that are automatically 
+    compressed when saving, so they are often quite small.</para>
    <para>
-    Dia makes it easy to connect elements, add text, and use simple fill and
-    border colors. Although Dia can import <acronym>SVG</acronym> files as
+    Although Dia can import <acronym>SVG</acronym> files as
     shapes, it is not useful for freely drawing shapes itself. Dia is not
-    designed for creating complex or effect-heavy vector illustrations and
-    information graphics.
-   </para>
+    designed to create complex or effect-heavy vector illustrations and
+    information graphics. DIA can only be used as input format for &dapsacr;.</para>
  </sect2>
 
-  <sect2 id="sec.daps.user.imgs.usage.eps">
-   <title>EPS</title>
-   <para>
-    The <emphasis>Encapsulated PostScript</emphasis> (EPS) format is a
-    general purpose vector image format. As a Postscript-based format, it is
-    similar to <acronym>PDF</acronym>. There is currently no mainstream
-    Linux image editor software that creates <acronym>EPS</acronym> files
-    natively, although various applications can export into it.
-   </para>
-   <para>
-    Where possible, use <acronym>SVG</acronym> files instead of
-    <acronym>EPS</acronym> files (also because EPS images only work with XEP
-    formatter at the moment).  <acronym>EPS</acronym> can occasionally serve
-    as an exchange format with contributors that use Adobe* graphics software.
-   </para>
-   &daps-img-format-support;
-  </sect2>
-
-  <sect2 id="sec.daps.user.imgs.usage.jpeg">
+ <sect2 id="sec.daps.user.imgs.usage.jpeg">
    <title>JPEG</title>
    <para>
      <acronym>JPEG</acronym> stands for <emphasis>Joint Photographic Experts
@@ -140,7 +110,7 @@
      the most common image format used by digital cameras and widely used for
      displaying photographs on the Web. Because of its lossy compression
      algorithm, the resulting file sizes are rather small compared to lossless
-     graphics format such as TIFF, GIF, PNG, or a raw image format. The
+     graphics format, such as TIFF, GIF, PNG, or a raw image format. The
      compression algorithm works well for photographs and paintings with
      smooth variations of tone and color. However, JPEG is not well suited for
      textual or iconic graphics, because sharp contrasts between adjacent
@@ -149,20 +119,6 @@
      image quality deteriorates each time the file is decompressed and
      recompressed. This is especially true if the image is cropped or shifted.
    </para>
-  </sect2>
-
-
-  <sect2 id="sec.daps.user.imgs.usage.pdf">
-   <title>PDF</title>
-   <para>
-    The <emphasis>Portable Document File</emphasis> format is a general
-    purpose, page-based, fixed-layout document format. <acronym>PDF</acronym>
-    is a PostScript-based format. There is a large number of Linux tools that
-    can export <acronym>PDF</acronym> files natively. <acronym>PDF</acronym>
-    files can also be used as an exchange format with contributors that cannot
-    export to <acronym>SVG</acronym>.
-   </para>
-   &daps-img-format-support;
   </sect2>
 
   <sect2 id="sec.daps.user.imgs.usage.png">
@@ -206,7 +162,7 @@
      version. Custom SVG formats might not be compatible with the components
      used by &dapsacr; for processing SVG files.
     </para>
-    <para>XEP and FOP formatter only support SVG 1.0.</para>
+    <para>XEP and FOP formatters only support SVG 1.0.</para>
    </important>
    <para>
     The multi-platform open source <ulink url="http://inkscape.org/">Inkscape</ulink> editor is a good choice for working with <acronym>SVG</acronym> files. You can also create <acronym>SVG</acronym>
@@ -217,7 +173,7 @@
 
  </sect1>
  <sect1 id="sec.daps.user.imgs.src.gen">
-  <title>Source Images and Generated Images</title>
+  <title>Source images and generated images</title>
 
   <para>
    &dapsacr; differentiates between source images (any images that
@@ -237,7 +193,7 @@
 
   <para>
    &dapsacr; uses source images to automatically generate appropriate image
-   formats for each output format. The geneerated images are stored in
+   formats for each output format. The generated images are stored in
    <filename>build/.images/</filename> within the project directory. If an
    image referenced in your DocBook files is changed, &dapsacr; detects this
    and generates new versions of the image automatically.
@@ -246,59 +202,59 @@
   <para>
    &dapsacr; provides commands for getting an overview of source images or
    generated images and for managing both. For details, refer to <xref
-   linkend="sec.daps.user.imgs.manage"/>
+   linkend="sec.daps.user.imgs.manage"/>.
   </para>
  </sect1>
  <sect1 id="sec.daps.user.imgs.req">
-  <title>File Name Requirements</title>
+  <title>File name requirements</title>
    &daps-file-names-req;
   </sect1>
  <sect1 id="sec.daps.user.imgs.refer">
-  <title>Referencing Images</title>
+  <title>Referencing images</title>
   &daps-img-ref;
   <example id="ex.daps.user.xml.img.ref">
-   <title>Image Reference in an XML File</title>
+   <title>Image reference in an XML file</title>
      &ex-daps-img-ref;
   </example>
  </sect1>
  <sect1 id="sec.daps.user.imgs.manage">
-  <title>&dapsacr; Commands for Managing Images</title>
+  <title>&dapsacr; Commands for managing images</title>
 
   <para>
     &dapsacr; offers several subcommands for managing images in a
-    documentation project. These commands can be used to list images that are
+    documentation project. These commands can list images that are
     used or not used in a project, or referenced in a DocBook file but missing
     from the file system.
   </para>
   <para>
-    In addition to that, you can check the source images for non-unique
+    Besides that, you can check the source images for non-unique
     <remark>dpopov 2016-10-11: duplicate?</remark> names and reduce the size
     of the <acronym>PNG</acronym> files with an optimizer.
   </para>
 
   <variablelist id="vl.daps.user.imgs.manage.cmds">
-   <title>Subcommands for Image Listing</title>
+   <title>Subcommands for image listing</title>
    <varlistentry>
-    <term>Listing All Graphics Referenced in a Documentation Project
+    <term>Listing all graphics referenced in a documentation project
      </term>
     <listitem>
      <screen>&prompt.user;&dapscmd;&nbsp;<parameter>-d</parameter>&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;list-srcfiles&nbsp;--imgonly</screen>
-     <para> Lists all graphics file used by the DocBook files that are referenced in the document
+     <para> Lists all graphic files used by the DocBook files that are referenced in the document
       specified by the current &dc; file. </para>
     </listitem>
    </varlistentry>
    <varlistentry>
     <term>
-      Listing Missing Graphics in a Documentation Project</term>
+      Listing missing graphics in a documentation project</term>
     <listitem>
      <screen>&prompt.user;&dapscmd;&nbsp;<parameter>-d</parameter>&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;list-images-missing</screen>
-     <para> Lists all graphics that are referenced in your DocBook files, but
-      could not be found in the file system. In case there are any missing
+     <para> Lists all graphics that are referenced in your DocBook files but
+      could not be found in the file system. If there are any missing
       graphics, you cannot build your project. </para>
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term>Listing Unused Graphics in a Documentation Project</term>
+    <term>Listing unused graphics in a documentation project</term>
     <listitem>
      <screen>&prompt.user;&dapscmd;&nbsp;<parameter>-d</parameter>&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;list-srcfiles-unused&nbsp;--imgonly</screen>
      <para> Lists all graphics that are <emphasis>not</emphasis> referenced in
@@ -308,16 +264,16 @@
       you want to clean up your source images and want to know which images are
       no longer needed for the documentation project. </para>
      <para>
-                 Use this command in a directory containing a single DC-file or a
-                 DC-file referencing the whole <sgmltag>set</sgmltag>. Or else,
-                 images would be listed that may be used in files not referenced
-                 by the current DC-file.
-         </para>
+     Use this command in a directory containing a single &dc; file or a
+     &dc; file referencing the whole <sgmltag>set</sgmltag>. Or else,
+     images would be listed that may be used in files not referenced
+     by the current &dc; file.
+    </para>
     &daps-note-superfluous-files;
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term>Checking for Non-Unique File Names</term>
+    <term>Checking for non-unique file names</term>
     <listitem>
      <screen>&prompt.user;&dapscmd;&nbsp;<parameter>-d</parameter>&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;list-images-multisrc</screen>
      <para> Checks the <filename>images/src</filename> subdirectories for
@@ -326,7 +282,7 @@
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term>Reducing the File Size of PNG Graphics</term>
+    <term>Reducing the file size of PNG graphics</term>
     <listitem>
      <screen>&prompt.user;&dapscmd;&nbsp;<parameter>-d</parameter>&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;optipng</screen>
      <para> Recompresses any PNG files in the
@@ -335,18 +291,18 @@
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term>Deleting All Generated Images for a Documentation Project</term>
+    <term>Deleting all generated images for a documentation project</term>
     <listitem>
      <screen>&prompt.user;&dapscmd; -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;clean-images</screen>
      <para> Deletes all images generated for the specified &dc; file. This is
-      only necessary in rare cases; For example, when a file previously had an
+      only necessary in rare cases. For example, when a file previously had an
       incorrect time stamp, or after you have changed your global &dapsacr;
       configuration. In these cases, instead of re-generating the image, &dapsacr; might wrongly assume that an
       already generated image should be inserted into the output file.</para>
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term>Viewing All Images Referenced in a File or Project</term>
+    <term>Viewing all images referenced in a file or project</term>
     <listitem><screen>&prompt.user;&dapscmd; -d&nbsp;DC-daps-example&nbsp;getimages&nbsp;--show&nbsp;--viewer ristretto</screen>
      <para>Opens and shows all images referenced in the documentation project in the specified image
       viewer (in this example, it is Ristretto). Alternatively, specify your preferred image viewer in the
@@ -384,14 +340,14 @@
   </example>
 
   <tip>
-   <title>Use Pretty-Printed Output for Counting</title>
+   <title>Use pretty-printed output for counting</title>
    <para> To count the number of images listed in a given output, you can use
    the <parameter>--pretty</parameter> parameter and pipe the output to the
     <command>wc</command> command: </para>
    <screen>&prompt.user;&dapscmd; -d <replaceable>PATH_TO_&dc;_FILE</replaceable> list-srcfiles --imgonly --pretty | wc -l</screen>
    <para> For <xref linkend="ex.daps.graphics.output.default"
-    xrefstyle="select:label"/>, the command above would return
-    <computeroutput>5</computeroutput> as value.
+    xrefstyle="select:label"/>, the command above would return 
+    <emphasis role="bold">5</emphasis> as a value.
    </para>
   </tip>
  </sect1>

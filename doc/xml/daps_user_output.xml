@@ -90,6 +90,25 @@
 <screen>&prompt.user;&dapscmd; -d <replaceable>PATH_TO_DC_FILE</replaceable> validate --norefcheck</screen>
    </listitem>
    </varlistentry>
+   <varlistentry>
+    <term>Validating files without checking for tables that contain structural errors</term>
+    <listitem>
+<screen>&prompt.user;&dapscmd; -d <replaceable>PATH_TO_DC_FILE</replaceable> validate --not-validate-tables</screen>
+   </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>Validating files and checking for missing and duplicated images</term>
+    <listitem>
+<screen>&prompt.user;&dapscmd; -d <replaceable>PATH_TO_DC_FILE</replaceable> validate --validate-images</screen>
+<para>Missing images cause an error, duplicated images a warning only.</para>
+   </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>Validating files and checking IDs to include no characters other than <literal>[-a-zA-Z0-9]</literal>.</term>
+    <listitem>
+<screen>&prompt.user;&dapscmd; -d <replaceable>PATH_TO_DC_FILE</replaceable> validate --validate-ids</screen>
+   </listitem>
+   </varlistentry>
   </variablelist>
  </sect1>
  <sect1 id="sec.daps.user.output.syntax">
@@ -128,7 +147,7 @@
   </para>
  </sect1>
  <sect1 id="sec.daps.user.output.formats">
-  <title>Supported Output Formats</title>
+  <title>Supported output formats</title>
 
   <para>
    The following table lists the main output formats and their
@@ -144,7 +163,7 @@
   me...</remark>-->
 
   <table id="tab.daps.user.output.overview">
-   <title>&dapsacr; Output commands and formats</title>
+   <title>&dapsacr; output commands and formats</title>
    <xi:include href="daps_table_output_formats_i.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
   </table>
   &daps-output-all;
@@ -203,7 +222,7 @@
     <term>Getting more information about the build process</term>
     <listitem>
      <para>
-      By default &dapsacr;, only provides the path to the resulting file as
+      By default, &dapsacr; only provides the path to the resulting file as
       output. To set higher verbosity levels, use the global options
       <option>-v</option>, <option>-vv</option>, <option>-vvv</option>, and
       <option>--debug</option>.
@@ -276,8 +295,8 @@
  <title>Putting the current date and time into the target document</title>
  <para>
  To get information about the build date and time, you can use the <sgmltag class="pi">dbtimestamp</sgmltag> tag.
- The processing instruction <sgmltag class="pi">dbtimestamp</sgmltag> is processed by &daps;, when the document
- is built. The date and time then show up in the final document, based on how you've set the date/time format.
+ The processing instruction <sgmltag class="pi">dbtimestamp</sgmltag> is processed by &dapsacr; when the document
+ is built. The date and time then show up in the final document, based on how you have set the date/time format.
  </para>
  <example>
 	 <title>Example for implementing the dbtimestamp tag in an XML file:</title>
@@ -291,7 +310,7 @@
 	 <screen>&lt;para>Current date: &lt;?dbtimestamp format="A, d B Y"?>.&lt;/para></screen>
  </example>
  <para>
- For further information about the format elements, look at this site:
+ For further information about format elements, look at this site:
  <ulink  url="http://www.sagehill.net/docbookxsl/Datetime.html"/>  
  </para>
  </sect1>
