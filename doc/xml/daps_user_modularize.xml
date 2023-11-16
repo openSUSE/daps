@@ -733,11 +733,11 @@
      (XML files, &main; file and &dc; file).
     </para>
     <example id="ex.daps.xml.pa">
-     <title>XML file with profiling attributes (DocBook 4.x)</title>
+     <title>XML file with profiling attributes</title>
 <screen><?dbsuse-fo font-size="0.70em"?>&lt;?xml version="1.0" encoding="utf-8"?&gt;
 [...]
 
-&lt;chapter id="frog.features"&gt;
+&lt;chapter xml:id="frog.features"&gt;
  [...]
  &lt;simplelist&gt;
    &lt;member&gt;Common Feature 1&lt;/member&gt; <co id="co.daps.xml.no.prof.attr"/>
@@ -981,7 +981,7 @@ PROFVENDOR="oemcompany" <co id="co.dc.pa.profvendor.oem"/>
 <emphasis role="strong">&lt;?xml-stylesheet
  href="urn:x-daps:xslt:profiling:docbook50-profile.xsl"
  type="text/xml"
- title="Profiling step"?&gt;</emphasis> <co id="co.daps.main.pi.profiling3"/>
+ title="Profiling step"?&gt;</emphasis>
 
 <emphasis role="strong">&lt;!DOCTYPE article
 [&lt;!ENTITY % entities SYSTEM "entity-decl.ent">
@@ -1007,12 +1007,6 @@ PROFVENDOR="oemcompany" <co id="co.dc.pa.profvendor.oem"/>
  [...]
 &lt;/article&gt;</screen>
  <calloutlist>
-    <callout arearefs="co.daps.main.pi.profiling3">
-     <para>
-      Processing instruction (PI) in the header of the &main; file. If it is
-      missing, any profiling parameters in the &dc; file will be ignored.
-     </para>
-    </callout>
     <callout arearefs="co.daps.main.reference.ent3">
      <para>
       Reference to the separate entity declaration file (with a parameter
