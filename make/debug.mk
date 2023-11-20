@@ -59,6 +59,11 @@ ROOTID             = $(ROOTID)\n\
 STYLEIMG           = $(STYLEIMG)\n\
 STYLEROOT          = $(STYLEROOT)\n\
 \n\
+Assemblies\n\
+----------
+STYLEASSEMBLY      = $(STYLEASSEMBLY)\n\
+STRUCTID           = $(STRUCTID)\n\
+\n\
 Profiling\n\
 ---------\n\
 PROFILE_URN        = $(PROFILE_URN)\n\
