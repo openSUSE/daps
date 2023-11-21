@@ -81,7 +81,7 @@
       Thus, your XML documents can be published in different layouts without
       having to change the sources or the configuration. Note that &dapsacr;
       only supports using customized DocBook style sheets; the customization
-      itself requires to tweak the DocBook style sheets written in XSLT.
+      itself requires tweaking the DocBook style sheets written in XSLT.
 <!--You do not need to define custom stylesheets for <emphasis>all</emphasis>
      output formats&mdash;in case a custom layout cannot be found, &dapsacr;
      will automatically fall back to the DocBook stylesheets.-->
@@ -89,7 +89,7 @@
      <para>
       Apart from that, &dapsacr; allows you to change individual layout
       parameters by passing string parameters to <command>xsltproc</command>
-      for HTML or PDF builds &mdash;without even touching the style sheets.
+      for HTML or PDF builds&mdash;without even touching the style sheets.
       For details about custom layouts, refer to <xref linkend="cha.daps.user.layout"/>.
      </para>
     </listitem>
@@ -623,7 +623,7 @@ STYLEROOT="/usr/share/xml/docbook/stylesheet/suse/xslt/flyer" <co id="co.daps.dc
      </callout>
      <callout arearefs="co.daps.dc.quick.fbstyleroot"> &daps-co-fbstyleroot;
        <para>
-       In this example, no fallback is specified and the parameter is
+       In this example, no fallback is specified, and the parameter is
        disabled.
       </para>
      </callout>
@@ -682,7 +682,7 @@ DRAFT="yes" <co id="co.daps.dc.user.draft"/>
      </callout>
      <callout arearefs="co.daps.dc.user.fbstyleroot"> &daps-co-fbstyleroot;
        <para>
-       In this example, no fallback is specified and the parameter is
+       In this example, no fallback is specified, and the parameter is
        disabled.
       </para>
      </callout>
@@ -699,7 +699,7 @@ DRAFT="yes" <co id="co.daps.dc.user.draft"/>
    <para>
     If your documentation project contains cross-references between the
     individual books in a set, it is useful to define an additional &dc;
-    file &mdash;<emphasis>without</emphasis> the
+    file&mdash;<emphasis>without</emphasis> the
     <parameter>ROOTID</parameter> parameter. Use this (generic) &dc; to
     generate HTML outputs containing all hyperlinks between the individual
     books (or for creating file lists of all source files and images used in
@@ -748,7 +748,7 @@ export DOCCONF=$BASH_SOURCE <co id="co.daps.dc.set.source"/></screen>
      </callout>
      <callout arearefs="co.daps.dc.set.fbstyleroot"> &daps-co-fbstyleroot;
        <para>
-       In this example, no fallback is specified and the parameter is
+       In this example, no fallback is specified, and the parameter is
        disabled.
       </para>
      </callout>
@@ -831,10 +831,9 @@ export DOCCONF=$BASH_SOURCE <co id="co.daps.dc.set.source"/></screen>
      |--images/
      |   |--src/<co id="co.prjdir.img.src"/>
      |   |  |--dia/
-     |   |  |--eps/
      |   |  |--fig/
      |   |  |--jpg
-     |   |  |--pdf/
+     |   |  |--odg/
      |   |  |--png/
      |   |  |--svg/
      |--xml/ (--adoc)<co id="co.prjdir.xml"/>
