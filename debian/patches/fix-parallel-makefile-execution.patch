@@ -1,0 +1,12 @@
+Fix the parallel execution of the install make target.
+Thanks to Santiago Vila <sanvila@debian.org> for the report and the fix
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -1731,6 +1731,7 @@
+ 	  tar c --mode=u+w,go+r-w,a-s -C $$BOOK . | \
+ 		(cd $(DESTDIR)$(docdir)/html; tar xp); \
+ 	done
++	mkdir -p $(DESTDIR)$(bindir)
+ 	install -m755 autobuild/daps-autobuild $(DESTDIR)$(bindir)
+ 	install -m644 autobuild/daps-autobuild.rnc $(DESTDIR)$(datadir)/xml/$(PACKAGE)/schema/
+ 	install -m644 autobuild/daps-autobuild.xml $(DESTDIR)$(templatedir)

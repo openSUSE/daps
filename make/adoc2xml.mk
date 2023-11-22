@@ -85,7 +85,7 @@ _ADOC_VERSION += $(shell $(ASCIIDOC) --version | head -n1 | awk '{print $$2}')
 
 _ADOC_VERSION_SORT := $(shell echo "$(_ADOC_VERSION)" | tr " " "\n" | sort -b --version-sort )
 
-_ADOC_SUPPORTS_FAILURE := $(shell if [ "$(_ADOC_VERSION)" == "$(_ADOC_VERSION_SORT)" ]; then echo "yes"; else echo "no"; fi)
+_ADOC_SUPPORTS_FAILURE := $(shell if [ "$(_ADOC_VERSION)" = "$(_ADOC_VERSION_SORT)" ]; then echo "yes"; else echo "no"; fi)
 
 ifeq "$(strip $(_ADOC_SUPPORTS_FAILURE))" "yes"
   ADOC_FAILURE := --failure-level $(ADOC_FAILURE_LEVEL)

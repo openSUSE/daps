@@ -1,5 +1,104 @@
-daps (2.1.5-1) wily; urgency=low
+daps (4.0.0-2) ; urgency=low
 
-  * Initial release.
+  * Aligned files to exclude from src tarball.
+  * Optimizing files not belonging to src tarball.
 
- -- Christoph Berg <christoph.berg@zalando.de>  Mon, 14 Dec 2015 15:49:06 +0100
+ -- Tomáš Bažant <tbazant@suse.cz>  Wed, 22 Nov 2023 17:27:10 +0100
+
+daps (4.0.0-1) unstable; urgency=low
+
+  * Initial pack for version 4.
+
+ -- Tomáš Bažant <tbazant@suse.cz>  Tue, 21 Nov 2023 17:54:10 +0100
+
+daps (3.3.2+cleaned1-4) unstable; urgency=low
+
+  * This is a one line patch to fix the parallel execution of the install make
+    target.  Thanks to Santiago Vila <sanvila@debian.org> for the report and
+    the fix (closes: #1029530).  I reported the issue upstream:
+    https://github.com/openSUSE/daps/issues/705.
+
+ -- Filippo Rusconi <lopippo@debian.org>  Tue, 24 Jan 2023 18:39:41 +0100
+
+daps (3.3.2+cleaned1-3) unstable; urgency=low
+
+  * Add new patch to fix the daps-jing wrapper call in validate.mk (issue
+    opened upstream).
+
+ -- Filippo Rusconi <lopippo@debian.org>  Fri, 25 Nov 2022 15:19:57 +0100
+
+daps (3.3.2+cleaned1-2) unstable; urgency=low
+
+  * Fix unnecessary constraints (thanks to salsa janitor.)
+
+ -- Filippo Rusconi <lopippo@debian.org>  Wed, 02 Nov 2022 21:42:59 +0100
+
+daps (3.3.2+cleaned1-1) unstable; urgency=low
+
+  * New upstream version partly fixing problems reported by me during the
+    packaging of the previous version.
+
+  * Remove the now useless libxslt-1.1.35+-build-fix.patch.
+
+ -- Filippo Rusconi <lopippo@debian.org>  Wed, 02 Nov 2022 16:06:37 +0100
+
+daps (3.3.1+cleaned1-4) unstable; urgency=low
+
+  * Add runtime dependencies that make the package more robust (experienced
+    using it for building the massxpert and minexpert2 user manuals).
+
+ -- Filippo Rusconi <lopippo@debian.org>  Tue, 01 Nov 2022 15:26:05 +0100
+
+daps (3.3.1+cleaned1-3) unstable; urgency=low
+
+  * Add libsaxon-java and libsaxonhe-java and docbook-xsl-saxon dependencies
+    to the daps binary package.
+
+ -- Filippo Rusconi <lopippo@debian.org>  Tue, 18 Oct 2022 22:33:11 +0200
+
+daps (3.3.1+cleaned1-2) unstable; urgency=low
+
+  * Remove patch that was erroneously applied.
+
+ -- Filippo Rusconi <lopippo@debian.org>  Tue, 18 Oct 2022 21:50:38 +0200
+
+daps (3.3.1+cleaned1-1) unstable; urgency=low
+
+  * New upstream version.
+
+  * Make patch to fix daps build failures (Closes: #1015073). Thanks to crew
+    mentioned at https://github.com/openSUSE/daps/issues/676.
+
+  * Make patch to fix the call to daps-xmlwellformed in bin/daps (see issue
+    https://github.com/openSUSE/daps/issues/687 that I reported).
+
+ -- Filippo Rusconi <lopippo@debian.org>  Sat, 15 Oct 2022 11:40:33 +0200
+
+daps (3.0.0-4) unstable; urgency=low
+
+  * Fake new package version to force the source package into unstable (see
+    https://qa.debian.org/excuses.php?package=daps, with comment Not built on
+    buildd: arch all binaries uploaded by lopippo, a new source-only upload is
+    needed to allow migration).
+
+ -- Filippo Rusconi <lopippo@debian.org>  Fri, 10 Jan 2020 14:58:49 +0100
+
+daps (3.0.0-3) unstable; urgency=low
+
+  * Fix in d/rules the .xsl file that is chmod'ed to +x while being installed.
+    Sent bug report upstream. 
+
+ -- Filippo Rusconi <lopippo@debian.org>  Tue, 12 Feb 2019 08:28:16 +0100
+
+daps (3.0.0-2) unstable; urgency=low
+
+  * Fix the Vcs fields for salsa location.
+
+ -- Filippo Rusconi <lopippo@debian.org>  Fri, 08 Feb 2019 19:55:51 +0100
+
+daps (3.0.0-1) unstable; urgency=low
+
+  * Initial release with packaging starting from earlier work (see
+    d/copyright).
+
+ -- Filippo Rusconi <lopippo@debian.org>  Wed, 06 Feb 2019 21:43:14 +0100
