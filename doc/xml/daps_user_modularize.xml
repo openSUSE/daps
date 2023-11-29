@@ -6,6 +6,7 @@
 <!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.docbook.org/xml/4.5/docbookx.dtd"
 [<!ENTITY % entities SYSTEM "entity-decl.ent">
 %entities;
+  <!ENTITY exampleuser "entity-value">
 ]>
 <chapter id="cha.daps.user.modular">
  <title>Modularizing documentation projects</title>
@@ -74,15 +75,27 @@
    projects, it is therefore useful to put all entity declarations into a
    separate file and reference that file in the individual XML files.
   </para>
-
+  <para>As a value of the entity, you can add plain text, another entity 
+    or a DocBook 5 tag.</para>
   <example id="ex.daps.ent.decl.separate">
    <title>Separate entity file <filename>entity-decl.ent</filename></title>
-<screen>&lt;?xml version="1.0" encoding="iso-8859-1" ?&gt;
-&lt;!ENTITY exampleuser "tux"&gt;
-&lt;!ENTITY exampleuserII "wilber"&gt;
-&lt;!ENTITY examplegroup "users"&gt;
+<screen>&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;!ENTITY exampleuser "tux"&gt; <co id="co.daps.ent.plain"/>
+&lt;!ENTITY user "&exampleuser;"&gt; <co id="co.daps.ent.entity"/>
+&lt;!ENTITY dbexampleuser "&lt;systemitem xmlns='http://docbook.org/ns/docbook'&gt;Tux&lt;/systemitem&gt;"&gt; <co id="co.daps.ent.db5"/>
 [...]</screen>
-  </example>
+<calloutlist>
+  <callout arearefs="co.daps.ent.plain">
+   <para>Plain text as the entity definition value.</para>
+  </callout>
+  <callout arearefs="co.daps.ent.entity">
+    <para>A reference to another entity as the entity definition value.</para>
+   </callout>
+  <callout arearefs="co.daps.ent.db5">
+    <para>A DocBook 5 tag as the entity definition value.</para>
+   </callout>
+  </calloutlist>
+</example>
 
   <example id="ex.daps.ent.decl.reference">
    <title>Referencing a separate entity file</title>
@@ -123,7 +136,7 @@
   the separate entity file that is referenced in the XML file.</para>
   <example id="ex.daps.ent.decl.separate.multi">
    <title>Referencing entity files within an entity file</title>
-  <screen>&lt;?xml version="1.0" encoding="iso-8859-1" ?&gt;
+  <screen>&lt;?xml version="1.0" encoding="utf-8"?&gt;
 &lt;!ENTITY exampleuser "tux"&gt;
 &lt;!ENTITY exampleuserII "wilber"&gt;
 &lt;!ENTITY examplegroup "users"&gt;
@@ -907,7 +920,7 @@ PROFVENDOR="oemcompany" <co id="co.dc.pa.profvendor.oem"/>
   </para>
 
   <example id="ex.daps.ent.decl.profiling">
-   <title>Separate entity file with profiling attributes (DocBook 5.0)</title>
+   <title>Separate entity file with profiling attributes</title>
 <screen><?dbsuse-fo font-size="0.60em"?>&lt;!--the following declarations are contained in the file entity-decl.ent --&gt;
 
 &lt;!ENTITY productname
