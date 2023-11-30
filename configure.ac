@@ -348,6 +348,31 @@ if test -z "$HAVE_DOCBOOK_51"; then
   AC_MSG_WARN([Seems you do not have DocBook 5.1 installed.])
 fi
 
+
+dnl DocBook 5.2
+AC_MSG_NOTICE([===== Checking for DocBook 5.2...])
+for XML_SCHEMA in "http://docbook.org/xml/5.2/rng/docbookxi.rng" \
+                  "http://docbook.org/xml/5.2/rng/docbookxi.rnc" \
+                  "http://docbook.org/xml/5.2/rng/docbook.rng" \
+                  "http://docbook.org/xml/5.2/rng/docbook.rnc" \
+                  "http://docbook.org/xml/5.2/rng/assembly.rng" \
+                  "http://docbook.org/xml/5.2/rng/assembly.rnc" \
+                  "http://docbook.org/xml/5.2/rng/dbits.rng" \
+                  "http://docbook.org/xml/5.2/rng/dbits.rnc"  ; do
+  AC_MSG_CHECKING([for $XML_SCHEMA])
+  if AC_RUN_LOG([$XMLCATALOG --noout "$root_catalog" "$XML_SCHEMA" >&2]); then
+    AC_MSG_RESULT([yes])
+    HAVE_DOCBOOK_52=1
+    db5_version="5.2"
+  else
+    AC_MSG_RESULT([no])
+  fi
+done
+if test -z "$HAVE_DOCBOOK_52"; then
+  HAVE_DOCBOOK_52=0
+  AC_MSG_WARN([Seems you do not have DocBook 5.2 installed.])
+fi
+
 # In case DocBook 5 is not installed, setting db5_version fails and the
 # URI in etc/config is set to an invalid value. Therefore let's set
 # 5.0 as a hopefully sane default
