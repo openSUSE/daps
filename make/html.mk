@@ -124,6 +124,11 @@ HTMLSTRINGS  += --param "show.comments=$(REMARKS)" \
 		--stringparam "draft.mode=$(DRAFT)" \
                 --stringparam "img.src.path=images/"
 
+# For metadata extraction during HTML builds the SUSE stylesheets need the
+# DC-file name 
+
+HTMLSTRINGS  += --stringparam "dcfilename=$(DC_FILE)"
+
 # DocBook uses .xhtml for XHTML5 by default
 ifeq "$(HTML5)" "1"
   HTMLSTRINGS  += --stringparam "html.ext=.html"
