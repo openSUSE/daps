@@ -17,7 +17,9 @@ includes=$(basename "$main")
 
 function include_grep {
     local f
-    f=$(grep -E '^include::' $@ 2>/dev/null | sed 's/.*::\.\/\([^\[]*\).*/\1/g' 2>/dev/null)
+#    f=$(grep -E '^include::' $@ 2>/dev/null | sed 's/.*::\.\/\([^\[]*\).*/\1/g' 2>/dev/null)
+    f=$(grep -E '^include::' $@ 2>/dev/null | sed 's/.*::\([^\[]*\).*/\1/g'  2>/dev/null)
+
     if [[ -n $f ]]; then
         includes+=" $f"
         include_grep $f
