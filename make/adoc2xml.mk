@@ -98,7 +98,7 @@ endif
 #
 
 ADOC_DOCINFO := $(addsuffix -docinfo.xml,$(basename $(ADOC_MAIN)))
-ADOC_SRCFILES := $(wildcard $(addprefix $(ADOC_SRC_DIR)/,$(shell $(LIBEXEC_DIR)/get_adoc_includes.sh $(ADOC_MAIN)))) $(wildcard $(ADOC_DOCINFO))
+ADOC_SRCFILES := $(realpath $(wildcard $(addprefix $(ADOC_SRC_DIR)/,$(shell $(LIBEXEC_DIR)/get_adoc_includes.sh $(ADOC_MAIN)))) $(wildcard $(ADOC_DOCINFO)))
 
 all: $(MAIN)
 
