@@ -72,7 +72,7 @@
                        d:contractnum|d:contractsponsor|d:contrib|
                        d:copyright|d:country|d:database|d:edition|
                        d:email|d:enumidentifier|d:enumitemdescription|d:enumname|
-                       d:enumvalue|d:envar|d:errorcode|d:errorname|d:errortext|
+                       d:enumvalue|d:emphasis|d:envar|d:errorcode|d:errorname|d:errortext|
                        d:errortype|d:exceptionname|d:fax|d:filename|d:firstname|
                        d:foreignphrase|d:funcdef|d:function|d:guilabel|d:guimenu|
                        d:guimenuitem|d:guisubmenu|d:hardware|d:holder|d:honorific|
