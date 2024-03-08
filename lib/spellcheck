@@ -35,14 +35,14 @@ function spellcheck {
         [[ "aspell" = $SPELL_CHECKER || "hunspell" = $SPELL_CHECKER ]] || \
             exit_on_error "Wrong value for --spellchecker. Needs to be \"aspell\" or \"hunspell\""
         # check whether given spellchecker is installed:
-        [[ $(which --skip-alias --skip-functions "$SPELL_CHECKER" 2>/dev/null) ]] || ccecho "error" "Error: '$SPELL_CHECKER' is not installed"
+        [[ $(which "$SPELL_CHECKER" 2>/dev/null) ]] || ccecho "error" "Error: '$SPELL_CHECKER' is not installed"
     else
         if [[ -z "$SPELL_CHECKER" ]]; then
             # no spell checker defined in the configs or on the command line
             # searching for aspell or hunspell
             # If both are installed, favor hunspell
             for SC in hunspell aspell; do
-                SPELL_CHECKER="$(which  --skip-alias --skip-functions "$SC" 2>/dev/null)"
+                SPELL_CHECKER="$(which  "$SC" 2>/dev/null)"
                 [[ -n "$SPELL_CHECKER" ]] && break;
             done
             [[ -z "$SPELL_CHECKER" ]] && exit_on_error "Cannot perform a spell check; neither aspell nor hunspell is installed"
