@@ -18,7 +18,7 @@ function build_locdrop {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="def-file:,export-dir:,help,name:,nopdf,not-validate-tables,optipng,rootid:"
+    LONG_OPTS="def-file:,export-dir:,extended-validation:,help,name:,nopdf,not-validate-tables,optipng,rootid:"
 
     parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -28,6 +28,7 @@ function build_locdrop {
         help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
         help_def-file
         help_export-dir
+        help_extended-validation
         help_help
         help_name
         help_nopdf

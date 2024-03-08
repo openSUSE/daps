@@ -256,7 +256,7 @@ copy_inline_images_html: $(COLOR_IMAGES)
 ifdef METASTRING
   $(HTML_RESULT): $(PROFILEDIR)/METAFILE
 endif
-$(HTML_RESULT): $(PROFILES) $(PROFILEDIR)/.validate $(DOCFILES)
+$(HTML_RESULT): $(PROFILES) $(DOCFILES) validate
   ifeq "$(VERBOSITY)" "2"
 	@ccecho "info" "Creating HTML pages"
     ifdef HTML_CSS_INFO
