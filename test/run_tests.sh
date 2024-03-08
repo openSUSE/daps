@@ -105,7 +105,7 @@ declare -a _REQUIREMENTS
 _REQUIREMENTS=( "epubcheck" "lynx" "pdfinfo" "xmllint" "xmlstarlet" )
 
 for _REQ in "${_REQUIREMENTS[@]}"; do
-    which --skip-alias --skip-functions $_REQ >/dev/null 2>&1 || exit_on_error "Requirement $_REQ is not installed, exiting"
+    which $_REQ >/dev/null 2>&1 || exit_on_error "Requirement $_REQ is not installed, exiting"
 done
 
 
