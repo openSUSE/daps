@@ -210,7 +210,6 @@ INSTALLDIRS = $(DESTDIR)$(docdir)/html $(DESTDIR)$(pkgdatadir) \
 	$(DESTDIR)$(datadir)/xml/$(PACKAGE)/schema/ \
 	$(DESTDIR)$(bindir) $(DESTDIR)$(templatedir)
 
-
 install-data-local: $(INSTALLDIRS) autobuild/daps-autobuild
 install-data-local: TMP_CATALOG := $(shell mktemp -q $(BUILD_ROOT)/daps_catalog.XXXXX)
 install-data-local:
