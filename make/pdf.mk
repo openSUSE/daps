@@ -205,7 +205,7 @@ endif
 ifeq "$(VERBOSITY)" "1"
   $(FOFILE): FONTDEBUG := --param "debug.fonts=0"
 endif
-$(FOFILE): $(PROFILES) $(PROFILEDIR)/.validate $(DOCFILES) $(STYLEFO)
+$(FOFILE): $(PROFILES) $(DOCFILES) $(STYLEFO) validate
   ifeq "$(VERBOSITY)" "2"
 	@ccecho "info"  "   Creating fo-file..."
   endif

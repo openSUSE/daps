@@ -18,7 +18,7 @@ function package-pdf {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="cropmarks,desktopfiles,documentfiles,formatter:,grayscale,help,name:,not-validate-tables,pagefiles,param:,rootid:,set-date:,stringparam:,xsltparam:"
+    LONG_OPTS="cropmarks,desktopfiles,documentfiles,extended-validation:,formatter:,grayscale,help,name:,not-validate-tables,pagefiles,param:,rootid:,set-date:,stringparam:,xsltparam:"
 
     parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -29,6 +29,7 @@ function package-pdf {
         help_cropmarks
         help_desktopfiles
         help_documentfiles
+        help_extended-validation
         help_formatter
         help_grayscale_pdf
         help_help

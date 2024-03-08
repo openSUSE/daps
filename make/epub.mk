@@ -167,7 +167,7 @@ $(EPUB_DIRECTORIES):
 #--------------
 # generate EPUB-bigfile
 #
-$(EPUB_BIGFILE): $(PROFILES) $(PROFILEDIR)/.validate
+$(EPUB_BIGFILE): $(PROFILES) validate
   ifeq "$(VERBOSITY)" "2"
 	@ccecho "info" "   Generating EPUB-bigfile"
   endif
