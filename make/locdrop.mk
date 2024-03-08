@@ -152,7 +152,7 @@ endif
 ifneq "$(NOPDF)" "1"
   locdrop: pdf
 endif
-locdrop: $(SRCFILES) $(MANIFEST_TRANS) $(MANIFEST_NOTRANS) $(USED_ALL) $(PROFILES) $(PROFILEDIR)/.validate
+locdrop: $(SRCFILES) $(MANIFEST_TRANS) $(MANIFEST_NOTRANS) $(USED_ALL) $(PROFILES) validate
   ifeq "$(strip $(TO_TRANS_FILES))" ""
 	$(error $(shell ccecho "error" "Fatal error: Could not find any files to translate"))
   endif

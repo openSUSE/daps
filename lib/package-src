@@ -18,7 +18,7 @@ function package-src {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="def-file:,help,locdrop,name:,not-validate-tables,optipng,set-date:"
+    LONG_OPTS="def-file:,extended-validation:,help,locdrop,name:,not-validate-tables,optipng,set-date:"
 
     parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -27,6 +27,7 @@ function package-src {
     if [[ 1 -eq $P_HELP ]]; then
         help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
         help_def-file
+        help_extended-validation
         help_help
         help_locdrop
         help_name
