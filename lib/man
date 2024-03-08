@@ -18,7 +18,7 @@ function build_man {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="help,nogzip,norefcheck,not-validate-tables,param,rootid:,stringparam:,subdirs"
+    LONG_OPTS="extended-validation:,help,nogzip,norefcheck,not-validate-tables,param,rootid:,stringparam:,subdirs"
 
     parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -26,6 +26,7 @@ function build_man {
     #------ Computing the values returned from the parser -----
     if [[ 1 -eq $P_HELP ]]; then
         help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
+        help_extended-validation
         help_help
         help_nogzip
         help_norefcheck

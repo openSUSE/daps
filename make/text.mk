@@ -50,7 +50,7 @@ $(TXT_RESULT): $(TMP_DIR)/$(DOCNAME).html
 # (it's initially faster because no images will be created)
 #
 $(TMP_DIR)/$(DOCNAME).html: | $(TMP_DIR)
-$(TMP_DIR)/$(DOCNAME).html: $(DOCFILES) $(PROFILES) $(PROFILEDIR)/.validate
+$(TMP_DIR)/$(DOCNAME).html: $(DOCFILES) $(PROFILES) validate
   ifeq "$(VERBOSITY)" "2"
 	@ccecho "info" "   Creating temporary single HTML page"
   endif
