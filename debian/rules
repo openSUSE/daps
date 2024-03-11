@@ -4,18 +4,17 @@
 
 override_dh_auto_configure:
 	dh_auto_configure -- --sysconfdir=/etc --disable-edit-rootcatalog
+	dh_python3
+
+override_dh_auto_install:
+	dh_auto_install
 
 override_dh_install:
 	dh_installxmlcatalogs
 
-	# Remove obsolete catalog file
-	rm debian/daps/etc/xml/for-catalog-daps.xml
-
-	# Remove obsolete licenceses and documentation
+	# Remove obsolete licences and documentation
 	rm debian/daps/usr/share/doc/daps/COPYING \
-	   debian/daps/usr/share/doc/daps/COPYING-2.0 \
-	   debian/daps/usr/share/doc/daps/COPYING-3.0 \
-	   debian/daps/usr/share/doc/daps/INSTALL.adoc
+		 debian/daps/usr/share/doc/daps/COPYING-2.0 \
+		 debian/daps/usr/share/doc/daps/COPYING-3.0 \
+		 debian/daps/usr/share/doc/daps/INSTALL.adoc
 
-	# Remove the language extension of the Perl script
-	mv debian/daps/usr/bin/daps-auto.pl debian/daps/usr/bin/daps-auto
