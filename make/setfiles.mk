@@ -91,6 +91,7 @@ ifdef ROOTSTRING
   DOCFILES  += $(MAIN)
 else
   DOCFILES  := $(SRCFILES)
+  ROOTELEMENT := $(shell $(XMLSTARLET) sel -t -v "(//div)[1]/@remap" $(SETFILES_TMP) 2>/dev/null)
 endif
 
 # Entity files

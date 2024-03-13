@@ -18,7 +18,7 @@ function build_html {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="clean,css:,draft,help,html5,name:,norefcheck,nostatic,not-validate-tables,meta,param:,remarks,rootid:,single,statdir:,static,stringparam:,xsltparam:"
+    LONG_OPTS="clean,css:,draft,extended-validation:,help,html5,name:,norefcheck,nostatic,not-validate-tables,meta,param:,remarks,rootid:,single,statdir:,static,stringparam:,xsltparam:"
 
     parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -29,6 +29,7 @@ function build_html {
         help_clean
         help_css
         help_draft
+        help_extended-validation
         help_help
         help_html5
         help_meta

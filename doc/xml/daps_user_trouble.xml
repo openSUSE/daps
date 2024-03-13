@@ -43,18 +43,11 @@
      <step>
       <para> Check the &dc; file for your documentation project: Does it
        contain one or multiple <parameter>PROF*</parameter> parameters?
-       Otherwise &dapsacr; does not know which profiling attributes to
+       Otherwise, &dapsacr; does not know which profiling attributes to
        interpret. Do the <parameter>PROF*</parameter> parameters match the
        profiling attributes used in the XML files? Do the values of the
         <parameter>PROF*</parameter> parameters match the attribute values used
        in the XML files? </para>
-     </step>
-     <step>
-      <para> Check the &main; file of your documentation projects: Does its
-       header contain the following line? </para>
-      <screen>href="urn:x-daps:xslt:profiling:docbook45-profile.xsl" type="text/xml"</screen>
-      <para> If not, any profiling parameters in the &dc; file will be
-       ignored during generation of the output. </para>
      </step>
     </procedure>
     <para> For more details, refer to <xref linkend="sec.daps.user.edit.profile"
@@ -72,8 +65,8 @@
     </para>
    </question>
    <answer>
-    <para>By default &dapsacr; only shows the result of the current subcommand.
-     To increase the verbosity run <command>daps</command> with the option
+    <para>By default, &dapsacr; only shows the result of the current subcommand.
+     To increase the verbosity, run <command>daps</command> with the option
      <option>-v</option>, <option>-vv</option>, or <option>-vvv</option>.
      For the highest verbosity, use the <option>--debug</option> option. </para>
    </answer>
@@ -88,9 +81,9 @@
        <filename><replaceable>YOUR_PRJ_DIR</replaceable>/build/<replaceable>BOOKNAME</replaceable>/log</filename>.
      A complete log file of the latest
      <command>daps&nbsp;<replaceable>subcommand</replaceable> </command>
-     that was executed is available in <filename><replaceable>YOUR_PRJ_DIR</replaceable>/build/<replaceable>BOOKNAME</replaceable>/log/make_<replaceable>SUBCOMMAND</replaceable>.log</filename>
+     that was executed is available in <filename><replaceable>YOUR_PRJ_DIR</replaceable>/build/<replaceable>BOOKNAME</replaceable>/log/make_<replaceable>SUBCOMMAND</replaceable>.log</filename>.
     </para>
-    <para> In case of an error the complete log file will be shown on the screen
+    <para> In case of an error, the complete log file will be shown on the screen
      (STDOUT). </para>
    </answer>
   </qandaentry>
@@ -101,19 +94,19 @@
    <answer>
     <para>
       No. If you have recently updated to a higher &dapsacr; version and
-      afterward experience strange behavior that are difficult to debug, check
+      afterward experience strange behavior that is difficult to debug, check
       your custom &dapsacr; configuration file (&dapsconf-user;) against the
       system-wide configuration file (&dapsconf-sys;). Search for any
       parameters that may have changed. By default, the settings in the custom
       &dapsacr; configuration file will override the settings in
-      &dapsconf-sys;. Therefore any parameter incompatibilities between the
+      &dapsconf-sys;. Therefore, any parameter incompatibilities between the
       files may lead to unexpected behavior of &dapsacr;.
     </para>
     <para>
       When switching from &dapsacr; 1.x to &dapsacr; &dapsversion;, especially
       check the syntax of any XSLT parameters that you are using (on the
       command line, in scripts or in &dc; files). If you have not adjusted the
-      parameters to the new syntax, this may result in strange error messages.
+      parameters to the new syntax, this may cause strange error messages.
       For details, refer to <xref linkend="cha.daps.user.config"/>.
     </para>
    </answer>

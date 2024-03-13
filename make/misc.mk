@@ -120,4 +120,15 @@ productinfo: $(BIGFILE)
 	@echo -n "PRODUCTNUMBER=\"$(shell $(XMLSTARLET) sel $(NAMESPACE) -t -v "(/*/*/$(ELEM_PREFIX)productnumber)[1]" $< 2>/dev/null)\""
   endif
 
+#---------------
+# Docinfo
+#
+STYLEDOCINFO := $(DAPSROOT)/daps-xslt/common/docinfo.xsl
+
+# make sure to rebuils always
+#
+.PHONY: docinfo
+docinfo: $(BIGFILE)
+	$(XSLTPROC) --stylesheet $(STYLEDOCINFO) --file $< \
+	  $(XSLTPROCESSOR) $(ERR_DEVNULL)
 

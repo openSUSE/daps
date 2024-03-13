@@ -60,7 +60,7 @@
 #------------------------------------------------------------------------
 # Check for optipng
 #
-HAVE_OPTIPNG  := $(shell which optipng 2>/dev/null)
+HAVE_OPTIPNG  := $(shell command -v optipng 2>/dev/null)
 
 #------------------------------------------------------------------------
 # xslt stylsheets
@@ -111,6 +111,23 @@ USED_SVG := $(filter \
 	$(SRCSVG))
 USED_ALL := $(USED_DIA) $(USED_DITAA) $(USED_JPG) \
                 $(USED_ODG) $(USED_PNG) $(USED_SVG)
+
+
+# check the availability of dia and ditaa
+#
+ifneq "$(USED_DIA)" ""
+  HAVE_DIA = $(shell command -v dia 2>/dev/null)
+  ifeq "$(HAVE_DIA)" ""
+    $(error $(shell ccecho "error" "Error: dia is not installed, can't process $(USED_DIA)"))
+   endif
+endif
+ifneq "$(USED_DITAA)" ""
+  HAVE_DIA = $(shell command -v ditaa 2>/dev/null)
+  ifeq "$(HAVE_DITAA)" ""
+    $(error $(shell ccecho "error" "Error: ditaa is not installed, can't process $(USED_DITAA)"))
+   endif
+endif
+
 
 # generated images
 #

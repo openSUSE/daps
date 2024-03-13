@@ -65,38 +65,46 @@ $(PROFILEDIR)/.validate validate: $(PROFILES)
   else
 	$(eval FAULTY_XML=$(shell unset VERBOSE && $(JING_WRAPPER) $(JING_FLAGS) $(DOCBOOK5_RNG) $(PROFILED_MAIN) 2>&1))
   endif
-  ifneq "$(strip $(NOT_VALIDATE_TABLES))" "1"
+  ifeq "$(strip $(VALIDATE_TABLES))" "1"
 	$(eval FAULTY_TABLES=$(shell $(LIBEXEC_DIR)/validate-tables.py $(PROFILED_MAIN) 2>&1 | sed -r -e 's,^/([^/: ]+/)*,,' -e 's,.http://docbook.org/ns/docbook.,,' | sed -rn '/^- / !p' | awk -v ORS='\\n' '1'))
   endif
   ifeq "$(strip $(VALIDATE_IDS))" "1"
 	$(eval FAULTY_IDS=$(shell $(XSLTPROC) --xinclude --stylesheet $(DAPSROOT)/daps-xslt/common/get-all-xmlids.xsl --file $(PROFILED_MAIN) $(XSLTPROCESSOR) | grep -P '[^-a-zA-Z0-9]'))
   endif
+  ifeq "$(strip $(VALIDATE_INLINES))" "1"
+	$(eval FAULTY_INLINES=$(shell $(XSLTPROC) --xinclude --stylesheet $(DAPSROOT)/contrib/check-source/find-empty-inlines.xsl --file $(PROFILED_MAIN) $(XSLTPROCESSOR) 2>&1))
+  endif
 	@if [[ -n '$(FAULTY_XML)' ]]; then \
-	  ccecho "error" "Fatal error: The document contains XML errors:"; \
+	  ccecho "error" "[ERROR]: The document contains XML errors:"; \
 	  echo -e '$(FAULTY_XML)'; \
 	  echo "--------------------------------"; \
 	fi
 	@if [[ -n '$(FAULTY_TABLES)' ]]; then \
-	  ccecho "error" "Fatal error: The following tables contain errors:"; \
+	  ccecho "error" "[ERROR]: The following table(s) contain errors:"; \
 	  echo -e '$(FAULTY_TABLES)'; \
 	  echo "--------------------------------"; \
 	fi
 	@if [[ -n "$(FAULTY_IDS)" ]]; then \
-	  ccecho "error" "The following IDs contain unwanted characters:"; \
+	  ccecho "error" "[ERROR]: The following ID(s) contain unwanted characters:"; \
 	  echo -e "$(subst $(SPACE),\n,$(sort $(FAULTY_IDS)))"; \
 	  echo "--------------------------------"; \
 	fi
+	@if [[ -n "$(FAULTY_INLINES)" ]]; then \
+	  ccecho "error" "[ERROR] The following inline elements are empty:"; \
+	  echo -e "$(subst $(SPACE)$(SPACE)$(SPACE)$(SPACE)$(SPACE)$(SPACE)$(SPACE)$(SPACE)$(SPACE),\n\t,$(subst [ERROR],\n[ERROR],$(FAULTY_INLINES)))"; \
+	  echo "--------------------------------"; \
+	fi
 	@if [[ -n "$(_IMG_MISS)" ]]; then \
-	  ccecho "error" "Fatal error: The following images are missing:"; \
+	  ccecho "error" "[ERROR]: The following images are missing:"; \
 	  echo -e "$(subst $(SPACE),\n,$(sort $(_IMG_MISS)))"; \
 	  echo "--------------------------------"; \
 	fi
 	@if [[ -n "$(_IMG_DUPES)" ]]; then \
-	  ccecho "warn" "Warning: Image names not unique$(COMMA) multiple sources available for the following images:"; \
+	  ccecho "error" "[ERROR]: Image names not unique$(COMMA) multiple sources available for the following images:"; \
 	  echo -e "$(subst $(SPACE),\n,$(sort $(_IMG_DUPES)))"; \
 	  echo "--------------------------------"; \
 	fi
-	@if [[ -n '$(strip $(FAULTY_XML)$(FAULTY_TABLES)$(FAULTY_IDS)$(_IMG_MISS))' ]]; then \
+	@if [[ -n '$(strip $(FAULTY_XML)$(FAULTY_TABLES)$(FAULTY_IDS)$(FAULTY_INLINES)$(_IMG_MISS))' ]]; then \
 	  ccecho "error" "Document does not validate!"; \
 	  exit 1; \
 	fi

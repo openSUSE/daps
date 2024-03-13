@@ -40,11 +40,6 @@ export prefix=@prefix@
 # need to be added here!!
 #
 
-
-
-
-
-
 declare -a VARLIST
 VARLIST=(
     ADOC_ATTRIBUTES
@@ -67,6 +62,7 @@ VARLIST=(
     DEBUG
     DAPSROOT
     DAPSROOT_DEFAULT
+    DC_FILE
     DEF_FILE
     DIA_OPTIONS
     DOCBOOK4_PROFILE_URN
@@ -157,6 +153,7 @@ VARLIST=(
     XML_CATALOG_FILES
     XMLFORMAT_CONFIG_FILE
     XML_MAIN_CATALOG
+    XMLSTARLET
     XML_USER_CATALOGS
     XSLTPARAM
     XSLTPROC
@@ -193,6 +190,13 @@ UNSETLIST=(
     VERBOSITY_CMDL
 )
 unset "${UNSETLIST[@]}"
+
+# check for xmlstarlet binary
+for _binary in xmlstarlet xml; do
+    XMLSTARLET=$(which $_binary 2>/dev/null)
+    [[ 0 -eq $? ]] && break
+done
+[[ -z $XMLSTARLET ]] && exit_on_error "Required package \"xmlstarlet\" is not installed"
 
 # PATHLIST contains all variables holding a path. Relative paths need to be
 # made absolute and we need this list in order to know which variables hold
@@ -311,6 +315,9 @@ HELP_SUBCOMMAND[dist-webhelp]="Creates a distributable tar archive of a webhelp 
 SUBCOMMANDS[dist-webhelp-name]="show_names"
 HELP_SUBCOMMAND[dist-webhelp-name]="Print the file name that would result when building a distributable tar archive\nof a webhelp document."
 
+SUBCOMMANDS[docinfo]="build_generic"
+HELP_SUBCOMMAND[docinfo]="Print information such as title, language, etc on a book or article."
+
 SUBCOMMANDS[epub]="build_epub"
 HELP_SUBCOMMAND[epub]="Build an eBook from the XML sources."
 
@@ -393,7 +400,7 @@ SUBCOMMANDS[pdf-name]="show_names"
 HELP_SUBCOMMAND[pdf-name]="Print the file name that would result when building a grayscale PDF document."
 
 SUBCOMMANDS[productinfo]="build_generic"
-HELP_SUBCOMMAND[productinfo]="Print the contents of the tags <productname> and <productnumber for the given ROOTID"
+HELP_SUBCOMMAND[productinfo]="Print the contents of the tags <productname> and <productnumber for the given ROOTID."
 
 SUBCOMMANDS[profile]="build_generic"
 HELP_SUBCOMMAND[profile]="Create profiled souces from the original XML sources. If the MAIN-file does\nnot contain profiling instructions, link the files into the profile directory."
@@ -636,6 +643,8 @@ Subcommands:
                               errors that cannot be found otherwise.
     dapsenv                   Print a list of the most important make variables
                               and their value.
+    docinfo                   Print information such as title, language, etc
+                              on a book or article.
     images                    Generates all images for the given DC-file or
                               rootid.
     showvariable              Print value of a given make variable:
@@ -987,6 +996,7 @@ while true ; do
             ;;
         -d|--docconfig|-e|--envfile)
             # make path absolute and strip trailing slash
+            [[ -h "$2" ]] && exit_on_error "The DC-file must not by a symbolic link."
             sanitize_path "$2" "DOCCONF"
             shift 2
             ;;
@@ -1658,7 +1668,7 @@ DOCBOOK_STYLES=${DOCBOOK_STYLES%/}
 # ----------------------------------------------------------------------------
 # Check whether we have an assembly by checking the root element from MAIN
 #
-IS_ASSEMBLY=$(xml sel -t -v "local-name(/*)" $MAIN 2>/dev/null)
+IS_ASSEMBLY=$($XMLSTARLET sel -t -v "local-name(/*)" $MAIN 2>/dev/null)
 
 # ----------------------------------------------------------------------------
 # Now export all variables set by the config file

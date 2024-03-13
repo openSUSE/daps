@@ -8,34 +8,25 @@
 %entities;
 ]>
 <chapter id="cha.daps.user.review">
- <title>Review and Translation Processes</title>
+ <title>Review process</title>
  <abstract>
   <para>
-   This chapter describes how to simplify review and translation processes
-   with &dapsacr; either by including remarks, or draft
-   watermarks in the output, or by transforming the multiple DocBook files in
-   your project into one big XML file.
+   This chapter describes how to simplify the review process with &dapsacr;, 
+   either by including remarks or draft watermarks in the output, 
+   or by transforming the multiple DocBook files in your project into 
+   one big XML file.
   </para>
  </abstract>
  <sect1 id="sec.daps.user.review.output.special">
-  <title>Including Remarks and Draft Watermarks in the Output</title>
+  <title>Including remarks and draft watermarks in the output</title>
 
   <para>
-   &dapsacr; offers several features to simplify review and translation
-   processes. For example, you can insert <sgmltag>remark</sgmltag> elements
-   in the source code (for editorial remarks or questions to the proofreader)
-   and generate an output format that either includes or suppresses
-   <remark>dpopov 2016-10-12: perhaps shows/hides is more descriptive than
-   includes/suppresses?</remark> these remarks. You can also generate preview
-   versions of your documentation with a <literal>DRAFT</literal> watermark
-   appearing on the HTML or PDF output.
-  </para>
-
-  <para>
-   If you use &dm; in addition to &dapsacr;, you can <quote>flag</quote>
-   your XML files with meta information (such as the workflow status). &dapsacr;
-   offers an option to also display this meta information in the generated
-   output.
+   &dapsacr; offers several features to simplify the review process. For example, 
+   you can insert <sgmltag>remark</sgmltag> elements in the source code 
+   (for editorial remarks or questions to the proofreader)
+   and generate an output format that shows or hides these remarks. 
+   You can also generate preview versions of your documentation with a 
+   <literal>DRAFT</literal> watermark appearing on the HTML or PDF output.
   </para>
 
 &daps-note-output-adv;
@@ -46,14 +37,14 @@
 
   <variablelist>
    <varlistentry>
-    <term>Including Remarks in the Output</term>
+    <term>Including remarks in the output</term>
     <listitem>
      <screen>&prompt.user;&dapscmd; -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> pdf --remarks</screen>
      &daps-output-remarks;
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term>Building PDFs with a <literal>DRAFT</literal> Watermark</term>
+    <term>Building PDFs with a <literal>DRAFT</literal> watermark</term>
     <listitem>
      <screen>&prompt.user;&dapscmd; -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> pdf --draft</screen>
      <para>
@@ -62,19 +53,10 @@
      </para>
     </listitem>
    </varlistentry>
-   <varlistentry>
-    <term>Including Metadata in the Output</term>
-    <listitem>
-     <screen>&prompt.user;daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> html --meta</screen>
-     <para>
-      Adds the file name of the current file below section titles.
-     </para>
-     </listitem>
-   </varlistentry>
-  </variablelist>
+   </variablelist>
  </sect1>
  <sect1 id="sec.daps.user.review.bigfile">
-  <title>Creating XML Big Files</title>
+  <title>Creating XML big files</title>
 
   <para> Instead of sending multiple XML files to a proofreader for review, you can transform all
    files included in your <sgmltag>book</sgmltag> or <sgmltag>set</sgmltag> into one huge DocBook
@@ -89,39 +71,10 @@
    <sgmltag>&lt;xi:include/&gt;</sgmltag> tag and the real error is hidden
    somewhere inside the included file. Using the option
    <option>--novalid</option> allows you to build and validate a single XML
-   file where error messages points to their occurrences in the bigfile. Use
+   file where error messages point to their occurrences in the big file. Use
    the following command as an example:
   </para>
 
   <screen>&prompt.user;&dapscmd; -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> bigfile --novalid</screen>
-
- </sect1>
- <sect1 id="sec.daps.user.review.locdrop">
-  <title>Creating TAR Archives For Localization</title>
-  <para> If you have a huge documentation project of which only individual books or files are to be
-   translated, you can mark the respective files as translation-relevant with
-   the <sgmltag>dm:translation</sgmltag> element of &dm;.
-   You can then use the <command>&dapscmd; locdrop</command> command to generate the
-   following archives for distribution to the translators or translation agency: </para>
-  <itemizedlist>
-   <listitem>
-    <para>One TAR archive contains the graphics.</para>
-   </listitem>
-   <listitem>
-    <para>One TAR archive contains all XML files that need to be localized.</para>
-   </listitem>
-   <listitem>
-    <para>One TAR archive contains the remaining files of the set. The remaining files are
-     needed for solving any cross-references between translated and untranslated content during
-     generation of output.</para>
-   </listitem>
-  </itemizedlist>
-
-
-  <screen>&prompt.user;daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> locdrop</screen>
-
-  <para> For further options related to creating distributable archives with &dapsacr;, run
-   <command>daps -/-help</command> or see <xref linkend="cha.daps.user.deploy"/> for more
-   information. </para>
- </sect1>
-</chapter>
+</sect1>
+ </chapter>

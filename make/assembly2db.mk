@@ -16,6 +16,10 @@ include $(DAPSROOT)/make/common_variables.mk
 STYLEASSEMBLY  ?= $(firstword $(wildcard $(addsuffix \
 	        /assembly/assemble.xsl, $(STYLE_ROOTDIRS))))
 
+# Error out if no assembly stylesheet can be found
+ifeq "$(strip $(STYLEASSEMBLY))" ""
+  $(error "FATAL: Could not find assembly/assemble.xsl in the given stylesheet paths. Do you have DocBook >= 5.2 and the respective stylesheets installed?")
+endif
 
 # used to select one structure among several (if assembly file provides
 # multiple structures)

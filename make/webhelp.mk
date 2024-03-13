@@ -276,7 +276,7 @@ copy_common:
 # Generate WEBHELP from profiled xml
 #
 $(WEBHELP_RESULT): | $(WEBHELP_DIR)
-$(WEBHELP_RESULT): $(PROFILES) $(PROFILEDIR)/.validate $(DOCFILES)
+$(WEBHELP_RESULT): $(PROFILES)  $(DOCFILES) validate
 ifneq "$(WH_SEARCH)" "no"
   $(WEBHELP_RESULT): copy_common
 endif

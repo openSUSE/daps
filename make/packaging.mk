@@ -43,7 +43,7 @@ ifdef IS_LOCDROP
   package-src: MFT_TRANS := $(wildcard $(addprefix $(PRJ_DIR)/,$(notdir $(MANIFEST_TRANS))))
   package-src: MFT_NOTRANS := $(wildcard $(addprefix $(PRJ_DIR)/,$(notdir $(MANIFEST_NOTRANS))))
 endif
-package-src: $(PROFILES) $(PROFILEDIR)/.validate
+package-src: $(PROFILES) validate
   ifneq "$(strip $(MISSING_IMG))" ""
 	@ccecho "error" "Fatal error: The following images are missing:"
 	@echo -e "$(subst $(SPACE),\n,$(sort $(MISSING_IMG)))"

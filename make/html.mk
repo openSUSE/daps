@@ -124,6 +124,11 @@ HTMLSTRINGS  += --param "show.comments=$(REMARKS)" \
 		--stringparam "draft.mode=$(DRAFT)" \
                 --stringparam "img.src.path=images/"
 
+# For metadata extraction during HTML builds the SUSE stylesheets need the
+# DC-file name 
+
+HTMLSTRINGS  += --stringparam "dcfilename=$(DC_FILE)"
+
 # DocBook uses .xhtml for XHTML5 by default
 ifeq "$(HTML5)" "1"
   HTMLSTRINGS  += --stringparam "html.ext=.html"
@@ -251,7 +256,7 @@ copy_inline_images_html: $(COLOR_IMAGES)
 ifdef METASTRING
   $(HTML_RESULT): $(PROFILEDIR)/METAFILE
 endif
-$(HTML_RESULT): $(PROFILES) $(PROFILEDIR)/.validate $(DOCFILES)
+$(HTML_RESULT): $(PROFILES) $(DOCFILES) validate
   ifeq "$(VERBOSITY)" "2"
 	@ccecho "info" "Creating HTML pages"
     ifdef HTML_CSS_INFO

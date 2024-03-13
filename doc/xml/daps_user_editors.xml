@@ -8,237 +8,118 @@
 %entities;
 ]>
 <appendix id="app.daps.user.editors">
- <title>Editor-specific Information</title>
+ <title>Editor-specific information</title>
  <abstract>
   <para>
    This chapter covers the following topics:
    <itemizedlist>
     <listitem>
      <para>
+      Visual Studio Code extensions: run &dapsacr; commands, check style and add snippets 
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Editing XML/DocBook files with Vim
+     </para>
+    </listitem>
+    <listitem>
+     <para>
       Using DocBook macros for Emacs
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      Editing XML/DocBook Files with the Vim Editor
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      Integrating the spell checker &aspell; into &jedit;
      </para>
     </listitem>
    </itemizedlist>
   </para>
  </abstract>
- <sect1 id="sec.daps.user.editors.emacs.macros">
-  <title>Emacs&mdash;Macros for Inserting DocBook Elements</title>
-
-  <para>
-   Most editors allow you to write or record macros that you can use for
-   automatically inserting <quote>skeletons</quote> for complex XML
-   constructs as illustrated by <xref linkend="ex.daps.user.vle"/>.
-  </para>
-
-  <example id="ex.daps.user.vle">
-   <title>A <sgmltag>varlistentry</sgmltag> Element</title>
-<screen>&lt;varlistentry&gt;
- &lt;term&gt;&lt;/term&gt;
-  &lt;listitem&gt;
-   &lt;para&gt;&lt;/para&gt;
-  &lt;/listitem&gt;
- &lt;/varlistentry&gt;</screen>
-  </example>
-
-  <para>
-   &dapsacr; comes with macros for the Emacs editor that can be used to add
-   DocBook elements, such as <sgmltag>listitem</sgmltag>,
-   <sgmltag>figure</sgmltag>, or <sgmltag>indexterm</sgmltag>. The macros are
-   stored in <filename>docbook_macros.el</filename> and are added to your
-   system during the installation of &dapsacr;. They require that you use one
-   of Emacs' main XML editing modes, either <literal>nxml</literal> or
-   <literal>psgml</literal>.
-  </para>
-
-  <procedure id="pro.daps.emacs.macros.config">
-   <title>Configuring Emacs for Using the DocBook Macros</title>
-   <step>
-    <para>
-     To load the DocBook macros, open your Emacs customization file
-     (<filename>~/.emacs</filename> or <filename>~/.gnu-emacs</filename>).
-    </para>
-   </step>
-   <step>
-    <para>
-     Insert the following line:
-    </para>
-<screen>(load "/usr/share/emacs/site-lisp/docbook_macros.el" t t)</screen>
-   </step>
-   <step>
-    <para>
-     Save the Emacs customization file and restart Emacs.
-    </para>
-   </step>
-  </procedure>
-
-  <para>
-   For an overview of the available macros and their usage, refer to
-   <ulink url="http://en.opensuse.org/openSUSE:Documentation_Emacs_Docbook_Macros"></ulink>.
-  </para>
- </sect1>
+ 
+<sect1 id="sec.daps.user.editors.vscode">
+<title>Visual Studio Code extensions: check spelling and style, run &dapsacr; commands and add snippets</title>
+<para>The VSCode editor features extensions that are handy for document checking 
+      and effective use of &dapsacr; commands and DocBook templates.</para>
+<itemizedlist>
+      <listitem>
+            <para>
+            The suse-vale-styleguide extension incorporates Vale VSCode linter rules
+            (spelling, style and grammar) along with specific guidance from the SUSE Documentation Style Guide.
+            For more information, refer to
+            <ulink url="https://github.com/openSUSE/vscode-suse-vale-styleguide"></ulink>.     
+            </para>
+      </listitem>
+      <listitem>
+            <para>
+            The vscode-daps extension makes it easier to run selected &dapsacr; commands
+            from the VSCode editor. For details, see
+            <ulink url="https://github.com/openSUSE/vscode-daps"></ulink>.</para>
+      </listitem>
+      <listitem>
+            <para>
+            The docbook-snippets extension includes templates of both simple and complex
+            DocBook structures. You can populate the templates by pressing the initial DocBook
+            markup letters. For example, pressing <emphasis>li</emphasis> results in
+            &lt;listitem&gt;insert content&lt;/listitem&gt;. For more details, see
+            <ulink url="https://github.com/openSUSE/vscode-docbook-snippets"></ulink>.
+            </para>
+      </listitem>
+</itemizedlist>
+</sect1>
 
  <sect1 id="sec.daps.user.editors.vi">
-  <title>Editing XML/DocBook Files with the Vim Editor</title>
-  <para>Find information about on <ulink
-   url="https://github.com/tbazant/xml-vim"></ulink>.</para>
+  <title>Editing XML/DocBook files with Vim</title>
+  <para>The vim-daps plug-in brings &dapsacr; command functionality to the Vim editor
+      when editing XML/DocBook files. After installing it, you can validate DocBook sources,
+      build HTML or PDF targets, format the source XML and much more. You can also customize
+      the plug-in with multiple options to make editing XML files easier.
+      For details, refer to <ulink url="https://github.com/tbazant/xml-vim"></ulink>.</para>
  </sect1>
 
- <sect1 id="sec.daps.user.editors.jedit.spellcheck">
-  <title>&jedit;&mdash;Spell Check on the Fly</title>
-
-  <para>
-   If you do not want to run <command>daps spellcheck</command> from the
-   command line, you can also integrate &aspell; (plus a custom
-   dictionary, if needed) into your XML editor, so that spelling is
-   checked <quote>on the fly</quote> during editing. Consult your editor's
-   documentation on how to integrate a custom dictionary. If you use
-   &jedit;, follow the instructions in
-   <xref linkend="pro.daps.spellcheck.jedit"/>.
-  </para>
-
-  <procedure id="pro.daps.spellcheck.jedit">
-   <title>Integrating &aspell; into &jedit;</title>
-   <step>
-    <para>
-     Install and activate the plug-in for spell checking:
-    </para>
-    <substeps>
-     <step>
+ <sect1 id="sec.daps.user.editors.emacs.macros">
+      <title>Emacs&mdash;macros for inserting DocBook elements</title>
       <para>
-       Start &jedit; and select <menuchoice><guimenu>Plug-ins</guimenu>
-       <guimenu>Plug-in Manager</guimenu> </menuchoice>.
+       Most editors allow you to write or record macros that you can use for
+       automatically inserting <quote>skeletons</quote> for complex XML
+       constructs as illustrated by <xref linkend="ex.daps.user.vle"/>.
       </para>
-     </step>
-     <step>
-      <para>
-       If the <guimenu>Spell Check</guimenu> plug-in is not already
-       installed, install and activate it.
+          <example id="ex.daps.user.vle">
+       <title>A <sgmltag>varlistentry</sgmltag> element</title>
+    <screen>&lt;varlistentry&gt;
+     &lt;term&gt;&lt;/term&gt;
+      &lt;listitem&gt;
+       &lt;para&gt;&lt;/para&gt;
+      &lt;/listitem&gt;
+     &lt;/varlistentry&gt;</screen>
+      </example>
+          <para>
+       &dapsacr; comes with macros for the Emacs editor that can be used to add
+       DocBook elements, such as <sgmltag>listitem</sgmltag>,
+       <sgmltag>figure</sgmltag>, or <sgmltag>indexterm</sgmltag>. The macros are
+       stored in <filename>docbook_macros.el</filename> and are added to your
+       system during the installation of &dapsacr;. They require that you use one
+       of Emacs' main XML editing modes, either <literal>nxml</literal> or
+       <literal>psgml</literal>.
       </para>
-     </step>
-     <step>
-      <para>
-       Close and restart &jedit;.
-      </para>
-     </step>
-    </substeps>
-   </step>
-   <step>
-    <para>
-     Configure the plug-in as follows:
-    </para>
-    <substeps>
-     <step>
-      <para>
-       Select <menuchoice> <guimenu>Plug-ins</guimenu> <guimenu>Plug-in
-       Options</guimenu> </menuchoice>.
-      </para>
-     </step>
-     <step>
-      <para>
-       In the left navigation pane, select <menuchoice> <guimenu>Spell
-       Check</guimenu> <guimenu>General</guimenu> </menuchoice>.
-      </para>
-     </step>
-     <step>
-      <para>
-       Set <guimenu>Spell-checking engine</guimenu> to
-       <guimenu>Aspell</guimenu> and select the <guimenu>Dictionary to
-       use</guimenu>, for example <literal>en_US</literal>.
-      </para>
-     </step>
-     <step>
-      <para>
-       If the desired dictionary does not appear in the drop-down box,
-       install the respective &aspell; dictionary for the language and click
-       <guimenu>Refresh list</guimenu>.
-      </para>
-     </step>
-     <step>
-      <para>
-       In the left navigation pane, switch to <menuchoice> <guimenu>Spell
-       Check</guimenu> <guimenu>Syntax handling</guimenu> </menuchoice>.
-      </para>
-     </step>
-     <step>
-      <para>
-       In the table, activate the <guimenu>markup</guimenu> entry and click
-       <guimenu>Edit</guimenu> next to it.
-      </para>
-     </step>
-     <step>
-      <para>
-       In the <guimenu>Token types picker</guimenu>, activate the following
-       entries:
-      </para>
-      <itemizedlist>
-       <listitem>
+          <procedure id="pro.daps.emacs.macros.config">
+       <title>Configuring Emacs for using the DocBook macros</title>
+       <step>
         <para>
-         NULL
+         To load the DocBook macros, open your Emacs customization file
+         (<filename>~/.emacs</filename> or <filename>~/.gnu-emacs</filename>).
         </para>
-       </listitem>
-       <listitem>
+       </step>
+       <step>
         <para>
-         COMMENT1
+         Insert the following line:
         </para>
-       </listitem>
-       <listitem>
+    <screen>(load "/usr/share/emacs/site-lisp/docbook_macros.el" t t)</screen>
+       </step>
+       <step>
         <para>
-         LITERAL1
+         Save the Emacs customization file and restart Emacs.
         </para>
-       </listitem>
-      </itemizedlist>
-     </step>
-     <step>
-      <para>
-       In the left navigation pane, switch to <menuchoice> <guimenu>Spell
-       Check</guimenu> <guimenu>Aspell Engine</guimenu> </menuchoice>.
+       </step>
+      </procedure>
+          <para>
+       For an overview of the available macros and their usage, refer to
+       <ulink url="http://en.opensuse.org/openSUSE:Documentation_Emacs_Docbook_Macros"></ulink>.
       </para>
-     </step>
-     <step>
-      <para>
-       Set the path to the <guimenu>Aspell executable file name</guimenu>.
-       Select <guimenu>Enable markup mode</guimenu>.
-      </para>
-     </step>
-     <step>
-      <para>
-       To use an additional custom &aspell; dictionary, specify the path to it
-       in the text box below <guimenu>Additional parameters</guimenu>:
-      </para>
-<screen>--extra-dicts=<replaceable>PATH_TO_CUSTOM_DICT</replaceable></screen>
-      <para>
-       For example:
-      </para>
-<screen>--extra-dicts=/home/tux/custom_aspell.rws</screen>
-     </step>
-     <step>
-      <para>
-       Save your settings in the plug-in options dialog by pressing
-       <guimenu>OK</guimenu> or <guimenu>Apply</guimenu>.
-      </para>
-     </step>
-    </substeps>
-   </step>
-   <step>
-    <para>
-     To perform a spell check during editing, select <menuchoice>
-     <guimenu>Plug-ins</guimenu> <guimenu>Spell Check</guimenu>
-     <guimenu>Highlight misspelled words</guimenu> </menuchoice> (or use the
-     key combination assigned to that menu item).
-    </para>
-   </step>
-  </procedure>
- </sect1>
-
-
+     </sect1>
 </appendix>
