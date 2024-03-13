@@ -91,7 +91,7 @@ $(PROFILEDIR)/.validate validate: $(PROFILES)
 	fi
 	@if [[ -n "$(FAULTY_INLINES)" ]]; then \
 	  ccecho "error" "[ERROR] The following inline elements are empty:"; \
-	  echo -e "$(subst $(SPACE)$(SPACE)$(SPACE)$(SPACE)$(SPACE)$(SPACE)$(SPACE)$(SPACE)$(SPACE),\n\t,$(subst [ERROR],\n[WARNING],$(FAULTY_INLINES)))"; \
+	  echo -e "$(subst $(SPACE)$(SPACE)$(SPACE)$(SPACE)$(SPACE)$(SPACE)$(SPACE)$(SPACE)$(SPACE),\n\t,$(subst [ERROR],\n[ERROR],$(FAULTY_INLINES)))"; \
 	  echo "--------------------------------"; \
 	fi
 	@if [[ -n "$(_IMG_MISS)" ]]; then \
@@ -104,7 +104,7 @@ $(PROFILEDIR)/.validate validate: $(PROFILES)
 	  echo -e "$(subst $(SPACE),\n,$(sort $(_IMG_DUPES)))"; \
 	  echo "--------------------------------"; \
 	fi
-	@if [[ -n '$(strip $(FAULTY_XML)$(FAULTY_TABLES)$(FAULTY_IDS)$(_IMG_MISS))' ]]; then \
+	@if [[ -n '$(strip $(FAULTY_XML)$(FAULTY_TABLES)$(FAULTY_IDS)$(FAULTY_INLINES)$(_IMG_MISS))' ]]; then \
 	  ccecho "error" "Document does not validate!"; \
 	  exit 1; \
 	fi
