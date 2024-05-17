@@ -26,6 +26,7 @@ LOGGERNAME = "metadata"
 
 #: The configuration paths where to search for the config
 CONFIGDIRS: t.Sequence = [
+    # "Reserve" first place for environment variable 'METAVALIDATOR_CONFIG'
     # Search in the current directory:
     "metadatavalidator.ini",
     # In the users' home directory:
@@ -33,6 +34,10 @@ CONFIGDIRS: t.Sequence = [
     # In the system
     "/etc/metadatavalidator/config.ini"
     ]
+METAVALIDATOR_CONFIG = os.environ.get('METAVALIDATOR_CONFIG')
+if METAVALIDATOR_CONFIG is not None:
+    CONFIGDIRS.insert(0, os.path.expanduser(METAVALIDATOR_CONFIG))
+
 CONFIGDIRS = tuple(os.path.expanduser(i) for i in CONFIGDIRS)
 
 #: The dictionary, passed to :class:`logging.config.dictConfig`,
@@ -82,6 +87,11 @@ logging.getLogger().setLevel(logging.NOTSET)
 log = logging.getLogger(LOGGERNAME)
 
 
+#----------------
+class NoConfigFilesFoundError(FileNotFoundError):
+    pass
+
+
 def parsecli(cliargs=None) -> argparse.Namespace:
     """Parse CLI with :class:`argparse.ArgumentParser` and return parsed result
     :param cliargs: Arguments to parse or None (=use sys.argv)
@@ -100,7 +110,9 @@ def parsecli(cliargs=None) -> argparse.Namespace:
                         action='version',
                         version='%(prog)s ' + __version__
                         )
-    parser.add_argument("XMLFILE",
+    parser.add_argument("xmlfiles",
+                        metavar="XMLFILES",
+                        nargs="+",
                         help="Searches for metadata in the XML file"
                         )
 
@@ -115,14 +127,21 @@ def parsecli(cliargs=None) -> argparse.Namespace:
     for handler in log.handlers:
         if handler.name == "console":
             handler.setLevel(loglevel)
-
-    log.debug("CLI result: %s", args)
     return args
 
 
-def readconfig():
+def readconfig(dirs: t.Sequence) -> configparser.ConfigParser:
+    """Read config data from config files
+
+    :param dirs: the directories to search for config files
+    :return: a :class:`configparser.ConfigParser` object
     """
-    """
+    config = configparser.ConfigParser()
+    configfiles = config.read(dirs)
+    if not configfiles:
+        raise NoConfigFilesFoundError("Config files not found")
+    setattr(config, "configfiles", configfiles)
+    return config
 
 
 def main(cliargs=None) -> int:
@@ -132,6 +151,7 @@ def main(cliargs=None) -> int:
     """
     try:
         args = parsecli(cliargs)
+        config = readconfig(CONFIGDIRS)
         log.debug("CLI args %s", args)
         # do some useful things here...
         # If everything was good, return without error:
@@ -143,11 +163,14 @@ def main(cliargs=None) -> int:
 
         return 0
 
-    # List possible exceptions here and return error codes
+    except NoConfigFilesFoundError as error:
+        log.critical("No config files found")
+        return 100
+
     except Exception as error:  # FIXME: add a more specific exception here!
-        log.fatal(error)
+        log.exception("Some unknown exception occured", error)
         # Use whatever return code is appropriate for your specific exception
-        return 10
+        return 200
 
 
 if __name__ == "__main__":
