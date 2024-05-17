@@ -1,0 +1,51 @@
+# https://packaging.python.org/en/latest/specifications/declaring-project-metadata/#declaring-project-metadata
+[build-system]
+requires = [
+  # Don't forget to install the "build" package in your
+  # environment!
+  # pyproject-build ...
+  "setuptools>=61.0.0",
+  # "setuptools >=63.2.0",
+  # "setuptools @ git+https://github.com/pypa/setuptools.git@main"
+  # "git+https://github.com/pypa/setuptools.git@v67.0.0",
+  # "setuptools-scm",
+  "wheel ~=0.37.1",
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "metadatavalidator"
+readme = "README.rst"
+description = "Validates DocBook metadata (mainly in <meta/> tags)"
+# readme = "README.rst"
+license = {file = "LICENSE.rst"}
+authors = [
+   {name = "Tom Schraitle", email = "toms@suse.de"},
+]
+requires-python = ">=3.11"
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Intended Audience :: System Administrators",
+    "Framework :: Litestar",
+    "License :: OSI Approved",
+    "Operating System :: POSIX :: Linux",
+    "Environment :: Web Environment",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Documentation",
+    "Topic :: Text Processing",
+    "Topic :: Text Processing :: Markup :: XML",
+]
+dynamic = ["version"]
+
+
+[project.scripts]
+metavalidator = "metadatavalidator:main"
+
+[tool.setuptools.dynamic]
+version = {attr = "metadatavalidator.__version__"}
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+include = [ "pyproject.toml", "metadatavalidator.py", ]
