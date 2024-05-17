@@ -29,10 +29,6 @@ DEFAULT_LOGGING_DICT = {
     'disable_existing_loggers': True,
     'formatters': {
         'standard': {'format': '[%(levelname)s] %(funcName)s: %(message)s'},
-        # 'file': {'format': '[%(levelname)s] %(asctime)s (%(funcName)s): %(message)s',
-        #          #: Depending on your wanted precision, disable this line
-        #          'datefmt': '%Y-%m-%d %H:%M:%S',
-        #          },
     },
     'handlers': {
         'console': {
@@ -40,23 +36,15 @@ DEFAULT_LOGGING_DICT = {
             'formatter': 'standard',
             'class': 'logging.StreamHandler',
         },
-        # 'fh': {
-        #     'level': 'DEBUG',  # we want all in the log file
-        #     # Change the formatting here, if you want a different output in your log file
-        #     'formatter': 'file',
-        #     'class': 'logging.FileHandler',
-        #     'filename': '/tmp/log.txt',
-        #     'mode': 'w',  # use "a" if you want to append log output or remove this lien
-        # },
     },
     'loggers': {
         LOGGERNAME: {
-            'handlers': ['console', ],
+            'handlers': ['console',],
             'level': 'DEBUG',
             'propagate': False,
         },
         # Set the root logger's log level:
-        '': {
+        'root': {
             'level': 'WARNING',
             'handlers': ["console"],
         }
