@@ -7,10 +7,13 @@ import argparse
 import configparser
 import logging
 from logging.config import dictConfig
+import os.path
 import sys
+import typing as t
 
 try:
     from lxml import etree
+
 except ImportError:
     print("Cannot import lxml. ", file=sys.stderr)
     sys.exit(10)
@@ -20,6 +23,17 @@ __author__ = "Tom Schraitle <toms@suse.de>"
 
 #: The logger name; can also set to "__name__"
 LOGGERNAME = "metadata"
+
+#: The configuration paths where to search for the config
+CONFIGDIRS: t.Sequence = [
+    # Search in the current directory:
+    "metadatavalidator.ini",
+    # In the users' home directory:
+    "~/.config/metadatavalidator/config.ini",
+    # In the system
+    "/etc/metadatavalidator/config.ini"
+    ]
+CONFIGDIRS = tuple(os.path.expanduser(i) for i in CONFIGDIRS)
 
 #: The dictionary, passed to :class:`logging.config.dictConfig`,
 #: is used to setup your logging formatters, handlers, and loggers
@@ -106,6 +120,11 @@ def parsecli(cliargs=None) -> argparse.Namespace:
     return args
 
 
+def readconfig():
+    """
+    """
+
+
 def main(cliargs=None) -> int:
     """Entry point for the application script
     :param cliargs: Arguments to parse or None (=use :class:`sys.argv`)
@@ -113,6 +132,7 @@ def main(cliargs=None) -> int:
     """
     try:
         args = parsecli(cliargs)
+        log.debug("CLI args %s", args)
         # do some useful things here...
         # If everything was good, return without error:
         log.debug("I'm a debug message.")
