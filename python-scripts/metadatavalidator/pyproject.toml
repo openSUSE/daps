@@ -17,8 +17,7 @@ build-backend = "setuptools.build_meta"
 name = "metadatavalidator"
 readme = "README.rst"
 description = "Validates DocBook metadata (mainly in <meta/> tags)"
-# readme = "README.rst"
-license = {file = "LICENSE.rst"}
+# license = {file = "LICENSE.rst"}
 authors = [
    {name = "Tom Schraitle", email = "toms@suse.de"},
 ]
@@ -40,11 +39,10 @@ dynamic = ["version"]
 
 
 [project.scripts]
-metavalidator = "metadatavalidator:main"
+metavalidator = "bin.metadatavalidator:main"
 
 [tool.setuptools.dynamic]
-version = {attr = "metadatavalidator.__version__"}
-
+version = {attr = "bin.metadatavalidator.__version__"}
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
@@ -62,7 +60,6 @@ pythonpath = ["bin/", "tests/"]
 #   --cov=docr
 #   --cov-report=term-missing
 # """
-
 
 
 [tool.ruff]
