@@ -1,7 +1,7 @@
 import argparse
+import asyncio
 import logging
 from logging.config import dictConfig
-import os.path
 import sys
 import typing as t
 
@@ -15,6 +15,7 @@ except ImportError:
 from . import __author__, __version__
 from .config import readconfig
 from .common import CONFIGDIRS
+from .exceptions import NoConfigFilesFoundError
 from .logging import DEFAULT_LOGGING_DICT, LOGLEVELS, log
 from .process import process
 
@@ -22,11 +23,6 @@ from .process import process
 #: in order for all messages to be delegated.
 logging.getLogger().setLevel(logging.NOTSET)
 
-
-
-#----------------
-class NoConfigFilesFoundError(FileNotFoundError):
-    pass
 
 
 def parsecli(cliargs=None) -> argparse.Namespace:
