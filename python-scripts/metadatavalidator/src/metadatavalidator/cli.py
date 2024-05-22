@@ -78,14 +78,7 @@ def main(cliargs=None) -> int:
         config = readconfig(CONFIGDIRS)
         log.debug("CLI args %s", args)
 
-        process(args, config)
-        # do some useful things here...
-        # If everything was good, return without error:
-        log.debug("I'm a debug message.")
-        log.info("I'm an info message")
-        log.warning("I'm a warning message.")
-        log.error("I'm an error message.")
-        log.fatal("I'm a really fatal massage!")
+        asyncio.run(process(args, config))
 
         return 0
 

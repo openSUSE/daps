@@ -1,9 +1,8 @@
 import configparser
 import typing as t
 
+from .exceptions import NoConfigFilesFoundError
 
-class NoConfigFilesFoundError(FileNotFoundError):
-    pass
 
 
 def readconfig(dirs: t.Sequence) -> configparser.ConfigParser:
