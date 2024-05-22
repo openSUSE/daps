@@ -1,10 +1,4 @@
-#!/usr/bin/python3
-"""
-
-"""
-
 import argparse
-import configparser
 import logging
 from logging.config import dictConfig
 import os.path
@@ -18,73 +12,16 @@ except ImportError:
     print("Cannot import lxml. ", file=sys.stderr)
     sys.exit(10)
 
-__version__ = "0.2.0"
-__author__ = "Tom Schraitle <toms@suse.de>"
-
-#: The logger name; can also set to "__name__"
-LOGGERNAME = "metadata"
-
-#: The configuration paths where to search for the config
-CONFIGDIRS: t.Sequence = [
-    # "Reserve" first place for environment variable 'METAVALIDATOR_CONFIG'
-    # Search in the current directory:
-    "metadatavalidator.ini",
-    # In the users' home directory:
-    "~/.config/metadatavalidator/config.ini",
-    # In the system
-    "/etc/metadatavalidator/config.ini"
-    ]
-METAVALIDATOR_CONFIG = os.environ.get('METAVALIDATOR_CONFIG')
-if METAVALIDATOR_CONFIG is not None:
-    CONFIGDIRS.insert(0, os.path.expanduser(METAVALIDATOR_CONFIG))
-
-CONFIGDIRS = tuple(os.path.expanduser(i) for i in CONFIGDIRS)
-
-#: The dictionary, passed to :class:`logging.config.dictConfig`,
-#: is used to setup your logging formatters, handlers, and loggers
-#: For details, see https://docs.python.org/3.4/library/logging.config.html#configuration-dictionary-schema
-DEFAULT_LOGGING_DICT = {
-    'version': 1,
-    'disable_existing_loggers': True,
-    'formatters': {
-        'standard': {'format': '[%(levelname)s] %(funcName)s: %(message)s'},
-    },
-    'handlers': {
-        'console': {
-            'level': 'DEBUG', # will be set later
-            'formatter': 'standard',
-            'class': 'logging.StreamHandler',
-        },
-    },
-    'loggers': {
-        LOGGERNAME: {
-            'handlers': ['console',],
-            'level': 'DEBUG',
-            'propagate': False,
-        },
-        # Set the root logger's log level:
-        'root': {
-            'level': 'WARNING',
-            'handlers': ["console"],
-        }
-    }
-}
-
-
-#: Map verbosity level (int) to log level
-LOGLEVELS = {None: logging.WARNING,  # 0
-             0: logging.WARNING,
-             1: logging.INFO,
-             2: logging.DEBUG,
-             }
+from . import __author__, __version__
+from .config import readconfig
+from .common import CONFIGDIRS
+from .logging import DEFAULT_LOGGING_DICT, LOGLEVELS, log
 
 
 #: Change root logger level from WARNING (default) to NOTSET
 #: in order for all messages to be delegated.
 logging.getLogger().setLevel(logging.NOTSET)
 
-#: Instantiate our logger
-log = logging.getLogger(LOGGERNAME)
 
 
 #----------------
@@ -134,27 +71,10 @@ def parsecli(cliargs=None) -> argparse.Namespace:
     return args
 
 
-def readconfig(dirs: t.Sequence) -> configparser.ConfigParser:
-    """Read config data from config files
-
-    :param dirs: the directories to search for config files
-    :return: a :class:`configparser.ConfigParser` object
-    """
-    config = configparser.ConfigParser()
-    configfiles = config.read(dirs)
-    if not configfiles:
-        raise NoConfigFilesFoundError("Config files not found")
-    setattr(config, "configfiles", configfiles)
-    return config
-
-
-# def check_
-
-
-def process(args: argparse.Namespace, config: configparser.ConfigParser):
+def process(args, config):
     """
     """
-    pass
+    log.info("I'm the process function!")
 
 
 def main(cliargs=None) -> int:

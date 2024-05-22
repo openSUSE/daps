@@ -1,14 +1,8 @@
 # https://packaging.python.org/en/latest/specifications/declaring-project-metadata/#declaring-project-metadata
 [build-system]
 requires = [
-  # Don't forget to install the "build" package in your
-  # environment!
-  # pyproject-build ...
+  # "pyproject-build",
   "setuptools>=61.0.0",
-  # "setuptools >=63.2.0",
-  # "setuptools @ git+https://github.com/pypa/setuptools.git@main"
-  # "git+https://github.com/pypa/setuptools.git@v67.0.0",
-  # "setuptools-scm",
   "wheel ~=0.37.1",
 ]
 build-backend = "setuptools.build_meta"
@@ -39,10 +33,11 @@ dynamic = ["version"]
 
 
 [project.scripts]
-metavalidator = "bin.metadatavalidator:main"
+metadatavalidator = "metadatavalidator.cli:main"
+
 
 [tool.setuptools.dynamic]
-version = {attr = "bin.metadatavalidator.__version__"}
+version = {attr = "metadatavalidator.__version__"}
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
@@ -54,15 +49,15 @@ norecursedirs = [
   ".pyenv/",
   ".tmp/",
  ]
-pythonpath = ["bin/", "tests/"]
-# addopts = """
-#   --no-cov-on-fail
-#   --cov=docr
-#   --cov-report=term-missing
-# """
+pythonpath = ["src", "tests"]
+addopts = """
+  --no-cov-on-fail
+  --cov=docr
+  --cov-report=term-missing
+"""
 
 
 [tool.ruff]
 line-length = 88
 target-version = "py311"
-include = [ "pyproject.toml", "metadatavalidator.py", ]
+include = [ "pyproject.toml", "src/metadatavalidator", ]
