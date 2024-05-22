@@ -45,6 +45,26 @@ metavalidator = "metadatavalidator:main"
 [tool.setuptools.dynamic]
 version = {attr = "metadatavalidator.__version__"}
 
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+norecursedirs = [
+  "build",
+  ".git",
+  ".eggs/",
+  ".env/",
+  ".pyenv/",
+  ".tmp/",
+ ]
+pythonpath = ["bin/", "tests/"]
+# addopts = """
+#   --no-cov-on-fail
+#   --cov=docr
+#   --cov-report=term-missing
+# """
+
+
+
 [tool.ruff]
 line-length = 88
 target-version = "py311"
