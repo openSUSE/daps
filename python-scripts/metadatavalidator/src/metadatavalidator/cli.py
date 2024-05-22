@@ -16,7 +16,7 @@ from . import __author__, __version__
 from .config import readconfig
 from .common import CONFIGDIRS
 from .logging import DEFAULT_LOGGING_DICT, LOGLEVELS, log
-
+from .process import process
 
 #: Change root logger level from WARNING (default) to NOTSET
 #: in order for all messages to be delegated.
@@ -70,11 +70,6 @@ def parsecli(cliargs=None) -> argparse.Namespace:
               getattr(args.config, "configfiles", "n/a"))
     return args
 
-
-def process(args, config):
-    """
-    """
-    log.info("I'm the process function!")
 
 
 def main(cliargs=None) -> int:
