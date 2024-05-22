@@ -8,3 +8,8 @@ class NoConfigFilesFoundError(FileNotFoundError):
 class BaseMetadataError(ValueError):
     pass
 
+class InvalidElementError(BaseMetadataError):
+    pass
+
+class InvalidValueError(BaseMetadataError):
+    pass

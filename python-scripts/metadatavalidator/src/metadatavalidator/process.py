@@ -4,44 +4,44 @@ from configparser import ConfigParser
 
 from lxml import etree
 
+from .checks.check_root import check_root_tag, check_namespace
+from .exceptions import InvalidValueError
 from .logging import log
 
 
-# Example check functions
-def check_root_tag(tree):
-    if tree.getroot().tag in ("article", "book", "topic"):
-        raise ValueError("Root tag is not 'expected_root'")
-
-def check_element_exists(tree, element_name):
-    if tree.find(element_name) is None:
-        raise ValueError(f"Element '{element_name}' not found")
-
-
-async def process_xml_file(xmlfile: str):
+async def process_xml_file(xmlfile: str, config: ConfigParser):
     """Process a single XML file
+
+    :param xmlfile: the XML file to check for meta data
+    :param config: read-only configuration from INI file
     """
-    try:
-        # loop = asyncio.get_running_loop()
-        # tree = await loop.run_in_executor(None, etree.parse, xmlfile)
-        tree = etree.parse(xmlfile)
+    for checkfunc in [check_namespace, check_root_tag]:
+        try:
+            # loop = asyncio.get_running_loop()
+            # tree = await loop.run_in_executor(None, etree.parse, xmlfile)
+            tree = etree.parse(xmlfile,
+                               parser=etree.XMLParser(encoding="UTF-8"))
 
-        # Apply check functions
-        check_root_tag(tree)
-        # check_element_exists(tree, 'required_element')
+            # Apply check function
+            checkfunc(tree, config)
 
-        # Add calls to more check functions here...
+        except etree.XMLSyntaxError as e:
+            log.fatal("Syntax error in %r: %s", xmlfile, e)
 
-        log.info("File %s processed successfully.", xmlfile)
+        except InvalidValueError as e:
+            log.fatal("Invalid value in %r for %s: %s",
+                      xmlfile, checkfunc.__name__,  e)
 
-    except etree.XMLSyntaxError as e:
-        log.fatal("Problem with %r: %s", xmlfile, e)
-        # print(f"Error in file {xmlfile}: {e}")
+    log.info("File %r checked successfully.", xmlfile)
 
 
 async def process(args: Namespace, config: ConfigParser):
-    """
+    """Process all XML files that are give on CLI
+
+    :param args: the arguments parsed by argparse
+    :param config: read-only configuration from INI file
     """
     log.debug("Process all XML files...")
     async with asyncio.TaskGroup() as tg:
         for xmlfile in args.xmlfiles:
-            tg.create_task(process_xml_file(xmlfile))
+            tg.create_task(process_xml_file(xmlfile, config))

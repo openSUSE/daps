@@ -67,7 +67,6 @@ def parsecli(cliargs=None) -> argparse.Namespace:
     return args
 
 
-
 def main(cliargs=None) -> int:
     """Entry point for the application script
     :param cliargs: Arguments to parse or None (=use :class:`sys.argv`)

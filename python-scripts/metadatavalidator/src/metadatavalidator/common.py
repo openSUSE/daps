@@ -18,3 +18,4 @@ if METAVALIDATOR_CONFIG is not None:
 
 CONFIGDIRS = tuple(os.path.expanduser(i) for i in CONFIGDIRS)
 
+DOCBOOK_NS = "http://docbook.org/ns/docbook"
