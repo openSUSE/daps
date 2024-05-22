@@ -127,6 +127,10 @@ def parsecli(cliargs=None) -> argparse.Namespace:
     for handler in log.handlers:
         if handler.name == "console":
             handler.setLevel(loglevel)
+
+    args.config = readconfig(CONFIGDIRS)
+    log.debug("Reading these config files %s",
+              getattr(args.config, "configfiles", "n/a"))
     return args
 
 
@@ -144,6 +148,15 @@ def readconfig(dirs: t.Sequence) -> configparser.ConfigParser:
     return config
 
 
+# def check_
+
+
+def process(args: argparse.Namespace, config: configparser.ConfigParser):
+    """
+    """
+    pass
+
+
 def main(cliargs=None) -> int:
     """Entry point for the application script
     :param cliargs: Arguments to parse or None (=use :class:`sys.argv`)
@@ -153,6 +166,8 @@ def main(cliargs=None) -> int:
         args = parsecli(cliargs)
         config = readconfig(CONFIGDIRS)
         log.debug("CLI args %s", args)
+
+        process(args, config)
         # do some useful things here...
         # If everything was good, return without error:
         log.debug("I'm a debug message.")
