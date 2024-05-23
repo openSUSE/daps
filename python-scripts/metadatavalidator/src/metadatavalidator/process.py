@@ -1,22 +1,34 @@
 import asyncio
 from argparse import Namespace
-from configparser import ConfigParser
+# from configparser import ConfigParser
 import typing as t
 
 from lxml import etree
 
-from .checks.check_root import check_root_tag, check_namespace
+# from .checks.check_root import check_root_tag, check_namespace
+from . import checks
 from .exceptions import InvalidValueError
 from .logging import log
 
 
-async def process_xml_file(xmlfile: str, config: ConfigParser):
+def get_all_check_functions(name):
+    """"Yield a check function from the :mod:`metadatavalidator.checks`
+    package
+    """
+    import importlib
+    module = importlib.import_module(name)
+    for name, obj in module.__dict__.items():
+        if callable(obj) and name.startswith("check_"):
+            yield obj
+
+
+async def process_xml_file(xmlfile: str, config: dict[t.Any, t.Any]):
     """Process a single XML file
 
     :param xmlfile: the XML file to check for meta data
     :param config: read-only configuration from INI file
     """
-    for checkfunc in [check_namespace, check_root_tag]:
+    for checkfunc in get_all_check_functions(checks.__package__):
         try:
             # loop = asyncio.get_running_loop()
             # tree = await loop.run_in_executor(None, etree.parse, xmlfile)
