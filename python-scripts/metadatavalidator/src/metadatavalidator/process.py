@@ -1,6 +1,7 @@
 import asyncio
 from argparse import Namespace
 from configparser import ConfigParser
+import typing as t
 
 from lxml import etree
 
@@ -35,7 +36,7 @@ async def process_xml_file(xmlfile: str, config: ConfigParser):
     log.info("File %r checked successfully.", xmlfile)
 
 
-async def process(args: Namespace, config: ConfigParser):
+async def process(args: Namespace, config: dict[t.Any, t.Any]):
     """Process all XML files that are give on CLI
 
     :param args: the arguments parsed by argparse
