@@ -19,3 +19,4 @@ if METAVALIDATOR_CONFIG is not None:
 CONFIGDIRS = tuple(os.path.expanduser(i) for i in CONFIGDIRS)
 
 DOCBOOK_NS = "http://docbook.org/ns/docbook"
+XML_NS = "http://www.w3.org/XML/1998/namespace"

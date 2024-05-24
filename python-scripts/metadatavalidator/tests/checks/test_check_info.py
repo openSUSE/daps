@@ -1,7 +1,7 @@
 import pytest
 from lxml import etree
 
-from metadatavalidator.checks import check_info, check_info_revhistory
+from metadatavalidator.checks import check_info, check_info_revhistory, check_info_revhistory_xmlid
 from metadatavalidator.exceptions import InvalidValueError
 
 
@@ -72,4 +72,62 @@ def test_check_info_revhistory_without_info():
     )
 
     assert check_info_revhistory(tree, {}) is None
+    assert check_info_revhistory_xmlid(tree, {}) is None
+
+
+def test_check_info_revhistory_xmlid():
+    xmlcontent = """<article xmlns="http://docbook.org/ns/docbook" version="5.2">
+    <info>
+        <title>Test</title>
+        <revhistory xml:id="rh1"></revhistory>
+    </info>
+    <para/>
+</article>"""
+    tree = etree.ElementTree(
+        etree.fromstring(xmlcontent,
+                         parser=etree.XMLParser(encoding="UTF-8"))
+    )
+
+    assert check_info_revhistory_xmlid(tree, {}) is None
+
+
+def test_check_info_revhistory_missing_xmlid():
+    xmlcontent = """<article xmlns="http://docbook.org/ns/docbook" version="5.2">
+    <info>
+        <title>Test</title>
+        <revhistory></revhistory>
+    </info>
+    <para/>
+</article>"""
+    tree = etree.ElementTree(
+        etree.fromstring(xmlcontent,
+                         parser=etree.XMLParser(encoding="UTF-8"))
+    )
+
+    with pytest.raises(InvalidValueError,
+                       match="Couldn't find xml:id attribute"):
+        check_info_revhistory_xmlid(tree, {})
+
+
+def test_check_info_revhistory_xmlid_with_wrong_value():
+    xmlcontent = """<article xmlns="http://docbook.org/ns/docbook" version="5.2">
+    <info>
+        <title>Test</title>
+        <revhistory xml:id="wrong_id"></revhistory>
+    </info>
+    <para/>
+</article>"""
+    tree = etree.ElementTree(
+        etree.fromstring(xmlcontent,
+                         parser=etree.XMLParser(encoding="UTF-8"))
+    )
+
+    with pytest.raises(InvalidValueError,
+                       match="should start with 'rh'"):
+        check_info_revhistory_xmlid(tree, {})
+
+
+
+
+
 
