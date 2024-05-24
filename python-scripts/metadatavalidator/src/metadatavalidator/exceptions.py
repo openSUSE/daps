@@ -8,15 +8,23 @@ class NoConfigFilesFoundError(FileNotFoundError):
 
 # --- Configuration exceptions
 class BaseConfigError(ValueError):
-    pass
+    def __init__(self, error, *args, **kwargs):
+        self.error = error
+        super().__init__(*args, **kwargs)
 
 
 class MissingSectionError(BaseConfigError):
     """A missing section could not be found in the config"""
 
+    def __str__(self) -> str:
+        return f"Missing section in config file: {self.error}"
+
 
 class MissingKeyError(BaseConfigError):
     """A missing key could not be found in the config"""
+
+    def __str__(self) -> str:
+        return f"Missing key in config file: {self.error}"
 
 
 # --- Validator exceptions
