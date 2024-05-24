@@ -15,7 +15,7 @@ except ImportError:
 from . import __author__, __version__
 from .config import readconfig
 from .common import CONFIGDIRS
-from .exceptions import NoConfigFilesFoundError
+from .exceptions import BaseConfigError, NoConfigFilesFoundError
 from .logging import DEFAULT_LOGGING_DICT, LOGLEVELS, log
 from .process import process
 
@@ -84,6 +84,10 @@ def main(cliargs=None) -> int:
     except NoConfigFilesFoundError as error:
         log.critical("No config files found")
         return 100
+
+    except BaseConfigError as error:
+        log.critical(error)
+        return 150
 
     except Exception as error:  # FIXME: add a more specific exception here!
         log.exception("Some unknown exception occured", error)
