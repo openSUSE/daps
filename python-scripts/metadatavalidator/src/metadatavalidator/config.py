@@ -1,28 +1,28 @@
 import configparser
 from pathlib import Path
 import re
-import tomllib
+# import tomllib
 import typing as t
 
 from .exceptions import MissingKeyError, MissingSectionError, NoConfigFilesFoundError
 from .logging import log
 
 
-def read_and_merge_toml_files(*paths: str) -> dict[t.Any, t.Any]:
-    """Read and merge TOML files from given paths.
+# def read_and_merge_toml_files(*paths: str) -> dict[t.Any, t.Any]:
+#     """Read and merge TOML files from given paths.
 
-    :param paths:
-    :return: the merged configuration as dictionary.
-    """
-    merged_config = {}
-    for path in paths:
-        full_path = Path(path).resolve()
-        if full_path.exists():
-            with open(full_path, mode='rb') as f:
-                config = tomllib.load(f)
-                # merged_config.update(config)
-                merged_config |= config
-    return merged_config
+#     :param paths:
+#     :return: the merged configuration as dictionary.
+#     """
+#     merged_config = {}
+#     for path in paths:
+#         full_path = Path(path).resolve()
+#         if full_path.exists():
+#             with open(full_path, mode='rb') as f:
+#                 config = tomllib.load(f)
+#                 # merged_config.update(config)
+#                 merged_config |= config
+#     return merged_config
 
 
 def as_dict(config: configparser.ConfigParser):
@@ -40,7 +40,6 @@ def as_dict(config: configparser.ConfigParser):
     return the_dict
 
 
-
 def validate_and_convert_config(config: configparser.ConfigParser):
     """Validate sections, keys, and their values of the config
     """
@@ -56,9 +55,14 @@ def validate_and_convert_config(config: configparser.ConfigParser):
         raise MissingKeyError("validator.check_root_elements")
     theconfig["validator"]["check_root_elements"] = split.split(check_root_elements)
 
+    valid_languages = config.get("validator", "valid_languages", fallback=None)
+    if valid_languages is None:
+        raise MissingKeyError("validator.valid_languages")
+
+    theconfig["validator"]["valid_languages"] = split.split(valid_languages)
+
     # Store the configfiles
     theconfig["configfiles"] = getattr(config, "configfiles")
-    log.debug("The config: %s", theconfig)
     return theconfig
 
 
