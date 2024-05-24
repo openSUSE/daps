@@ -61,9 +61,6 @@ def parsecli(cliargs=None) -> argparse.Namespace:
         if handler.name == "console":
             handler.setLevel(loglevel)
 
-    args.config = readconfig(CONFIGDIRS)
-    log.debug("Reading these config files %s",
-              getattr(args.config, "configfiles", "n/a"))
     return args
 
 
@@ -75,6 +72,7 @@ def main(cliargs=None) -> int:
     try:
         args = parsecli(cliargs)
         config = readconfig(CONFIGDIRS)
+        args.config = config
         log.debug("CLI args %s", args)
 
         asyncio.run(process(args, config))
