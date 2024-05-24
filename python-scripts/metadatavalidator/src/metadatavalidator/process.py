@@ -2,6 +2,7 @@ import asyncio
 from argparse import Namespace
 # from configparser import ConfigParser
 import typing as t
+import os.path
 
 from lxml import etree
 
@@ -28,6 +29,7 @@ async def process_xml_file(xmlfile: str, config: dict[t.Any, t.Any]):
     :param xmlfile: the XML file to check for meta data
     :param config: read-only configuration from INI file
     """
+    errors = []
     for checkfunc in get_all_check_functions(checks.__package__):
         try:
             # loop = asyncio.get_running_loop()
@@ -39,22 +41,75 @@ async def process_xml_file(xmlfile: str, config: dict[t.Any, t.Any]):
             checkfunc(tree, config)
 
         except etree.XMLSyntaxError as e:
-            log.fatal("Syntax error in %r: %s", xmlfile, e)
+            # log.fatal("Syntax error in %r: %s", xmlfile, e)
+            errors.append({
+                'checkfunc': checkfunc.__name__,
+                'message': str(e)
+            })
 
         except InvalidValueError as e:
-            log.fatal("Invalid value in %r for %s: %s",
-                      xmlfile, checkfunc.__name__,  e)
+            #log.fatal("Invalid value in %r for %s: %s",
+            #          xmlfile, checkfunc.__name__,  e)
+            errors.append({
+                'checkfunc': checkfunc.__name__,
+                'message': str(e)
+            })
+        else:
+            # log.info("Passed check %r for %r", checkfunc.__name__, os.path.basename(xmlfile))
+            pass
 
-    log.info("File %r checked successfully.", xmlfile)
+    log.info("File %r checked.", xmlfile)
+    return {
+        "xmlfile": xmlfile,
+        "errors": errors,
+        "basename": os.path.basename(xmlfile),
+    }
+
+def green(text):
+    return f"\033[32m{text}\033[0m"
+
+def red(text):
+    return f"\033[31m{text}\033[0m"
+
+
+def format_results(results: list[t.Any]):
+    """Format the results for output
+
+    :param results: the results from the checks
+    """
+    error_template = """[{idx}] {xmlfile}:"""
+    ok_template = f"""[{{idx}}] {{xmlfile}}: {green("OK")}"""
+    print(">>>", results)
+    print("==== RESULTS ====")
+    for allidx, result in enumerate(results, 1):
+        if not result['errors']:
+            print(ok_template.format(idx=allidx, **result))
+        else:
+            print(error_template.format(idx=allidx, **result))
+
+            for idx, error in enumerate(result['errors'], 1):
+                print(f"  {allidx}.{idx}: {error['checkfunc']}: {error['message']}")
+            print()
+
 
 
 async def process(args: Namespace, config: dict[t.Any, t.Any]):
-    """Process all XML files that are give on CLI
+    """Process all XML files that are passed on CLI
 
     :param args: the arguments parsed by argparse
     :param config: read-only configuration from INI file
     """
     log.debug("Process all XML files...")
+    tasks = []
     async with asyncio.TaskGroup() as tg:
         for xmlfile in args.xmlfiles:
-            tg.create_task(process_xml_file(xmlfile, config))
+             task = tg.create_task(process_xml_file(xmlfile, config))
+             tasks.append(task)
+
+    results = []
+    for task in tasks:
+        maybeissue = await task
+        if maybeissue:
+            results.append(maybeissue)
+
+    format_results(results)
