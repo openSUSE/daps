@@ -41,7 +41,7 @@ def parsecli(cliargs=None) -> argparse.Namespace:
 
     parser.add_argument('--version',
                         action='version',
-                        version='%(prog)s ' + __version__
+                        version=f'%(prog)s {__version__} written by {__author__}'
                         )
     parser.add_argument("xmlfiles",
                         metavar="XMLFILES",
