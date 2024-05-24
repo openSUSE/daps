@@ -49,6 +49,6 @@ def test_check_check_namespace_invalid():
     )
 
     with pytest.raises(InvalidValueError,
-                       # match="Root element 'not_docbook5'.*"
+                       match=".*doesn't belong to DocBook 5"
                        ):
         check_namespace(tree, {})

@@ -28,6 +28,12 @@ def test_valid_validate_and_convert_config():
         "configfiles": None,
     }
 
+
+def test_missing_config_files():
+    with pytest.raises(NoConfigFilesFoundError, match=".*Config files not found.*"):
+        readconfig([])
+
+
 def test_missing_validator_section():
     config = ConfigParser()
     with pytest.raises(MissingSectionError, match=".*validator.*"):
