@@ -79,7 +79,7 @@ def format_results(results: list[t.Any]):
     """
     error_template = """[{idx}] {xmlfile}:"""
     ok_template = f"""[{{idx}}] {{xmlfile}}: {green("OK")}"""
-    print(">>>", results)
+
     print("==== RESULTS ====")
     for allidx, result in enumerate(results, 1):
         if not result['errors']:
@@ -88,7 +88,8 @@ def format_results(results: list[t.Any]):
             print(error_template.format(idx=allidx, **result))
 
             for idx, error in enumerate(result['errors'], 1):
-                print(f"  {allidx}.{idx}: {error['checkfunc']}: {error['message']}")
+                msg = red(error['message'])
+                print(f"  {allidx}.{idx}: {error['checkfunc']}: {msg}")
             print()
 
 
