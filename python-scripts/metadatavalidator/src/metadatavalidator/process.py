@@ -30,7 +30,11 @@ async def process_xml_file(xmlfile: str, config: dict[t.Any, t.Any]):
     :param config: read-only configuration from INI file
     """
     errors = []
+    basexmlfile = os.path.basename(xmlfile)
     for checkfunc in get_all_check_functions(checks.__package__):
+        log.debug("Checking %r with %r",
+                  basexmlfile,
+                  checkfunc.__name__)
         try:
             # loop = asyncio.get_running_loop()
             # tree = await loop.run_in_executor(None, etree.parse, xmlfile)
@@ -58,7 +62,7 @@ async def process_xml_file(xmlfile: str, config: dict[t.Any, t.Any]):
             # log.info("Passed check %r for %r", checkfunc.__name__, os.path.basename(xmlfile))
             pass
 
-    log.info("File %r checked.", xmlfile)
+    log.info("File %r checked.", basexmlfile)
     return {
         "xmlfile": xmlfile,
         "errors": errors,
