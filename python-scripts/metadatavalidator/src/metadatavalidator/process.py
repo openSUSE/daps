@@ -18,6 +18,7 @@ def get_all_check_functions(name):
     """
     import importlib
     module = importlib.import_module(name)
+    # The order of the checks is important and uses it from checks.__all__
     for name, obj in module.__dict__.items():
         if callable(obj) and name.startswith("check_"):
             yield obj
