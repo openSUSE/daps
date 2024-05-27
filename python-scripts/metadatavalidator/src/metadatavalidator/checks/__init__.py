@@ -5,7 +5,6 @@ from .check_root import (
 from .check_info import (
     check_info,
     check_info_revhistory,
-    check_info_revhistory_xmlid,
 )
 
 
@@ -15,6 +14,5 @@ __all__ = [
     "check_namespace",
     "check_info",
     "check_info_revhistory",
-    "check_info_revhistory_xmlid",
 ]
 

@@ -26,16 +26,6 @@ def check_info_revhistory(tree: etree.ElementTree, config: dict[t.Any, t.Any]):
     if revhistory is None:
         raise InvalidValueError(f"Couldn't find a revhistory element in {info.tag}.")
 
-
-def check_info_revhistory_xmlid(tree: etree.ElementTree, config: dict[t.Any, t.Any]):
-    """Checks for an info/revhistory/revision/@xml:id attribute"""
-    revhistory = tree.find("./d:info/d:revhistory",
-                           namespaces={"d": DOCBOOK_NS})
-
-    if revhistory is None:
-        # If <revhistory> couldn't be found, this is checked in check_info_revhistory
-        return
-
     xmlid = revhistory.attrib.get(f"{{{XML_NS}}}id")
     if xmlid is None:
         raise InvalidValueError(f"Couldn't find xml:id attribute in info/revhistory.")
