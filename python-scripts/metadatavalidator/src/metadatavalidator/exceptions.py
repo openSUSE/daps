@@ -27,12 +27,29 @@ class MissingKeyError(BaseConfigError):
         return f"Missing key in config file: {self.error}"
 
 
-# --- Validator exceptions
+# --- Validator exceptions, base classes
 class BaseMetadataError(ValueError):
+    """Base class for metadata errors"""
     pass
 
-class InvalidElementError(BaseMetadataError):
+
+class BaseMetadataWarning(ValueError):
+    """Base class for metadata warnings"""
     pass
+
+
+# --- Warnings
+class MissingAttributeWarning(BaseMetadataWarning):
+    """A warning for a missing attribute that is recommended to have"""
+    pass
+
+
+# --- Errors
+class InvalidElementError(BaseMetadataError):
+    """An element was missing or invalid in the metadata"""
+    pass
+
 
 class InvalidValueError(BaseMetadataError):
+    """A value was invalid in the metadata"""
     pass

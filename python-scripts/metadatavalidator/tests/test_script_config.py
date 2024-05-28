@@ -19,14 +19,11 @@ def create_config():
 def test_valid_validate_and_convert_config():
     config = create_config()
     result = validate_and_convert_config(config)
-    assert result == {
-        "validator": {
+    assert result.get("validator") == {
             "check_root_elements": ["book", "article"],
             "file_extension": ".xml",
             "valid_languages": ["en-us", "de-de",]
-        },
-        "configfiles": None,
-    }
+        }
 
 
 def test_missing_config_files():
@@ -57,11 +54,9 @@ def test_missing_key_valid_languages():
 def test_readconfig():
     configfile = os.path.join(os.path.dirname(__file__), "data/metadatavalidator.ini")
     result = readconfig([configfile])
-    assert result == {
-        "validator": {
+    assert result.get("validator") == {
             "check_root_elements": ["book", "article", "topic"],
             "file_extension": ".xml",
             "valid_languages": ["de-de", "en-us", "es-es", "fr-fr"]
-        },
-        "configfiles": [configfile],
-    }
+        }
+    assert result.get("configfiles") == [configfile]

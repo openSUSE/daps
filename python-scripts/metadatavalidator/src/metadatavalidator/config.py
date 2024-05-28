@@ -40,8 +40,21 @@ def as_dict(config: configparser.ConfigParser):
     return the_dict
 
 
-def validate_and_convert_config(config: configparser.ConfigParser):
+def truefalse(value: str|bool|int) -> bool:
+    """Convert a string to a boolean value
+    """
+    if isinstance(value, bool):
+        return value
+
+    return str(value).lower() in ("true", "yes", "1", "on")
+
+
+def validate_and_convert_config(config: configparser.ConfigParser) -> dict[t.Any, t.Any]:
     """Validate sections, keys, and their values of the config
+
+    :param config: the :class:`configparser.Configparser` object
+    :return: a dict that contains converted keys into their
+             respective datatypes
     """
     split = re.compile(r"[;, ]")
     theconfig = as_dict(config)
@@ -49,7 +62,7 @@ def validate_and_convert_config(config: configparser.ConfigParser):
     if not config.has_section("validator"):
         raise MissingSectionError("validator")
 
-    # Validate "validator" section
+    # Section "validator"
     check_root_elements = config.get("validator", "check_root_elements", fallback=None)
     if check_root_elements is None:
         raise MissingKeyError("validator.check_root_elements")
@@ -60,6 +73,13 @@ def validate_and_convert_config(config: configparser.ConfigParser):
         raise MissingKeyError("validator.valid_languages")
 
     theconfig["validator"]["valid_languages"] = split.split(valid_languages)
+
+    # Section "metadata"
+    require_xmlid_on_revision = truefalse(
+        theconfig.get("metadata", {}).get("require_xmlid_on_revision", True)
+    )
+    theconfig.setdefault("metadata", {})["require_xmlid_on_revision"] = require_xmlid_on_revision
+
 
     # Store the configfiles
     theconfig["configfiles"] = getattr(config, "configfiles")
