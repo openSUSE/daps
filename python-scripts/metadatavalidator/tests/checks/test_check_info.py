@@ -127,7 +127,18 @@ def test_check_info_revhistory_xmlid_with_wrong_value():
         check_info_revhistory(tree, {})
 
 
-
-
-
-
+def test_check_info_revhistory_revision_missing():
+    xmlcontent = """<article xmlns="http://docbook.org/ns/docbook" version="5.2">
+    <info>
+        <title>Test</title>
+        <revhistory>
+          <revision>
+          </revision>
+        </revhistory>
+    </info>
+    <para/>
+</article>"""
+    tree = etree.ElementTree(
+        etree.fromstring(xmlcontent,
+                         parser=etree.XMLParser(encoding="UTF-8"))
+    )

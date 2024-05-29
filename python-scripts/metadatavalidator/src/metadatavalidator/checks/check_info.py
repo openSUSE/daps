@@ -3,6 +3,7 @@ import typing as t
 from lxml import etree
 
 from ..common import (
+    DATE_REGEX,
     DOCBOOK_NS,
     XML_NS,
     )
@@ -39,7 +40,8 @@ def check_info_revhistory(tree: etree.ElementTree, config: dict[t.Any, t.Any]):
 
 
 
-def check_info_revhistory_revision(tree: etree.ElementTree, config: dict[t.Any, t.Any]):
+def check_info_revhistory_revision(tree: etree.ElementTree,
+                                   config: dict[t.Any, t.Any]):
     """Checks for an info/revhistory/revision element"""
     revhistory = tree.find("./d:info/d:revhistory", namespaces={"d": DOCBOOK_NS})
     if revhistory is None:
@@ -53,4 +55,22 @@ def check_info_revhistory_revision(tree: etree.ElementTree, config: dict[t.Any, 
 
     if config.get("metadata", {}).get("require_xmlid_on_revision", True) and xmlid is None:
         xpath = getfullxpath(revision)
-        raise MissingAttributeWarning("")
+        xpath += "/@xml:id"
+        raise MissingAttributeWarning(path)
+
+
+def check_info_revhistory_revision_date(tree: etree.ElementTree,
+                                        config: dict[t.Any, t.Any]):
+    """Checks for an info/revhistory/revision/date element"""
+    date = tree.find("./d:info/d:revhistory/d:revision/d:date",
+                     namespaces={"d": DOCBOOK_NS})
+    if date is None:
+        raise InvalidValueError(f"Couldn't find a date element in info/revhistory/revision.")
+
+    if DATE_REGEX.search(date.text) is None:
+        path = getfullxpath(date)
+        raise InvalidValueError(f"Invalid date format in {date.tag} (XPath={path}).")
+
+    # Check if the date is valid
+
+
