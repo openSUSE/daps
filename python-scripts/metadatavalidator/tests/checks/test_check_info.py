@@ -9,17 +9,15 @@ from metadatavalidator.checks import (
 from metadatavalidator.exceptions import InvalidValueError, MissingAttributeWarning
 
 
-basic_xmlcontent = """<article xmlns="http://docbook.org/ns/docbook" version="5.2">
+def test_check_info():
+    xmlcontent = """<article xmlns="http://docbook.org/ns/docbook" version="5.2">
     <info>
         <title>Test</title>
     </info>
     <para/>
 </article>"""
-
-
-def test_check_info():
     tree = etree.ElementTree(
-        etree.fromstring(basic_xmlcontent,
+        etree.fromstring(xmlcontent,
                          parser=etree.XMLParser(encoding="UTF-8"))
     )
 
@@ -40,8 +38,14 @@ def test_check_info_missing():
 
 
 def test_check_info_revhistory_missing():
+    xmlcontent = """<article xmlns="http://docbook.org/ns/docbook" version="5.2">
+    <info>
+        <title>Test</title>
+    </info>
+    <para/>
+</article>"""
     tree = etree.ElementTree(
-        etree.fromstring(basic_xmlcontent,
+        etree.fromstring(xmlcontent,
                          parser=etree.XMLParser(encoding="UTF-8"))
     )
 
@@ -179,10 +183,7 @@ def test_check_info_revhistory_revision_missing():
     xmlcontent = """<article xmlns="http://docbook.org/ns/docbook" version="5.2">
     <info>
         <title>Test</title>
-        <revhistory>
-          <revision>
-          </revision>
-        </revhistory>
+        <revhistory/>
     </info>
     <para/>
 </article>"""
@@ -190,6 +191,13 @@ def test_check_info_revhistory_revision_missing():
         etree.fromstring(xmlcontent,
                          parser=etree.XMLParser(encoding="UTF-8"))
     )
+
+    with pytest.raises(InvalidValueError,
+                       match="Couldn't find a revision element"):
+        check_info_revhistory_revision(
+            tree,
+            {"metadata": {"require_xmlid_on_revision": True}}
+        )
 
 
 def test_check_info_revhistory_revision_date():
@@ -210,3 +218,68 @@ def test_check_info_revhistory_revision_date():
     )
 
     assert check_info_revhistory_revision_date(tree, {}) is None
+
+
+def test_check_info_revhistory_revision_date_missing():
+    xmlcontent = """<article xmlns="http://docbook.org/ns/docbook" version="5.2">
+    <info>
+        <title>Test</title>
+        <revhistory>
+          <revision/>
+        </revhistory>
+    </info>
+    <para/>
+</article>"""
+    tree = etree.ElementTree(
+        etree.fromstring(xmlcontent,
+                         parser=etree.XMLParser(encoding="UTF-8"))
+    )
+    with pytest.raises(InvalidValueError,
+                       match="Couldn't find a date element"):
+        check_info_revhistory_revision_date(tree, {})
+
+
+
+def test_check_info_revhistory_revision_date_invalid_format():
+    xmlcontent = """<article xmlns="http://docbook.org/ns/docbook" version="5.2">
+    <info>
+        <title>Test</title>
+        <revhistory xml:id="rh">
+          <revision>
+            <date>January 2024</date>
+          </revision>
+        </revhistory>
+    </info>
+    <para/>
+</article>"""
+    tree = etree.ElementTree(
+        etree.fromstring(xmlcontent,
+                         parser=etree.XMLParser(encoding="UTF-8"))
+    )
+
+    with pytest.raises(InvalidValueError,
+                       match="Invalid date format"):
+        check_info_revhistory_revision_date(tree, {})
+
+
+def test_check_info_revhistory_revision_date_invalid_value():
+    xmlcontent = """<article xmlns="http://docbook.org/ns/docbook" version="5.2">
+    <info>
+        <title>Test</title>
+        <revhistory xml:id="rh">
+          <revision>
+            <date>2024-13</date>
+          </revision>
+        </revhistory>
+    </info>
+    <para/>
+</article>"""
+    tree = etree.ElementTree(
+        etree.fromstring(xmlcontent,
+                         parser=etree.XMLParser(encoding="UTF-8"))
+    )
+
+    with pytest.raises(InvalidValueError,
+                       match="Invalid value in metadata"
+                       ):
+        check_info_revhistory_revision_date(tree, {})

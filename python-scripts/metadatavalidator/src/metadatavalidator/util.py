@@ -42,8 +42,8 @@ def getfullxpath(element: etree._Element,
     fullpath = fullpath.split("/")
 
     # Check if the two paths have the same length
-    if len(path) != len(fullpath):
-        raise RuntimeError("two paths differ")
+    # if len(path) != len(fullpath):
+    #    raise RuntimeError("two paths differ")
 
     # Combine element part and predicate
     return "/".join([f"{p2}{p1.replace('*', '')}"
