@@ -10,7 +10,7 @@ from metadatavalidator.checks import (
 from metadatavalidator.exceptions import InvalidValueError, MissingAttributeWarning
 
 
-def test_check_info():
+def test_check_info(xmlparser):
     xmlcontent = """<article xmlns="http://docbook.org/ns/docbook" version="5.2">
     <info>
         <title>Test</title>
@@ -18,27 +18,25 @@ def test_check_info():
     <para/>
 </article>"""
     tree = etree.ElementTree(
-        etree.fromstring(xmlcontent,
-                         parser=etree.XMLParser(encoding="UTF-8"))
+        etree.fromstring(xmlcontent, parser=xmlparser)
     )
 
     assert check_info(tree, {}) is None
 
 
-def test_check_info_missing():
+def test_check_info_missing(xmlparser):
     xmlcontent = """<article xmlns="http://docbook.org/ns/docbook" version="5.2">
     <para/>
 </article>"""
     tree = etree.ElementTree(
-        etree.fromstring(xmlcontent,
-                         parser=etree.XMLParser(encoding="UTF-8"))
+        etree.fromstring(xmlcontent, parser=xmlparser)
     )
     with pytest.raises(InvalidValueError,
                           match="Couldn't find info element"):
           check_info(tree, {})
 
 
-def test_check_info_revhistory_missing():
+def test_check_info_revhistory_missing(xmlparser):
     xmlcontent = """<article xmlns="http://docbook.org/ns/docbook" version="5.2">
     <info>
         <title>Test</title>
@@ -46,8 +44,7 @@ def test_check_info_revhistory_missing():
     <para/>
 </article>"""
     tree = etree.ElementTree(
-        etree.fromstring(xmlcontent,
-                         parser=etree.XMLParser(encoding="UTF-8"))
+        etree.fromstring(xmlcontent, parser=xmlparser)
     )
 
     with pytest.raises(InvalidValueError,
@@ -55,7 +52,7 @@ def test_check_info_revhistory_missing():
         check_info_revhistory(tree, {})
 
 
-def test_check_info_revhistory():
+def test_check_info_revhistory(xmlparser):
     xmlcontent = """<article xmlns="http://docbook.org/ns/docbook" version="5.2">
     <info>
         <title>Test</title>
@@ -64,27 +61,25 @@ def test_check_info_revhistory():
     <para/>
 </article>"""
     tree = etree.ElementTree(
-        etree.fromstring(xmlcontent,
-                         parser=etree.XMLParser(encoding="UTF-8"))
+        etree.fromstring(xmlcontent, parser=xmlparser)
     )
 
     assert check_info_revhistory(tree, {}) is None
 
 
-def test_check_info_revhistory_without_info():
+def test_check_info_revhistory_without_info(xmlparser):
     xmlcontent = """<article xmlns="http://docbook.org/ns/docbook" version="5.2">
     <para/>
 </article>"""
     tree = etree.ElementTree(
-        etree.fromstring(xmlcontent,
-                         parser=etree.XMLParser(encoding="UTF-8"))
+        etree.fromstring(xmlcontent, parser=xmlparser)
     )
 
     assert check_info_revhistory(tree, {}) is None
     assert check_info_revhistory(tree, {}) is None
 
 
-def test_check_info_revhistory_xmlid():
+def test_check_info_revhistory_xmlid(xmlparser):
     xmlcontent = """<article xmlns="http://docbook.org/ns/docbook" version="5.2">
     <info>
         <title>Test</title>
@@ -93,14 +88,13 @@ def test_check_info_revhistory_xmlid():
     <para/>
 </article>"""
     tree = etree.ElementTree(
-        etree.fromstring(xmlcontent,
-                         parser=etree.XMLParser(encoding="UTF-8"))
+        etree.fromstring(xmlcontent, parser=xmlparser)
     )
 
     assert check_info_revhistory(tree, {}) is None
 
 
-def test_check_info_revhistory_missing_xmlid():
+def test_check_info_revhistory_missing_xmlid(xmlparser):
     xmlcontent = """<article xmlns="http://docbook.org/ns/docbook" version="5.2">
     <info>
         <title>Test</title>
@@ -109,8 +103,7 @@ def test_check_info_revhistory_missing_xmlid():
     <para/>
 </article>"""
     tree = etree.ElementTree(
-        etree.fromstring(xmlcontent,
-                         parser=etree.XMLParser(encoding="UTF-8"))
+        etree.fromstring(xmlcontent, parser=xmlparser)
     )
 
     with pytest.raises(InvalidValueError,
@@ -118,7 +111,7 @@ def test_check_info_revhistory_missing_xmlid():
         check_info_revhistory(tree, {})
 
 
-def test_check_info_revhistory_xmlid_with_wrong_value():
+def test_check_info_revhistory_xmlid_with_wrong_value(xmlparser):
     xmlcontent = """<article xmlns="http://docbook.org/ns/docbook" version="5.2">
     <info>
         <title>Test</title>
@@ -127,8 +120,7 @@ def test_check_info_revhistory_xmlid_with_wrong_value():
     <para/>
 </article>"""
     tree = etree.ElementTree(
-        etree.fromstring(xmlcontent,
-                         parser=etree.XMLParser(encoding="UTF-8"))
+        etree.fromstring(xmlcontent, parser=xmlparser)
     )
 
     with pytest.raises(InvalidValueError,
@@ -136,7 +128,7 @@ def test_check_info_revhistory_xmlid_with_wrong_value():
         check_info_revhistory(tree, {})
 
 
-def test_check_info_revhistory_revision():
+def test_check_info_revhistory_revision(xmlparser):
     xmlcontent = """<article xmlns="http://docbook.org/ns/docbook" version="5.2">
     <info>
         <title>Test</title>
@@ -149,13 +141,12 @@ def test_check_info_revhistory_revision():
     <para/>
 </article>"""
     tree = etree.ElementTree(
-        etree.fromstring(xmlcontent,
-                            parser=etree.XMLParser(encoding="UTF-8"))
+        etree.fromstring(xmlcontent, parser=xmlparser)
     )
     assert check_info_revhistory_revision(tree, {}) is None
 
 
-def test_check_info_revhistory_revision_missing_xmlid():
+def test_check_info_revhistory_revision_missing_xmlid(xmlparser):
     xmlcontent = """<article xmlns="http://docbook.org/ns/docbook" version="5.2">
     <info>
         <title>Test</title>
@@ -168,8 +159,7 @@ def test_check_info_revhistory_revision_missing_xmlid():
     <para/>
 </article>"""
     tree = etree.ElementTree(
-        etree.fromstring(xmlcontent,
-                            parser=etree.XMLParser(encoding="UTF-8"))
+        etree.fromstring(xmlcontent, parser=xmlparser)
     )
 
     with pytest.raises(MissingAttributeWarning,
@@ -179,8 +169,21 @@ def test_check_info_revhistory_revision_missing_xmlid():
             {"metadata": {"require_xmlid_on_revision": True}})
 
 
+def test_check_info_revhistory_missing(xmlparser):
+    xmlcontent = """<article xmlns="http://docbook.org/ns/docbook" version="5.2">
+    <info>
+        <title>Test</title>
+    </info>
+    <para/>
+</article>"""
+    tree = etree.ElementTree(
+        etree.fromstring(xmlcontent, parser=xmlparser)
+    )
 
-def test_check_info_revhistory_revision_missing():
+    check_info_revhistory_revision(tree, {}) is None
+
+
+def test_check_info_revhistory_revision_missing(xmlparser):
     xmlcontent = """<article xmlns="http://docbook.org/ns/docbook" version="5.2">
     <info>
         <title>Test</title>
@@ -189,8 +192,7 @@ def test_check_info_revhistory_revision_missing():
     <para/>
 </article>"""
     tree = etree.ElementTree(
-        etree.fromstring(xmlcontent,
-                         parser=etree.XMLParser(encoding="UTF-8"))
+        etree.fromstring(xmlcontent, parser=xmlparser)
     )
 
     with pytest.raises(InvalidValueError,
@@ -201,7 +203,7 @@ def test_check_info_revhistory_revision_missing():
         )
 
 
-def test_check_info_revhistory_revision_date():
+def test_check_info_revhistory_revision_date(xmlparser):
     xmlcontent = """<article xmlns="http://docbook.org/ns/docbook" version="5.2">
     <info>
         <title>Test</title>
@@ -214,14 +216,13 @@ def test_check_info_revhistory_revision_date():
     <para/>
 </article>"""
     tree = etree.ElementTree(
-        etree.fromstring(xmlcontent,
-                         parser=etree.XMLParser(encoding="UTF-8"))
+        etree.fromstring(xmlcontent, parser=xmlparser)
     )
 
     assert check_info_revhistory_revision_date(tree, {}) is None
 
 
-def test_check_info_revhistory_revision_date_missing():
+def test_check_info_revhistory_revision_date_missing(xmlparser):
     xmlcontent = """<article xmlns="http://docbook.org/ns/docbook" version="5.2">
     <info>
         <title>Test</title>
@@ -232,16 +233,14 @@ def test_check_info_revhistory_revision_date_missing():
     <para/>
 </article>"""
     tree = etree.ElementTree(
-        etree.fromstring(xmlcontent,
-                         parser=etree.XMLParser(encoding="UTF-8"))
+        etree.fromstring(xmlcontent, parser=xmlparser)
     )
     with pytest.raises(InvalidValueError,
                        match="Couldn't find a date element"):
         check_info_revhistory_revision_date(tree, {})
 
 
-
-def test_check_info_revhistory_revision_date_invalid_format():
+def test_check_info_revhistory_revision_date_invalid_format(xmlparser):
     xmlcontent = """<article xmlns="http://docbook.org/ns/docbook" version="5.2">
     <info>
         <title>Test</title>
@@ -254,8 +253,7 @@ def test_check_info_revhistory_revision_date_invalid_format():
     <para/>
 </article>"""
     tree = etree.ElementTree(
-        etree.fromstring(xmlcontent,
-                         parser=etree.XMLParser(encoding="UTF-8"))
+        etree.fromstring(xmlcontent, parser=xmlparser)
     )
 
     with pytest.raises(InvalidValueError,
@@ -263,7 +261,7 @@ def test_check_info_revhistory_revision_date_invalid_format():
         check_info_revhistory_revision_date(tree, {})
 
 
-def test_check_info_revhistory_revision_date_invalid_value():
+def test_check_info_revhistory_revision_date_invalid_value(xmlparser):
     xmlcontent = """<article xmlns="http://docbook.org/ns/docbook" version="5.2">
     <info>
         <title>Test</title>
@@ -276,8 +274,7 @@ def test_check_info_revhistory_revision_date_invalid_value():
     <para/>
 </article>"""
     tree = etree.ElementTree(
-        etree.fromstring(xmlcontent,
-                         parser=etree.XMLParser(encoding="UTF-8"))
+        etree.fromstring(xmlcontent,  parser=xmlparser)
     )
 
     with pytest.raises(InvalidValueError,
@@ -286,7 +283,7 @@ def test_check_info_revhistory_revision_date_invalid_value():
         check_info_revhistory_revision_date(tree, {})
 
 
-def test_check_info_revhistory_revision_order():
+def test_check_info_revhistory_revision_order(xmlparser):
     xmlcontent = """<article xmlns="http://docbook.org/ns/docbook" version="5.2">
     <info>
         <title>Test</title>
@@ -305,8 +302,7 @@ def test_check_info_revhistory_revision_order():
     <para/>
 </article>"""
     tree = etree.ElementTree(
-        etree.fromstring(xmlcontent,
-                         parser=etree.XMLParser(encoding="UTF-8"))
+        etree.fromstring(xmlcontent, parser=xmlparser)
     )
 
     assert check_info_revhistory_revision_order(tree, {}) is None
