@@ -2,9 +2,13 @@ import typing as t
 
 from lxml import etree
 
-from ..common import DOCBOOK_NS, XML_NS
-from ..exceptions import InvalidValueError
+from ..common import (
+    DOCBOOK_NS,
+    XML_NS,
+    )
+from ..exceptions import InvalidValueError, MissingAttributeWarning
 from ..logging import log
+from ..util import getfullxpath
 
 
 def check_info(tree: etree.ElementTree, config: dict[t.Any, t.Any]):
@@ -32,3 +36,21 @@ def check_info_revhistory(tree: etree.ElementTree, config: dict[t.Any, t.Any]):
 
     if not xmlid.startswith("rh"):
         raise InvalidValueError(f"xml:id attribute in info/revhistory should start with 'rh'.")
+
+
+
+def check_info_revhistory_revision(tree: etree.ElementTree, config: dict[t.Any, t.Any]):
+    """Checks for an info/revhistory/revision element"""
+    revhistory = tree.find("./d:info/d:revhistory", namespaces={"d": DOCBOOK_NS})
+    if revhistory is None:
+        # If <info> couldn't be found, we can't check <revhistory>
+        return
+
+    revision = revhistory.find("./d:revision", namespaces={"d": DOCBOOK_NS})
+    if revision is None:
+        raise InvalidValueError(f"Couldn't find a revision element in {revhistory.tag}.")
+    xmlid = revision.attrib.get(f"{{{XML_NS}}}id")
+
+    if config.get("metadata", {}).get("require_xmlid_on_revision", True) and xmlid is None:
+        xpath = getfullxpath(revision)
+        raise MissingAttributeWarning("")

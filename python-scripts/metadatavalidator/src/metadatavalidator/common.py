@@ -20,3 +20,14 @@ CONFIGDIRS = tuple(os.path.expanduser(i) for i in CONFIGDIRS)
 
 DOCBOOK_NS = "http://docbook.org/ns/docbook"
 XML_NS = "http://www.w3.org/XML/1998/namespace"
+XLINK_NS = "http://www.w3.org/1999/xlink"
+ITS_NS = "http://www.w3.org/2005/11/its"
+XINCLUDE_NS = "http://www.w3.org/2001/XInclude"
+
+NAMESPACES2PREFIX = {
+    DOCBOOK_NS: "d",
+    XML_NS: "xml",
+    XLINK_NS: "xlink",
+    ITS_NS: "its",
+    XINCLUDE_NS: "xi",
+}
