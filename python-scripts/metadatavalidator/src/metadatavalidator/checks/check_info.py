@@ -80,7 +80,9 @@ def check_info_revhistory_revision_order(tree: etree._ElementTree,
                                         config: dict[t.Any, t.Any]):
     """Checks for the right order of info/revhistory/revision elements"""
     revhistory = tree.find("./d:info/d:revhistory", namespaces={"d": DOCBOOK_NS})
-    revisions = revhistory.xpath("d:revision",
+    if revhistory is None:
+        return
+    revisions = revhistory.xpath("./d:revision",
                                   namespaces={"d": DOCBOOK_NS})
     xpath = getfullxpath(revhistory)
     if not revisions:

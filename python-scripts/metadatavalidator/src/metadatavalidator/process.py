@@ -8,7 +8,7 @@ from lxml import etree
 
 # from .checks.check_root import check_root_tag, check_namespace
 from . import checks
-from .exceptions import InvalidValueError
+from .exceptions import InvalidValueError, MissingAttributeWarning
 from .logging import log
 
 
@@ -52,7 +52,7 @@ async def process_xml_file(xmlfile: str, config: dict[t.Any, t.Any]):
                 'message': str(e)
             })
 
-        except InvalidValueError as e:
+        except (InvalidValueError, MissingAttributeWarning) as e:
             #log.fatal("Invalid value in %r for %s: %s",
             #          xmlfile, checkfunc.__name__,  e)
             errors.append({
