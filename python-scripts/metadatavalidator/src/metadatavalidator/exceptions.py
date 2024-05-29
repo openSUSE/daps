@@ -41,15 +41,18 @@ class BaseMetadataWarning(ValueError):
 # --- Warnings
 class MissingAttributeWarning(BaseMetadataWarning):
     """A warning for a missing attribute that is recommended to have"""
-    pass
+    def __str__(self) -> str:
+        return f"Missing recommended attribute in {super().__str__()}"
 
 
 # --- Errors
 class InvalidElementError(BaseMetadataError):
     """An element was missing or invalid in the metadata"""
-    pass
+    def __str__(self) -> str:
+        return f"Missing or invalid element in {super().__str__()}"
 
 
 class InvalidValueError(BaseMetadataError):
     """A value was invalid in the metadata"""
-    pass
+    def __str__(self) -> str:
+        return f"Invalid value in metadata {super().__str__()}"
