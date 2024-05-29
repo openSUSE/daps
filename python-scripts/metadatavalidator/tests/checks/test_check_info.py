@@ -4,7 +4,8 @@ from lxml import etree
 from metadatavalidator.checks import (
     check_info, check_info_revhistory,
     check_info_revhistory_revision,
-    check_info_revhistory_revision_date
+    check_info_revhistory_revision_date,
+    check_info_revhistory_revision_order,
 )
 from metadatavalidator.exceptions import InvalidValueError, MissingAttributeWarning
 
@@ -283,3 +284,30 @@ def test_check_info_revhistory_revision_date_invalid_value():
                        match="Invalid value in metadata"
                        ):
         check_info_revhistory_revision_date(tree, {})
+
+
+def test_check_info_revhistory_revision_order():
+    xmlcontent = """<article xmlns="http://docbook.org/ns/docbook" version="5.2">
+    <info>
+        <title>Test</title>
+        <revhistory xml:id="rh">
+          <revision>
+            <date>2024-13</date>
+          </revision>
+          <revision>
+            <date>2023-12-12</date>
+          </revision>
+          <revision>
+            <date>2022-04</date>
+          </revision>
+        </revhistory>
+    </info>
+    <para/>
+</article>"""
+    tree = etree.ElementTree(
+        etree.fromstring(xmlcontent,
+                         parser=etree.XMLParser(encoding="UTF-8"))
+    )
+
+    assert check_info_revhistory_revision_order(tree, {}) is None
+

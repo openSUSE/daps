@@ -1,3 +1,5 @@
+import datetime
+import itertools
 import typing as t
 
 from lxml import etree
@@ -6,13 +8,17 @@ from ..common import (
     DATE_REGEX,
     DOCBOOK_NS,
     XML_NS,
-    )
+)
 from ..exceptions import InvalidValueError, MissingAttributeWarning
 from ..logging import log
-from ..util import getfullxpath, parse_date
+from ..util import (
+    getfullxpath,
+    validatedate,
+    validatedatevalue
+)
 
 
-def check_info(tree: etree.ElementTree, config: dict[t.Any, t.Any]):
+def check_info(tree: etree._ElementTree, config: dict[t.Any, t.Any]):
     """Checks for an info element"""
     root = tree.getroot()
     info = root.find(".//{%s}info" % DOCBOOK_NS)
@@ -20,7 +26,7 @@ def check_info(tree: etree.ElementTree, config: dict[t.Any, t.Any]):
         raise InvalidValueError(f"Couldn't find info element in {root.tag}.")
 
 
-def check_info_revhistory(tree: etree.ElementTree, config: dict[t.Any, t.Any]):
+def check_info_revhistory(tree: etree._ElementTree, config: dict[t.Any, t.Any]):
     """Checks for an info/revhistory element"""
     info = tree.find("./d:info", namespaces={"d": DOCBOOK_NS})
     if info is None:
@@ -40,7 +46,7 @@ def check_info_revhistory(tree: etree.ElementTree, config: dict[t.Any, t.Any]):
 
 
 
-def check_info_revhistory_revision(tree: etree.ElementTree,
+def check_info_revhistory_revision(tree: etree._ElementTree,
                                    config: dict[t.Any, t.Any]):
     """Checks for an info/revhistory/revision element"""
     revhistory = tree.find("./d:info/d:revhistory", namespaces={"d": DOCBOOK_NS})
@@ -59,7 +65,7 @@ def check_info_revhistory_revision(tree: etree.ElementTree,
         raise MissingAttributeWarning(xpath)
 
 
-def check_info_revhistory_revision_date(tree: etree.ElementTree,
+def check_info_revhistory_revision_date(tree: etree._ElementTree,
                                         config: dict[t.Any, t.Any]):
     """Checks for an info/revhistory/revision/date element"""
     date = tree.find("./d:info/d:revhistory/d:revision/d:date",
@@ -67,15 +73,34 @@ def check_info_revhistory_revision_date(tree: etree.ElementTree,
     if date is None:
         raise InvalidValueError(f"Couldn't find a date element in info/revhistory/revision.")
 
-    # First check the formal correctness of the date with regex
-    if DATE_REGEX.search(date.text) is None:
-        path = getfullxpath(date)
-        raise InvalidValueError(f"Invalid date format in {date.tag} (XPath={path}).")
+    validatedate(date)
 
-    # Check if the date is valid
-    try:
-        parse_date(date.text.strip())
-    except ValueError as e:
-        xpath = getfullxpath(date)
-        raise InvalidValueError(f"{e} (XPath={xpath})")
+
+def check_info_revhistory_revision_order(tree: etree._ElementTree,
+                                        config: dict[t.Any, t.Any]):
+    """Checks for the right order of info/revhistory/revision elements"""
+    revhistory = tree.find("./d:info/d:revhistory", namespaces={"d": DOCBOOK_NS})
+    revisions = revhistory.xpath("d:revision",
+                                  namespaces={"d": DOCBOOK_NS})
+    xpath = getfullxpath(revhistory)
+    if not revisions:
+        return None
+
+    date_elements = [rev.find("./d:date", namespaces={"d": DOCBOOK_NS})
+                     for rev in revisions]
+    dates = [
+        validatedatevalue(d.text)
+        for d in date_elements if d is not None
+    ]
+    converteddates: list[datetime.date] = [d for d in dates if d is not None]
+
+    # First check: check if we have the same number of dates and revisions
+    if len(date_elements) != len(revisions):
+        raise InvalidValueError(f"Couldn't convert all dates. Check {xpath}")
+
+    # Second check: we have the same number of dates and revisions, now
+    # check if the dates are in descending order
+    for first, second in itertools.pairwise(converteddates):
+        if first <= second:
+            raise InvalidValueError("Dates in revhistory/revision are not in descending order.")
 

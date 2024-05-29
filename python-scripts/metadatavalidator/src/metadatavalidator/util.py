@@ -1,9 +1,12 @@
-from datetime import datetime, date
+import datetime
+import typing as t
 from lxml import etree
 
 from .common import (
+    DATE_REGEX,
     NAMESPACES2PREFIX,
     )
+from .exceptions import InvalidValueError
 
 
 def getfullxpath(element: etree._Element,
@@ -51,7 +54,7 @@ def getfullxpath(element: etree._Element,
     )
 
 
-def parse_date(date_text: str) -> date:
+def parse_date(date_text: str) -> datetime.date:
     """Attempt to parse a date string into a date object
     Valid formats are YYYY-MM-DD, YYYY-M-D, YYYY-MM, YYYY-M,
     YYYY-MM-D, and YYYY-M-D
@@ -60,10 +63,35 @@ def parse_date(date_text: str) -> date:
     for fmt in ("%Y-%m-%d", "%Y-%m"):
         try:
             # This will handle all formats
-            parsed_date = datetime.strptime(date_text, fmt)
+            parsed_date = datetime.datetime.strptime(date_text, fmt)
             return parsed_date.date()
         except ValueError:
             continue
 
     # If none of the formats matched, raise an error
     raise ValueError(f"Invalid date format: {date_text}")
+
+
+def validatedate(element: etree._Element):
+    """Validate the date text from an element"""
+    # First check the formal correctness of the date with regex
+
+    date = validatedatevalue(element.text.strip())
+    if date is None:
+        path = getfullxpath(element)
+        raise InvalidValueError(f"Invalid date format in {element.tag} (XPath={path}).")
+    return date
+
+
+def validatedatevalue(date: str) -> t.Optional[datetime.date]:
+    """Validate the date text from an element"""
+    # First check the formal correctness of the date with regex
+    if DATE_REGEX.search(date) is None:
+        raise InvalidValueError(f"Invalid date format in {date}.")
+
+    # Check if the date is valid
+    try:
+        return parse_date(date.strip())
+
+    except ValueError as e:
+        return None
