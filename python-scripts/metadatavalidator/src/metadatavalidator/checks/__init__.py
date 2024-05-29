@@ -5,8 +5,10 @@ from .check_root import (
 from .check_info import (
     check_info,
     check_info_revhistory,
-)
+    check_info_revhistory_revision,
+    check_info_revhistory_revision_date
 
+)
 
 # Keep the order. The next item is dependent on the previous item.
 __all__ = [
@@ -14,5 +16,7 @@ __all__ = [
     "check_namespace",
     "check_info",
     "check_info_revhistory",
+    "check_info_revhistory_revision",
+    "check_info_revhistory_revision_date",
 ]
 

@@ -9,7 +9,7 @@ from ..common import (
     )
 from ..exceptions import InvalidValueError, MissingAttributeWarning
 from ..logging import log
-from ..util import getfullxpath
+from ..util import getfullxpath, parse_date
 
 
 def check_info(tree: etree.ElementTree, config: dict[t.Any, t.Any]):
@@ -56,7 +56,7 @@ def check_info_revhistory_revision(tree: etree.ElementTree,
     if config.get("metadata", {}).get("require_xmlid_on_revision", True) and xmlid is None:
         xpath = getfullxpath(revision)
         xpath += "/@xml:id"
-        raise MissingAttributeWarning(path)
+        raise MissingAttributeWarning(xpath)
 
 
 def check_info_revhistory_revision_date(tree: etree.ElementTree,
@@ -67,10 +67,15 @@ def check_info_revhistory_revision_date(tree: etree.ElementTree,
     if date is None:
         raise InvalidValueError(f"Couldn't find a date element in info/revhistory/revision.")
 
+    # First check the formal correctness of the date with regex
     if DATE_REGEX.search(date.text) is None:
         path = getfullxpath(date)
         raise InvalidValueError(f"Invalid date format in {date.tag} (XPath={path}).")
 
     # Check if the date is valid
-
+    try:
+        parse_date(date.text.strip())
+    except ValueError as e:
+        xpath = getfullxpath(date)
+        raise InvalidValueError(f"{e} (XPath={xpath})")
 

@@ -1,3 +1,4 @@
+from datetime import datetime, date
 from lxml import etree
 
 from .common import (
@@ -49,3 +50,20 @@ def getfullxpath(element: etree._Element,
                      for p1, p2 in zip(path, fullpath) ]
     )
 
+
+def parse_date(date_text: str) -> date:
+    """Attempt to parse a date string into a date object
+    Valid formats are YYYY-MM-DD, YYYY-M-D, YYYY-MM, YYYY-M,
+    YYYY-MM-D, and YYYY-M-D
+    """
+    # Attempt to parse the date text into a date object
+    for fmt in ("%Y-%m-%d", "%Y-%m"):
+        try:
+            # This will handle all formats
+            parsed_date = datetime.strptime(date_text, fmt)
+            return parsed_date.date()
+        except ValueError:
+            continue
+
+    # If none of the formats matched, raise an error
+    raise ValueError(f"Invalid date format: {date_text}")
