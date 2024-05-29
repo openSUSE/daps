@@ -289,7 +289,7 @@ def test_check_info_revhistory_revision_order(xmlparser):
         <title>Test</title>
         <revhistory xml:id="rh">
           <revision>
-            <date>2024-13</date>
+            <date>2024-12</date>
           </revision>
           <revision>
             <date>2023-12-12</date>
@@ -307,3 +307,30 @@ def test_check_info_revhistory_revision_order(xmlparser):
 
     assert check_info_revhistory_revision_order(tree, {}) is None
 
+
+def test_check_info_revhistory_revision_order_one_invalid_date(xmlparser):
+    xmlcontent = """<article xmlns="http://docbook.org/ns/docbook" version="5.2">
+    <info>
+        <title>Test</title>
+        <revhistory xml:id="rh">
+          <revision>
+            <date>2024-53</date><!-- Wrong date -->
+          </revision>
+          <revision>
+            <date>2023-12-12</date>
+          </revision>
+          <revision>
+            <date>2022-04</date>
+          </revision>
+        </revhistory>
+    </info>
+    <para/>
+</article>"""
+    tree = etree.ElementTree(
+        etree.fromstring(xmlcontent, parser=xmlparser)
+    )
+
+    with pytest.raises(InvalidValueError,
+                       match=".*Couldn't convert all dates.*see position dates=1.*"
+                       ):
+        check_info_revhistory_revision_order(tree, {})

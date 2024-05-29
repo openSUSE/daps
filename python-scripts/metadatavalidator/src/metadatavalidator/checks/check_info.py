@@ -97,8 +97,10 @@ def check_info_revhistory_revision_order(tree: etree._ElementTree,
     converteddates: list[datetime.date] = [d for d in dates if d is not None]
 
     # First check: check if we have the same number of dates and revisions
-    if len(date_elements) != len(revisions):
-        raise InvalidValueError(f"Couldn't convert all dates. Check {xpath}")
+    if len(converteddates) != len(revisions):
+        raise InvalidValueError(f"Couldn't convert all dates "
+                                f"(see position dates={dates.index(None)+1}). "
+                                f"Check {xpath}")
 
     # Second check: we have the same number of dates and revisions, now
     # check if the dates are in descending order
