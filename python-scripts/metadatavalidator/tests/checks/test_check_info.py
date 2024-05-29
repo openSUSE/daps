@@ -257,7 +257,7 @@ def test_check_info_revhistory_revision_date_invalid_format(xmlparser):
     )
 
     with pytest.raises(InvalidValueError,
-                       match="Invalid date format"):
+                       match=".*ate is empty or has invalid format.*"):
         check_info_revhistory_revision_date(tree, {})
 
 

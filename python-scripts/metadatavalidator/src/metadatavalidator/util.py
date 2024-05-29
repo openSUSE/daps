@@ -86,8 +86,8 @@ def validatedate(element: etree._Element):
 def validatedatevalue(date: str) -> t.Optional[datetime.date]:
     """Validate the date text from an element"""
     # First check the formal correctness of the date with regex
-    if DATE_REGEX.search(date) is None:
-        raise InvalidValueError(f"Invalid date format in {date}.")
+    if not date or not DATE_REGEX.search(date):
+        raise InvalidValueError(f"Date is empty or has invalid format: {date}.")
 
     # Check if the date is valid
     try:
