@@ -78,7 +78,7 @@ def red(text):
     return f"\033[31m{text}\033[0m"
 
 
-def format_results(results: list[t.Any]):
+def format_results_text(results: list[t.Any]):
     """Format the results for output
 
     :param results: the results from the checks
@@ -128,7 +128,7 @@ async def process(args: Namespace, config: dict[t.Any, t.Any]):
 
     # Use strategy pattern to format the results
     formatmap = {
-        "text": format_results,
+        "text": format_results_text,
         "json": format_results_json,
     }
 
