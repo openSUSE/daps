@@ -32,7 +32,7 @@ def parsecli(cliargs=None) -> argparse.Namespace:
                         default=0, # emit warnings, errors, and critical
                         help="increase verbosity level")
 
-    parser.add_argument('--config',
+    parser.add_argument('-C', '--config',
                         help="The configuration file to use (disables other systems or home configuration files)",
                         metavar="CONFIGFILE",)
 
