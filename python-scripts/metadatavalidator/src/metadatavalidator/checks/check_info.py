@@ -33,9 +33,13 @@ def check_info_revhistory(tree: etree._ElementTree, config: dict[t.Any, t.Any]):
         # If <info> couldn't be found, we can't check <revhistory>
         return
 
+    required = config.get("metadata", {}).get("require_revhistory", False)
+
     revhistory = info.find("./d:revhistory", namespaces={"d": DOCBOOK_NS})
     if revhistory is None:
-        raise InvalidValueError(f"Couldn't find a revhistory element in {info.tag}.")
+        if required:
+            raise InvalidValueError(f"Couldn't find a revhistory element in {info.tag}.")
+        return None
 
     xmlid = revhistory.attrib.get(f"{{{XML_NS}}}id")
     if xmlid is None:
@@ -43,7 +47,6 @@ def check_info_revhistory(tree: etree._ElementTree, config: dict[t.Any, t.Any]):
 
     if not xmlid.startswith("rh"):
         raise InvalidValueError(f"xml:id attribute in info/revhistory should start with 'rh'.")
-
 
 
 def check_info_revhistory_revision(tree: etree._ElementTree,
@@ -70,6 +73,10 @@ def check_info_revhistory_revision_date(tree: etree._ElementTree,
     """Checks for an info/revhistory/revision/date element"""
     date = tree.find("./d:info/d:revhistory/d:revision/d:date",
                      namespaces={"d": DOCBOOK_NS})
+
+    revhistory = tree.find("./d:info/d:revhistory", namespaces={"d": DOCBOOK_NS})
+    if revhistory is None:
+        return None
     if date is None:
         raise InvalidValueError(f"Couldn't find a date element in info/revhistory/revision.")
 
