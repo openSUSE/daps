@@ -14,6 +14,7 @@ from .check_meta import (
     check_meta_title,
     check_meta_description,
     check_meta_series,
+    check_meta_techpartner,
 )
 
 # Keep the order. The next item is dependent on the previous item.
@@ -30,5 +31,6 @@ __all__ = [
     "check_meta_title",
     "check_meta_description",
     "check_meta_series",
+    "check_meta_techpartner",
 ]
 

@@ -67,3 +67,32 @@ def check_meta_series(tree: etree.ElementTree, config: dict[t.Any, t.Any]):
             f"Meta series is invalid, got {meta.text.strip()!r}. "
             f"Valid series are {valid_series}."
         )
+
+
+def check_meta_techpartner(tree: etree.ElementTree, config: dict[t.Any, t.Any]):
+    """Checks for a <meta name="techpartner"> element"""
+    root = tree.getroot()
+    meta = root.find("./d:info/d:meta[@name='techpartner']", namespaces=NAMESPACES)
+    required = config.get("metadata", {}).get("require_meta_techpartner", False)
+    if meta is None:
+        if required:
+            raise InvalidValueError(
+                f"Couldn't find required meta[@name='techpartner'] element "
+                f"in {root.tag}."
+            )
+        return
+
+    # Do we have children?
+    partners = [tag.text.strip() for tag in meta.iterchildren()]
+    if not partners:
+        raise InvalidValueError(
+            f"Couldn't find any tech partners in meta[@name='techpartner'] element "
+            f"(line {meta.sourceline})."
+        )
+
+    # Are they unique?
+    if len(partners) != len(set(partners)):
+        raise InvalidValueError(
+            f"Duplicate tech partners found in meta[@name='techpartner'] element "
+            f"(line {meta.sourceline})."
+        )

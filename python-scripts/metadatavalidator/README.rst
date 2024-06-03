@@ -54,3 +54,5 @@ recognized:
     * :var:`require_meta_series`: Requires a ``<meta name="series">`` tag or not.
 
     * :var:`valid_meta_series`: Lists the valid series names for ``<meta name="series">``.
+
+    * :var:`require_meta_techpartner`: Requires a ``<meta name="techpartner">`` tag or not.

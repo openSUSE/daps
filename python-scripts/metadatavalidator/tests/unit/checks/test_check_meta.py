@@ -5,6 +5,7 @@ from metadatavalidator.checks.check_meta import (
     check_meta_title,
     check_meta_description,
     check_meta_series,
+    check_meta_techpartner,
 )
 from metadatavalidator.exceptions import InvalidValueError
 
@@ -64,8 +65,8 @@ def test_check_optional_meta_title(xmlparser):
     tree = etree.ElementTree(
         etree.fromstring(xmlcontent, parser=xmlparser)
     )
-    assert check_meta_title(tree,
-                            dict(metadata=dict(meta_title_required=False))) is None
+    config = dict(metadata=dict(meta_title_required=False))
+    assert check_meta_title(tree, config) is None
 
 
 def test_check_meta_description(xmlparser):
@@ -157,7 +158,8 @@ def test_check_missing_meta_series(xmlparser):
         etree.fromstring(xmlcontent, parser=xmlparser)
     )
 
-    check_meta_series(tree, dict(metadata=dict(require_meta_series=False))) is None
+    config = dict(metadata=dict(require_meta_series=False))
+    assert check_meta_series(tree, config) is None
 
 
 def test_check_wrong_meta_series(xmlparser):
@@ -177,3 +179,74 @@ def test_check_wrong_meta_series(xmlparser):
                                                    "Technical References"]))
     with pytest.raises(InvalidValueError, match="Meta series is invalid"):
         check_meta_series(tree, config)
+
+
+def test_check_meta_techpartner(xmlparser):
+    xmlcontent = """<article xmlns="http://docbook.org/ns/docbook" version="5.2">
+    <info>
+        <title>Test</title>
+        <meta name="techpartner">
+            <phrase>Acme Inc.</phrase>
+            <phrase>Foo Corp.</phrase>
+        </meta>
+    </info>
+    <para/>
+</article>"""
+    tree = etree.ElementTree(
+        etree.fromstring(xmlcontent, parser=xmlparser)
+    )
+
+    assert check_meta_techpartner(tree, {}) is None
+
+
+def test_check_missing_meta_techpartner(xmlparser):
+    xmlcontent = """<article xmlns="http://docbook.org/ns/docbook" version="5.2">
+    <info>
+        <title>Test</title>
+    </info>
+    <para/>
+</article>"""
+    tree = etree.ElementTree(
+        etree.fromstring(xmlcontent, parser=xmlparser)
+    )
+
+    config = dict(metadata=dict(require_meta_techpartner=True))
+    with pytest.raises(InvalidValueError, match=".*required.*"):
+        check_meta_techpartner(tree, config)
+
+
+def test_check_missing_children_in_meta_techpartner(xmlparser):
+    xmlcontent = """<article xmlns="http://docbook.org/ns/docbook" version="5.2">
+    <info>
+        <title>Test</title>
+        <meta name="techpartner"/>
+    </info>
+    <para/>
+</article>"""
+    tree = etree.ElementTree(
+        etree.fromstring(xmlcontent, parser=xmlparser)
+    )
+
+    config = dict(metadata=dict(require_meta_techpartner=True))
+    with pytest.raises(InvalidValueError, match=".*Couldn't find any tech partners.*"):
+        check_meta_techpartner(tree, config)
+
+
+def test_check_meta_techpartner_with_nonunique_children(xmlparser):
+    xmlcontent = """<article xmlns="http://docbook.org/ns/docbook" version="5.2">
+    <info>
+        <title>Test</title>
+        <meta name="techpartner">
+            <phrase>Acme Inc.</phrase>
+            <phrase>Acme Inc.</phrase>
+        </meta>
+    </info>
+    <para/>
+</article>"""
+    tree = etree.ElementTree(
+        etree.fromstring(xmlcontent, parser=xmlparser)
+    )
+
+    config = dict(metadata=dict(require_meta_techpartner=True))
+    with pytest.raises(InvalidValueError, match=".*Duplicate tech partners.*"):
+        check_meta_techpartner(tree, config)
