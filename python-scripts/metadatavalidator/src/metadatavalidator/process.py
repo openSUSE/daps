@@ -66,6 +66,7 @@ async def process_xml_file(xmlfile: str, config: dict[t.Any, t.Any]):
     log.info("File %r checked.", basexmlfile)
     return {
         "xmlfile": xmlfile,
+        "absxmlfilename": os.path.abspath(xmlfile),
         "errors": errors,
         "basename": os.path.basename(xmlfile),
     }
@@ -97,6 +98,13 @@ def format_results(results: list[t.Any]):
                 print(f"  {allidx}.{idx}: {error['checkfunc']}: {msg}")
             print()
 
+def format_results_json(results: list[t.Any]):
+    """Format the results for output
+
+    :param results: the results from the checks
+    """
+    import json
+    print(json.dumps(results, indent=2))
 
 
 async def process(args: Namespace, config: dict[t.Any, t.Any]):
@@ -118,4 +126,10 @@ async def process(args: Namespace, config: dict[t.Any, t.Any]):
         if maybeissue:
             results.append(maybeissue)
 
-    format_results(results)
+    # Use strategy pattern to format the results
+    formatmap = {
+        "text": format_results,
+        "json": format_results_json,
+    }
+
+    formatmap[args.format](results)

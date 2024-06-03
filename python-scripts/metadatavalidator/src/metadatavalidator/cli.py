@@ -36,6 +36,12 @@ def parsecli(cliargs=None) -> argparse.Namespace:
                         help="The configuration file to use (disables other systems or home configuration files)",
                         metavar="CONFIGFILE",)
 
+    parser.add_argument('-F', '--format',
+                        help="Output format (default %(default)r)",
+                        choices=["text", "json"],
+                        default="text"
+                        )
+
     parser.add_argument('--version',
                         action='version',
                         version=f'%(prog)s {__version__} written by {__author__}'
