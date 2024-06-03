@@ -50,3 +50,7 @@ recognized:
     * :var:`require_meta_description`: Requires a ``<meta name="description">`` tag or not.
 
     * :var:`meta_description_length`: Checks the length of the text content in ``<meta name="description">``. Default is 155.
+
+    * :var:`require_meta_series`: Requires a ``<meta name="series">`` tag or not.
+
+    * :var:`valid_meta_series`: Lists the valid series names for ``<meta name="series">``.

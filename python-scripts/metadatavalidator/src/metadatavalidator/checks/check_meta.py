@@ -45,3 +45,25 @@ def check_meta_description(tree: etree.ElementTree, config: dict[t.Any, t.Any]):
     length = config.get("metadata", {}).get("meta_description_length", 150)
     if len(meta.text) > length:
         raise InvalidValueError(f"Meta description is too long. Max length is {length} characters.")
+
+
+def check_meta_series(tree: etree.ElementTree, config: dict[t.Any, t.Any]):
+    """Checks for a <meta name="series"> element"""
+    root = tree.getroot()
+    meta = root.find("./d:info/d:meta[@name='series']", namespaces=NAMESPACES)
+    required = config.get("metadata", {}).get("required_meta_series", False)
+    if meta is None:
+        if required:
+            raise InvalidValueError(
+                f"Couldn't find required meta[@name='series'] element in {root.tag}."
+            )
+        return
+
+    valid_series = [x.strip() for x in
+                    config.get("metadata", {}).get("valid_meta_series", [])
+                    if x]
+    if meta.text.strip() not in valid_series:
+        raise InvalidValueError(
+            f"Meta series is invalid, got {meta.text.strip()!r}. "
+            f"Valid series are {valid_series}."
+        )

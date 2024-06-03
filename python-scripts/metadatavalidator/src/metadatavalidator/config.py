@@ -98,6 +98,14 @@ def validate_and_convert_config(config: configparser.ConfigParser) -> dict[t.Any
     except TypeError:
         raise MissingKeyError("metadata.meta_description_length")
 
+    split = re.compile(r"[;,]")  # no space!
+    valid_meta_series = split.split(theconfig.get("metadata", {}).get("valid_meta_series", ""))
+    theconfig.setdefault("metadata", {})["valid_meta_series"] = valid_meta_series
+
+    require_meta_series = truefalse(
+        theconfig.get("metadata", {}).get("require_meta_series", False)
+    )
+    theconfig.setdefault("metadata", {})["require_meta_series"] = require_meta_series
 
     # Store the configfiles
     theconfig["configfiles"] = getattr(config, "configfiles")
