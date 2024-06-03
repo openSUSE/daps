@@ -12,6 +12,23 @@ Requirements
 * Python >=3.11 (only due to for installing with :file:`pyproject.toml`.)
 
 
+Installation
+------------
+
+To install the script, run the following command:
+
+.. code-block:: bash
+
+    pip install .
+
+
+For development, you can install the script in editable mode:
+
+.. code-block:: bash
+
+    pip install -e .[test]
+
+
 Configuration
 -------------
 
