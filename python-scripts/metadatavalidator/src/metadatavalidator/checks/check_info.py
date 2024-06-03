@@ -106,5 +106,8 @@ def check_info_revhistory_revision_order(tree: etree._ElementTree,
     # check if the dates are in descending order
     for first, second in itertools.pairwise(converteddates):
         if first <= second:
-            raise InvalidValueError("Dates in revhistory/revision are not in descending order.")
+            raise InvalidValueError(
+                "Dates in revhistory/revision are not in descending order: "
+                f"{first} <= {second}."
+                )
 
