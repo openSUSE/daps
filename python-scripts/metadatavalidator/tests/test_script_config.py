@@ -17,6 +17,7 @@ def create_config():
     config.set("metadata", "revhistory", "0")
     config.set("metadata", "require_xmlid_on_revision", "true")
     config.set("metadata", "meta_title_length", "50")
+    config.set("metadata", "meta_description_length", "150")
     #
     setattr(config, "configfiles", None)
     return config
@@ -88,6 +89,20 @@ def test_meta_title_length_not_positive():
     config = create_config()
     config.set("metadata", "meta_title_length", "-1")
     with pytest.raises(ValueError, match=".*meta_title_length should be a positive integer.*"):
+        validate_and_convert_config(config)
+
+
+def test_meta_description_length_not_positive():
+    config = create_config()
+    config.set("metadata", "meta_description_length", "-1")
+    with pytest.raises(ValueError, match=".*meta_description_length should be a positive integer.*"):
+        validate_and_convert_config(config)
+
+
+def test_missing_key_meta_description_length():
+    config = create_config()
+    config.remove_option("metadata", "meta_description_length")
+    with pytest.raises(MissingKeyError, match=".*metadata.meta_description_length.*"):
         validate_and_convert_config(config)
 
 

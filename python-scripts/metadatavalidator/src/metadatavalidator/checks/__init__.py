@@ -10,7 +10,10 @@ from .check_info import (
     check_info_revhistory_revision_order
 
 )
-from .check_meta import check_meta_title
+from .check_meta import (
+    check_meta_title,
+    check_meta_description,
+)
 
 # Keep the order. The next item is dependent on the previous item.
 __all__ = [
@@ -24,5 +27,6 @@ __all__ = [
     "check_info_revhistory_revision_order",
     #
     "check_meta_title",
+    "check_meta_description",
 ]
 

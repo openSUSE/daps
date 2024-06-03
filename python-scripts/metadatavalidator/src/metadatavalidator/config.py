@@ -89,6 +89,15 @@ def validate_and_convert_config(config: configparser.ConfigParser) -> dict[t.Any
     except TypeError:
         raise MissingKeyError("metadata.meta_title_length")
 
+    try:
+        meta_description_length = int(theconfig.get("metadata", {}).get("meta_description_length"))
+        if meta_description_length < 0:
+            raise ValueError("meta_description_length should be a positive integer")
+        theconfig.setdefault("metadata", {})["meta_description_length"] = meta_description_length
+
+    except TypeError:
+        raise MissingKeyError("metadata.meta_description_length")
+
 
     # Store the configfiles
     theconfig["configfiles"] = getattr(config, "configfiles")

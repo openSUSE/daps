@@ -45,3 +45,7 @@ recognized:
     * :var:`require_meta_title`: Requires a ``<meta name="title">`` tag or not.
 
     * :var:`meta_title_length`: Checks the length of the text content in ``<meta name="title">``. Default is 55.
+
+    * :var:`require_meta_description`: Requires a ``<meta name="description">`` tag or not.
+
+    * :var:`meta_description_length`: Checks the length of the text content in ``<meta name="description">``. Default is 155.
