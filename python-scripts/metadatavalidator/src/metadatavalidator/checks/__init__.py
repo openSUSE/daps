@@ -10,16 +10,19 @@ from .check_info import (
     check_info_revhistory_revision_order
 
 )
-from .check_meta import check_meta_
+from .check_meta import check_meta_title
 
 # Keep the order. The next item is dependent on the previous item.
 __all__ = [
     "check_root_tag",
     "check_namespace",
     "check_info",
+    #
     "check_info_revhistory",
     "check_info_revhistory_revision",
     "check_info_revhistory_revision_date",
     "check_info_revhistory_revision_order",
+    #
+    "check_meta_title",
 ]
 

@@ -80,6 +80,15 @@ def validate_and_convert_config(config: configparser.ConfigParser) -> dict[t.Any
     )
     theconfig.setdefault("metadata", {})["require_xmlid_on_revision"] = require_xmlid_on_revision
 
+    try:
+        meta_title_length = int(theconfig.get("metadata", {}).get("meta_title_length"))
+        if meta_title_length < 0:
+            raise ValueError("meta_title_length should be a positive integer")
+        theconfig.setdefault("metadata", {})["meta_title_length"] = meta_title_length
+
+    except TypeError:
+        raise MissingKeyError("metadata.meta_title_length")
+
 
     # Store the configfiles
     theconfig["configfiles"] = getattr(config, "configfiles")
