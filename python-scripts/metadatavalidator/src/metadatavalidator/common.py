@@ -27,14 +27,17 @@ XLINK_NS = "http://www.w3.org/1999/xlink"
 ITS_NS = "http://www.w3.org/2005/11/its"
 XINCLUDE_NS = "http://www.w3.org/2001/XInclude"
 
-#: Mapping of namespaces to prefixes
-NAMESPACES2PREFIX = {
-    DOCBOOK_NS: "d",
-    XML_NS: "xml",
-    XLINK_NS: "xlink",
-    ITS_NS: "its",
-    XINCLUDE_NS: "xi",
+#: Mapping of prefixes to namespaces
+NAMESPACES = {
+    "d": DOCBOOK_NS,
+    "xml": XML_NS,
+    "xlink": XLINK_NS,
+    "its": ITS_NS,
+    "xi": XINCLUDE_NS,
 }
+
+#: Mapping of namespaces to prefixes
+NAMESPACES2PREFIX = {v: k for k, v in NAMESPACES.items()}
 
 #: The regex to match a date with year, month and an optional day
 DATE_REGEX = re.compile(r"^(\d{4})-(\d{1,2})(?:-(\d{1,2}))?$")
