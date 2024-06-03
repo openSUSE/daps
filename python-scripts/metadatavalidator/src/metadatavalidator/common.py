@@ -15,7 +15,7 @@ CONFIGDIRS: t.Sequence = [
     ]
 METAVALIDATOR_CONFIG = os.environ.get('METAVALIDATOR_CONFIG')
 if METAVALIDATOR_CONFIG is not None:
-    CONFIGDIRS.insert(0, os.path.expanduser(METAVALIDATOR_CONFIG))
+    CONFIGDIRS.insert(0, os.path.expanduser(METAVALIDATOR_CONFIG))  # pragma: no cover
 
 #: Store the expanded paths in tuple
 CONFIGDIRS = tuple(os.path.expanduser(i) for i in CONFIGDIRS)

@@ -5,13 +5,6 @@ from logging.config import dictConfig
 import sys
 import typing as t
 
-try:
-    from lxml import etree
-
-except ImportError:
-    print("Cannot import lxml. ", file=sys.stderr)
-    sys.exit(10)
-
 from . import __author__, __version__
 from .config import readconfig
 from .common import CONFIGDIRS
@@ -70,6 +63,9 @@ def main(cliargs=None) -> int:
     :return: error code
     """
     try:
+        # just try to import lxml.etree
+        from lxml import etree  # noqa: F401
+
         args = parsecli(cliargs)
         config = readconfig(CONFIGDIRS)
         args.config = config
@@ -78,6 +74,10 @@ def main(cliargs=None) -> int:
         asyncio.run(process(args, config))
 
         return 0
+
+    except ImportError as error:
+        log.critical("lxml is not installed")
+        return 50
 
     except NoConfigFilesFoundError as error:
         log.critical("No config files found")
