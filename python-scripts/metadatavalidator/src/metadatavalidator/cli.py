@@ -32,6 +32,10 @@ def parsecli(cliargs=None) -> argparse.Namespace:
                         default=0, # emit warnings, errors, and critical
                         help="increase verbosity level")
 
+    parser.add_argument('--config',
+                        help="The configuration file to use (disables other systems or home configuration files)",
+                        metavar="CONFIGFILE",)
+
     parser.add_argument('--version',
                         action='version',
                         version=f'%(prog)s {__version__} written by {__author__}'
@@ -67,7 +71,12 @@ def main(cliargs=None) -> int:
         from lxml import etree  # noqa: F401
 
         args = parsecli(cliargs)
-        config = readconfig(CONFIGDIRS)
+        # Either use the config file from the CLI or the default config files
+        if args.config is None:
+            configfiles = CONFIGDIRS
+        else:
+            configfiles = [args.config]
+        config = readconfig(configfiles)
         args.config = config
         log.debug("CLI args %s", args)
 

@@ -17,6 +17,7 @@ Configuration
 
 The configuration file is search in the following order (first is the highest):
 
+1. Command line with :option:`--config`. This doesn't search for other configuration files.
 1. Environment variable :envar:`METAVALIDATOR_CONFIG`.
 1. In the current directory: :file:`metadatavalidator.ini`
 1. In the users' home directory: :file:`~/.config/metadatavalidator/config.ini`

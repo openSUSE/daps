@@ -18,3 +18,9 @@ def test_parsecli_version(capsys):
     captured = capsys.readouterr()
     # We can't check for the script name as it's "pytest"
     assert re.match(r"[a-z]+ \d+\.\d+(\.\d+)? written by .*\n", captured.out)
+
+
+def test_parsecli_config():
+    args = parsecli(["--config", "config.ini", "a.xml", "b.xml"])
+    assert args.config == "config.ini"
+    assert args.xmlfiles == ["a.xml", "b.xml"]
