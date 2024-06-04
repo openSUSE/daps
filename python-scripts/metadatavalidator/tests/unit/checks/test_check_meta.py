@@ -265,7 +265,7 @@ def test_check_meta_platform(xmlparser):
         etree.fromstring(xmlcontent, parser=xmlparser)
     )
     config = dict(metadata=dict(require_meta_platform=True))
-    assert check_meta_platform(tree, {}) is None
+    assert check_meta_platform(tree, config) is None
 
 
 def test_check_missing_meta_platform(xmlparser):
