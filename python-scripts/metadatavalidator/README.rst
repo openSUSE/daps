@@ -75,3 +75,7 @@ recognized:
     * :var:`require_meta_techpartner`: Requires a ``<meta name="techpartner">`` tag or not.
 
     * :var:`require_meta_platform`: Requires a ``<meta name="platform">`` tag or not.
+
+    * :var:`require_meta_architecture`: Requires a ``<meta name="architecture">`` tag or not.
+
+    * :var:`valid_meta_architecture`: Lists the valid architecture names for ``<meta name="architecture">/<phrase>``.

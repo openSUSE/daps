@@ -7,6 +7,7 @@ from metadatavalidator.checks.check_meta import (
     check_meta_series,
     check_meta_techpartner,
     check_meta_platform,
+    check_meta_architecture,
 )
 from metadatavalidator.exceptions import InvalidValueError
 
@@ -314,3 +315,93 @@ def test_check_empty_meta_platform(xmlparser):
     config = dict(metadata=dict(require_meta_platform=True))
     with pytest.raises(InvalidValueError, match=r".*Empty meta.*"):
         check_meta_platform(tree, config)
+
+
+def test_check_meta_architecture(xmlparser):
+    xmlcontent = """<article xmlns="http://docbook.org/ns/docbook" version="5.2">
+    <info>
+        <title>Test</title>
+        <meta name="architecture">
+          <phrase>x86_64</phrase>
+        </meta>
+    </info>
+    <para/>
+</article>"""
+    tree = etree.ElementTree(etree.fromstring(xmlcontent, parser=xmlparser))
+    config = dict(metadata=dict(require_meta_architecture=True))
+    assert check_meta_architecture(tree, config) is None
+
+
+def test_check_missing_optional_meta_architecture(xmlparser):
+    xmlcontent = """<article xmlns="http://docbook.org/ns/docbook" version="5.2">
+    <info>
+        <title>Test</title>
+    </info>
+    <para/>
+</article>"""
+    tree = etree.ElementTree(etree.fromstring(xmlcontent, parser=xmlparser))
+    config = dict(metadata=dict(require_meta_architecture=True))
+    with pytest.raises(InvalidValueError,
+                       match=r".*Couldn't find required meta.*"):
+        check_meta_architecture(tree, config)
+
+
+def test_check_missing_child_meta_architecture(xmlparser):
+    xmlcontent = """<article xmlns="http://docbook.org/ns/docbook" version="5.2">
+    <info>
+        <title>Test</title>
+        <meta name="architecture"/>
+    </info>
+    <para/>
+</article>"""
+    tree = etree.ElementTree(etree.fromstring(xmlcontent, parser=xmlparser))
+    config = dict(metadata=dict(require_meta_architecture=True))
+    with pytest.raises(
+        InvalidValueError,
+        match=r".*Couldn't find any child elements in meta.*"
+    ):
+        check_meta_architecture(tree, config)
+
+
+def test_check_duplicate_child_meta_architecture(xmlparser):
+    xmlcontent = """<article xmlns="http://docbook.org/ns/docbook" version="5.2">
+    <info>
+        <title>Test</title>
+        <meta name="architecture">
+          <phrase>x86_64</phrase>
+          <phrase>x86_64</phrase>
+        </meta>
+    </info>
+    <para/>
+</article>"""
+    tree = etree.ElementTree(etree.fromstring(xmlcontent, parser=xmlparser))
+    config = dict(metadata=dict(
+        require_meta_architecture=True,
+        valid_meta_architecture=["x86_64", "POWER"]))
+    with pytest.raises(
+        InvalidValueError, match=r".*Duplicate architectures found in meta.*"
+    ):
+        check_meta_architecture(tree, config)
+
+
+def test_check_unknown_child_meta_architecture(xmlparser):
+    xmlcontent = """<article xmlns="http://docbook.org/ns/docbook" version="5.2">
+    <info>
+        <title>Test</title>
+        <meta name="architecture">
+          <phrase>x86_64</phrase>
+          <phrase>foo</phrase>
+        </meta>
+    </info>
+    <para/>
+</article>"""
+    tree = etree.ElementTree(etree.fromstring(xmlcontent, parser=xmlparser))
+    config = dict(
+        metadata=dict(
+            require_meta_architecture=True,
+            valid_meta_architecture=["x86_64", "POWER"],
+        )
+    )
+    with pytest.raises(InvalidValueError,
+                       match=r".*Unknown architecture.*"):
+        check_meta_architecture(tree, config)

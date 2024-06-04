@@ -120,3 +120,50 @@ def check_meta_platform(tree: etree._ElementTree,
 
     if meta.text is None or not meta.text.strip():
         raise InvalidValueError("Empty meta[@name='platform'] element")
+
+
+def check_meta_architecture(tree: etree._ElementTree,
+                            config: dict[t.Any, t.Any]):
+    """Checks for a <meta name="architecture"> element"""
+    root = tree.getroot()
+    meta = root.find("./d:info/d:meta[@name='architecture']",
+                     namespaces=NAMESPACES)
+    required = config.get("metadata", {}).get("require_meta_architecture",
+                                              False)
+    if meta is None:
+        if required:
+            raise InvalidValueError(
+                f"Couldn't find required meta[@name='architecture'] element "
+                f"in {root.tag}."
+            )
+        return
+
+    valid_archs = [
+        x.strip() for x in config.get("metadata", {}
+                                      ).get("valid_meta_architecture", [])
+        if x
+    ]
+
+    # Do we have children?
+    archs = [tag.text.strip() for tag in meta.iterchildren()]
+    if not archs:
+        raise InvalidValueError(
+            f"Couldn't find any child elements in meta[@name='architecture'] "
+            f"(line {meta.sourceline})."
+        )
+
+    # Are they unique?
+    if len(archs) != len(set(archs)):
+        raise InvalidValueError(
+            f"Duplicate architectures found in meta[@name='architecture'] "
+            f"(line {meta.sourceline})."
+        )
+
+    # Do we have items that don't conform to our predefined list?
+    wrong_items = set(archs) - set(valid_archs)
+    if wrong_items:
+        raise InvalidValueError(
+            f"Unknown architecture(s) {wrong_items}. "
+            f"Allowed are {valid_archs}."
+        )
+    print(">>>", wrong_items, valid_archs, archs)
