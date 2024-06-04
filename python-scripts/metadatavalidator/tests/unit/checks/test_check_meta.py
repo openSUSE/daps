@@ -6,6 +6,7 @@ from metadatavalidator.checks.check_meta import (
     check_meta_description,
     check_meta_series,
     check_meta_techpartner,
+    check_meta_platform,
 )
 from metadatavalidator.exceptions import InvalidValueError
 
@@ -250,3 +251,46 @@ def test_check_meta_techpartner_with_nonunique_children(xmlparser):
     config = dict(metadata=dict(require_meta_techpartner=True))
     with pytest.raises(InvalidValueError, match=".*Duplicate tech partners.*"):
         check_meta_techpartner(tree, config)
+
+
+def test_check_meta_platform(xmlparser):
+    xmlcontent = """<article xmlns="http://docbook.org/ns/docbook" version="5.2">
+    <info>
+        <title>Test</title>
+        <meta name="platform">Foo</meta>
+    </info>
+    <para/>
+</article>"""
+    tree = etree.ElementTree(
+        etree.fromstring(xmlcontent, parser=xmlparser)
+    )
+    config = dict(metadata=dict(require_meta_platform=True))
+    assert check_meta_platform(tree, {}) is None
+
+
+def test_check_missing_meta_platform(xmlparser):
+    xmlcontent = """<article xmlns="http://docbook.org/ns/docbook" version="5.2">
+    <info>
+        <title>Test</title>
+    </info>
+    <para/>
+</article>"""
+    tree = etree.ElementTree(etree.fromstring(xmlcontent, parser=xmlparser))
+    config = dict(metadata=dict(require_meta_platform=True))
+    with pytest.raises(InvalidValueError,
+                       match=r".*Couldn't find required meta.*"):
+        check_meta_platform(tree, config)
+
+
+def test_check_empty_meta_platform(xmlparser):
+    xmlcontent = """<article xmlns="http://docbook.org/ns/docbook" version="5.2">
+    <info>
+        <title>Test</title>
+        <meta name="platform"/>
+    </info>
+    <para/>
+</article>"""
+    tree = etree.ElementTree(etree.fromstring(xmlcontent, parser=xmlparser))
+    config = dict(metadata=dict(require_meta_platform=True))
+    with pytest.raises(InvalidValueError, match=r".*Empty meta.*"):
+        check_meta_platform(tree, config)

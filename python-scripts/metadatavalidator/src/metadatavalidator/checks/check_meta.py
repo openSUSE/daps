@@ -30,7 +30,7 @@ def check_meta_title(tree: etree._ElementTree, config: dict[t.Any, t.Any]):
         raise InvalidValueError(f"Meta title is too long. Max length is {length} characters.")
 
 
-def check_meta_description(tree: etree.ElementTree, config: dict[t.Any, t.Any]):
+def check_meta_description(tree: etree._ElementTree, config: dict[t.Any, t.Any]):
     """Checks for a <meta name="description"> element"""
     root = tree.getroot()
     meta = root.find("./d:info/d:meta[@name='description']", namespaces=NAMESPACES)
@@ -47,7 +47,7 @@ def check_meta_description(tree: etree.ElementTree, config: dict[t.Any, t.Any]):
         raise InvalidValueError(f"Meta description is too long. Max length is {length} characters.")
 
 
-def check_meta_series(tree: etree.ElementTree, config: dict[t.Any, t.Any]):
+def check_meta_series(tree: etree._ElementTree, config: dict[t.Any, t.Any]):
     """Checks for a <meta name="series"> element"""
     root = tree.getroot()
     meta = root.find("./d:info/d:meta[@name='series']", namespaces=NAMESPACES)
@@ -69,10 +69,11 @@ def check_meta_series(tree: etree.ElementTree, config: dict[t.Any, t.Any]):
         )
 
 
-def check_meta_techpartner(tree: etree.ElementTree, config: dict[t.Any, t.Any]):
+def check_meta_techpartner(tree: etree._ElementTree, config: dict[t.Any, t.Any]):
     """Checks for a <meta name="techpartner"> element"""
     root = tree.getroot()
-    meta = root.find("./d:info/d:meta[@name='techpartner']", namespaces=NAMESPACES)
+    meta = root.find("./d:info/d:meta[@name='techpartner']",
+                     namespaces=NAMESPACES)
     required = config.get("metadata", {}).get("require_meta_techpartner", False)
     if meta is None:
         if required:
@@ -96,3 +97,21 @@ def check_meta_techpartner(tree: etree.ElementTree, config: dict[t.Any, t.Any]):
             f"Duplicate tech partners found in meta[@name='techpartner'] element "
             f"(line {meta.sourceline})."
         )
+
+
+def check_meta_platform(tree: etree._ElementTree, config: dict[t.Any, t.Any]):
+    """Checks for a <meta name="platform"> element"""
+    root = tree.getroot()
+    meta = root.find("./d:info/d:meta[@name='platform']",
+                     namespaces=NAMESPACES)
+    required = config.get("metadata", {}).get("require_meta_platform", False)
+    if meta is None:
+        if required:
+            raise InvalidValueError(
+                f"Couldn't find required meta[@name='platform'] element "
+                f"in {root.tag}."
+            )
+        return
+
+    if meta.text is None or not meta.text.strip():
+        raise InvalidValueError("Empty meta[@name='platform'] element")

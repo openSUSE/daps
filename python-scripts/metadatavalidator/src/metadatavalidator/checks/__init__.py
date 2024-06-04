@@ -7,7 +7,7 @@ from .check_info import (
     check_info_revhistory,
     check_info_revhistory_revision,
     check_info_revhistory_revision_date,
-    check_info_revhistory_revision_order
+    check_info_revhistory_revision_order,
 
 )
 from .check_meta import (
@@ -15,6 +15,7 @@ from .check_meta import (
     check_meta_description,
     check_meta_series,
     check_meta_techpartner,
+    check_meta_platform,
 )
 
 # Keep the order. The next item is dependent on the previous item.
@@ -32,5 +33,6 @@ __all__ = [
     "check_meta_description",
     "check_meta_series",
     "check_meta_techpartner",
+    "check_meta_platform",
 ]
 
