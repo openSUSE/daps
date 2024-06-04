@@ -54,7 +54,7 @@ def check_meta_series(tree: etree._ElementTree,
     """Checks for a <meta name="series"> element"""
     root = tree.getroot()
     meta = root.find("./d:info/d:meta[@name='series']", namespaces=NAMESPACES)
-    required = config.get("metadata", {}).get("required_meta_series", False)
+    required = config.get("metadata", {}).get("require_meta_series", False)
     if meta is None:
         if required:
             raise InvalidValueError(

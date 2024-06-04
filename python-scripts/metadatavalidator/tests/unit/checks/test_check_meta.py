@@ -148,7 +148,7 @@ def test_check_meta_series(xmlparser):
     assert check_meta_series(tree, config) is None
 
 
-def test_check_missing_meta_series(xmlparser):
+def test_check_missing_optional_meta_series(xmlparser):
     xmlcontent = """<article xmlns="http://docbook.org/ns/docbook" version="5.2">
     <info>
         <title>Test</title>
@@ -179,6 +179,26 @@ def test_check_wrong_meta_series(xmlparser):
                                 valid_meta_series=["Best Practices",
                                                    "Technical References"]))
     with pytest.raises(InvalidValueError, match="Meta series is invalid"):
+        check_meta_series(tree, config)
+
+
+def test_check_require_meta_series(xmlparser):
+    xmlcontent = """<article xmlns="http://docbook.org/ns/docbook" version="5.2">
+    <info>
+        <title>Test</title>
+    </info>
+    <para/>
+</article>"""
+    tree = etree.ElementTree(etree.fromstring(xmlcontent, parser=xmlparser))
+
+    config = dict(
+        metadata=dict(
+            require_meta_series=True,
+            valid_meta_series=["Best Practices", "Technical References"],
+        )
+    )
+    with pytest.raises(InvalidValueError,
+                       match=r".*Couldn't find required meta.*"):
         check_meta_series(tree, config)
 
 
