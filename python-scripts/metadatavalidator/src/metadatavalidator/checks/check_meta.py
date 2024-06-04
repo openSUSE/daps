@@ -13,7 +13,8 @@ from ..exceptions import InvalidValueError
 from ..logging import log
 
 
-def check_meta_title(tree: etree._ElementTree, config: dict[t.Any, t.Any]):
+def check_meta_title(tree: etree._ElementTree,
+                     config: dict[t.Any, t.Any]):
     """Checks for a <meta name="title"> element"""
     root = tree.getroot()
     meta = root.find("./d:info/d:meta[@name='title']", namespaces=NAMESPACES)
@@ -30,7 +31,8 @@ def check_meta_title(tree: etree._ElementTree, config: dict[t.Any, t.Any]):
         raise InvalidValueError(f"Meta title is too long. Max length is {length} characters.")
 
 
-def check_meta_description(tree: etree._ElementTree, config: dict[t.Any, t.Any]):
+def check_meta_description(tree: etree._ElementTree,
+                           config: dict[t.Any, t.Any]):
     """Checks for a <meta name="description"> element"""
     root = tree.getroot()
     meta = root.find("./d:info/d:meta[@name='description']", namespaces=NAMESPACES)
@@ -47,7 +49,8 @@ def check_meta_description(tree: etree._ElementTree, config: dict[t.Any, t.Any])
         raise InvalidValueError(f"Meta description is too long. Max length is {length} characters.")
 
 
-def check_meta_series(tree: etree._ElementTree, config: dict[t.Any, t.Any]):
+def check_meta_series(tree: etree._ElementTree,
+                      config: dict[t.Any, t.Any]):
     """Checks for a <meta name="series"> element"""
     root = tree.getroot()
     meta = root.find("./d:info/d:meta[@name='series']", namespaces=NAMESPACES)
@@ -69,7 +72,8 @@ def check_meta_series(tree: etree._ElementTree, config: dict[t.Any, t.Any]):
         )
 
 
-def check_meta_techpartner(tree: etree._ElementTree, config: dict[t.Any, t.Any]):
+def check_meta_techpartner(tree: etree._ElementTree,
+                           config: dict[t.Any, t.Any]):
     """Checks for a <meta name="techpartner"> element"""
     root = tree.getroot()
     meta = root.find("./d:info/d:meta[@name='techpartner']",
@@ -99,7 +103,8 @@ def check_meta_techpartner(tree: etree._ElementTree, config: dict[t.Any, t.Any])
         )
 
 
-def check_meta_platform(tree: etree._ElementTree, config: dict[t.Any, t.Any]):
+def check_meta_platform(tree: etree._ElementTree,
+                        config: dict[t.Any, t.Any]):
     """Checks for a <meta name="platform"> element"""
     root = tree.getroot()
     meta = root.find("./d:info/d:meta[@name='platform']",
