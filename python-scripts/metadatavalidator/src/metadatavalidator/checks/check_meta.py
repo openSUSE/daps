@@ -13,7 +13,7 @@ from ..exceptions import InvalidValueError
 from ..logging import log
 
 
-def check_meta_title(tree: etree.ElementTree, config: dict[t.Any, t.Any]):
+def check_meta_title(tree: etree._ElementTree, config: dict[t.Any, t.Any]):
     """Checks for a <meta name="title"> element"""
     root = tree.getroot()
     meta = root.find("./d:info/d:meta[@name='title']", namespaces=NAMESPACES)
