@@ -328,7 +328,8 @@ def test_check_meta_architecture(xmlparser):
     <para/>
 </article>"""
     tree = etree.ElementTree(etree.fromstring(xmlcontent, parser=xmlparser))
-    config = dict(metadata=dict(require_meta_architecture=True))
+    config = dict(metadata=dict(require_meta_architecture=True,
+                                valid_meta_architecture=["x86_64", "POWER"]))
     assert check_meta_architecture(tree, config) is None
 
 
