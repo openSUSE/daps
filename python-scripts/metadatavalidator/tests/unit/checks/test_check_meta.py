@@ -8,6 +8,7 @@ from metadatavalidator.checks.check_meta import (
     check_meta_techpartner,
     check_meta_platform,
     check_meta_architecture,
+    check_meta_category,
 )
 from metadatavalidator.exceptions import InvalidValueError
 
@@ -406,3 +407,19 @@ def test_check_unknown_child_meta_architecture(xmlparser):
     with pytest.raises(InvalidValueError,
                        match=r".*Unknown architecture.*"):
         check_meta_architecture(tree, config)
+
+
+def test_meta_category(xmlparser):
+    xmlcontent = """<article xmlns="http://docbook.org/ns/docbook" version="5.2">
+    <info>
+        <title>Test</title>
+        <meta name="category">
+            <phrase>Systems Management</phrase>
+        </meta>
+    </info>
+    <para/>
+</article>"""
+    tree = etree.ElementTree(etree.fromstring(xmlcontent, parser=xmlparser))
+    config = dict(metadata=dict(require_meta_category=True,
+                                valid_meta_category=["Systems Management"]))
+    assert check_meta_category(tree, config) is None

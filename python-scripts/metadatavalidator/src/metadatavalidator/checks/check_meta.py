@@ -166,4 +166,48 @@ def check_meta_architecture(tree: etree._ElementTree,
             f"Unknown architecture(s) {wrong_items}. "
             f"Allowed are {valid_archs}."
         )
-    print(">>>", wrong_items, valid_archs, archs)
+
+
+def check_meta_category(tree: etree._ElementTree,
+                        config: dict[t.Any, t.Any]):
+    """Checks for a <meta name="category"> element"""
+    root = tree.getroot()
+    meta = root.find("./d:info/d:meta[@name='category']",
+                     namespaces=NAMESPACES)
+    required = config.get("metadata", {}).get("require_meta_category", False)
+    if meta is None:
+        if required:
+            raise InvalidValueError(
+                f"Couldn't find required meta[@name='category'] element "
+                f"in {root.tag}."
+            )
+        return
+
+    valid_cats = [
+        x.strip() for x in config.get("metadata", {}
+                                      ).get("valid_meta_category", [])
+        if x
+    ]
+
+    # Do we have children?
+    cats = [tag.text.strip() for tag in meta.iterchildren()]
+    if not cats:
+        raise InvalidValueError(
+            f"Couldn't find any child elements in meta[@name='category'] "
+            f"(line {meta.sourceline})."
+        )
+
+    # Are they unique?
+    if len(cats) != len(set(cats)):
+        raise InvalidValueError(
+            f"Duplicate categories found in meta[@name='category'] "
+            f"(line {meta.sourceline})."
+        )
+
+    # Do we have items that don't conform to our predefined list?
+    wrong_items = set(cats) - set(valid_cats)
+    if wrong_items:
+        raise InvalidValueError(
+            f"Unknown category(ies) {wrong_items}. "
+            f"Allowed are {valid_cats}."
+        )

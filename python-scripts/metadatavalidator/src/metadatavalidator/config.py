@@ -107,6 +107,30 @@ def validate_and_convert_config(config: configparser.ConfigParser) -> dict[t.Any
     )
     theconfig.setdefault("metadata", {})["require_meta_series"] = require_meta_series
 
+    # architectures
+    require_meta_architecture = truefalse(
+        theconfig.get("metadata", {}).get("require_meta_architecture", False)
+    )
+    theconfig.setdefault("metadata", {})["require_meta_architecture"] = require_meta_architecture
+    try:
+        architectures = split.split(theconfig.get("metadata", {}).get("valid_meta_architecture", []))
+        theconfig.setdefault("metadata", {})["valid_meta_architecture"] = architectures
+    except TypeError:
+        raise MissingKeyError("metadata.valid_meta_architecture")
+
+
+    # categories
+    require_meta_category = truefalse(
+        theconfig.get("metadata", {}).get("require_meta_category", False)
+    )
+    theconfig.setdefault("metadata", {})["require_meta_category"] = require_meta_category
+    try:
+        categories = split.split(theconfig.get("metadata", {}).get("valid_meta_category", []))
+        theconfig.setdefault("metadata", {})["valid_meta_category"] = categories
+    except TypeError:
+        raise MissingKeyError("metadata.valid_meta_category")
+
+
     # Store the configfiles
     theconfig["configfiles"] = getattr(config, "configfiles")
     return theconfig

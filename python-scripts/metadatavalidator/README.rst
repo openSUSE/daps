@@ -79,3 +79,7 @@ recognized:
     * :var:`require_meta_architecture`: Requires a ``<meta name="architecture">`` tag or not.
 
     * :var:`valid_meta_architecture`: Lists the valid architecture names for ``<meta name="architecture">/<phrase>``.
+
+    * :var:`require_meta_category`: Requires a ``<meta name="category">`` tag or not.
+
+    * :var:`valid_meta_category`: Lists the valid category names for ``<meta name="category">/<phrase>``.

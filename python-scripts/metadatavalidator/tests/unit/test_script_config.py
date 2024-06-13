@@ -3,8 +3,16 @@ import os.path
 
 import pytest
 
-from metadatavalidator.config import readconfig, validate_and_convert_config, truefalse
-from metadatavalidator.exceptions import MissingKeyError, MissingSectionError, NoConfigFilesFoundError
+from metadatavalidator.config import (
+    readconfig,
+    validate_and_convert_config,
+    truefalse,
+    )
+from metadatavalidator.exceptions import (
+    MissingKeyError,
+    MissingSectionError,
+    NoConfigFilesFoundError,
+    )
 
 def create_config():
     config = ConfigParser()
@@ -19,6 +27,8 @@ def create_config():
     config.set("metadata", "meta_title_length", "50")
     config.set("metadata", "meta_description_length", "150")
     #
+    config.set("metadata", "valid_meta_architecture", "A, B, C")
+    config.set("metadata", "valid_meta_category", "D, E, F")
     setattr(config, "configfiles", None)
     return config
 
@@ -49,7 +59,8 @@ def test_valid_validate_and_convert_config():
     assert result.get("validator") == {
             "check_root_elements": ["book", "article"],
             "file_extension": ".xml",
-            "valid_languages": ["en-us", "de-de",]
+            "valid_languages": ["en-us", "de-de",],
+            # ""
         }
 
 
