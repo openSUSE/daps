@@ -5,32 +5,16 @@ import pytest
 
 from metadatavalidator.config import (
     readconfig,
-    validate_and_convert_config,
     truefalse,
+    validate_check_root_elements,
+    validate_and_convert_config,
+    validate_valid_meta_architecture,
     )
 from metadatavalidator.exceptions import (
     MissingKeyError,
     MissingSectionError,
     NoConfigFilesFoundError,
     )
-
-def create_config():
-    config = ConfigParser()
-    config.add_section("validator")
-    config.set("validator", "check_root_elements", "book article")
-    config.set("validator", "file_extension", ".xml")
-    config.set("validator", "valid_languages", "en-us de-de")
-    #
-    config.add_section("metadata")
-    config.set("metadata", "revhistory", "0")
-    config.set("metadata", "require_xmlid_on_revision", "true")
-    config.set("metadata", "meta_title_length", "50")
-    config.set("metadata", "meta_description_length", "150")
-    #
-    config.set("metadata", "valid_meta_architecture", "A, B, C")
-    config.set("metadata", "valid_meta_category", "D, E, F")
-    setattr(config, "configfiles", None)
-    return config
 
 
 @pytest.mark.parametrize("value, expected", [
@@ -53,8 +37,7 @@ def test_truefalse(value, expected):
     assert truefalse(value) == expected
 
 
-def test_valid_validate_and_convert_config():
-    config = create_config()
+def test_valid_validate_and_convert_config(config):
     result = validate_and_convert_config(config)
     assert result.get("validator") == {
             "check_root_elements": ["book", "article"],
@@ -75,43 +58,37 @@ def test_missing_validator_section():
         validate_and_convert_config(config)
 
 
-def test_missing_key_check_root_elements():
-    config = create_config()
+def test_missing_key_check_root_elements(config):
     config.remove_option("validator", "check_root_elements")
     with pytest.raises(MissingKeyError, match=".*validator.check_root_elements.*"):
         validate_and_convert_config(config)
 
 
-def test_missing_key_valid_languages():
-    config = create_config()
+def test_missing_key_valid_languages(config):
     config.remove_option("validator", "valid_languages")
     with pytest.raises(MissingKeyError, match=".*validator.valid_languages.*"):
         validate_and_convert_config(config)
 
 
-def test_missing_key_meta_title_length():
-    config = create_config()
+def test_missing_key_meta_title_length(config):
     config.remove_option("metadata", "meta_title_length")
     with pytest.raises(MissingKeyError, match=".*metadata.meta_title_length.*"):
         validate_and_convert_config(config)
 
 
-def test_meta_title_length_not_positive():
-    config = create_config()
+def test_meta_title_length_not_positive(config):
     config.set("metadata", "meta_title_length", "-1")
     with pytest.raises(ValueError, match=".*meta_title_length should be a positive integer.*"):
         validate_and_convert_config(config)
 
 
-def test_meta_description_length_not_positive():
-    config = create_config()
+def test_meta_description_length_not_positive(config):
     config.set("metadata", "meta_description_length", "-1")
     with pytest.raises(ValueError, match=".*meta_description_length should be a positive integer.*"):
         validate_and_convert_config(config)
 
 
-def test_missing_key_meta_description_length():
-    config = create_config()
+def test_missing_key_meta_description_length(config):
     config.remove_option("metadata", "meta_description_length")
     with pytest.raises(MissingKeyError, match=".*metadata.meta_description_length.*"):
         validate_and_convert_config(config)
@@ -127,3 +104,14 @@ def test_readconfig():
         }
     assert result.get("configfiles") == [configfile]
 
+
+def test_validate_check_root_elements(dict_config):
+    assert validate_check_root_elements(dict_config) == ["book", "article"]
+
+def test_validate_check_root_elements_missing_key(dict_config):
+    dict_config["validator"].pop("check_root_elements")
+    with pytest.raises(MissingKeyError, match=".*validator.check_root_elements.*"):
+        validate_check_root_elements(dict_config)
+
+def test_validate_valid_meta_architecture(dict_config):
+    assert validate_valid_meta_architecture(dict_config) == ["A", "B", "C"]

@@ -32,6 +32,7 @@ async def process_xml_file(xmlfile: str, config: dict[t.Any, t.Any]):
     """
     errors = []
     basexmlfile = os.path.basename(xmlfile)
+    # log.debug("Config %s", config)
     for checkfunc in get_all_check_functions(checks.__package__):
         log.debug("Checking %r with %r",
                   basexmlfile,
@@ -44,6 +45,7 @@ async def process_xml_file(xmlfile: str, config: dict[t.Any, t.Any]):
 
             # Apply check function
             checkfunc(tree, config)
+            # await asyncio.sleep(0.1)
 
         except etree.XMLSyntaxError as e:
             # log.fatal("Syntax error in %r: %s", xmlfile, e)
