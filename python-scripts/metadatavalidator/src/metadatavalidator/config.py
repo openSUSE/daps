@@ -155,15 +155,11 @@ def validate_valid_meta_architecture(config: dict) -> list[str]:
     :param config: the configuration object
     :return: a list of valid meta architecture
     """
-    try:
-        # architectures = re.split(r"[;,]", config.get("metadata", {}).get("valid_meta_architecture", []))
-        return [x.strip() for x in re.split(r"[;,]",
+    return [x.strip() for x in re.split(r"[;,]",
                                         config.get("metadata", {}).get("valid_meta_architecture", "")
                                         )
                 if x
-                ]
-    except TypeError:
-        raise MissingKeyError("metadata.valid_meta_architecture")
+            ]
 
 
 def validate_valid_meta_category(config: dict) -> list[str]:
@@ -172,14 +168,11 @@ def validate_valid_meta_category(config: dict) -> list[str]:
     :param config: the configuration object
     :return: a list of valid meta category
     """
-    try:
-        return [x.strip() for x in re.split(r"[;,]",
+    return [x.strip() for x in re.split(r"[;,]",
                                         config.get("metadata", {}).get("valid_meta_category", "")
                                         )
                 if x
-                ]
-    except TypeError:
-        raise MissingKeyError("metadata.valid_meta_category")
+            ]
 
 
 def validate_and_convert_config(config: configparser.ConfigParser) -> dict[t.Any, t.Any]:

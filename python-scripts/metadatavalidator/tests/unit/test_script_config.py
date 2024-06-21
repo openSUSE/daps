@@ -58,6 +58,13 @@ def test_missing_validator_section():
         validate_and_convert_config(config)
 
 
+def test_missing_metadata_section():
+    config = ConfigParser()
+    config.add_section("validator")
+    with pytest.raises(MissingSectionError, match=".*metadata.*"):
+        validate_and_convert_config(config)
+
+
 def test_missing_key_check_root_elements(config):
     config.remove_option("validator", "check_root_elements")
     with pytest.raises(MissingKeyError, match=".*validator.check_root_elements.*"):

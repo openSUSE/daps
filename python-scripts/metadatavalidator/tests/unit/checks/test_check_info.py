@@ -2,7 +2,8 @@ import pytest
 from lxml import etree
 
 from metadatavalidator.checks import (
-    check_info, check_info_revhistory,
+    check_info,
+    check_info_revhistory,
     check_info_revhistory_revision,
     check_info_revhistory_revision_date,
     check_info_revhistory_revision_order,
@@ -49,7 +50,7 @@ def test_check_info_revhistory_missing(xmlparser):
 
     with pytest.raises(InvalidValueError,
                        match="Couldn't find a revhistory element"):
-        check_info_revhistory(tree, {})
+        check_info_revhistory(tree, {"metadata": {"require_revhistory": True}})
 
 
 def test_check_info_revhistory(xmlparser):
@@ -76,7 +77,6 @@ def test_check_info_revhistory_without_info(xmlparser):
     )
 
     assert check_info_revhistory(tree, {}) is None
-    assert check_info_revhistory(tree, {}) is None
 
 
 def test_check_info_revhistory_xmlid(xmlparser):
@@ -94,11 +94,11 @@ def test_check_info_revhistory_xmlid(xmlparser):
     assert check_info_revhistory(tree, {}) is None
 
 
-def test_check_info_revhistory_missing_xmlid(xmlparser):
+def test_info_revhistory_missing_xmlid(xmlparser):
     xmlcontent = """<article xmlns="http://docbook.org/ns/docbook" version="5.2">
     <info>
         <title>Test</title>
-        <revhistory></revhistory>
+        <revhistory/>
     </info>
     <para/>
 </article>"""
@@ -167,20 +167,6 @@ def test_check_info_revhistory_revision_missing_xmlid(xmlparser):
         check_info_revhistory_revision(
             tree,
             {"metadata": {"require_xmlid_on_revision": True}})
-
-
-def test_check_info_revhistory_missing(xmlparser):
-    xmlcontent = """<article xmlns="http://docbook.org/ns/docbook" version="5.2">
-    <info>
-        <title>Test</title>
-    </info>
-    <para/>
-</article>"""
-    tree = etree.ElementTree(
-        etree.fromstring(xmlcontent, parser=xmlparser)
-    )
-
-    check_info_revhistory_revision(tree, {}) is None
 
 
 def test_check_info_revhistory_revision_missing(xmlparser):
@@ -332,5 +318,33 @@ def test_check_info_revhistory_revision_order_one_invalid_date(xmlparser):
 
     with pytest.raises(InvalidValueError,
                        match=".*Couldn't convert all dates.*see position dates=1.*"
+                       ):
+        check_info_revhistory_revision_order(tree, {})
+
+
+def test_check_info_revhistory_revision_wrong_order(xmlparser):
+    xmlcontent = """<article xmlns="http://docbook.org/ns/docbook" version="5.2">
+    <info>
+        <title>Test</title>
+        <revhistory xml:id="rh">
+          <revision>
+            <date>2024-12</date>
+          </revision>
+          <revision>
+            <date>2023-12-12</date>
+          </revision>
+          <revision>
+            <date>2026-04</date>
+          </revision>
+        </revhistory>
+    </info>
+    <para/>
+</article>"""
+    tree = etree.ElementTree(
+        etree.fromstring(xmlcontent, parser=xmlparser)
+    )
+
+    with pytest.raises(InvalidValueError,
+                       match=".*Dates in revhistory/revision are not in descending order.*"
                        ):
         check_info_revhistory_revision_order(tree, {})
