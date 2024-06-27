@@ -18,7 +18,7 @@ def xmlparser():
 
 
 @pytest.fixture
-def xmlcontent():
+def xmlcontent() -> str:
     return """<article xmlns="http://docbook.org/ns/docbook" version="5.2">
     <info>
         <title>Test</title>
@@ -28,7 +28,7 @@ def xmlcontent():
 
 
 @pytest.fixture
-def tree(xmlcontent, xmlparser):
+def tree(xmlcontent, xmlparser) -> etree._ElementTree:
     return etree.ElementTree(etree.fromstring(xmlcontent, parser=xmlparser))
 
 

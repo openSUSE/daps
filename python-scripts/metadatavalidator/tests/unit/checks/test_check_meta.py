@@ -14,6 +14,7 @@ from metadatavalidator.checks.check_meta import (
 )
 from metadatavalidator.exceptions import InvalidValueError
 
+
 def createmeta(attribs: dict,
                text: str|None=None,
                nsmap: dict|None=None):
