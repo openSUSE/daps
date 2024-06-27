@@ -12,10 +12,10 @@
 include $(DAPSROOT)/make/common_variables.mk
 
 # Stylesheets and Settings
+# Prefer the one shipped with DAPS
 # Can be overwritten in DC files or in shell
-STYLEASSEMBLY  ?= $(firstword $(wildcard $(addsuffix \
-	        /assembly/assemble.xsl, $(STYLE_ROOTDIRS))))
-
+STYLEASSEMBLY  ?= $(firstword $(wildcard $(DAPSROOT)/daps-xslt/assembly/assemble.xsl $(addsuffix \
+	            /assembly/assemble.xsl, $(STYLE_ROOTDIRS))))
 
 # used to select one structure among several (if assembly file provides
 # multiple structures)
