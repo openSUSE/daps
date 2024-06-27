@@ -11,13 +11,15 @@ from lxml import etree
 from ..common import NAMESPACES
 from ..exceptions import InvalidValueError
 from ..logging import log
+from ..util import info_or_fail
 
 
 def check_meta_title(tree: etree._ElementTree,
                      config: dict[t.Any, t.Any]):
     """Checks for a <meta name="title"> element"""
     root = tree.getroot()
-    meta = root.find("./d:info/d:meta[@name='title']", namespaces=NAMESPACES)
+    info = info_or_fail(tree)
+    meta = info.find("./d:meta[@name='title']", namespaces=NAMESPACES)
     required = config.get("metadata", {}).get("meta_title_required", False)
     if meta is None:
         if required:
@@ -35,7 +37,8 @@ def check_meta_description(tree: etree._ElementTree,
                            config: dict[t.Any, t.Any]):
     """Checks for a <meta name="description"> element"""
     root = tree.getroot()
-    meta = root.find("./d:info/d:meta[@name='description']", namespaces=NAMESPACES)
+    info = info_or_fail(tree)
+    meta = info.find("./d:meta[@name='description']", namespaces=NAMESPACES)
     required = config.get("metadata", {}).get("meta_description_required", False)
     if meta is None:
         if required:
@@ -53,7 +56,8 @@ def check_meta_series(tree: etree._ElementTree,
                       config: dict[t.Any, t.Any]):
     """Checks for a <meta name="series"> element"""
     root = tree.getroot()
-    meta = root.find("./d:info/d:meta[@name='series']", namespaces=NAMESPACES)
+    info = info_or_fail(tree)
+    meta = info.find("./d:meta[@name='series']", namespaces=NAMESPACES)
     required = config.get("metadata", {}).get("require_meta_series", False)
     if meta is None:
         if required:
@@ -76,8 +80,8 @@ def check_meta_techpartner(tree: etree._ElementTree,
                            config: dict[t.Any, t.Any]):
     """Checks for a <meta name="techpartner"> element"""
     root = tree.getroot()
-    meta = root.find("./d:info/d:meta[@name='techpartner']",
-                     namespaces=NAMESPACES)
+    info = info_or_fail(tree)
+    meta = info.find("./d:meta[@name='techpartner']", namespaces=NAMESPACES)
     required = config.get("metadata", {}).get("require_meta_techpartner", False)
     if meta is None:
         if required:
@@ -107,8 +111,8 @@ def check_meta_platform(tree: etree._ElementTree,
                         config: dict[t.Any, t.Any]):
     """Checks for a <meta name="platform"> element"""
     root = tree.getroot()
-    meta = root.find("./d:info/d:meta[@name='platform']",
-                     namespaces=NAMESPACES)
+    info = info_or_fail(tree)
+    meta = info.find("./d:meta[@name='platform']", namespaces=NAMESPACES)
     required = config.get("metadata", {}).get("require_meta_platform", False)
     if meta is None:
         if required:
@@ -126,8 +130,8 @@ def check_meta_architecture(tree: etree._ElementTree,
                             config: dict[t.Any, t.Any]):
     """Checks for a <meta name="architecture"> element"""
     root = tree.getroot()
-    meta = root.find("./d:info/d:meta[@name='architecture']",
-                     namespaces=NAMESPACES)
+    info = info_or_fail(tree)
+    meta = info.find("./d:meta[@name='architecture']", namespaces=NAMESPACES)
     required = config.get("metadata", {}).get("require_meta_architecture",
                                               False)
     if meta is None:
@@ -172,8 +176,8 @@ def check_meta_category(tree: etree._ElementTree,
                         config: dict[t.Any, t.Any]):
     """Checks for a <meta name="category"> element"""
     root = tree.getroot()
-    meta = root.find("./d:info/d:meta[@name='category']",
-                     namespaces=NAMESPACES)
+    info = info_or_fail(tree)
+    meta = info.find("./d:meta[@name='category']", namespaces=NAMESPACES)
     required = config.get("metadata", {}).get("require_meta_category", False)
     if meta is None:
         if required:
@@ -217,8 +221,8 @@ def check_meta_task(tree: etree._ElementTree,
                     config: dict[t.Any, t.Any]):
     """Checks for a <meta name="task"> element"""
     root = tree.getroot()
-    meta = root.find("./d:info/d:meta[@name='task']",
-                     namespaces=NAMESPACES)
+    info = info_or_fail(tree)
+    meta = info.find("./d:meta[@name='task']", namespaces=NAMESPACES)
     required = config.get("metadata", {}).get("require_meta_task", False)
     if meta is None:
         if required:

@@ -6,7 +6,7 @@ import typing as t
 from lxml import etree
 
 from ..common import (
-    DOCBOOK_NS,
+    NAMESPACES,
     XML_NS,
 )
 from ..exceptions import InvalidValueError, MissingAttributeWarning
@@ -31,7 +31,7 @@ def check_info_revhistory(tree: etree._ElementTree, config: dict[t.Any, t.Any]):
 
     required = config.get("metadata", {}).get("require_revhistory", False)
 
-    revhistory = info.find("./d:revhistory", namespaces={"d": DOCBOOK_NS})
+    revhistory = info.find("./d:revhistory", namespaces=NAMESPACES)
     if revhistory is None:
         if required:
             raise InvalidValueError(f"Couldn't find a revhistory element in {info.tag}.")
@@ -48,12 +48,14 @@ def check_info_revhistory(tree: etree._ElementTree, config: dict[t.Any, t.Any]):
 def check_info_revhistory_revision(tree: etree._ElementTree,
                                    config: dict[t.Any, t.Any]):
     """Checks for an info/revhistory/revision element"""
-    revhistory = tree.find("./d:info/d:revhistory", namespaces={"d": DOCBOOK_NS})
+    info = info_or_fail(tree)
+    revhistory = info.find("./d:revhistory", namespaces=NAMESPACES)
+
     if revhistory is None:
         # If <info> couldn't be found, we can't check <revhistory>
         return
 
-    revision = revhistory.find("./d:revision", namespaces={"d": DOCBOOK_NS})
+    revision = revhistory.find("./d:revision", namespaces=NAMESPACES)
     if revision is None:
         raise InvalidValueError(f"Couldn't find a revision element in {revhistory.tag}.")
     xmlid = revision.attrib.get(f"{{{XML_NS}}}id")
@@ -67,12 +69,13 @@ def check_info_revhistory_revision(tree: etree._ElementTree,
 def check_info_revhistory_revision_date(tree: etree._ElementTree,
                                         config: dict[t.Any, t.Any]):
     """Checks for an info/revhistory/revision/date element"""
-    date = tree.find("./d:info/d:revhistory/d:revision/d:date",
-                     namespaces={"d": DOCBOOK_NS})
+    info = info_or_fail(tree)
 
-    revhistory = tree.find("./d:info/d:revhistory", namespaces={"d": DOCBOOK_NS})
+    revhistory = info.find("./d:revhistory", namespaces=NAMESPACES)
     if revhistory is None:
         return None
+
+    date = revhistory.find("./d:revision/d:date", namespaces=NAMESPACES)
     if date is None:
         raise InvalidValueError(f"Couldn't find a date element in info/revhistory/revision.")
 
@@ -82,16 +85,17 @@ def check_info_revhistory_revision_date(tree: etree._ElementTree,
 def check_info_revhistory_revision_order(tree: etree._ElementTree,
                                         config: dict[t.Any, t.Any]):
     """Checks for the right order of info/revhistory/revision elements"""
-    revhistory = tree.find("./d:info/d:revhistory", namespaces={"d": DOCBOOK_NS})
+    info = info_or_fail(tree)
+    revhistory = info.find("./d:revhistory", namespaces=NAMESPACES)
     if revhistory is None:
         return
     revisions = revhistory.xpath("./d:revision",
-                                  namespaces={"d": DOCBOOK_NS})
+                                  namespaces=NAMESPACES)
     xpath = getfullxpath(revhistory)
     if not revisions:
         return None
 
-    date_elements = [rev.find("./d:date", namespaces={"d": DOCBOOK_NS})
+    date_elements = [rev.find("./d:date", namespaces=NAMESPACES)
                      for rev in revisions]
     dates = [
         validatedatevalue(d.text)
