@@ -17,6 +17,21 @@ def xmlparser():
     return etree.XMLParser(encoding="UTF-8")
 
 
+@pytest.fixture
+def xmlcontent():
+    return """<article xmlns="http://docbook.org/ns/docbook" version="5.2">
+    <info>
+        <title>Test</title>
+        <!-- We add here additional content in the respective tests -->
+    </info>
+</article>"""
+
+
+@pytest.fixture
+def tree(xmlcontent, xmlparser):
+    return etree.ElementTree(etree.fromstring(xmlcontent, parser=xmlparser))
+
+
 @pytest.fixture(scope="function")
 def config() -> ConfigParser:
     config = ConfigParser()
