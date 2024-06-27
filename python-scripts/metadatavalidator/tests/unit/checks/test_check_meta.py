@@ -9,6 +9,7 @@ from metadatavalidator.checks.check_meta import (
     check_meta_platform,
     check_meta_architecture,
     check_meta_category,
+    check_meta_task,
 )
 from metadatavalidator.exceptions import InvalidValueError
 
@@ -489,3 +490,52 @@ def test_unknown_category_meta_category(xmlparser):
     with pytest.raises(InvalidValueError,
                        match=r".*Unknown category.*"):
         check_meta_category(tree, config)
+
+
+def test_meta_task(xmlparser):
+    xmlcontent = """<article xmlns="http://docbook.org/ns/docbook" version="5.2">
+    <info>
+        <title>Test</title>
+        <meta name="task">
+            <phrase>Configuration</phrase>
+        </meta>
+    </info>
+</article>"""
+    tree = etree.ElementTree(etree.fromstring(xmlcontent, parser=xmlparser))
+    config = dict(metadata=dict(require_meta_task=True,
+                                valid_meta_task=["Configuration"]))
+    assert check_meta_task(tree, config) is None
+
+
+def test_missing_child_meta_task(xmlparser):
+    xmlcontent = """<article xmlns="http://docbook.org/ns/docbook" version="5.2">
+    <info>
+        <title>Test</title>
+        <meta name="task"/>
+    </info>
+</article>"""
+    tree = etree.ElementTree(etree.fromstring(xmlcontent, parser=xmlparser))
+    config = dict(metadata=dict(require_meta_task=True),
+                                valid_meta_task=["Configuration"])
+    with pytest.raises(InvalidValueError,
+                       match=r".*Couldn't find any child elements in meta.*"):
+        check_meta_task(tree, config)
+
+
+
+def test_duplicate_child_meta_task(xmlparser):
+    xmlcontent = """<article xmlns="http://docbook.org/ns/docbook" version="5.2">
+    <info>
+        <title>Test</title>
+        <meta name="task">
+            <phrase>Configuration</phrase>
+            <phrase>Configuration</phrase>
+        </meta>
+    </info>
+</article>"""
+    tree = etree.ElementTree(etree.fromstring(xmlcontent, parser=xmlparser))
+    config = dict(metadata=dict(require_meta_task=True),
+                                valid_meta_task=["Configuration"])
+    with pytest.raises(InvalidValueError,
+                       match=r".*Duplicate tasks found in meta.*"):
+        check_meta_task(tree, config)

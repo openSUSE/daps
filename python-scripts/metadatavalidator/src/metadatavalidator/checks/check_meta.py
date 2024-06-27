@@ -211,3 +211,48 @@ def check_meta_category(tree: etree._ElementTree,
             f"Unknown category(ies) {wrong_items}. "
             f"Allowed are {valid_cats}."
         )
+
+
+def check_meta_task(tree: etree._ElementTree,
+                    config: dict[t.Any, t.Any]):
+    """Checks for a <meta name="task"> element"""
+    root = tree.getroot()
+    meta = root.find("./d:info/d:meta[@name='task']",
+                     namespaces=NAMESPACES)
+    required = config.get("metadata", {}).get("require_meta_task", False)
+    if meta is None:
+        if required:
+            raise InvalidValueError(
+                f"Couldn't find required meta[@name='task'] element "
+                f"in {root.tag}."
+            )
+        return
+
+    valid_tasks = [
+        x.strip() for x in config.get("metadata", {}
+                                      ).get("valid_meta_task", [])
+        if x
+    ]
+
+    # Do we have children?
+    tasks = [tag.text.strip() for tag in meta.iterchildren()]
+    if not tasks:
+        raise InvalidValueError(
+            f"Couldn't find any child elements in meta[@name='task'] "
+            f"(line {meta.sourceline})."
+        )
+
+    # Are they unique?
+    if len(tasks) != len(set(tasks)):
+        raise InvalidValueError(
+            f"Duplicate tasks found in meta[@name='task'] "
+            f"(line {meta.sourceline})."
+        )
+
+    # Do we have items that don't conform to our predefined list?
+    wrong_items = set(tasks) - set(valid_tasks)
+    if wrong_items:
+        raise InvalidValueError(
+            f"Unknown task(s) {wrong_items}. "
+            f"Allowed are {valid_tasks}."
+        )

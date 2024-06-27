@@ -174,6 +174,18 @@ def validate_valid_meta_category(config: dict) -> list[str]:
                 if x
             ]
 
+def validate_valid_meta_task(config: dict) -> list[str]:
+    """Validate the meta task
+
+    :param config: the configuration object
+    :return: a list of valid meta task
+    """
+    return [x.strip() for x in re.split(r"[;,]",
+                                        config.get("metadata", {}).get("valid_meta_task", "")
+                                        )
+                if x
+            ]
+
 
 def validate_and_convert_config(config: configparser.ConfigParser) -> dict[t.Any, t.Any]:
     """Validate sections, keys, and their values of the config
@@ -248,6 +260,14 @@ def validate_and_convert_config(config: configparser.ConfigParser) -> dict[t.Any
     theconfig.setdefault("metadata", {})[
         "valid_meta_category"
     ] = validate_valid_meta_category(theconfig)
+
+    # <meta name="task">
+    theconfig.setdefault("metadata", {})[
+        "require_meta_task"
+    ] = truefalse(theconfig.get("metadata", {}).get("require_meta_task", False))
+    theconfig.setdefault("metadata", {})[
+        "valid_meta_task"
+    ] = validate_valid_meta_task(theconfig)
 
     # Store the configfiles
     theconfig["configfiles"] = getattr(config, "configfiles")

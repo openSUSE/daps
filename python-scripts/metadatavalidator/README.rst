@@ -19,14 +19,37 @@ To install the script, run the following command:
 
 .. code-block:: bash
 
-    pip install .
+    $ pip install .
 
 
 For development, you can install the script in editable mode:
 
 .. code-block:: bash
 
-    pip install -e .[test]
+    $ pip install -e .[test]
+
+
+Usage
+-----
+
+Call the script with the following command:
+
+.. code-block:: bash
+
+    $ metadatavalidator PATH_TO_DOCBOOK_FILES
+
+The script will show all problems with metadata
+
+.. code-block::
+
+    $ metadatavalidator a.xml b.xml
+    ==== RESULTS ====
+    [1] a.xml:
+      1.1: check_info_revhistory_revision: Missing recommended attribute in /d:article/d:info[2]/d:revhistory[12]/d:revision/@xml:id
+
+    [2] b.xml:
+      2.1: 
+
 
 
 Configuration
@@ -35,9 +58,13 @@ Configuration
 The configuration file is search in the following order (first is the highest):
 
 1. Command line with :option:`--config`. This doesn't search for other configuration files.
+
 1. Environment variable :envar:`METAVALIDATOR_CONFIG`.
+
 1. In the current directory: :file:`metadatavalidator.ini`
+
 1. In the users' home directory: :file:`~/.config/metadatavalidator/config.ini`
+
 1. In the system: :file:`/etc/metadatavalidator/config.ini`
 
 

@@ -18,6 +18,7 @@ from .check_meta import (
     check_meta_platform,
     check_meta_architecture,
     check_meta_category,
+    check_meta_task,
 )
 
 # Keep the order. The next item is dependent on the previous item.
@@ -38,5 +39,6 @@ __all__ = [
     "check_meta_platform",
     "check_meta_architecture",
     "check_meta_category",
+    "check_meta_task",
 ]
 
