@@ -48,8 +48,13 @@ The script will show all problems with metadata
       1.1: check_info_revhistory_revision: Missing recommended attribute in /d:article/d:info[2]/d:revhistory[12]/d:revision/@xml:id
 
     [2] b.xml:
-      2.1: 
+      2.1: check_meta_task: Invalid value in metadata Unknown task(s) {'Clusering'}. Allowed are ...
 
+If wanted, you can add your own configuration file with the option :option:`--config`:
+
+.. code-block:: bash
+
+    $ metadatavalidator --config /path/to/config.ini PATH_TO_DOCBOOK_FILES
 
 
 Configuration
