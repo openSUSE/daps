@@ -1,6 +1,7 @@
 import pytest
 from lxml import etree
 
+from metadatavalidator.common import NAMESPACES
 from metadatavalidator.checks import (
     check_info,
     check_info_revhistory,
@@ -8,20 +9,48 @@ from metadatavalidator.checks import (
     check_info_revhistory_revision_date,
     check_info_revhistory_revision_order,
 )
+from metadatavalidator.util import getinfo, info_or_fail
+
 from metadatavalidator.exceptions import InvalidValueError, MissingAttributeWarning
 
 
-def test_check_info(xmlparser):
-    xmlcontent = """<article xmlns="http://docbook.org/ns/docbook" version="5.2">
-    <info>
-        <title>Test</title>
-    </info>
-    <para/>
-</article>"""
-    tree = etree.ElementTree(
-        etree.fromstring(xmlcontent, parser=xmlparser)
-    )
+def test_getinfo_with_regular_tree(tree):
+    info = getinfo(tree)
+    assert info is not None
+    assert info.tag == "{http://docbook.org/ns/docbook}info"
 
+
+def test_getinfo_with_assembly_tree(asmtree):
+    info = getinfo(asmtree)
+    assert info is not None
+    assert info.tag == "{http://docbook.org/ns/docbook}info"
+
+
+def test_info_or_fail_with_regular_tree(tree):
+    info = info_or_fail(tree)
+    assert info is not None
+    assert info.tag == "{http://docbook.org/ns/docbook}info"
+
+
+def test_info_or_fail_with_assembly_tree(asmtree):
+    info = info_or_fail(asmtree)
+    assert info is not None
+    assert info.tag == "{http://docbook.org/ns/docbook}info"
+
+
+def test_info_or_fail_with_raise_on_missing():
+    tree = etree.ElementTree(etree.Element("{http://docbook.org/ns/docbook}article"))
+    info = info_or_fail(tree, raise_on_missing=False)
+    assert info is None
+
+
+def test_info_or_fail_with_raise_on_missing_and_missing_info():
+    tree = etree.ElementTree(etree.Element("{http://docbook.org/ns/docbook}article"))
+    with pytest.raises(InvalidValueError, match="Couldn't find <info> element."):
+        info_or_fail(tree)
+
+
+def test_check_info(tree):
     assert check_info(tree, {}) is None
 
 
@@ -33,21 +62,11 @@ def test_check_info_missing(xmlparser):
         etree.fromstring(xmlcontent, parser=xmlparser)
     )
     with pytest.raises(InvalidValueError,
-                          match="Couldn't find info element"):
+                          match=".*Couldn't find <info> element."):
           check_info(tree, {})
 
 
-def test_check_info_revhistory_missing(xmlparser):
-    xmlcontent = """<article xmlns="http://docbook.org/ns/docbook" version="5.2">
-    <info>
-        <title>Test</title>
-    </info>
-    <para/>
-</article>"""
-    tree = etree.ElementTree(
-        etree.fromstring(xmlcontent, parser=xmlparser)
-    )
-
+def test_check_info_revhistory_missing(tree):
     with pytest.raises(InvalidValueError,
                        match="Couldn't find a revhistory element"):
         check_info_revhistory(tree, {"metadata": {"require_revhistory": True}})
@@ -68,15 +87,13 @@ def test_check_info_revhistory(xmlparser):
     assert check_info_revhistory(tree, {}) is None
 
 
-def test_check_info_revhistory_without_info(xmlparser):
-    xmlcontent = """<article xmlns="http://docbook.org/ns/docbook" version="5.2">
-    <para/>
-</article>"""
-    tree = etree.ElementTree(
-        etree.fromstring(xmlcontent, parser=xmlparser)
-    )
-
-    assert check_info_revhistory(tree, {}) is None
+def test_check_info_revhistory_without_info(tree):
+    info = tree.find("./d:info", namespaces=NAMESPACES)
+    info.getparent().remove(info)
+    # tree.remove(info)
+    with pytest.raises(InvalidValueError,
+                       match="Couldn't find <info> element."):
+        check_info_revhistory(tree, {})
 
 
 def test_check_info_revhistory_xmlid(xmlparser):

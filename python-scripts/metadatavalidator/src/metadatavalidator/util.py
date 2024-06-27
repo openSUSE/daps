@@ -4,9 +4,40 @@ from lxml import etree
 
 from .common import (
     DATE_REGEX,
+    NAMESPACES,
     NAMESPACES2PREFIX,
     )
 from .exceptions import InvalidValueError
+
+
+def getinfo(tree: etree._ElementTree) -> etree._Element:
+    """Get the <info> element from a DocBook5 XML tree
+
+    :param tree: the XML tree to get the <info> element from
+    :return: the <info> element
+    """
+    # Check if we get an <info> element from "normal" root elements or
+    # from an assembly structure.
+    a = tree.find("./d:info", namespaces=NAMESPACES)
+    b = tree.find("./d:structure/d:merge/d:info", namespaces=NAMESPACES)
+
+    if a is not None:
+        return a
+    if b is not None:
+        return b
+
+
+def info_or_fail(tree: etree._ElementTree, raise_on_missing=True) -> etree._Element:
+    """Get the <info> element from a DocBook5 XML tree or raise an error
+
+    :param tree: the XML tree to get the <info> element from
+    :param raise_on_missing: whether to raise an error if the <info> element is missing
+    :return: the <info> element
+    """
+    info = getinfo(tree)
+    if info is None and raise_on_missing:
+        raise InvalidValueError("Couldn't find <info> element.")
+    return info
 
 
 def getfullxpath(element: etree._Element,

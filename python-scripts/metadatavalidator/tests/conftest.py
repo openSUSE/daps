@@ -32,6 +32,28 @@ def tree(xmlcontent, xmlparser) -> etree._ElementTree:
     return etree.ElementTree(etree.fromstring(xmlcontent, parser=xmlparser))
 
 
+@pytest.fixture
+def assemblystr() -> str:
+    return """<assembly version="5.2"
+       xml:lang="en"
+       xmlns:xlink="http://www.w3.org/1999/xlink"
+       xmlns:trans="http://docbook.org/ns/transclusion"
+       xmlns:its="http://www.w3.org/2005/11/its"
+       xmlns:xi="http://www.w3.org/2001/XInclude"
+       xmlns="http://docbook.org/ns/docbook">
+       <structure>
+         <merge>
+           <info/>
+         </merge>
+       </structure>
+</assembly>"""
+
+
+@pytest.fixture
+def asmtree(assemblystr, xmlparser) -> etree._ElementTree:
+    return etree.ElementTree(etree.fromstring(assemblystr, parser=xmlparser))
+
+
 @pytest.fixture(scope="function")
 def config() -> ConfigParser:
     config = ConfigParser()

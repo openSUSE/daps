@@ -6,13 +6,14 @@ import typing as t
 from lxml import etree
 
 from ..common import (
-    DATE_REGEX,
     DOCBOOK_NS,
     XML_NS,
 )
 from ..exceptions import InvalidValueError, MissingAttributeWarning
 from ..logging import log
 from ..util import (
+    getinfo,
+    info_or_fail,
     getfullxpath,
     validatedate,
     validatedatevalue
@@ -21,18 +22,12 @@ from ..util import (
 
 def check_info(tree: etree._ElementTree, config: dict[t.Any, t.Any]):
     """Checks for an info element"""
-    root = tree.getroot()
-    info = root.find(".//{%s}info" % DOCBOOK_NS)
-    if info is None:
-        raise InvalidValueError(f"Couldn't find info element in {root.tag}.")
+    info_or_fail(tree)
 
 
 def check_info_revhistory(tree: etree._ElementTree, config: dict[t.Any, t.Any]):
     """Checks for an info/revhistory element"""
-    info = tree.find("./d:info", namespaces={"d": DOCBOOK_NS})
-    if info is None:
-        # If <info> couldn't be found, we can't check <revhistory>
-        return
+    info = info_or_fail(tree)
 
     required = config.get("metadata", {}).get("require_revhistory", False)
 
