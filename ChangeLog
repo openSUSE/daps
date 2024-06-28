@@ -1,4 +1,58 @@
 -------------------------------------------------------------------
+Mo Jul 01 10:45:17 UTC 2023 - fsundermeyer@opensuse.org
+
+Beta release DAPS 4.0.beta2:
+
+* New features:
+  -new command line switch for the "validation" subcommand:
+   "--extended-validation=<VALUE>"
+    Comma-separated list of extended validation checks
+     Possible values:
+       all|ALL: shortcut for all checks listed below
+       ids:     checks for IDs that are not SEO friendly
+       images:  checks for missing and duplicated  images
+       inlines: checks for empty inline elements
+       tables:  checks for invalid tables
+     Example: --extended-validation="ids,tables"
+     Default: unset
+  - new subcommand "docinfo"
+    Shows the following information (if available)
+    Title:
+    Subtitle:
+    Product Name:
+    Product Version:
+    Authors:
+    Language:
+    Type:
+    Root ID:
+    (https://github.com/openSUSE/daps/issues/414)
+* Improvements
+  - debug/verbose output now also shows values for STYLEASSEMBLY
+    STRUCTID for DocBook assembly sources
+  - DAPS ships a customization layer of the assembly staylsheet
+    which prevents writing of xml:base attributes to avoid
+    problems with image paths in fo/pdf. To re-enable xml:base,
+    use the sring parameter
+  - "list-src-files" should work much more relaibly for ASCIIDOC
+    sources now
+  - Documentation has been completely reviewed and anhanced, some
+    4.0 updates are still missing, though
+* Bug fixes:
+  - Path to log file is shown when in debug mode
+    (https://github.com/openSUSE/daps/issues/154)
+  - proper error message is shown when processing dia or ditaa
+    images but the respective packages are not installed
+    (https://github.com/openSUSE/daps/issues/642)
+  - RPM packaging: made poppler-tools an optional dependency
+    (https://github.com/openSUSE/daps/issues/716)
+  - Assemblies: DAPS ships a customization for the assembly
+    stylesheet that removes adding xml:base to the bigfile that
+    is created. With the xml:base entries image paths in fo/pdf
+    are wrong.
+* Removed features:
+  - DC-file must not be a link anymore
+
+-------------------------------------------------------------------
 Tue Feb 21 11:02:00 UTC 2023 - fsundermeyer@opensuse.org
 
 Beta release DAPS 4.0.beta1:
