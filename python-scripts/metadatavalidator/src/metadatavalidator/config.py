@@ -206,6 +206,10 @@ def validate_and_convert_config(config: configparser.ConfigParser) -> dict[t.Any
     theconfig["validator"]["valid_languages"] = validate_valid_languages(theconfig)
 
     # Section "metadata"
+    # <revhistory>
+    theconfig.setdefault("metadata", {})[
+        "require_revhistory"
+    ] = truefalse(theconfig.get("metadata", {}).get("require_revhistory", True))
     theconfig.setdefault("metadata", {})[
         "require_xmlid_on_revision"
     ] = truefalse(theconfig.get("metadata", {}).get("require_xmlid_on_revision", True))
