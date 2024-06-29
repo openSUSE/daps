@@ -12,7 +12,6 @@ from ..common import (
 from ..exceptions import InvalidValueError, MissingAttributeWarning
 from ..logging import log
 from ..util import (
-    getinfo,
     info_or_fail,
     getfullxpath,
     validatedate,
@@ -39,10 +38,10 @@ def check_info_revhistory(tree: etree._ElementTree, config: dict[t.Any, t.Any]):
 
     xmlid = revhistory.attrib.get(f"{{{XML_NS}}}id")
     if xmlid is None:
-        raise InvalidValueError(f"Couldn't find xml:id attribute in info/revhistory.")
+        raise InvalidValueError(f"Couldn't find xml:id attribute in revhistory.")
 
     if not xmlid.startswith("rh"):
-        raise InvalidValueError(f"xml:id attribute in info/revhistory should start with 'rh'.")
+        raise InvalidValueError(f"xml:id attribute in revhistory should start with 'rh'.")
 
 
 def check_info_revhistory_revision(tree: etree._ElementTree,

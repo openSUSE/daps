@@ -41,7 +41,10 @@ async def process_xml_file(xmlfile: str, config: dict[t.Any, t.Any]):
             # loop = asyncio.get_running_loop()
             # tree = await loop.run_in_executor(None, etree.parse, xmlfile)
             tree = etree.parse(xmlfile,
-                               parser=etree.XMLParser(encoding="UTF-8"))
+                               parser=etree.XMLParser(encoding="UTF-8",
+                                                      # huge_tree=True,
+                                                      resolve_entities=True)
+                                                      )
 
             # Apply check function
             checkfunc(tree, config)

@@ -10,16 +10,18 @@ from .common import (
 from .exceptions import InvalidValueError
 
 
-def getinfo(tree: etree._ElementTree) -> etree._Element:
+def getinfo(tree: etree._ElementTree) -> etree._Element|None:
     """Get the <info> element from a DocBook5 XML tree
 
     :param tree: the XML tree to get the <info> element from
     :return: the <info> element
     """
-    # Check if we get an <info> element from "normal" root elements or
-    # from an assembly structure.
+    # Check if we get all children of <info> element from "normal" root
+    # elements orfrom an assembly structure.
+    # Regular structures have <info>, but for an assembly we only have
+    # <merge> (which can be seen as a "virtual" <info> element).
     a = tree.find("./d:info", namespaces=NAMESPACES)
-    b = tree.find("./d:structure/d:merge/d:info", namespaces=NAMESPACES)
+    b = tree.find("./d:structure/d:merge", namespaces=NAMESPACES)
 
     if a is not None:
         return a

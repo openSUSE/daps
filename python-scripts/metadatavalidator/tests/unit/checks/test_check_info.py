@@ -23,9 +23,9 @@ def test_getinfo_with_regular_tree(tree):
 
 
 def test_getinfo_with_assembly_tree(asmtree):
-    info = getinfo(asmtree)
-    assert info is not None
-    assert info.tag == dbtag("info")
+    merge = getinfo(asmtree)
+    assert merge is not None
+    assert merge.tag == dbtag("merge")
 
 
 def test_info_or_fail_with_regular_tree(tree):
@@ -35,9 +35,9 @@ def test_info_or_fail_with_regular_tree(tree):
 
 
 def test_info_or_fail_with_assembly_tree(asmtree):
-    info = info_or_fail(asmtree)
-    assert info is not None
-    assert info.tag == dbtag("info")
+    merge = info_or_fail(asmtree)
+    assert merge is not None
+    assert merge.tag == dbtag("merge")
 
 
 def test_info_or_fail_with_raise_on_missing():
