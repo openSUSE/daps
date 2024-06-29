@@ -1,7 +1,7 @@
 from lxml import etree
 import pytest
 
-from _utils import createmeta, appendnode, addphrase
+from _utils import appendnode, D, xmlid
 
 from metadatavalidator.common import NAMESPACES
 from metadatavalidator.checks.check_meta import (
@@ -25,11 +25,8 @@ def test_check_meta_title(tree):
 #     </info>
 #     <para/>
 # </article>"""
-    root = tree.getroot()
-    meta = createmeta(dict(name='title'), 'The SEO title')
+    meta = D("meta", {"name": "title"}, "The SEO title")
     appendnode(tree, meta)
-    # info = root.find("./d:info", namespaces=NAMESPACES)
-    # info.append(meta)
 
     assert check_meta_title(tree, {}) is None
 
@@ -42,37 +39,19 @@ def test_check_meta_title_wrong_length(tree):
 #     </info>
 #     <para/>
 # </article>"""
-    root = tree.getroot()
-    meta = createmeta(dict(name='title'),
-                      'The SEO title that is too long',
-                      root.nsmap)
+    meta = D("meta", {"name": "title"}, "The SEO title that is too long")
     appendnode(tree, meta)
-    # info = root.find("./d:info", namespaces=NAMESPACES)
-    # info.append(meta)
 
     with pytest.raises(InvalidValueError, match=".*too long.*"):
         check_meta_title(tree, dict(metadata=dict(meta_title_length=10)))
 
 
 def test_check_required_meta_title(tree):
-#     xmlcontent = """<article xmlns="http://docbook.org/ns/docbook" version="5.2">
-#     <info>
-#         <title>Test</title>
-#     </info>
-#     <para/>
-# </article>"""
-
     with pytest.raises(InvalidValueError, match=".*required.*"):
         check_meta_title(tree, dict(metadata=dict(meta_title_required=True)))
 
 
 def test_check_optional_meta_title(tree):
-#     xmlcontent = """<article xmlns="http://docbook.org/ns/docbook" version="5.2">
-#     <info>
-#         <title>Test</title>
-#     </info>
-#     <para/>
-# </article>"""
     config = dict(metadata=dict(meta_title_required=False))
     assert check_meta_title(tree, config) is None
 
@@ -85,7 +64,7 @@ def test_check_meta_description(tree):
 #     </info>
 #     <para/>
 # </article>"""
-    meta = createmeta(dict(name='description'), 'The SEO description')
+    meta = D("meta", {"name": "description"}, "The SEO description")
     appendnode(tree, meta)
     assert check_meta_description(tree, {}) is None
 
@@ -98,8 +77,7 @@ def test_check_meta_description_wrong_length(tree):
 #     </info>
 #     <para/>
 # </article>"""
-    meta = createmeta(dict(name='description'),
-                      'The SEO description that is too long')
+    meta = D("meta", {"name": "description"}, "The SEO description that is too long")
     appendnode(tree, meta)
 
     with pytest.raises(InvalidValueError, match=".*too long.*"):
@@ -138,7 +116,7 @@ def test_check_meta_series(tree):
 #     </info>
 #     <para/>
 # </article>"""
-    meta = createmeta(dict(name='series'), 'Products & Solutions')
+    meta = D("meta", {"name": "series"}, "Products & Solutions")
     appendnode(tree, meta)
 
     config = dict(metadata=dict(require_meta_series=True,
@@ -168,7 +146,7 @@ def test_check_wrong_meta_series(tree):
 #     </info>
 #     <para/>
 # </article>"""
-    meta = createmeta(dict(name='series'), 'Foo')
+    meta = D("meta", {"name": "series"}, "Foo")
     appendnode(tree, meta)
 
     config = dict(metadata=dict(require_meta_series=True,
@@ -208,8 +186,10 @@ def test_check_meta_techpartner(tree):
 #     </info>
 #     <para/>
 # </article>"""
-    meta = createmeta(dict(name='techpartner'))
-    addphrase(meta, ["Acme Inc.", "Foo Corp."])
+    meta = D("meta", {"name": "techpartner"},
+             D("phrase", {}, "Acme Inc."),
+             D("phrase", {}, "Foo Corp."),
+             )
     appendnode(tree, meta)
 
     assert check_meta_techpartner(tree, {}) is None
@@ -236,7 +216,7 @@ def test_check_missing_children_in_meta_techpartner(tree):
 #     </info>
 #     <para/>
 # </article>"""
-    meta = createmeta(dict(name='techpartner'))
+    meta = D("meta", {"name": "techpartner"})
     appendnode(tree, meta)
 
     config = dict(metadata=dict(require_meta_techpartner=True))
@@ -255,8 +235,10 @@ def test_check_meta_techpartner_with_nonunique_children(tree):
 #     </info>
 #     <para/>
 # </article>"""
-    meta = createmeta(dict(name='techpartner'))
-    addphrase(meta, ["Acme Inc.", "Acme Inc."])
+    meta = D("meta", {"name": "techpartner"},
+             D("phrase", "Acme Inc."),
+             D("phrase", "Acme Inc."),
+             )
     appendnode(tree, meta)
 
     config = dict(metadata=dict(require_meta_techpartner=True))
@@ -272,7 +254,7 @@ def test_check_meta_platform(tree):
 #     </info>
 #     <para/>
 # </article>"""
-    meta = createmeta(dict(name='platform'), 'Foo')
+    meta = D("meta", {"name": "platform"}, "Foo")
     appendnode(tree, meta)
 
     config = dict(metadata=dict(require_meta_platform=True))
@@ -302,7 +284,7 @@ def test_check_empty_meta_platform(tree):
 #     </info>
 #     <para/>
 # </article>"""
-    meta = createmeta(dict(name='platform'))
+    meta = D("meta", {"name": "platform"})
     appendnode(tree, meta)
 
     config = dict(metadata=dict(require_meta_platform=True))
@@ -320,8 +302,7 @@ def test_check_meta_architecture(tree):
 #     </info>
 #     <para/>
 # </article>"""
-    meta = createmeta(dict(name='architecture'))
-    addphrase(meta, ["x86_64"])
+    meta = D("meta", {"name": "architecture"}, D("phrase", "x86_64"))
     appendnode(tree, meta)
 
     config = dict(metadata=dict(require_meta_architecture=True,
@@ -351,7 +332,7 @@ def test_check_missing_child_meta_architecture(tree):
 #     </info>
 #     <para/>
 # </article>"""
-    meta = createmeta(dict(name='architecture'))
+    meta = D("meta", {"name": "architecture"})
     appendnode(tree, meta)
 
     config = dict(metadata=dict(require_meta_architecture=True))
@@ -373,8 +354,10 @@ def test_check_duplicate_child_meta_architecture(tree):
 #     </info>
 #     <para/>
 # </article>"""
-    meta = createmeta(dict(name='architecture'))
-    addphrase(meta, ["x86_64", "x86_64"])
+    meta = D("meta", {"name": "architecture"},
+                D("phrase", "x86_64"),
+                D("phrase", "x86_64"),
+                )
     appendnode(tree, meta)
 
     config = dict(metadata=dict(
@@ -397,8 +380,10 @@ def test_check_unknown_child_meta_architecture(tree):
 #     </info>
 #     <para/>
 # </article>"""
-    meta = createmeta(dict(name='architecture'))
-    addphrase(meta, ["x86_64", "foo"])
+    meta = D("meta", {"name": "architecture"},
+            D("phrase", "x86_64"),
+            D("phrase", "foo"),
+            )
     appendnode(tree, meta)
 
     config = dict(
@@ -422,8 +407,8 @@ def test_meta_category(tree):
 #     </info>
 #     <para/>
 # </article>"""
-    meta = createmeta(dict(name='category'))
-    addphrase(meta, ["Systems Management"])
+    meta = D("meta", {"name": "category"},
+             D("phrase", "Systems Management"))
     appendnode(tree, meta)
 
     config = dict(metadata=dict(require_meta_category=True,
@@ -453,7 +438,7 @@ def test_missing_child_meta_category(tree):
 #     </info>
 #     <para/>
 # </article>"""
-    meta = createmeta(dict(name='category'))
+    meta = D("meta", {"name": "category"})
     appendnode(tree, meta)
 
     config = dict(metadata=dict(require_meta_category=True))
@@ -473,8 +458,10 @@ def test_duplicate_child_meta_category(tree):
 #     </info>
 #     <para/>
 # </article>"""
-    meta = createmeta(dict(name='category'))
-    addphrase(meta, ["Systems Management", "Systems Management"])
+    meta = D("meta", {"name": "category"},
+                D("phrase", "Systems Management"),
+                D("phrase", "Systems Management"),
+                )
     appendnode(tree, meta)
 
     config = dict(metadata=dict(require_meta_category=True))
@@ -494,8 +481,10 @@ def test_unknown_category_meta_category(tree):
 #     </info>
 #     <para/>
 # </article>"""
-    meta = createmeta(dict(name='category'))
-    addphrase(meta, ["Systems Management", "Foo"])
+    meta = D("meta", {"name": "category"},
+             D("phrase", "Systems Management"),
+             D("phrase", "Foo"),
+             )
     appendnode(tree, meta)
 
     config = dict(metadata=dict(require_meta_category=True,
@@ -514,8 +503,8 @@ def test_meta_task(tree):
 #         </meta>
 #     </info>
 # </article>"""
-    meta = createmeta(dict(name='task'))
-    addphrase(meta, ["Configuration"])
+    meta = D("meta", {"name": "task"},
+             D("phrase", "Configuration"))
     appendnode(tree, meta)
 
     config = dict(metadata=dict(require_meta_task=True,
@@ -530,7 +519,7 @@ def test_missing_child_meta_task(tree):
 #         <meta name="task"/>
 #     </info>
 # </article>"""
-    meta = createmeta(dict(name='task'))
+    meta = D("meta", {"name": "task"})
     appendnode(tree, meta)
 
     config = dict(metadata=dict(require_meta_task=True),
@@ -550,8 +539,10 @@ def test_duplicate_child_meta_task(tree):
 #         </meta>
 #     </info>
 # </article>"""
-    meta = createmeta(dict(name='task'))
-    addphrase(meta, ["Configuration", "Configuration"])
+    meta = D("meta", {"name": "task"},
+             D("phrase", "Configuration"),
+             D("phrase", "Configuration"),
+             )
     appendnode(tree, meta)
 
     config = dict(metadata=dict(require_meta_task=True),

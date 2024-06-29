@@ -1,7 +1,7 @@
 import pytest
-from lxml import etree
+from lxml import etree as ET
 
-from _utils import createmeta, appendnode,  createinfoelement, addsub
+from _utils import appendnode, dbtag, D, xmlid
 
 from metadatavalidator.common import NAMESPACES
 from metadatavalidator.checks import (
@@ -19,35 +19,35 @@ from metadatavalidator.exceptions import InvalidValueError, MissingAttributeWarn
 def test_getinfo_with_regular_tree(tree):
     info = getinfo(tree)
     assert info is not None
-    assert info.tag == "{http://docbook.org/ns/docbook}info"
+    assert info.tag == dbtag("info")
 
 
 def test_getinfo_with_assembly_tree(asmtree):
     info = getinfo(asmtree)
     assert info is not None
-    assert info.tag == "{http://docbook.org/ns/docbook}info"
+    assert info.tag == dbtag("info")
 
 
 def test_info_or_fail_with_regular_tree(tree):
     info = info_or_fail(tree)
     assert info is not None
-    assert info.tag == "{http://docbook.org/ns/docbook}info"
+    assert info.tag == dbtag("info")
 
 
 def test_info_or_fail_with_assembly_tree(asmtree):
     info = info_or_fail(asmtree)
     assert info is not None
-    assert info.tag == "{http://docbook.org/ns/docbook}info"
+    assert info.tag == dbtag("info")
 
 
 def test_info_or_fail_with_raise_on_missing():
-    tree = etree.ElementTree(etree.Element("{http://docbook.org/ns/docbook}article"))
+    tree = D("article").getroottree()
     info = info_or_fail(tree, raise_on_missing=False)
     assert info is None
 
 
 def test_info_or_fail_with_raise_on_missing_and_missing_info():
-    tree = etree.ElementTree(etree.Element("{http://docbook.org/ns/docbook}article"))
+    tree = D("article").getroottree()
     with pytest.raises(InvalidValueError, match="Couldn't find <info> element."):
         info_or_fail(tree)
 
@@ -56,13 +56,8 @@ def test_check_info(tree):
     assert check_info(tree, {}) is None
 
 
-def test_check_info_missing(xmlparser):
-    xmlcontent = """<article xmlns="http://docbook.org/ns/docbook" version="5.2">
-    <para/>
-</article>"""
-    tree = etree.ElementTree(
-        etree.fromstring(xmlcontent, parser=xmlparser)
-    )
+def test_check_info_missing():
+    tree = D("article").getroottree()
     with pytest.raises(InvalidValueError,
                           match=".*Couldn't find <info> element."):
           check_info(tree, {})
@@ -82,11 +77,10 @@ def test_check_info_revhistory(tree):
 #     </info>
 #     <para/>
 # </article>"""
-#     tree = etree.ElementTree(
-#         etree.fromstring(xmlcontent, parser=xmlparser)
+#     tree = ET.ElementTree(
+#         ET.fromstring(xmlcontent, parser=xmlparser)
 #     )
-    revhistory = createinfoelement("revhistory",
-                                   {f"{{{NAMESPACES['xml']}}}id": "rh"})
+    revhistory = D("revhistory", {xmlid: "rh"})
     appendnode(tree, revhistory)
 
     assert check_info_revhistory(tree, {}) is None
@@ -108,8 +102,7 @@ def test_check_info_revhistory_xmlid(tree):
 #     </info>
 #     <para/>
 # </article>"""
-    revhistory = createinfoelement("revhistory",
-                                   {f"{{{NAMESPACES['xml']}}}id": "rh1"})
+    revhistory = D("revhistory", {xmlid: "rh1"})
     appendnode(tree, revhistory)
 
     assert check_info_revhistory(tree, {}) is None
@@ -123,7 +116,7 @@ def test_info_revhistory_missing_xmlid(tree):
 #     </info>
 #     <para/>
 # </article>"""
-    revhistory = createinfoelement("revhistory")
+    revhistory = D("revhistory")
     appendnode(tree, revhistory)
 
     with pytest.raises(InvalidValueError,
@@ -139,9 +132,7 @@ def test_check_info_revhistory_xmlid_with_wrong_value(tree):
 #     </info>
 #     <para/>
 # </article>"""
-    revhistory = createinfoelement("revhistory",
-                                   {f"{{{NAMESPACES['xml']}}}id": "wrong_id"})
-    appendnode(tree, revhistory)
+    appendnode(tree, D("revhistory", {xmlid: "wrong_id"}))
 
     with pytest.raises(InvalidValueError,
                        match="should start with 'rh'"):
@@ -160,16 +151,14 @@ def test_check_info_revhistory_revision(tree):
 #     </info>
 #     <para/>
 # </article>"""
-    revhistory = createinfoelement("revhistory")
-    revision = etree.SubElement(revhistory,
-                                f"{{{NAMESPACES['d']}}}revision",
-                                {f"{{{NAMESPACES['xml']}}}id": "rh"}
-                                )
-    date = etree.SubElement(revision, f"{{{NAMESPACES['d']}}}date")
-    date.text = "2021-01-01"
+    revhistory = D("revhistory",
+                   D("revision", {xmlid: "rh"},
+                     D("date", "2021")
+                     )
+                   )
     appendnode(tree, revhistory)
 
-    print(etree.tostring(tree.getroot(), pretty_print=True).decode("utf-8"))
+    print(ET.tostring(tree.getroot(), pretty_print=True).decode("utf-8"))
 
     assert check_info_revhistory_revision(tree, {}) is None
 
@@ -186,10 +175,11 @@ def test_check_info_revhistory_revision_missing_xmlid(tree):
 #     </info>
 #     <para/>
 # </article>"""
-    revhistory = createinfoelement("revhistory")
-    revision = etree.SubElement(revhistory, f"{{{NAMESPACES['d']}}}revision")
-    date = etree.SubElement(revision, f"{{{NAMESPACES['d']}}}date")
-    date.text = "2021-01-01"
+    revhistory = D("revhistory",
+                    D("revision",
+                      D("date", "2021-01-01")
+                      )
+                    )
     appendnode(tree, revhistory)
 
     with pytest.raises(MissingAttributeWarning,
@@ -207,8 +197,7 @@ def test_check_info_revhistory_revision_missing(tree):
 #     </info>
 #     <para/>
 # </article>"""
-    revhistory = createinfoelement("revhistory")
-    appendnode(tree, revhistory)
+    appendnode(tree, D("revhistory"))
 
     with pytest.raises(InvalidValueError,
                        match="Couldn't find a revision element"):
@@ -230,10 +219,11 @@ def test_check_info_revhistory_revision_date(tree):
 #     </info>
 #     <para/>
 # </article>"""
-    revhistory = createinfoelement("revhistory")
-    revision = etree.SubElement(revhistory, f"{{{NAMESPACES['d']}}}revision")
-    date = etree.SubElement(revision, f"{{{NAMESPACES['d']}}}date")
-    date.text = "2021-01-01"
+    revhistory = D("revhistory",
+                   D("revision",
+                     D("date", "2021-01-01")
+                    )
+                   )
     appendnode(tree, revhistory)
 
     assert check_info_revhistory_revision_date(tree, {}) is None
@@ -249,8 +239,7 @@ def test_check_info_revhistory_revision_date_missing(tree):
 #     </info>
 #     <para/>
 # </article>"""
-    revhistory = createinfoelement("revhistory")
-    revision = etree.SubElement(revhistory, f"{{{NAMESPACES['d']}}}revision")
+    revhistory = D("revhistory", D("revision"))
     appendnode(tree, revhistory)
 
     with pytest.raises(InvalidValueError,
@@ -270,17 +259,7 @@ def test_check_info_revhistory_revision_date_invalid_format(tree):
 #     </info>
 #     <para/>
 # </article>"""
-    nsmap = tree.getroot().nsmap
-    revhistory = createinfoelement("revhistory",
-                                   {f"{{{NAMESPACES['xml']}}}id": "rh"},
-                                   nsmap=nsmap)
-    revision = etree.SubElement(revhistory,
-                                f"{{{NAMESPACES['d']}}}revision",
-                                )
-    date = etree.SubElement(revision,
-                            f"{{{NAMESPACES['d']}}}date",
-                            )
-    date.text = "January 2024"
+    revhistory = D("revhistory", D("revision", D("date", "January 2024")))
     appendnode(tree, revhistory)
 
     with pytest.raises(InvalidValueError,
@@ -300,13 +279,8 @@ def test_check_info_revhistory_revision_date_invalid_value(tree):
 #     </info>
 #     <para/>
 # </article>"""
-    revhistory = createinfoelement("revhistory",
-                                      {f"{{{NAMESPACES['xml']}}}id": "rh"})
-    revision = etree.SubElement(revhistory,
-                                f"{{{NAMESPACES['d']}}}revision")
-    date = etree.SubElement(revision,
-                            f"{{{NAMESPACES['d']}}}date")
-    date.text = "2024-13"
+    revhistory = D("revhistory", {xmlid: "rh"},
+                   D("revision", D("date", "2024-13")))
     appendnode(tree, revhistory)
 
     with pytest.raises(InvalidValueError,
@@ -315,52 +289,57 @@ def test_check_info_revhistory_revision_date_invalid_value(tree):
         check_info_revhistory_revision_date(tree, {})
 
 
-def test_check_info_revhistory_revision_order(xmlparser):
-    xmlcontent = """<article xmlns="http://docbook.org/ns/docbook" version="5.2">
-    <info>
-        <title>Test</title>
-        <revhistory xml:id="rh">
-          <revision>
-            <date>2024-12</date>
-          </revision>
-          <revision>
-            <date>2023-12-12</date>
-          </revision>
-          <revision>
-            <date>2022-04</date>
-          </revision>
-        </revhistory>
-    </info>
-    <para/>
-</article>"""
-    tree = etree.ElementTree(
-        etree.fromstring(xmlcontent, parser=xmlparser)
-    )
+def test_check_info_revhistory_revision_order(tree):
+#     xmlcontent = """<article xmlns="http://docbook.org/ns/docbook" version="5.2">
+#     <info>
+#         <title>Test</title>
+#         <revhistory xml:id="rh">
+#           <revision>
+#             <date>2024-12</date>
+#           </revision>
+#           <revision>
+#             <date>2023-12-12</date>
+#           </revision>
+#           <revision>
+#             <date>2022-04</date>
+#           </revision>
+#         </revhistory>
+#     </info>
+#     <para/>
+# </article>"""
+    revhistory = D("revhistory", {xmlid: "rh"},
+                     D("revision", D("date", "2024-12")),
+                     D("revision", D("date", "2023-12-12")),
+                     D("revision", D("date", "2022-04")))
+    appendnode(tree, revhistory)
 
     assert check_info_revhistory_revision_order(tree, {}) is None
 
 
-def test_check_info_revhistory_revision_order_one_invalid_date(xmlparser):
-    xmlcontent = """<article xmlns="http://docbook.org/ns/docbook" version="5.2">
-    <info>
-        <title>Test</title>
-        <revhistory xml:id="rh">
-          <revision>
-            <date>2024-53</date><!-- Wrong date -->
-          </revision>
-          <revision>
-            <date>2023-12-12</date>
-          </revision>
-          <revision>
-            <date>2022-04</date>
-          </revision>
-        </revhistory>
-    </info>
-    <para/>
-</article>"""
-    tree = etree.ElementTree(
-        etree.fromstring(xmlcontent, parser=xmlparser)
-    )
+def test_check_info_revhistory_revision_order_one_invalid_date(tree):
+#     xmlcontent = """<article xmlns="http://docbook.org/ns/docbook" version="5.2">
+#     <info>
+#         <title>Test</title>
+#         <revhistory xml:id="rh">
+#           <revision>
+#             <date>2024-53</date><!-- Wrong date -->
+#           </revision>
+#           <revision>
+#             <date>2023-12-12</date>
+#           </revision>
+#           <revision>
+#             <date>2022-04</date>
+#           </revision>
+#         </revhistory>
+#     </info>
+#     <para/>
+# </article>"""
+    revhistory = D("revhistory", {xmlid: "rh"},
+                    D("revision", D("date", "2024-53")),
+                    D("revision", D("date", "2023-12-12")),
+                    D("revision", D("date", "2022-04"))
+                    )
+    appendnode(tree, revhistory)
 
     with pytest.raises(InvalidValueError,
                        match=".*Couldn't convert all dates.*see position dates=1.*"
@@ -368,27 +347,30 @@ def test_check_info_revhistory_revision_order_one_invalid_date(xmlparser):
         check_info_revhistory_revision_order(tree, {})
 
 
-def test_check_info_revhistory_revision_wrong_order(xmlparser):
-    xmlcontent = """<article xmlns="http://docbook.org/ns/docbook" version="5.2">
-    <info>
-        <title>Test</title>
-        <revhistory xml:id="rh">
-          <revision>
-            <date>2024-12</date>
-          </revision>
-          <revision>
-            <date>2023-12-12</date>
-          </revision>
-          <revision>
-            <date>2026-04</date>
-          </revision>
-        </revhistory>
-    </info>
-    <para/>
-</article>"""
-    tree = etree.ElementTree(
-        etree.fromstring(xmlcontent, parser=xmlparser)
-    )
+def test_check_info_revhistory_revision_wrong_order(tree):
+#     xmlcontent = """<article xmlns="http://docbook.org/ns/docbook" version="5.2">
+#     <info>
+#         <title>Test</title>
+#         <revhistory xml:id="rh">
+#           <revision>
+#             <date>2024-12</date>
+#           </revision>
+#           <revision>
+#             <date>2023-12-12</date>
+#           </revision>
+#           <revision>
+#             <date>2026-04</date>
+#           </revision>
+#         </revhistory>
+#     </info>
+#     <para/>
+# </article>"""
+    revhistory = D("revhistory", {xmlid: "rh"},
+                    D("revision", D("date", "2024-12")),
+                    D("revision", D("date", "2023-12-12")),
+                    D("revision", D("date", "2026-04"))
+                    )
+    appendnode(tree, revhistory)
 
     with pytest.raises(InvalidValueError,
                        match=".*Dates in revhistory/revision are not in descending order.*"
