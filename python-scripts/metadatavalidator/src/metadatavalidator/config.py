@@ -174,6 +174,7 @@ def validate_valid_meta_category(config: dict) -> list[str]:
                 if x
             ]
 
+
 def validate_valid_meta_task(config: dict) -> list[str]:
     """Validate the meta task
 
