@@ -24,13 +24,17 @@ def check_meta_title(tree: etree._ElementTree,
     if meta is None:
         if required:
             raise InvalidValueError(
-                f"Couldn't find required meta[@name='title'] element in {root.tag}."
+                f"Couldn't find required meta[@name='title'] element in {root.tag}"
+                f" (line {info.sourceline})."
             )
         return
 
     length = config.get("metadata", {}).get("meta_title_length", 55)
     if len(meta.text) > length:
-        raise InvalidValueError(f"Meta title is too long. Max length is {length} characters.")
+        raise InvalidValueError(
+            f"Meta title is too long. Max length is {length} characters"
+            f" (line {meta.sourceline})."
+            )
 
 
 def check_meta_description(tree: etree._ElementTree,
@@ -43,13 +47,17 @@ def check_meta_description(tree: etree._ElementTree,
     if meta is None:
         if required:
             raise InvalidValueError(
-                f"Couldn't find required meta[@name='description'] element in {root.tag}."
+                f"Couldn't find required meta[@name='description'] element in "
+                f"{root.tag} (line {info.sourceline})."
             )
         return
 
     length = config.get("metadata", {}).get("meta_description_length", 150)
     if len(meta.text) > length:
-        raise InvalidValueError(f"Meta description is too long. Max length is {length} characters.")
+        raise InvalidValueError(
+            f"Meta description is too long. Max length is {length} characters."
+            f" (line {meta.sourceline})."
+            )
 
 
 def check_meta_series(tree: etree._ElementTree,
@@ -62,7 +70,8 @@ def check_meta_series(tree: etree._ElementTree,
     if meta is None:
         if required:
             raise InvalidValueError(
-                f"Couldn't find required meta[@name='series'] element in {root.tag}."
+                f"Couldn't find required meta[@name='series'] element in {root.tag}"
+                f" (line {info.sourceline})."
             )
         return
 
@@ -72,7 +81,8 @@ def check_meta_series(tree: etree._ElementTree,
     if meta.text.strip() not in valid_series:
         raise InvalidValueError(
             f"Meta series is invalid, got {meta.text.strip()!r}. "
-            f"Valid series are {valid_series}."
+            f"Valid series are {valid_series}"
+            f" (line {meta.sourceline})."
         )
 
 
@@ -87,7 +97,8 @@ def check_meta_techpartner(tree: etree._ElementTree,
         if required:
             raise InvalidValueError(
                 f"Couldn't find required meta[@name='techpartner'] element "
-                f"in {root.tag}."
+                f"in {root.tag}"
+                f" (line {info.sourceline})."
             )
         return
 
@@ -96,7 +107,7 @@ def check_meta_techpartner(tree: etree._ElementTree,
     if not partners:
         raise InvalidValueError(
             f"Couldn't find any tech partners in meta[@name='techpartner'] element "
-            f"(line {meta.sourceline})."
+            f"(line {meta.sourceline})"
         )
 
     # Are they unique?
@@ -118,7 +129,8 @@ def check_meta_platform(tree: etree._ElementTree,
         if required:
             raise InvalidValueError(
                 f"Couldn't find required meta[@name='platform'] element "
-                f"in {root.tag}."
+                f"in {root.tag}"
+                f" (line {info.sourceline})."
             )
         return
 
@@ -138,7 +150,8 @@ def check_meta_architecture(tree: etree._ElementTree,
         if required:
             raise InvalidValueError(
                 f"Couldn't find required meta[@name='architecture'] element "
-                f"in {root.tag}."
+                f"in {root.tag}"
+                f" (line {info.sourceline})."
             )
         return
 
@@ -152,15 +165,15 @@ def check_meta_architecture(tree: etree._ElementTree,
     archs = [tag.text.strip() for tag in meta.iterchildren()]
     if not archs:
         raise InvalidValueError(
-            f"Couldn't find any child elements in meta[@name='architecture'] "
-            f"(line {meta.sourceline})."
+            f"Couldn't find any child elements in meta[@name='architecture']"
+            f" (line {meta.sourceline})."
         )
 
     # Are they unique?
     if len(archs) != len(set(archs)):
         raise InvalidValueError(
-            f"Duplicate architectures found in meta[@name='architecture'] "
-            f"(line {meta.sourceline})."
+            f"Duplicate architectures found in meta[@name='architecture']"
+            f" (line {meta.sourceline})."
         )
 
     # Do we have items that don't conform to our predefined list?
@@ -168,7 +181,8 @@ def check_meta_architecture(tree: etree._ElementTree,
     if wrong_items:
         raise InvalidValueError(
             f"Unknown architecture(s) {wrong_items}. "
-            f"Allowed are {valid_archs}."
+            f"Allowed are {valid_archs}"
+            f" (line {meta.sourceline})."
         )
 
 
@@ -197,15 +211,15 @@ def check_meta_category(tree: etree._ElementTree,
     cats = [tag.text.strip() for tag in meta.iterchildren()]
     if not cats:
         raise InvalidValueError(
-            f"Couldn't find any child elements in meta[@name='category'] "
-            f"(line {meta.sourceline})."
+            f"Couldn't find any child elements in meta[@name='category']"
+            f" (line {meta.sourceline})."
         )
 
     # Are they unique?
     if len(cats) != len(set(cats)):
         raise InvalidValueError(
-            f"Duplicate categories found in meta[@name='category'] "
-            f"(line {meta.sourceline})."
+            f"Duplicate categories found in meta[@name='category']"
+            f" (line {meta.sourceline})."
         )
 
     # Do we have items that don't conform to our predefined list?
@@ -214,6 +228,7 @@ def check_meta_category(tree: etree._ElementTree,
         raise InvalidValueError(
             f"Unknown category(ies) {wrong_items}. "
             f"Allowed are {valid_cats}."
+            f" (line {meta.sourceline})."
         )
 
 
@@ -242,15 +257,15 @@ def check_meta_task(tree: etree._ElementTree,
     tasks = [tag.text.strip() for tag in meta.iterchildren()]
     if not tasks:
         raise InvalidValueError(
-            f"Couldn't find any child elements in meta[@name='task'] "
-            f"(line {meta.sourceline})."
+            f"Couldn't find any child elements in meta[@name='task']"
+            f" (line {meta.sourceline})."
         )
 
     # Are they unique?
     if len(tasks) != len(set(tasks)):
         raise InvalidValueError(
-            f"Duplicate tasks found in meta[@name='task'] "
-            f"(line {meta.sourceline})."
+            f"Duplicate tasks found in meta[@name='task']"
+            f" (line {meta.sourceline})."
         )
 
     # Do we have items that don't conform to our predefined list?
@@ -258,5 +273,6 @@ def check_meta_task(tree: etree._ElementTree,
     if wrong_items:
         raise InvalidValueError(
             f"Unknown task(s) {wrong_items}. "
-            f"Allowed are {valid_tasks}."
+            f"Allowed are {valid_tasks}"
+            f" (line {meta.sourceline})."
         )

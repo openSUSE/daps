@@ -33,15 +33,24 @@ def check_info_revhistory(tree: etree._ElementTree, config: dict[t.Any, t.Any]):
     revhistory = info.find("./d:revhistory", namespaces=NAMESPACES)
     if revhistory is None:
         if required:
-            raise InvalidValueError(f"Couldn't find a revhistory element in {info.tag}.")
+            raise InvalidValueError(
+                f"Couldn't find a revhistory element in {info.tag}"
+                f" (line {info.sourceline})."
+                )
         return None
 
     xmlid = revhistory.attrib.get(f"{{{XML_NS}}}id")
     if xmlid is None:
-        raise InvalidValueError(f"Couldn't find xml:id attribute in revhistory.")
+        raise InvalidValueError(
+            f"Couldn't find xml:id attribute in revhistory"
+            f" (line {revhistory.sourceline})."
+            )
 
     if not xmlid.startswith("rh"):
-        raise InvalidValueError(f"xml:id attribute in revhistory should start with 'rh'.")
+        raise InvalidValueError(
+            f"xml:id attribute in revhistory should start with 'rh'"
+            f" (line {revhistory.sourceline})."
+            )
 
 
 def check_info_revhistory_revision(tree: etree._ElementTree,
@@ -56,12 +65,16 @@ def check_info_revhistory_revision(tree: etree._ElementTree,
 
     revision = revhistory.find("./d:revision", namespaces=NAMESPACES)
     if revision is None:
-        raise InvalidValueError(f"Couldn't find a revision element in {revhistory.tag}.")
+        raise InvalidValueError(
+            f"Couldn't find a revision element in {revhistory.tag}"
+            f" (line {revhistory.sourceline})."
+            )
     xmlid = revision.attrib.get(f"{{{XML_NS}}}id")
 
     if config.get("metadata", {}).get("require_xmlid_on_revision", True) and xmlid is None:
         xpath = getfullxpath(revision)
         xpath += "/@xml:id"
+        xpath += f" (line {revision.sourceline})."
         raise MissingAttributeWarning(xpath)
 
 
@@ -76,7 +89,10 @@ def check_info_revhistory_revision_date(tree: etree._ElementTree,
 
     date = revhistory.find("./d:revision/d:date", namespaces=NAMESPACES)
     if date is None:
-        raise InvalidValueError(f"Couldn't find a date element in info/revhistory/revision.")
+        raise InvalidValueError(
+            f"Couldn't find a date element in revhistory/revision"
+            f" (line {revhistory.sourceline})."
+            )
 
     validatedate(date)
 
@@ -104,9 +120,12 @@ def check_info_revhistory_revision_order(tree: etree._ElementTree,
 
     # First check: check if we have the same number of dates and revisions
     if len(converteddates) != len(revisions):
-        raise InvalidValueError(f"Couldn't convert all dates "
-                                f"(see position dates={dates.index(None)+1}). "
-                                f"Check {xpath}")
+        raise InvalidValueError(
+            f"Couldn't convert all dates "
+            f"(see position dates={dates.index(None)+1}). "
+            f"Check {xpath}"
+            f" (line {revhistory.sourceline})."
+            )
 
     # Second check: we have the same number of dates and revisions, now
     # check if the dates are in descending order
@@ -114,6 +133,7 @@ def check_info_revhistory_revision_order(tree: etree._ElementTree,
         if first <= second:
             raise InvalidValueError(
                 "Dates in revhistory/revision are not in descending order: "
-                f"{first} <= {second}."
+                f"{first} <= {second}"
+                f" (line {revhistory.sourceline})."
                 )
 

@@ -20,5 +20,7 @@ def check_namespace(tree: etree._ElementTree, config: dict[t.Any, t.Any]):
     """Checks the namespace"""
     tag = etree.QName(tree.getroot().tag)
     if tag.namespace != DOCBOOK_NS:
-        raise InvalidValueError(f"Root element {tag.localname!r} doesn't belong to DocBook 5.")
+        raise InvalidValueError(
+            f"Root element {tag.localname!r} doesn't belong to DocBook 5."
+            )
 
