@@ -32,7 +32,32 @@ async def process_xml_file(xmlfile: str, config: dict[t.Any, t.Any]):
     """
     errors = []
     basexmlfile = os.path.basename(xmlfile)
+
+    returndict = {
+        "xmlfile": xmlfile,
+        "absxmlfilename": os.path.abspath(xmlfile),
+        "basename": basexmlfile,
+    }
     # log.debug("Config %s", config)
+    # First check if the file is a well-formed XML file
+    # If not, don't bother to check further
+    try:
+         tree = etree.parse(xmlfile,
+                            parser=etree.XMLParser(
+                                encoding="UTF-8",
+                                # huge_tree=True,
+                                resolve_entities=True)
+                                )
+
+    except etree.XMLSyntaxError as e:
+            # log.fatal("Syntax error in %r: %s", xmlfile, e)
+            log.fatal("Syntax error in %r: %s", basexmlfile, e)
+            errors.append({
+                'checkfunc': None,
+                'message': str(e)
+            })
+            return { **returndict, "errors": errors }
+
     for checkfunc in get_all_check_functions(checks.__package__):
         log.debug("Checking %r with %r",
                   basexmlfile,
@@ -40,22 +65,9 @@ async def process_xml_file(xmlfile: str, config: dict[t.Any, t.Any]):
         try:
             # loop = asyncio.get_running_loop()
             # tree = await loop.run_in_executor(None, etree.parse, xmlfile)
-            tree = etree.parse(xmlfile,
-                               parser=etree.XMLParser(encoding="UTF-8",
-                                                      # huge_tree=True,
-                                                      resolve_entities=True)
-                                                      )
-
             # Apply check function
             checkfunc(tree, config)
             # await asyncio.sleep(0.1)
-
-        except etree.XMLSyntaxError as e:
-            # log.fatal("Syntax error in %r: %s", xmlfile, e)
-            errors.append({
-                'checkfunc': checkfunc.__name__,
-                'message': str(e)
-            })
 
         except (InvalidValueError, MissingAttributeWarning) as e:
             #log.fatal("Invalid value in %r for %s: %s",
@@ -65,16 +77,12 @@ async def process_xml_file(xmlfile: str, config: dict[t.Any, t.Any]):
                 'message': str(e)
             })
         else:
-            # log.info("Passed check %r for %r", checkfunc.__name__, os.path.basename(xmlfile))
+            # log.info("Passed check %r for %r", checkfunc.__name__, basexmlfile)
             pass
 
     log.info("File %r checked.", basexmlfile)
-    return {
-        "xmlfile": xmlfile,
-        "absxmlfilename": os.path.abspath(xmlfile),
-        "errors": errors,
-        "basename": os.path.basename(xmlfile),
-    }
+    return { **returndict, "errors": errors }
+
 
 def green(text):
     return f"\033[32m{text}\033[0m"
