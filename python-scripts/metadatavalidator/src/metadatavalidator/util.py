@@ -10,6 +10,14 @@ from .common import (
 from .exceptions import InvalidValueError
 
 
+
+def green(text):    # pragma: no cover
+    return f"\033[32m{text}\033[0m"
+
+def red(text):    # pragma: no cover
+    return f"\033[31m{text}\033[0m"
+
+
 def getinfo(tree: etree._ElementTree) -> etree._Element|None:
     """Get the <info> element from a DocBook5 XML tree
 

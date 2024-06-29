@@ -10,6 +10,7 @@ from lxml import etree
 from . import checks
 from .exceptions import InvalidValueError, MissingAttributeWarning
 from .logging import log
+from .util import green, red
 
 
 def get_all_check_functions(name):
@@ -84,13 +85,6 @@ async def process_xml_file(xmlfile: str, config: dict[t.Any, t.Any]):
     return { **returndict, "errors": errors }
 
 
-def green(text):
-    return f"\033[32m{text}\033[0m"
-
-def red(text):
-    return f"\033[31m{text}\033[0m"
-
-
 def format_results_text(results: list[t.Any]):
     """Format the results for output
 
@@ -110,6 +104,7 @@ def format_results_text(results: list[t.Any]):
                 msg = red(error['message'])
                 print(f"  {allidx}.{idx}: {error['checkfunc']}: {msg}")
             print()
+
 
 def format_results_json(results: list[t.Any]):
     """Format the results for output
