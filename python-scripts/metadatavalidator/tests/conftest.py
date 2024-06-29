@@ -43,7 +43,7 @@ def assemblystr() -> str:
        xmlns="http://docbook.org/ns/docbook">
        <structure>
          <merge>
-           <info/>
+              <!-- We add here additional content in the respective tests -->
          </merge>
        </structure>
 </assembly>"""
