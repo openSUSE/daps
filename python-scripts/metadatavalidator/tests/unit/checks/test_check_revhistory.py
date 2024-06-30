@@ -148,7 +148,7 @@ def test_check_info_revhistory_revision_missing(tree):
     appendnode(tree, D("revhistory"))
 
     with pytest.raises(InvalidValueError,
-                       match="Couldn't find a revision element"):
+                       match=".*Couldn't find any revision element.*"):
         check_info_revhistory_revision(
             tree,
             {"metadata": {"require_xmlid_on_revision": True}}
@@ -262,6 +262,15 @@ def test_check_info_revhistory_revision_order(tree):
     appendnode(tree, revhistory)
 
     assert check_info_revhistory_revision_order(tree, {}) is None
+
+
+def test_check_info_revhistory_revision_order_without_revision(tree):
+    revhistory = D("revhistory", {xmlid: "rh"})
+    appendnode(tree, revhistory)
+
+    with pytest.raises(InvalidValueError,
+                       match=".*Couldn't find any revision element.*"):
+        check_info_revhistory_revision_order(tree, {})
 
 
 def test_check_info_revhistory_revision_order_one_invalid_date(tree):

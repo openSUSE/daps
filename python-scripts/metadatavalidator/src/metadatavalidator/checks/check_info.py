@@ -34,7 +34,7 @@ def check_info_revhistory(tree: etree._ElementTree, config: dict[t.Any, t.Any]):
     if revhistory is None:
         if required:
             raise InvalidValueError(
-                f"Couldn't find a revhistory element in {info.tag}"
+                f"Couldn't find a revhistory element in info"
                 f" (line {info.sourceline})."
                 )
         return None
@@ -66,7 +66,7 @@ def check_info_revhistory_revision(tree: etree._ElementTree,
     revision = revhistory.find("./d:revision", namespaces=NAMESPACES)
     if revision is None:
         raise InvalidValueError(
-            f"Couldn't find a revision element in {revhistory.tag}"
+            f"Couldn't find any revision element in revhistory"
             f" (line {revhistory.sourceline})."
             )
     xmlid = revision.attrib.get(f"{{{XML_NS}}}id")
@@ -108,7 +108,10 @@ def check_info_revhistory_revision_order(tree: etree._ElementTree,
                                   namespaces=NAMESPACES)
     xpath = getfullxpath(revhistory)
     if not revisions:
-        return None
+        raise InvalidValueError(
+            f"Couldn't find any revision element in revhistory"
+            f" (line {revhistory.sourceline})."
+            )
 
     date_elements = [rev.find("./d:date", namespaces=NAMESPACES)
                      for rev in revisions]
