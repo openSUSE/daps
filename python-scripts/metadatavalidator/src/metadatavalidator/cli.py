@@ -1,3 +1,10 @@
+"""
+Parses a XML file and checks for metadata. Can be applied for regular
+DocBook files and assembly files.
+
+For "Suggested values and structure" see:
+https://confluence.suse.com/x/aQDWNg
+"""
 import argparse
 import asyncio
 import logging
@@ -24,7 +31,8 @@ def parsecli(cliargs=None) -> argparse.Namespace:
     :return: parsed CLI result
     """
     parser = argparse.ArgumentParser(description=__doc__,
-                                     epilog="Version %s written by %s " % (__version__, __author__)
+                                     epilog="Version %s written by %s " % (__version__, __author__),
+                                     formatter_class=argparse.RawTextHelpFormatter,
                                      )
 
     parser.add_argument('-v', '--verbose',
