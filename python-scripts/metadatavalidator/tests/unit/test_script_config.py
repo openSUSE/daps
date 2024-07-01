@@ -8,7 +8,7 @@ from metadatavalidator.config import (
     truefalse,
     validate_check_root_elements,
     validate_and_convert_config,
-    validate_valid_meta_architecture,
+    validate_valid_meta_architectures,
     )
 from metadatavalidator.exceptions import (
     MissingKeyError,
@@ -120,5 +120,5 @@ def test_validate_check_root_elements_missing_key(dict_config):
     with pytest.raises(MissingKeyError, match=".*validator.check_root_elements.*"):
         validate_check_root_elements(dict_config)
 
-def test_validate_valid_meta_architecture(dict_config):
-    assert validate_valid_meta_architecture(dict_config) == ["A", "B", "C"]
+def test_validate_valid_meta_architectures(dict_config):
+    assert validate_valid_meta_architectures(dict_config) == ["A", "B", "C"]

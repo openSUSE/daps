@@ -188,12 +188,12 @@ The following values are recognized:
 
     * :var:`require_meta_architecture`: Requires a ``<meta name="architecture">`` tag or not.
 
-    * :var:`valid_meta_architecture`: Lists the valid architecture names for ``<meta name="architecture">/<phrase>``.
+    * :var:`valid_meta_architectures`: Lists the valid architecture names for ``<meta name="architecture">/<phrase>``.
 
     * :var:`require_meta_category`: Requires a ``<meta name="category">`` tag or not.
 
-    * :var:`valid_meta_category`: Lists the valid category names for ``<meta name="category">/<phrase>``.
+    * :var:`valid_meta_categories`: Lists the valid category names for ``<meta name="category">/<phrase>``.
 
     * :var:`require_meta_task`: Requires a ``<meta name="task">`` tag or not.
 
-    * :var:`valid_meta_task`: Lists the valid task names for ``<meta name="task">/<phrase>``.
+    * :var:`valid_meta_tasks`: Lists the valid task names for ``<meta name="task">/<phrase>``.

@@ -25,7 +25,7 @@ def test_meta_task(tree):
     appendnode(tree, meta)
 
     config = dict(metadata=dict(require_meta_task=True,
-                                valid_meta_task=["Configuration"]))
+                                valid_meta_tasks=["Configuration"]))
     assert check_meta_task(tree, config) is None
 
 
@@ -36,7 +36,7 @@ def test_missing_required_meta_task(tree):
 #     </info>
 # </article>"""
     config = dict(metadata=dict(require_meta_task=True,
-                                valid_meta_task=["Configuration"]))
+                                valid_meta_tasks=["Configuration"]))
     with pytest.raises(InvalidValueError,
                           match=r".*Couldn't find required meta\[@name='task'\].*"):
           check_meta_task(tree, config)
@@ -53,7 +53,7 @@ def test_missing_child_meta_task(tree):
     appendnode(tree, meta)
 
     config = dict(metadata=dict(require_meta_task=True),
-                                valid_meta_task=["Configuration"])
+                                valid_meta_tasks=["Configuration"])
     with pytest.raises(InvalidValueError,
                        match=r".*Couldn't find any child elements in meta.*"):
         check_meta_task(tree, config)
@@ -76,7 +76,7 @@ def test_duplicate_child_meta_task(tree):
     appendnode(tree, meta)
 
     config = dict(metadata=dict(require_meta_task=True),
-                                valid_meta_task=["Configuration"])
+                                valid_meta_tasks=["Configuration"])
     with pytest.raises(InvalidValueError,
                        match=r".*Duplicate tasks found in meta.*"):
         check_meta_task(tree, config)
@@ -99,7 +99,7 @@ def test_unknown_child_meta_task(tree):
     appendnode(tree, meta)
 
     config = dict(metadata=dict(require_meta_task=True,
-                                valid_meta_task=["Configuration"]))
+                                valid_meta_tasks=["Configuration"]))
     with pytest.raises(InvalidValueError,
                        match=r".*Unknown task\(s\) \{'Unknown'\}.*"):
         check_meta_task(tree, config)

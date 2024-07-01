@@ -25,7 +25,7 @@ def test_meta_category(tree):
     appendnode(tree, meta)
 
     config = dict(metadata=dict(require_meta_category=True,
-                                valid_meta_category=["Systems Management"]))
+                                valid_meta_categories=["Systems Management"]))
     assert check_meta_category(tree, config) is None
 
 
@@ -101,7 +101,7 @@ def test_unknown_category_meta_category(tree):
     appendnode(tree, meta)
 
     config = dict(metadata=dict(require_meta_category=True,
-                                valid_meta_category=["Systems Management"]))
+                                valid_meta_categories=["Systems Management"]))
     with pytest.raises(InvalidValueError,
                        match=r".*Unknown category.*"):
         check_meta_category(tree, config)

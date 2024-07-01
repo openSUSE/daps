@@ -26,7 +26,7 @@ def test_check_meta_architecture(tree):
     appendnode(tree, meta)
 
     config = dict(metadata=dict(require_meta_architecture=True,
-                                valid_meta_architecture=["x86_64", "POWER"]))
+                                valid_meta_architectures=["x86_64", "POWER"]))
     assert check_meta_architecture(tree, config) is None
 
 
@@ -82,7 +82,7 @@ def test_check_duplicate_child_meta_architecture(tree):
 
     config = dict(metadata=dict(
         require_meta_architecture=True,
-        valid_meta_architecture=["x86_64", "POWER"]))
+        valid_meta_architectures=["x86_64", "POWER"]))
     with pytest.raises(
         InvalidValueError, match=r".*Duplicate architectures found in meta.*"
     ):
@@ -109,7 +109,7 @@ def test_check_unknown_child_meta_architecture(tree):
     config = dict(
         metadata=dict(
             require_meta_architecture=True,
-            valid_meta_architecture=["x86_64", "POWER"],
+            valid_meta_architectures=["x86_64", "POWER"],
         )
     )
     with pytest.raises(InvalidValueError,

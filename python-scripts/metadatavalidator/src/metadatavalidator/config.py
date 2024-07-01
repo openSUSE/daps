@@ -149,40 +149,40 @@ def validate_valid_meta_series(config: dict) -> list[str]:
             ]
 
 
-def validate_valid_meta_architecture(config: dict) -> list[str]:
+def validate_valid_meta_architectures(config: dict) -> list[str]:
     """Validate the meta architecture
 
     :param config: the configuration object
     :return: a list of valid meta architecture
     """
     return [x.strip() for x in re.split(r"[;,]",
-                                        config.get("metadata", {}).get("valid_meta_architecture", "")
+                                        config.get("metadata", {}).get("valid_meta_architectures", "")
                                         )
                 if x
             ]
 
 
-def validate_valid_meta_category(config: dict) -> list[str]:
+def validate_valid_meta_categories(config: dict) -> list[str]:
     """Validate the meta category
 
     :param config: the configuration object
     :return: a list of valid meta category
     """
     return [x.strip() for x in re.split(r"[;,]",
-                                        config.get("metadata", {}).get("valid_meta_category", "")
+                                        config.get("metadata", {}).get("valid_meta_categories", "")
                                         )
                 if x
             ]
 
 
-def validate_valid_meta_task(config: dict) -> list[str]:
+def validate_valid_meta_tasks(config: dict) -> list[str]:
     """Validate the meta task
 
     :param config: the configuration object
     :return: a list of valid meta task
     """
     return [x.strip() for x in re.split(r"[;,]",
-                                        config.get("metadata", {}).get("valid_meta_task", "")
+                                        config.get("metadata", {}).get("valid_meta_tasks", "")
                                         )
                 if x
             ]
@@ -242,8 +242,8 @@ def validate_and_convert_config(config: configparser.ConfigParser) -> dict[t.Any
         ] = truefalse(theconfig.get("metadata", {}).get("require_meta_architecture",
                                                         False))
     theconfig.setdefault("metadata", {})[
-        "valid_meta_architecture"
-    ] = validate_valid_meta_architecture(theconfig)
+        "valid_meta_architectures"
+    ] = validate_valid_meta_architectures(theconfig)
 
     # <meta name="techpartner">
     require_meta_techpartner = truefalse(
@@ -263,16 +263,16 @@ def validate_and_convert_config(config: configparser.ConfigParser) -> dict[t.Any
         "require_meta_category"
     ] = truefalse(theconfig.get("metadata", {}).get("require_meta_category", False))
     theconfig.setdefault("metadata", {})[
-        "valid_meta_category"
-    ] = validate_valid_meta_category(theconfig)
+        "valid_meta_categories"
+    ] = validate_valid_meta_categories(theconfig)
 
     # <meta name="task">
     theconfig.setdefault("metadata", {})[
         "require_meta_task"
     ] = truefalse(theconfig.get("metadata", {}).get("require_meta_task", False))
     theconfig.setdefault("metadata", {})[
-        "valid_meta_task"
-    ] = validate_valid_meta_task(theconfig)
+        "valid_meta_tasks"
+    ] = validate_valid_meta_tasks(theconfig)
 
     # Store the configfiles
     theconfig["configfiles"] = getattr(config, "configfiles")

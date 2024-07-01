@@ -157,7 +157,7 @@ def check_meta_architecture(tree: etree._ElementTree,
 
     valid_archs = [
         x.strip() for x in config.get("metadata", {}
-                                      ).get("valid_meta_architecture", [])
+                                      ).get("valid_meta_architectures", [])
         if x
     ]
 
@@ -203,7 +203,7 @@ def check_meta_category(tree: etree._ElementTree,
 
     valid_cats = [
         x.strip() for x in config.get("metadata", {}
-                                      ).get("valid_meta_category", [])
+                                      ).get("valid_meta_categories", [])
         if x
     ]
 
@@ -249,7 +249,7 @@ def check_meta_task(tree: etree._ElementTree,
 
     valid_tasks = [
         x.strip() for x in config.get("metadata", {}
-                                      ).get("valid_meta_task", [])
+                                      ).get("valid_meta_tasks", [])
         if x
     ]
 

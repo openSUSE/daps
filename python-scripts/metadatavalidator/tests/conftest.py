@@ -68,8 +68,8 @@ def config() -> ConfigParser:
     config.set("metadata", "meta_title_length", "50")
     config.set("metadata", "meta_description_length", "150")
     #
-    config.set("metadata", "valid_meta_architecture", "A, B, C")
-    config.set("metadata", "valid_meta_category", "D, E, F")
+    config.set("metadata", "valid_meta_architectures", "A, B, C")
+    config.set("metadata", "valid_meta_categories", "D, E, F")
     setattr(config, "configfiles", None)
     return config
 
