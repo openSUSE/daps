@@ -1,21 +1,21 @@
 <!ENTITY wip "<emphasis>Work in progress</emphasis>" >
 
 <!ENTITY audience
-"This document is intended for users who want to make efficient use of
+"This document is intended for users who want to efficiently use
  DocBook XML for editing and publishing their documentation&mdash;be it
- documentation sets, individual books, or articles. Key knowledge of XML
- and DocBook and of using the Bash Shell (or command line interfaces 
+ documentation sets, individual books or articles. Key knowledge of XML
+ and DocBook and of using the Bash Shell (or command-line interfaces 
  in general) is required.">
 
 <!ENTITY daps-description-short
 "&dapsacr; (&dapslong;) helps technical writers to author and publish documentation written in
- DocBook XML. &dapsacr; is a command line based software for Linux* and released
+ DocBook XML. &dapsacr; is a command line-based software for Linux* and released
  as open source.">
 
 <!ENTITY daps-description-long
 "The &dapslong; (&dapsacr;) is developed as open source software for Linux*
- operating systems and is licensed under the GPL.  A number of integrated
- tools, stylesheets, scripts, and makefiles help technical writers in the
+ operating systems and is licensed under the GPL. A number of integrated
+ tools, style sheets, scripts and makefiles help technical writers in the
  editing, translation and publishing process. &dapsacr; supports single
  source publishing into several different output formats, and is suited
  both for small documentation projects and for comprehensive projects,
@@ -75,9 +75,9 @@
     </listitem>
     <listitem>
      <para>For generating PDF output: an FO formatter, like
-      <ulink url="http://projects.apache.org/projects/fop.html">FOP</ulink> or
-      <ulink url="http://www.renderx.com">XEP</ulink>. The FO formatter
-      <ulink url="http://www.antennahouse.com">Antenna House Formatter</ulink>
+      <ulink url="https://xmlgraphics.apache.org/fop/">FOP</ulink> or
+      <ulink url="https://www.renderx.com/tools/xep.html">XEP</ulink>. The FO formatter
+      <ulink url="https://www.antennahouse.com">Antenna House Formatter</ulink>
       is currently not supported. Whereas FOP is an open source product,
       both XEP and Antenna House are commercial products.</para>
     </listitem>
@@ -92,7 +92,7 @@
    </listitem>
    <!--taroth 2015-04-15: commenting for now, can hopefully be re-enabled after
    the dm relaunch<listitem>
-    <para>&dm;, a command line tool for adding and retrieving the meta information
+    <para>&dm;, a command-line tool for adding and retrieving the meta information
      of all files belonging to a documentation project. &dm; is especially useful
      for larger, collaborative projects where it helps you keep track of
      owners (authors) and editing statuses of all files. However, &dm; requires
@@ -125,7 +125,7 @@
       </listitem>
      </varlistentry>
     <varlistentry>
-     <term>Hard Disk Space</term>
+     <term>Hard disk space</term>
      <listitem>
       <para>The disk space consumed mostly depends on the amount of your
        documentation sources and the number of output formats you want to generate.</para>
@@ -140,15 +140,15 @@
     Currently, &dapsacr; is available as an RPM package for the &osuse;
     distribution and for &sle; products.
     Eventually, packages for other distributions may become available.
-    For the latest status update and installation instructions, refer to    
+    Find the latest status update and installation instructions at    
     <ulink url="https://github.com/openSUSE/daps/blob/main/INSTALL.adoc"/>.
   </para>
 '>
 
 <!ENTITY daps-install-osuse
 '   <para>
-    There are a few ways to install &dapsacr; on &osuse;. To always stay up-to-date
-    with the latest version of &dapsacr; install the <systemitem class="resource">daps</systemitem>
+    There are a few ways to install &dapsacr; on &osuse;. To always stay up to date
+    with the latest version of &dapsacr;, install the <systemitem class="resource">daps</systemitem>
     package from the <systemitem class="service">&suse-dapsrepo;</systemitem> repository as outlined below.
    </para>
  
@@ -162,9 +162,9 @@
 '   <para>The quickest way to install &dapsacr; is using the
 <command>zypper</command> command.</para>
     <procedure>
-     <title>Installing &dapsacr; via Zypper From &suse-dapsrepo;</title>
+     <title>Installing &dapsacr; via Zypper from &suse-dapsrepo;</title>
      <step>
-      <para>Open a browser and enter the following URL: <ulink url="http://download.opensuse.org/repositories/Documentation:/Tools"></ulink></para>
+      <para>Open a browser and enter the following URL: <ulink url="https://download.opensuse.org/repositories/Documentation:/Tools"></ulink>.</para>
      </step>
      <step>
       <para>Select your distribution and product number to make the browser show the URL for the respective repository.</para>
@@ -184,7 +184,7 @@
      <step>
       <para>Install &dapsacr; with the following zypper command:</para>
       <screen>&prompt.root;<command>zypper in --from &suse-dapsrepo; daps</command></screen>
-      <para>In order to install &dapsacr; you have to trust the <systemitem>&suse-dapsrepo;</systemitem> repository.</para>
+      <para>To install &dapsacr;, you have to trust the <systemitem>&suse-dapsrepo;</systemitem> repository.</para>
      </step>
     </procedure>
    '>
@@ -201,16 +201,13 @@
    <procedure>
     <step>
      <para> Download the installation media for the SDK from <ulink
-       url="http://download.suse.com/"/>.</para>
+       url="https://download.suse.com/"/>.</para>
     </step>
     <step>
      <para>Install the SDK as an add-on product to &sle;. </para>
      <para>For details on how to install add-on products (with or without
-      physical media), see the <citetitle>&sle; 12 &deploy;</citetitle>,
-      available at &suse-onlinedoc;. Refer to chapter <citetitle>Installing
-       Add-On Products</citetitle>, <ulink
-       url="https://www.suse.com/documentation/sles-12/book_sle_deployment/data/cha_add-ons.html"
-      />.</para>
+      physical media), refer to the chapter about installing add-on products in &sle; &deploy;
+      available at &suse-onlinedoc;.</para>
     </step>
     <step>
      <para>Install the <systemitem class="resource">daps</systemitem> package,
@@ -247,16 +244,16 @@
    formats. For example, SVG images are converted to PNG for HTML builds, or
    color images to grayscale for black-and-white PDFs. You only need to decide
    which file format to use as source format. Of course, this decision depends on
-   the purpose of the image. For more details, see the &dapsuser;.
+   the purpose of the image.
   </para>'>
 
 <!ENTITY daps-images-dir
 '    &dapsacr; requires you to use a specific directory structure for images. All
      images that you reference from your DocBook files must be stored in
      a subdirectory of the project directory named
-     <filename>images/src/file_extension</filename>. For example, <acronym>PNG</acronym>
-     files must be stored under <filename>images/src/png</filename>. If you used
-     <command>daps-init</command> to set up your project, the appropriate
+     <filename>images</filename> or, in some structures, <filename>images/src/file_extension</filename>.
+     For example, <acronym>PNG</acronym> files must be stored under <filename>images/src/png</filename>. 
+     If you used <command>daps-init</command> to set up your project, the appropriate
      directories should already exist.
 '>
 
@@ -265,12 +262,12 @@
   <itemizedlist>
    <listitem>
     <para>
-     DIA (input format only)
+     SVG
     </para>
-   </listitem>
+   </listitem> 
    <listitem>
     <para>
-     EPS (experimental)
+     DIA (input format only)
     </para>
    </listitem>
    <listitem>
@@ -285,17 +282,12 @@
    </listitem>
    <listitem>
     <para>
-     PDF (experimental - only works for PDF output and with XEP formatter)
-    </para>
-   </listitem>
-   <listitem>
-    <para>
      PNG
     </para>
    </listitem>
    <listitem>
     <para>
-     SVG
+     ODG
     </para>
    </listitem>
   </itemizedlist>">
@@ -306,13 +298,13 @@
      <term>XML extension required</term>
      <listitem>
      <para>
-       Always use the .xml extension, so DAPS can recognize the files, which are
+       Always use the .xml extension, so DAPS can recognize the files that are
        needed to build the document.
      </para>
      </listitem>
    </varlistentry>
    <varlistentry>
-     <term>No Spaces and Colons In File and Directory Names</term>
+     <term>No spaces and colons in file and directory names</term>
      <listitem>
       <para>Avoid spaces and colons in file and directory names. 
       The <command>make</command> command
@@ -321,21 +313,22 @@
        </para>
        <para>It is good practice to only use the following characters for
        file or directory names: alphabetic characters [a-z] or [A-Z], numerical
-       characters [0-9], hyphens (<literal>-</literal>), or underscores
+       characters [0-9], hyphens (<literal>-</literal>) and underscores
        (<literal>_</literal>).</para>
      </listitem>
     </varlistentry>
     <varlistentry>
-     <term>Unique Image Names</term>
+     <term>Unique image names</term>
      <listitem>
-      <para>Always store just one file with a particular name within the
-      <filename>images/src</filename> directory of a project. As &dapsacr; tries to
-      create any missing image formats from original images, it will otherwise
-      not know which one of the duplicate files to use for converting to the
-      missing formats.</para>
+      <para>Make sure there are never two (or more) images with the same base 
+      name in one documentation project. Always store just one file with a 
+      particular name in the <filename>images/src</filename> directory of a project.
+      As &dapsacr; tries to create any missing image formats from the original 
+      images, it will otherwise not know which one of the duplicate files to 
+      use for converting to the missing formats.</para>
       <para>Additionally, having a file called <filename>example.png</filename>
-      and another called <filename>example.svg</filename> in the same documentation
-      project will often lead to  questions like: Which file to use where? Do
+      and another one called <filename>example.svg</filename> in the same documentation
+      project will often lead to questions like: Which file to use where? Do
       both files display the same content? Are both files current, or is one
       outdated?</para>
       <para>
@@ -346,7 +339,7 @@
      </para>
      <para>
       It is a good idea to find a consistent file naming scheme. For example, when
-      documenting software, it might prove helpful to include the name of the
+      documenting software, it is helpful to include the name of the
       application at the beginning of the file name. You can also use prefixes like
      <filename>screenshot_</filename> and <filename>diagram_</filename>
       to separate between different types of images.
@@ -354,11 +347,11 @@
      </listitem>
     </varlistentry>
    </variablelist>
-   <note><title>Hint on Using UTF-8 characters in File Names</title>
+   <note><title>Hint on using UTF-8 characters in file names</title>
    <para>
      Depending on your environment, the build process could fail if you are using
      file names with UTF-8 characters. Run the <command>locale</command>
-     command and check if the LANG environment variable contains UTF-8. Otherwise
+     command and check if the LANG environment variable contains UTF-8. Otherwise,
      adjust the LANG environment variable accordingly.
    </para>
    </note>
@@ -379,7 +372,7 @@
     two references pointing to the same file, but using different images
     widths for PDF and HTML output. Use the
     <sgmltag class="attribute">role</sgmltag> attribute to specify the
-    output format, for example <sgmltag class="attvalue">fo</sgmltag> or
+    output format, for example, <sgmltag class="attvalue">fo</sgmltag> or
     <sgmltag class="attvalue">html</sgmltag>.
     </para>'>
 
@@ -389,7 +382,7 @@
     a PNG version for HTML output (<literal>role="html"</literal>), reference the images as follows:
    </para>
 <screen>&lt;figure&gt;
-  &lt;title&gt;Main Window&lt;/title&gt;
+  &lt;title&gt;Main window&lt;/title&gt;
   &lt;mediaobject&gt;
     &lt;imageobject role="fo"&gt;
       &lt;imagedata fileref="graphic.svg" width="70&#37;"/&gt;
@@ -397,18 +390,21 @@
     &lt;imageobject role="html"&gt;
       &lt;imagedata fileref="graphic.png" width="75&#37;"/&gt;
     &lt;/imageobject&gt;
+    &lt;textobject role="description"&gt;
+    &lt;phrase&gt;Cat chasing Geeko&lt;/phrase&gt;
+  &lt;/textobject&gt;
   &lt;/mediaobject&gt;
 &lt;/figure&gt;</screen>'>
 
 <!ENTITY daps-config
   '<para>
-   &dapsacr; can be customized to a large degree: per system, per user, and per
+   &dapsacr; can be customized to a large degree: per system, per user and per
    document. The configuration file &dapsconf-sys; lists all parameters that can
-   be configured, including a short description for each parameter. Parameters
+   be configured, including a short description of each parameter. Parameters
    are always defined as <option>KEY="VALUE"</option> pairs. Any parameter can be
    set in various locations, which are listed below in ascending order with
    regard to their hierarchy. If conflicting values are set for the same parameter,
-   the value defined in the next higher hierarchy level takes precedence. Values
+   the value defined at the next higher hierarchy level takes precedence. Values
    defined on the command line always take precedence over values set in any other
    locations.
   </para>
@@ -433,7 +429,7 @@
    <listitem>
     <para>
      on the fly at the command line by specifying options to a
-     <command>daps</command> command.
+     <command>daps</command> command
     </para>
    </listitem>
   </itemizedlist>'>
@@ -446,7 +442,7 @@
    </para>
    <variablelist>
     <varlistentry>
-     <term>&main; File</term>
+     <term>&main; file</term>
      <listitem>
       <para>
      A DocBook XML file in the <filename>xml</filename> directory. It contains the <quote>starting point</quote> (the
@@ -455,13 +451,13 @@
        documentation projects, it is good practice to name the file
     <filename>MAIN-<replaceable>PROJECTNAME</replaceable>.xml</filename>,
        but you can use any other file name as well. Other XML files may be
-       included into the &main; file via <sgmltag>&lt;xi:include/&gt;</sgmltag>
+       included in the &main; file via <sgmltag>&lt;xi:include/&gt;</sgmltag>
        statements.
       </para>
      </listitem>
     </varlistentry>
     <varlistentry>
-     <term>&dclong; (&dc;) File</term>
+     <term>&dclong; (&dc;) file</term>
      <listitem>
       <para>
       A configuration file in the project directory. It defines several parameters for your
@@ -496,18 +492,18 @@
   '<para>
    For a custom layout, use the <parameter>STYLEROOT</parameter> parameter to
    specify the (absolute or relative) path to the directory containing the
-   custom stylesheets. Using absolute paths is recommended for &dc; files.
+   custom style sheets. Using absolute paths is recommended for &dc; files.
    </para>'>
 
 <!ENTITY daps-co-fbstyleroot
   '<para>Allows you to define a fallback which is used in case the custom
-     stylesheets defined with <parameter>STYLEROOT</parameter> cannot be accessed.
-     In case neither the stylesheets specified with <parameter>STYLEROOT</parameter>
+     style sheets defined with <parameter>STYLEROOT</parameter> cannot be accessed.
+     In case neither the style sheets specified with <parameter>STYLEROOT</parameter>
      nor with <parameter>FALLBACK_STYLEROOT</parameter> can be accessed, &dapsacr;
      uses the default DocBook layout.</para>'>
 
 <!ENTITY daps-co-css
-  '<para>If not specified, &dapsacr; will use the default DocBook stylesheets for
+  '<para>If not specified, &dapsacr; will use the default DocBook style sheets for
      production of HTML and &epub;. For custom CSS styles, specify the
      (absolute or relative) path to the respective CSS file. Using absolute paths
      is recommended for &dc; files.</para>'>
@@ -528,17 +524,16 @@
    HTML outputs of the document.</para>'>
 
 <!ENTITY daps-editor
- ' <para>
-   As &dapsacr; does not include any editor software, you are completely
-   free in the choice of your XML editor. While you can use your text editor of
-   choice, it is helpful if the editor supports editing XML in
-   accordance with the schema you use. Several open source editors can be
-   extended with plug-ins for automatic tag insertion and completion,
-   insertion of <sgmltag>xref</sgmltag> elements and for checks if the XML
-   document is well-formed. If you are already familiar with vi or Emacs,
-   you can configure them to support XML editing mode. If you prefer an
-   editor with a graphical user interface,
-   <ulink url="http://www.jedit.org/">jEdit</ulink> is a good choice.
+ '<para>
+  As &dapsacr; does not include any editor software, you are completely
+  free in the choice of your XML editor. When choosing an editor, it is
+  helpful if the editor supports editing XML in accordance with the schema
+  you use. Several open source editors can be extended with plug-ins for
+  automatic tag insertion and completion, insertion of <sgmltag>xref</sgmltag>
+  elements and for checks if the XML document is well-formed.</para>
+  <para>We recommend <ulink url="https://code.visualstudio.com/">Visual Studio Code</ulink>
+  as a first-choice editor, followed by Vim and Emacs, respectively. All three editors
+  can be configured to support XML editing mode.
   </para>'>
 
 
@@ -557,7 +552,7 @@
    usually subdivided into sections (<sgmltag>section</sgmltag> elements or
    <sgmltag>sect1</sgmltag>, <sgmltag>sect2</sgmltag> etc.). Smaller structural
    units are <sgmltag>para</sgmltag> (for paragraphs), or list elements
-   such as <sgmltag>orderlist</sgmltag>, <sgmltag>itemizedlist</sgmltag>, or
+   such as <sgmltag>orderedlist</sgmltag>, <sgmltag>itemizedlist</sgmltag>, or
    <sgmltag>variablelist</sgmltag>.
   </para>
 
@@ -571,18 +566,17 @@
 <!ENTITY db-profiling-intro
 '<para>
    Similar products often share a considerable amount of features and differ
-   in details only. It is therefore convenient to apply the same approach to
-   the documentation of similar products or product families: Share most of
-   the XML source code and only differentiate text snippets where necessary.
-   DocBook allows you to create documentation variants from the same pool of XML
-   sources by means of <emphasis>profiling</emphasis>. </para>'>
+   in details only. So, when documenting similar products or product families,
+   use the same approach. Share most of the XML source code and only change text
+   snippets when needed. DocBook allows you to create documentation variants
+   from the same pool of XML sources by means of <emphasis>profiling</emphasis>.</para>'>
 
 
 <!ENTITY db-profiling
  ' <para>
-      In DocBook XML files you can mark some elements as conditional by using
+      In DocBook XML files, you can mark some elements as conditional by using
       profiling attributes. When processing the files to generate output, specify
-      which conditions apply to the output. The stylesheets will then include or
+      which conditions apply to the output. The style sheets will then include or
       exclude the marked text, according to the conditions.</para>
       <para>Profiling allows you to keep both common and product-specific
       content in one XML file and select at production time which information
@@ -643,21 +637,21 @@
 
 <!ENTITY daps-output-remarks
 '<para>When generating PDFs with FOP, the contents of the remark elements
-     is shown in italics within the text. XEP supports conversion of remark
+     are shown in italics in the text. XEP supports conversion of remark
      elements into PDF annotations. This feature is enabled in &dapsacr; by
      default, but if you want XEP to treat remark elements like FOP does, you
      can change the respective &dapsacr; parameter.<remark>taroth 2012-10-16:
      todo - add link as soon as this is covered in &dapsuser;</remark> In HTML,
-     HTML-single and &epub; output, the contents of the remark elements is shown
-     in red within the text.
+     HTML-single and &epub; output, the contents of remark elements are shown
+     in red.
     </para>'>
 
 <!ENTITY daps-note-output-adv
 '<note>
-   <title>Availability of Advanced Output Options</title>
+   <title>Availability of advanced output options</title>
    <para>Advanced output options are only supported for selected formats. For example, 
    <option>--draft</option> and <option>--remarks</option> are only available in HTML, 
-   HTML-single, PDF, and &epub; output.     
+   HTML-single, PDF and &epub; output.     
   </para>
   <!--
   <itemizedlist>
@@ -693,18 +687,18 @@
 
 <!ENTITY daps-example-validation-error
  ' <example>
-     <title>Parser Output For Validation Errors (<sgmltag>xref</sgmltag> to unknown ID)</title>
+     <title>Parser output for validation errors (<sgmltag>xref</sgmltag> to unknown ID)</title>
      <screen>daps_user_concept.xml:60: element xref: validity error:
 IDREF attribute linkend references an unknown ID "itl.daps.user.inst.other.req"
 Document /local/svn/daps-svn/daps/doc/build/.profiled/x86-amd64-em64t_osuse_/
 MAIN.DAPS.xml does not validate
 make: *** [validate] Error 3</screen>
 </example>
-<note><title>Validating is Done in Build Directory</title>
+<note><title>Validating is done in build directory</title>
 <para>Validation is always done in the <filename>build</filename>
 directory and in the profiled sources, as indicated by
  the path above (<filename>/local/[...]/build/.profiled/[...]/MAIN.DAPS.xml
- </filename>). However,  you need to fix the validation error in the sources located in your
+ </filename>). However, you need to fix the validation error in the sources located in your
  <filename>xml</filename> directory, otherwise the fixes will not take effect. 
  Profiling is similar to conditional text. For details, refer to the chapter
  about modularizing document projects in the &dapsuser;.
@@ -725,7 +719,7 @@ directory and in the profiled sources, as indicated by
    For a short help text on a specific <emphasis>subcommand</emphasis>, use:
   </para>
 
-  <screen>&prompt.user;&dapscmd; help  <replaceable>subcommand</replaceable>&nbsp;</screen>
+  <screen>&prompt.user;&dapscmd; help <replaceable>subcommand</replaceable>&nbsp;</screen>
 
   <para>
    For example, if you want more information about generating HTML output,
@@ -736,9 +730,9 @@ directory and in the profiled sources, as indicated by
 
 <!ENTITY daps-dc-file-tip
 '<tip>
-   <title>Specifying the &dc; File</title>
+   <title>Specifying the &dc; file</title>
    <para>For execution of most commands, &dapsacr; needs to know which &dc; file
-      to use. Usually, you do so by specifying a &dc; file with the global option
+      to use. Usually, you specify a &dc; file with the global option
      <option>-d</option>. For example:</para>
      <screen>&prompt.user;&dapscmd; -d <replaceable>PATH_TO_DC_FILE</replaceable> pdf</screen>
      <para>Only in the following cases you may omit the <option>-d</option>
@@ -763,7 +757,7 @@ directory and in the profiled sources, as indicated by
 <!ENTITY daps-output-all
 '<para>
    The number of output formats may be extended in the future, depending on
-   the output formats that are supported by DocBook stylesheets. For an
+   the output formats that are supported by DocBook style sheets. For an
    overview of all output formats, run <command>daps&nbsp;help</command>.
    The available output formats are listed below <menuchoice><guimenu>Subcommands</guimenu>
    <guimenu>Generate Books</guimenu> </menuchoice>.
@@ -787,27 +781,26 @@ directory and in the profiled sources, as indicated by
  <!ENTITY daps-note-subdirs
  ' <important>
     <title>Structure of the <filename>xml</filename> and
-     <filename>image/src/*</filename> Directories</title>
-    <para>Avoid subdirectories within the <filename>xml</filename> and
+     <filename>image/src/*</filename> directories</title>
+    <para>Avoid subdirectories in the <filename>xml</filename> and
       <filename>image/src/*</filename> directories. Referencing or including
-     files from subdirectories within those directories is not supported.</para>
+     files from subdirectories in those directories is not supported.</para>
    </important>'>
   
 <!ENTITY daps-note-filelists
 ' <note>
-   <title>Output of File Listings</title>
-   <para>By default, the output of the listing commands is a list of file names
-    (including the absolute path), all printed in one line with the file names
-    separated by blanks. This default output format is useful for piping (or
-    copying and pasting) the output for use with another command. </para>
-   <para>If you need a pretty printed output where each file name is listed on a
-    separate line, use the <option>--pretty</option> option. </para>
+   <title>Output of file listings</title>
+   <para>By default, the output of the listing commands is a list of single file
+    names on separate lines. In case the output does not go to the
+    terminal (e.g. when being passed to a pipe) all names are printed on a single
+    line with the file names separated by spaces (unless you use the
+    <option>--pretty</option> parameter). </para>
   </note>'>
   
 <!ENTITY daps-note-superfluous-files
   ' <important>
-      <title>Use a <sgmltag>set</sgmltag> to Check for Superfluous
-       Files</title>
+      <title>Use a <sgmltag>set</sgmltag> to check for superfluous
+       files</title>
       <para> If you are storing multiple &dc; files in the same project
        directory, use the &dc; file of a <sgmltag>set</sgmltag> for this check.
        As it contains all articles and books in the project directory, this makes
@@ -817,7 +810,7 @@ directory and in the profiled sources, as indicated by
     
 <!ENTITY daps-partial-builds
 '<para>Instead of always building your complete documentation project
-     (<sgmltag>set</sgmltag>, <sgmltag>book</sgmltag>, or
+     (<sgmltag>set</sgmltag>, <sgmltag>book</sgmltag> or
      <sgmltag>article</sgmltag>), &dapsacr; also allows you to build only
     individual parts. The <quote>starting point</quote> of your documentation
     project is usually defined by the root element of the &main; file that
@@ -830,7 +823,7 @@ directory and in the profiled sources, as indicated by
 
 <!ENTITY daps-img-format-support
 '<important>
-    <title>Limited Support with &dapsacr;</title>
+    <title>Limited support with &dapsacr;</title>
     <para>
      This image format is only supported in combination with the XEP formatter. Using this format
      might also lead to longer document creation times.

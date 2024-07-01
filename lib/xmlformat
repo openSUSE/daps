@@ -26,7 +26,7 @@ function xmlformat {
 
     # check whether xmlformat is installed:
     for _BINARY in xmlformat xmlformat.pl xmlformat.rb; do
-        XMLFORMAT_CMD="$(which  --skip-alias --skip-functions "$_BINARY" 2>/dev/null)" && break
+        XMLFORMAT_CMD="$(which "$_BINARY" 2>/dev/null)" && break
     done
     if [[ -z $XMLFORMAT_CMD ]]; then
         ccecho "error" "Error: xmlformat is not installed"
@@ -57,7 +57,7 @@ function xmlformat {
         # use daps-xmlformat from DAPSROOT if the latter is set
         DAPSXMLFORMAT="${DAPSROOT}/bin/daps-xmlformat"
     else
-        DAPSXMLFORMAT="$(which --skip-alias --skip-functions daps-xmlformat 2>/dev/null)" || exit_on_error "Cannot find a daps-xmlformat executable"
+        DAPSXMLFORMAT="$(which daps-xmlformat 2>/dev/null)" || exit_on_error "Cannot find a daps-xmlformat executable"
     fi
 
     # if --file was specified, FILELIST contains just one file

@@ -45,7 +45,7 @@ MAN_RESULTS = $(shell $(XSLTPROC) $(MANSTRINGS) $(PARAMS) $(STRINGPARAMS) \
 #
 .PHONY: man
 man: | $(MAN_DIR)
-man: $(PROFILES) $(PROFILEDIR)/.validate
+man: $(PROFILES) validate
 man: $(BIGFILE)
         # only checking firstword, because if $MAN_RESULTS is very long,
         # the test expression will throw an error

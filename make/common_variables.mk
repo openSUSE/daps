@@ -60,20 +60,6 @@ define \n
 endef
 
 #--------------------------------------------------
-# xmlstarlet
-#
-# Prior to openSUSE 13.2 the suse xmlstarlet package had /usr/bin/xml, while
-# other distributions used /usr/bin/xmlstarlet
-
-HAVE_XMLSTARLET := $(shell which xmlstarlet 2>/dev/null)
-
-ifndef HAVE_XMLSTARLET
-  XMLSTARLET := /usr/bin/xml
-else
-  XMLSTARLET := /usr/bin/xmlstarlet
-endif
-
-#--------------------------------------------------
 # VERBOSITY
 #
 

@@ -19,14 +19,14 @@
 # binary checks
 ifeq "$(TARGET)" "epub"
   ifeq "$(RESULTCHECK)" "1"
-    HAVE_ECHECK = $(shell which epubcheck 2>/dev/null)
+    HAVE_ECHECK = $(shell command -v epubcheck 2>/dev/null)
     ifeq "$(HAVE_ECHECK)" ""
       $(error $(shell ccecho "error" "Error: epubcheck is not installed"))
     endif
   endif
 endif
 ifeq "$(TARGET)" "mobi"
-  HAVE_CALIBRE = $(shell which ebook-convert 2>/dev/null)
+  HAVE_CALIBRE = $(shell command -v ebook-convert 2>/dev/null)
   ifeq "$(HAVE_CALIBRE)" ""
     $(error $(shell ccecho "error" "Error: ebook-convert (provided by calibre) is not installed"))
   endif
@@ -167,7 +167,7 @@ $(EPUB_DIRECTORIES):
 #--------------
 # generate EPUB-bigfile
 #
-$(EPUB_BIGFILE): $(PROFILES) $(PROFILEDIR)/.validate
+$(EPUB_BIGFILE): $(PROFILES) validate
   ifeq "$(VERBOSITY)" "2"
 	@ccecho "info" "   Generating EPUB-bigfile"
   endif

@@ -19,7 +19,7 @@
 
 # binary check
 ifeq "$(TARGET)" "text"
-  HAVE_W3M = $(shell which w3m 2>/dev/null)
+  HAVE_W3M = $(shell command -v w3m 2>/dev/null)
   ifeq "$(HAVE_W3M)" ""
     $(error $(shell ccecho "error" "Error: w3m is not installed"))
    endif
@@ -50,7 +50,7 @@ $(TXT_RESULT): $(TMP_DIR)/$(DOCNAME).html
 # (it's initially faster because no images will be created)
 #
 $(TMP_DIR)/$(DOCNAME).html: | $(TMP_DIR)
-$(TMP_DIR)/$(DOCNAME).html: $(DOCFILES) $(PROFILES) $(PROFILEDIR)/.validate
+$(TMP_DIR)/$(DOCNAME).html: $(DOCFILES) $(PROFILES) validate
   ifeq "$(VERBOSITY)" "2"
 	@ccecho "info" "   Creating temporary single HTML page"
   endif

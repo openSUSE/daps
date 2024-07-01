@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet
+ href="urn:x-daps:xslt:profiling:docbook45-profile.xsl"
+ type="text/xml"
+ title="Profiling step"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.docbook.org/xml/4.5/docbookx.dtd"
+[<!ENTITY % entities SYSTEM "entity-decl.ent">
+%entities;
+]>
+<chapter id="cha.daps.user.assembly">
+ <title>Working with assemblies</title>
+
+ <abstract>
+  <para>
+   This chapter provides a brief overview of the assembly mechanism supported by
+   &dapsacr;. The standard DocBook structure is used for linear documents
+   (books or articles), while assembly structure is used for non-linear collections
+   of topics (like Web sites or help systems).</para>
+ </abstract>
+ 
+  <para>In addition to the custom directory structure 
+    (see <xref linkend="sec.daps.user.basics.dirstruct.custom"/>)
+    that supports topic-based projects, DocBook 5 introduces the assembly
+    mechanism that represents the modular approach to documentation,
+    allowing content to be pulled from different topic files
+    to create a single, coherent and logical document.</para>
+  <para>In the standard DocBook structure, the document is authored in a single file. 
+    In the assembly structure, the document comprises multiple files (topics), 
+    and an assembly file combines these topics into a single document.
+    The assembly structure allows for more flexibility in the organization of content, 
+    as it can handle complex relationships between topics and can produce different 
+    output formats for different parts of the document.</para>
+  <para> 
+    An assembly in DocBook is a mechanism that defines the hierarchy and
+    relationships for a collection of resources. It identifies a collection
+    of topics, the relationships between these topics, and transformations
+    that can be applied during assembly. For more information, refer to 
+    <ulink url="https://tdg.docbook.org/tdg/5.2/ch06.html">
+    <citetitle>DocBook Assemblies</citetitle></ulink> in <citetitle>&tdg;</citetitle>.</para>
+    
+<example id="ex.daps.user.assembly.dirstruct">
+       <title>Basic assembly structure</title>
+<screen>
+&lt;assembly version="5.2" xmlns="http://docbook.org/ns/docbook"&gt;
+ &lt;resources&gt; <co id="co.daps.assembly.resources"/>
+   &lt;resource xml:id="_topic-1" href="../topics/topic-1.xml"&gt;&lt;/resource&gt; <co id="co.daps.assembly.topic"/>
+   &lt;resource xml:id="_topic-2" href="../topics/topic-2.xml"&gt;&lt;/resource&gt;
+   &lt;resource xml:id="_topic-3" href="../topics/topic-3.xml"&gt;&lt;/resource&gt;
+ &lt;/resources&gt;
+  &lt;structure renderas="article" xml:id="article-example" xml:lang="en"&gt; <co id="co.daps.assembly.structure"/>
+    &lt;module resourceref="topic-1"/&gt; <co id="co.daps.assembly.module"/>
+    &lt;module resourceref="topic-2"/&gt;
+    &lt;module resourceref="topic-3"/&gt;
+    &lt;/module&gt;
+  &lt;/structure&gt;
+&lt;/assembly&gt;
+</screen>
+</example>
+<calloutlist>
+  <callout arearefs="co.daps.assembly.resources"><para>The <sgmltag>resources</sgmltag>
+    element in the assembly defines the topics that are pulled in to 
+    build the article. Each topic is linked using the <sgmltag>resource</sgmltag> element.
+    The <sgmltag>href</sgmltag> attribute specifies the path to the referenced file, 
+    and the <sgmltag>xml:id</sgmltag> attribute provides an internal ID (<emphasis>_ prefix</emphasis>)
+    to the resource under which it can be pulled in.</para></callout>
+  <callout arearefs="co.daps.assembly.topic"><para><filename>topic-1.xml</filename>,
+    <filename>topic-2.xml</filename> and <filename>topic3.xml</filename> are 
+    the source files that are included in the final document.</para></callout>
+  <callout arearefs="co.daps.assembly.structure"><para>The <sgmltag>structure</sgmltag> element
+    defines the order and hierarchy of the topics in the final document.</para></callout>
+  <callout arearefs="co.daps.assembly.module"><para>Each topic is referenced using 
+    the <sgmltag>module</sgmltag> element, with the <sgmltag>resourceref</sgmltag> 
+    attribute matching the <sgmltag>xml:id</sgmltag> of the corresponding 
+    <sgmltag>resource</sgmltag>.</para></callout>
+ </calloutlist>
+          
+</chapter>

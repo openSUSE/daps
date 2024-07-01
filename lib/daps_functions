@@ -27,6 +27,7 @@ function parse_args {
     # variables accordingly.
 
     local SHORT_OPTS LONG_OPTS SUB_CMD
+    local _EXTVAL_VALUES
     SHORT_OPTS=$1
     LONG_OPTS=$2
     SUB_CMD=$3
@@ -107,6 +108,11 @@ function parse_args {
                 # epub: Create ePub 3
                 export EPUB3=1
                 shift
+                ;;
+            --extended-validation)
+                # validate: activate extended validation
+                EXTENDED_VALIDATION=(${2//,/ })
+                shift 2
                 ;;
             --export-dir)
                 # locdrop: export directory
@@ -253,10 +259,6 @@ function parse_args {
                 sanitize_path "$2" "P_NOTRANS_DIR"
                 shift 2
                 ;;
-            --not-validate-tables)
-                export NOT_VALIDATE_TABLES=1
-                shift
-                ;;
             --novalid)
                 # bigfile: Do not validate profiled sources
                 export NOVALID=1
@@ -370,14 +372,6 @@ function parse_args {
                 # no need to export (not passed to make)
                 P_TRANS_FILES="$2"
                 shift 2
-                ;;
-            --validate-ids)
-                export VALIDATE_IDS=1
-                shift
-                ;;
-            --validate-images)
-                export VALIDATE_IMAGES=1
-                shift
                 ;;
             --viewer)
                 # getimages: specify image viewer
@@ -505,6 +499,33 @@ function init_env {
         # No terminal
         COLOR=0
     fi
+
+    # Set values for extended validation
+    #
+    for _opt in "${EXTENDED_VALIDATION[@]}"; do
+        case $_opt in
+            all|ALL)
+                export VALIDATE_IDS=1
+                export VALIDATE_IMAGES=1
+                export VALIDATE_INLINES=1
+                export VALIDATE_TABLES=1
+                ;;
+            ids|id)
+                export VALIDATE_IDS=1
+                ;;
+            images|image)
+                export VALIDATE_IMAGES=1
+                ;;
+            inlines|inline)
+                export VALIDATE_INLINES=1
+                ;;
+            tables|table)
+                export VALIDATE_TABLES=1
+                ;;
+            *)
+                exit_on_error "Wrong value \"$_opt\" for --extended-validation"
+        esac
+    done
 
     # export PARAMS and STRINGPARAMS
     [[ -n "$P_PARAMS" ]]      && export PARAMS="$P_PARAMS"
@@ -662,7 +683,7 @@ function call_make {
         for V in BOOK MAIN BUILD_DIR DAPSROOT DOCCONF PRJ_DIR SRC_DIR; do
             printf "%${COLWIDTH}s: %s\n" "$V" "${!V}"
         done
-        printf "%${COLWIDTH}s: %s\n" "IMG_SRC_DIR" "${PRJ_DIR}/$IMG_SRC_DIR"
+        printf "%${COLWIDTH}s: %s\n" "IMG_SRC_DIR" "$IMG_SRC_DIR"
 
         echo
 
@@ -768,6 +789,11 @@ function call_make {
             $MAKE_CMD
         fi
     fi
+    # show path to log file if DEBUG is on
+    #
+    if [[ 1 -eq $WRITE_LOG && 1 -eq $DEBUG ]]; then
+        ccecho "info" "Find the log file at\n$LOGFILE"
+    fi
 }
 
 ##########################################################
@@ -804,7 +830,7 @@ function call_make {
 #
 # Generic BUILD function
 #
-# Subcommands: all commands that does not fit elsewhere
+# Subcommands: all commands that do not fit elsewhere
 #
 ###########################################################################
 function build_generic {
@@ -887,7 +913,7 @@ function validate {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="help,norefcheck,not-validate-tables,remarks,validate-ids,validate-images"
+    LONG_OPTS="help,extended-validation:,norefcheck,not-validate-tables,remarks,validate-ids,validate-images"
 
     parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -895,11 +921,9 @@ function validate {
     #------ Computing the values returned from the parser -----
     if [[ 1 -eq $P_HELP ]]; then
         help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
+        help_extended-validation
         help_norefcheck
-        help_not-validate-tables
         help_remarks
-        help_validate-ids
-        help_validate-images
         echo
         exit 0
     fi
@@ -1210,6 +1234,23 @@ function help_epub3 {
                               Default: ePUB version 2
 EOF
 }
+function help_extended-validation {
+    cat <<EOF
+    --extended-validation=value     Comma-separated list of extended validation
+                                    checks
+                                    Possible values:
+                                     all|ALL: shortcut for all checks listed
+                                              below
+                                     ids:     checks for IDs that are not SEO
+                                              friendly
+                                     images:  checks for missing and duplicated
+                                              images
+                                     inlines: checks for empty inline elements
+                                     tables:  checks for invalid tables
+                                    Example: --extended-validation="ids,tables"
+                                    Default: unset
+EOF
+}
 function help_extra-dict {
     cat <<EOF
     --extra-dict=filename     Specify a path to an additional custom
@@ -1426,13 +1467,6 @@ function help_nostatic {
                               with CSS and Javascript.
 EOF
 }
-function help_not-validate-tables {
-    cat <<EOF
-    --not-validate-tables     Disable checking for tables that contain
-                              structural errors (e.g. missing cells).
-                              Default: unset (table check is performed)
-EOF
-}
 function help_novalid {
     cat <<EOF
     --novalid                 Do not perform a validation check on the
@@ -1562,21 +1596,6 @@ function help_target {
                               to retrieve correct values for target-specific
                               values.
                               Default: same as daps subcommand
-EOF
-}
-function help_validate-ids {
-    cat <<EOF
-    --validate-ids            Also check IDs to include no other
-                              characters than '[-a-zA-Z0-9].
-                              Default: unset
-EOF
-}
-function help_validate-images {
-    cat <<EOF
-    --validate-images         Also check for missing and duplicated images.
-                              Missing images cause an error, duplicated
-                              imnages a warning only.
-                              Default: unset
 EOF
 }
 function help_viewer {

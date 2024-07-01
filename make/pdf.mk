@@ -20,11 +20,14 @@
 
 # binary checks
 ifeq "$(FORMATTER)" "xep"
-  HAVE_XEP := $(shell which xep 2>/dev/null)
+  HAVE_XEP := $(shell command -v xep 2>/dev/null)
   ifndef HAVE_XEP
     $(error $(shell ccecho "error" "Error: PDF formatter xep is not installed"))
   endif
 endif
+
+HAVE_PDFINFO  := $(shell command -v pdfinfo 2>/dev/null)
+HAVE_PDFFONTS := $(shell command -v pdffonts 2>/dev/null)
 
 STYLEFO    := $(firstword $(wildcard $(addsuffix \
 	        /fo/docbook.xsl, $(STYLE_ROOTDIRS))))
@@ -178,7 +181,9 @@ ifeq "$(LEAN)" "1"
 else
   pdf: $(PDF_RESULT)
 endif
+  ifneq "$(HAVE_PDFINFO)" ""
 	pdfinfo $(PDF_RESULT) > /dev/null 2>&1 || ( ccecho "error" "PDF $(PDF_RESULT) has a size of 0 bytes"; false )
+  endif
   ifeq "$(TARGET)" "pdf"
 	@ccecho "result" "PDF book built with REMARKS=$(REMARKS), DRAFT=$(DRAFT) and META=$(META):\n$<"
   endif
@@ -200,7 +205,7 @@ endif
 ifeq "$(VERBOSITY)" "1"
   $(FOFILE): FONTDEBUG := --param "debug.fonts=0"
 endif
-$(FOFILE): $(PROFILES) $(PROFILEDIR)/.validate $(DOCFILES) $(STYLEFO)
+$(FOFILE): $(PROFILES) $(DOCFILES) $(STYLEFO) validate
   ifeq "$(VERBOSITY)" "2"
 	@ccecho "info"  "   Creating fo-file..."
   endif
@@ -242,9 +247,11 @@ $(PDF_RESULT): $(FOFILE)
 	(cd $(dir $(FOFILE)) && $(FORMATTER_CMD) $< $@ $(DEVNULL) $(ERR_DEVNULL))
 	@rm -rf $(TMP_STATIC_DIR) $(TMP_IMG_DIR)
   ifeq "$(VERBOSITY)" "2"
+    ifneq "$(HAVE_PDFFONTS)" ""
 	@pdffonts $@ | tail -n +3 | awk '{print $5}' | grep -v "yes" \
 		>& /dev/null && \
 		(ccecho "warn" "Not all fonts are embedded" >&2;) || :
+    endif
   endif
 
 #--------------
