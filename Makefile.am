@@ -119,6 +119,7 @@ bashcompletiondir =@datadir@/bash-completion/completions
 htmldocdir     = @docdir@/html
 
 xsltdir          = $(pkgdatadir)/daps-xslt
+xsltassemblydir  = $(xsltdir)/assembly
 xsltasciidocdir  = $(xsltdir)/asciidoc
 xsltcommondir    = $(xsltdir)/common
 xsltcontribdir   = $(xsltdir)/contrib
@@ -165,6 +166,7 @@ dist_xsltasciidoc_DATA  = $(wildcard daps-xslt/asciidoc/*.xsl)
 dist_xsltcommon_DATA    = $(wildcard daps-xslt/common/*.xsl) \
 			   $(wildcard daps-xslt/common/*.xml) \
 			   $(wildcard daps-xslt/common/*.svg)
+dist_xsltassemblydir_DATA = $(wildcard daps-xslt/assembly/*.xsl)
 dist_xsltcontrib_DATA   = $(wildcard daps-xslt/contrib/*.xsl)
 dist_xsltdesktop_DATA   = $(wildcard daps-xslt/desktop/*.xsl)
 dist_xsltepub_DATA      = $(wildcard daps-xslt/epub/*.xsl)
