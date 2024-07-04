@@ -122,7 +122,7 @@ ifneq "$(USED_DIA)" ""
    endif
 endif
 ifneq "$(USED_DITAA)" ""
-  HAVE_DIA = $(shell command -v ditaa 2>/dev/null)
+  HAVE_DITAA = $(shell command -v ditaa 2>/dev/null)
   ifeq "$(HAVE_DITAA)" ""
     $(error $(shell ccecho "error" "Error: ditaa is not installed, can't process $(USED_DITAA)"))
    endif
