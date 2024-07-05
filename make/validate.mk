@@ -72,7 +72,7 @@ $(PROFILEDIR)/.validate validate: $(PROFILES)
 	$(eval FAULTY_IDS=$(shell $(XSLTPROC) --xinclude --stylesheet $(DAPSROOT)/daps-xslt/common/get-all-xmlids.xsl --file $(PROFILED_MAIN) $(XSLTPROCESSOR) | grep -P '[^-a-zA-Z0-9]'))
   endif
   ifeq "$(strip $(VALIDATE_INLINES))" "1"
-	$(eval FAULTY_INLINES=$(shell $(XSLTPROC) --xinclude --stylesheet $(DAPSROOT)/contrib/check-source/find-empty-inlines.xsl --file $(PROFILED_MAIN) $(XSLTPROCESSOR) 2>&1))
+	$(eval FAULTY_INLINES=$(shell $(XSLTPROC) --xinclude --stylesheet $(DAPSROOT)/daps-xslt/check-source/find-empty-inlines.xsl --file $(PROFILED_MAIN) $(XSLTPROCESSOR) 2>&1))
   endif
 	@if [[ -n '$(FAULTY_XML)' ]]; then \
 	  ccecho "error" "[ERROR]: The document contains XML errors:"; \
