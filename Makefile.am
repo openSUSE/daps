@@ -121,6 +121,7 @@ htmldocdir     = @docdir@/html
 xsltdir          = $(pkgdatadir)/daps-xslt
 xsltassemblydir  = $(xsltdir)/assembly
 xsltasciidocdir  = $(xsltdir)/asciidoc
+xsltchecksourcedir  = $(xsltdir)/check-source
 xsltcommondir    = $(xsltdir)/common
 xsltcontribdir   = $(xsltdir)/contrib
 xsltdesktopdir   = $(xsltdir)/desktop
@@ -163,6 +164,7 @@ dist_emacssite_DATA     = misc/docbook_macros.el
 dist_dapsmake_DATA      = $(wildcard make/*.mk)
 dist_template_DATA      = $(wildcard init_templates/*)
 dist_xsltasciidoc_DATA  = $(wildcard daps-xslt/asciidoc/*.xsl)
+dist_xsltchecksource_DATA  = $(wildcard daps-xslt/check-source/*.xsl)
 dist_xsltcommon_DATA    = $(wildcard daps-xslt/common/*.xsl) \
 			   $(wildcard daps-xslt/common/*.xml) \
 			   $(wildcard daps-xslt/common/*.svg)
