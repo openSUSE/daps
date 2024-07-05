@@ -20,7 +20,7 @@ function linkcheck {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="file:,help,not-validate-tables,rootid:,show"
+    LONG_OPTS="file:,help,rootid:,show"
 
     parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -30,7 +30,6 @@ function linkcheck {
         help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
         help_file
         help_help
-        help_not-validate-tables
         help_rootid
         help_show_check
         cat <<EOF
