@@ -1,0 +1,1 @@
+../common/xpath.location.xsl
