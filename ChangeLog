@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-Mo Jul 01 10:45:17 UTC 2023 - fsundermeyer@opensuse.org
+Mo Jul 05 15:36:32 UTC 2023 - fsundermeyer@opensuse.org
 
 Beta release DAPS 4.0.beta2:
 
@@ -51,7 +51,12 @@ Beta release DAPS 4.0.beta2:
     are wrong.
 * Removed features:
   - DC-file must not be a link anymore
-
+  - The option "--not-validate-tables" is deprecated since tables are
+    now only validated on demand via extended validation (see above)
+    IMPORTANT:
+     If you use "--not-validate-tables" in scripts, you must remove
+     this option, otherwise validation will fail because DAPS will
+     error out
 -------------------------------------------------------------------
 Tue Feb 21 11:02:00 UTC 2023 - fsundermeyer@opensuse.org
 
