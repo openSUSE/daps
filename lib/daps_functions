@@ -913,7 +913,7 @@ function validate {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="help,extended-validation:,norefcheck,not-validate-tables,remarks,validate-ids,validate-images"
+    LONG_OPTS="help,extended-validation:,norefcheck,remarks,validate-ids,validate-images"
 
     parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
