@@ -91,12 +91,6 @@
    </listitem>
    </varlistentry>
    <varlistentry>
-    <term>Validating files without checking for tables that contain structural errors</term>
-    <listitem>
-<screen>&prompt.user;&dapscmd; -d <replaceable>PATH_TO_DC_FILE</replaceable> validate --not-validate-tables</screen>
-   </listitem>
-   </varlistentry>
-   <varlistentry>
     <term>Validating files and checking for missing and duplicated images</term>
     <listitem>
 <screen>&prompt.user;&dapscmd; -d <replaceable>PATH_TO_DC_FILE</replaceable> validate --validate-images</screen>
@@ -299,7 +293,7 @@
  is built. The date and time then show up in the final document, based on how you have set the date/time format.
  </para>
  <example>
-	 <title>Example for implementing the dbtimestamp tag in an XML file:</title>
+         <title>Example for implementing the dbtimestamp tag in an XML file:</title>
    <screen>&lt;para>Current date: &lt;?dbtimestamp?>.&lt;/para></screen>
  </example>
  <para>
@@ -307,11 +301,11 @@
  </para>
  <example>
    <title>Example for implementing the dbtimestamp tag with a customized format:</title>
-	 <screen>&lt;para>Current date: &lt;?dbtimestamp format="A, d B Y"?>.&lt;/para></screen>
+         <screen>&lt;para>Current date: &lt;?dbtimestamp format="A, d B Y"?>.&lt;/para></screen>
  </example>
  <para>
  For further information about format elements, look at this site:
- <ulink  url="http://www.sagehill.net/docbookxsl/Datetime.html"/>  
+ <ulink  url="http://www.sagehill.net/docbookxsl/Datetime.html"/>
  </para>
  </sect1>
  </chapter>
