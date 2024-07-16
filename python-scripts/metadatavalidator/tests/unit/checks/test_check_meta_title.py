@@ -48,3 +48,11 @@ def test_check_optional_meta_title(tree):
     config = dict(metadata=dict(meta_title_required=False))
     assert check_meta_title(tree, config) is None
 
+def test_check_meta_title_empty(tree):
+    meta = D("meta", {"name": "title"})
+    appendnode(tree, meta)
+
+    with pytest.raises(InvalidValueError,
+                       match=r".*Empty meta\[@name='title'\] element.*"):
+        check_meta_title(tree, dict(metadata=dict(meta_title_length=10,
+                                                  meta_title_required=True)))

@@ -29,8 +29,14 @@ def check_meta_title(tree: etree._ElementTree,
             )
         return
 
+    # the meta[@name='title'] element exists, but must not be empty
+    if meta.text is None:
+        raise InvalidValueError(
+            f"Empty meta[@name='title'] element (line {meta.sourceline})."
+        )
+
     length = config.get("metadata", {}).get("meta_title_length", 55)
-    if len(meta.text) > length:
+    if meta.text is not None and len(meta.text) > length:
         raise InvalidValueError(
             f"Meta title is too long. Max length is {length} characters"
             f" (line {meta.sourceline})."
