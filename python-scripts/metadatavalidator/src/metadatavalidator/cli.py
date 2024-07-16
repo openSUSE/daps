@@ -23,15 +23,18 @@ from .process import process
 #: in order for all messages to be delegated.
 logging.getLogger().setLevel(logging.NOTSET)
 
-
+PROGPATH = sys.argv[0]
 
 def parsecli(cliargs=None) -> argparse.Namespace:
     """Parse CLI with :class:`argparse.ArgumentParser` and return parsed result
     :param cliargs: Arguments to parse or None (=use sys.argv)
     :return: parsed CLI result
     """
+    epilog = f"""
+{__package__} {__version__} written by {__author__} from {PROGPATH}
+"""
     parser = argparse.ArgumentParser(description=__doc__,
-                                     epilog="Version %s written by %s " % (__version__, __author__),
+                                     epilog=epilog,
                                      formatter_class=argparse.RawTextHelpFormatter,
                                      )
 
