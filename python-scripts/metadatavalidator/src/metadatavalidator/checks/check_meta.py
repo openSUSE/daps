@@ -254,7 +254,8 @@ def check_meta_task(tree: etree._ElementTree,
     ]
 
     # Do we have children?
-    tasks = [tag.text.strip() for tag in meta.iterchildren()]
+    tasks = [tag.text.strip() for tag in meta.iterchildren()
+             if tag.text is not None]
     if not tasks:
         raise InvalidValueError(
             f"Couldn't find any child elements in meta[@name='task']"
