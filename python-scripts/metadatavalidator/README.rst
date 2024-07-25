@@ -58,6 +58,8 @@ If you don't need the virtual environment anymore, you can deactivate it:
 Installing the script
 ---------------------
 
+Before you install the script, your current directory must be
+`python-scripts/metadatavalidator/`.
 To install the script, run the following command:
 
 .. code-block:: bash
