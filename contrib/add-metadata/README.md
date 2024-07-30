@@ -85,11 +85,22 @@ Same for the other meta tags.
 
 # Metadata parameter reference
 
-* `meta-series`: String to add for `<meta name="series">`
-* `meta-category`: Comma separated list of categories to add for `<meta name="category">`
-* `meta-task`: Comma separated list of tasks to add for `<meta name="task">`
 * `meta-arch`: Comma separated list of architectures to add for `<meta name="architecture">`
+* `meta-category`: Comma separated list of categories to add for `<meta name="category">`
+* `meta-series`: String to add for `<meta name="series">`
+* `meta-task`: Comma separated list of tasks to add for `<meta name="task">`
+* `meta-type`: Comma separated list of tasks to add for `<meta name="type">`
 
+# Parameters for enabling/disabling meta tags
+Each parameter expects a boolean value like `0`/`false()` to disable, or
+`1`/`true()` to enable. Pass the option `--param` for `xsltproc`.
+
+* `use-meta-arch`: Enable/disable `<meta name="arch">`
+* `use-meta-category`: Enable/disable `<meta name="series">`
+* `use-meta-description`: Enable/disable `<meta name="description">`
+* `use-meta-series`: Enable/disable `<meta name="series">`
+* `use-meta-task`: Enable/disable `<meta name="task">`
+* `use-meta-type` (default disabled): Enable/disable `<meta name="type">`
 
 # General parameter reference
 * `delim`: The delimiter used to separate each parameter (by default ",")
