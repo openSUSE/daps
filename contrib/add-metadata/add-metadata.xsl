@@ -45,18 +45,22 @@
 
   <xsl:output method="xml"/>
 
-  <!-- ==== Parameters -->
+  <!-- ==== Content Parameters -->
   <xsl:param name="meta-arch" />
   <xsl:param name="meta-category" />
   <xsl:param name="meta-series" />
   <xsl:param name="meta-task" />
+  <xsl:param name="meta-title" />
   <xsl:param name="meta-type" />
 
+  <!-- ==== Boolean Parameters -->
   <xsl:param name="use-meta-arch" select="false()" />
   <xsl:param name="use-meta-category" select="true()" />
   <xsl:param name="use-meta-description" select="true()" />
+  <xsl:param name="use-meta-platform" select="true()" />
   <xsl:param name="use-meta-series" select="true()" />
   <xsl:param name="use-meta-task" select="true()" />
+  <xsl:param name="use-meta-title" select="true()" />
   <xsl:param name="use-meta-type" select="false()" />
 
   <xsl:param name="delim">,</xsl:param>
@@ -80,12 +84,13 @@
       <xsl:comment> SUSE Metadata Start</xsl:comment>
       <xsl:text>&#10;</xsl:text>
 
-      <xsl:call-template name="meta-series" />
-      <xsl:call-template name="meta-task" />
-      <xsl:call-template name="meta-description" />
-      <xsl:call-template name="meta-social-descr" />
-      <xsl:call-template name="meta-category" />
       <xsl:call-template name="meta-architecture" />
+      <xsl:call-template name="meta-category" />
+      <xsl:call-template name="meta-description" />
+      <xsl:call-template name="meta-series" />
+      <xsl:call-template name="meta-social-descr" />
+      <xsl:call-template name="meta-task" />
+      <xsl:call-template name="meta-title" />
       <xsl:call-template name="meta-type" />
 
       <xsl:text>&#10;</xsl:text>
@@ -134,6 +139,75 @@
   </xsl:template>
 
   <!-- ==== Named templates -->
+  <xsl:template name="meta-architecture">
+    <xsl:param name="node" select="."/>
+    <xsl:choose>
+      <xsl:when test="d:meta[@name='architecture']">
+        <xsl:text>&#10;</xsl:text>
+        <xsl:apply-templates select="d:meta[@name='architecture']"/>
+      </xsl:when>
+      <xsl:when test="boolean($use-meta-arch)">
+        <xsl:text>&#10;</xsl:text>
+        <meta name="architecture" its:translate="no">
+          <xsl:choose>
+            <xsl:when test="$meta-arch != ''">
+              <xsl:call-template name="split-string">
+                <xsl:with-param name="list" select="$meta-arch" />
+              </xsl:call-template>
+            </xsl:when>
+            <xsl:otherwise>
+              <phrase><xsl:value-of select="$default-text" /></phrase>
+            </xsl:otherwise>
+          </xsl:choose>
+        </meta>
+      </xsl:when>
+      <xsl:otherwise />
+    </xsl:choose>
+  </xsl:template>
+
+  <xsl:template name="meta-category">
+    <xsl:param name="node" select="."/>
+    <xsl:choose>
+      <xsl:when test="d:meta[@name='category']">
+        <xsl:text>&#10;</xsl:text>
+        <xsl:apply-templates select="d:meta[@name='category']"/>
+      </xsl:when>
+      <xsl:when test="boolean($use-meta-category)">
+        <xsl:text>&#10;</xsl:text>
+        <meta name="category" its:translate="no">
+          <xsl:choose>
+            <xsl:when test="$meta-category != ''">
+              <xsl:call-template name="split-string">
+                <xsl:with-param name="list" select="$meta-category" />
+              </xsl:call-template>
+            </xsl:when>
+            <xsl:otherwise>
+              <phrase><xsl:value-of select="$default-text" /></phrase>
+            </xsl:otherwise>
+          </xsl:choose>
+        </meta>
+      </xsl:when>
+      <xsl:otherwise />
+    </xsl:choose>
+  </xsl:template>
+
+  <xsl:template name="meta-description">
+    <xsl:param name="node" select="."/>
+    <xsl:choose>
+      <xsl:when test="d:meta[@name='description']">
+        <xsl:text>&#10;</xsl:text>
+        <xsl:apply-templates select="d:meta[@name='description']"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:text>&#10;</xsl:text>
+        <meta name="description" its:translate="yes">
+          <xsl:value-of select="$default-text"/>
+        </meta>
+        <xsl:text>&#10;</xsl:text>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
   <xsl:template name="meta-series">
     <xsl:param name="node" select="."/>
     <xsl:choose>
@@ -156,6 +230,22 @@
     </xsl:choose>
   </xsl:template>
 
+  <xsl:template name="meta-social-descr">
+    <xsl:param name="node" select="."/>
+    <xsl:choose>
+      <xsl:when test="d:meta[@name='social-descr']">
+        <xsl:text>&#10;</xsl:text>
+        <xsl:apply-templates select="d:meta[@name='social-descr']"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:text>&#10;</xsl:text>
+        <meta name="social-descr" its:translate="yes">
+          <xsl:value-of select="$default-text"/>
+        </meta>
+        <xsl:text>&#10;</xsl:text>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
 
   <xsl:template name="meta-task">
     <xsl:param name="node" select="."/>
@@ -184,96 +274,9 @@
     </xsl:choose>
   </xsl:template>
 
-
-  <xsl:template name="meta-description">
+  <xsl:template name="meta-title">
     <xsl:param name="node" select="."/>
-    <xsl:choose>
-      <xsl:when test="d:meta[@name='description']">
-        <xsl:text>&#10;</xsl:text>
-        <xsl:apply-templates select="d:meta[@name='description']"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:text>&#10;</xsl:text>
-        <meta name="description" its:translate="yes">
-          <xsl:value-of select="$default-text"/>
-        </meta>
-        <xsl:text>&#10;</xsl:text>
-      </xsl:otherwise>
-    </xsl:choose>
   </xsl:template>
-
-
-  <xsl:template name="meta-social-descr">
-    <xsl:param name="node" select="."/>
-    <xsl:choose>
-      <xsl:when test="d:meta[@name='social-descr']">
-        <xsl:text>&#10;</xsl:text>
-        <xsl:apply-templates select="d:meta[@name='social-descr']"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:text>&#10;</xsl:text>
-        <meta name="social-descr" its:translate="yes">
-          <xsl:value-of select="$default-text"/>
-        </meta>
-        <xsl:text>&#10;</xsl:text>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:template>
-
-
-  <xsl:template name="meta-category">
-    <xsl:param name="node" select="."/>
-    <xsl:choose>
-      <xsl:when test="d:meta[@name='category']">
-        <xsl:text>&#10;</xsl:text>
-        <xsl:apply-templates select="d:meta[@name='category']"/>
-      </xsl:when>
-      <xsl:when test="boolean($use-meta-category)">
-        <xsl:text>&#10;</xsl:text>
-        <meta name="category" its:translate="no">
-          <xsl:choose>
-            <xsl:when test="$meta-category != ''">
-              <xsl:call-template name="split-string">
-                <xsl:with-param name="list" select="$meta-category" />
-              </xsl:call-template>
-            </xsl:when>
-            <xsl:otherwise>
-              <phrase><xsl:value-of select="$default-text" /></phrase>
-            </xsl:otherwise>
-          </xsl:choose>
-        </meta>
-      </xsl:when>
-      <xsl:otherwise />
-    </xsl:choose>
-  </xsl:template>
-
-
-  <xsl:template name="meta-architecture">
-    <xsl:param name="node" select="."/>
-    <xsl:choose>
-      <xsl:when test="d:meta[@name='architecture']">
-        <xsl:text>&#10;</xsl:text>
-        <xsl:apply-templates select="d:meta[@name='architecture']"/>
-      </xsl:when>
-      <xsl:when test="boolean($use-meta-arch)">
-        <xsl:text>&#10;</xsl:text>
-        <meta name="architecture" its:translate="no">
-          <xsl:choose>
-            <xsl:when test="$meta-arch != ''">
-              <xsl:call-template name="split-string">
-                <xsl:with-param name="list" select="$meta-arch" />
-              </xsl:call-template>
-            </xsl:when>
-            <xsl:otherwise>
-              <phrase><xsl:value-of select="$default-text" /></phrase>
-            </xsl:otherwise>
-          </xsl:choose>
-        </meta>
-      </xsl:when>
-      <xsl:otherwise />
-    </xsl:choose>
-  </xsl:template>
-
 
   <xsl:template name="meta-type">
     <xsl:param name="node" select="."/>
