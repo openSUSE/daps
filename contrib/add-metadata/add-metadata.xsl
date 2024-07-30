@@ -72,7 +72,6 @@
 
   <!-- ==== Templates -->
   <xsl:template match="d:info|d:merge">
-    <xsl:message>info gefunden!!</xsl:message>
     <xsl:copy>
       <xsl:copy-of select="@*"/>
       <!-- Copy all element excluding meta elements -->
@@ -231,7 +230,7 @@
       </xsl:when>
       <xsl:when test="boolean($use-meta-category)">
         <xsl:text>&#10;</xsl:text>
-        <meta name="category">
+        <meta name="category" its:translate="no">
           <xsl:choose>
             <xsl:when test="$meta-category != ''">
               <xsl:call-template name="split-string">
@@ -258,7 +257,7 @@
       </xsl:when>
       <xsl:when test="boolean($use-meta-arch)">
         <xsl:text>&#10;</xsl:text>
-        <meta name="architecture">
+        <meta name="architecture" its:translate="no">
           <xsl:choose>
             <xsl:when test="$meta-arch != ''">
               <xsl:call-template name="split-string">
@@ -285,7 +284,7 @@
       </xsl:when>
       <xsl:when test="boolean($use-meta-type)">
         <xsl:text>&#10;</xsl:text>
-        <meta name="type">
+        <meta name="type" its:translate="no">
           <xsl:choose>
             <xsl:when test="$meta-type != ''">
               <xsl:value-of select="$meta-type"/>
