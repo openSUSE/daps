@@ -45,12 +45,33 @@
 <xsl:stylesheet version="1.0"
  xmlns="&db5ns;"
  xmlns:d="&db5ns;"
+ xmlns:exsl="http://exslt.org/common"
+ xmlns:xi="http://www.w3.org/2001/XInclude"
  xmlns:xlink="http://www.w3.org/1999/xlink"
+ xmlns:its="http://www.w3.org/2005/11/its"
  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
- exclude-result-prefixes="d">
+ exclude-result-prefixes="d exsl">
 
   <xsl:import href="../common/copy.xsl"/>
   <xsl:output indent="yes"/>
+
+  <xsl:variable name="namespaces">
+    <its:foo/>
+    <xlink:foo/>
+    <xi:foo/>
+  </xsl:variable>
+  <xsl:variable name="namespace-nodes" select="exsl:node-set($namespaces)"/>
+
+  <!-- This rule is only necessary to copy the namespaces into the root element -->
+  <xsl:template match="/*">
+    <xsl:copy>
+      <!-- Copy the namespaces -->
+      <xsl:for-each select="$namespace-nodes//*/namespace::*">
+           <xsl:copy-of select="."/>
+       </xsl:for-each>
+      <xsl:apply-templates/>
+    </xsl:copy>
+  </xsl:template>
 
   <xsl:template match="d:authorinitials"/>
   <!-- othername & lineage arguably out to be supported by GeekoDoc but aren't currently. -->
