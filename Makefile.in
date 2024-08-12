@@ -120,9 +120,10 @@ DIST_COMMON = $(srcdir)/Makefile.am $(top_srcdir)/configure \
 	$(dist_xsltcontrib_DATA) $(dist_xsltdesktop_DATA) \
 	$(dist_xsltepub_DATA) $(dist_xsltindex_DATA) \
 	$(dist_xsltlib_DATA) $(dist_xsltmallard_DATA) \
-	$(dist_xsltmigrate_DATA) $(dist_xsltprofiling_DATA) \
-	$(dist_xsltrelnotes_DATA) $(dist_xsltxhtml_DATA) \
-	$(dist_xsltyelp_DATA) $(am__DIST_COMMON)
+	$(dist_xsltmetadata_DATA) $(dist_xsltmigrate_DATA) \
+	$(dist_xsltprofiling_DATA) $(dist_xsltrelnotes_DATA) \
+	$(dist_xsltxhtml_DATA) $(dist_xsltyelp_DATA) \
+	$(am__DIST_COMMON)
 am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
  configure.lineno config.status.lineno
 mkinstalldirs = $(install_sh) -d
@@ -166,9 +167,9 @@ am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(dapslibexecdir)" \
 	"$(DESTDIR)$(xsltcontribdir)" "$(DESTDIR)$(xsltdesktopdir)" \
 	"$(DESTDIR)$(xsltepubdir)" "$(DESTDIR)$(xsltindexdir)" \
 	"$(DESTDIR)$(xsltlibdir)" "$(DESTDIR)$(xsltmallarddir)" \
-	"$(DESTDIR)$(xsltmigratedir)" "$(DESTDIR)$(xsltprofilingdir)" \
-	"$(DESTDIR)$(xsltrelnotesdir)" "$(DESTDIR)$(xsltxhtmldir)" \
-	"$(DESTDIR)$(xsltyelpdir)"
+	"$(DESTDIR)$(xsltmetadatadir)" "$(DESTDIR)$(xsltmigratedir)" \
+	"$(DESTDIR)$(xsltprofilingdir)" "$(DESTDIR)$(xsltrelnotesdir)" \
+	"$(DESTDIR)$(xsltxhtmldir)" "$(DESTDIR)$(xsltyelpdir)"
 SCRIPTS = $(dist_bin_SCRIPTS) $(dist_dapslibexec_SCRIPTS)
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
@@ -210,9 +211,10 @@ DATA = $(dist_bashcompletion_DATA) $(dist_catalog_DATA) \
 	$(dist_xsltcommon_DATA) $(dist_xsltcontrib_DATA) \
 	$(dist_xsltdesktop_DATA) $(dist_xsltepub_DATA) \
 	$(dist_xsltindex_DATA) $(dist_xsltlib_DATA) \
-	$(dist_xsltmallard_DATA) $(dist_xsltmigrate_DATA) \
-	$(dist_xsltprofiling_DATA) $(dist_xsltrelnotes_DATA) \
-	$(dist_xsltxhtml_DATA) $(dist_xsltyelp_DATA)
+	$(dist_xsltmallard_DATA) $(dist_xsltmetadata_DATA) \
+	$(dist_xsltmigrate_DATA) $(dist_xsltprofiling_DATA) \
+	$(dist_xsltrelnotes_DATA) $(dist_xsltxhtml_DATA) \
+	$(dist_xsltyelp_DATA)
 RECURSIVE_CLEAN_TARGETS = mostlyclean-recursive clean-recursive	\
   distclean-recursive maintainer-clean-recursive
 am__recursive_targets = \
@@ -513,6 +515,7 @@ xsltepubdir = $(xsltdir)/epub
 xsltindexdir = $(xsltdir)/index
 xsltlibdir = $(xsltdir)/lib
 xsltmallarddir = $(xsltdir)/mallard
+xsltmetadatadir = $(xsltdir)/metadata
 xsltmigratedir = $(xsltdir)/migrate
 xsltprofilingdir = $(xsltdir)/profiling
 xsltrelnotesdir = $(xsltdir)/relnotes
@@ -560,6 +563,7 @@ dist_xsltepub_DATA = $(wildcard daps-xslt/epub/*.xsl)
 dist_xsltindex_DATA = $(wildcard daps-xslt/index/*.xsl)
 dist_xsltlib_DATA = $(wildcard daps-xslt/lib/*.xsl)
 dist_xsltmallard_DATA = $(wildcard daps-xslt/mallard/*.xsl)
+dist_xsltmetadata_DATA = $(wildcard daps-xslt/metadata/*.xsl)
 dist_xsltmigrate_DATA = $(wildcard daps-xslt/migrate/*.xsl)
 dist_xsltprofiling_DATA = $(wildcard daps-xslt/profiling/*.xsl)
 dist_xsltrelnotes_DATA = $(wildcard daps-xslt/relnotes/*.xsl)
@@ -1167,6 +1171,27 @@ uninstall-dist_xsltmallardDATA:
 	@list='$(dist_xsltmallard_DATA)'; test -n "$(xsltmallarddir)" || list=; \
 	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
 	dir='$(DESTDIR)$(xsltmallarddir)'; $(am__uninstall_files_from_dir)
+install-dist_xsltmetadataDATA: $(dist_xsltmetadata_DATA)
+	@$(NORMAL_INSTALL)
+	@list='$(dist_xsltmetadata_DATA)'; test -n "$(xsltmetadatadir)" || list=; \
+	if test -n "$$list"; then \
+	  echo " $(MKDIR_P) '$(DESTDIR)$(xsltmetadatadir)'"; \
+	  $(MKDIR_P) "$(DESTDIR)$(xsltmetadatadir)" || exit 1; \
+	fi; \
+	for p in $$list; do \
+	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	  echo "$$d$$p"; \
+	done | $(am__base_list) | \
+	while read files; do \
+	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(xsltmetadatadir)'"; \
+	  $(INSTALL_DATA) $$files "$(DESTDIR)$(xsltmetadatadir)" || exit $$?; \
+	done
+
+uninstall-dist_xsltmetadataDATA:
+	@$(NORMAL_UNINSTALL)
+	@list='$(dist_xsltmetadata_DATA)'; test -n "$(xsltmetadatadir)" || list=; \
+	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
+	dir='$(DESTDIR)$(xsltmetadatadir)'; $(am__uninstall_files_from_dir)
 install-dist_xsltmigrateDATA: $(dist_xsltmigrate_DATA)
 	@$(NORMAL_INSTALL)
 	@list='$(dist_xsltmigrate_DATA)'; test -n "$(xsltmigratedir)" || list=; \
@@ -1579,7 +1604,7 @@ check: check-recursive
 all-am: Makefile $(SCRIPTS) $(MANS) $(DATA) all-local
 installdirs: installdirs-recursive
 installdirs-am:
-	for dir in "$(DESTDIR)$(bindir)" "$(DESTDIR)$(dapslibexecdir)" "$(DESTDIR)$(man1dir)" "$(DESTDIR)$(bashcompletiondir)" "$(DESTDIR)$(catalogdir)" "$(DESTDIR)$(dapsconfdir)" "$(DESTDIR)$(dapslibdir)" "$(DESTDIR)$(dapsmakedir)" "$(DESTDIR)$(docdir)" "$(DESTDIR)$(emacssitedir)" "$(DESTDIR)$(fopconfdir)" "$(DESTDIR)$(hyphendir)" "$(DESTDIR)$(templatedir)" "$(DESTDIR)$(xepconfdir)" "$(DESTDIR)$(xsltasciidocdir)" "$(DESTDIR)$(xsltassemblydir)" "$(DESTDIR)$(xsltchecksourcedir)" "$(DESTDIR)$(xsltcommondir)" "$(DESTDIR)$(xsltcontribdir)" "$(DESTDIR)$(xsltdesktopdir)" "$(DESTDIR)$(xsltepubdir)" "$(DESTDIR)$(xsltindexdir)" "$(DESTDIR)$(xsltlibdir)" "$(DESTDIR)$(xsltmallarddir)" "$(DESTDIR)$(xsltmigratedir)" "$(DESTDIR)$(xsltprofilingdir)" "$(DESTDIR)$(xsltrelnotesdir)" "$(DESTDIR)$(xsltxhtmldir)" "$(DESTDIR)$(xsltyelpdir)"; do \
+	for dir in "$(DESTDIR)$(bindir)" "$(DESTDIR)$(dapslibexecdir)" "$(DESTDIR)$(man1dir)" "$(DESTDIR)$(bashcompletiondir)" "$(DESTDIR)$(catalogdir)" "$(DESTDIR)$(dapsconfdir)" "$(DESTDIR)$(dapslibdir)" "$(DESTDIR)$(dapsmakedir)" "$(DESTDIR)$(docdir)" "$(DESTDIR)$(emacssitedir)" "$(DESTDIR)$(fopconfdir)" "$(DESTDIR)$(hyphendir)" "$(DESTDIR)$(templatedir)" "$(DESTDIR)$(xepconfdir)" "$(DESTDIR)$(xsltasciidocdir)" "$(DESTDIR)$(xsltassemblydir)" "$(DESTDIR)$(xsltchecksourcedir)" "$(DESTDIR)$(xsltcommondir)" "$(DESTDIR)$(xsltcontribdir)" "$(DESTDIR)$(xsltdesktopdir)" "$(DESTDIR)$(xsltepubdir)" "$(DESTDIR)$(xsltindexdir)" "$(DESTDIR)$(xsltlibdir)" "$(DESTDIR)$(xsltmallarddir)" "$(DESTDIR)$(xsltmetadatadir)" "$(DESTDIR)$(xsltmigratedir)" "$(DESTDIR)$(xsltprofilingdir)" "$(DESTDIR)$(xsltrelnotesdir)" "$(DESTDIR)$(xsltxhtmldir)" "$(DESTDIR)$(xsltyelpdir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
 install: install-recursive
@@ -1645,9 +1670,10 @@ install-data-am: install-data-local install-dist_bashcompletionDATA \
 	install-dist_xsltcontribDATA install-dist_xsltdesktopDATA \
 	install-dist_xsltepubDATA install-dist_xsltindexDATA \
 	install-dist_xsltlibDATA install-dist_xsltmallardDATA \
-	install-dist_xsltmigrateDATA install-dist_xsltprofilingDATA \
-	install-dist_xsltrelnotesDATA install-dist_xsltxhtmlDATA \
-	install-dist_xsltyelpDATA install-man
+	install-dist_xsltmetadataDATA install-dist_xsltmigrateDATA \
+	install-dist_xsltprofilingDATA install-dist_xsltrelnotesDATA \
+	install-dist_xsltxhtmlDATA install-dist_xsltyelpDATA \
+	install-man
 
 install-dvi: install-dvi-recursive
 
@@ -1707,7 +1733,8 @@ uninstall-am: uninstall-dist_bashcompletionDATA \
 	uninstall-dist_xsltcommonDATA uninstall-dist_xsltcontribDATA \
 	uninstall-dist_xsltdesktopDATA uninstall-dist_xsltepubDATA \
 	uninstall-dist_xsltindexDATA uninstall-dist_xsltlibDATA \
-	uninstall-dist_xsltmallardDATA uninstall-dist_xsltmigrateDATA \
+	uninstall-dist_xsltmallardDATA uninstall-dist_xsltmetadataDATA \
+	uninstall-dist_xsltmigrateDATA \
 	uninstall-dist_xsltprofilingDATA \
 	uninstall-dist_xsltrelnotesDATA uninstall-dist_xsltxhtmlDATA \
 	uninstall-dist_xsltyelpDATA uninstall-local uninstall-man
@@ -1735,16 +1762,17 @@ uninstall-man: uninstall-man1
 	install-dist_xsltcommonDATA install-dist_xsltcontribDATA \
 	install-dist_xsltdesktopDATA install-dist_xsltepubDATA \
 	install-dist_xsltindexDATA install-dist_xsltlibDATA \
-	install-dist_xsltmallardDATA install-dist_xsltmigrateDATA \
-	install-dist_xsltprofilingDATA install-dist_xsltrelnotesDATA \
-	install-dist_xsltxhtmlDATA install-dist_xsltyelpDATA \
-	install-dvi install-dvi-am install-exec install-exec-am \
-	install-html install-html-am install-info install-info-am \
-	install-man install-man1 install-pdf install-pdf-am install-ps \
-	install-ps-am install-strip installcheck installcheck-am \
-	installdirs installdirs-am maintainer-clean \
-	maintainer-clean-generic mostlyclean mostlyclean-generic pdf \
-	pdf-am ps ps-am tags tags-am uninstall uninstall-am \
+	install-dist_xsltmallardDATA install-dist_xsltmetadataDATA \
+	install-dist_xsltmigrateDATA install-dist_xsltprofilingDATA \
+	install-dist_xsltrelnotesDATA install-dist_xsltxhtmlDATA \
+	install-dist_xsltyelpDATA install-dvi install-dvi-am \
+	install-exec install-exec-am install-html install-html-am \
+	install-info install-info-am install-man install-man1 \
+	install-pdf install-pdf-am install-ps install-ps-am \
+	install-strip installcheck installcheck-am installdirs \
+	installdirs-am maintainer-clean maintainer-clean-generic \
+	mostlyclean mostlyclean-generic pdf pdf-am ps ps-am tags \
+	tags-am uninstall uninstall-am \
 	uninstall-dist_bashcompletionDATA uninstall-dist_binSCRIPTS \
 	uninstall-dist_catalogDATA uninstall-dist_dapsconfDATA \
 	uninstall-dist_dapslibDATA uninstall-dist_dapslibexecSCRIPTS \
@@ -1757,7 +1785,8 @@ uninstall-man: uninstall-man1
 	uninstall-dist_xsltcommonDATA uninstall-dist_xsltcontribDATA \
 	uninstall-dist_xsltdesktopDATA uninstall-dist_xsltepubDATA \
 	uninstall-dist_xsltindexDATA uninstall-dist_xsltlibDATA \
-	uninstall-dist_xsltmallardDATA uninstall-dist_xsltmigrateDATA \
+	uninstall-dist_xsltmallardDATA uninstall-dist_xsltmetadataDATA \
+	uninstall-dist_xsltmigrateDATA \
 	uninstall-dist_xsltprofilingDATA \
 	uninstall-dist_xsltrelnotesDATA uninstall-dist_xsltxhtmlDATA \
 	uninstall-dist_xsltyelpDATA uninstall-local uninstall-man \
