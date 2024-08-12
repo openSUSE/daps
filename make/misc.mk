@@ -9,6 +9,7 @@
 # <fsundermeyer at opensuse dot org>
 #
 
+
 #--------------
 # Bigfile
 #
@@ -131,4 +132,18 @@ STYLEDOCINFO := $(DAPSROOT)/daps-xslt/common/docinfo.xsl
 docinfo: $(BIGFILE)
 	$(XSLTPROC) --stylesheet $(STYLEDOCINFO) --file $< \
 	  $(XSLTPROCESSOR) $(ERR_DEVNULL)
+
+
+#---------------
+# Metadata
+#
+# requires filelist.mk because of a setting for FILE4ID
+
+
+STYLEDOCMETADATA := $(DAPSROOT)/daps-xslt/metadata/extract-metadata.xsl
+METAFILE := $(PROFILEDIR)/$(notdir $(FILE4ID))
+
+.PHONY: metadata
+metadata: $(PROFILES) $(DOCFILES) validate
+	$(XSLTPROC) --stylesheet $(STYLEDOCMETADATA) --file $(METAFILE) $(XSLTPROCESSOR) $(ERR_DEVNULL)
 
