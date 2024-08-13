@@ -46,11 +46,11 @@
 
 
   <!-- ===== Empty templates -->
-  <xsl:template match="d:section|d:sect1|d:glossary|d:bibliography"/>
+  <xsl:template match="d:section|d:sect1|d:glossary|d:bibliography|d:module"/>
 
 
   <!-- ===== info and merge  -->
-  <xsl:template match="d:info|d:merge">
+  <xsl:template match="d:info|d:structure/d:merge">
     <xsl:text># Metadata output&#10;</xsl:text>
     <xsl:call-template name="product" />
     <xsl:call-template name="title" />
@@ -113,8 +113,8 @@
         <xsl:when test="$node/d:title">
           <xsl:value-of select="string($node/d:title)"/>
         </xsl:when>
-        <xsl:when test="$node/parent::d:title">
-          <xsl:value-of select="string($node/d:title)"/>
+        <xsl:when test="$node/parent::*/d:title">
+          <xsl:value-of select="string($node/parent::*/d:title)"/>
         </xsl:when>
       </xsl:choose>
     </xsl:variable>
@@ -138,8 +138,8 @@
         <xsl:when test="$node/d:subtitle">
           <xsl:value-of select="string($node/d:subtitle)"/>
         </xsl:when>
-        <xsl:when test="$node/parent::d:title">
-          <xsl:value-of select="string($node/d:subtitle)"/>
+        <xsl:when test="$node/parent::*/d:subtitle">
+          <xsl:value-of select="string($node/parent::*/d:subtitle)"/>
         </xsl:when>
       </xsl:choose>
     </xsl:variable>
