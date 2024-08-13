@@ -46,7 +46,8 @@
 
 
   <!-- ===== Empty templates -->
-  <xsl:template match="d:section|d:sect1|d:glossary|d:bibliography|d:module"/>
+  <xsl:template match="d:appendix|d:bibliography|d:colophon|d:chapter|d:dedication
+                       |d:glossary|d:module|d:part|d:preface|d:section|d:sect1"/>
 
 
   <!-- ===== info and merge  -->
