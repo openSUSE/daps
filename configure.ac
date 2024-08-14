@@ -11,7 +11,7 @@ dnl
 
 m4_define(daps_version_major, 4)
 m4_define(daps_version_minor, 0)
-m4_define(daps_version_micro, [beta3])
+m4_define(daps_version_micro, [beta4])
 
 # API version
 m4_define([daps_api_version],[daps_version_major])
