@@ -1065,6 +1065,36 @@ function debugging {
 
 ###########################################################################
 #
+# Metadata function
+#
+# Subcommands: metadata
+#
+###########################################################################
+function metadata {
+    local SHORT_OPTS LONG_OPTS SUB_CMD
+    SUB_CMD=$1
+    shift
+
+    SHORT_OPTS="h"
+    LONG_OPTS="help,rootid:"
+
+    parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
+    eval set -- "$P_REMAIN_ARGS"
+
+    #------ Computing the values returned from the parser -----
+    if [[ 1 -eq $P_HELP ]]; then
+        help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
+        help_help
+        help_rootid
+        echo
+        exit 0
+    fi
+
+    call_make "$SUB_CMD" "$@"
+}
+
+###########################################################################
+#
 #  MISC
 #
 #  various functions
