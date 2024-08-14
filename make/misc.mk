@@ -140,10 +140,9 @@ docinfo: $(BIGFILE)
 # requires filelist.mk because of a setting for FILE4ID
 
 
-STYLEDOCMETADATA := $(DAPSROOT)/daps-xslt/metadata/extract-metadata.xsl
 METAFILE := $(PROFILEDIR)/$(notdir $(FILE4ID))
 
 .PHONY: metadata
 metadata: $(PROFILES) $(DOCFILES) validate
-	$(XSLTPROC) --stylesheet $(STYLEDOCMETADATA) --file $(METAFILE) $(XSLTPROCESSOR) $(ERR_DEVNULL)
+	$(XSLTPROC) --stylesheet $(META_STYLE) --file $(METAFILE) $(XSLTPROCESSOR) $(ERR_DEVNULL)
 
