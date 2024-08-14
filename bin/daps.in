@@ -106,6 +106,7 @@ VARLIST=(
     MAIN
     META
     META_STR
+    META_STYLE
     OUTPUTNAME
     PRJ_DIR
     PROFARCH
@@ -363,7 +364,7 @@ HELP_SUBCOMMAND[man]="Build one or more man pages from suitable XML sources. All
 SUBCOMMANDS[man-dir-name]="show_names"
 HELP_SUBCOMMAND[man-dir-name]="Print the directory name that would result when building man pages."
 
-SUBCOMMANDS[metadata]="no_opts"
+SUBCOMMANDS[metadata]="metadata"
 HELP_SUBCOMMAND[metadata]="Extract selected metadata from the file containing the rootid"
 
 SUBCOMMANDS[mobi]="build_epub"
@@ -1556,6 +1557,8 @@ FOP_CONFIG_FILE=${FOP_CONFIG_FILE/#@sysconfdir\@\/daps/${DAPSROOT}/etc}
 FOP_WRAPPER=${FOP_WRAPPER/#@pkgdatadir\@/${DAPSROOT}}
 
 JING_WRAPPER=${JING_WRAPPER/#@pkgdatadir\@/${DAPSROOT}}
+
+META_STYLE=${META_STYLE/#@pkgdatadir\@/${DAPSROOT}}
 
 XEP_CONFIG_FILE=${XEP_CONFIG_FILE/#@sysconfdir\@\/daps/${DAPSROOT}/etc}
 XEP_WRAPPER=${XEP_WRAPPER/#@pkgdatadir\@/${DAPSROOT}}
