@@ -1,4 +1,39 @@
 -------------------------------------------------------------------
+Wed Aug 14 13:09:49 UTC 2024 - Frank Sundermeyer <fs@suse.com>
+
+Beta release DAPS 4.0.beta4:
+
+* New feature:
+  - new subcommand "metadata":
+    * extracts the following metadata from the profiled DocBook XML
+      that contains the given ROOTID (either from DC-file or from
+      --rootid parameter)
+        - meta[@name = 'productname'] and productname/productnumber
+        - info/title or title
+        - info/subtitle or subtitle
+        - meta[@name='title']
+        - meta[@name='description']
+        - meta[@name='social-descr']
+        - revhistory/revision[1]/date
+        - meta[@name='task']
+        - meta[@name='series']
+        - meta[@name='category']
+        - meta[@name='type']
+    * works for "regular" DocBook5 files, for DocBook 5.2 assemblies
+      and for ASCIIDic (via docinfo.xml)
+
+-------------------------------------------------------------------
+Mon Aug  5 12:24:50 UTC 2024 - Frank Sundermeyer <fs@suse.com> - 4.0.beta3
+
+Beta release DAPS 4.0.beta3:
+
+* Improvements
+  - ASCIIDoc: Copy namespaces to root element
+    During the postprocess step, the stylesheets copy some often used
+    namespaces (XLink, XInclude, ITS) to the root element of the result
+    tree.
+
+-------------------------------------------------------------------
 Mo Jul 05 15:36:32 UTC 2023 - fsundermeyer@opensuse.org
 
 Beta release DAPS 4.0.beta2:
