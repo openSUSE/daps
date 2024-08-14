@@ -1,7 +1,7 @@
 #
 # spec file for package daps
 #
-# Copyright (c) 2021 SUSE LLC
+# Copyright (c) 2024 SUSE LLC
 #
 # All modifications and additions to the file contributed by third parties
 # remain the property of their copyright owners, unless otherwise agreed
@@ -17,18 +17,19 @@
 
 
 Name:           daps
-Version:        3.3.0
+Version:        4.0~beta4
 Release:        0
 
-%define docbuilddir    %{_datadir}/daps
+%define pkg_version 4.0beta4
+%define docbuilddir %{_datadir}/daps
 
 Summary:        DocBook Authoring and Publishing Suite
 License:        GPL-2.0-only OR GPL-3.0-only
 Group:          Productivity/Publishing/XML
 URL:            https://github.com/openSUSE/daps
-Source0:        %{name}-%{version}.tar.bz2
+Source0:        %{name}-%{pkg_version}.tar.bz2
 Source1:        %{name}.rpmlintrc
-BuildRoot:      %{_tmppath}/%{name}-%{version}-build
+BuildRoot:      %{_tmppath}/%{name}-%{pkg_version}-build
 
 BuildArch:      noarch
 
@@ -116,9 +117,22 @@ validator, link checker, spellchecker, editor macros and stylesheets for
 converting DocBook XML.
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 #--------------------------------------------------------------------------
+
 %prep
-%setup -q -n %{name}-%{version}
+%setup -q -n %{name}-%{pkg_version}
 
 # Correct shebang line as suggested in
 # https://lists.opensuse.org/opensuse-packaging/2018-03/msg00017.html
@@ -137,6 +151,10 @@ make install DESTDIR=$RPM_BUILD_ROOT
 
 # create symlinks:
 %fdupes -s $RPM_BUILD_ROOT/%{_datadir}
+
+%if 0%{?suse_version} >= 1550
+%python3_fix_shebang_path %{buildroot}%{_datadir}/%{name}/libexec/*
+%endif
 
 #----------------------
 %post
