@@ -134,11 +134,12 @@ def modify_screen_with_text_only(screen):
 def modify_screen_with_prompt(screen):
     # Remove any whitespace between <screen> and <prompt>
     screen.text = screen.text.strip()
-    if screen[1].tag == "command":
+    if screen.xpath("*[2][self::command]"):
         # Remove any whitespace between <prompt> and <command>
         screen[0].tail = screen[0].tail.strip()
         # Remove any whitespace between <command> and </screen>
         screen[1].tail = screen[1].tail.strip()
+
 
 
 def modify_screen_content(screen_content):
