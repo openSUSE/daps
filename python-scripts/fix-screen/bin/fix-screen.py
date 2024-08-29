@@ -8,6 +8,7 @@ linebreaks
 import argparse
 import re
 from lxml import etree
+import sys
 
 __version__ = "0.2.0"
 __author__ = "Tom Schraitle <toms@suse.de>"
@@ -20,6 +21,10 @@ MASKED_ENTITIES = re.compile(r'{}([\w\.\-_]+){}'.format(
     re.escape(START_DELIMITER),
     re.escape(END_DELIMITER))
 )
+
+
+def stderr(*args, **kwargs):
+    print(*args, file=sys.stderr, **kwargs)
 
 
 def parsecli(cliargs=None) -> argparse.Namespace:
@@ -42,6 +47,11 @@ def parsecli(cliargs=None) -> argparse.Namespace:
     parser.add_argument("--end-delimiter",
                         # default=r"}}}",
                         help="The end delimiter for masked entities (default: %(default)s)"
+                        )
+    parser.add_argument("--stdout",
+                        action="store_true",
+                        default=False,
+                        help="Print the modified content to stdout"
                         )
     parser.add_argument("XMLFILES",
                         # dest="xmlfiles",
@@ -176,7 +186,7 @@ def replace_screen_blocks(content, modified_blocks):
     return content
 
 
-def process_file(xmlfile):
+def process_file(xmlfile, stdout=False):
     """
     Orchestrates the extraction, modification, and replacement of <screen> blocks.
     """
@@ -188,7 +198,7 @@ def process_file(xmlfile):
 
     # Check if any <screen> blocks were found
     if not screen_blocks:
-        print(f"No <screen> content found. Skip {xmlfile}.")
+        stderr(f"Skip {xmlfile}: No <screen> content found.")
         return
 
     # Step 3: Modify each <screen> block
@@ -197,18 +207,20 @@ def process_file(xmlfile):
     # Step 4: Replace original blocks with modified ones
     modified_content = replace_screen_blocks(content, modified_blocks)
 
-    # Step 5: Write the modified content back to the file
-    print(f"Would write to {xmlfile}.new")
-    with open(f"{xmlfile}.new", 'w') as file:
-        file.write(modified_content)
-    # print(modified_content)
+    # Step 5: Output the modified content
+    if not stdout:
+        stderr(f"Would write to {xmlfile}.new")
+        with open(f"{xmlfile}.new", 'w') as file:
+            file.write(modified_content)
+    else:
+        print(modified_content)
 
 
 def main(cliargs=None):
     args = parsecli(cliargs)
-    print(">>> args:", args)
+    stderr(">>> args:", args)
     for xmlfile in args.XMLFILES:
-        process_file(xmlfile)
+        process_file(xmlfile, args.stdout)
 
 
 if __name__ == "__main__":
