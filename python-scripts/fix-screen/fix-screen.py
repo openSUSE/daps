@@ -148,7 +148,7 @@ def modify_screen_content(screen_content):
     if has_text_only:
         modify_screen_with_text_only(screen)
     # Case 2: The content contains child elements and starts with a <prompt> element
-    elif screen[0].tag == "prompt":
+    elif screen.xpath("*[1][self::prompt]"):
         modify_screen_with_prompt(screen)
 
 
@@ -188,9 +188,10 @@ def process_file(xmlfile):
     modified_content = replace_screen_blocks(content, modified_blocks)
 
     # Step 5: Write the modified content back to the file
-    print(f"Would write to {xmlfile}")
-    with open(xmlfile, 'w') as file:
+    print(f"Would write to {xmlfile}.new")
+    with open(f"{xmlfile}.new", 'w') as file:
         file.write(modified_content)
+    # print(modified_content)
 
 
 def main(cliargs=None):
