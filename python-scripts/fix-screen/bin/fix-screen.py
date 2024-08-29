@@ -137,11 +137,12 @@ def modify_screen_with_prompt(screen):
     if screen.xpath("*[2][self::command or self::replaceable]"):
         # Remove any whitespace between <prompt> and <command>
         screen[0].tail = screen[0].tail.strip()
-        # Remove any whitespace between <command> and </screen>
-        # screen[1].tail = screen[1].tail.strip()
+    # elif f"{START_DELIMITER}prompt." in screen.text:
+        screen.text = screen.text.lstrip()
+        # screen.text = screen.text.replace(f"{START_DELIMITER}prompt", f"{START_DELIMITER}prompt{END_DELIMITER}")
 
 
-def modify_screen_content(screen_content):
+def modify_screen_content(screen_content: str) -> str:
     """
     Parses the <screen> content using lxml.etree, modifies it, and returns the modified string.
     """
@@ -150,14 +151,19 @@ def modify_screen_content(screen_content):
 
     has_text_only = is_screen_content_text_only(screen)
     # Case 1: The content is text only
-    if has_text_only:
+    if f"{START_DELIMITER}prompt." in screen.text:
+        screen.text = screen.text.lstrip()
+    elif has_text_only:
         modify_screen_with_text_only(screen)
     # Case 2: The content contains child elements and starts with a <prompt> element
     elif screen.xpath("*[1][self::prompt]"):
         modify_screen_with_prompt(screen)
+    # Case 3: The content contains an entity
+    #elif f"{START_DELIMITER}prompt." in screen.text:
+    #    screen.text = screen.text.lstrip()
 
     # Return the modified XML as a string
-    return etree.tostring(screen, pretty_print=True, encoding=str)
+    return etree.tostring(screen, encoding="unicode")
 
 
 def replace_screen_blocks(content, modified_blocks):
