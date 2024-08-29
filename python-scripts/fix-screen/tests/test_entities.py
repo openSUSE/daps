@@ -2,11 +2,22 @@ import pytest
 import screen
 
 
-def test_replace_entities_with_braces():
-    text = "echo &gt; &hello;"
+@pytest.mark.parametrize("text", [
+    "&ticket1;",
+    "&prompt.root;",
+    "&ABC;",
+    "&prompt;",
+    "&repo-url;",
+    "&s390;",
+    "&s4h;",
+    "&crm.live.host;",
+    "&geo-vip-site1;",
+    "&subnetImask;",
+])
+def test_replace_entities_with_braces(text):
     result = screen.replace_entities_with_braces(text)
-    assert result not in "&hello;"
-    expected = f"echo &gt; {screen.START_DELIMITER}hello{screen.END_DELIMITER}"
+    name = screen.ENTITIES.search(text).group(2)
+    expected = f"{screen.START_DELIMITER}{name}{screen.END_DELIMITER}"
     assert result == expected
 
 
