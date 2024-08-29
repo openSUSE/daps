@@ -65,6 +65,11 @@ def parsecli(cliargs=None) -> argparse.Namespace:
     return args
 
 
+def xmlparser():
+    """Return a new XML parser object"""
+    return etree.XMLParser(recover=True)
+
+
 def is_screen_content_text_only(screen):
     """
     Checks if the content inside a <screen> element contains only
@@ -141,7 +146,7 @@ def modify_screen_content(screen_content):
     Parses the <screen> content using lxml.etree, modifies it, and returns the modified string.
     """
     # Parse the content as XML
-    screen = etree.fromstring(screen_content, parser=etree.XMLParser(recover=True))
+    screen = etree.fromstring(screen_content, parser=xmlparser())
 
     has_text_only = is_screen_content_text_only(screen)
     # Case 1: The content is text only
