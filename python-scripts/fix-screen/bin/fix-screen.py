@@ -134,12 +134,11 @@ def modify_screen_with_text_only(screen):
 def modify_screen_with_prompt(screen):
     # Remove any whitespace between <screen> and <prompt>
     screen.text = screen.text.strip()
-    if screen.xpath("*[2][self::command]"):
+    if screen.xpath("*[2][self::command or self::replaceable]"):
         # Remove any whitespace between <prompt> and <command>
         screen[0].tail = screen[0].tail.strip()
         # Remove any whitespace between <command> and </screen>
-        screen[1].tail = screen[1].tail.strip()
-
+        # screen[1].tail = screen[1].tail.strip()
 
 
 def modify_screen_content(screen_content):
@@ -156,7 +155,6 @@ def modify_screen_content(screen_content):
     # Case 2: The content contains child elements and starts with a <prompt> element
     elif screen.xpath("*[1][self::prompt]"):
         modify_screen_with_prompt(screen)
-
 
     # Return the modified XML as a string
     return etree.tostring(screen, pretty_print=True, encoding=str)
