@@ -128,7 +128,7 @@ def modify_screen_with_text_only(screen):
         screen.text = screen.text[1:]
     # Remove last newline character if it exists
     if screen.tail and screen.tail.endswith('\n'):
-        screen.tail = screen
+        screen.tail = screen.tail[:-1]
 
 
 def modify_screen_with_prompt(screen):
