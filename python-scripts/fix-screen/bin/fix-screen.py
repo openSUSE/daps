@@ -13,7 +13,7 @@ __version__ = "0.2.0"
 __author__ = "Tom Schraitle <toms@suse.de>"
 
 
-ENTITIES = re.compile(r'&(?!(lt|gt|apos|quot);)(\w+);')
+ENTITIES = re.compile(r'&(?!(lt|gt|apos|quot|amp);)(\w+);')
 START_DELIMITER = r"{{{"
 END_DELIMITER = r"}}}"
 MASKED_ENTITIES = re.compile(r'{}(\w+){}'.format(
