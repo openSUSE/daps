@@ -16,7 +16,7 @@ __author__ = "Tom Schraitle <toms@suse.de>"
 ENTITIES = re.compile(r'&(?!(lt|gt|apos|quot|amp);)([\w\.\-_]+);')
 START_DELIMITER = r"{{{"
 END_DELIMITER = r"}}}"
-MASKED_ENTITIES = re.compile(r'{}(\w+){}'.format(
+MASKED_ENTITIES = re.compile(r'{}([\w\.\-_]+){}'.format(
     re.escape(START_DELIMITER),
     re.escape(END_DELIMITER))
 )
