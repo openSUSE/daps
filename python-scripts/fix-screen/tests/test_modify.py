@@ -145,7 +145,7 @@ def test_replace_screen_blocks_with_prompt_and_two_commands():
         "<screen>"
         "<prompt>&lt;</prompt>"
         "<command>sudo</command>"
-        "  <command>ls</command>\n"
+        " <command>ls</command>\n"
         "</screen>\n"
         "<para>Other text</para>"
     )

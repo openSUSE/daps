@@ -21,6 +21,7 @@ MASKED_ENTITIES = re.compile(r'{}([\w\.\-_]+){}'.format(
     re.escape(START_DELIMITER),
     re.escape(END_DELIMITER))
 )
+SPACES = re.compile(r' +')
 
 
 def stderr(*args, **kwargs):
@@ -156,7 +157,7 @@ def modify_screen_with_prompt(screen):
         # <command> or <replaceable> element
         if screen[1].tail is not None:
             # Only strip linebreaks, but not spaces
-            screen[1].tail = screen[1].tail.strip('\n')
+            screen[1].tail = SPACES.sub(" ", screen[1].tail).strip('\n')
 
 
 def modify_screen_content(screen_content: str) -> str:
