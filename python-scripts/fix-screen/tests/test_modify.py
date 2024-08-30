@@ -23,7 +23,12 @@ def test_modify_screen_with_prompt():
 
 
 def test_modify_screen_with_prompt_and_command():
-    content = "<screen>\n<prompt>&lt;</prompt>\n  <command>sudo</command>\n</screen>"
+    content = (
+        "<screen>\n"
+        "<prompt>&lt;</prompt>\n"
+        "  <command>sudo</command>\n"
+        "</screen>"
+    )
     xml = etree.fromstring(content, parser=screen.xmlparser())
     screen.modify_screen_with_prompt(xml)
     assert etree.tostring(xml, encoding="unicode") == (
@@ -116,5 +121,31 @@ def test_replace_screen_blocks_with_prompt_entity():
         "<screen>"
         "&prompt.root;\n"
         "    </screen>\n"
+        "<para>Other text</para>"
+    )
+
+
+def test_replace_screen_blocks_with_prompt_and_two_commands():
+    content = (
+        "<para>Some text</para>\n"
+        "<screen>\n"
+        "  <prompt>&lt;</prompt>\n"
+        "  <command>sudo</command>\n"
+        "  <command>ls</command>\n"
+        "</screen>\n"
+        "<para>Other text</para>"
+    )
+    screen_blocks = screen.extract_screen_blocks(content)
+    modified_blocks = [(block, screen.modify_screen_content(block))
+                       for block in screen_blocks]
+    modified_content = screen.replace_screen_blocks(content, modified_blocks)
+
+    assert modified_content == (
+        "<para>Some text</para>\n"
+        "<screen>"
+        "<prompt>&lt;</prompt>"
+        "<command>sudo</command>"
+        "  <command>ls</command>\n"
+        "</screen>\n"
         "<para>Other text</para>"
     )

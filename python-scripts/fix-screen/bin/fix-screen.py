@@ -151,6 +151,12 @@ def modify_screen_with_prompt(screen):
         # Remove any whitespace between <prompt> and <command>
         if screen[0].tail is not None:
             screen[0].tail = screen[0].tail.strip()
+    if screen.xpath("*[3][self::command or self::replaceable]"):
+        # Remove any whitespace between <prompt> and the next inline
+        # <command> or <replaceable> element
+        if screen[1].tail is not None:
+            # Only strip linebreaks, but not spaces
+            screen[1].tail = screen[1].tail.strip('\n')
 
 
 def modify_screen_content(screen_content: str) -> str:
