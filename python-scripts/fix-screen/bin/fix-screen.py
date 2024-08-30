@@ -185,7 +185,7 @@ def replace_screen_blocks(content, modified_blocks):
     """
     for original, modified in modified_blocks:
         restored_modified = restore_entities_from_braces(modified)
-        content = content.replace(original, restored_modified)
+        content = content.replace(original.rstrip(), restored_modified)
     return content
 
 
