@@ -142,17 +142,15 @@ def modify_screen_with_text_only(screen):
 
 
 def modify_screen_with_prompt(screen):
-    if screen.xpath("*[1][self::prompt]"):
+    if screen.xpath("*[1][self::prompt]") and screen.text is not None:
         # Remove any whitespace between <screen> and <prompt>
         screen.text = screen.text.lstrip()
-    if MASKED_ENTITIES.search(screen.text):
+    if screen.text is not None and MASKED_ENTITIES.search(screen.text):
         screen.text = screen.text.lstrip()
     if screen.xpath("*[2][self::command or self::replaceable]"):
         # Remove any whitespace between <prompt> and <command>
-        screen[0].tail = screen[0].tail.strip()
-    # elif f"{START_DELIMITER}prompt." in screen.text:
-        screen.text = screen.text.lstrip()
-        # screen.text = screen.text.replace(f"{START_DELIMITER}prompt", f"{START_DELIMITER}prompt{END_DELIMITER}")
+        if screen[0].tail is not None:
+            screen[0].tail = screen[0].tail.strip()
 
 
 def modify_screen_content(screen_content: str) -> str:
@@ -164,7 +162,7 @@ def modify_screen_content(screen_content: str) -> str:
 
     has_text_only = is_screen_content_text_only(screen)
     # Case 1: The content starts with an entity
-    if MASKED_ENTITIES.search(screen.text):
+    if screen.text is not None and MASKED_ENTITIES.search(screen.text):
         screen.text = screen.text.lstrip()
     # Case 2: The content contains only text
     elif has_text_only:
@@ -210,8 +208,8 @@ def process_file(xmlfile, stdout=False):
 
     # Step 5: Output the modified content
     if not stdout:
-        stderr(f"Would write to {xmlfile}.new")
-        with open(f"{xmlfile}.new", 'w') as file:
+        stderr(f"Would write to {xmlfile}")
+        with open(xmlfile, 'w') as file:
             file.write(modified_content)
     else:
         print(modified_content)
