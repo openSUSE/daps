@@ -75,9 +75,9 @@ def parsecli(cliargs=None) -> argparse.Namespace:
     return args
 
 
-def xmlparser():
+def xmlparser(**args):
     """Return a new XML parser object"""
-    return etree.XMLParser(recover=True)
+    return etree.XMLParser(recover=True, **args)
 
 
 def is_screen_content_text_only(screen):
