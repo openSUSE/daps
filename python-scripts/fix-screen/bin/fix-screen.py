@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Searches for <screen> tags in DocBook files and replace misplaced
-linebreaks
+linebreaks.
 
 """
 
@@ -163,17 +163,15 @@ def modify_screen_content(screen_content: str) -> str:
     screen = etree.fromstring(screen_content, parser=xmlparser())
 
     has_text_only = is_screen_content_text_only(screen)
-    # Case 1: The content is text only
-    if f"{START_DELIMITER}prompt." in screen.text:
+    # Case 1: The content starts with an entity
+    if MASKED_ENTITIES.search(screen.text):
         screen.text = screen.text.lstrip()
+    # Case 2: The content contains only text
     elif has_text_only:
         modify_screen_with_text_only(screen)
-    # Case 2: The content contains child elements and starts with a <prompt> element
+    # Case 3: The content contains child elements and starts with a <prompt> element
     elif screen.xpath("*[1][self::prompt]"):
         modify_screen_with_prompt(screen)
-    # Case 3: The content contains an entity
-    #elif f"{START_DELIMITER}prompt." in screen.text:
-    #    screen.text = screen.text.lstrip()
 
     # Return the modified XML as a string
     return etree.tostring(screen, encoding="unicode")

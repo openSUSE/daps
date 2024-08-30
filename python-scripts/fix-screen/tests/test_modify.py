@@ -83,6 +83,7 @@ def test_replace_screen_blocks():
     modified_blocks = [(block, screen.modify_screen_content(block))
                        for block in screen_blocks]
     modified_content = screen.replace_screen_blocks(content, modified_blocks)
+
     assert modified_content == (
         "<para>Some text</para>\n"
         "<screen>"
@@ -93,3 +94,27 @@ def test_replace_screen_blocks():
         "<para>Other text</para>"
     )
 
+
+def test_replace_screen_blocks_with_prompt_entity():
+    content = (
+        "<para>Some text</para>\n"
+        "<screen>\n"
+        "        &prompt.root;\n"
+        "    </screen>\n"
+        "<para>Other text</para>"
+    )
+    content = screen.replace_entities_with_braces(content)
+    screen_blocks = screen.extract_screen_blocks(content)
+    modified_blocks = [(block, screen.modify_screen_content(block))
+                       for block in screen_blocks]
+    modified_content = screen.replace_screen_blocks(content, modified_blocks)
+    #print(">>> screen_blocks:", screen_blocks)
+    #print(">>> modified_blocks:", modified_blocks)
+
+    assert modified_content == (
+        "<para>Some text</para>\n"
+        "<screen>"
+        "&prompt.root;\n"
+        "    </screen>\n"
+        "<para>Other text</para>"
+    )
