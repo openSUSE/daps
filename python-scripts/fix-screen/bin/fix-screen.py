@@ -142,22 +142,42 @@ def modify_screen_with_text_only(screen):
         screen.tail = screen.tail[:-1]
 
 
+def group_by_prompt(screen):
+    # Helper function to define a group when we encounter a 'prompt'
+    grouped = []
+
+    for element in screen:
+        if element.tag == 'prompt':
+            # Start a new group when 'prompt' is encountered
+            grouped.append([element])
+        else:
+            # Append 'command' to the last group
+            grouped[-1].append(element)
+
+    return grouped
+
+
 def modify_screen_with_prompt(screen):
     if screen.xpath("*[1][self::prompt]") and screen.text is not None:
         # Remove any whitespace between <screen> and <prompt>
         screen.text = screen.text.lstrip()
     if screen.text is not None and MASKED_ENTITIES.search(screen.text):
         screen.text = screen.text.lstrip()
-    if screen.xpath("*[2][self::command or self::replaceable]"):
-        # Remove any whitespace between <prompt> and <command>
-        if screen[0].tail is not None:
-            screen[0].tail = screen[0].tail.strip()
-    if screen.xpath("*[3][self::command or self::replaceable]"):
-        # Remove any whitespace between <prompt> and the next inline
-        # <command> or <replaceable> element
-        if screen[1].tail is not None:
-            # Only strip linebreaks, but not spaces
-            screen[1].tail = SPACES.sub(" ", screen[1].tail).strip('\n')
+    # Group the elements by <prompt> and non-prompt elements.
+    # (<prompt>, <command>, <command>, <prompt>, <command>, ...) =>
+    # [(<prompt>, <command>, <command>), (<prompt>, <command>), ...]
+    grouped = group_by_prompt(screen)
+    for group in grouped:
+        prompt = group[0]
+        if prompt.tail is not None:
+            prompt.tail = SPACES.sub("", prompt.tail).strip("\n")
+        for element in group[1:]:
+            if element.tail is not None:
+                element.tail = SPACES.sub(" ", element.tail).strip("\n")
+        # Last element in the group should contain a newline character
+        if group[-1].tail is not None:
+            group[-1].tail = "\n" + group[-1].tail.lstrip()
+
 
 
 def modify_screen_content(screen_content: str) -> str:
