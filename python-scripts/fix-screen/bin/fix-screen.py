@@ -144,7 +144,9 @@ def modify_screen_with_text_only(screen):
 def modify_screen_with_prompt(screen):
     if screen.xpath("*[1][self::prompt]"):
         # Remove any whitespace between <screen> and <prompt>
-        screen.text = screen.text.strip()
+        screen.text = screen.text.lstrip()
+    if MASKED_ENTITIES.search(screen.text):
+        screen.text = screen.text.lstrip()
     if screen.xpath("*[2][self::command or self::replaceable]"):
         # Remove any whitespace between <prompt> and <command>
         screen[0].tail = screen[0].tail.strip()

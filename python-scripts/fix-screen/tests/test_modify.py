@@ -35,14 +35,13 @@ def test_modify_screen_with_prompt_and_command():
 
 def test_modify_screen_with_prompt_entity():
     content = "<screen>        &prompt.root;\n    </screen>"
-    content = screen.replace_entities_with_braces(content)
-    print(">>>", content)
-    xml = etree.fromstring(content, parser=screen.xmlparser())
+    xml = etree.fromstring(screen.replace_entities_with_braces(content),
+                           parser=screen.xmlparser())
     screen.modify_screen_with_prompt(xml)
     assert etree.tostring(xml, encoding="unicode") == (
         "<screen>"
-        f"{screen.START_DELIMITER}prompt.root{screen.END_DELIMITER}"
-        "</screen>"
+        f"{screen.START_DELIMITER}prompt.root{screen.END_DELIMITER}\n"
+        "    </screen>"
     )
 
 
