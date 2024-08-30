@@ -136,7 +136,7 @@ def extract_screen_blocks(content):
 def modify_screen_with_text_only(screen):
     # Remove the first newline character if it exists
     if screen.text and screen.text.startswith('\n'):
-        screen.text = screen.text[1:]
+        screen.text = screen.text.lstrip()
     # Remove last newline character if it exists
     if screen.tail and screen.tail.endswith('\n'):
         screen.tail = screen.tail[:-1]
