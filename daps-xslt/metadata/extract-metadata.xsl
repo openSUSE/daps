@@ -46,8 +46,18 @@
 
 
   <!-- ===== Empty templates -->
-  <xsl:template match="d:appendix|d:bibliography|d:colophon|d:chapter|d:dedication
-                       |d:glossary|d:module|d:part|d:preface|d:section|d:sect1|d:title"/>
+  <xsl:template match="d:appendix|d:article/*[not(self::d:info)]|
+                       d:bibliography|d:colophon|
+                       d:chapter|d:chapter/*[not(self::d:info)]|
+                       d:dedication|
+                       d:glossary|d:glossary/*[not(self::d:info)]|
+                       d:module|
+                       d:part|d:part/*[not(self::d:info)]|
+                       d:preface|d:preface/*[not(self::d:info)]|
+                       d:section|d:section/*[not(self::d:info)]|
+                       d:sect1|d:sect1/*[not(self::d:info)]|
+                       d:topic|d:topic/*[not(self::d:info)]|
+                       d:title|d:subtitle"/>
 
 
   <!-- ===== info and merge  -->
@@ -147,7 +157,7 @@
 
     <xsl:choose>
       <xsl:when test="$this-subtitle != ''">
-        <xsl:text>title=</xsl:text>
+        <xsl:text>subtitle=</xsl:text>
         <xsl:value-of select="normalize-space($this-subtitle)"/>
         <xsl:text>&#10;</xsl:text>
       </xsl:when>
