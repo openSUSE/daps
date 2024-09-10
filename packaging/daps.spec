@@ -17,10 +17,10 @@
 
 
 Name:           daps
-Version:        4.0~beta4
+Version:        4.0~beta5
 Release:        0
 
-%define pkg_version 4.0beta4
+%define pkg_version 4.0beta5
 %define docbuilddir %{_datadir}/daps
 
 Summary:        DocBook Authoring and Publishing Suite
