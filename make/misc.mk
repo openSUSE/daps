@@ -140,9 +140,14 @@ docinfo: $(BIGFILE)
 # requires filelist.mk because of a setting for FILE4ID
 
 
-METAFILE := $(PROFILEDIR)/$(notdir $(FILE4ID))
+METAFILE = $(PROFILEDIR)/$(notdir $(FILE4ID))
 
 .PHONY: metadata
 metadata: $(PROFILES) $(DOCFILES) validate
-	$(XSLTPROC) --stylesheet $(META_STYLE) --file $(METAFILE) $(XSLTPROCESSOR) $(ERR_DEVNULL)
+ifneq "$(METADATA_OUTPUT)" ""
+	@$(XSLTPROC) --stylesheet $(META_STYLE) --file $(METAFILE) $(XSLTPROCESSOR) 2>/dev/null > $(METADATA_OUTPUT)
+	@echo "Find the meatdata at $(METADATA_OUTPUT)"
+else
+	@$(XSLTPROC) --stylesheet $(META_STYLE) --file $(METAFILE) $(XSLTPROCESSOR) 2>/dev/null
+endif
 
