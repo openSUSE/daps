@@ -12,7 +12,8 @@
      Plain text with key=value lines
 
   Parameters:
-     * "sep": The separation character between different entries in a list
+     * "sep": Separation character of different items
+     * "sep-entries": The separation character between different entries in a list
      * "with-warn": should warnings be printed? true()=yes, false()=no
 
   References:
@@ -31,9 +32,12 @@
 
 
   <!-- ===== Parameter -->
-  <xsl:param name="sep">;</xsl:param>
+  <xsl:param name="sep-entries">;</xsl:param>
+  <xsl:param name="sep">
+    <xsl:text>&#10;</xsl:text>
+  </xsl:param>
   <xsl:param name="with-warn" select="true()"/>
-
+  <xsl:param name="version">1.0</xsl:param>
 
   <!-- ===== Helper templates -->
   <xsl:template name="warn">
@@ -62,7 +66,8 @@
 
   <!-- ===== info and merge  -->
   <xsl:template match="d:info|d:structure/d:merge">
-    <xsl:text># Metadata output&#10;</xsl:text>
+    <xsl:text># Metadata output from v</xsl:text>
+    <xsl:value-of select="concat($version, $sep)"/>
     <xsl:call-template name="product" />
     <xsl:call-template name="title" />
     <xsl:call-template name="subtitle" />
@@ -109,11 +114,10 @@
       <xsl:text>productname=</xsl:text>
       <!-- Add os and version information before product name -->
       <xsl:text>[</xsl:text>
-      <xsl:if test="./@os"><xsl:value-of select="concat(./@os, $sep)"/></xsl:if>
+      <xsl:if test="./@os"><xsl:value-of select="concat(./@os, $sep-entries)"/></xsl:if>
       <xsl:if test="./@version"><xsl:value-of select="./@version"/></xsl:if>
       <xsl:text>]</xsl:text>
-      <xsl:value-of select="string(current())" />
-      <xsl:text>&#10;</xsl:text>
+      <xsl:value-of select="concat(string(current()), $sep)" />
     </xsl:for-each>
   </xsl:template>
 
@@ -133,8 +137,7 @@
     <xsl:choose>
       <xsl:when test="$this-title != ''">
         <xsl:text>title=</xsl:text>
-        <xsl:value-of select="normalize-space($this-title)"/>
-        <xsl:text>&#10;</xsl:text>
+        <xsl:value-of select="concat(normalize-space($this-title), $sep)"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:message>WARNING: No title could be found! :-(</xsl:message>
@@ -158,8 +161,7 @@
     <xsl:choose>
       <xsl:when test="$this-subtitle != ''">
         <xsl:text>subtitle=</xsl:text>
-        <xsl:value-of select="normalize-space($this-subtitle)"/>
-        <xsl:text>&#10;</xsl:text>
+        <xsl:value-of select="concat(normalize-space($this-subtitle), $sep)"/>
       </xsl:when>
       <xsl:otherwise/>
     </xsl:choose>
@@ -178,8 +180,7 @@
     <xsl:choose>
       <xsl:when test="$this-seo-title != ''">
         <xsl:text>seo-title=</xsl:text>
-        <xsl:value-of select="normalize-space($this-seo-title)"/>
-        <xsl:text>&#10;</xsl:text>
+        <xsl:value-of select="concat(normalize-space($this-seo-title), $sep)"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:call-template name="warn">
@@ -202,8 +203,7 @@
     <xsl:choose>
       <xsl:when test="$this-seo-description != ''">
         <xsl:text>seo-description=</xsl:text>
-        <xsl:value-of select="normalize-space($this-seo-description)"/>
-        <xsl:text>&#10;</xsl:text>
+        <xsl:value-of select="concat(normalize-space($this-seo-description), $sep)"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:call-template name="warn">
@@ -226,8 +226,7 @@
     <xsl:choose>
       <xsl:when test="$this-seo-social-descr != ''">
         <xsl:text>seo-social-descr=</xsl:text>
-        <xsl:value-of select="normalize-space($this-seo-social-descr)"/>
-        <xsl:text>&#10;</xsl:text>
+        <xsl:value-of select="concat(normalize-space($this-seo-social-descr), $sep)"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:call-template name="warn">
@@ -250,8 +249,7 @@
     <xsl:choose>
       <xsl:when test="$this-date != ''">
         <xsl:text>date=</xsl:text>
-        <xsl:value-of select="normalize-space($this-date)"/>
-        <xsl:text>&#10;</xsl:text>
+        <xsl:value-of select="concat(normalize-space($this-date), $sep)"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:call-template name="warn">
@@ -269,7 +267,7 @@
           <xsl:for-each select="$node/d:meta[@name='task']/d:*">
             <xsl:value-of select="string(.)"/>
             <xsl:if test="position() &lt; last()">
-              <xsl:value-of select="$sep"/>
+              <xsl:value-of select="$sep-entries"/>
             </xsl:if>
           </xsl:for-each>
         </xsl:when>
@@ -279,8 +277,7 @@
     <xsl:choose>
       <xsl:when test="$this-task != ''">
         <xsl:text>task=</xsl:text>
-        <xsl:value-of select="normalize-space($this-task)"/>
-        <xsl:text>&#10;</xsl:text>
+        <xsl:value-of select="concat(normalize-space($this-task), $sep)"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:call-template name="warn">
@@ -303,8 +300,7 @@
     <xsl:choose>
       <xsl:when test="$this-series != ''">
         <xsl:text>series=</xsl:text>
-        <xsl:value-of select="normalize-space($this-series)"/>
-        <xsl:text>&#10;</xsl:text>
+        <xsl:value-of select="concat(normalize-space($this-series), $sep)"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:call-template name="warn">
@@ -322,7 +318,7 @@
           <xsl:for-each select="$node/d:meta[@name='category']/d:*">
             <xsl:value-of select="string(.)"/>
             <xsl:if test="position() &lt; last()">
-              <xsl:value-of select="$sep"/>
+              <xsl:value-of select="$sep-entries"/>
             </xsl:if>
           </xsl:for-each>
         </xsl:when>
@@ -332,8 +328,7 @@
     <xsl:choose>
       <xsl:when test="$this-category != ''">
         <xsl:text>category=</xsl:text>
-        <xsl:value-of select="normalize-space($this-category)"/>
-        <xsl:text>&#10;</xsl:text>
+        <xsl:value-of select="concat(normalize-space($this-category), $sep)"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:call-template name="warn">
@@ -356,8 +351,7 @@
     <xsl:choose>
       <xsl:when test="$this-type != ''">
         <xsl:text>type=</xsl:text>
-        <xsl:value-of select="normalize-space($this-type)"/>
-        <xsl:text>&#10;</xsl:text>
+        <xsl:value-of select="concat(normalize-space($this-type), $sep)"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:call-template name="warn">
