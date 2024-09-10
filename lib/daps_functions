@@ -274,6 +274,11 @@ function parse_args {
                 export OPTIPNG=1
                 shift
                 ;;
+            --output)
+                # output file for the metadata command
+                export METADATA_OUTPUT="$2"
+                shift 2
+                ;;
             --output-dir)
                 # unpack lockdrop: output directory
                 # no need to export (not passed to make)
@@ -1076,7 +1081,7 @@ function metadata {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="help,rootid:"
+    LONG_OPTS="help,output:,rootid:"
 
     parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -1085,9 +1090,14 @@ function metadata {
     if [[ 1 -eq $P_HELP ]]; then
         help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
         help_help
+        help_output
         help_rootid
         echo
         exit 0
+    fi
+
+    if [[ -n $METADATA_OUTPUT ]]; then
+        [[ -d $(dirname $METADATA_OUTPUT) ]] || exit_on_error "You are attempting to write the output to a non-existing directory ($(dirname $METADATA_OUTPUT))"
     fi
 
     call_make "$SUB_CMD" "$@"
@@ -1511,6 +1521,17 @@ function help_noxml {
     cat <<EOF
     --noxml                   Exclude XML files from list.
                               Default: unset
+EOF
+}
+function help_output {
+    cat <<EOF
+    --output                  Write the meatadata information to a file
+                              specified with this parameter. The parent
+                              directory must exist.
+                              Default: unset (on screen output only)
+
+                              NOTE: Redirecting the on-screen output to a file
+                                    or pipe will not work!
 EOF
 }
 function help_optipng {
