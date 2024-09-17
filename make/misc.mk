@@ -146,8 +146,10 @@ METAFILE = $(PROFILEDIR)/$(notdir $(FILE4ID))
 metadata: $(PROFILES) $(DOCFILES) validate
 ifneq "$(METADATA_OUTPUT)" ""
 	@$(XSLTPROC) --stylesheet $(META_STYLE) --file $(METAFILE) $(XSLTPROCESSOR) 2>/dev/null > $(METADATA_OUTPUT)
-	@echo "Find the meatdata at $(METADATA_OUTPUT)"
+	@echo -e "rootid=$(ROOTID)" >> $(METADATA_OUTPUT)
+	@echo "Find the metadata at $(METADATA_OUTPUT)"
 else
 	@$(XSLTPROC) --stylesheet $(META_STYLE) --file $(METAFILE) $(XSLTPROCESSOR) 2>/dev/null
+	@echo -e "rootid=$(ROOTID)"
 endif
 
