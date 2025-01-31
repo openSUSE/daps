@@ -83,7 +83,7 @@ $(HTMLDIR)/index.html: $(STYLEH) $(PROFILES) provide-color-images  warn-images $
    if test -L images/online/lvm.png; then \
     rm -f images/online/lvm.png; \
    fi
-   inkscape -z -w 800 -e images/online/lvm.png -f images/gen/svg/lvm.svg
+   rsvg-convert -o images/online/lvm.png -f png -w 800 images/gen/svg/lvm.svg
 
  . Create HTML from profiled XML:
    xsltproc --stringparam base.dir html/susestudio-enterprise-admin/ \

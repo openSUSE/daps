@@ -303,27 +303,6 @@ list-images-multisrc:
 # Color images are placed in $IMAGES_GENDIR/color/
 # Grayscale images are placed in $IMAGES_GENDIR/grayscale/
 
-#
-# Inscape changed command line option in version 1.0
-#
-# Check whether we have inkscape >= 1.0 or the old version (<1.0)
-#
-_INKSCAPE_VERSION := 1.0
-_INKSCAPE_TEST    := $(_INKSCAPE_VERSION)
-_INKSCAPE_VERSION += $(shell inkscape --version 2>/dev/null | awk '{print $$2}')
-
-#
-# Nasty workaround to compare version strings. 
-# We are creating a string with "1.0 <current>", e.g. "1.0 0.91" in $(_INKSCAPE_VERSION)
-# Afterwards we are sorting it (lowest version first) in $(_INKSCAPE_VERSION_SORT)
-# Afterwards both strings are compared. If both are the same, the inkscape version
-# is >=1.0, otherwise it is lower than 1.0 (which means it requires the old
-# command line switches)
-
-_INKSCAPE_VERSION_SORT := $(shell echo "$(_INKSCAPE_VERSION)" | tr " " "\n" | sort -b --version-sort | head -n1)
-
-_INKSCAPE_IS_NEW := $(shell if [[ "$(_INKSCAPE_TEST)" = "$(_INKSCAPE_VERSION_SORT)" ]]; then echo "yes"; else echo "no"; fi)
-
 #------------------------------------------------------------------------
 # PNG
 #
@@ -406,11 +385,19 @@ ifeq "$(VERBOSITY)" "2"
 	@echo "   Converting $(notdir $<) to PNG"
 endif
 	$(remove_link)
-ifeq "$(_INKSCAPE_IS_NEW)" "yes"
-	inkscape $(INK_OPTIONS) --export-type="png" --export-filename $@ $< $(ERR_DEVNULL)
-else
-	inkscape -z -e $@ -f $< $(DEVNULL) && ( test -f $< || false )
+
+# Check for rsvg-convert
+HAVE_RSVG_CONVERT := $(shell which rsvg-convert 2>/dev/null)
+
+# Ensure rsvg-convert is available
+ifeq ($(HAVE_RSVG_CONVERT),)
+$(error rsvg-convert not found. Please install librsvg.)
 endif
+
+# Convert SVG to PNG using rsvg-convert
+$(IMG_GENDIR)/color/%.png: $(IMG_SRC_DIR)/svg/%.svg | $(IMG_GEN_DIRECTORIES)
+	@echo "Converting $< to $@ using rsvg-convert"
+	rsvg-convert -o $@ $<
 	$(run_optipng)
 
 # Create grayscale PNGs

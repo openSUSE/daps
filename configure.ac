@@ -184,8 +184,18 @@ fi
 dnl dia
 AC_PATH_PROG([DIA], [dia], [0])
 
-dnl inkscape
-AC_PATH_PROG([INKSCAPE], [inkscape], [0])
+dnl rsvg-convert
+AC_PATH_PROG([RSVG_CONVERT], [rsvg-convert])
+
+if test -z "$RSVG_CONVERT"; then
+    AC_MSG_ERROR([rsvg-convert not found. Install 'rsvg-convert' from:
+      - openSUSE/Fedora: package 'rsvg-convert'
+      - Ubuntu/Debian: package 'librsvg2-bin'])
+fi
+
+AC_SUBST([RSVG_CONVERT])
+
+
 
 dnl optipng
 AC_PATH_PROG([OPTIPNG], [optipng], [0])
@@ -513,8 +523,8 @@ else
 fi
 
 dnl SVG support
-if test 0 = "$INKSCAPE" -o 0 = "$HAVE_SVGDTD"; then
-  AC_MSG_RESULT([Support for .svg images          |    no   | install inkscape and/or the SVG DTD])
+if test 0 = "$RSVG_CONVERT" -o 0 = "$HAVE_SVGDTD"; then
+  AC_MSG_RESULT([Support for .svg images          |    no   | install rsvg-convert and/or the SVG DTD])
 else
   AC_MSG_RESULT([Support for .svg images          |   yes   |])
 fi

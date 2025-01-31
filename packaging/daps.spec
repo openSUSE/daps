@@ -40,7 +40,7 @@ BuildRequires:  docbook-xsl-stylesheets >= 1.77
 BuildRequires:  docbook_4
 BuildRequires:  docbook_5
 BuildRequires:  fdupes
-BuildRequires:  inkscape
+BuildRequires:  rsvg-convert
 BuildRequires:  jing
 BuildRequires:  libxml2-tools
 BuildRequires:  libxslt
@@ -70,7 +70,7 @@ Requires:       docbook-xsl-stylesheets >= 1.77
 Requires:       docbook5-xsl-stylesheets >= 1.77
 Requires:       docbook_4
 Requires:       docbook_5
-Requires:       inkscape
+Requires:       rsvg-convert
 Requires:       java >= 1.8.0
 Requires:       jing
 Requires:       libxslt
