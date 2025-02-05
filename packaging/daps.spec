@@ -17,10 +17,10 @@
 
 
 Name:           daps
-Version:        4.0~beta6
+Version:        4.0~beta7
 Release:        0
 
-%define pkg_version 4.0beta6
+%define pkg_version 4.0beta7
 %define docbuilddir %{_datadir}/daps
 
 Summary:        DocBook Authoring and Publishing Suite
@@ -41,12 +41,16 @@ BuildRequires:  docbook-xsl-stylesheets >= 1.77
 BuildRequires:  docbook_4
 BuildRequires:  docbook_5
 BuildRequires:  fdupes
-BuildRequires:  inkscape
 BuildRequires:  jing
 BuildRequires:  libxml2-tools
 BuildRequires:  libxslt
 BuildRequires:  libxslt-tools
 BuildRequires:  python3-lxml
+%if 0%{?suse_version} >= 1600
+BuildRequires:  rsvg-convert
+%else
+BuildRequires:  inkscape
+%endif
 BuildRequires:  suse-xsl-stylesheets
 BuildRequires:  svg-dtd
 BuildRequires:  xerces-j2
@@ -70,12 +74,16 @@ Requires:       docbook-xsl-stylesheets >= 1.77
 Requires:       docbook5-xsl-stylesheets >= 1.77
 Requires:       docbook_4
 Requires:       docbook_5
-Requires:       inkscape
 Requires:       java >= 1.8.0
 Requires:       jing
 Requires:       libxslt
 Requires:       make
 Requires:       python3-lxml
+%if 0%{?suse_version} >= 1600
+Requires:  rsvg-convert
+%else
+Requires:  inkscape
+%endif
 Requires:       suse-xsl-stylesheets
 Requires:       svg-schema
 Requires:       xerces-j2

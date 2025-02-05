@@ -61,10 +61,9 @@ will output detailed information about the support status on your system.
 |docbook_4                |docbook                     |docbook-dtds
 |docbook_5                |docbook5-xml                |docbook5-schemas
 |--                       |docbook-xml                 |--
-|docbook-xsl-stylesheets^1^ |docbook-xsl^*^            |docbook-style-xsl^1^
+|docbook-xsl-stylesheets^1^ |docbook-xsl^1^            |docbook-style-xsl^1^
 |docbook5-xsl-stylesheets |docbook-xsl-ns              |docbook5-style-xsl
 |ImageMagick              |imagemagick                 |ImageMagick
-|inkscape                 |inkscape                    |inkscape
 |libxml2                  |libxml2-utils               |libxml2
 |--                       |libxml-commons-external-java|--
 |--                       |libxmlgraphics-commons-java |--
@@ -72,17 +71,19 @@ will output detailed information about the support status on your system.
 |jing                     |jing                        |jing
 |make                     |make                        |make
 |python3-lxml             |python3-lxml                |python3-lxml
+|rsvg-convert^2^          |librsvg2-bin^2^             |rsvg-convert^2^
 |sgml-skel                |sgml-base                   |sgml-common
 |svg-schema               |sgml-data                   |?
 |xml-apis                 |   --                       |xml-commons-apis
-|xmlgraphics-fop^2^       |fop^2^                      |fop^2^
+|xmlgraphics-fop^3^       |fop^3^                      |fop^3^
 |xmlstarlet               |xmlstarlet                  |xmlstarlet
 |--                       |xsltproc                    |--
 |zip                      |zip                         |zip
 |====
 
 ^1^: minimum version: 1.7.8
-^2^: minimum version: 0.96, 1.x or better is recommended
+^2^: use inkscape if rsvg-convert is not available
+^3^: minimum version: 0.96, 1.x or better is recommended
 
 .*Required Packages for AsciiDoc Support*
 [options="header"]
