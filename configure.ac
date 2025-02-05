@@ -11,7 +11,7 @@ dnl
 
 m4_define(daps_version_major, 4)
 m4_define(daps_version_minor, 0)
-m4_define(daps_version_micro, [beta6])
+m4_define(daps_version_micro, [beta7])
 
 # API version
 m4_define([daps_api_version],[daps_version_major])
@@ -184,8 +184,11 @@ fi
 dnl dia
 AC_PATH_PROG([DIA], [dia], [0])
 
-dnl inkscape
+dnl inkscape (only if rsvg-convert is not available)
 AC_PATH_PROG([INKSCAPE], [inkscape], [0])
+
+dnl rsvg-convert (should be preferred over inkscape)
+AC_PATH_PROG([RSVG_CONVERT], [rsvg-convert])
 
 dnl optipng
 AC_PATH_PROG([OPTIPNG], [optipng], [0])
@@ -558,8 +561,12 @@ else
 fi
 
 dnl SVG support
-if test 0 = "$INKSCAPE" -o 0 = "$HAVE_SVGDTD"; then
-  AC_MSG_RESULT([Support for .svg images          |    no   | install inkscape and/or the SVG DTD])
+if test 0 = "$HAVE_SVGDTD"; then
+  if test 0 = "$RSVG_CONVERT" -o 0 = "$INKSCAPE"; then
+    AC_MSG_RESULT([Support for .svg images          |    no   | install the SVG DTD and rsvg-convert (or inkscape)])
+  else
+    AC_MSG_RESULT([Support for .svg images          |    no   | install the SVG DTD])
+  fi
 else
   AC_MSG_RESULT([Support for .svg images          |   yes   |])
 fi
