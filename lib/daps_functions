@@ -772,10 +772,13 @@ function call_make {
     if [[ 0 -ne $VERBOSITY ]]; then
         if [[ 1 -eq $WRITE_LOG ]]; then
             $MAKE_CMD 2>&1 | tee -a "$LOGFILE"
+            # make sure to also exit this script with error of make fails
             # see http://www.unix.com/shell-programming-scripting/92163-command-does-not-return-exit-status-due-tee.html
             [[ 0 -eq ${PIPESTATUS[0]} ]] || exit 1
         else
             $MAKE_CMD 2>&1
+            # make sure to also exit this script with error of make fails
+            [[ 0 -eq $? ]] || exit 1
         fi
     else
         if [[ 1 -eq $WRITE_LOG ]]; then
@@ -792,6 +795,8 @@ function call_make {
             fi
         else
             $MAKE_CMD
+            # make sure to also exit this script with error of make fails
+            [[ 0 -eq $? ]] || exit 1
         fi
     fi
     # show path to log file if DEBUG is on
