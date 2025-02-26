@@ -321,7 +321,7 @@ list-images-multisrc:
 # Grayscale images are placed in $IMAGES_GENDIR/grayscale/
 
 HAVE_RSVG = $(shell command -v rsvg-convert 2>/dev/null)
-ifeq "$(HAVE_RSVG)" "foo"
+ifdef HAVE_RSVG
   define convert_svg
     rsvg-convert -o $@ $<
   endef
