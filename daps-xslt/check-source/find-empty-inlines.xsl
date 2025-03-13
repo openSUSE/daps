@@ -48,16 +48,37 @@
     </xsl:param>
     <xsl:param name="title" select="($node/ancestor-or-self::*/d:title|$node/ancestor-or-self::*/d:info/d:title)[last()]"/>
     <xsl:param name="level">ERROR</xsl:param>
-    <xsl:param name="msg">Empty inline found.</xsl:param>
+    <xsl:param name="nested" />
+    <xsl:param name="msg">
+      <xsl:choose>
+        <xsl:when test="$nested">Empty nested inline found.</xsl:when>
+        <xsl:otherwise>Empty inline found.</xsl:otherwise>
+      </xsl:choose>
+    </xsl:param>
+    <xsl:param name="surrounding-text" />
+    <xsl:param name="substr-len" select="30" />
 
-    <xsl:message><xsl:value-of
-      select="concat('[', $level, '] ', $msg, ' Element &lt;', local-name($node), '>')"
-       /> located near id=<xsl:value-of
-        select="$id"/>, title=<xsl:value-of select="normalize-space($title)"/>
-        XPath=<xsl:call-template name="xpath.location">
-          <xsl:with-param name="prefix" select="$prefix"/>
-        </xsl:call-template>
-    </xsl:message>
+    <xsl:variable name="candidate-error">
+      <xsl:value-of select="concat('&#10;[', $level, '] ', $msg, ' Element &lt;', local-name($node), '>')"
+       />
+      <xsl:text>&#10;        near id=</xsl:text>
+      <xsl:value-of select="$id"/>
+      <xsl:text>&#10;</xsl:text>
+      <xsl:if test="$nested">
+        <xsl:text>        within inline=</xsl:text>
+        <xsl:value-of select="concat(local-name(..), '&#10;')"/>
+      </xsl:if>
+      <xsl:if test="$surrounding-text != ''">
+        <xsl:text>        previous text=</xsl:text>
+        <xsl:value-of select="concat('&quot;', substring($surrounding-text, 1, $substr-len), '&quot;&#10;')"/>
+      </xsl:if>
+      <xsl:text>        XPath=</xsl:text>
+      <xsl:call-template name="xpath.location">
+        <xsl:with-param name="prefix" select="$prefix" />
+      </xsl:call-template>
+    </xsl:variable>
+
+    <xsl:message><xsl:value-of select="$candidate-error" /></xsl:message>
   </xsl:template>
 
 
@@ -91,15 +112,21 @@
                        d:token|d:type|d:typedefname|d:unionname|d:uri|d:varname|d:volumenum|
                        d:year
                        ">
-    <xsl:choose>
-      <!-- Don't report inlines with a xref -->
-      <xsl:when test="d:xref"/>
-      <xsl:when test="normalize-space(.) = ''">
-        <xsl:call-template name="error"/>
-      </xsl:when>
-    </xsl:choose>
-  </xsl:template>
+    <xsl:param name="node" select="." />
+    <xsl:param name="nested" select="false()" />
 
+    <!-- Check for "real" inlines, directly under a block element without child elements -->
+    <xsl:if test="not(normalize-space($node))">
+      <xsl:call-template name="error">
+      <xsl:with-param name="surrounding-text" select="normalize-space(preceding-sibling::text())" />
+      <xsl:with-param name="nested" select="$nested" />
+    </xsl:call-template>
+    </xsl:if>
+    <!-- Process any inline child elements we have -->
+    <xsl:apply-templates>
+       <xsl:with-param name="nested" select="true()" />
+    </xsl:apply-templates>
+  </xsl:template>
 
   <xsl:template match="d:indexterm">
     <xsl:call-template name="error">
