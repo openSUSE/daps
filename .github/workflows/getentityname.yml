@@ -19,9 +19,9 @@ jobs:
       - name: Install dependencies
         run: |
            sudo apt-get install -y libxml2-utils
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v4
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v1
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
 
