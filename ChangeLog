@@ -1,4 +1,21 @@
 -------------------------------------------------------------------
+Wed Jul 02 14:40:01 UTC 2025 - Frank Sundermeyer <fs@suse.com>
+
+Beta release DAPS 4.0 beta10
+
+* New features:
+  - support for GIFs (will not be converted to any other format)
+  - added a new stylesheet to create a revhistory entry if missing
+    (daps-xslt/revhistory/create-revhistory.xsl)
+* Bugfixes:
+  - ADOC_POST_STYLE was not made an absolute path and therefore
+    daps failed when using it in a container
+  - Fixed missing BINDIR in Makefile issue
+    (https://github.com/openSUSE/daps/issues/705)
+* Engancemants
+  - improvements for the find-empty-inlines.xsl styleheets
+
+-------------------------------------------------------------------
 Thu Feb 27 10:14:26 UTC 2025 - Frank Sundermeyer <fs@suse.com>
 
 Beta release DAPS 4.0 beta9
