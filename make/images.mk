@@ -20,9 +20,9 @@
 # Overview
 # DAPS uses images in $PRJ_DIR/$IMG_SRC_DIR/<FORMAT>/
 # or alternatively $PRJ_DIR/$IMG_SRC_DIR/
-# Supported image formats are .dia, .ditaa, .odg, .png, and .svg
+# Supported image formats are .dia, .ditaa, .gif, .jpg, .odg, .png, and .svg
 # - When creating HTML manuals all formats are converted to PNG
-# - When creating PDF manuals all formats are converted to
+# - When creating PDF manuals all formats (except gif, jpg) are converted to
 #   either PNG, or SVG depending on the "format" attribute in the
 #   <imagedata> tag of the XML source
 # The format attribute may take the following values
@@ -32,6 +32,8 @@
 #  DIA   |   PNG     |   SVG
 #........|...........|..........
 #  DITAA |   PNG     |   PNG
+#........|...........|..........
+#  GIF   |   GIF     |   GIF
 #........|...........|..........
 #  JPG   |   JPG     |   JPG
 #........|...........|..........
@@ -80,9 +82,10 @@ USED := $(sort $(shell $(XSLTPROC) --stringparam "filetype=img" \
 	 $(ROOTSTRING) --file $(SETFILES_TMP) \
          --stylesheet $(DAPSROOT)/daps-xslt/common/extract-files-and-images.xsl $(XSLTPROCESSOR) $(ERR_DEVNULL)))
 
-# JPG and PNG can be directly taken from the USED list - the filter
+# GIF, JPG and PNG can be directly taken from the USED list - the filter
 # function generates lists of all PNG common to USED and SCRPNG
 #
+USED_GIF := $(filter $(addprefix $(IMG_SRC_DIR)/gif/,$(USED)) $(addprefix $(IMG_SRC_DIR)/,$(USED)), $(SRCPNG))
 USED_JPG := $(filter $(addprefix $(IMG_SRC_DIR)/jpg/,$(USED)) $(addprefix $(IMG_SRC_DIR)/,$(USED)), $(SRCJPG))
 USED_PNG := $(filter $(addprefix $(IMG_SRC_DIR)/png/,$(USED)) $(addprefix $(IMG_SRC_DIR)/,$(USED)), $(SRCPNG))
 
@@ -109,7 +112,7 @@ USED_SVG := $(filter \
 	$(addprefix $(IMG_SRC_DIR)/svg/,$(addsuffix .svg,$(basename $(USED)))) \
 	$(addprefix $(IMG_SRC_DIR)/,$(addsuffix .svg,$(basename $(USED)))), \
 	$(SRCSVG))
-USED_ALL := $(USED_DIA) $(USED_DITAA) $(USED_JPG) \
+USED_ALL := $(USED_DIA) $(USED_DITAA) $(USED_GIF) $(USED_JPG) \
                 $(USED_ODG) $(USED_PNG) $(USED_SVG)
 
 
@@ -257,6 +260,7 @@ images:
 #------------------------------------------------------------------------
 # We want to keep the generated files
 #
+
 .PRECIOUS: $(COLOR_IMAGES) $(GRAYSCALE_IMAGES) $(GEN_IMAGES)
 
 #---------------
@@ -352,6 +356,29 @@ else
     endef
   endif
 endif
+
+#------------------------------------------------------------------------
+# GIF
+#
+
+#---------------
+# Link existing source images that are used in the manuals
+#
+$(IMG_GENDIR)/color/%.gif: $(IMG_SRC_DIR)/gif/%.gif | $(IMG_GEN_DIRECTORIES)
+	ln -sf $< $@
+
+$(IMG_GENDIR)/color/%.gif: $(IMG_SRC_DIR)/%.gif | $(IMG_GEN_DIRECTORIES)
+	ln -sf $< $@
+
+# Create grayscale PNGs
+#
+# all PNGs we need are in $(IMG_GENDIR)/color, generate from there
+#
+$(IMG_GENDIR)/grayscale/%.gif: $(IMG_GENDIR)/color/%.gif | $(IMG_GEN_DIRECTORIES)
+ifeq "$(VERBOSITY)" "2"
+	@echo "   Converting $(notdir $<) to grayscale"
+endif
+	convert $< $(CONVERT_OPTS_PNG) $@ $(DEVNULL)
 
 #------------------------------------------------------------------------
 # PNG
