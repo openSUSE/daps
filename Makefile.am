@@ -208,7 +208,7 @@ all-local: $(USERGUIDE) $(QUICKSTART) $(dist_man1_MANS) $(DAPS_CATALOG)
 
 INSTALLDIRS = $(DESTDIR)$(docdir)/html $(DESTDIR)$(pkgdatadir) \
 	$(DESTDIR)$(datadir)/xml/$(PACKAGE)/schema/ \
-	$(DESTDIR)$(templatedir)
+	$(DESTDIR)$(bindir) $(DESTDIR)$(templatedir)
 
 
 install-data-local: $(INSTALLDIRS) autobuild/daps-autobuild
