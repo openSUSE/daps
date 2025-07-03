@@ -49,7 +49,7 @@ ADOC_DEFAULT_ATTRIBUTES := --attribute=data-uri! \
 			   --attribute=imagesdir! \
 			   --attribute=attribute-missing=warn
 
-# If ASCIICoc attrributes are specified with the DAPS command line or
+# If ASCIICoc attributes are specified with the DAPS command line or
 # via the DC file, the asciidoc attribute "daps-adoc-attributes"
 # will be set and will contain all key=value paiirs specified this way.
 # This allows to use daps-adoc-attributes in the asciidoc sources in order to
