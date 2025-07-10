@@ -39,12 +39,6 @@ export prefix=@prefix@
 # All variables that need to be exported for further use in the makefiles
 # need to be added here!!
 #
-
-
-
-
-
-
 declare -a VARLIST
 VARLIST=(
     ADOC_ATTRIBUTES
@@ -57,6 +51,8 @@ VARLIST=(
     ADOC_TYPE
     ASCIIDOC
     ASSEMBLY_LANG
+    ASSEMBLY_RNG
+    DOCBOOK5_RNG
     BOOK
     BUILD_DIR
     CB_OPTIONS
@@ -800,6 +796,49 @@ function recover_cmdl_values {
     test -n "$VERBOSITY_CMDL"        && VERBOSITY="$VERBOSITY_CMDL"
     test -n "$XSLTPROCESSOR_CMDL"    && XSLTPROCESSOR="$XSLTPROCESSOR_CMDL"
 }
+
+# -----------
+# Set DocBook 5 schema locations
+#
+
+function resolve_schema_uri() {
+
+    #@param $1 {string} The URN to resolve.
+    local input_uri="$1"
+    local tmp_path=""
+    local resolved_path=""
+
+    # Case 1: The URN contains a version placeholder.
+    if [[ "$input_uri" =~ [^@]*@db5version\@.* ]]; then
+        for version in "5.2" "5.1" "5.0"; do
+            local versioned_uri="${input_uri/@db5version\@/$version}"
+            tmp_path=$(xmlcatalog "$XML_MAIN_CATALOG" "$versioned_uri" 2>/dev/null)
+            # xmlcatalog does not print errors to stderr, heence we need to check the eturn code
+            if [[ $? -eq 0 ]]; then
+                resolved_path="$tmp_path"
+                break
+            fi
+        done
+    # Case 2: The URN is a local file path.
+    elif [[ "${input_uri:0:5}" = "file:" ]]; then
+        resolved_path="$input_uri"
+    # Case 3: A standard URN to be resolved via catalog.
+    else
+        resolved_path=$(xmlcatalog "$XML_MAIN_CATALOG" "$input_uri" 2>/dev/null) || resolved_path=""
+    fi
+    # Final check: If a path was resolved, set the output variable. Otherwise, exit with an error.
+    if [[ -n "$resolved_path" ]]; then
+        # remove file:// or file: (Debian, Tumbleweed) prefix
+        resolved_path=${resolved_path#*file:}
+        resolved_path=${resolved_path#*//}
+        # return the path
+        echo "$resolved_path"
+    else
+        # return error code if empty
+        return 1
+    fi
+}
+
 
 # ---------
 # Config file parser for DC-files and general configs
@@ -1569,8 +1608,7 @@ fi
 # DocBook 5
 #
 if [[ 5 -eq $DOCBOOK_VERSION ]]; then
-    # resolve stylesheet URN
-    #
+    # $URI begins with file://: Take value as is
     if [[ ${DOCBOOK5_STYLE_URI:0:5} = file: ]]; then
         DOCBOOK_STYLES="$DOCBOOK5_STYLE_URI"
     else
@@ -1578,43 +1616,11 @@ if [[ 5 -eq $DOCBOOK_VERSION ]]; then
           "$DOCBOOK5_STYLE_URI" 2>/dev/null) || \
             exit_on_error "Could not determine the DocBook stylesheet location by resolving \"$DOCBOOK5_STYLE_URI\" via xmlcatalog"
     fi
-    # also get the RNG scheme location
+    # also get the RNG scheme location for DocBook itself as well as for
+    # the Assembly schema
     #
-
-    # first check whether we come from a GIT checkout - if so
-    # the URI contains @db5version@
-    #
-    if [[ $DOCBOOK5_RNG_URI =~ [^@]*@db5version\@.* ]]; then
-        for DB5_VERSION in "5.1" "5.0"; do
-            # checks 5.1 first, if it is found sets DOCBOOK5_RNG and
-            # leaves loop via break, otherwise continue with 5.0
-            #
-            D5U="${DOCBOOK5_RNG_URI/@db5version\@/$DB5_VERSION}"
-            DOCBOOK5_RNG=$(xmlcatalog "$XML_MAIN_CATALOG" "$D5U") && break
-        done
-    else
-        if [[ ${DOCBOOK5_RNG_URI:0:5} = file: ]]; then
-            DOCBOOK5_RNG="$DOCBOOK5_RNG_URI"
-        else
-            DOCBOOK5_RNG=$(xmlcatalog "$XML_MAIN_CATALOG" \
-              "$DOCBOOK5_RNG_URI" 2>/dev/null) || \
-                exit_on_error "Could not determine the DocBook 5 schema location by resolving \"$DOCBOOK5_RNG_URI\" via xmlcatalog"
-        fi
-    fi
-    # remove file:// or file: (Debian, Tumbleweed) prefix
-    #
-    DOCBOOK5_RNG=${DOCBOOK5_RNG#*file:}
-    DOCBOOK5_RNG=${DOCBOOK5_RNG#*//}
-    #
-    # check if resulting path is valid
-    #
-    if [[ ! -s "$DOCBOOK5_RNG" ]]; then
-        if [[ -n "$DOCBOOK5_RNG_URI_CMDL" ]]; then
-            exit_on_error "The URN specified with --schema points to a non-existing file \"$DOCBOOK5_RNG\""
-        else
-            exit_on_error "The URN specified with DOCBOOK5_RNG_URI points to a non-existing file \"$DOCBOOK5_RNG\""
-        fi
-    fi
+    DOCBOOK5_RNG=$(resolve_schema_uri $DOCBOOK5_RNG_URI) || exit_on_error "The schema URN \"$DOCBOOK5_RNG_URI\" could not be resolved"
+    ASSEMBLY_RNG=$(resolve_schema_uri $ASSEMBLY_RNG_URI) || exit_on_error "The schema URN \"$ASSEMBLY_RNG_URI\" could not be resolved"
 
 # DocBook 4
 #
