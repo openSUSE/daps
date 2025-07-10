@@ -47,7 +47,7 @@ fi
 as_nl='
 '
 export as_nl
-IFS=" ""	$as_nl"
+IFS=" ""        $as_nl"
 
 PS1='$ '
 PS2='> '
@@ -208,20 +208,20 @@ do
   esac
   as_found=:
   case $as_dir in #(
-	 /*)
-	   for as_base in sh bash ksh sh5; do
-	     # Try only shells that exist, to save several forks.
-	     as_shell=$as_dir$as_base
-	     if { test -f "$as_shell" || test -f "$as_shell.exe"; } &&
-		    as_run=a "$as_shell" -c "$as_bourne_compatible""$as_required" 2>/dev/null
+         /*)
+           for as_base in sh bash ksh sh5; do
+             # Try only shells that exist, to save several forks.
+             as_shell=$as_dir$as_base
+             if { test -f "$as_shell" || test -f "$as_shell.exe"; } &&
+                    as_run=a "$as_shell" -c "$as_bourne_compatible""$as_required" 2>/dev/null
 then :
   CONFIG_SHELL=$as_shell as_have_required=yes
-		   if as_run=a "$as_shell" -c "$as_bourne_compatible""$as_suggested" 2>/dev/null
+                   if as_run=a "$as_shell" -c "$as_bourne_compatible""$as_suggested" 2>/dev/null
 then :
   break 2
 fi
 fi
-	   done;;
+           done;;
        esac
   as_found=false
 done
@@ -231,7 +231,7 @@ then :
 
 else case e in #(
   e) if { test -f "$SHELL" || test -f "$SHELL.exe"; } &&
-	      as_run=a "$SHELL" -c "$as_bourne_compatible""$as_required" 2>/dev/null
+              as_run=a "$SHELL" -c "$as_bourne_compatible""$as_required" 2>/dev/null
 then :
   CONFIG_SHELL=$SHELL as_have_required=yes
 fi ;;
@@ -337,27 +337,27 @@ as_fn_mkdir_p ()
       as_dirs="'$as_qdir' $as_dirs"
       as_dir=`$as_dirname -- "$as_dir" ||
 $as_expr X"$as_dir" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
-	 X"$as_dir" : 'X\(//\)[^/]' \| \
-	 X"$as_dir" : 'X\(//\)$' \| \
-	 X"$as_dir" : 'X\(/\)' \| . 2>/dev/null ||
+         X"$as_dir" : 'X\(//\)[^/]' \| \
+         X"$as_dir" : 'X\(//\)$' \| \
+         X"$as_dir" : 'X\(/\)' \| . 2>/dev/null ||
 printf "%s\n" X"$as_dir" |
     sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{
-	    s//\1/
-	    q
-	  }
-	  /^X\(\/\/\)[^/].*/{
-	    s//\1/
-	    q
-	  }
-	  /^X\(\/\/\)$/{
-	    s//\1/
-	    q
-	  }
-	  /^X\(\/\).*/{
-	    s//\1/
-	    q
-	  }
-	  s/.*/./; q'`
+            s//\1/
+            q
+          }
+          /^X\(\/\/\)[^/].*/{
+            s//\1/
+            q
+          }
+          /^X\(\/\/\)$/{
+            s//\1/
+            q
+          }
+          /^X\(\/\).*/{
+            s//\1/
+            q
+          }
+          s/.*/./; q'`
       test -d "$as_dir" && break
     done
     test -z "$as_dirs" || eval "mkdir $as_dirs"
@@ -450,22 +450,22 @@ fi
 
 as_me=`$as_basename -- "$0" ||
 $as_expr X/"$0" : '.*/\([^/][^/]*\)/*$' \| \
-	 X"$0" : 'X\(//\)$' \| \
-	 X"$0" : 'X\(/\)' \| . 2>/dev/null ||
+         X"$0" : 'X\(//\)$' \| \
+         X"$0" : 'X\(/\)' \| . 2>/dev/null ||
 printf "%s\n" X/"$0" |
     sed '/^.*\/\([^/][^/]*\)\/*$/{
-	    s//\1/
-	    q
-	  }
-	  /^X\/\(\/\/\)$/{
-	    s//\1/
-	    q
-	  }
-	  /^X\/\(\/\).*/{
-	    s//\1/
-	    q
-	  }
-	  s/.*/./; q'`
+            s//\1/
+            q
+          }
+          /^X\/\(\/\/\)$/{
+            s//\1/
+            q
+          }
+          /^X\/\(\/\).*/{
+            s//\1/
+            q
+          }
+          s/.*/./; q'`
 
 # Avoid depending upon Character Ranges.
 as_cr_letters='abcdefghijklmnopqrstuvwxyz'
@@ -520,10 +520,10 @@ ECHO_C= ECHO_N= ECHO_T=
 case `echo -n x` in #(((((
 -n*)
   case `echo 'xy\c'` in
-  *c*) ECHO_T='	';;	# ECHO_T is single tab character.
+  *c*) ECHO_T=' ';;     # ECHO_T is single tab character.
   xy)  ECHO_C='\c';;
   *)   echo `echo ksh88 bug on AIX 6.1` > /dev/null
-       ECHO_T='	';;
+       ECHO_T=' ';;
   esac;;
 *)
   ECHO_N='-n';;
@@ -879,7 +879,7 @@ do
 "enable_$ac_useropt"
 "*) ;;
       *) ac_unrecognized_opts="$ac_unrecognized_opts$ac_unrecognized_sep--disable-$ac_useropt_orig"
-	 ac_unrecognized_sep=', ';;
+         ac_unrecognized_sep=', ';;
     esac
     eval enable_$ac_useropt=no ;;
 
@@ -905,7 +905,7 @@ do
 "enable_$ac_useropt"
 "*) ;;
       *) ac_unrecognized_opts="$ac_unrecognized_opts$ac_unrecognized_sep--enable-$ac_useropt_orig"
-	 ac_unrecognized_sep=', ';;
+         ac_unrecognized_sep=', ';;
     esac
     eval enable_$ac_useropt=\$ac_optarg ;;
 
@@ -1118,7 +1118,7 @@ do
 "with_$ac_useropt"
 "*) ;;
       *) ac_unrecognized_opts="$ac_unrecognized_opts$ac_unrecognized_sep--with-$ac_useropt_orig"
-	 ac_unrecognized_sep=', ';;
+         ac_unrecognized_sep=', ';;
     esac
     eval with_$ac_useropt=\$ac_optarg ;;
 
@@ -1134,7 +1134,7 @@ do
 "with_$ac_useropt"
 "*) ;;
       *) ac_unrecognized_opts="$ac_unrecognized_opts$ac_unrecognized_sep--without-$ac_useropt_orig"
-	 ac_unrecognized_sep=', ';;
+         ac_unrecognized_sep=', ';;
     esac
     eval with_$ac_useropt=no ;;
 
@@ -1195,10 +1195,10 @@ if test -n "$ac_unrecognized_opts"; then
 fi
 
 # Check all directory arguments for consistency.
-for ac_var in	exec_prefix prefix bindir sbindir libexecdir datarootdir \
-		datadir sysconfdir sharedstatedir localstatedir includedir \
-		oldincludedir docdir infodir htmldir dvidir pdfdir psdir \
-		libdir localedir mandir runstatedir
+for ac_var in   exec_prefix prefix bindir sbindir libexecdir datarootdir \
+                datadir sysconfdir sharedstatedir localstatedir includedir \
+                oldincludedir docdir infodir htmldir dvidir pdfdir psdir \
+                libdir localedir mandir runstatedir
 do
   eval ac_val=\$$ac_var
   # Remove trailing slashes.
@@ -1251,27 +1251,27 @@ if test -z "$srcdir"; then
   # Try the directory containing this script, then the parent directory.
   ac_confdir=`$as_dirname -- "$as_myself" ||
 $as_expr X"$as_myself" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
-	 X"$as_myself" : 'X\(//\)[^/]' \| \
-	 X"$as_myself" : 'X\(//\)$' \| \
-	 X"$as_myself" : 'X\(/\)' \| . 2>/dev/null ||
+         X"$as_myself" : 'X\(//\)[^/]' \| \
+         X"$as_myself" : 'X\(//\)$' \| \
+         X"$as_myself" : 'X\(/\)' \| . 2>/dev/null ||
 printf "%s\n" X"$as_myself" |
     sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{
-	    s//\1/
-	    q
-	  }
-	  /^X\(\/\/\)[^/].*/{
-	    s//\1/
-	    q
-	  }
-	  /^X\(\/\/\)$/{
-	    s//\1/
-	    q
-	  }
-	  /^X\(\/\).*/{
-	    s//\1/
-	    q
-	  }
-	  s/.*/./; q'`
+            s//\1/
+            q
+          }
+          /^X\(\/\/\)[^/].*/{
+            s//\1/
+            q
+          }
+          /^X\(\/\/\)$/{
+            s//\1/
+            q
+          }
+          /^X\(\/\).*/{
+            s//\1/
+            q
+          }
+          s/.*/./; q'`
   srcdir=$ac_confdir
   if test ! -r "$srcdir/$ac_unique_file"; then
     srcdir=..
@@ -1285,8 +1285,8 @@ if test ! -r "$srcdir/$ac_unique_file"; then
 fi
 ac_msg="sources are in $srcdir, but 'cd $srcdir' does not work"
 ac_abs_confdir=`(
-	cd "$srcdir" && test -r "./$ac_unique_file" || as_fn_error $? "$ac_msg"
-	pwd)`
+        cd "$srcdir" && test -r "./$ac_unique_file" || as_fn_error $? "$ac_msg"
+        pwd)`
 # When building in place, set srcdir=.
 if test "$ac_abs_confdir" = "$ac_pwd"; then
   srcdir=.
@@ -1504,7 +1504,7 @@ case $ac_configure_args_raw in
   *$as_nl*)
     ac_safe_unquote= ;;
   *)
-    ac_unsafe_z='|&;<>()$`\\"*?[ ''	' # This string ends in space, tab.
+    ac_unsafe_z='|&;<>()$`\\"*?[ ''     ' # This string ends in space, tab.
     ac_unsafe_a="$ac_unsafe_z#~"
     ac_safe_unquote="s/ '\\([^$ac_unsafe_a][^$ac_unsafe_z]*\\)'/ \\1/g"
     ac_configure_args_raw=`      printf "%s\n" "$ac_configure_args_raw" | sed "$ac_safe_unquote"`;;
@@ -1597,19 +1597,19 @@ do
     2)
       as_fn_append ac_configure_args1 " '$ac_arg'"
       if test $ac_must_keep_next = true; then
-	ac_must_keep_next=false # Got value, back to normal.
+        ac_must_keep_next=false # Got value, back to normal.
       else
-	case $ac_arg in
-	  *=* | --config-cache | -C | -disable-* | --disable-* \
-	  | -enable-* | --enable-* | -gas | --g* | -nfp | --nf* \
-	  | -q | -quiet | --q* | -silent | --sil* | -v | -verb* \
-	  | -with-* | --with-* | -without-* | --without-* | --x)
-	    case "$ac_configure_args0 " in
-	      "$ac_configure_args1"*" '$ac_arg' "* ) continue ;;
-	    esac
-	    ;;
-	  -* ) ac_must_keep_next=true ;;
-	esac
+        case $ac_arg in
+          *=* | --config-cache | -C | -disable-* | --disable-* \
+          | -enable-* | --enable-* | -gas | --g* | -nfp | --nf* \
+          | -q | -quiet | --q* | -silent | --sil* | -v | -verb* \
+          | -with-* | --with-* | -without-* | --without-* | --x)
+            case "$ac_configure_args0 " in
+              "$ac_configure_args1"*" '$ac_arg' "* ) continue ;;
+            esac
+            ;;
+          -* ) ac_must_keep_next=true ;;
+        esac
       fi
       as_fn_append ac_configure_args " '$ac_arg'"
       ;;
@@ -1626,7 +1626,7 @@ done
 # WARNING: Do not start the trap code with a newline, due to a FreeBSD 4.0 bug.
 trap 'exit_status=$?
   # Sanitize IFS.
-  IFS=" ""	$as_nl"
+  IFS=" ""      $as_nl"
   # Save into config.log some information that might help in debugging.
   {
     echo
@@ -1656,8 +1656,8 @@ printf "%s\n" "$as_me: WARNING: cache variable $ac_var contains a newline" >&2;}
     case $as_nl`(ac_space='\'' '\''; set) 2>&1` in #(
     *${as_nl}ac_space=\ *)
       sed -n \
-	"s/'\''/'\''\\\\'\'''\''/g;
-	  s/^\\([_$as_cr_alnum]*_cv_[_$as_cr_alnum]*\\)=\\(.*\\)/\\1='\''\\2'\''/p"
+        "s/'\''/'\''\\\\'\'''\''/g;
+          s/^\\([_$as_cr_alnum]*_cv_[_$as_cr_alnum]*\\)=\\(.*\\)/\\1='\''\\2'\''/p"
       ;; #(
     *)
       sed -n "/^[_$as_cr_alnum]*_cv_[_$as_cr_alnum]*=/p"
@@ -1688,11 +1688,11 @@ printf "%s\n" "$as_me: WARNING: cache variable $ac_var contains a newline" >&2;}
       echo
       for ac_var in $ac_subst_files
       do
-	eval ac_val=\$$ac_var
-	case $ac_val in
-	*\'\''*) ac_val=`printf "%s\n" "$ac_val" | sed "s/'\''/'\''\\\\\\\\'\'''\''/g"`;;
-	esac
-	printf "%s\n" "$ac_var='\''$ac_val'\''"
+        eval ac_val=\$$ac_var
+        case $ac_val in
+        *\'\''*) ac_val=`printf "%s\n" "$ac_val" | sed "s/'\''/'\''\\\\\\\\'\'''\''/g"`;;
+        esac
+        printf "%s\n" "$ac_var='\''$ac_val'\''"
       done | sort
       echo
     fi
@@ -1904,21 +1904,21 @@ printf "%s\n" "$as_me: error: '$ac_var' was not set in the previous run" >&2;}
     ,);;
     *)
       if test "x$ac_old_val" != "x$ac_new_val"; then
-	# differences in whitespace do not lead to failure.
-	ac_old_val_w=`echo x $ac_old_val`
-	ac_new_val_w=`echo x $ac_new_val`
-	if test "$ac_old_val_w" != "$ac_new_val_w"; then
-	  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: error: '$ac_var' has changed since the previous run:" >&5
+        # differences in whitespace do not lead to failure.
+        ac_old_val_w=`echo x $ac_old_val`
+        ac_new_val_w=`echo x $ac_new_val`
+        if test "$ac_old_val_w" != "$ac_new_val_w"; then
+          { printf "%s\n" "$as_me:${as_lineno-$LINENO}: error: '$ac_var' has changed since the previous run:" >&5
 printf "%s\n" "$as_me: error: '$ac_var' has changed since the previous run:" >&2;}
-	  ac_cache_corrupted=:
-	else
-	  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: warning: ignoring whitespace changes in '$ac_var' since the previous run:" >&5
+          ac_cache_corrupted=:
+        else
+          { printf "%s\n" "$as_me:${as_lineno-$LINENO}: warning: ignoring whitespace changes in '$ac_var' since the previous run:" >&5
 printf "%s\n" "$as_me: warning: ignoring whitespace changes in '$ac_var' since the previous run:" >&2;}
-	  eval $ac_var=\$ac_old_val
-	fi
-	{ printf "%s\n" "$as_me:${as_lineno-$LINENO}:   former value:  '$ac_old_val'" >&5
+          eval $ac_var=\$ac_old_val
+        fi
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}:   former value:  '$ac_old_val'" >&5
 printf "%s\n" "$as_me:   former value:  '$ac_old_val'" >&2;}
-	{ printf "%s\n" "$as_me:${as_lineno-$LINENO}:   current value: '$ac_new_val'" >&5
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}:   current value: '$ac_new_val'" >&5
 printf "%s\n" "$as_me:   current value: '$ac_new_val'" >&2;}
       fi;;
   esac
@@ -1940,7 +1940,7 @@ printf "%s\n" "$as_me: error: in '$ac_pwd':" >&2;}
   { printf "%s\n" "$as_me:${as_lineno-$LINENO}: error: changes in the environment can compromise the build" >&5
 printf "%s\n" "$as_me: error: changes in the environment can compromise the build" >&2;}
   as_fn_error $? "run '${MAKE-make} distclean' and/or 'rm $cache_file'
-	    and start over" "$LINENO" 5
+            and start over" "$LINENO" 5
 fi
 ## -------------------- ##
 ## Main body of script. ##
@@ -2005,7 +2005,7 @@ printf "%s\n" "$as_me:
 " >&6;}
 
 
-am__api_version='1.17'
+am__api_version='1.18'
 
 
 
@@ -2051,30 +2051,30 @@ case $as_dir in #((
     # by default.
     for ac_prog in ginstall scoinst install; do
       for ac_exec_ext in '' $ac_executable_extensions; do
-	if as_fn_executable_p "$as_dir$ac_prog$ac_exec_ext"; then
-	  if test $ac_prog = install &&
-	    grep dspmsg "$as_dir$ac_prog$ac_exec_ext" >/dev/null 2>&1; then
-	    # AIX install.  It has an incompatible calling convention.
-	    :
-	  elif test $ac_prog = install &&
-	    grep pwplus "$as_dir$ac_prog$ac_exec_ext" >/dev/null 2>&1; then
-	    # program-specific install script used by HP pwplus--don't use.
-	    :
-	  else
-	    rm -rf conftest.one conftest.two conftest.dir
-	    echo one > conftest.one
-	    echo two > conftest.two
-	    mkdir conftest.dir
-	    if "$as_dir$ac_prog$ac_exec_ext" -c conftest.one conftest.two "`pwd`/conftest.dir/" &&
-	      test -s conftest.one && test -s conftest.two &&
-	      test -s conftest.dir/conftest.one &&
-	      test -s conftest.dir/conftest.two
-	    then
-	      ac_cv_path_install="$as_dir$ac_prog$ac_exec_ext -c"
-	      break 3
-	    fi
-	  fi
-	fi
+        if as_fn_executable_p "$as_dir$ac_prog$ac_exec_ext"; then
+          if test $ac_prog = install &&
+            grep dspmsg "$as_dir$ac_prog$ac_exec_ext" >/dev/null 2>&1; then
+            # AIX install.  It has an incompatible calling convention.
+            :
+          elif test $ac_prog = install &&
+            grep pwplus "$as_dir$ac_prog$ac_exec_ext" >/dev/null 2>&1; then
+            # program-specific install script used by HP pwplus--don't use.
+            :
+          else
+            rm -rf conftest.one conftest.two conftest.dir
+            echo one > conftest.one
+            echo two > conftest.two
+            mkdir conftest.dir
+            if "$as_dir$ac_prog$ac_exec_ext" -c conftest.one conftest.two "`pwd`/conftest.dir/" &&
+              test -s conftest.one && test -s conftest.two &&
+              test -s conftest.dir/conftest.one &&
+              test -s conftest.dir/conftest.two
+            then
+              ac_cv_path_install="$as_dir$ac_prog$ac_exec_ext -c"
+              break 3
+            fi
+          fi
+        fi
       done
     done
     ;;
@@ -2225,7 +2225,7 @@ for am_try_res in $am_try_resolutions; do
       # Create a Makefile (real tab character here):
       rm -f conftest.mk
       echo 'conftest.ts1: conftest.ts2' >conftest.mk
-      echo '	touch conftest.ts2' >>conftest.mk
+      echo '    touch conftest.ts2' >>conftest.mk
       #
       # Now, running
       #   touch conftest.ts1; touch conftest.ts2; make
@@ -2275,10 +2275,14 @@ am_lf='
 '
 case `pwd` in
   *[\\\"\#\$\&\'\`$am_lf]*)
+    { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+printf "%s\n" "no" >&6; }
     as_fn_error $? "unsafe absolute working directory name" "$LINENO" 5;;
 esac
 case $srcdir in
-  *[\\\"\#\$\&\'\`$am_lf\ \	]*)
+  *[\\\"\#\$\&\'\`$am_lf\ \     ]*)
+    { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+printf "%s\n" "no" >&6; }
     as_fn_error $? "unsafe srcdir value: '$srcdir'" "$LINENO" 5;;
 esac
 
@@ -2359,7 +2363,7 @@ fi
 
 if test x"${install_sh+set}" != xset; then
   case $am_aux_dir in
-  *\ * | *\	*)
+  *\ * | *\     *)
     install_sh="\${SHELL} '$am_aux_dir/install-sh'" ;;
   *)
     install_sh="\${SHELL} $am_aux_dir/install-sh"
@@ -2496,16 +2500,16 @@ do
     *) as_dir=$as_dir/ ;;
   esac
     for ac_prog in mkdir gmkdir; do
-	 for ac_exec_ext in '' $ac_executable_extensions; do
-	   as_fn_executable_p "$as_dir$ac_prog$ac_exec_ext" || continue
-	   case `"$as_dir$ac_prog$ac_exec_ext" --version 2>&1` in #(
-	     'mkdir ('*'coreutils) '* | \
-	     *'BusyBox '* | \
-	     'mkdir (fileutils) '4.1*)
-	       ac_cv_path_mkdir=$as_dir$ac_prog$ac_exec_ext
-	       break 3;;
-	   esac
-	 done
+         for ac_exec_ext in '' $ac_executable_extensions; do
+           as_fn_executable_p "$as_dir$ac_prog$ac_exec_ext" || continue
+           case `"$as_dir$ac_prog$ac_exec_ext" --version 2>&1` in #(
+             'mkdir ('*'coreutils) '* | \
+             *'BusyBox '* | \
+             'mkdir (fileutils) '4.1*)
+               ac_cv_path_mkdir=$as_dir$ac_prog$ac_exec_ext
+               break 3;;
+           esac
+         done
        done
   done
 IFS=$as_save_IFS
@@ -2584,7 +2588,7 @@ else case e in #(
   e) cat >conftest.make <<\_ACEOF
 SHELL = /bin/sh
 all:
-	@echo '@@@%%%=$(MAKE)=@@@%%%'
+        @echo '@@@%%%=$(MAKE)=@@@%%%'
 _ACEOF
 # GNU make sometimes prints "make[1]: Entering ...", which would confuse us.
 case `${MAKE-make} -f conftest.make 2>/dev/null` in
@@ -2634,7 +2638,7 @@ BAR0=false
 BAR1=true
 V=1
 am__doit:
-	@$(TRUE)
+        @$(TRUE)
 .PHONY: am__doit' | $am_make -f - >/dev/null 2>&1; then
   am_cv_make_support_nested_variables=yes
 else
@@ -2743,9 +2747,133 @@ AMTAR='$${TAR-tar}'
 
 
 # We'll loop over all known methods to create a tar archive until one works.
-_am_tools='gnutar  pax cpio none'
+_am_tools='gnutar plaintar pax cpio none'
 
-am__tar='$${TAR-tar} chof - "$$tardir"' am__untar='$${TAR-tar} xf -'
+# The POSIX 1988 'ustar' format is defined with fixed-size fields.
+      # There is notably a 21 bits limit for the UID and the GID.  In fact,
+      # the 'pax' utility can hang on bigger UID/GID (see automake bug#8343
+      # and bug#13588).
+      am_max_uid=2097151 # 2^21 - 1
+      am_max_gid=$am_max_uid
+      # The $UID and $GID variables are not portable, so we need to resort
+      # to the POSIX-mandated id(1) utility.  Errors in the 'id' calls
+      # below are definitely unexpected, so allow the users to see them
+      # (that is, avoid stderr redirection).
+      am_uid=`id -u || echo unknown`
+      am_gid=`id -g || echo unknown`
+      { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking whether UID '$am_uid' is supported by ustar format" >&5
+printf %s "checking whether UID '$am_uid' is supported by ustar format... " >&6; }
+      if test x$am_uid = xunknown; then
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: WARNING: ancient id detected; assuming current UID is ok, but dist-ustar might not work" >&5
+printf "%s\n" "$as_me: WARNING: ancient id detected; assuming current UID is ok, but dist-ustar might not work" >&2;}
+      elif test $am_uid -le $am_max_uid; then
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+printf "%s\n" "yes" >&6; }
+      else
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+printf "%s\n" "no" >&6; }
+        _am_tools=none
+      fi
+      { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking whether GID '$am_gid' is supported by ustar format" >&5
+printf %s "checking whether GID '$am_gid' is supported by ustar format... " >&6; }
+      if test x$gm_gid = xunknown; then
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: WARNING: ancient id detected; assuming current GID is ok, but dist-ustar might not work" >&5
+printf "%s\n" "$as_me: WARNING: ancient id detected; assuming current GID is ok, but dist-ustar might not work" >&2;}
+      elif test $am_gid -le $am_max_gid; then
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+printf "%s\n" "yes" >&6; }
+      else
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+printf "%s\n" "no" >&6; }
+        _am_tools=none
+      fi
+
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking how to create a ustar tar archive" >&5
+printf %s "checking how to create a ustar tar archive... " >&6; }
+
+  # Go ahead even if we have the value already cached.  We do so because we
+  # need to set the values for the 'am__tar' and 'am__untar' variables.
+  _am_tools=${am_cv_prog_tar_ustar-$_am_tools}
+
+  for _am_tool in $_am_tools; do
+    case $_am_tool in
+    gnutar)
+      for _am_tar in tar gnutar gtar; do
+        { echo "$as_me:$LINENO: $_am_tar --version" >&5
+   ($_am_tar --version) >&5 2>&5
+   ac_status=$?
+   echo "$as_me:$LINENO: \$? = $ac_status" >&5
+   (exit $ac_status); } && break
+      done
+      am__tar="$_am_tar --format=ustar -chf - "'"$$tardir"'
+      am__tar_="$_am_tar --format=ustar -chf - "'"$tardir"'
+      am__untar="$_am_tar -xf -"
+      ;;
+    plaintar)
+      # Must skip GNU tar: if it does not support --format= it doesn't create
+      # ustar tarball either.
+      (tar --version) >/dev/null 2>&1 && continue
+      am__tar='tar chf - "$$tardir"'
+      am__tar_='tar chf - "$tardir"'
+      am__untar='tar xf -'
+      ;;
+    pax)
+      am__tar='pax -L -x ustar -w "$$tardir"'
+      am__tar_='pax -L -x ustar -w "$tardir"'
+      am__untar='pax -r'
+      ;;
+    cpio)
+      am__tar='find "$$tardir" -print | cpio -o -H ustar -L'
+      am__tar_='find "$tardir" -print | cpio -o -H ustar -L'
+      am__untar='cpio -i -H ustar -d'
+      ;;
+    none)
+      am__tar=false
+      am__tar_=false
+      am__untar=false
+      ;;
+    esac
+
+    # If the value was cached, stop now.  We just wanted to have am__tar
+    # and am__untar set.
+    test -n "${am_cv_prog_tar_ustar}" && break
+
+    # tar/untar a dummy directory, and stop if the command works.
+    rm -rf conftest.dir
+    mkdir conftest.dir
+    echo GrepMe > conftest.dir/file
+    { echo "$as_me:$LINENO: tardir=conftest.dir && eval $am__tar_ >conftest.tar" >&5
+   (tardir=conftest.dir && eval $am__tar_ >conftest.tar) >&5 2>&5
+   ac_status=$?
+   echo "$as_me:$LINENO: \$? = $ac_status" >&5
+   (exit $ac_status); }
+    rm -rf conftest.dir
+    if test -s conftest.tar; then
+      { echo "$as_me:$LINENO: $am__untar <conftest.tar" >&5
+   ($am__untar <conftest.tar) >&5 2>&5
+   ac_status=$?
+   echo "$as_me:$LINENO: \$? = $ac_status" >&5
+   (exit $ac_status); }
+      { echo "$as_me:$LINENO: cat conftest.dir/file" >&5
+   (cat conftest.dir/file) >&5 2>&5
+   ac_status=$?
+   echo "$as_me:$LINENO: \$? = $ac_status" >&5
+   (exit $ac_status); }
+      grep GrepMe conftest.dir/file >/dev/null 2>&1 && break
+    fi
+  done
+  rm -rf conftest.dir
+
+  if test ${am_cv_prog_tar_ustar+y}
+then :
+  printf %s "(cached) " >&6
+else case e in #(
+  e) am_cv_prog_tar_ustar=$_am_tool ;;
+esac
+fi
+
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $am_cv_prog_tar_ustar" >&5
+printf "%s\n" "$am_cv_prog_tar_ustar" >&6; }
 
 
 
@@ -3749,7 +3877,7 @@ fi ;;
 esac
 fi
 eval ac_res=\$$as_ac_File
-	       { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
+               { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
 printf "%s\n" "$ac_res" >&6; }
 if eval test \"x\$"$as_ac_File"\" = x"yes"
 then :
@@ -4163,7 +4291,7 @@ printf "%s\n" "yes" >&6; }
 else case e in #(
   e) { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
 printf "%s\n" "no" >&6; }
-			       as_fn_error $? "Python interpreter is too old" "$LINENO" 5 ;;
+                               as_fn_error $? "Python interpreter is too old" "$LINENO" 5 ;;
 esac
 fi
       am_display_PYTHON=$PYTHON
@@ -4177,9 +4305,9 @@ then :
   printf %s "(cached) " >&6
 else case e in #(
   e)
-	for am_cv_pathless_PYTHON in python python3  python3.20 python3.19 python3.18 python3.17 python3.16  python3.15 python3.14 python3.13 python3.12 python3.11 python3.10  python3.9 python3.8 python3.7 python3.6 python3.5 python3.4 python3.3  python3.2 python3.1 python3.0  python2  python2.7 python2.6 python2.5 python2.4 python2.3 python2.2 python2.1  python2.0 none; do
-	  test "$am_cv_pathless_PYTHON" = none && break
-	  prog="import sys
+        for am_cv_pathless_PYTHON in python python3  python3.20 python3.19 python3.18 python3.17 python3.16  python3.15 python3.14 python3.13 python3.12 python3.11 python3.10  python3.9 python3.8 python3.7 python3.6 python3.5 python3.4 python3.3  python3.2 python3.1 python3.0  python2  python2.7 python2.6 python2.5 python2.4 python2.3 python2.2 python2.1  python2.0 none; do
+          test "$am_cv_pathless_PYTHON" = none && break
+          prog="import sys
 # split strings by '.' and convert to numeric.  Append some zeros
 # because we need at least 4 digits for the hex conversion.
 # map returns an iterator in Python 3.0 and a list in 2.x
@@ -4196,14 +4324,14 @@ sys.exit(sys.hexversion < minverhex)"
 then :
   break
 fi
-	done ;;
+        done ;;
 esac
 fi
 { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $am_cv_pathless_PYTHON" >&5
 printf "%s\n" "$am_cv_pathless_PYTHON" >&6; }
       # Set $PYTHON to the absolute path of $am_cv_pathless_PYTHON.
       if test "$am_cv_pathless_PYTHON" = none; then
-	PYTHON=:
+        PYTHON=:
       else
         # Extract the first word of "$am_cv_pathless_PYTHON", so it can be a program name with args.
 set dummy $am_cv_pathless_PYTHON; ac_word=$2
@@ -4573,23 +4701,23 @@ printf "%s\n" "$am_cv_python_pyexecdir" >&6; }
     PYTHON_NAME=`basename $PYTHON`
     { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking $PYTHON_NAME module: lxml" >&5
 printf %s "checking $PYTHON_NAME module: lxml... " >&6; }
-	$PYTHON -c "import lxml" 2>/dev/null
-	if test $? -eq 0;
-	then
-		{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+        $PYTHON -c "import lxml" 2>/dev/null
+        if test $? -eq 0;
+        then
+                { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 printf "%s\n" "yes" >&6; }
-		eval HAVE_PYMOD_LXML=yes
-	else
-		{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+                eval HAVE_PYMOD_LXML=yes
+        else
+                { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
 printf "%s\n" "no" >&6; }
-		eval HAVE_PYMOD_LXML=no
-		#
-		if test -n "fatal"
-		then
-			as_fn_error $? "failed to find required python module lxml" "$LINENO" 5
-			exit 1
-		fi
-	fi
+                eval HAVE_PYMOD_LXML=no
+                #
+                if test -n "fatal"
+                then
+                        as_fn_error $? "failed to find required python module lxml" "$LINENO" 5
+                        exit 1
+                fi
+        fi
 
 
 
@@ -4960,8 +5088,8 @@ printf "%s\n" "$as_me: WARNING: cache variable $ac_var contains a newline" >&2;}
       # 'set' does not quote correctly, so add quotes: double-quote
       # substitution turns \\\\ into \\, and sed turns \\ into \.
       sed -n \
-	"s/'/'\\\\''/g;
-	  s/^\\([_$as_cr_alnum]*_cv_[_$as_cr_alnum]*\\)=\\(.*\\)/\\1='\\2'/p"
+        "s/'/'\\\\''/g;
+          s/^\\([_$as_cr_alnum]*_cv_[_$as_cr_alnum]*\\)=\\(.*\\)/\\1='\\2'/p"
       ;; #(
     *)
       # 'set' quotes correctly as required by POSIX, so do not add quotes.
@@ -4984,15 +5112,15 @@ if diff "$cache_file" confcache >/dev/null 2>&1; then :; else
       { printf "%s\n" "$as_me:${as_lineno-$LINENO}: updating cache $cache_file" >&5
 printf "%s\n" "$as_me: updating cache $cache_file" >&6;}
       if test ! -f "$cache_file" || test -h "$cache_file"; then
-	cat confcache >"$cache_file"
+        cat confcache >"$cache_file"
       else
         case $cache_file in #(
         */* | ?:*)
-	  mv -f confcache "$cache_file"$$ &&
-	  mv -f "$cache_file"$$ "$cache_file" ;; #(
+          mv -f confcache "$cache_file"$$ &&
+          mv -f "$cache_file"$$ "$cache_file" ;; #(
         *)
-	  mv -f confcache "$cache_file" ;;
-	esac
+          mv -f confcache "$cache_file" ;;
+        esac
       fi
     fi
   else
@@ -5022,21 +5150,21 @@ ac_script='
 }
 t clear
 :clear
-s/^[	 ]*#[	 ]*define[	 ][	 ]*\([^	 (][^	 (]*([^)]*)\)[	 ]*\(.*\)/-D\1=\2/g
+s/^[     ]*#[    ]*define[       ][      ]*\([^  (][^    (]*([^)]*)\)[   ]*\(.*\)/-D\1=\2/g
 t quote
-s/^[	 ]*#[	 ]*define[	 ][	 ]*\([^	 ][^	 ]*\)[	 ]*\(.*\)/-D\1=\2/g
+s/^[     ]*#[    ]*define[       ][      ]*\([^  ][^     ]*\)[   ]*\(.*\)/-D\1=\2/g
 t quote
 b any
 :quote
-s/[][	 `~#$^&*(){}\\|;'\''"<>?]/\\&/g
+s/[][    `~#$^&*(){}\\|;'\''"<>?]/\\&/g
 s/\$/$$/g
 H
 :any
 ${
-	g
-	s/^\n//
-	s/\n/ /g
-	p
+        g
+        s/^\n//
+        s/\n/ /g
+        p
 }
 '
 DEFS=`sed -n "$ac_script" confdefs.h`
@@ -5171,7 +5299,7 @@ fi
 as_nl='
 '
 export as_nl
-IFS=" ""	$as_nl"
+IFS=" ""        $as_nl"
 
 PS1='$ '
 PS2='> '
@@ -5344,22 +5472,22 @@ fi
 
 as_me=`$as_basename -- "$0" ||
 $as_expr X/"$0" : '.*/\([^/][^/]*\)/*$' \| \
-	 X"$0" : 'X\(//\)$' \| \
-	 X"$0" : 'X\(/\)' \| . 2>/dev/null ||
+         X"$0" : 'X\(//\)$' \| \
+         X"$0" : 'X\(/\)' \| . 2>/dev/null ||
 printf "%s\n" X/"$0" |
     sed '/^.*\/\([^/][^/]*\)\/*$/{
-	    s//\1/
-	    q
-	  }
-	  /^X\/\(\/\/\)$/{
-	    s//\1/
-	    q
-	  }
-	  /^X\/\(\/\).*/{
-	    s//\1/
-	    q
-	  }
-	  s/.*/./; q'`
+            s//\1/
+            q
+          }
+          /^X\/\(\/\/\)$/{
+            s//\1/
+            q
+          }
+          /^X\/\(\/\).*/{
+            s//\1/
+            q
+          }
+          s/.*/./; q'`
 
 # Avoid depending upon Character Ranges.
 as_cr_letters='abcdefghijklmnopqrstuvwxyz'
@@ -5376,10 +5504,10 @@ ECHO_C= ECHO_N= ECHO_T=
 case `echo -n x` in #(((((
 -n*)
   case `echo 'xy\c'` in
-  *c*) ECHO_T='	';;	# ECHO_T is single tab character.
+  *c*) ECHO_T=' ';;     # ECHO_T is single tab character.
   xy)  ECHO_C='\c';;
   *)   echo `echo ksh88 bug on AIX 6.1` > /dev/null
-       ECHO_T='	';;
+       ECHO_T=' ';;
   esac;;
 *)
   ECHO_N='-n';;
@@ -5438,27 +5566,27 @@ as_fn_mkdir_p ()
       as_dirs="'$as_qdir' $as_dirs"
       as_dir=`$as_dirname -- "$as_dir" ||
 $as_expr X"$as_dir" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
-	 X"$as_dir" : 'X\(//\)[^/]' \| \
-	 X"$as_dir" : 'X\(//\)$' \| \
-	 X"$as_dir" : 'X\(/\)' \| . 2>/dev/null ||
+         X"$as_dir" : 'X\(//\)[^/]' \| \
+         X"$as_dir" : 'X\(//\)$' \| \
+         X"$as_dir" : 'X\(/\)' \| . 2>/dev/null ||
 printf "%s\n" X"$as_dir" |
     sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{
-	    s//\1/
-	    q
-	  }
-	  /^X\(\/\/\)[^/].*/{
-	    s//\1/
-	    q
-	  }
-	  /^X\(\/\/\)$/{
-	    s//\1/
-	    q
-	  }
-	  /^X\(\/\).*/{
-	    s//\1/
-	    q
-	  }
-	  s/.*/./; q'`
+            s//\1/
+            q
+          }
+          /^X\(\/\/\)[^/].*/{
+            s//\1/
+            q
+          }
+          /^X\(\/\/\)$/{
+            s//\1/
+            q
+          }
+          /^X\(\/\).*/{
+            s//\1/
+            q
+          }
+          s/.*/./; q'`
       test -d "$as_dir" && break
     done
     test -z "$as_dirs" || eval "mkdir $as_dirs"
@@ -5853,21 +5981,21 @@ _ACEOF
 # trailing colons and then remove the whole line if VPATH becomes empty
 # (actually we leave an empty line to preserve line numbers).
 if test "x$srcdir" = x.; then
-  ac_vpsub='/^[	 ]*VPATH[	 ]*=[	 ]*/{
+  ac_vpsub='/^[  ]*VPATH[        ]*=[    ]*/{
 h
 s///
 s/^/:/
-s/[	 ]*$/:/
+s/[      ]*$/:/
 s/:\$(srcdir):/:/g
 s/:\${srcdir}:/:/g
 s/:@srcdir@:/:/g
 s/^:*//
 s/:*$//
 x
-s/\(=[	 ]*\).*/\1/
+s/\(=[   ]*\).*/\1/
 G
 s/\n//
-s/^[^=]*=[	 ]*$//
+s/^[^=]*=[       ]*$//
 }'
 fi
 
@@ -5905,14 +6033,14 @@ do
       case $ac_f in
       -) ac_f="$ac_tmp/stdin";;
       *) # Look for the file first in the build tree, then in the source tree
-	 # (if the path is not absolute).  The absolute path cannot be DOS-style,
-	 # because $ac_f cannot contain ':'.
-	 test -f "$ac_f" ||
-	   case $ac_f in
-	   [\\/$]*) false;;
-	   *) test -f "$srcdir/$ac_f" && ac_f="$srcdir/$ac_f";;
-	   esac ||
-	   as_fn_error 1 "cannot find input file: '$ac_f'" "$LINENO" 5;;
+         # (if the path is not absolute).  The absolute path cannot be DOS-style,
+         # because $ac_f cannot contain ':'.
+         test -f "$ac_f" ||
+           case $ac_f in
+           [\\/$]*) false;;
+           *) test -f "$srcdir/$ac_f" && ac_f="$srcdir/$ac_f";;
+           esac ||
+           as_fn_error 1 "cannot find input file: '$ac_f'" "$LINENO" 5;;
       esac
       case $ac_f in *\'*) ac_f=`printf "%s\n" "$ac_f" | sed "s/'/'\\\\\\\\''/g"`;; esac
       as_fn_append ac_file_inputs " '$ac_f'"
@@ -5922,8 +6050,8 @@ do
     # use $as_me), people would be surprised to read:
     #    /* config.h.  Generated by config.status.  */
     configure_input='Generated from '`
-	  printf "%s\n" "$*" | sed 's|^[^:]*/||;s|:[^:]*/|, |g'
-	`' by configure.'
+          printf "%s\n" "$*" | sed 's|^[^:]*/||;s|:[^:]*/|, |g'
+        `' by configure.'
     if test x"$ac_file" != x-; then
       configure_input="$ac_file.  $configure_input"
       { printf "%s\n" "$as_me:${as_lineno-$LINENO}: creating $ac_file" >&5
@@ -5946,27 +6074,27 @@ printf "%s\n" "$as_me: creating $ac_file" >&6;}
 
   ac_dir=`$as_dirname -- "$ac_file" ||
 $as_expr X"$ac_file" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
-	 X"$ac_file" : 'X\(//\)[^/]' \| \
-	 X"$ac_file" : 'X\(//\)$' \| \
-	 X"$ac_file" : 'X\(/\)' \| . 2>/dev/null ||
+         X"$ac_file" : 'X\(//\)[^/]' \| \
+         X"$ac_file" : 'X\(//\)$' \| \
+         X"$ac_file" : 'X\(/\)' \| . 2>/dev/null ||
 printf "%s\n" X"$ac_file" |
     sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{
-	    s//\1/
-	    q
-	  }
-	  /^X\(\/\/\)[^/].*/{
-	    s//\1/
-	    q
-	  }
-	  /^X\(\/\/\)$/{
-	    s//\1/
-	    q
-	  }
-	  /^X\(\/\).*/{
-	    s//\1/
-	    q
-	  }
-	  s/.*/./; q'`
+            s//\1/
+            q
+          }
+          /^X\(\/\/\)[^/].*/{
+            s//\1/
+            q
+          }
+          /^X\(\/\/\)$/{
+            s//\1/
+            q
+          }
+          /^X\(\/\).*/{
+            s//\1/
+            q
+          }
+          s/.*/./; q'`
   as_dir="$ac_dir"; as_fn_mkdir_p
   ac_builddir=.
 
@@ -6080,7 +6208,7 @@ eval sed \"\$ac_sed_extra\" "$ac_file_inputs" | $AWK -f "$ac_tmp/subs.awk" \
 
 test -z "$ac_datarootdir_hack$ac_datarootdir_seen" &&
   { ac_out=`sed -n '/\${datarootdir}/p' "$ac_tmp/out"`; test -n "$ac_out"; } &&
-  { ac_out=`sed -n '/^[	 ]*datarootdir[	 ]*:*=/p' \
+  { ac_out=`sed -n '/^[  ]*datarootdir[  ]*:*=/p' \
       "$ac_tmp/out"`; test -z "$ac_out"; } &&
   { printf "%s\n" "$as_me:${as_lineno-$LINENO}: WARNING: $ac_file contains a reference to the variable 'datarootdir'
 which seems to be undefined.  Please make sure it is defined" >&5
@@ -6181,8 +6309,8 @@ printf "%s\n" "$as_me: WARNING: cache variable $ac_var contains a newline" >&2;}
       # 'set' does not quote correctly, so add quotes: double-quote
       # substitution turns \\\\ into \\, and sed turns \\ into \.
       sed -n \
-	"s/'/'\\\\''/g;
-	  s/^\\([_$as_cr_alnum]*_cv_[_$as_cr_alnum]*\\)=\\(.*\\)/\\1='\\2'/p"
+        "s/'/'\\\\''/g;
+          s/^\\([_$as_cr_alnum]*_cv_[_$as_cr_alnum]*\\)=\\(.*\\)/\\1='\\2'/p"
       ;; #(
     *)
       # 'set' quotes correctly as required by POSIX, so do not add quotes.
@@ -6205,15 +6333,15 @@ if diff "$cache_file" confcache >/dev/null 2>&1; then :; else
       { printf "%s\n" "$as_me:${as_lineno-$LINENO}: updating cache $cache_file" >&5
 printf "%s\n" "$as_me: updating cache $cache_file" >&6;}
       if test ! -f "$cache_file" || test -h "$cache_file"; then
-	cat confcache >"$cache_file"
+        cat confcache >"$cache_file"
       else
         case $cache_file in #(
         */* | ?:*)
-	  mv -f confcache "$cache_file"$$ &&
-	  mv -f "$cache_file"$$ "$cache_file" ;; #(
+          mv -f confcache "$cache_file"$$ &&
+          mv -f "$cache_file"$$ "$cache_file" ;; #(
         *)
-	  mv -f confcache "$cache_file" ;;
-	esac
+          mv -f confcache "$cache_file" ;;
+        esac
       fi
     fi
   else
@@ -6243,21 +6371,21 @@ ac_script='
 }
 t clear
 :clear
-s/^[	 ]*#[	 ]*define[	 ][	 ]*\([^	 (][^	 (]*([^)]*)\)[	 ]*\(.*\)/-D\1=\2/g
+s/^[     ]*#[    ]*define[       ][      ]*\([^  (][^    (]*([^)]*)\)[   ]*\(.*\)/-D\1=\2/g
 t quote
-s/^[	 ]*#[	 ]*define[	 ][	 ]*\([^	 ][^	 ]*\)[	 ]*\(.*\)/-D\1=\2/g
+s/^[     ]*#[    ]*define[       ][      ]*\([^  ][^     ]*\)[   ]*\(.*\)/-D\1=\2/g
 t quote
 b any
 :quote
-s/[][	 `~#$^&*(){}\\|;'\''"<>?]/\\&/g
+s/[][    `~#$^&*(){}\\|;'\''"<>?]/\\&/g
 s/\$/$$/g
 H
 :any
 ${
-	g
-	s/^\n//
-	s/\n/ /g
-	p
+        g
+        s/^\n//
+        s/\n/ /g
+        p
 }
 '
 DEFS=`sed -n "$ac_script" confdefs.h`
@@ -6392,7 +6520,7 @@ fi
 as_nl='
 '
 export as_nl
-IFS=" ""	$as_nl"
+IFS=" ""        $as_nl"
 
 PS1='$ '
 PS2='> '
@@ -6565,22 +6693,22 @@ fi
 
 as_me=`$as_basename -- "$0" ||
 $as_expr X/"$0" : '.*/\([^/][^/]*\)/*$' \| \
-	 X"$0" : 'X\(//\)$' \| \
-	 X"$0" : 'X\(/\)' \| . 2>/dev/null ||
+         X"$0" : 'X\(//\)$' \| \
+         X"$0" : 'X\(/\)' \| . 2>/dev/null ||
 printf "%s\n" X/"$0" |
     sed '/^.*\/\([^/][^/]*\)\/*$/{
-	    s//\1/
-	    q
-	  }
-	  /^X\/\(\/\/\)$/{
-	    s//\1/
-	    q
-	  }
-	  /^X\/\(\/\).*/{
-	    s//\1/
-	    q
-	  }
-	  s/.*/./; q'`
+            s//\1/
+            q
+          }
+          /^X\/\(\/\/\)$/{
+            s//\1/
+            q
+          }
+          /^X\/\(\/\).*/{
+            s//\1/
+            q
+          }
+          s/.*/./; q'`
 
 # Avoid depending upon Character Ranges.
 as_cr_letters='abcdefghijklmnopqrstuvwxyz'
@@ -6597,10 +6725,10 @@ ECHO_C= ECHO_N= ECHO_T=
 case `echo -n x` in #(((((
 -n*)
   case `echo 'xy\c'` in
-  *c*) ECHO_T='	';;	# ECHO_T is single tab character.
+  *c*) ECHO_T=' ';;     # ECHO_T is single tab character.
   xy)  ECHO_C='\c';;
   *)   echo `echo ksh88 bug on AIX 6.1` > /dev/null
-       ECHO_T='	';;
+       ECHO_T=' ';;
   esac;;
 *)
   ECHO_N='-n';;
@@ -6659,27 +6787,27 @@ as_fn_mkdir_p ()
       as_dirs="'$as_qdir' $as_dirs"
       as_dir=`$as_dirname -- "$as_dir" ||
 $as_expr X"$as_dir" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
-	 X"$as_dir" : 'X\(//\)[^/]' \| \
-	 X"$as_dir" : 'X\(//\)$' \| \
-	 X"$as_dir" : 'X\(/\)' \| . 2>/dev/null ||
+         X"$as_dir" : 'X\(//\)[^/]' \| \
+         X"$as_dir" : 'X\(//\)$' \| \
+         X"$as_dir" : 'X\(/\)' \| . 2>/dev/null ||
 printf "%s\n" X"$as_dir" |
     sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{
-	    s//\1/
-	    q
-	  }
-	  /^X\(\/\/\)[^/].*/{
-	    s//\1/
-	    q
-	  }
-	  /^X\(\/\/\)$/{
-	    s//\1/
-	    q
-	  }
-	  /^X\(\/\).*/{
-	    s//\1/
-	    q
-	  }
-	  s/.*/./; q'`
+            s//\1/
+            q
+          }
+          /^X\(\/\/\)[^/].*/{
+            s//\1/
+            q
+          }
+          /^X\(\/\/\)$/{
+            s//\1/
+            q
+          }
+          /^X\(\/\).*/{
+            s//\1/
+            q
+          }
+          s/.*/./; q'`
       test -d "$as_dir" && break
     done
     test -z "$as_dirs" || eval "mkdir $as_dirs"
@@ -7075,21 +7203,21 @@ _ACEOF
 # trailing colons and then remove the whole line if VPATH becomes empty
 # (actually we leave an empty line to preserve line numbers).
 if test "x$srcdir" = x.; then
-  ac_vpsub='/^[	 ]*VPATH[	 ]*=[	 ]*/{
+  ac_vpsub='/^[  ]*VPATH[        ]*=[    ]*/{
 h
 s///
 s/^/:/
-s/[	 ]*$/:/
+s/[      ]*$/:/
 s/:\$(srcdir):/:/g
 s/:\${srcdir}:/:/g
 s/:@srcdir@:/:/g
 s/^:*//
 s/:*$//
 x
-s/\(=[	 ]*\).*/\1/
+s/\(=[   ]*\).*/\1/
 G
 s/\n//
-s/^[^=]*=[	 ]*$//
+s/^[^=]*=[       ]*$//
 }'
 fi
 
@@ -7127,14 +7255,14 @@ do
       case $ac_f in
       -) ac_f="$ac_tmp/stdin";;
       *) # Look for the file first in the build tree, then in the source tree
-	 # (if the path is not absolute).  The absolute path cannot be DOS-style,
-	 # because $ac_f cannot contain ':'.
-	 test -f "$ac_f" ||
-	   case $ac_f in
-	   [\\/$]*) false;;
-	   *) test -f "$srcdir/$ac_f" && ac_f="$srcdir/$ac_f";;
-	   esac ||
-	   as_fn_error 1 "cannot find input file: '$ac_f'" "$LINENO" 5;;
+         # (if the path is not absolute).  The absolute path cannot be DOS-style,
+         # because $ac_f cannot contain ':'.
+         test -f "$ac_f" ||
+           case $ac_f in
+           [\\/$]*) false;;
+           *) test -f "$srcdir/$ac_f" && ac_f="$srcdir/$ac_f";;
+           esac ||
+           as_fn_error 1 "cannot find input file: '$ac_f'" "$LINENO" 5;;
       esac
       case $ac_f in *\'*) ac_f=`printf "%s\n" "$ac_f" | sed "s/'/'\\\\\\\\''/g"`;; esac
       as_fn_append ac_file_inputs " '$ac_f'"
@@ -7144,8 +7272,8 @@ do
     # use $as_me), people would be surprised to read:
     #    /* config.h.  Generated by config.status.  */
     configure_input='Generated from '`
-	  printf "%s\n" "$*" | sed 's|^[^:]*/||;s|:[^:]*/|, |g'
-	`' by configure.'
+          printf "%s\n" "$*" | sed 's|^[^:]*/||;s|:[^:]*/|, |g'
+        `' by configure.'
     if test x"$ac_file" != x-; then
       configure_input="$ac_file.  $configure_input"
       { printf "%s\n" "$as_me:${as_lineno-$LINENO}: creating $ac_file" >&5
@@ -7168,27 +7296,27 @@ printf "%s\n" "$as_me: creating $ac_file" >&6;}
 
   ac_dir=`$as_dirname -- "$ac_file" ||
 $as_expr X"$ac_file" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
-	 X"$ac_file" : 'X\(//\)[^/]' \| \
-	 X"$ac_file" : 'X\(//\)$' \| \
-	 X"$ac_file" : 'X\(/\)' \| . 2>/dev/null ||
+         X"$ac_file" : 'X\(//\)[^/]' \| \
+         X"$ac_file" : 'X\(//\)$' \| \
+         X"$ac_file" : 'X\(/\)' \| . 2>/dev/null ||
 printf "%s\n" X"$ac_file" |
     sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{
-	    s//\1/
-	    q
-	  }
-	  /^X\(\/\/\)[^/].*/{
-	    s//\1/
-	    q
-	  }
-	  /^X\(\/\/\)$/{
-	    s//\1/
-	    q
-	  }
-	  /^X\(\/\).*/{
-	    s//\1/
-	    q
-	  }
-	  s/.*/./; q'`
+            s//\1/
+            q
+          }
+          /^X\(\/\/\)[^/].*/{
+            s//\1/
+            q
+          }
+          /^X\(\/\/\)$/{
+            s//\1/
+            q
+          }
+          /^X\(\/\).*/{
+            s//\1/
+            q
+          }
+          s/.*/./; q'`
   as_dir="$ac_dir"; as_fn_mkdir_p
   ac_builddir=.
 
@@ -7302,7 +7430,7 @@ eval sed \"\$ac_sed_extra\" "$ac_file_inputs" | $AWK -f "$ac_tmp/subs.awk" \
 
 test -z "$ac_datarootdir_hack$ac_datarootdir_seen" &&
   { ac_out=`sed -n '/\${datarootdir}/p' "$ac_tmp/out"`; test -n "$ac_out"; } &&
-  { ac_out=`sed -n '/^[	 ]*datarootdir[	 ]*:*=/p' \
+  { ac_out=`sed -n '/^[  ]*datarootdir[  ]*:*=/p' \
       "$ac_tmp/out"`; test -z "$ac_out"; } &&
   { printf "%s\n" "$as_me:${as_lineno-$LINENO}: WARNING: $ac_file contains a reference to the variable 'datarootdir'
 which seems to be undefined.  Please make sure it is defined" >&5
@@ -7365,8 +7493,8 @@ your expectations.
 Supported features
 ------------------
 * DocBook 4/5 support                * man pages output
-* HTML/single HTML output            * webhelp output (experimental)
-* ePUB output                        * png and jpg images
+* HTML/single HTML output            * png, jpg, and gif images
+* ePUB output
 
 Optional features
 -----------------
@@ -7379,8 +7507,8 @@ your expectations.
 Supported features
 ------------------
 * DocBook 4/5 support                * man pages output
-* HTML/single HTML output            * webhelp output (experimental)
-* ePUB output                        * png and jpg images
+* HTML/single HTML output            * png, jpg, and gif images
+* ePUB output
 
 Optional features
 -----------------
@@ -7393,8 +7521,16 @@ if test 0 = "$HAVE_DOCBOOK_50"; then
   { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: DocBook 5.0 support              |    no   | install DocBook 5.0, the
                                  |         | DocBook 5 XSL stylesheets,
                                  |         | and jing
+
+DocBook Assembly support         |  no     | install DocBook 5.2, the
+                                 |         | DocBook 5 XSL stylesheets,
+                                 |         | and jing
 " >&5
 printf "%s\n" "DocBook 5.0 support              |    no   | install DocBook 5.0, the
+                                 |         | DocBook 5 XSL stylesheets,
+                                 |         | and jing
+
+DocBook Assembly support         |  no     | install DocBook 5.2, the
                                  |         | DocBook 5 XSL stylesheets,
                                  |         | and jing
 " >&6; }
@@ -7407,8 +7543,16 @@ if test 0 = "$HAVE_DOCBOOK_51"; then
   { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: DocBook 5.1 support              |    no   | install DocBook 5.1, the
                                  |         | DocBook 5 XSL stylesheets,
                                  |         | and jing
+
+DocBook Assembly support         |  no     | install DocBook 5.2, the
+                                 |         | DocBook 5 XSL stylesheets,
+                                 |         | and jing
 " >&5
 printf "%s\n" "DocBook 5.1 support              |    no   | install DocBook 5.1, the
+                                 |         | DocBook 5 XSL stylesheets,
+                                 |         | and jing
+
+DocBook Assembly support         |  no     | install DocBook 5.2, the
                                  |         | DocBook 5 XSL stylesheets,
                                  |         | and jing
 " >&6; }
@@ -7585,4 +7729,3 @@ System wide config files: $SYSCONFDIR
 Documentation           : $DOCDIR
 Everything else         : $DATADIR
 " >&6; }
-

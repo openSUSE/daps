@@ -468,8 +468,8 @@ your expectations.
 Supported features
 ------------------
 * DocBook 4/5 support                * man pages output
-* HTML/single HTML output            * webhelp output (experimental)
-* ePUB output                        * png and jpg images
+* HTML/single HTML output            * png, jpg, and gif images
+* ePUB output
 
 Optional features
 -----------------
@@ -483,6 +483,10 @@ if test 0 = "$HAVE_DOCBOOK_50"; then
   AC_MSG_RESULT([DocBook 5.0 support              |    no   | install DocBook 5.0, the
                                  |         | DocBook 5 XSL stylesheets,
                                  |         | and jing
+				 
+DocBook Assembly support         |  no     | install DocBook 5.2, the
+                                 |         | DocBook 5 XSL stylesheets,
+                                 |         | and jing
 ])
 else
   AC_MSG_RESULT([DocBook 5.0 support              |   yes   |])
@@ -490,6 +494,10 @@ fi
 
 if test 0 = "$HAVE_DOCBOOK_51"; then
   AC_MSG_RESULT([DocBook 5.1 support              |    no   | install DocBook 5.1, the
+                                 |         | DocBook 5 XSL stylesheets,
+                                 |         | and jing
+				 
+DocBook Assembly support         |  no     | install DocBook 5.2, the
                                  |         | DocBook 5 XSL stylesheets,
                                  |         | and jing
 ])
