@@ -348,6 +348,30 @@ if test -z "$HAVE_DOCBOOK_51"; then
   AC_MSG_WARN([Seems you do not have DocBook 5.1 installed.])
 fi
 
+dnl Docbook 5.2
+AC_MSG_NOTICE([===== Checking for DocBook 5.2...])
+for XML_SCHEMA in "http://docbook.org/xml/5.2/rng/docbookxi.rng" \
+                  "http://docbook.org/xml/5.2/rng/docbookxi.rnc" \
+                  "http://docbook.org/xml/5.2/rng/docbook.rng" \
+                  "http://docbook.org/xml/5.2/rng/docbook.rnc" \
+                  "http://docbook.org/xml/5.2/rng/assembly.rng" \
+                  "http://docbook.org/xml/5.2/rng/assembly.rnc" \
+                  "http://docbook.org/xml/5.2/rng/dbits.rng" \
+                  "http://docbook.org/xml/5.2/rng/dbits.rnc"  ; do
+  AC_MSG_CHECKING([for $XML_SCHEMA])
+  if AC_RUN_LOG([$XMLCATALOG --noout "$root_catalog" "$XML_SCHEMA" >&2]); then
+    AC_MSG_RESULT([yes])
+    HAVE_DOCBOOK_52=1
+    db5_version="5.2"
+  else
+    AC_MSG_RESULT([no])
+  fi
+done
+if test -z "$HAVE_DOCBOOK_52"; then
+  HAVE_DOCBOOK_52=0
+  AC_MSG_WARN([Seems you do not have DocBook 5.1 installed.])
+fi
+
 # In case DocBook 5 is not installed, setting db5_version fails and the
 # URI in etc/config is set to an invalid value. Therefore let's set
 # 5.0 as a hopefully sane default
@@ -439,8 +463,8 @@ your expectations.
 Supported features
 ------------------
 * DocBook 4/5 support                * man pages output
-* HTML/single HTML output            * webhelp output (experimental)
-* ePUB output                        * png and jpg images
+* HTML/single HTML output            * png, jpg, and gif images
+* ePUB output
 
 Optional features
 -----------------
@@ -454,6 +478,10 @@ if test 0 = "$HAVE_DOCBOOK_50"; then
   AC_MSG_RESULT([DocBook 5.0 support              |    no   | install DocBook 5.0, the
                                  |         | DocBook 5 XSL stylesheets,
                                  |         | and jing
+				 
+DocBook Assembly support         |  no     | install DocBook 5.2, the
+                                 |         | DocBook 5 XSL stylesheets,
+                                 |         | and jing
 ])
 else
   AC_MSG_RESULT([DocBook 5.0 support              |   yes   |])
@@ -463,9 +491,29 @@ if test 0 = "$HAVE_DOCBOOK_51"; then
   AC_MSG_RESULT([DocBook 5.1 support              |    no   | install DocBook 5.1, the
                                  |         | DocBook 5 XSL stylesheets,
                                  |         | and jing
+				 
+DocBook Assembly support         |  no     | install DocBook 5.2, the
+                                 |         | DocBook 5 XSL stylesheets,
+                                 |         | and jing
 ])
 else
   AC_MSG_RESULT([DocBook 5.1 support              |   yes   |])
+fi
+
+if test 0 = "$HAVE_DOCBOOK_52"; then
+  AC_MSG_RESULT([DocBook 5.2 support              |    no   | install DocBook 5.2, the
+                                 |         | DocBook 5 XSL stylesheets,
+                                 |         | and jing
+				 
+DocBook Assembly support         |  no     | install DocBook 5.2, the
+                                 |         | DocBook 5 XSL stylesheets,
+                                 |         | and jing
+])
+else
+  AC_MSG_RESULT([DocBook 5.2 support              |   yes   |
+  
+DocBook Assembly support         |   yes   |
+])
 fi
 
 dnl AsciiDoc support
