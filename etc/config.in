@@ -201,6 +201,24 @@ ALWAYS_REBUILD="yes"
 #
 ASSEMBLY_LANG="en"
 
+## Key: ASSEMBLY_RNG_URI
+## ------------------
+## Description: URI to DocBook 5 Assembly Relax NG schema
+## Type:        URI
+## Default:     "http://docbook.org/xml/@db5version@/rng/assembly.rng"
+#
+# URI to the DocBook 5 Assembly Relax NG schema that can be resolved by xmlcatalog
+# There should be no need to change this entry
+# In case you use a git checkout the DB5 version will be masked with 
+# \@db5version\@. This string will automatically be replaced with the highest 5.x
+# version installed
+# If you do not like this, replace the value with one of the commented lines
+#
+#DOCBOOK5_RNG_URI="http://docbook.org/xml/5.0/rng/assembly.rng"
+#DOCBOOK5_RNG_URI="http://docbook.org/xml/5.1/rng/assembly.rng"
+#DOCBOOK5_RNG_URI="http://docbook.org/xml/5.3/rng/assembly.rng"
+ASSEMBLY_RNG_URI="http://docbook.org/xml/@db5version@/rng/assembly.rng"
+
 ## Key:         BUILD_DIR
 ## ----------------------
 ## Description: Build directory where all daps generated files will go
@@ -335,12 +353,13 @@ DOCBOOK5_PROFILE_URN="urn:x-daps:xslt:profiling:docbook51-profile.xsl"
 # URI to the DocBook 5 Relax NG schema that can be resolved by xmlcatalog
 # There should be no need to change this entry
 # In case you use a git checkout the DB5 version will be masked with 
-# \@db5version\@. This string will automatically be replaced with "5.1" if
-# DocBook 5.1 is installed, otherwise it will be set to "5.0"
+# \@db5version\@. This string will automatically be replaced with the highest 5.x
+# version installed
 # If you do not like this, replace the value with one of the commented lines
 #
 #DOCBOOK5_RNG_URI="http://docbook.org/xml/5.0/rng/docbookxi.rng"
 #DOCBOOK5_RNG_URI="http://docbook.org/xml/5.1/rng/docbookxi.rng"
+#DOCBOOK5_RNG_URI="http://docbook.org/xml/5.2/rng/docbookxi.rng"
 DOCBOOK5_RNG_URI="http://docbook.org/xml/@db5version@/rng/docbookxi.rng"
 
 ## Key: DOCBOOK5_STYLE_URI
