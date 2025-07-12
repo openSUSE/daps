@@ -38,7 +38,7 @@
   </xsl:param>
   <xsl:param name="with-warn" select="true()"/>
   <xsl:param name="version">1.0</xsl:param>
-  <xsl:param name="json" select="1" />
+  <xsl:param name="json" select="0" />
 
 
   <!-- ===== Helper templates -->
