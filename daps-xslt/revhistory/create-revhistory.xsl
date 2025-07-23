@@ -25,21 +25,45 @@
 
   <xsl:import href="../common/copy.xsl"/>
   <xsl:output method="xml" indent="yes"/>
+  <xsl:preserve-space elements="d:info"/>
 
   <xsl:param name="revdate"/>
   <xsl:param name="revdescr">Initial version<xsl:value-of select="concat(' ', $revdate)"/></xsl:param>
+  <xsl:param name="with-doctype" select="1" />
+
+
+  <xsl:template match="/">
+    <xsl:if test="$with-doctype">
+      <xsl:text disable-output-escaping="yes">&lt;!DOCTYPE chapter
+[
+  &lt;!ENTITY % entities SYSTEM "generic-entities.ent">
+  %entities;
+]>&#10;&#10;</xsl:text>
+    </xsl:if>
+    <xsl:apply-templates />
+  </xsl:template>
 
 
    <xsl:template match="d:info[not(d:revhistory)]">
      <info>
        <xsl:apply-templates/>
-       <revhistory xml:id="rh-{/*/@xml:id}">
+       <revhistory>
+          <xsl:attribute name="xml:id">
+           <xsl:value-of select="concat('rh-', translate(/*/@xml:id, ': /.', '_'))"/>
+         </xsl:attribute>
+         <xsl:text>&#10;   </xsl:text>
          <revision>
+           <xsl:text>&#10;     </xsl:text>
            <date><xsl:value-of select="$revdate"/></date>
+           <xsl:text>&#10;     </xsl:text>
            <revdescription>
+             <xsl:text>&#10;       </xsl:text>
              <para><xsl:value-of select="$revdescr"/></para>
+             <xsl:text>&#10;     </xsl:text>
            </revdescription>
+           <xsl:text>&#10;   </xsl:text>
          </revision>
+         <xsl:text>&#10; </xsl:text>
        </revhistory>
        <xsl:text>&#10;</xsl:text>
      </info>
