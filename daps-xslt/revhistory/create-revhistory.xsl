@@ -55,6 +55,7 @@
                         | d:appendix/d:info[not(d:revhistory)]
                         | d:glossary/d:info[not(d:revhistory)]
                         | d:part/d:info[not(d:revhistory)]
+                        | d:preface/d:info[not(d:revhistory)]
                         | d:set/d:info[not(d:revhistory)]
                         | d:legalnotice/d:info[not(d:revhistory)]
                         | d:reference/d:info[not(d:revhistory)]
