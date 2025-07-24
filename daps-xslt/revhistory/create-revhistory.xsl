@@ -30,9 +30,13 @@
   <xsl:param name="revdate"/>
   <xsl:param name="revdescr">Initial version<xsl:value-of select="concat(' ', $revdate)"/></xsl:param>
   <xsl:param name="with-doctype" select="1" />
+  <xsl:param name="revhistory-xmlid-prefix">rh-</xsl:param>
 
 
   <xsl:template match="/">
+    <xsl:if test="$revdate = ''">
+      <xsl:message terminate="yes">ERROR: Missing 'revdate' XSLT parameter!</xsl:message>
+    </xsl:if>
     <xsl:if test="$with-doctype">
       <xsl:text disable-output-escaping="yes">&lt;!DOCTYPE chapter
 [
@@ -44,12 +48,20 @@
   </xsl:template>
 
 
-   <xsl:template match="d:info[not(d:revhistory)]">
+   <xsl:template match="d:book/d:info[not(d:revhistory)]
+                        | d:article/d:info[not(d:revhistory)]
+                        | d:bibliography/d:info[not(d:revhistory)]
+                        | d:chapter/d:info[not(d:revhistory)]
+                        | d:appendix/d:info[not(d:revhistory)]
+                        | d:glossary/d:info[not(d:revhistory)]
+                        | d:part/d:info[not(d:revhistory)]
+                        | d:reference/d:info[not(d:revhistory)]
+                        ">
      <info>
        <xsl:apply-templates/>
        <revhistory>
           <xsl:attribute name="xml:id">
-           <xsl:value-of select="concat('rh-', translate(/*/@xml:id, ': /.', '_'))"/>
+           <xsl:value-of select="concat($revhistory-xmlid-prefix, translate((ancestor-or-self::*/@xml:id)[1], ': /.', '_'))"/>
          </xsl:attribute>
          <xsl:text>&#10;   </xsl:text>
          <revision>
