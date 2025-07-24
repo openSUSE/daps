@@ -57,11 +57,21 @@
                         | d:part/d:info[not(d:revhistory)]
                         | d:reference/d:info[not(d:revhistory)]
                         ">
+     <xsl:param name="ID">
+       <xsl:choose>
+         <xsl:when test="not(parent::*/@xml:id)">
+           <xsl:value-of select="generate-id()"/>
+         </xsl:when>
+         <xsl:otherwise>
+           <xsl:value-of select="translate((ancestor-or-self::*/@xml:id)[1], ': /.', '_')"/>
+         </xsl:otherwise>
+       </xsl:choose>
+     </xsl:param>
      <info>
        <xsl:apply-templates/>
        <revhistory>
           <xsl:attribute name="xml:id">
-           <xsl:value-of select="concat($revhistory-xmlid-prefix, translate((ancestor-or-self::*/@xml:id)[1], ': /.', '_'))"/>
+           <xsl:value-of select="concat($revhistory-xmlid-prefix, $ID)"/>
          </xsl:attribute>
          <xsl:text>&#10;   </xsl:text>
          <revision>
