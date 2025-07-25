@@ -15,6 +15,8 @@
      * "sep": Separation character of different items
      * "sep-entries": The separation character between different entries in a list
      * "with-warn": should warnings be printed? true()=yes, false()=no
+     * "json": Use JSON output (=1) or not (=0)
+     * "rootid": The $ROOTID from the DC file
 
   References:
      * Adding metadata to all SUSE documentation
@@ -39,6 +41,7 @@
   <xsl:param name="with-warn" select="true()"/>
   <xsl:param name="version">1.0</xsl:param>
   <xsl:param name="json" select="0" />
+  <xsl:param name="rootid" />
 
 
   <!-- ===== Helper templates -->
@@ -134,7 +137,6 @@
     </xsl:choose>
   </xsl:template>
 
-
   <!-- ===== Empty templates mode="text" -->
   <xsl:template match="d:appendix|d:article/*[not(self::d:info)]|
                        d:bibliography|d:colophon|
@@ -165,6 +167,7 @@
     <xsl:call-template name="series" />
     <xsl:call-template name="category" />
     <xsl:call-template name="type" />
+    <xsl:call-template name="rootid" />
   </xsl:template>
 
   <xsl:template name="product">
@@ -411,6 +414,13 @@
     </xsl:choose>
   </xsl:template>
 
+  <xsl:template name="rootid">
+    <xsl:param name="node" select="." />
+    <xsl:if test="$rootid != ''">
+      <xsl:text>rootid=</xsl:text>
+      <xsl:value-of select="concat($rootid, $sep)"/>
+    </xsl:if>
+  </xsl:template>
 
   <!-- ===== Templates for mode="json" -->
   <xsl:template match="d:info" mode="json">
@@ -426,8 +436,9 @@
     <xsl:text>   ],&#10;</xsl:text>
     <xsl:text>   "docTypes": [],&#10;</xsl:text>
     <xsl:text>   "isGated": false,&#10;</xsl:text>
-    <xsl:text>   "rank": ""&#10;</xsl:text>
-    <xsl:text>}</xsl:text>
+    <xsl:text>   "rank": ""</xsl:text>
+    <xsl:call-template name="json.docs" />
+    <xsl:text>&#10;}</xsl:text>
   </xsl:template>
 
   <xsl:template name="json-meta-productname">
@@ -508,7 +519,8 @@
     <xsl:text>        "description": </xsl:text>
     <xsl:value-of select="concat('&quot;', normalize-space($description), '&quot;,&#10;')"/>
     <xsl:text>        "dcfile": </xsl:text>
-    <xsl:value-of select="concat('&quot;', '', '&quot;,&#10;')"/>
+    <xsl:value-of select="concat('&quot;', '', '&quot;,')"/>
+    <xsl:call-template name="json.rootid" />
     <!-- Can't be derived from the metadata of the document alone. Needs Docserv config -->
     <xsl:text>        "format": {&#10;</xsl:text>
     <xsl:text>           "html": "",&#10;</xsl:text>
@@ -518,4 +530,14 @@
     <xsl:value-of select="concat('&quot;', normalize-space($datemodified), '&quot;&#10;')"/>
     <xsl:text>     }&#10;</xsl:text>
   </xsl:template>
+
+  <xsl:template name="json.rootid">
+    <xsl:param name="node" select="." />
+    <xsl:if test="$rootid != ''">
+      <xsl:text>&#10;        </xsl:text>
+      <xsl:value-of select="concat('&quot;rootid&quot;: ', '&quot;', $rootid, '&quot;,')"/>
+    </xsl:if>
+    <xsl:text>&#10;</xsl:text>
+  </xsl:template>
+
 </xsl:stylesheet>
