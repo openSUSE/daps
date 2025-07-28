@@ -139,6 +139,7 @@ docinfo: $(BIGFILE)
 #
 # requires filelist.mk because of a setting for FILE4ID
 
+
 METAFILE = $(PROFILEDIR)/$(notdir $(FILE4ID))
 ifeq "$(ROOTID)" ""
   _ROOTID = $(shell $(XMLSTARLET) sel -N d=http://docbook.org/ns/docbook -T -t -v "/d:*/@xml:id" $(METAFILE))
@@ -146,14 +147,14 @@ else
   _ROOTID = $(ROOTID)
 endif
 
-
-
 .PHONY: metadata
 metadata: $(PROFILES) $(DOCFILES) validate
 ifneq "$(METADATA_OUTPUT)" ""
-	@$(XSLTPROC) $(PARAMS) $(STRINGPARAMS) --stringparam "rootid=$(_ROOTID)" --stylesheet $(META_STYLE) --file $(METAFILE) $(XSLTPROCESSOR) 2>/dev/null > $(METADATA_OUTPUT)
+	@$(XSLTPROC) --stylesheet $(META_STYLE) --file $(METAFILE) $(XSLTPROCESSOR) 2>/dev/null > $(METADATA_OUTPUT)
+	@echo -e "rootid=$(_ROOTID)" >> $(METADATA_OUTPUT)
 	@echo "Find the metadata at $(METADATA_OUTPUT)"
 else
-	@$(XSLTPROC) $(PARAMS) $(STRINGPARAMS)--stringparam "rootid=$(_ROOTID)"  --stylesheet $(META_STYLE) --file $(METAFILE) $(XSLTPROCESSOR) 2>/dev/null
+	@$(XSLTPROC) --stylesheet $(META_STYLE) --file $(METAFILE) $(XSLTPROCESSOR) 2>/dev/null
+	@echo -e "rootid=$(_ROOTID)"
 endif
 

@@ -15,8 +15,6 @@
      * "sep": Separation character of different items
      * "sep-entries": The separation character between different entries in a list
      * "with-warn": should warnings be printed? true()=yes, false()=no
-     * "json": Use JSON output (=1) or not (=0)
-     * "rootid": The $ROOTID from the DC file
 
   References:
      * Adding metadata to all SUSE documentation
@@ -40,9 +38,6 @@
   </xsl:param>
   <xsl:param name="with-warn" select="true()"/>
   <xsl:param name="version">1.0</xsl:param>
-  <xsl:param name="json" select="0" />
-  <xsl:param name="rootid" />
-
 
   <!-- ===== Helper templates -->
   <xsl:template name="warn">
@@ -53,91 +48,8 @@
     </xsl:if>
   </xsl:template>
 
-  <!-- ===== Entry template -->
-  <xsl:template match="/">
-    <xsl:choose>
-      <xsl:when test="boolean($json)">
-        <xsl:apply-templates select="*/d:info" mode="json" />
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:apply-templates select="*/d:info|*/d:structure/d:merge" mode="text" />
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:template>
 
-  <!-- ===== Helper templates -->
-  <xsl:template name="get.title">
-    <xsl:param name="node" select="." />
-    <xsl:choose>
-      <xsl:when test="$node/d:title">
-        <xsl:value-of select="string($node/d:title)"/>
-      </xsl:when>
-      <xsl:when test="$node/parent::*/d:title">
-        <xsl:value-of select="string($node/parent::*/d:title)"/>
-      </xsl:when>
-    </xsl:choose>
-  </xsl:template>
-
-  <xsl:template name="get.subtitle">
-    <xsl:param name="node" select="." />
-    <xsl:choose>
-      <xsl:when test="$node/d:subtitle">
-        <xsl:value-of select="string($node/d:subtitle)"/>
-      </xsl:when>
-      <xsl:when test="$node/parent::*/d:subtitle">
-        <xsl:value-of select="string($node/parent::*/d:subtitle)"/>
-      </xsl:when>
-    </xsl:choose>
-  </xsl:template>
-
-  <xsl:template name="get.seo-title">
-    <xsl:param name="node" select="." />
-    <xsl:choose>
-      <xsl:when test="$node/d:meta[@name='title']">
-        <xsl:value-of select="string($node/d:meta[@name='title'])"/>
-      </xsl:when>
-    </xsl:choose>
-  </xsl:template>
-
-  <xsl:template name="get.seo-description">
-    <xsl:param name="node" select="." />
-    <xsl:choose>
-    <xsl:when test="$node/d:meta[@name='description']">
-      <xsl:value-of select="string($node/d:meta[@name='description'])"/>
-    </xsl:when>
-  </xsl:choose>
-  </xsl:template>
-
-  <xsl:template name="get.seo-social-descr">
-    <xsl:param name="node" select="." />
-    <xsl:choose>
-      <xsl:when test="$node/d:meta[@name='social-descr']">
-        <xsl:value-of select="string($node/d:meta[@name='social-descr'])"/>
-      </xsl:when>
-    </xsl:choose>
-  </xsl:template>
-
-  <xsl:template name="get.date">
-    <xsl:param name="node" select="." />
-    <xsl:choose>
-      <xsl:when test="$node/d:revhistory/d:revision[1]/d:date">
-        <xsl:value-of select="string($node/d:revhistory/d:revision[1]/d:date)"/>
-      </xsl:when>
-      <xsl:otherwise />
-    </xsl:choose>
-  </xsl:template>
-
-  <xsl:template name="get.series">
-    <xsl:param name="node" select="." />
-    <xsl:choose>
-      <xsl:when test="$node/d:meta[@name='series']">
-        <xsl:value-of select="string($node/d:meta[@name='series'])"/>
-      </xsl:when>
-      <xsl:otherwise/>
-    </xsl:choose>
-  </xsl:template>
-
-  <!-- ===== Empty templates mode="text" -->
+  <!-- ===== Empty templates -->
   <xsl:template match="d:appendix|d:article/*[not(self::d:info)]|
                        d:bibliography|d:colophon|
                        d:chapter|d:chapter/*[not(self::d:info)]|
@@ -149,11 +61,11 @@
                        d:section|d:section/*[not(self::d:info)]|
                        d:sect1|d:sect1/*[not(self::d:info)]|
                        d:topic|d:topic/*[not(self::d:info)]|
-                       d:title|d:subtitle" mode="text"/>
+                       d:title|d:subtitle"/>
 
 
   <!-- ===== info and merge  -->
-  <xsl:template match="d:info|d:structure/d:merge" mode="text">
+  <xsl:template match="d:info|d:structure/d:merge">
     <xsl:text># Metadata output from v</xsl:text>
     <xsl:value-of select="concat($version, $sep)"/>
     <xsl:call-template name="product" />
@@ -167,7 +79,6 @@
     <xsl:call-template name="series" />
     <xsl:call-template name="category" />
     <xsl:call-template name="type" />
-    <xsl:call-template name="rootid" />
   </xsl:template>
 
   <xsl:template name="product">
@@ -213,7 +124,14 @@
   <xsl:template name="title">
     <xsl:param name="node" select="." />
     <xsl:variable name="this-title">
-      <xsl:call-template name="get.title" />
+      <xsl:choose>
+        <xsl:when test="$node/d:title">
+          <xsl:value-of select="string($node/d:title)"/>
+        </xsl:when>
+        <xsl:when test="$node/parent::*/d:title">
+          <xsl:value-of select="string($node/parent::*/d:title)"/>
+        </xsl:when>
+      </xsl:choose>
     </xsl:variable>
 
     <xsl:choose>
@@ -230,7 +148,14 @@
   <xsl:template name="subtitle">
     <xsl:param name="node" select="." />
     <xsl:variable name="this-subtitle">
-      <xsl:call-template name="get.subtitle" />
+      <xsl:choose>
+        <xsl:when test="$node/d:subtitle">
+          <xsl:value-of select="string($node/d:subtitle)"/>
+        </xsl:when>
+        <xsl:when test="$node/parent::*/d:subtitle">
+          <xsl:value-of select="string($node/parent::*/d:subtitle)"/>
+        </xsl:when>
+      </xsl:choose>
     </xsl:variable>
 
     <xsl:choose>
@@ -245,7 +170,11 @@
   <xsl:template name="seo-title">
     <xsl:param name="node" select="." />
     <xsl:variable name="this-seo-title">
-      <xsl:call-template name="get.seo-title" />
+      <xsl:choose>
+        <xsl:when test="$node/d:meta[@name='title']">
+          <xsl:value-of select="string($node/d:meta[@name='title'])"/>
+        </xsl:when>
+      </xsl:choose>
     </xsl:variable>
 
     <xsl:choose>
@@ -264,7 +193,11 @@
   <xsl:template name="seo-description">
     <xsl:param name="node" select="." />
     <xsl:variable name="this-seo-description">
-      <xsl:call-template name="get.seo-description" />
+      <xsl:choose>
+        <xsl:when test="$node/d:meta[@name='description']">
+          <xsl:value-of select="string($node/d:meta[@name='description'])"/>
+        </xsl:when>
+      </xsl:choose>
     </xsl:variable>
 
     <xsl:choose>
@@ -283,7 +216,11 @@
   <xsl:template name="seo-social-descr">
     <xsl:param name="node" select="." />
     <xsl:variable name="this-seo-social-descr">
-      <xsl:call-template name="get.seo-social-descr" />
+      <xsl:choose>
+        <xsl:when test="$node/d:meta[@name='social-descr']">
+          <xsl:value-of select="string($node/d:meta[@name='social-descr'])"/>
+        </xsl:when>
+      </xsl:choose>
     </xsl:variable>
 
     <xsl:choose>
@@ -302,7 +239,12 @@
   <xsl:template name="date">
     <xsl:param name="node" select="." />
     <xsl:variable name="this-date">
-      <xsl:call-template name="get.date" />
+      <xsl:choose>
+        <xsl:when test="$node/d:revhistory/d:revision[1]/d:date">
+          <xsl:value-of select="string($node/d:revhistory/d:revision[1]/d:date)"/>
+        </xsl:when>
+        <xsl:otherwise />
+      </xsl:choose>
     </xsl:variable>
     <xsl:choose>
       <xsl:when test="$this-date != ''">
@@ -348,7 +290,12 @@
   <xsl:template name="series">
     <xsl:param name="node" select="." />
     <xsl:variable name="this-series">
-      <xsl:call-template name="get.series" />
+      <xsl:choose>
+        <xsl:when test="$node/d:meta[@name='series']">
+          <xsl:value-of select="string($node/d:meta[@name='series'])"/>
+        </xsl:when>
+        <xsl:otherwise/>
+      </xsl:choose>
     </xsl:variable>
     <xsl:choose>
       <xsl:when test="$this-series != ''">
@@ -413,131 +360,5 @@
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
-
-  <xsl:template name="rootid">
-    <xsl:param name="node" select="." />
-    <xsl:if test="$rootid != ''">
-      <xsl:text>rootid=</xsl:text>
-      <xsl:value-of select="concat($rootid, $sep)"/>
-    </xsl:if>
-  </xsl:template>
-
-  <!-- ===== Templates for mode="json" -->
-  <xsl:template match="d:info" mode="json">
-    <xsl:text>{&#10;</xsl:text>
-    <xsl:text>   "docs": [&#10;</xsl:text>
-    <xsl:call-template name="json.docs" />
-    <xsl:text>   ],&#10;</xsl:text>
-    <xsl:text>   "tasks": [&#10;</xsl:text>
-    <xsl:call-template name="json.tasks" />
-    <xsl:text>   ],&#10;</xsl:text>
-    <xsl:text>   "products": [&#10;</xsl:text>
-    <xsl:call-template name="json.products" />
-    <xsl:text>   ],&#10;</xsl:text>
-    <xsl:text>   "docTypes": [],&#10;</xsl:text>
-    <xsl:text>   "isGated": false,&#10;</xsl:text>
-    <xsl:text>   "rank": ""</xsl:text>
-    <xsl:call-template name="json.docs" />
-    <xsl:text>&#10;}</xsl:text>
-  </xsl:template>
-
-  <xsl:template name="json-meta-productname">
-    <xsl:param name="meta"/>
-    <xsl:for-each select="$meta">
-      <xsl:text>    {&#10;</xsl:text>
-      <xsl:text>      "name": </xsl:text>
-      <xsl:value-of select="concat('&quot;', d:productname, '&quot;,&#10;')"/>
-      <xsl:text>      "versions": [&#10;</xsl:text>
-      <xsl:value-of select="concat('        &quot;', d:productname/@version, '&quot;')"/>
-      <xsl:if test="position() &lt; last()">,</xsl:if>
-      <xsl:text>&#10;      ]</xsl:text>
-      <xsl:text>&#10;</xsl:text>
-      <xsl:text>    }&#10;</xsl:text>
-    </xsl:for-each>
-  </xsl:template>
-
-  <xsl:template name="json.products">
-    <xsl:param name="node" select="." />
-    <xsl:choose>
-      <xsl:when test="$node/d:meta[@name = 'productname']">
-        <xsl:call-template name="json-meta-productname">
-          <xsl:with-param name="meta" select="$node/d:meta[@name='productname']" />
-        </xsl:call-template>
-      </xsl:when>
-      <xsl:when test="$node/d:productname">
-        <xsl:variable name="meta-node">
-          <d:meta name="productname">
-            <d:productname
-              version="{normalize-space(string($node/d:productnumber//*))}"
-              os="{($node/d:productname[not(@role)]//*/@os)[last()]}">
-              <xsl:value-of select="normalize-space(string($node/d:productname[not(@role)]))" />
-            </d:productname>
-          </d:meta>
-        </xsl:variable>
-        <xsl:call-template name="json-meta-productname">
-          <xsl:with-param name="meta" select="exsl:node-set($meta-node)/*" />
-        </xsl:call-template>
-      </xsl:when>
-      <xsl:otherwise />
-    </xsl:choose>
-  </xsl:template>
-
-  <xsl:template name="json.tasks">
-    <xsl:param name="node" select="." />
-    <xsl:for-each select="$node/d:meta[@name='task']/d:*">
-       <xsl:value-of select="concat('      &quot;', string(.), '&quot;')"/>
-        <xsl:if test="position() &lt; last()">
-            <xsl:text>,</xsl:text>
-        </xsl:if>
-        <xsl:text>&#10;</xsl:text>
-     </xsl:for-each>
-  </xsl:template>
-
-  <xsl:template name="json.docs">
-    <xsl:param name="node" select="." />
-    <xsl:variable name="title">
-      <xsl:call-template name="get.title"/>
-    </xsl:variable>
-    <xsl:variable name="subtitle">
-      <xsl:call-template name="get.subtitle"/>
-    </xsl:variable>
-    <xsl:variable name="description">
-      <xsl:call-template name="get.seo-description" />
-    </xsl:variable>
-    <xsl:variable name="datemodified">
-      <xsl:call-template name="get.date" />
-    </xsl:variable>
-
-    <xsl:text>     {&#10;</xsl:text>
-    <xsl:text>        "lang": </xsl:text>
-    <xsl:value-of select="concat('&quot;', (ancestor::*/@xml:lang)[1], '&quot;,&#10;')"/>
-    <xsl:text>        "default": true,&#10;</xsl:text>
-    <xsl:text>        "title": </xsl:text>
-    <xsl:value-of select="concat('&quot;', normalize-space($title), '&quot;,&#10;')"/>
-    <xsl:text>        "subtitle": </xsl:text>
-    <xsl:value-of select="concat('&quot;', normalize-space($subtitle), '&quot;,&#10;')"/>
-    <xsl:text>        "description": </xsl:text>
-    <xsl:value-of select="concat('&quot;', normalize-space($description), '&quot;,&#10;')"/>
-    <xsl:text>        "dcfile": </xsl:text>
-    <xsl:value-of select="concat('&quot;', '', '&quot;,')"/>
-    <xsl:call-template name="json.rootid" />
-    <!-- Can't be derived from the metadata of the document alone. Needs Docserv config -->
-    <xsl:text>        "format": {&#10;</xsl:text>
-    <xsl:text>           "html": "",&#10;</xsl:text>
-    <xsl:text>           "pdf": ""&#10;</xsl:text>
-    <xsl:text>        },&#10;</xsl:text>
-    <xsl:text>        "dateModified": </xsl:text>
-    <xsl:value-of select="concat('&quot;', normalize-space($datemodified), '&quot;&#10;')"/>
-    <xsl:text>     }&#10;</xsl:text>
-  </xsl:template>
-
-  <xsl:template name="json.rootid">
-    <xsl:param name="node" select="." />
-    <xsl:if test="$rootid != ''">
-      <xsl:text>&#10;        </xsl:text>
-      <xsl:value-of select="concat('&quot;rootid&quot;: ', '&quot;', $rootid, '&quot;,')"/>
-    </xsl:if>
-    <xsl:text>&#10;</xsl:text>
-  </xsl:template>
-
+  
 </xsl:stylesheet>
