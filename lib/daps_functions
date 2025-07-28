@@ -1086,7 +1086,7 @@ function metadata {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="help,output:,rootid:"
+    LONG_OPTS="help,output:,param:,rootid:,stringparam:"
 
     parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -1096,7 +1096,9 @@ function metadata {
         help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
         help_help
         help_output
+        help_param
         help_rootid
+        help_stringparam
         echo
         exit 0
     fi
