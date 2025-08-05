@@ -8,6 +8,9 @@
    Parameters:
      prefix:  the prefix to use for the output XPath (default "d")
               (without the colon)
+     check.xref: Check <xref/> references in inline elements
+              If the <xref/> points to an ID that is in a different
+              file, this won't work.
 
    Input:
      DocBook 5 document
@@ -30,13 +33,15 @@
   <xsl:import href="xpath.location.xsl"/>
   <xsl:output method="text"/>
 
+  <xsl:key name="id" match="*" use="@id|@xml:id" />
+
   <xsl:strip-space elements="*"/>
   <xsl:preserve-space elements="d:screen d:programlisting"/>
 
 <!--  <xsl:param name="prefix">d</xsl:param>-->
+  <xsl:param name="check.xref" select="0" />
 
-
-  <xsl:template name="error">
+  <xsl:template name="log">
     <xsl:param name="node" select="."/>
     <xsl:param name="id">
       <xsl:choose>
@@ -114,14 +119,39 @@
                        ">
     <xsl:param name="node" select="." />
     <xsl:param name="nested" select="false()" />
+    <xsl:param name="xreftarget" select="key('id',d:xref/@linkend)" />
 
-    <!-- Check for "real" inlines, directly under a block element without child elements -->
-    <xsl:if test="not(normalize-space($node))">
-      <xsl:call-template name="error">
-      <xsl:with-param name="surrounding-text" select="normalize-space(preceding-sibling::text())" />
-      <xsl:with-param name="nested" select="$nested" />
-    </xsl:call-template>
-    </xsl:if>
+    <xsl:choose>
+      <!-- Ignore xref if we see a target in the tree -->
+      <xsl:when test="d:xref and $check.xref = 1 and count($xreftarget) >0" />
+
+      <xsl:when test="d:xref and $check.xref = 1 and count($xreftarget) =0">
+        <xsl:call-template name="log">
+          <xsl:with-param name="surrounding-text">
+            <xsl:choose>
+              <xsl:when test="parent::d:para">
+                <xsl:value-of select="substring(normalize-space(parent::d:para[1]), 1, 20)"/>
+              </xsl:when>
+            </xsl:choose>
+          </xsl:with-param>
+          <xsl:with-param name="msg">Cannot find target for xref/@linkend=<xsl:value-of
+              select="concat('&quot;', d:xref/@linkend, '&quot;')"/>. Is ID in a different file?</xsl:with-param>
+          <xsl:with-param name="nested" select="$nested" />
+          <xsl:with-param name="level">WARNING</xsl:with-param>
+        </xsl:call-template>
+      </xsl:when>
+
+      <xsl:when test="not(normalize-space($node))">
+        <!-- Check for "real" inlines, directly under a block element without child elements -->
+        <xsl:call-template name="log">
+          <xsl:with-param name="surrounding-text" select="normalize-space(preceding-sibling::text())" />
+          <xsl:with-param name="nested" select="$nested" />
+        </xsl:call-template>
+      </xsl:when>
+
+      <xsl:otherwise />
+    </xsl:choose>
+
     <!-- Process any inline child elements we have -->
     <xsl:apply-templates>
        <xsl:with-param name="nested" select="true()" />
@@ -129,7 +159,7 @@
   </xsl:template>
 
   <xsl:template match="d:indexterm">
-    <xsl:call-template name="error">
+    <xsl:call-template name="log">
       <!-- <xsl:with-param name="level">WARN</xsl:with-param> -->
       <xsl:with-param name="msg">Deprecated indexterm found (primary=<xsl:value-of select="normalize-space(d:primary)"/>).</xsl:with-param>
     </xsl:call-template>
