@@ -1,4 +1,20 @@
 -------------------------------------------------------------------
+Wed Aug 05 12:18:01 UTC 2025 - Frank Sundermeyer <fs@suse.com>
+
+Beta release DAPS 4.0 beta11
+
+* New features:
+  - Added assembly validation via the assembly rng schema
+    (is automatically done when DC file points to an assembly)
+    (https://github.com/openSUSE/daps/issues/732)
+  - the metadata command now supports json output as well
+    (daps -d <DC> metadata --param "json=1")
+* Bugfixes:
+  - several fixes and enhancements for create-revhistory.xsl
+  - properly distinguish between XSLT params and stringparams
+  - find-empty-inlines.xsl sometimes reported fals errors
+
+-------------------------------------------------------------------
 Wed Jul 02 14:40:01 UTC 2025 - Frank Sundermeyer <fs@suse.com>
 
 Beta release DAPS 4.0 beta10
