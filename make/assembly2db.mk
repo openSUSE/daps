@@ -92,15 +92,14 @@ $(MAIN): $(ASSEMBLY_MAIN) $(ASSEMBLY_JING_VALIDATION_MAIN) $(ASSEMBLY_VALIDATION
 # Assembly validation
 # see https://github.com/openSUSE/daps/issues/732 for why this is needed
 # We need to validate MAIN (the assembly file) with jing to check whether it
-# adheres to the assembly validation schema
-# We also nee to use plain jing (and not the DAPS provided wrapper script) to
-# be able to detect wrongly placed xi:includes. Additionally assmblies need to
-# be validated with checking IDs
+# adheres to the assembly validation schema and for checking IDs.
 #
-# the resources files are validated with xmllint fo well-fomedness
+# The resources files are validated with xmllint for well-formedness. This
+# also includes a second validation of the assembly to check for unresovable
+# entities (something jing does not do)
 
 $(ASSEMBLY_JING_VALIDATION_MAIN): $(ASSEMBLY_MAIN) | $(ASSEMBLY_RESULT_DIR) $(ASSEMBLY_RESULT_SUBDIRS)
-	jing -i $(ASSEMBLY_RNG) $<
+	$(JING_WRAPPER) -i $(ASSEMBLY_RNG) $<
 	touch $@
 
 $(ASSEMBLY_RESULT_DIR)/%.avalidate: $(PRJ_DIR)/%.xml | $(ASSEMBLY_RESULT_DIR) $(ASSEMBLY_RESULT_SUBDIRS)
