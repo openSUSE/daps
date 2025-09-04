@@ -84,12 +84,12 @@ $(PROFILEDIR)/.validate validate: $(PROFILES)
 	  echo -e '$(FAULTY_TABLES)'; \
 	  echo "--------------------------------"; \
 	fi
-	@if [[ -n "$(FAULTY_IDS)" ]]; then \
+	@if [[ -n '$(FAULTY_IDS)' ]]; then \
 	  ccecho "error" "[ERROR]: The following ID(s) contain unwanted characters:"; \
 	  echo -e "$(subst $(SPACE),\n,$(sort $(FAULTY_IDS)))"; \
 	  echo "--------------------------------"; \
 	fi
-	@if [[ -n "$(FAULTY_INLINES)" ]]; then \
+	@if [[ -n '$(FAULTY_INLINES)' ]]; then \
 	  ccecho "error" "[ERROR] The following inline elements are empty:"; \
 	  echo -e "$(subst $(SPACE)$(SPACE)$(SPACE)$(SPACE)$(SPACE)$(SPACE)$(SPACE)$(SPACE)$(SPACE),\n\t,$(subst [ERROR],\n[ERROR],$(FAULTY_INLINES)))"; \
 	  echo "--------------------------------"; \
