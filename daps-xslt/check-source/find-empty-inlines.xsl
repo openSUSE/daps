@@ -2,7 +2,7 @@
 <!--
 
    Purpose:
-     Find empty inline elements in our sources.
+     Find empty inline elements (like <phrase/>) in our sources.
      These elements cause layout issues in HTML.
 
    Parameters:
@@ -105,7 +105,7 @@
                        d:initializer|d:issuenum|d:jobtitle|d:keycap[not(@function)]|d:keycode|d:keysym|
                        d:keyword|d:label|d:lhs|d:lineage|d:lineannotation|
                        d:literal|d:macrodef|d:macroname|d:manvolnum|d:markup|
-                       d:mathphrase|d:member|d:modfier|d:msgaud|d:msglevel|d:msgtext|
+                       d:mathphrase|d:member[not(d:xref)]|d:modfier|d:msgaud|d:msglevel|d:msgtext|
                        d:nonterminal|d:ooclass|d:ooexception|d:oointerface|
                        d:option|d:optional|d:org|d:orgdiv|d:orgname|d:otheraddr|
                        d:othername|d:package|d:pagenums|d:paramdef|d:parameter|
