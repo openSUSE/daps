@@ -39,7 +39,7 @@
   <xsl:preserve-space elements="d:screen d:programlisting"/>
 
 <!--  <xsl:param name="prefix">d</xsl:param>-->
-  <xsl:param name="check.xref" select="0" />
+  <xsl:param name="check.xref" select="1" />
 
   <xsl:template name="log">
     <xsl:param name="node" select="."/>
