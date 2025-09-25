@@ -248,7 +248,9 @@
   -->
 
   <xsl:template match="d:formalpara[d:para/d:screen|
-                                    d:para/d:literallayout[@class='monospaced']]">
+                                    d:para/d:programlisting|
+                                    d:para/d:literallayout[@class='monospaced']
+                                    ]">
     <xsl:element name="example" namespace="&db5ns;">
       <xsl:apply-templates select="d:title"/>
       <!-- The following apply-templates is not relevant for any of the cases
@@ -256,13 +258,14 @@
       output of the templates is unlikely to correctly order para content and
       the screen but at least we get it all into the output document. -->
       <xsl:apply-templates select="d:para" mode="exclude-verbatim"/>
-      <xsl:apply-templates select="d:para/d:screen|
+      <xsl:apply-templates select="d:para/d:screen|d:para/d:programlisting|
                                    d:para/d:literallayout[@class='monospaced']"/>
     </xsl:element>
   </xsl:template>
 
   <xsl:template match="d:informalexample[d:*[1][self::d:formalpara]
                                          [d:para/d:screen|
+                                          d:para/d:programlisting|
                                           d:para/d:literallayout[@class='monospaced']]]">
     <xsl:element name="example" namespace="&db5ns;">
       <xsl:apply-templates select="@*"/>
@@ -272,7 +275,7 @@
       output of the templates is unlikely to correctly order para content and
       the screen but at least we get it all into the output document. -->
       <xsl:apply-templates select="d:formalpara[1]/d:para" mode="exclude-verbatim"/>
-      <xsl:apply-templates select="d:formalpara[1]/d:para/d:screen|
+      <xsl:apply-templates select="d:formalpara[1]/d:para/d:screen|d:para/d:programlisting|
                                    d:formalpara[1]/d:para/d:literallayout[@class='monospaced']"/>
       <xsl:apply-templates select="d:*[position() > 1]|node()[not(*)]"/>
     </xsl:element>
