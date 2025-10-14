@@ -455,30 +455,65 @@
     </xsl:for-each>
   </xsl:template>
 
+  <xsl:template name="split-versions">
+    <xsl:param name="list" select="."/>
+    <xsl:param name="delimiter" select="';'"/>
+
+    <xsl:variable name="first-item" select="substring-before(concat($list, $delimiter), $delimiter)"/>
+    <xsl:variable name="remaining-list" select="substring-after($list, $delimiter)"/>
+
+    <!-- Output the first item, properly quoted and formatted -->
+    <xsl:if test="normalize-space($first-item)">
+      <xsl:text>"</xsl:text>
+      <xsl:value-of select="normalize-space($first-item)"/>
+      <xsl:text>"</xsl:text>
+    </xsl:if>
+
+    <!-- If there's more to process, add a comma and recurse -->
+    <xsl:if test="$remaining-list">
+      <xsl:if test="normalize-space($first-item)">
+        <xsl:text>, </xsl:text>
+      </xsl:if>
+      <xsl:call-template name="split-versions">
+        <xsl:with-param name="list" select="$remaining-list"/>
+        <xsl:with-param name="delimiter" select="$delimiter"/>
+      </xsl:call-template>
+    </xsl:if>
+  </xsl:template>
+
   <xsl:template name="json.products">
     <xsl:param name="node" select="." />
-    <xsl:choose>
-      <xsl:when test="$node/d:meta[@name = 'productname']">
-        <xsl:call-template name="json-meta-productname">
-          <xsl:with-param name="meta" select="$node/d:meta[@name='productname']" />
-        </xsl:call-template>
-      </xsl:when>
-      <xsl:when test="$node/d:productname">
-        <xsl:variable name="meta-node">
-          <d:meta name="productname">
-            <d:productname
-              version="{normalize-space(string($node/d:productnumber//*))}"
-              os="{($node/d:productname[not(@role)]//*/@os)[last()]}">
-              <xsl:value-of select="normalize-space(string($node/d:productname[not(@role)]))" />
-            </d:productname>
-          </d:meta>
-        </xsl:variable>
-        <xsl:call-template name="json-meta-productname">
-          <xsl:with-param name="meta" select="exsl:node-set($meta-node)/*" />
-        </xsl:call-template>
-      </xsl:when>
-      <xsl:otherwise />
-    </xsl:choose>
+    <!-- Collect all relevant productname nodes first -->
+    <xsl:variable name="product-nodes-rtf">
+      <xsl:choose>
+        <!-- Modern structure: <meta><productname .../><productname .../></meta> -->
+        <xsl:when test="$node/d:meta[@name='productname']/d:productname">
+          <xsl:copy-of select="$node/d:meta[@name='productname']/d:productname"/>
+        </xsl:when>
+        <!-- Legacy structure: <productname> directly under <info> -->
+        <xsl:when test="$node/d:productname">
+          <d:productname version="{normalize-space(string($node/d:productnumber//*))}" os="{($node/d:productname[not(@role)]//*/@os)[last()]}">
+            <xsl:value-of select="normalize-space(string($node/d:productname[not(@role)]))" />
+          </d:productname>
+        </xsl:when>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="product-nodes" select="exsl:node-set($product-nodes-rtf)/d:productname" />
+
+    <!-- Iterate over the collected product nodes -->
+    <xsl:for-each select="$product-nodes">
+      <xsl:text>    {&#10;</xsl:text>
+      <xsl:value-of select="concat('      &quot;name&quot;: &quot;', normalize-space(.), '&quot;,&#10;')"/>
+      <xsl:text>      "versions": [&#10;        </xsl:text>
+      <xsl:call-template name="split-versions">
+        <!-- Normalize delimiters: replace comma and space with semicolon -->
+        <xsl:with-param name="list" select="translate(@version, ', ', ';;')"/>
+      </xsl:call-template>
+      <xsl:text>&#10;      ]&#10;</xsl:text>
+      <xsl:text>    }</xsl:text>
+      <xsl:if test="position() != last()">,</xsl:if>
+      <xsl:text>&#10;</xsl:text>
+    </xsl:for-each>
   </xsl:template>
 
   <xsl:template name="json.tasks">
