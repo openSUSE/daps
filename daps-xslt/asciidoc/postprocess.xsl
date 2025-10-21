@@ -65,6 +65,7 @@
   <!-- This rule is only necessary to copy the namespaces into the root element -->
   <xsl:template match="/*">
     <xsl:copy>
+      <xsl:copy-of select="@*"/> 
       <!-- Copy the namespaces -->
       <xsl:for-each select="$namespace-nodes//*/namespace::*">
            <xsl:copy-of select="."/>
