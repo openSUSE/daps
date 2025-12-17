@@ -289,4 +289,26 @@
     </xsl:if>
   </xsl:template>
 
+
+  <xsl:template match="d:orderedlist[@role='procedure']">
+    <xsl:element name="procedure" namespace="&db5ns;">
+      <xsl:apply-templates select="@xml:id"/>
+      <xsl:apply-templates/>
+    </xsl:element>
+  </xsl:template>
+
+  <xsl:template match="d:orderedlist[@role='procedure']/d:listitem">
+    <xsl:element name="step" namespace="&db5ns;">
+      <xsl:apply-templates select="@*"/>
+      <xsl:apply-templates/>
+    </xsl:element>
+  </xsl:template>
+
+  <xsl:template match="d:orderedlist[@role='procedure']/d:listitem/d:orderedlist[@role='procedure']">
+    <xsl:element name="substeps" namespace="&db5ns;">
+      <xsl:apply-templates select="@xml:id"/>
+      <xsl:apply-templates/>
+    </xsl:element>
+  </xsl:template>
+
 </xsl:stylesheet>
