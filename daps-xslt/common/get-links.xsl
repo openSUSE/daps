@@ -2,7 +2,7 @@
 <!--
    Purpose:
      Extracts all <ulink>s or <link>s from a DocBook document and
-     creates a HTML page for "daps checkbot"
+     creates a HTML page for a link checker
      
    Parameters:
      * nolocalhost (default: 1)
@@ -15,10 +15,10 @@
      
    Output:
      HTML file which contains all links from a document, easy to feed
-     to checkbot
+     to a link checker
    
    Author:    Thomas Schraitle <toms@opensuse.org>
-   Copyright (C) 2012-2020 SUSE Software Solutions Germany GmbH
+   Copyright (C) 2012-2026 SUSE Software Solutions Germany GmbH
    
 -->
 <xsl:stylesheet version="1.0" 
@@ -30,9 +30,10 @@
   <xsl:output method="html"/>
 
   <xsl:key name="id" match="*" use="@id|@xml:id"/>
-    
+
   <xsl:param name="nolocalhost" select="1"/>
   <xsl:param name="rootid"/>
+  <xsl:param name="debug" select="false()" />
 
   <xsl:template match="/">
     <html>
@@ -58,7 +59,7 @@
                                          key('id',$rootid)//d:link"/>
           </xsl:when>
           <xsl:otherwise>
-            <h1>Links for Checkbot</h1>
+            <h1>Links for a Link Checker</h1>
             <p>Total links: <xsl:value-of select="count(.//ulink|.//d:link)"/></p>
             <br/>
             <xsl:apply-templates select=".//ulink|.//d:link"/>
@@ -76,13 +77,15 @@
         <xsl:choose>
           <xsl:when test="$nolocalhost != 0 and 
                           contains($href, 'localhost')">
+            <xsl:if test="boolean($debug)">
             <xsl:message> Suppressing URL "<xsl:value-of
               select="$href"/>"</xsl:message>
+            </xsl:if>
           </xsl:when>
           <xsl:otherwise>
             <p>
               <a href="{$href}"><xsl:value-of select="$href"/></a>
-              <xsl:call-template name="getxmlbase"/>
+<!--              <xsl:call-template name="getxmlbase"/>-->
             </p>
           </xsl:otherwise>
         </xsl:choose>
@@ -91,7 +94,7 @@
                       starts-with($href, 'sftp')">
         <p>
           <a href="{$href}"><xsl:value-of select="$href"/></a>
-          <xsl:call-template name="getxmlbase"/>
+<!--          <xsl:call-template name="getxmlbase"/>-->
         </p>
       </xsl:when>
       <xsl:when test="starts-with($href, 'mailto')">
@@ -115,7 +118,6 @@
   </xsl:template>
 
 
-
 <xsl:template name="getxmlbase">
   <xsl:param name="node" select="."/>
   
@@ -125,9 +127,11 @@
       <span class="xmlbase">Filename: <xsl:value-of select="$node/ancestor::*/@xml:base"/></span>
     </xsl:when>
     <xsl:otherwise>
-      <xsl:message> No ancestor with xml:base for '<xsl:value-of
+      <xsl:if test="boolean($debug)">
+        <xsl:message> No ancestor with xml:base for '<xsl:value-of
         select="concat(name(.), '@id=', @id)"/>' found.</xsl:message>
+      </xsl:if>
     </xsl:otherwise>
-  </xsl:choose>  
+  </xsl:choose>
 </xsl:template>
 </xsl:stylesheet>
