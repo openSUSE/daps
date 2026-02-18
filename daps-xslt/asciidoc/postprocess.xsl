@@ -248,6 +248,12 @@
 
   -->
 
+  <xsl:template match="node() | @*" mode="procedure">
+    <xsl:copy>
+      <xsl:apply-templates select="@* | node()"/>
+    </xsl:copy>
+  </xsl:template>
+
   <xsl:template match="d:formalpara[d:para/d:screen|
                                     d:para/d:literallayout[@class='monospaced']]">
     <xsl:element name="example" namespace="&db5ns;">
@@ -290,25 +296,90 @@
   </xsl:template>
 
 
+  <!-- HINT: Turn a <orderedlist role="procedure"> into a real <procedure>
+
+      In ADoc you use this syntax:
+
+        [.procedure]
+        . First step
+        . Second step
+        .. Fist substep
+
+      To make the syntax in ADoc easier, the template rules assume all nested ordered list
+      structures this will be all steps and substeps. Usually this is correct. However, if
+      you really need to deviate
+      from that assumption and make the "substep" a real list, use this syntax:
+
+        [.procedure]
+        . First step
+        . Second step
+        [.list]
+        .. Fist ordered list
+  -->
+  <xsl:template match="*" mode="procedure">
+    <xsl:copy>
+      <xsl:apply-templates select="node()" mode="procedure" />
+    </xsl:copy>
+  </xsl:template>
+
   <xsl:template match="d:orderedlist[@role='procedure']">
+<!--    <xsl:message>procedure created</xsl:message>-->
     <xsl:element name="procedure" namespace="&db5ns;">
       <xsl:apply-templates select="@xml:id"/>
-      <xsl:apply-templates/>
+      <xsl:apply-templates mode="procedure"/>
     </xsl:element>
   </xsl:template>
 
-  <xsl:template match="d:orderedlist[@role='procedure']/d:listitem">
+  <xsl:template match="d:listitem" mode="procedure">
+<!--    <xsl:message>step created</xsl:message>-->
     <xsl:element name="step" namespace="&db5ns;">
+      <xsl:if test="d:simpara/d:phrase[@role='optional']">
+        <xsl:attribute name="performance">optional</xsl:attribute>
+        <xsl:message> => (optional)</xsl:message>
+      </xsl:if>
       <xsl:apply-templates select="@*"/>
-      <xsl:apply-templates/>
+      <xsl:apply-templates mode="procedure"/>
     </xsl:element>
   </xsl:template>
 
-  <xsl:template match="d:orderedlist[@role='procedure']/d:listitem/d:orderedlist[@role='procedure']">
+  <xsl:template match="d:simpara" mode="procedure">
+    <xsl:element name="para" namespace="&db5ns;">
+      <xsl:apply-templates select="@*"/>
+      <xsl:apply-templates mode="procedure"/>
+    </xsl:element>
+  </xsl:template>
+
+  <!-- HINT: Make steps optional
+
+    This is the ADoc syntax:
+
+       [.optional]#_#
+
+    Basically everything can be between the two hashes. However, we don't want the
+    text content. It just serves as a marker. When ADoc transforms it into DocBook,
+    we get this:
+
+      <phrase role="optional">_</phrase>
+
+    We can ignore such phrase completely. It is only used to carry the role="optional"
+    attribute to attach the performance="optional" attribute on the parent step.
+  -->
+  <xsl:template match="d:phrase[@role='optional']" />
+
+  <xsl:template match="d:listitem/d:orderedlist" mode="procedure">
+<!--    <xsl:message>substeps created</xsl:message>-->
     <xsl:element name="substeps" namespace="&db5ns;">
       <xsl:apply-templates select="@xml:id"/>
-      <xsl:apply-templates/>
+      <xsl:apply-templates mode="procedure"/>
     </xsl:element>
+  </xsl:template>
+
+  <xsl:template match="d:listitem/d:orderedlist[@role='list'] |
+                       d:listitem/d:itemizedlist |
+                       d:programlisting|d:co|d:callout" 
+                       mode="procedure">
+    <!-- With enumeration we switch to a normal orderedlist, not substeps. -->
+    <xsl:apply-templates select="." />
   </xsl:template>
 
 </xsl:stylesheet>
