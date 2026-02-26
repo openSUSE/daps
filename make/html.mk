@@ -118,11 +118,18 @@ else
   endif
 endif
 
-HTMLSTRINGS  += --param "show.comments=$(REMARKS)" \
-                --param "use.id.as.filename=1" \
+HTMLSTRINGS  += --param "use.id.as.filename=1" \
 		--stringparam "base.dir=$(HTML_DIR)/" \
-		--stringparam "draft.mode=$(DRAFT)" \
                 --stringparam "img.src.path=images/"
+
+ifneq "$(DRAFT)" "no"
+  HTMLSTRINGS += --stringparam "draft.mode=$(DRAFT)"
+endif
+ifneq "$(REMARKS)" "0"
+  HTMLSTRINGS += --stringparam "show.comments=$(REMARKS)"
+endif
+
+
 
 # For metadata extraction during HTML builds the SUSE stylesheets need the
 # DC-file name 
@@ -157,7 +164,7 @@ ifdef HTML_CSS
     HTMLSTRINGS += --stringparam "html.stylesheet=static/css/$(notdir $(HTML_CSS))"
   else
     HTML_CSS_INFO := CSS was set to none, using no CSS
-    HTMLSTRINGS += --stringparam "html.stylesheet=\"\""
+    #HTMLSTRINGS += --stringparam "html.stylesheet=\"\""
   endif
 endif
 

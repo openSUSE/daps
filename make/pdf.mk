@@ -48,11 +48,17 @@ endif
 #----------
 # FO stringparams
 #
-FOSTRINGS := --param "show.comments=$(REMARKS)" \
-             --param "generate.permalink=0"  \
-	     --param "ulink.show=1" \
-	     --stringparam "draft.mode=$(DRAFT)" \
-             --stringparam "styleroot=$(dir $(STYLEIMG))"
+# avoid unnecessary params (aka ones that have the same value as upstream default)
+ifneq "$(STYLEIMG)" ""
+  FOSTRINGS += --stringparam "styleroot=$(dir $(STYLEIMG))"
+endif
+ifneq "$(DRAFT)" "no"
+  FOSTRINGS += --stringparam "draft.mode=$(DRAFT)"
+endif
+ifneq "$(REMARKS)" "0"
+  FOSTRINGS += --stringparam "show.comments=$(REMARKS)"
+endif
+
 
 #----------
 # Settings depending on --grayscale and --cropmarks
@@ -85,13 +91,11 @@ FOFILE := $(FOFILE)$(LANGSTRING).fo
 # and are processed in the wrapper files
 #
 ifeq "$(FORMATTER)" "fop"
-  FOSTRINGS += --param "fop1.extensions=1" \
-               --param "xep.extensions=0"
+  FOSTRINGS += --param "fop1.extensions=1"
   FORMATTER_CMD := $(FOP_WRAPPER)
 endif
 ifeq "$(FORMATTER)" "xep"
-  FOSTRINGS += --param "fop1.extensions=0" \
-               --param "xep.extensions=1"
+  FOSTRINGS += --param "xep.extensions=1"
   FORMATTER_CMD := $(XEP_WRAPPER)
 endif
 
@@ -162,15 +166,12 @@ endif
 ifeq "$(INDEX)" "Yes"
   $(FOFILE): $(PROFILEDIR)/$(DOCNAME).ind
 endif
-ifeq "$(VERBOSITY)" "1"
-  $(FOFILE): FONTDEBUG := --param "debug.fonts=0"
-endif
 $(FOFILE): $(PROFILES) $(DOCFILES) $(STYLEFO) validate
   ifeq "$(VERBOSITY)" "2"
 	@ccecho "info"  "   Creating fo-file..."
   endif
 	  $(XSLTPROC) --xinclude $(FOSTRINGS) $(ROOTSTRING) $(METASTRING) \
-	    $(INDEXSTRING) $(FONTDEBUG) $(DAPSSTRINGS) $(XSLTPARAM) $(PARAMS) \
+	    $(INDEXSTRING)$(DAPSSTRINGS) $(XSLTPARAM) $(PARAMS) \
 	    $(STRINGPARAMS) --output $(FOFILE) --stylesheet $(STYLEFO) \
 	    --file $(PROFILED_MAIN) $(XSLTPROCESSOR) $(DEVNULL) \
 	    $(ERR_DEVNULL);

@@ -132,12 +132,18 @@ endif
 #----------
 # Stringparams
 #  
-WEBHELPSTRINGS := --param "show.comments=$(REMARKS)" \
-                  --param "use.id.as.filename=1" \
-	          --stringparam "draft.mode=$(DRAFT)" \
+WEBHELPSTRINGS := --param "use.id.as.filename=1" \
 		  --stringparam "base.dir=$(WEBHELP_DIR)/" \
                   --stringparam "img.src.path=images/" \
                   --stringparam "webhelp.indexer.language=$(LL)"
+
+ifneq "$(DRAFT)" "no"
+  WEBHELPSTRINGS += --stringparam "draft.mode=$(DRAFT)"
+endif
+ifneq "$(REMARKS)" "0"
+  WEBHELPSTRINGS += --stringparam "show.comments=$(REMARKS)"
+endif
+
 
 #------------
 # Whether the search tab is generated or not is configurable
@@ -176,7 +182,7 @@ ifdef HTML_CSS
     WEBHELPSTRINGS += --stringparam "html.stylesheet=static/css/$(notdir $(HTML_CSS))"
   else
     HTML_CSS_INFO := CSS was set to none, using no CSS
-    WEBHELPSTRINGS += --stringparam "html.stylesheet=\"\""
+    #WEBHELPSTRINGS += --stringparam "html.stylesheet=\"\""
   endif
 endif
 

@@ -105,9 +105,12 @@ EPUB_INLINE_IMAGES := $(subst $(IMG_GENDIR)/color,$(EPUB_INLINE_DIR),$(COLOR_IMA
 #
 EPUB_DIRECTORIES := $(EPUB_TMPDIR) $(EPUB_OEBPS) $(EPUB_STATIC)
 
-EPUBSTRINGS := --param "show.comments=$(REMARKS)" \
-		--stringparam "epub.oebps.dir=OEBPS/" \
+EPUBSTRINGS := --stringparam "epub.oebps.dir=OEBPS/" \
 		--stringparam "epub.metainf.dir=META-INF/"
+
+ifneq "$(REMARKS)" "0"
+  EPUBSTRINGS += --stringparam "show.comments=$(REMARKS)"
+endif
 
 ifeq "$(IS_STATIC)" "static"
   EPUBSTRINGS += --stringparam "callout.graphics.path=static/images/" \
@@ -130,9 +133,9 @@ ifneq "$(strip $(EPUB_CSS))" ""
   ifneq "$(strip $(EPUB_CSS))" "none"
     EPUBSTRINGS  += --stringparam "html.stylesheet=$(notdir $(EPUB_CSS))"
     EPUB_CSSFILE := $(EPUB_OEBPS)/$(notdir $(EPUB_CSS))
-  else
-    EPUBSTRINGS += --stringparam "html.stylesheet=\"\""
-endif
+  #else
+    #EPUBSTRINGS += --stringparam "html.stylesheet=\"\""
+  endif
 endif
 
 #--------------
