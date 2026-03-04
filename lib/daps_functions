@@ -298,8 +298,8 @@ function parse_args {
                 shift 2
                 ;;
             --pretty)
-                # filelists: make outpot human readyble
-                export PRETTY_FILELIST=1
+                # filelists, metadata: make outpot human readyble
+                export PRETTY_OUTPUT=1
                 shift
                 ;;
             --remarks)
@@ -1086,7 +1086,7 @@ function metadata {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="help,output:,param:,rootid:,stringparam:"
+    LONG_OPTS="help,output:,param:,pretty,rootid:,stringparam:"
 
     parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -1097,6 +1097,7 @@ function metadata {
         help_help
         help_output
         help_param
+        help_pretty
         help_rootid
         help_stringparam
         echo
@@ -1566,7 +1567,7 @@ EOF
 }
 function help_pretty {
     cat <<EOF
-    --pretty                  Pretty print file lists (one filename per line)
+    --pretty                  Make output human readable.
 EOF
 }
 function help_remarks {

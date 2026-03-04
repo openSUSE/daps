@@ -425,7 +425,7 @@ MANIFEST_NOTRANS := $(LOCDROP_TMP_DIR)/$(DOCNAME)_manifest_notrans.txt
 #
 
 define print_list
-  @if [[ -t 0 || 1 = "$(strip $(PRETTY_FILELIST))" ]]; then \
+  @if [[ -t 0 || 1 = "$(strip $(PRETTY_OUTPUT))" ]]; then \
     echo -e "$(subst $(SPACE),\n,$(sort $(1)))"; \
   else \
     echo $(sort $(1)); \
