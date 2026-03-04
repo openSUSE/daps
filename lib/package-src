@@ -18,7 +18,7 @@ function package-src {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="def-file:,extended-validation:,help,locdrop,name:,optipng,set-date:"
+    LONG_OPTS="def-file:,extended-validation:,extra-dir:,help,locdrop,name:,optipng,set-date:"
 
     parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -28,6 +28,7 @@ function package-src {
         help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
         help_def-file
         help_extended-validation
+        help_extra-dir
         help_help
         help_locdrop
         help_name

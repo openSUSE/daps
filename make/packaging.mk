@@ -66,6 +66,10 @@ package-src: $(PROFILES) validate
 	tar rfh $(PACKAGE_SRC_TARBALL) --absolute-names \
 	  --transform=s%$(PRJ_DIR)/%% $(MFT_TRANS) $(MFT_NOTRANS)
     endif
+    ifdef HTML_EXTRA_DIR
+	tar rfh $(PACKAGE_SRC_TARBALL) --absolute-names \
+	  --transform=s%$(PRJ_DIR)/%% $(HTML_EXTRA_DIR)
+    endif
 	bzip2 -9f $(PACKAGE_SRC_TARBALL)
 	@ccecho "result" "Find the sources at:\n$(PACKAGE_SRC_RESULT)"
   endif

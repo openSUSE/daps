@@ -126,6 +126,16 @@ function parse_args {
                 SPELL_EXTRA_DICT="$2"
                 shift 2
                 ;;
+            --extra-dir)
+                # html/locdrop/package-html/package-src: directory with additional files
+                sanitize_path "${PRJ_DIR}/$2" "HTML_EXTRA_DIR"
+                if [[ "$(realpath -s $(dirname $HTML_EXTRA_DIR))" == "$PRJ_DIR" ]]; then
+                    export HTML_EXTRA_DIR
+                else
+                    exit_on_error "The extra-dir must be a subdirectory of ${PRJ_DIR}\nor a link to a directory in ${PRJ_DIR}."
+                fi
+                shift 2
+                ;;
             --file)
                 # getimages/linkcheck/spellcheck/stylecheck/xmlformat
                 # no need to export (not passed to make)
@@ -1323,6 +1333,16 @@ function help_export-dir {
                               of the $TARGET command. The directory will be
                               created if it does not exist.
                               Default: <BUILD_DIRECTORY>/locdrop
+EOF
+}
+function help_extra-dir {
+    cat <<EOF
+    --extra-dir=DIRECTORY     Specify a directory with additional files
+                              for the HTML build. It will be copied as is into
+                              the HTML result directory.
+                              The directory must be a subdirectory or a link in
+                              the project directory.
+                              Default: unset
 EOF
 }
 function help_file {

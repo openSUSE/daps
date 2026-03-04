@@ -187,6 +187,9 @@ ifdef COLOR_IMAGES
   html: $(COLOR_IMAGES) copy_inline_images_html
 endif
 html: copy_static_images_html
+ifneq "$(HTML_EXTRA_DIR)" ""
+  html: copy_extra_dir
+endif
 html: $(HTML_RESULT)
   ifeq "$(TARGET)" "html"
 	@ccecho "result" "$(RESULT_NAME) book built with REMARKS=$(REMARKS), DRAFT=$(DRAFT) and META=$(META):\n$(HTML_DIR)/"
@@ -251,6 +254,10 @@ endif
 copy_inline_images_html: | $(HTML_DIR)/images
 copy_inline_images_html: $(COLOR_IMAGES)
 	for IMG in $(COLOR_IMAGES); do $(HTML_GRAPH_COMMAND) $$IMG $(HTML_DIR)/images; done
+
+.PHONY: copy_extra_dir
+copy_extra_dir: | $(HTML_DIR)
+	$(HTML_GRAPH_COMMAND) $(HTML_EXTRA_DIR) $(HTML_DIR)
 
 
 #---------------

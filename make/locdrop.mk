@@ -186,6 +186,11 @@ locdrop: $(SRCFILES) $(MANIFEST_TRANS) $(MANIFEST_NOTRANS) $(USED_ALL) $(PROFILE
 	tar rhf $(NO_TRANS_TAR) --absolute-names --transform=s%$(PRJ_DIR)/%% \
 	  $(DEF_FILE) $(DC_FILES)
     endif
+    # add an HTML extra directory if existing
+    ifdef HTML_EXTRA_DIR
+	tar rfh $(NO_TRANS_TAR) --absolute-names \
+	  --transform=s%$(PRJ_DIR)/%% $(HTML_EXTRA_DIR)
+    endif
     ifneq "$(strip $(TO_TRANS_IMGS))" ""
         # graphics tarball "translated graphics"
 	BZIP2=--best tar cfhj $(TO_TRANS_IMG_TAR) \
