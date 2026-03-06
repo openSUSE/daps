@@ -96,7 +96,18 @@ endif
 
 # Entity files
 #
-ENTITIES_DOC := $(shell $(LIBEXEC_DIR)/getentityname.py $(DOCFILES) 2>/dev/null)
+ifeq "$(strip $(IS_ASSEMBLY))" "assembly"
+  ENTITIES_DOC := $(shell $(LIBEXEC_DIR)/getentityname.py $(ASSEMBLYFILES) $(ASSEMBLY_MAIN) 2>/dev/null)
+else
+  ENTITIES_DOC := $(shell $(LIBEXEC_DIR)/getentityname.py $(DOCFILES) 2>/dev/null)
+endif
+
+# this does not resolve links
+ENTITIES_DOC := $(sort $(abspath $(ENTITIES_DOC)))
+
+# this _does_ resolve links
+# 
+#ENTITIES_DOC := $(sort $(realpath $(ENTITIES_DOC)))
 
 
 # files xi:included with parse="text"
