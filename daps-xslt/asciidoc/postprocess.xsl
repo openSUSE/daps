@@ -298,7 +298,6 @@
     </xsl:if>
   </xsl:template>
 
-
   <!-- HINT: Turn a <orderedlist role="procedure"> into a real <procedure>
 
       In ADoc you use this syntax:
@@ -384,5 +383,33 @@
     <!-- With enumeration we switch to a normal orderedlist, not substeps. -->
     <xsl:apply-templates select="." />
   </xsl:template>
+
+  <!-- Structure -->
+
+  <xsl:template match="d:book[normalize-space(d:preface/d:title) = '']">
+    <xsl:copy>
+      <xsl:copy-of select="@*" />
+      <info>
+        <xsl:apply-templates select="d:info/node()"/>
+        <xsl:apply-templates select="d:preface" mode="book-preface" />
+      </info>
+      <xsl:apply-templates select="node()[not(self::d:info)]" />
+    </xsl:copy>
+  </xsl:template>
+
+  <xsl:template match="*" mode="book-preface">
+    <xsl:copy>
+      <xsl:apply-templates select="@* | node()" mode="book-preface" />
+    </xsl:copy>
+  </xsl:template>
+  <xsl:template match="d:preface/d:title" mode="book-preface" />
+  <xsl:template match="d:preface" mode="book-preface">
+    <abstract>
+      <xsl:apply-templates mode="book-preface" />
+    </abstract>
+  </xsl:template>
+
+  <xsl:template match="d:book[normalize-space(d:preface/d:title) = '']/d:preface" />
+
 
 </xsl:stylesheet>
