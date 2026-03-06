@@ -72,7 +72,6 @@ list-file:
 list-srcfiles: 
 	$(call print_list,$(USED_FILES))
 
-
 # List files from xml and images/src _not_ referenced by $DOCFILE or $MAIN
 #
 .PHONY: list-srcfiles-unused

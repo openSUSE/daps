@@ -156,6 +156,11 @@ function parse_args {
                 export IMAGES_GEN=1
                 shift
                 ;;
+            --graph)
+                # list-srcfiles
+                export GRAPH_OUTPUT=1
+                shift
+                ;;
             --grayscale)
                 # images/pdf/package-pdf/show-names: only grayscale images
                 export GRAYSCALE=1
@@ -967,7 +972,7 @@ function filelists {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="adoconly,help,imgonly,noadoc,nodc,noent,noimg,noxml,pretty,rootid:,xmlonly"
+    LONG_OPTS="adoconly,graph,help,imgonly,noadoc,nodc,noent,noimg,noxml,pretty,rootid:,xmlonly"
 
     parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -978,6 +983,7 @@ function filelists {
         help_help
         if [[ $SUB_CMD =~ list-srcfiles ]]; then
             help_adoconly
+            help_graph
             help_imgonly
             help_noadoc
             help_nodc
@@ -1362,6 +1368,13 @@ function help_gen {
     --gen                     Do all image conversions (images/gen) but
                               do not generate or link the images to
                               images/color or images/grayscale.
+                              Default: unset
+EOF
+}
+function help_graph {
+    cat <<EOF
+    --graph                   Print file and directory lists as a graphical
+                              structure (like the tree command).
                               Default: unset
 EOF
 }
