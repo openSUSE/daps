@@ -102,6 +102,9 @@ ifeq "$(MAKECMDGOALS)" "$(filter $(MAKECMDGOALS),$(LISTTARGETS))"
   ifeq "$(strip $(SRC_FORMAT))" "adoc"
     include $(DAPSROOT)/make/adoc2xml.mk
   endif
+  ifeq "$(strip $(IS_ASSEMBLY))" "assembly"
+    include $(DAPSROOT)/make/assembly2db.mk
+  endif
   include $(DAPSROOT)/make/setfiles.mk
   include $(DAPSROOT)/make/images.mk
   include $(DAPSROOT)/make/filelist.mk

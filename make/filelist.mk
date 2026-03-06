@@ -17,7 +17,14 @@ ifeq "$(strip $(SRC_FORMAT))" "adoc"
   DOCFILES := $(ADOC_SRCFILES)
 endif
 
-USED_FILES    := $(ENTITIES_DOC) $(DOCCONF) $(DOCFILES) $(USED_ALL)
+
+ifeq "$(strip $(IS_ASSEMBLY))" "assembly"
+  USED_FILES    := $(ENTITIES_DOC) $(DOCCONF) $(ASSEMBLYFILES) $(ASSEMBLY_MAIN) $(USED_ALL)
+else
+  # the default
+  USED_FILES    := $(ENTITIES_DOC) $(DOCCONF) $(DOCFILES) $(USED_ALL)
+endif
+
 
 # Using tar is the easiest way to search for files excluding versioning system
 # files and directories. A simple tar cv >/dev/null does not work, because
@@ -27,7 +34,7 @@ UNUSED_IMAGES := $(shell tar cP --exclude-vcs \
 		    $(IMG_SRC_DIR) 2>/dev/null | tar tP 2>/dev/null |\
 		    sed '/\/$$/d' 2>/dev/null | tr '\n' ' ' 2>/dev/null)
 UNUSED_XML    := $(shell tar cP --exclude-vcs \
-		    $(PRJ_DIR)/xml  2>/dev/null | tar tP 2>/dev/null |\
+		    $(SRC_DIR)  2>/dev/null | tar tP 2>/dev/null |\
 		    sed '/\/$$/d' 2>/dev/null | tr '\n' ' ' 2>/dev/null)
 UNUSED_FILES := $(filter-out $(USED_FILES), $(UNUSED_IMAGES) $(UNUSED_XML))
 

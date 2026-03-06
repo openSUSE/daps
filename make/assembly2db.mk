@@ -52,7 +52,13 @@ endif
 
 # ../common/legal.xml -> $(PRJ_DIR)/common/legal.xml
 #
-ASSEMBLYFILES := $(addprefix $(PRJ_DIR)/,$(subst ../,,$(sort $(shell $(XSLTPROC) --param "header=0" --xinclude --stylesheet $(GETRESOURCES) --file $(ASSEMBLY_MAIN) $(XSLTPROCESSOR) 2>/dev/null ))))
+ASSEMBLYFILES_PARAMS := --param "header=0"
+ifneq "$(strip $(STRUCTID))" ""
+  ASSEMBLYFILES_PARAMS += --stringparam "structure.id=$(STRUCTID)"
+endif
+
+
+ASSEMBLYFILES := $(addprefix $(PRJ_DIR)/,$(subst ../,,$(sort $(shell $(XSLTPROC) $(ASSEMBLYFILES_PARAMS) --xinclude --stylesheet $(GETRESOURCES) --file $(ASSEMBLY_MAIN) $(XSLTPROCESSOR) 2>/dev/null ))))
 
 # The list of files we touch to "store" the successful validation result
 # $(PRJ_DIR)/common/legal.xml -> $(ASSEMBLY_RESULT_DIR)/common/legal.avalidate
