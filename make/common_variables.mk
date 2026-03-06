@@ -424,8 +424,32 @@ MANIFEST_NOTRANS := $(LOCDROP_TMP_DIR)/$(DOCNAME)_manifest_notrans.txt
 # (used in filelist.mk and images.mk)
 #
 
+#
+# tree only introduced --fromfile in version 1.8.0
+# Check whether we have inkscape >= 1.8.0 or the old version
+#
+_TREE_VERSION := v1.8.0
+_TREE_TEST    := $(_TREE_VERSION)
+_TREE_VERSION += $(shell tree --version 2>/dev/null | awk '{print $$2}')
+#
+# Nasty workaround to compare version strings.
+# We are creating a string with "1.0 <current>", e.g. "1.0 0.91" in $(_TREE_VERSION)
+# Afterwards we are sorting it (lowest version first) in $(_TREE_VERSION_SORT)
+# Afterwards both strings are compared. If both are the same, the inkscape version
+# is >=1.0, otherwise it is lower than 1.0 (which means it requires the old
+# command line switches)
+_TREE_VERSION_SORT := $(shell echo "$(_TREE_VERSION)" | tr " " "\n" | sort -b --version-sort | head -n1)
+_TREE_IS_NEW := $(shell if [[ "$(_TREE_TEST)" = "$(_TREE_VERSION_SORT)" ]]; then echo "yes"; else echo "no"; fi)
+
 define print_list
-  @if [[ -t 0 || 1 = "$(strip $(PRETTY_OUTPUT))" ]]; then \
+  @if  [[ 1 -eq "$(strip $(GRAPH_OUTPUT))" ]]; then \
+    if [[ "yes" == $(_TREE_IS_NEW) ]]; then \
+      echo -e "$(subst $(PRJ_DIR)/,,$(subst $(SPACE),\n,$(sort $(1))))" | tree --fromfile --noreport; \
+    else \
+      echo -e "$(subst $(SPACE),\n,$(sort $(1)))"; \
+      ccecho "error" "Your version of 'tree' is too old, cannot produce graph output."; \
+    fi \
+  elif [[ -t 0 || 1 -eq "$(strip $(PRETTY_OUTPUT))" ]]; then \
     echo -e "$(subst $(SPACE),\n,$(sort $(1)))"; \
   else \
     echo $(sort $(1)); \
