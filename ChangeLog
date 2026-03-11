@@ -1,4 +1,49 @@
 -------------------------------------------------------------------
+Fri Mar 06 12:17:38 UTC 2025 - Frank Sundermeyer <fs@suse.com>
+
+Beta release DAPS 4.0 beta13
+
+* Bugfixes:
+  - Make sure no attributes (like xml:lang) get lost when
+    postprocessing adoc
+  - Remove unnecessary stringparams/params, because libxslt
+    (and therefore xsltproc) has a built-in limit for parameters
+    (64 on openSUSE). When exceeded DAPS fails with Error: 2
+  - The subcommand "meta" now correctly reports multiple product
+    versions from <productname version="1;2;3:x">
+  - The subcommand list-srcfiles now also works with assemblies
+    (https://github.com/openSUSE/daps/issues/718)
+
+* New features:
+  - Allow asciidoc orderlists to be converted into DocBook
+    procedures when using [role="procedure"] with an ordered list
+  - Subcommand metadata now puts out json by default, use --pretty
+    to get human-redable text
+  - Subcommand list-srcfiles has got a new option (--graph) to
+    put out a file list in tree-style.
+  - With --extra-dir or HTML_EXTRA_DIR in the DC-file you can
+    specify an additional directory that is added to HTML builds
+    (e.g. for text files, PDFs, etc)
+    - works for HTML builds only
+    - the directory needs to be a subdirectory or link of the
+      project directory.
+    - link to it's content files from the XMl with a relative path
+      <directory>/FILE
+    - if present and used, it always needs to be added to the
+      subcommands "package-src", "package-html", and "locdrop", too
+      Therefore it is _strongly_ recommended to specify this directory
+      in the DC-file rather than on the command line
+    - (https://github.com/openSUSE/daps/issues/751)
+  - added two new helper stylesheets to daps-xslt/contrib
+     - change-products-on-assembly.xsl add <meta name="productname">
+       tags oßr move existing <productname> tage to a <meta> tag
+     - add missing metatags (required by the SUSE docs)
+  - asciidoc postprocess: if the conversion of an asciidoc book
+    generates a <preface> with an empty title (will create a
+    clickable empty space in the TOC), the <preface> is converted
+    into <info><abstract>
+
+-------------------------------------------------------------------
 Mon Sep 15 16:09:23 UTC 2025 - Frank Sundermeyer <fs@suse.com>
 
 Beta release DAPS 4.0 beta12
