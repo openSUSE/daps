@@ -14,8 +14,8 @@
 #
 # we make use of bash only syntax
 #
-#SHELL := /bin/bash -x
-SHELL := /bin/bash
+SHELL := /bin/bash -x
+#SHELL := /bin/bash
 
 #--------------------------------------------------
 # CHECKS

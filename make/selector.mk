@@ -147,29 +147,16 @@ ifeq "$(MAKECMDGOALS)" "man"
 endif
 
 #---------------
-# Metadata
-#
-
-MISCTARGETS := bigfile docinfo linkcheck stylecheck productinfo
-
-ifeq "$(MAKECMDGOALS)" "metadata"
-  include $(DAPSROOT)/make/setfiles.mk
-  include $(DAPSROOT)/make/profiling.mk
-  include $(DAPSROOT)/make/validate.mk
-  include $(DAPSROOT)/make/filelist.mk
-  include $(DAPSROOT)/make/misc.mk
-endif
-
-#---------------
 # Miscellaneous
 #
 
-MISCTARGETS := bigfile docinfo linkcheck stylecheck productinfo
+MISCTARGETS := bigfile docinfo linkcheck metadata productinfo stylecheck
 
 ifeq "$(MAKECMDGOALS)" "$(filter $(MAKECMDGOALS),$(MISCTARGETS))"
   include $(DAPSROOT)/make/setfiles.mk
   include $(DAPSROOT)/make/profiling.mk
   include $(DAPSROOT)/make/validate.mk
+  include $(DAPSROOT)/make/filelist.mk
   include $(DAPSROOT)/make/misc.mk
 endif
 
