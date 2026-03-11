@@ -1124,6 +1124,8 @@ function metadata {
         [[ -d $(dirname $METADATA_OUTPUT) ]] || exit_on_error "You are attempting to write the output to a non-existing directory ($(dirname $METADATA_OUTPUT))"
     fi
 
+    # requires profiling first, otherwise may not be able to set _ROOTID
+    call_make "profile" "$@" || exit_on_error "Profiling failed"
     call_make "$SUB_CMD" "$@"
 }
 
