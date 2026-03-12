@@ -65,7 +65,7 @@
   <!-- This rule is only necessary to copy the namespaces into the root element -->
   <xsl:template match="/*">
     <xsl:copy>
-      <xsl:copy-of select="@*"/> 
+      <xsl:copy-of select="@*"/>
       <!-- Copy the namespaces -->
       <xsl:for-each select="$namespace-nodes//*/namespace::*">
            <xsl:copy-of select="."/>
@@ -378,7 +378,7 @@
 
   <xsl:template match="d:listitem/d:orderedlist[@role='list'] |
                        d:listitem/d:itemizedlist |
-                       d:programlisting|d:co|d:callout" 
+                       d:programlisting|d:co|d:callout"
                        mode="procedure">
     <!-- With enumeration we switch to a normal orderedlist, not substeps. -->
     <xsl:apply-templates select="." />
@@ -391,25 +391,36 @@
       <xsl:copy-of select="@*" />
       <info>
         <xsl:apply-templates select="d:info/node()"/>
-        <xsl:apply-templates select="d:preface" mode="book-preface" />
+        <xsl:comment> Abstract:</xsl:comment>
+        <xsl:apply-templates select="d:preface/d:variablelist|d:preface/d:abstract/d:variablelist" mode="book-preface" />
       </info>
       <xsl:apply-templates select="node()[not(self::d:info)]" />
     </xsl:copy>
   </xsl:template>
+
 
   <xsl:template match="*" mode="book-preface">
     <xsl:copy>
       <xsl:apply-templates select="@* | node()" mode="book-preface" />
     </xsl:copy>
   </xsl:template>
-  <xsl:template match="d:preface/d:title" mode="book-preface" />
-  <xsl:template match="d:preface" mode="book-preface">
-    <abstract>
-      <xsl:apply-templates mode="book-preface" />
+
+  <xsl:template match="d:simpara" mode="book-preface">
+    <para>
+      <xsl:apply-templates select="@* | node()" mode="book-preface" />
+    </para>
+  </xsl:template>
+
+  <xsl:template match="d:preface[normalize-space(d:title) = '']/d:title" mode="book-preface" />
+
+  <xsl:template match="d:preface/d:variablelist | d:preface/d:abstract/d:variablelist" mode="book-preface">
+     <abstract>
+       <xsl:copy>
+        <xsl:apply-templates select="@*|node()" mode="book-preface" />
+       </xsl:copy>
     </abstract>
   </xsl:template>
 
-  <xsl:template match="d:book[normalize-space(d:preface/d:title) = '']/d:preface" />
-
+  <xsl:template match="d:book/d:preface[normalize-space(d:title) = '']" />
 
 </xsl:stylesheet>
