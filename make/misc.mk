@@ -134,29 +134,5 @@ docinfo: $(BIGFILE)
 	  $(XSLTPROCESSOR) $(ERR_DEVNULL)
 
 
-#---------------
-# Metadata
-#
-# requires filelist.mk because of a setting for FILE4ID
 
-METAFILE = $(PROFILEDIR)/$(notdir $(FILE4ID))
-ifeq "$(ROOTID)" ""
-  _ROOTID = $(shell $(XMLSTARLET) sel -N d=http://docbook.org/ns/docbook -T -t -v "/d:*/@xml:id" $(METAFILE))
-else
-  _ROOTID = $(ROOTID)
-endif
-
-METAPARAMS := --stringparam "rootid=$(_ROOTID)"
-ifeq "$(PRETTY_OUTPUT)" "1"
-  METAPARAMS += --param "json=0"
-endif
-
-.PHONY: metadata
-metadata: $(PROFILES) $(DOCFILES) validate
-ifneq "$(METADATA_OUTPUT)" ""
-	@$(XSLTPROC) $(PARAMS) $(STRINGPARAMS) $(METAPARAMS) --stylesheet $(META_STYLE) --file $(METAFILE) $(XSLTPROCESSOR) 2>/dev/null > $(METADATA_OUTPUT)
-	@echo "Find the metadata at $(METADATA_OUTPUT)"
-else
-	@$(XSLTPROC) $(PARAMS) $(STRINGPARAMS) $(METAPARAMS) --stylesheet $(META_STYLE) --file $(METAFILE) $(XSLTPROCESSOR) 2>/dev/null
-endif
 
