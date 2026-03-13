@@ -25,7 +25,7 @@
     <email>toms@opensuse.org</email>
    </author>
    <author>
-    <contrib>Developer</contrib>
+    <contrib>Developer (inactive)</contrib>
     <firstname>Stefan</firstname>
     <surname>Knorr</surname>
    </author>
@@ -52,7 +52,7 @@
   <refname>&daps_command;</refname>
   <refpurpose>
    A complete environment to build HTML, PDF, ePUB and other formats from
-   DocBook XML.
+   DocBook XML (incl. assemblies) and ASCIIDoctor.
   </refpurpose>
  </refnamediv>
 
@@ -78,13 +78,13 @@
  <refsect1 id="daps.description">
   <title>Description</title>
   <para>
-    DAPS contains a set of stylesheets, scripts and Makefiles that enable
-    you to create HTML, PDF, ePUB and other formats from DocBook XML with a
-    single command. It also contains tools to generate profiled source
+    DAPS contains a set of stylesheets, scripts and Makefiles that enable you
+    to create HTML, PDF, ePUB and other formats from DocBook XML or ASCIIDoctor
+    with a single command. It also contains tools to generate profiled source
     tarballs for distributing your XML sources for translation or review.
    </para>
    <para>
-    DAPS also includes tools that assist you when writing DocBook XML:
+    DAPS also includes tools that assist you when writing:
     linkchecker, validator, spellchecker, editor macros and stylesheets for
     converting DocBook XML.
    </para>
@@ -95,6 +95,13 @@
     command, you can run <command>&daps; <replaceable>subcommand</replaceable>
     <option>help</option></command>
    </para>
+   <para>
+     NOTE: When processing ASCIIDoctor files, they are first converted to
+     DocBook using asciidoctor's build in conversion.
+   </para>
+   <para>
+     NOTE: To process DocBook assemblies, DocBook 5.2 is required.
+   </para>
   </refsect1>
 
  <refsect1 id="daps.globaloptions">
@@ -104,7 +111,7 @@
     <term><option>--adocattr="NAME=VALUE"</option></term>
     <listitem>
      <para>
-      Overwrite, define or delete an AsciiDoc document attribute. >To overwrite
+      Overwrite, define or delete an AsciiDoc document attribute. To overwrite
       an attribute already defined in the AsciiDoc document, use
       <replaceable>NAME</replaceable>=<replaceable>VALUE</replaceable>, or just
       <replaceable>NAME</replaceable> for attributes without a value. To delete
@@ -137,10 +144,26 @@
     </listitem>
    </varlistentry>
    <varlistentry>
+    <term>
+     <option>--adocset</option>
+    </term>
+    <listitem>
+     <para>
+       If specified, DAPS tries to convert the AsciiDoc document into a
+       set. Requires an AsciiDoc document that consists of parts (each part
+       will be converted into a book in a set)
+     </para>
+     <para>Default: unset.</para>
+     <para>
+      Only works with AsciiDoc sources and is ignored otherwise.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
     <term><option>--builddir=<replaceable>BUILDDIR</replaceable></option></term>
     <listitem>
      <para>Directory where every output &dapsacr; generates will end up.</para>
-     <para>Default: <replaceable>DOC DIR</replaceable>/build/</para>
+     <para>Default: <replaceable>$PRJ_DIR</replaceable>/build/</para>
     </listitem>
    </varlistentry>
    <varlistentry>
@@ -152,7 +175,7 @@
       colors.
      </para>
      <para>
-      Default: 1 (when the output does not go to a terminal, colored
+      Default: 1 (however, when the output goes to a terminal, colored
       output will be disabled automatically).
      </para>
     </listitem>
@@ -179,14 +202,12 @@
     </term>
     <listitem>
      <para>
-      Path to doc config file to use. Mandatory unless there is only a single
-      <replaceable>DC-FILE</replaceable> in the current directory or unless you
-      have configured a default value (<envar>DOCCONF_DEFAULT</envar>) in
-      &dapsconf-user;.
+      Path to doc config file to use. Mandatory unless you specify an XML file
+      directly with <option>-m/--main</option>.
      </para>
      <para>Default: unset.</para>
      <para>
-      Note: Options <option>--docconfig</option> and <option>--main</option>
+      Note: Options <option>-d/--docconfig</option> and <option>-m/--main</option>
       exclude each other.
      </para>
     </listitem>
@@ -226,6 +247,16 @@
     </listitem>
    </varlistentry>
    <varlistentry>
+    <term><option>--imgsrcdir</option></term>
+    <listitem>
+      <para>
+        Specify a directory for the images source directory. Must contain
+        all images, either in the specified directory, or in subdirectories
+        carrying the name of the supported formats (jpg/, png/, svg/, ...).
+      </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
     <term><option>--jobs</option></term>
     <listitem>
      <para>
@@ -247,7 +278,7 @@
       Path to the main file defining your document.
      </para>
      <para>
-      Note: Options <option>--main</option> and <option>--docconfig</option>
+      Note: Options <option>-m/--main</option> and <option>-d/--docconfig</option>
       exclude each other.
      </para>
     </listitem>
@@ -261,6 +292,19 @@
       local schema, specify an absolute path with the
       <literal>file://</literal> prefix
       (e.g. <literal>file:///foo/schema.rnc</literal>)
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term><option>--srcdir=<replaceable>DIR</replaceable></option></term>
+    <listitem>
+     <para>
+       Specify a directory for the xml or adoc source files. Must contain all
+       respective xml or adoc source files for the project. It is not
+       necessary to specify this option when using --main.
+     </para>
+     <para>
+       Default: $PRJ_DIR/xml or $PRJ_DIR/adoc, depending on the source format.
      </para>
     </listitem>
    </varlistentry>
@@ -395,7 +439,8 @@
      <listitem>
       <para>
        Lists the filename that contains the ID specified with the mandatory
-       parameter <option>--rootid</option>.
+       parameter <option>--rootid</option>. Will not work properly for adoc
+       sources and assemblies.
       </para>
      </listitem>
     </varlistentry>
@@ -403,8 +448,8 @@
      <term><option>list-srcfiles</option></term>
      <listitem>
       <para>
-       List source files (XML sources, images, entity declarations, DC-file)
-       used by the document reference by the DC-file
+       List source files (XML/adoc sources, images, entity declarations,
+       DC-file) used by the document reference by the DC-file
       </para>
      </listitem>
     </varlistentry>
@@ -414,7 +459,8 @@
       <para>
        List files from the <filename>xml/</filename> and
        <filename>images/src/</filename> directories not used by the document
-       reference by the DC-file.
+       reference by the DC-file. Will not work properly for adoc
+       sources and assemblies.
       </para>
      </listitem>
     </varlistentry>
@@ -422,7 +468,7 @@
      <term><option>list-images-missing</option></term>
      <listitem>
       <para>
-       List images referenced in the XML sources but missing in the images'
+       List images referenced in the sources but missing in the images
        source directory
       </para>
      </listitem>
@@ -431,7 +477,7 @@
      <term><option>list-images-multisrc</option></term>
      <listitem>
       <para>
-       List images for which have the same basename
+       List images which have the same basename
        (e.g. <replaceable>foo.svg</replaceable> and
        <replaceable>foo.png</replaceable>). Refer to the DAPS manual for more
        information.
@@ -549,6 +595,17 @@
      </listitem>
     </varlistentry>
     <varlistentry>
+     <term><option>metadata</option></term>
+     <listitem>
+       <para>
+        Extracts metadata from the sources (mainly from <sgmltag
+        class="starttag">meta</sgmltag> tags and display them in
+        json-format. Use <option>--pretty</option> to display in human-readable
+        format.
+       </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
      <term><option>optipng</option></term>
      <listitem>
       <para>Optimize (size) source PNGs.</para>
@@ -565,7 +622,7 @@
      <listitem>
       <para>
        Spellchecks the file specified with <option>--file</option> or the
-       document specified by <option>--rootid</option>.
+       document specified by <option>--rootid</option>. Uses hunspell by default.
       </para>
      </listitem>
     </varlistentry>
@@ -574,7 +631,8 @@
      <listitem>
       <para>
        Validate profiled XML sources. Automatically profiles the XML sources if
-       needed.
+       needed. With <option>--extended-validation="OPT"</option> also checks for
+       empty XML elements, SEO-friendly IDs, and valid table layouts.
       </para>
       <para>
        Not supported for AsciiDoc projects.

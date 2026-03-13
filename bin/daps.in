@@ -482,11 +482,11 @@ Global Options:
                             Default: unset
   --builddir=BUILD_DIR      Directory where every output $ME generates will
                             end up.
-                            Default: <doc dir>/build/
+                            Default: \$PRJ_DIR/build
   --color=(0|1)             By default errors, results, warnings and certain
                             info messages are printed in color using bash color
                             codes. Set to '0' to turn off colors.
-                            Default: 1 (when the output does not go to a
+                            Default: 1 (however, when the output goes to a
                                         terminal, colored output will be
                                         disabled automatically)
   --config=CFG-FILE         Set a configuration file for DAPS that overwrites
@@ -502,10 +502,9 @@ Global Options:
                             readable.
   --docconfig=DC-file,
   -d DC-file                Path to doc config file to use. Mandatory,
-                            unless there is only a single DC-file in the
-                            current directory or unless you have configured a
-                            default value (DOCCONF_DEFAULT) in \$USER_CONFIG.
-                            Note: Options --docconfig and --main exclude
+                            unless you specify an XML file directly with
+                            -m/--main.
+                            Note: Options -d/--docconfig and -m/--main exclude
                                   each other.
   --fb_styleroot=DIR        Fallback styleroot directories. Can only be used in
                             conjunction with --styleroot. By default, the
@@ -524,8 +523,8 @@ Global Options:
                             If the config was changed to not rebuild
                             (ALWAYS_REBUILD="no"), use this option to override.
   --help, -h                Help
-  --imgsrcdir=IMG_SRC_DIR   Specify a directory for the images used in the
-                            sources. Must contain all images, either in the
+  --imgsrcdir=IMG_SRC_DIR   Specify a directory for the images source
+                            directory. Must contain all images, either in the
                             specified directory, or in subdirectories carrying
                             the name of the supported formats
                             (jpg/, png/, svg/, ...)
@@ -538,7 +537,7 @@ Global Options:
                             Default: Use as man jobs as available CPU cores.
   --main=MAIN
   -m MAIN                   Path to the main file defining your document.
-                            Note: Options --main and --docconfig exclude
+                            Note: Options -m/--main and -d/--docconfig exclude
                                   each other.
   --schema=URN              URN to a DocBook 5 schema that is to be used for
                             validation. Will be ignored when validating
@@ -548,10 +547,10 @@ Global Options:
                                   (e.g. "file:///foo/schema.rnc").
   --srcdir=SRC_DIR          Specify a directory for the xml or adoc source
                             files. Must contain all respective source files
-                            for the the project.
+                            for the project.
                             It is not necessary to specify this option when
                             using --main.
-                            Default: $PRJ_DIR/xml or $PRJ_DIR/adoc, depending
+                            Default: \$PRJ_DIR/xml or \$PRJ_DIR/adoc, depending
                                      on the source format
   --styleroot=DIR           By default, daps uses the DocBook stylesheets to
                             create output. If you have your own set of
@@ -585,13 +584,15 @@ Subcommands:
 
   File lists:
     list-file                 Lists the filename that contains the ID specified
-                              with the mandatory parameter --rootid.
-    list-srcfiles             List source files (XML sources, images, entity
+                              with the mandatory parameter --rootid. will not
+                              work properly for adoc sources and assemblies.
+    list-srcfiles             List source files (XML/adoc sources, images, entity
                               declarations, DC-file) used by the document
                               reference by the DC-file.
     list-srcfiles-unused      List files from the document and image source and
                               directories not used by the document reference
-                              by the DC-file.
+                              by the DC-file. Will not work properly for adoc
+                              files and assemblies.
     list-images-missing       List images referenced in the XML sources but
                               missing in the images' source directory.
     list-images-multisrc      List images for which multiple sources exist
@@ -630,7 +631,8 @@ Subcommands:
     optipng                   Optimize file size of source PNGs.
     profile                   Profile XML sources.
     spellcheck                Spellchecks the file specified with --file or the
-                              document specified by rootid.
+                              document specified by rootid. Uses hunspell
+                              by default.
     validate                  Validate profiled sources. Automatically profiles
                               the XML sources if needed.
     xmlformat                 Prettify the XML source files using
