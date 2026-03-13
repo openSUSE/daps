@@ -137,7 +137,7 @@ function parse_args {
                 shift 2
                 ;;
             --file)
-                # getimages/linkcheck/spellcheck/stylecheck/xmlformat
+                # getimages/linkcheck/spellcheck/xmlformat
                 # no need to export (not passed to make)
                 sanitize_path "$2" "P_FILE"
                 shift 2
@@ -332,7 +332,7 @@ function parse_args {
             --rootid)
                 # used almost everywhere: ROOTID
                 # P_ROOTID is needed for
-                # getimages/linkcheck//spellcheck/stylecheck/xmlformat
+                # getimages/linkcheck//spellcheck/xmlformat
                 # to distinguish between valkues provided by
                 # config and command line
                 P_ROOTID="$2"

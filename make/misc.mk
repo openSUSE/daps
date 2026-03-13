@@ -88,21 +88,6 @@ linkcheck:
 	@ccecho "result" "Find the linkcheck report at:\n$(TMP_DIR)/$(BOOK)-checkbot-localhost.html"
 
 #--------------
-# Style checker
-#
-
-STYLECHECK_OUTFILE := $(TMP_DIR)/$(DOCNAME)-stylecheck.xml
-
-.PHONY: stylecheck
-stylecheck: $(BIGFILE)
-  ifeq "$(SHOW)" "1"
-	@sdsc --show $(BIGFILE) $(STYLECHECK_OUTFILE)
-  else
-	@sdsc $(BIGFILE) $(STYLECHECK_OUTFILE) >/dev/null
-  endif
-	@ccecho "result" "Find the stylecheck report at:\n$(STYLECHECK_OUTFILE)"
-
-#--------------
 # Productname/Productversion
 #
 
