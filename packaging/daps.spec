@@ -17,7 +17,7 @@
 
 
 Name:           daps
-Version:        4.0~beta12
+Version:        4.0~beta13
 Release:        0
 
 %define pkg_version 4.0beta12
