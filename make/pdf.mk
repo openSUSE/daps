@@ -49,16 +49,16 @@ endif
 # FO stringparams
 #
 # avoid unnecessary params (aka ones that have the same value as upstream default)
+
+ifeq "$(DRAFT)" "yes"
+  FOSTRINGS += --stringparam "draft.mode=yes"
+endif
+ifneq "$(REMARKS)" "1"
+  FOSTRINGS += --param "show.comments=0"
+endif
 ifneq "$(STYLEIMG)" ""
   FOSTRINGS += --stringparam "styleroot=$(dir $(STYLEIMG))"
 endif
-ifneq "$(DRAFT)" "no"
-  FOSTRINGS += --stringparam "draft.mode=$(DRAFT)"
-endif
-ifneq "$(REMARKS)" "0"
-  FOSTRINGS += --stringparam "show.comments=$(REMARKS)"
-endif
-
 
 #----------
 # Settings depending on --grayscale and --cropmarks

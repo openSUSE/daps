@@ -137,11 +137,11 @@ WEBHELPSTRINGS := --param "use.id.as.filename=1" \
                   --stringparam "img.src.path=images/" \
                   --stringparam "webhelp.indexer.language=$(LL)"
 
-ifneq "$(DRAFT)" "no"
-  WEBHELPSTRINGS += --stringparam "draft.mode=$(DRAFT)"
+ifeq "$(DRAFT)" "yes"
+  WEBHELPSTRINGS += --stringparam "draft.mode=yes"
 endif
-ifneq "$(REMARKS)" "0"
-  WEBHELPSTRINGS += --stringparam "show.comments=$(REMARKS)"
+ifneq "$(REMARKS)" "1"
+  WEBHELPSTRINGS += --param "show.comments=0"
 endif
 
 

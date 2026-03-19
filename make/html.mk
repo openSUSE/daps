@@ -122,11 +122,11 @@ HTMLSTRINGS  += --param "use.id.as.filename=1" \
 		--stringparam "base.dir=$(HTML_DIR)/" \
                 --stringparam "img.src.path=images/"
 
-ifneq "$(DRAFT)" "no"
-  HTMLSTRINGS += --stringparam "draft.mode=$(DRAFT)"
+ifeq "$(DRAFT)" "yes"
+  HTMLSTRINGS += --stringparam "draft.mode=yes"
 endif
-ifneq "$(REMARKS)" "0"
-  HTMLSTRINGS += --stringparam "show.comments=$(REMARKS)"
+ifneq "$(REMARKS)" "1"
+  HTMLSTRINGS += --param "show.comments=0"
 endif
 
 
