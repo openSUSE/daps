@@ -320,7 +320,7 @@
   -->
   <xsl:template match="*" mode="procedure">
     <xsl:copy>
-      <xsl:apply-templates select="node()" mode="procedure" />
+      <xsl:apply-templates select="@* | node()" mode="procedure" />
     </xsl:copy>
   </xsl:template>
 
