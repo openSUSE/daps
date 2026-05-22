@@ -3,15 +3,18 @@
    Extract meta data for Docserv processing
 
   Purpose:
-     This is the stylesheet that makes the "daps meta" command work
+     Stylesheet for the "daps metadata" command
 
   Input:
      DocBook 5 document
 
   Output:
-     Plain text with key=value lines
+     JSON or plain text with key=value lines, depending on the "json" XSLT
+     parameter
 
   Parameters:
+     * "default-lang": The default fallback language to use when there is no
+       "lang" attribute (default 'en-us'). Only the string, without quotes.
      * "sep": Separation character of different items
      * "sep-entries": The separation character between different entries in a list
      * "with-warn": should warnings be printed? true()=yes, false()=no
@@ -42,7 +45,7 @@
   <xsl:param name="version">1.0</xsl:param>
   <xsl:param name="json" select="1" />
   <xsl:param name="rootid" />
-
+  <xsl:param name="default-lang">en-us</xsl:param>
 
   <!-- ===== Helper templates -->
   <xsl:template name="warn">
@@ -544,7 +547,14 @@
 
     <xsl:text>     {&#10;</xsl:text>
     <xsl:text>        "lang": </xsl:text>
-    <xsl:value-of select="concat('&quot;', (ancestor::*/@xml:lang)[1], '&quot;,&#10;')"/>
+    <xsl:choose>
+      <xsl:when test="(ancestor::*/@xml:lang)[1]">
+        <xsl:value-of select="concat('&quot;', (ancestor::*/@xml:lang)[1], '&quot;,&#10;')"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="concat('&quot;', $default-lang, '&quot;,&#10;')"/>
+      </xsl:otherwise>
+    </xsl:choose>
     <xsl:text>        "default": true,&#10;</xsl:text>
     <xsl:text>        "title": </xsl:text>
     <xsl:value-of select="concat('&quot;', normalize-space($title), '&quot;,&#10;')"/>
