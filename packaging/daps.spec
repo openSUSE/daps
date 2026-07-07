@@ -45,6 +45,7 @@ BuildRequires:  jing
 BuildRequires:  libxml2-tools
 BuildRequires:  libxslt
 BuildRequires:  libxslt-tools
+BuildRequires:  python3-base
 BuildRequires:  python3-lxml
 %if 0%{?suse_version} >= 1600
 BuildRequires:  rsvg-convert
