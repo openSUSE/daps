@@ -9,7 +9,7 @@
 #
 
 function check_prg {
-    which $1 2>/dev/null || return 1
+    type -p $1 2>/dev/null || return 1
 }
 
 function print_prg {
