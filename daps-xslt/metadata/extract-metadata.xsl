@@ -35,6 +35,8 @@
   <xsl:output method="text"/>
   <xsl:strip-space elements="*"/>
 
+  <xsl:key name="products-by-name" match="d:productname" use="normalize-space(.)" />
+
 
   <!-- ===== Parameter -->
   <xsl:param name="sep-entries">;</xsl:param>
@@ -504,15 +506,16 @@
     <xsl:variable name="product-nodes" select="exsl:node-set($product-nodes-rtf)/d:productname" />
 
     <!-- Iterate over the collected product nodes -->
-    <xsl:for-each select="$product-nodes">
+    <xsl:for-each select="$product-nodes[count(. | key('products-by-name', normalize-space(.))[1]) = 1]">
+      <xsl:variable name="current-group" select="key('products-by-name', normalize-space(.))" />
       <xsl:text>    {&#10;</xsl:text>
       <xsl:value-of select="concat('      &quot;name&quot;: &quot;', normalize-space(.), '&quot;,&#10;')"/>
-      <xsl:text>      "versions": [&#10;        </xsl:text>
-      <xsl:call-template name="split-versions">
-        <!-- Normalize delimiters: replace comma and space with semicolon -->
-        <xsl:with-param name="list" select="translate(@version, ', ', ';;')"/>
-      </xsl:call-template>
-      <xsl:text>&#10;      ]&#10;</xsl:text>
+      <xsl:text>      "versions": [</xsl:text>
+      <xsl:for-each select="$current-group">
+        <xsl:value-of select="concat('&quot;', @version, '&quot;')" />
+        <xsl:if test="position() != last()">, </xsl:if>
+      </xsl:for-each>
+      <xsl:text>]&#10;</xsl:text>
       <xsl:text>    }</xsl:text>
       <xsl:if test="position() != last()">,</xsl:if>
       <xsl:text>&#10;</xsl:text>
@@ -547,14 +550,7 @@
 
     <xsl:text>     {&#10;</xsl:text>
     <xsl:text>        "lang": </xsl:text>
-    <xsl:choose>
-      <xsl:when test="(ancestor::*/@xml:lang)[1]">
-        <xsl:value-of select="concat('&quot;', (ancestor::*/@xml:lang)[1], '&quot;,&#10;')"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="concat('&quot;', $default-lang, '&quot;,&#10;')"/>
-      </xsl:otherwise>
-    </xsl:choose>
+    <xsl:value-of select="concat('&quot;', (ancestor::*/@xml:lang)[1], '&quot;,&#10;')"/>
     <xsl:text>        "default": true,&#10;</xsl:text>
     <xsl:text>        "title": </xsl:text>
     <xsl:value-of select="concat('&quot;', normalize-space($title), '&quot;,&#10;')"/>
