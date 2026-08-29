@@ -460,6 +460,23 @@
     </xsl:for-each>
   </xsl:template>
 
+  <xsl:template name="get-full-lang-code">
+    <xsl:param name="lang"/>
+    <xsl:choose>
+      <xsl:when test="$lang = 'en'">en-us</xsl:when>
+      <xsl:when test="$lang = 'de'">de-de</xsl:when>
+      <xsl:when test="$lang = 'fr'">fr-fr</xsl:when>
+      <xsl:when test="$lang = 'ja'">ja-jp</xsl:when>
+      <xsl:when test="$lang = 'es'">es-es</xsl:when>
+      <xsl:when test="$lang = 'it'">it-it</xsl:when>
+      <xsl:when test="$lang = 'pt'">pt-br</xsl:when>
+      <xsl:when test="$lang = 'ru'">ru-ru</xsl:when>
+      <xsl:when test="$lang = 'zh-cn'">zh-cn</xsl:when>
+      <xsl:when test="$lang = 'zh-tw'">zh-tw</xsl:when>
+      <xsl:otherwise><xsl:value-of select="$lang"/></xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
   <xsl:template name="split-versions">
     <xsl:param name="list" select="."/>
     <xsl:param name="delimiter" select="';'"/>
@@ -547,10 +564,16 @@
     <xsl:variable name="datemodified">
       <xsl:call-template name="get.date" />
     </xsl:variable>
+    <xsl:variable name="short-lang" select="(ancestor::*/@xml:lang)[1]" />
+    <xsl:variable name="full-lang">
+      <xsl:call-template name="get-full-lang-code">
+        <xsl:with-param name="lang" select="$short-lang" />
+      </xsl:call-template>
+    </xsl:variable>
 
     <xsl:text>     {&#10;</xsl:text>
     <xsl:text>        "lang": </xsl:text>
-    <xsl:value-of select="concat('&quot;', (ancestor::*/@xml:lang)[1], '&quot;,&#10;')"/>
+    <xsl:value-of select="concat('&quot;', $full-lang, '&quot;,&#10;')"/>
     <xsl:text>        "default": true,&#10;</xsl:text>
     <xsl:text>        "title": </xsl:text>
     <xsl:value-of select="concat('&quot;', normalize-space($title), '&quot;,&#10;')"/>
