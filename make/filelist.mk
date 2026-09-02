@@ -71,6 +71,10 @@ list-file:
 # List files from xml and images/src referenced by $DOCFILE or $MAIN
 #
 .PHONY: list-srcfiles
+ifeq "$(GET_HASHES)" "1"
+HASHED_FILES := $(shell md5sum -- $(USED_FILES) | awk '{hash=$$1; sub(/^[^ ]+[ ]+/, ""); print $$0 ":" hash}')
+list-srcfiles: USED_FILES := $(HASHED_FILES)
+endif
 list-srcfiles: 
 	$(call print_list,$(USED_FILES))
 

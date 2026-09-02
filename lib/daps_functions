@@ -172,6 +172,11 @@ function parse_args {
                 P_HELP=1
                 shift
                 ;;
+            --hashes)
+                # list-srcfiles: show md5 hashes
+                export GET_HASHES=1
+                shift
+                ;;
             --html5)
                 # html/package-html: create html5
                 export HTML5=1
@@ -972,7 +977,7 @@ function filelists {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="adoconly,graph,help,imgonly,noadoc,nodc,noent,noimg,noxml,pretty,rootid:,xmlonly"
+    LONG_OPTS="adoconly,graph,hashes,help,imgonly,noadoc,nodc,noent,noimg,noxml,pretty,rootid:,xmlonly"
 
     parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -983,6 +988,7 @@ function filelists {
         help_help
         if [[ $SUB_CMD =~ list-srcfiles ]]; then
             help_adoconly
+            help_hashes
             help_graph
             help_imgonly
             help_noadoc
@@ -1389,6 +1395,12 @@ EOF
 function help_grayscale_pdf {
     cat <<EOF
     --grayscale               Generate a grayscale PDF for printing.
+                              Default: off
+EOF
+}
+function help_hashes {
+    cat <<EOF
+    --hashes                  Show an md5 hash sum for each file.
                               Default: off
 EOF
 }
