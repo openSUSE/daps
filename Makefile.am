@@ -133,6 +133,7 @@ xsltmetadatadir  = $(xsltdir)/metadata
 xsltmigratedir   = $(xsltdir)/migrate
 xsltprofilingdir = $(xsltdir)/profiling
 xsltrelnotesdir  = $(xsltdir)/relnotes
+xsltrevhistorydir = $(xsltdir)/revhistory
 xsltxhtmldir     = $(xsltdir)/xhtml
 xsltyelpdir      = $(xsltdir)/yelp
 
@@ -180,6 +181,7 @@ dist_xsltmetadata_DATA   = $(wildcard daps-xslt/metadata/*.xsl)
 dist_xsltmigrate_DATA   = $(wildcard daps-xslt/migrate/*.xsl)
 dist_xsltprofiling_DATA = $(wildcard daps-xslt/profiling/*.xsl)
 dist_xsltrelnotes_DATA  = $(wildcard daps-xslt/relnotes/*.xsl)
+dist_xsltrevhistory_DATA  = $(wildcard daps-xslt/revhistory/*.xsl)
 dist_xsltxhtml_DATA     = $(wildcard daps-xslt/xhtml/*.xsl)
 dist_xsltyelp_DATA      = $(wildcard daps-xslt/yelp/*.xsl)
 
