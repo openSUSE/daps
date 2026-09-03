@@ -21,7 +21,7 @@
 ###########################################################################
 function getimages {
     local SHORT_OPTS LONG_OPTS SUB_CMD
-    local COMPACT FILE SHOW IVIEWER
+    local COMPACT FILE SHOW
     local -a IMGLIST
 
     SUB_CMD=$1
@@ -70,11 +70,7 @@ function getimages {
         if [[ -z "$IMG_VIEWER" ]]; then
             exit_on_error "Please specify an image viewer via command-line (--viewer) or via config file"
         else
-            IVIEWER=$(which "$IMG_VIEWER" 2>/dev/null)
-            if [[ 0 -ne $? ]]; then # which command failed
-                # Viewer not installed
-                exit_on_error "Cannot find VIEWER command ($IMG_VIEWER). Is it installed?"
-            fi
+            type -p "$IMG_VIEWER" 2>/dev/null || exit_on_error "Cannot find VIEWER command ($IMG_VIEWER). Is it installed?"
         fi
     fi
 

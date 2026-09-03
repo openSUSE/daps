@@ -196,11 +196,7 @@ UNSETLIST=(
 unset "${UNSETLIST[@]}"
 
 # check for xmlstarlet binary
-for _binary in xmlstarlet xml; do
-    XMLSTARLET=$(which $_binary 2>/dev/null)
-    [[ 0 -eq $? ]] && break
-done
-[[ -z $XMLSTARLET ]] && exit_on_error "Required package \"xmlstarlet\" is not installed"
+XMLSTARLET=$(type -p xmlstarlet || type -p xml) || exit_on_error "Required package \"xmlstarlet\" is not installed"
 
 # PATHLIST contains all variables holding a path. Relative paths need to be
 # made absolute and we need this list in order to know which variables hold
@@ -1158,7 +1154,7 @@ while true ; do
             exit 0
             ;;
         --xsltprocessor)
-            which "$2" >/dev/null 2>&1 || exit_on_error "Cannot find the XSLT processor \"$2\"."
+            type -p "$2" >/dev/null || exit_on_error "Cannot find the XSLT processor \"$2\"."
             XSLTPROCESSOR_CMDL="$2"
             XSLTPROCESSOR="$XSLTPROCESSOR_CMDL"
             shift 2
@@ -1621,10 +1617,7 @@ XMLFORMAT_CONFIG_FILE=${XMLFORMAT_CONFIG_FILE/#@sysconfdir\@\/daps/${DAPSROOT}/e
 if [[ "adoc" = "$SRC_FORMAT" ]]; then
     DOCBOOK_VERSION=5
     ADOC_BACKEND=docbook5
-    ASCIIDOC=$(which asciidoctor 2>/dev/null)
-    if [[ 1 -eq $? ]]; then
-        exit_on_error "AsciiDoctor is not installed, you cannot parse AsciiDoc sources."
-    fi
+    ASCIIDOC=$(type -p asciidoctor) || exit_on_error "AsciiDoctor is not installed, you cannot parse AsciiDoc sources."
 else
     DOCBOOK_VERSION=$($XSLTPROC --stylesheet "${DAPSROOT}/daps-xslt/common/get-docbook-version.xsl" --file "$MAIN" "$XSLTPROCESSOR" 2>/dev/null) || exit_on_error "Could not get DocBook version. Maybe $MAIN is not well-formed?"
 fi

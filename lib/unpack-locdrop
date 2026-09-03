@@ -109,7 +109,7 @@ function unpack-locdrop {
     #
     # Run optipng on PNG images if --optipng was specified
     #
-    which optipng >/dev/null 2>&1 || NO_OPTIPNG="1"
+    type -p optipng >/dev/null 2>&1 || NO_OPTIPNG="1"
 
     if [[ 1 -eq $OPTIPNG ]]; then
         if [[ -z $NO_OPTIPNG ]]; then

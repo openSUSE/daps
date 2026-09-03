@@ -19,9 +19,7 @@ function exit_on_error {
 # Binary filename can either be xmlformat, xmlformat.rb, or xmlformat.pl ;-((
 # take the first one that exists
 #
-for _BINARY in xmlformat xmlformat.pl xmlformat.rb; do
-    XMLFORMAT_CMD="$(which "$_BINARY" 2>/dev/null)" && break
-done
+XMLFORMAT_CMD=$(type -p xmlformat || type -p xmlformat.pl || type -p xmlformat.rb) || exit_on_error "Error: xmlformat is not installed"
 
 _XMLF_VERSION=$($XMLFORMAT_CMD --version 2>/dev/null | head -n1 | cut -d' ' -f2)
 

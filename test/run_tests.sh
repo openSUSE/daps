@@ -105,7 +105,7 @@ declare -a _REQUIREMENTS
 _REQUIREMENTS=( "epubcheck" "lynx" "pdfinfo" "xmllint" "xmlstarlet" )
 
 for _REQ in "${_REQUIREMENTS[@]}"; do
-    which $_REQ >/dev/null 2>&1 || exit_on_error "Requirement $_REQ is not installed, exiting"
+    type -p "$_REQ" >/dev/null || exit_on_error "Requirement $_REQ is not installed, exiting"
 done
 
 
@@ -226,8 +226,7 @@ done
 #
 if [[ -n "${_XSLTPROCS[@]}" ]]; then
     for _PROC in "${_XSLTPROCS[@]}"; do
-        which --skip-alias --skip-functions $_PROC >/dev/null 2>&1
-        if [ $? -eq 0 ]; then
+        if [ type -p "$_PROC" >/dev/null ]; then
             _XSLT_PROCESSORS=( "${_XSLT_PROCESSORS[@]}" "$_PROC" )
         else
             echo "Warning: Did not found xslt processor $_PROC"
@@ -235,10 +234,7 @@ if [[ -n "${_XSLTPROCS[@]}" ]]; then
     done
 else
     _XSLT_PROCESSORS=( "/usr/bin/xsltproc" )
-    which --skip-alias --skip-functions /usr/bin/saxon6 >/dev/null 2>&1
-    if [ $? -eq 0 ]; then
-        _XSLT_PROCESSORS=( "${_XSLT_PROCESSORS[@]}" "/usr/bin/saxon6" )
-    fi
+    type -p saxon6 >/dev/null && _XSLT_PROCESSORS=( "${_XSLT_PROCESSORS[@]}" "/usr/bin/saxon6" )
 fi
 
 if [[ -z "${_XSLT_PROCESSORS[@]}" ]]; then
@@ -277,7 +273,7 @@ for _PROC in "${_XSLT_PROCESSORS[@]}"; do
         case "$_TEST" in
             *[_-]pdf)
                 for _FOPROC in "${_FO_PROCS[@]}"; do
-                    which --skip-alias --skip-functions $_FOPROC >/dev/null 2>&1
+                    type -p "$_FOPROC" >/dev/null
                     # skip if XSL-FO processor does not exist
                     [ $? -ne 0 ] && continue
                     export _FOPROC

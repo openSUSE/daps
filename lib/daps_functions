@@ -643,8 +643,7 @@ function call_make {
     if [[ 1 -ne $SILENT ]]; then
         if [[ 1 -eq $DEBUG || 3 -eq $VERBOSITY ]]; then
             # use remake if installed when in debug or highest verbosity mode
-            IS_REMAKE=$(which remake 2>/dev/null)
-            [[ -n "$IS_REMAKE" ]] && MAKE_BIN="/usr/bin/remake"
+            type -p remake >/dev/null && MAKE_BIN="/usr/bin/remake"
             MAKE_OPTIONS="$MAKE_OPTIONS --debug=b"
         fi
     fi
@@ -762,7 +761,7 @@ function call_make {
 
         # PDF
         printf "%${COLWIDTH}s: %s\n" "PDF FORMATTER" "$FORMATTER"
-        if which "$FORMATTER" >/dev/null 2>&1; then
+        if type -p "$FORMATTER" >/dev/null 2>&1; then
             printf "%${COLWIDTH}s: %s\n" "FORMATTER VERSION" "$($FORMATTER -version)"
         else
             printf "%${COLWIDTH}s: %s\n" "FORMATTER VERSION"
