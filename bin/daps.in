@@ -128,6 +128,7 @@ VARLIST=(
     PROFUSERLEVEL
     PROFVENDOR
     PROFWORDSIZE
+    PYTHON
     REMARKS
     REMARK_STR
     RESULT_DIR
@@ -1742,7 +1743,7 @@ fi
 # well-formedness and not for validity (a DocBook 5 validity check would
 # require jing).
 
-CHECK_WELLFORMED=$(PYTHONWARNINGS="ignore" ${LIBEXEC_DIR}/daps-xmlwellformed --xinclude ${MAIN} 2>&1)
+CHECK_WELLFORMED=$(PYTHONWARNINGS="ignore" $PYTHON ${LIBEXEC_DIR}/daps-xmlwellformed --xinclude ${MAIN} 2>&1)
 
 if [[ 0 -ne $? ]]; then
     # sometimes daps-xmnlwellformed stumbles upon errors and does not produce
