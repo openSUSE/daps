@@ -1,4 +1,25 @@
 -------------------------------------------------------------------
+Wed Sep 02 11:59:21 UTC 2026 - Frank Sundermeyer <fs@suse.com>
+
+Beta release DAPS 4.0 beta16
+
+* Bugfix:
+  - metadata:
+    . Add "en-us" as fallback language when no Language
+      can be determnined from the sources
+    . dual character language codes (en,de,..) are expanded to
+      the default 4 character codes (en-us, de-de)
+    . Fix grouping problem with multiple product names
+  - spec file: corrected python requirements, overall cleanup
+  - replaced "which" with type -p 
+
+* New features:
+  - list-srcfiles: Added --hashes to show md5sums
+    (https://github.com/openSUSE/daps/issues/756)
+  - possibility to specify your Python binary with $PYTHON in the
+    global settings 
+
+-------------------------------------------------------------------
 Thu Mar 25 10:50:03 UTC 2026 - Frank Sundermeyer <fs@suse.com>
 
 Beta release DAPS 4.0 beta15
@@ -781,7 +802,7 @@ Stable release DAPS 2.3.0:
     /etc/daps/config (for a system wide configuration), in
     $HOME/.config/daps/dapsrc (for a user specific configuration),
     or in the DC-file (for a document-specific configuration)
-	
+
 * Bugfixes:
   - subcommand "locdrop" failed when the book did not include
     images
