@@ -781,6 +781,21 @@ PROFOUTPUTFORMAT=""
 #
 PROFVENDOR=""
 
+## Key:         PYTHON
+## -------------------
+## Description: Interpreter used to run the Python helper scripts
+## Type:        Path to executable
+## Default:     ""
+#
+# DAPS uses Python helper scripts to check XML files for well-formedness,
+# to validate tables and to determine the entity files used by a document.
+# When this value is empty, these scripts are called directly and therefore
+# run with the interpreter specified in their shebang line.
+# Set this variable to run them with a different interpreter, for example
+# one from a virtual environment providing the required lxml module.
+#
+PYTHON=""
+
 ## Key:         REMARK
 ## -------------------
 ## Description: Generate books with remarks?

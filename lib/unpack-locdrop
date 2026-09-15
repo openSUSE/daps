@@ -212,7 +212,7 @@ function unpack-locdrop {
     # Get entity files from the notrans sources and link to them
     #
     echo "Getting entities"
-    ENTITIES="$("${LIBEXEC_DIR}/getentityname.py" ${P_NOTRANS_DIR}/xml/*.xml)"
+    ENTITIES="$($PYTHON "${LIBEXEC_DIR}/getentityname.py" ${P_NOTRANS_DIR}/xml/*.xml)"
     for ENT in $ENTITIES; do
         if [[ -f $ENT ]]; then
             [[ 1 -eq $DEBUG ]] && echo "Linking ${P_NOTRANS_DIR}/xml/$ENT"

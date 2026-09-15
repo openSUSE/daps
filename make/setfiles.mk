@@ -97,9 +97,9 @@ endif
 # Entity files
 #
 ifeq "$(strip $(IS_ASSEMBLY))" "assembly"
-  ENTITIES_DOC := $(shell $(LIBEXEC_DIR)/getentityname.py $(ASSEMBLYFILES) $(ASSEMBLY_MAIN) 2>/dev/null)
+  ENTITIES_DOC := $(shell $(PYTHON) $(LIBEXEC_DIR)/getentityname.py $(ASSEMBLYFILES) $(ASSEMBLY_MAIN) 2>/dev/null)
 else
-  ENTITIES_DOC := $(shell $(LIBEXEC_DIR)/getentityname.py $(DOCFILES) 2>/dev/null)
+  ENTITIES_DOC := $(shell $(PYTHON) $(LIBEXEC_DIR)/getentityname.py $(DOCFILES) 2>/dev/null)
 endif
 
 # this does not resolve links

@@ -109,7 +109,7 @@ $(ASSEMBLY_JING_VALIDATION_MAIN): $(ASSEMBLY_MAIN) | $(ASSEMBLY_RESULT_DIR) $(AS
 	touch $@
 
 $(ASSEMBLY_RESULT_DIR)/%.avalidate: $(PRJ_DIR)/%.xml | $(ASSEMBLY_RESULT_DIR) $(ASSEMBLY_RESULT_SUBDIRS)
-	${LIBEXEC_DIR}/daps-xmlwellformed --xinclude $<
+	$(PYTHON) ${LIBEXEC_DIR}/daps-xmlwellformed --xinclude $<
 	touch $@
 
 $(ASSEMBLY_RESULT_DIR) $(ASSEMBLY_RESULT_SUBDIRS):
