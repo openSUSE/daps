@@ -4,9 +4,11 @@
      Insert <revhistory> if not available
 
    Parameters:
-     * revdate (string): A date that is inserted into revhistory/revision[1]/date.
+     * revdate (string, required): A date that is inserted into revhistory/revision[1]/date.
        The value has to be in the format YYYY-MM-DD
      * revdescr (string): The description of the revision.
+     * new-revision (bool): For existing <revhistory>s, use this parameter to add
+       a new <revision> tag after <revhistory>. For <date>, it uses the parameter $revdate.
 
    Input:
      DocBook 5 source
@@ -27,12 +29,15 @@
   <xsl:output method="xml" indent="yes"/>
   <xsl:preserve-space elements="d:info"/>
 
+  <!-- #### Parameters -->
   <xsl:param name="revdate"/>
   <xsl:param name="revdescr">Initial version<xsl:value-of select="concat(' ', $revdate)"/></xsl:param>
   <xsl:param name="with-doctype" select="1" />
   <xsl:param name="revhistory-xmlid-prefix">rh-</xsl:param>
+  <xsl:param name="new-revision" select="false()" />
 
 
+  <!-- #### Templates -->
   <xsl:template match="/">
     <xsl:if test="$revdate = ''">
       <xsl:message terminate="yes">ERROR: Missing 'revdate' XSLT parameter!</xsl:message>
@@ -95,5 +100,29 @@
        <xsl:text>&#10;</xsl:text>
      </info>
    </xsl:template>
+
+
+  <xsl:template match="d:revhistory">
+    <xsl:copy>
+      <xsl:copy-of select="@*"/>
+      <xsl:if test="boolean($new-revision)">
+        <xsl:text>&#10;</xsl:text>
+        <revision>
+          <xsl:text>&#10;</xsl:text>
+          <date>
+            <xsl:value-of select="$revdate" />
+          </date>
+          <xsl:text>&#10;</xsl:text>
+          <revdescription>
+            <xsl:text>&#10;</xsl:text>
+            <para><xsl:comment>TODO</xsl:comment></para>
+            <xsl:text>&#10;</xsl:text>
+          </revdescription>
+          <xsl:text>&#10;</xsl:text>
+        </revision>
+      </xsl:if>
+      <xsl:apply-templates />
+    </xsl:copy>
+  </xsl:template>
 
 </xsl:stylesheet>
