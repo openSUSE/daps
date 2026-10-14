@@ -25,11 +25,15 @@
 # 
 # --- Modifications ---
 # Modified by Frank Sundermeyer on 2026-20-14:
-# - Converting adoc description attributes into 
-#   <info><meta name="description"/>...</meta></info>
+# - Converting adoc section-specific description and revadte attributes into 
+#   <info>
+     <meta name="description"/>...</meta>
+     <revhistory><revision><date>...</date></revision></revhistory>
+    </info>
 #   if the conversion results in the following docbook tags:
 #   'book', 'article', 'chapter', 'section', 'part', 'appendix', 'glossary',
 #   'preface', 'refentry'
+# - 
 #
 # --- Source Project ---
 # Asciidoctor: https://github.com/asciidoctor/asciidoctor/
@@ -132,7 +136,16 @@ class Converter::DocBook5Converter < Converter::Base
       tag_name = node.sectname
     end
     title_el = node.special && ((node.option? 'notitle') || (node.option? 'untitled')) ? '' : %(<title>#{node.title}</title>\n)
-    info_el = (desc = node.attr 'description', nil, false) && (META_DESCRIPTION_PARENT_TAGS.include? tag_name) ? %(<info>\n<meta name="description">#{desc}</meta>\n</info>\n) : ''
+    info_content = []
+    if META_DESCRIPTION_PARENT_TAGS.include? tag_name
+      if (desc = node.attr 'description', nil, false)
+        info_content << %(<meta name="description">#{desc}</meta>)
+      end
+      if (revdate = node.attr 'revdate', nil, false)
+        info_content << %(<revhistory>\n<revision>\n<date>#{revdate}</date>\n</revision>\n</revhistory>)
+      end
+    end
+    info_el = info_content.empty? ? '' : %(<info>\n#{info_content.join "\n"}\n</info>\n)
     %(<#{tag_name}#{common_attributes node.id, node.role, node.reftext}>
 #{title_el}#{info_el}#{node.content}
 </#{tag_name}>)
