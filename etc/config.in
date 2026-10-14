@@ -65,6 +65,19 @@
 # 3. $HOME/.config/daps/.dapsrc (user config file)
 # 4. $DAPSROOT/etc/config
 
+## Key:         ADOC_CMD_OPTIONS
+## -----------------------
+## Description: Command line options for asciidoctor
+## Type:        String
+## Default:     "-r @pkgdatadir@/lib/adoc/docbook5.rb"
+#
+# Specify command line options for asciidoctor.
+# By default a modified adoc-docbook5 converter shipped
+# with DAPS is used. Unset this variable if you rather
+# want to use the asciidoctor default
+#
+ADOC_CMD_OPTIONS="-r @pkgdatadir@//lib/adoc/docbook5.rb"
+
 ## Key: ADOC_FAILURE_LEVEL
 ## -----------------------
 ## Description: AsciiDoctor error level on which DAPS will exit

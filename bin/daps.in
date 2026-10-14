@@ -44,6 +44,7 @@ declare -a VARLIST
 VARLIST=(
     ADOC_ATTRIBUTES
     ADOC_BACKEND
+    ADOC_CMD_OPTIONS
     ADOC_FAILURE_LEVEL
     ADOC_POST
     ADOC_POST_STYLE
@@ -1592,6 +1593,7 @@ check_pathlist "$PRJ_DIR"
 # If $substring matches front end of $string, substitute
 # $replacement for $substring.
 
+ADOC_CMD_OPTIONS=${ADOC_CMD_OPTIONS//@pkgdatadir\@/${DAPSROOT}}
 ADOC_POST_STYLE=${ADOC_POST_STYLE/#@pkgdatadir\@/${DAPSROOT}}
 ADOC_SET_STYLE=${ADOC_SET_STYLE/#@pkgdatadir\@/${DAPSROOT}}
 

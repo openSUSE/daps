@@ -115,7 +115,7 @@ $(MAIN): $(ADOC_SRCFILES) | $(ADOC_RESULT_DIR)
 	@ccecho "info"  "   Creating XML from AsciiDoc..."
   endif
   ifeq "$(ADOC_SET)" "yes"
-	  (set -o pipefail; $(ASCIIDOC) \
+	  (set -o pipefail; $(ASCIIDOC) $(ADOC_CMD_OPTIONS) \
 	  $(ADOC_OVERRIDABLE_ATTRIBUTES) $(ADOC_ATTRIBUTES) $(ADOC_DEFAULT_ATTRIBUTES)  $(ADOC_SHOW_ATTRIBUTES) \
 	  --backend=$(ADOC_BACKEND) \
 	  --doctype=$(ADOC_TYPE) $(ADOC_FAILURE) \
@@ -123,7 +123,7 @@ $(MAIN): $(ADOC_SRCFILES) | $(ADOC_RESULT_DIR)
 	  --stylesheet $(ADOC_SET_STYLE) $(XSLTPROCESSOR) $(DEVNULL) \
 	  $(ERR_DEVNULL))
   else
-	$(ASCIIDOC) \
+	$(ASCIIDOC) $(ADOC_CMD_OPTIONS) \
 	  $(ADOC_OVERRIDABLE_ATTRIBUTES) $(ADOC_ATTRIBUTES) $(ADOC_DEFAULT_ATTRIBUTES) $(ADOC_SHOW_ATTRIBUTES) \
 	  --backend=$(ADOC_BACKEND) --doctype=$(ADOC_TYPE) \
 	  $(ADOC_FAILURE) --out-file=$@ $(ADOC_MAIN)
