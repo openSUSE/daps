@@ -27,9 +27,9 @@
 # Modified by Frank Sundermeyer on 2026-20-14:
 # - Converting adoc section-specific description and revadte attributes into 
 #   <info>
-     <meta name="description"/>...</meta>
-     <revhistory><revision><date>...</date></revision></revhistory>
-    </info>
+#     <meta name="description"/>...</meta>
+#     <revhistory><revision><date>...</date></revision></revhistory>
+#    </info>
 #   if the conversion results in the following docbook tags:
 #   'book', 'article', 'chapter', 'section', 'part', 'appendix', 'glossary',
 #   'preface', 'refentry'
