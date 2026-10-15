@@ -27,13 +27,14 @@
 # Modified by Frank Sundermeyer on 2026-20-14:
 # - Converting adoc section-specific description and revadte attributes into 
 #   <info>
-#     <meta name="description"/>...</meta>
+#     <meta name="description" its:translate="yes">...</meta>
 #     <revhistory><revision><date>...</date></revision></revhistory>
 #    </info>
 #   if the conversion results in the following docbook tags:
 #   'book', 'article', 'chapter', 'section', 'part', 'appendix', 'glossary',
 #   'preface', 'refentry'
-# - 
+# - Root element contains the its namespace and xml:xl was renamed to xml:xlink
+#   to use xlink:href rather than xl:href
 #
 # --- Source Project ---
 # Asciidoctor: https://github.com/asciidoctor/asciidoctor/
@@ -114,7 +115,7 @@ class Converter::DocBook5Converter < Converter::Base
     result << '</refentry>' if manpage
     id, node.id = node.id, nil unless id
     # defer adding root tag in case document ID is auto-generated on demand
-    result.insert root_tag_idx, %(<#{root_tag_name} xmlns="http://docbook.org/ns/docbook" xmlns:xl="http://www.w3.org/1999/xlink" version="5.0"#{lang_attribute}#{common_attributes id}>)
+    result.insert root_tag_idx, %(<#{root_tag_name} xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:its="http://www.w3.org/2005/11/its" version="5.0"#{lang_attribute}#{common_attributes id}>)
     result << %(</#{root_tag_name}>)
     result.join LF
   end
@@ -139,7 +140,7 @@ class Converter::DocBook5Converter < Converter::Base
     info_content = []
     if META_DESCRIPTION_PARENT_TAGS.include? tag_name
       if (desc = node.attr 'description', nil, false)
-        info_content << %(<meta name="description">#{desc}</meta>)
+        info_content << %(<meta name="description" its:translate="yes">#{desc}</meta>)
       end
       if (revdate = node.attr 'revdate', nil, false)
         info_content << %(<revhistory>\n<revision>\n<date>#{revdate}</date>\n</revision>\n</revhistory>)
@@ -545,7 +546,7 @@ class Converter::DocBook5Converter < Converter::Base
       %(<anchor#{common_attributes((id = node.id), nil, node.reftext || %([#{id}]))}/>)
     when :xref
       if (path = node.attributes['path'])
-        %(<link xl:href="#{node.target}">#{node.text || path}</link>)
+        %(<link xlink:href="#{node.target}">#{node.text || path}</link>)
       else
         if (linkend = node.attributes['refid']).nil_or_empty?
           root_doc = get_root_document node
@@ -558,7 +559,7 @@ class Converter::DocBook5Converter < Converter::Base
         (text = node.text) ? %(<link linkend="#{linkend}">#{text}</link>) : %(<xref linkend="#{linkend}"/>)
       end
     when :link
-      %(<link xl:href="#{node.target}">#{node.text}</link>)
+      %(<link xlink:href="#{node.target}">#{node.text}</link>)
     when :bibref
       %(<anchor#{common_attributes node.id, nil, (text = "[#{node.reftext || node.id}]")}/>#{text})
     else
@@ -783,7 +784,7 @@ class Converter::DocBook5Converter < Converter::Base
       end
     end
     if (doc.attr? 'description') && (META_DESCRIPTION_PARENT_TAGS.include? root_tag_name)
-      result << %(<meta name="description">#{doc.attr 'description'}</meta>)
+      result << %(<meta name="description" its:translate="yes">#{doc.attr 'description'}</meta>)
     end
     if abstract
       abstract.set_option 'root'
