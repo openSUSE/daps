@@ -110,6 +110,7 @@ hyphendir      = $(xepconfdir)/hyphen
 catalogdir     = @sysconfdir@/xml/catalog.d
 
 dapslibdir     = $(pkgdatadir)/lib
+dapslibadocdir = $(dapslibdir)/adoc
 dapslibexecdir = $(pkgdatadir)/libexec
 dapsmakedir    = $(pkgdatadir)/make
 emacssitedir   = @datadir@/emacs/site-lisp
@@ -161,7 +162,8 @@ dist_bashcompletion_DATA = bash_completion/daps
 if !CATALOG_EDIT
 dist_catalog_DATA   = $(DAPS_CATALOG)
 endif
-dist_dapslib_DATA       = $(wildcard lib/*)
+dist_dapslib_DATA       = $(filter-out lib/adoc,$(wildcard lib/*))
+dist_dapslibadoc_DATA   = $(wildcard lib/adoc/*.rb)
 dist_emacssite_DATA     = misc/docbook_macros.el
 dist_dapsmake_DATA      = $(wildcard make/*.mk)
 dist_template_DATA      = $(wildcard init_templates/*)

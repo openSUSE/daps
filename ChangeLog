@@ -1,3 +1,36 @@
+
+-------------------------------------------------------------------
+Fri Oct 16 10:39:04 UTC 2026 - Frank Sundermeyer <fs@suse.com>
+
+Beta release DAPS 4.0~beta17
+
+* New feature:
+  For SEO/GEO purposes it is required to have a proper metadata
+  description and a reliable change date for each HTML page that
+  DAPS creates. For DocBook this is achieved by creating an <info>
+  element containing <meta name="description"> and a <revhistory>
+  entry on the HTML chunking  level (DAPS default: <chapter>).
+  This does not work out of the box with AsciiDoc sources. This
+  version adds the missing support by shipping a modified AsciiDoc
+  to DocBook converter, that is used by default (can be changed by
+  unsetting ADOC_CMD_OPTIONS in /etc/daps/config).
+  How to use:
+  In the adoc main file (the one that defines the book or article)
+  use the global attributes :revdate: and :description: in the
+  header (and only there).
+  For all other sections that get processed into separate HTML files
+  use the sectio-specific bracketed syntax:
+  
+  [#my-id]
+  [revdate="YYYY-MM-DD"]
+  [description="DESCRIPTION"]
+  == My Chapter
+
+  alternatively combine all three attributes:
+  
+  [#my-id,revdate="YYYY-MM-DD",description="DESCRIPTION"]
+  == My Chapter
+
 -------------------------------------------------------------------
 Wed Sep 02 11:59:21 UTC 2026 - Frank Sundermeyer <fs@suse.com>
 

@@ -16,11 +16,11 @@
 #
 
 
-%define pkg_version 4.0beta16
+%define pkg_version 4.0beta17
 %define ourpython %{?primary_python}%{!?primary_python:python3}
 
 Name:           daps
-Version:        4.0~beta16
+Version:        4.0~beta17
 Release:        0
 Summary:        DocBook Authoring and Publishing Suite
 License:        GPL-2.0-only OR GPL-3.0-only
@@ -107,6 +107,8 @@ converting DocBook XML.
 %prep
 %autosetup -n %{name}-%{pkg_version}
 
+%python3_fix_shebang_path libexec/*
+
 %build
 %configure --docdir=%{_defaultdocdir}/%{name} --disable-edit-rootcatalog
 %make_build
@@ -114,8 +116,6 @@ converting DocBook XML.
 %install
 %make_install
 rm -v %{buildroot}%{_defaultdocdir}/%{name}/{COPYING*,INSTALL.adoc}
-
-%python3_fix_shebang_path %{buildroot}/%{_datadir}/%{name}/libexec/*
 
 # create symlinks:
 %fdupes %{buildroot}/%{_datadir}
