@@ -441,21 +441,29 @@ _TREE_VERSION += $(shell tree --version 2>/dev/null | awk '{print $$2}')
 _TREE_VERSION_SORT := $(shell echo "$(_TREE_VERSION)" | tr " " "\n" | sort -b --version-sort | head -n1)
 _TREE_IS_NEW := $(shell if [[ "$(_TREE_TEST)" = "$(_TREE_VERSION_SORT)" ]]; then echo "yes"; else echo "no"; fi)
 
+# On big projects the list of files may become too long so ARG_MAX of bash
+# is exceeded causing an "argument list too long" error.
+# Workaround: writing the list into a file using make's $(file) funktion
+# and then read from the file
+
+_TMP_FILELIST=/tmp/$(mktemp -u XXXXXXXXXX).txt
+
 define print_list
+  $(file > $(_TMP_FILELIST),$(sort $(1)))
   @if  [[ 1 -eq "$(strip $(GRAPH_OUTPUT))" ]]; then \
     if [[ "yes" == $(_TREE_IS_NEW) ]]; then \
-      echo -e "$(subst $(PRJ_DIR)/,,$(subst $(SPACE),\n,$(sort $(1))))" | tree --fromfile --noreport; \
+      tr ' ' '\n' < $(_TMP_FILELIST) | sed 's|^$(PRJ_DIR)/||' | tree --fromfile --noreport; \
     else \
-      echo -e "$(subst $(SPACE),\n,$(sort $(1)))"; \
+      tr ' ' '\n' < $(_TMP_FILELIST); \
       ccecho "error" "Your version of 'tree' is too old, cannot produce graph output."; \
     fi \
   elif [[ -t 0 || 1 -eq "$(strip $(PRETTY_OUTPUT))" ]]; then \
-    echo -e "$(subst $(SPACE),\n,$(sort $(1)))"; \
+    tr ' ' '\n' < $(_TMP_FILELIST); \
   else \
-    echo $(sort $(1)); \
-  fi
+    cat $(_TMP_FILELIST); \
+  fi; \
+  rm -f $(_TMP_FILELIST)
 endef
-
 #-----
 # define ccecho that is only displayed when the output
 # goes to a terminal
