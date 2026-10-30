@@ -16,11 +16,11 @@
 #
 
 
-%define pkg_version 4.0beta17
+%define pkg_version 4.0beta18
 %define ourpython %{?primary_python}%{!?primary_python:python3}
 
 Name:           daps
-Version:        4.0~beta17
+Version:        4.0~beta18
 Release:        0
 Summary:        DocBook Authoring and Publishing Suite
 License:        GPL-2.0-only OR GPL-3.0-only

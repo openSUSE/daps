@@ -1,3 +1,15 @@
+-------------------------------------------------------------------
+Fri Oct 16 19:54:38 UTC 2026 - Frank Sundermeyer <fs@suse.com>
+
+Beta release DAPS 4.0~beta18
+
+* Bugfix:
+  - Fixed "Argument list too long" for list-srcfiles
+    . On big projects the list of files may become too long so
+      ARG_MAX of bash is exceeded causing an "argument list too
+      long" error.
+      Workaround: writing the list into a file using make's $(file)
+      funktion and then read from the file
 
 -------------------------------------------------------------------
 Fri Oct 16 10:39:04 UTC 2026 - Frank Sundermeyer <fs@suse.com>
