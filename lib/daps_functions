@@ -129,7 +129,7 @@ function parse_args {
             --extra-dir)
                 # html/locdrop/package-html/package-src: directory with additional files
                 sanitize_path "${PRJ_DIR}/$2" "HTML_EXTRA_DIR"
-                if [[ "$(realpath -s $(dirname $HTML_EXTRA_DIR))" == "$PRJ_DIR" ]]; then
+                if [[ "$HTML_EXTRA_DIR" =~ ^$PRJ_DIR ]]; then
                     export HTML_EXTRA_DIR
                 else
                     exit_on_error "The extra-dir must be a subdirectory of ${PRJ_DIR}\nor a link to a directory in ${PRJ_DIR}."
